@@ -8,6 +8,19 @@ import store from './vuex';
 require('bootstrap-v4-rtl');
 require('./mixin');
 
+import 'cleave.js'
+
+import Multiselect  from 'vue-multiselect'
+Vue.component('multiselect', Multiselect );
+
+import _ from 'underscore'
+window._ = _
+
+window.numeral = require('numeral')
+
+import VueFormGenerator from "vue-form-generator";
+Vue.use(VueFormGenerator);
+
 Vue.config.productionTip = false
 
 new Vue({

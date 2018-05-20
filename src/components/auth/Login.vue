@@ -6,12 +6,10 @@
         <div class="form-group">
           <label for="username">نام کاربری</label>
           <input type="text" class="form-control" name="username" id="username" aria-describedby="helpIdusername" placeholder="نام کاربری">
-          <small id="helpIdusername" class="form-text text-muted">نام کاربری خود را وارد کنید</small>
         </div>
         <div class="form-group">
           <label for="password">رمز عبور</label>
           <input type="password" class="form-control" name="password" id="password" aria-describedby="helpIdpassword" placeholder="رمز عبور">
-          <small id="helpIdpassword" class="form-text text-muted">پسورد خود را وارد کنید</small>
         </div>
         <button @click="login()" type="button" name="submit-btn" id="submit-btn" class="btn btn-primary " style="min-width:100px;">ورود</button>
         <a name="" id="" class="secondary d-block d-sm-inline" href="#" role="button">رمز عبور خود را فراموش کرده اید؟</a>

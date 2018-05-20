@@ -14,5 +14,6 @@ export default new Router({
       component: Login
     },
     ...PanelRotues,
-  ]
+  ],
+  mode: 'history',
 })

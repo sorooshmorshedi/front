@@ -1,18 +1,21 @@
 <template>
 <div id="app">
-  <m-nav/>
+  <m-navbar/>
   <div class="container-fluid">
-    <router-view/>
+    <router-view></router-view>
   </div>
+  <m-footer/>
 </div>
 </template>
 
 <script>
-import mNav from './components/Nav';
+import mNavbar from './components/Navbar';
+import mFooter from './components/Footer';
 export default {
   name: 'App',
   components: {
-    mNav
+    mNavbar,
+    mFooter,
   }
 }
 </script>

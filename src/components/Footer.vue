@@ -1,19 +1,20 @@
 <template>
+<footer style="height: 250px;">
+</footer>
 </template>
 
 <script>
 export default {
-  name: 'Panel',
+  name: 'Footer',
   data() {
     return {}
-  },
-  created(){
-    // if has no companey
-    this.$router.push('CreateCompany');
   }
 }
 </script>
 
 <style scoped lang="scss">
-* {}
+footer {
+  margin-top: 50px;
+  background-color: #eee;
+}
 </style>

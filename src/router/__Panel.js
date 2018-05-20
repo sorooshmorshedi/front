@@ -1,13 +1,13 @@
-import Index from '@/components/panel/Index';
+import Panel from '@/components/panel/Panel';
 
-import Company from '@/components/panel/company/Index';
+import Company from '@/components/panel/company/Company';
 import CreateCompany from '@/components/panel/company/Create';
 
 export default [
    {
        name: 'Panel',
-       path: 'panel',
-       component: Index,
+       path: '/panel',
+       component: Panel,
        children: [
            {
                name: 'Company',
@@ -15,12 +15,12 @@ export default [
                component: Company,
                children: [
                    {
-                       name: 'Create',
+                       name: 'CreateCompany',
                        path: 'create',
                        component: CreateCompany,
                    }
                ]
            }
        ]
-   } 
+   }
 ]

@@ -1,77 +1,128 @@
 <template>
-  <div class="row">
-    <div class="col">
-  
+  <div class="row rtl">
+    <div class="col-12 col rtl">
+      <div class="card right ">
+        <div class="card-body">
+          <vue-form-generator tag="div" :schema="schema" :model="company" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'Form',
-    data() {
-      return {
-        companey: {},
-        fields: [{
-          label: 'نام شرکت',
-          model: 'name',
-          type: 'text',
-          class: 'col-12'
-        }, {
-          label: 'آدرس 1',
-          model: 'address1',
-          type: 'text',
-          class: 'col-12'
-        }, {
-          label: 'آدرس 2',
-          model: 'address2',
-          type: 'text',
-        }, {
-          label: 'کشور',
-          model: 'country',
-          type: 'text',
-        }, {
-          label: 'شماره ثبت',
-          model: 'sabtNumber',
-          type: 'text',
-        }, {
-          label: 'تلفن 1',
-          model: 'phone1',
-          type: 'text',
-        }, {
-          label: 'تلفن 2',
-          model: 'phone2',
-          type: 'text',
-        }, {
-          label: 'فکس',
-          model: 'fax',
-          type: 'text',
-        }, {
-          label: 'ایمیل',
-          model: 'email',
-          type: 'email',
-        }, {
-          label: 'وبسایت',
-          model: 'website',
-          type: 'text',
-        }, {
-          label: 'کد پستی',
-          model: 'postalCode',
-          type: 'text',
-        }, {
-          label: 'کد اقتصادی',
-          model: 'eghtesadiCode',
-          type: 'text',
-        }, {
-          label: 'شناسه',
-          model: 'shenase',
-          type: 'text',
-        }, ]
+export default {
+  name: "Form",
+  data() {
+    return {
+      company: {},
+      schema: {
+        groups: [
+          {
+            legend: "ثبت شرکت",
+            styleClasses: 'row',
+            fields: [
+              {
+                label: "نام شرکت",
+                type: "input",
+                inputType: "text",
+                model: "name",
+                styleClasses: "col-sm-4"
+              },
+              {
+                label: "آدرس 1",
+                type: "input",
+                inputType: "text",
+                model: "address1",
+                styleClasses: "col-12"
+              },
+              {
+                label: "آدرس 2",
+                type: "input",
+                inputType: "text",
+                model: "address2",
+                styleClasses: "col-12"
+              },
+              {
+                label: "کشور",
+                type: "input",
+                inputType: "text",
+                model: "country",
+                styleClasses: "col-md-3"
+              },
+              {
+                label: "شماره ثبت",
+                type: "input",
+                inputType: "number",
+                model: "sabtNumber",
+                styleClasses: "col-md-3"
+              },
+              {
+                label: "تلفن 1",
+                type: "input",
+                inputType: "text",
+                model: "phone1",
+                styleClasses: "col-sm-3"
+              },
+              {
+                label: "تلفن 2",
+                type: "input",
+                inputType: "text",
+                model: "phone2",
+                styleClasses: "col-sm-3"
+              },
+              {
+                label: "فکس",
+                type: "input",
+                inputType: "text",
+                model: "fax",
+                styleClasses: "col-sm-3"
+              },
+              {
+                label: "ایمیل",
+                type: "input",
+                inputType: "email",
+                model: "email",
+                styleClasses: "col-sm-3"
+              },
+              {
+                label: "وبسایت",
+                type: "input",
+                inputType: "text",
+                model: "website", 
+                styleClasses: "col-sm-3"
+              },
+              {
+                label: "کد پستی",
+                type: "input",
+                inputType: "number",
+                model: "postalCode",
+                styleClasses: "col-sm-3"
+              },
+              {
+                label: "کد اقتصادی",
+                type: "input",
+                inputType: "number",
+                model: "eghtesadiCode",
+                styleClasses: "col-sm-3"
+              },
+              {
+                label: "شناسه",
+                type: "input",
+                inputType: "number",
+                model: "shenase",
+                styleClasses: "col-sm-3"
+              }
+            ]
+          }
+        ]
       }
-    }
+    };
   }
+};
 </script>
 
 <style scoped lang="scss">
-  * {}
+* {
+}
 </style>

@@ -1,12 +1,16 @@
 <template>
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
 export default {
-  name: 'Company',
+  name: 'Panel',
   data() {
     return {}
+  },
+  created(){
+    // if has no companey
+    this.$router.push({name:'CreateCompany'});
   }
 }
 </script>

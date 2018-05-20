@@ -44,6 +44,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-* {
+nav {
+  margin-bottom: 50px;
 }
 </style>
