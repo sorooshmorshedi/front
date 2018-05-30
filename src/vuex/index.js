@@ -5,20 +5,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    doctors: [],
-    specialities: [],
-    postSpecialities: [],
+    user: {},
   },
   mutations: {
-    setDoctors(state, doctors) {
-      state.doctors = doctors;
+    setUser(state, user) {
+      state.user = user;
     },
-    setSpecialities(state, specialities) {
-      state.specialities = specialities;
-    },
-    setPostSpecialities(state, postSpecialities) {
-      state.postSpecialities = postSpecialities;
-    }
-
   }
 })

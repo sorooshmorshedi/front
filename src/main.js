@@ -18,6 +18,7 @@ window._ = _
 
 window.numeral = require('numeral')
 
+import './assets/js/bootstrap-notify.min.js'
 import VueFormGenerator from "vue-form-generator";
 Vue.use(VueFormGenerator);
 

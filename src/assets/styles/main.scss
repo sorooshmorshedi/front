@@ -1,5 +1,33 @@
 @import '~/bootstrap-v4-rtl/scss/bootstrap-rtl.scss';
-
-*:not(i){
+*:not(i) {
   font-family: IRANSans !important;
+}
+
+@mixin header() {
+  font-size: 1.6rem;
+  border-right: 8px solid $primary;
+  padding: 7px 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  border-top: 1px solid #eee;
+  border-radius: 10px;
+}
+
+.vue-form-generator {
+  legend {
+    @include header;
+    margin-right: 15px;
+  }
+}
+
+input {
+  // border-right: 6px solid lighten($primary, 20) !important;
+  // border-color: lighten($primary, 20) !important;
+  // box-shadow: none !important;
+  // &:active,
+  // &:focus {
+  //   border-right: 6px solid $primary !important;
+  // border-color: $primary !important;
+  // }
+  // &:focus {}
 }
