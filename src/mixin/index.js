@@ -25,8 +25,7 @@ Vue.mixin({
     }
 
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     async request(options) {
       this.errors = [];
@@ -57,16 +56,31 @@ Vue.mixin({
         })
         .catch((error) => {
           this.OGR--;
+          if (error.response.status == 401) {
+            this.notify('شما از سامانه خارج شده اید', 'warning');
+            this.$router.push({
+              name: "Login",
+              params: {cb: this.$router.currentRoute.name}
+            });
+            return;
+          }
           options.error && options.error(error.response);
           let errors = error.response.data;
           Object.keys(errors).forEach(err => {
             $.notify({
-              message: errors[err],
-            },{
+              message: err + ': ' + errors[err],
+            }, {
               type: 'danger'
             })
           })
         })
+    },
+    notify(msg, type) {
+      $.notify({
+        message: msg,
+      }, {
+        type: type,
+      })
     },
     hasPermission(permission) {
       return this.permissions && this.permissions.includes(permission);
@@ -115,7 +129,7 @@ Vue.mixin({
     },
   },
   filters: {
-    toJalali(date){
+    toJalali(date) {
       return moment(date).format('jYYYY/jMM/jDD');
     }
   }

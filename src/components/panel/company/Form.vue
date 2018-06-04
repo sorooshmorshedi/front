@@ -13,6 +13,12 @@
 <script>
 export default {
   name: "Form",
+  props: ['value'],
+  created(){
+    if(this.value){
+      this.company = this.value;
+    }
+  },
   data() {
     return {
       company: {},
@@ -131,6 +137,14 @@ export default {
         ]
       }
     };
+  },
+  watch: {
+    company: {
+      handler(val) {
+        this.$emit('input', this.company)
+      },
+      deep: true,
+    }
   }
 };
 </script>

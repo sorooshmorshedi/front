@@ -22,6 +22,8 @@ import './assets/js/bootstrap-notify.min.js'
 import VueFormGenerator from "vue-form-generator";
 Vue.use(VueFormGenerator);
 
+
+
 Vue.config.productionTip = false
 
 new Vue({

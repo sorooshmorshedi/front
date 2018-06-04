@@ -10,7 +10,7 @@ export default {
   },
   created(){
     // if has no companey
-    this.$router.push({name:'CreateCompany'});
+    // this.$router.push({name:'CreateCompany'});
   }
 }
 </script>

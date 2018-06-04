@@ -22,11 +22,15 @@
 <script>
 export default {
   name: "Login",
+  props: ['cb'],
   data() {
     return {
       username: "",
       password: ""
     };
+  },
+  created(){
+    !cb && (cb = 'Panel');
   },
   methods: {
     login() {
@@ -40,7 +44,7 @@ export default {
         success: data => {
           console.log("success");
           this.$router.push({
-            name: "Panel"
+            name: this.cb
           });
         },
         error: error => {
