@@ -1,0 +1,102 @@
+.halo-tree.rtl {
+  li {
+    text-align: right !important;
+  }
+  .halo-tree li:after,
+  .halo-tree li:before {
+    content: "";
+    right: -8px;
+    position: absolute;
+    left: auto;
+    border-width: 1px
+  }
+  .halo-tree li:before {
+    border-left: 1px dashed #999;
+    bottom: 50px;
+    height: 100%;
+    top: -8px;
+    width: 1px
+  }
+  .halo-tree li:after {
+    border-top: 1px dashed #999;
+    height: 20px;
+    top: 17px;
+    width: 28px
+  }
+  .halo-tree li:last-child:before {
+    height: 26px
+  }
+  .halo-tree>li.first-node:before {
+    top: 17px
+  }
+  .halo-tree>li.second-node:before {
+    top: 4px
+  }
+  .halo-tree>li.first-node.only-node:before {
+    border-left: none
+  }
+  .halo-tree>li.only-node:after {
+    border-top: none
+  }
+  .halo-tree>li {
+    padding-right: 15px;
+  }
+  .halo-tree, .halo-tree ul {
+    padding-right: 17px !important;
+    padding-top: 10px
+  }
+  .halo-tree .tree-close,
+  .halo-tree .tree-open {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    text-align: center;
+    line-height: 13px;
+    border: 1px solid #888;
+    border-radius: 2px;
+    background: #fff
+  }
+  .halo-tree .tree-open {
+    line-height: 13px
+  }
+  .halo-tree .tree-close:after {
+    content: "+";
+    font-style: normal
+  }
+  .halo-tree .tree-open:after {
+    content: "\2013";
+    font-style: normal
+  }
+  .halo-tree .tree-node-el {
+    background-color: #fff;
+    padding-right: 2px;
+    position: relative;
+    z-index: 3
+  }
+  .halo-tree li.leaf {
+    padding-right: 15px
+  }
+  .halo-tree li.leaf:after {
+    content: "";
+    right: -7px;
+    position: absolute;
+    left: auto;
+    border-width: 1px;
+    border-top: 1px dashed #999;
+    height: 20px;
+    top: 17px;
+    width: 25px
+  }
+}
+
+
+// --- Custom Styles ---
+.tree-close, .tree-open {
+  width: 20px !important;
+  height: 20px !important;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 5px 2px; 
+  margin-top: 3px;
+  color: rgba(#212121, .8);
+}

@@ -105,8 +105,8 @@ Vue.mixin({
       localStorage.setItem('token', token);
       this.token = token;
     },
-    modal(selector) {
-      $(selector).modal('open');
+    modal(selector, func) {
+      $(selector).modal(func);
     },
     copy(obj) {
       return JSON.parse(JSON.stringify(obj));
@@ -117,6 +117,7 @@ Vue.mixin({
     ...mapState({
       user: state => state.user,
       permissions: state => state.user.permissions,
+      accounts: state => state.accounts,
     }),
   },
   watch: {

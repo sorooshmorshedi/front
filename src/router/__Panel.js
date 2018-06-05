@@ -5,6 +5,10 @@ import CreateCompany from '@/components/panel/company/Create';
 import UpdateCompany from '@/components/panel/company/Update';
 import CompaniesList from '@/components/panel/company/List';
 
+import Account from '@/components/panel/account/Account';
+import CreateAccount from '@/components/panel/account/Create';
+import AccountTree from '@/components/panel/account/Tree';
+
 
 export default [
    {
@@ -32,6 +36,23 @@ export default [
                        path: 'update/:id',
                        component: UpdateCompany,
                        props: true,
+                   }
+               ]
+           },
+           {
+               name: 'Account',
+               path: 'account',
+               component: Account,
+               children: [
+                   {
+                       name: 'CreateAccount',
+                       path: 'create',
+                       component: CreateAccount
+                   },{
+                       name: 'AccountTree',
+                       path: 'tree',
+                       component: AccountTree,
+
                    }
                ]
            }

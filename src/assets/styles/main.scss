@@ -1,4 +1,6 @@
 @import '~/bootstrap-v4-rtl/scss/bootstrap-rtl.scss';
+@import './rtl-tree.scss';
+
 *:not(i) {
   font-family: IRANSans !important;
 }
@@ -22,16 +24,4 @@
     @include header;
     margin-right: 15px;
   }
-}
-
-input {
-  // border-right: 6px solid lighten($primary, 20) !important;
-  // border-color: lighten($primary, 20) !important;
-  // box-shadow: none !important;
-  // &:active,
-  // &:focus {
-  //   border-right: 6px solid $primary !important;
-  // border-color: $primary !important;
-  // }
-  // &:focus {}
 }

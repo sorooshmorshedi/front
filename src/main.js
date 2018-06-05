@@ -23,6 +23,9 @@ import VueFormGenerator from "vue-form-generator";
 Vue.use(VueFormGenerator);
 
 
+import 'vue-tree-halower/dist/halower-tree.min.css' 
+import VTree from 'vue-tree-halower'
+Vue.use(VTree)
 
 Vue.config.productionTip = false
 
