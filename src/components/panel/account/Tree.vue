@@ -1,7 +1,7 @@
 <template>
   <div class="rtl">
     <input type="text" v-model="searchAccount" />
-    <v-tree class="rtl" ref='tree' :data='treeAccounts' :tpl="tpl" :halfcheck='true' />
+    <v-tree v-if="treeAccounts.length" class="rtl" ref='tree' :data='treeAccounts' :tpl="tpl"  />
 
     <div class="modal" id="account-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
@@ -13,12 +13,12 @@
             </button>
           </div>
           <div class="modal-body">
-            <vue-form-generator v-if="account.level" tag="div" :schema="schema[levels[account.level]]" :model="account" />
+            <vue-form-generator tag="div" :schema="(account.pk)?editSchema[account.level]:createSchema[account.level]" :model="account" />
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="account.id" @click="updateAccount(levels[account.level],account)" type="button" class="btn btn-primary">ثبت</button>
-            <button v-else @click="storeAccount(levels[account.level],account)" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="account.pk" @click="updateAccount()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-else @click="storeAccount()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
       </div>
@@ -27,34 +27,36 @@
 </template>
 
 <script>
-import accountMixin from "@/mixin/api/account";
-import schema from "./Schema";
+import accountMixin from "@/mixin/account";
 
 export default {
-  name: "Tree",
+  name: "TreeView",
   mixins: [accountMixin],
   created() {},
   data() {
     return {
-      treeAccounts: this.getAccountsForTree(),
       searchAccount: "",
-      account: {},
-      schema: schema,
-      levels: ['', 'group', 'kol', 'moein', 'tafzili'],
+      // expandTo: null,
+      expandTo: '501010001',
     };
   },
   methods: {
     editAccount(node) {
+      this.mode = "edit";
       this.account = node;
       this.modal("#account-modal", "show");
     },
     createAccount(node) {
+      this.mode = "create";
       this.account = {};
       this.account.parent = node;
       this.account.level = node.level + 1;
       this.modal("#account-modal", "show");
     },
     tpl(node, ctx) {
+      if (!node.pk) {
+        return <span domPropsInnerHTML={node.title} />;
+      }
       return (
         <span>
           <span
@@ -64,8 +66,22 @@ export default {
               // console.log(ctx.parent.getSelectedNodes());
             }}
           />
-          <i class="fas fa-pencil-alt" onClick={() => this.editAccount(node)} />
-          <i class="fas fa-plus" onClick={() => this.createAccount(node)} />
+          <i
+            class="fas fa-pencil-alt text-warning"
+            onClick={() => this.editAccount(node)}
+          />
+          <i
+            class="fas fa-trash-alt text-danger"
+            onClick={() => this.deleteAccount(node)}
+          />
+          {node.level < 3 ? (
+            <i
+              class="fas fa-plus text-success"
+              onClick={() => this.createAccount(node)}
+            />
+          ) : (
+            ""
+          )}
         </span>
       );
     }
@@ -73,6 +89,35 @@ export default {
   watch: {
     searchAccount() {
       this.$refs.tree.searchNodes(this.searchAccount);
+    },
+    "account.code": function() {
+      this.expandTo = this.account.code;
+    }
+  },
+  computed: {
+    treeAccounts() {
+      if(this.accounts.length == 0) return [];
+      console.log("treeAccounts", this.expandTo);
+      // let accounts = this.copy(this.accounts);
+      let accounts = this.copy(this.accounts);
+
+      // let parts = this.splitCode(this.expandTo);
+      // let tmp = accounts.filter(acc => acc.code == parts[0])[0];
+      // tmp && (tmp.expanded = true);
+      // tmp && (tmp = tmp.children.filter(acc => acc.code == parts[1])[0]);
+      // tmp && (tmp.expanded = true);
+      // tmp && (tmp = tmp.children.filter(acc => acc.code == parts[2])[0]);
+      // tmp && (tmp.expanded = true);
+
+      let root = [
+        {
+          title: "نمودار درختی حساب ها",
+          expanded: true,
+          children: accounts
+        }
+      ];
+      // root = this.accounts;
+      return root;
     }
   }
 };
@@ -88,15 +133,11 @@ export default {
     background-color: transparent !important;
   }
   i {
-    margin-right: 8px;
-    margin-left: 4px;
     cursor: pointer !important;
-    background-color: #eee;
     padding: 5px;
     border-radius: 3px;
     &:hover {
-      color: #fafafa;
-      background-color: rgba(#000, 0.3);
+      background-color: #eee;
     }
   }
 }

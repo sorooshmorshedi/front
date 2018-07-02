@@ -26,11 +26,12 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      callback: 'Panel',
     };
   },
   created(){
-    !cb && (cb = 'Panel');
+    this.cb && (this.callback = this.cb);
   },
   methods: {
     login() {
@@ -42,7 +43,6 @@ export default {
           password: this.password
         },
         success: data => {
-          console.log("success");
           this.$router.push({
             name: this.cb
           });

@@ -27,25 +27,26 @@ Vue.mixin({
   },
   mounted() {},
   methods: {
-    async request(options) {
+    request(options) {
+      // this.log('request through mixin');
       this.errors = [];
       this.OGR++;
-      if (!this.token) {
-        console.log("user isn't login");
-      }
+      let headers = {};
+
+      if (!this.token) console.warn('user is not login');
+      else headers["authorization"] = "JWT " + this.token;
 
       if (!options.method) {
         options.method = 'get';
       }
-      await axios.request({
-          headers: {
-            "authorization": "JWT " + this.token
-          },
+      return axios.request({
+          headers: headers,
           url: options.url,
           method: options.method,
           data: options.data
         })
         .then((res) => {
+          // console.log('success');
           let data = res.data;
           if (data.token) {
             localStorage.setItem('token', data.token);
@@ -55,12 +56,25 @@ Vue.mixin({
           options.success(res.data);
         })
         .catch((error) => {
+          if (!error.response) {
+            console.warn('NO RESPONSE FROM SERVER');
+            // console.warn('Call Success any way');
+            // options.success();
+            return;
+          }
+          if (this.OGR == 0) {
+            console.warn('OGR IS ZERO');
+            return;
+          }
           this.OGR--;
           if (error.response.status == 401) {
+            if (this.$router.currentRoute.name == 'Login') return;
             this.notify('شما از سامانه خارج شده اید', 'warning');
             this.$router.push({
               name: "Login",
-              params: {cb: this.$router.currentRoute.name}
+              params: {
+                cb: this.$router.currentRoute.name
+              }
             });
             return;
           }
@@ -93,11 +107,8 @@ Vue.mixin({
           .height() - 50);
     },
     endpoint(url) {
-      if (url[0] == "/") {
-        url.splice(0, 1);
-      }
-      if (url[url.length - 1] == "/") {
-        url.splice(url.length - 1, 1);
+      if (url[0] == "/" || url[url.length - 1] == "/") {
+        throw "Bad URL";
       }
       return "http://localhost:8000/" + url;
     },
@@ -109,15 +120,24 @@ Vue.mixin({
       $(selector).modal(func);
     },
     copy(obj) {
-      return JSON.parse(JSON.stringify(obj));
+      // return JSON.parse(JSON.stringify(obj));
+      let res = null;
+      if (Array.isArray(obj)) {
+        res = obj.slice();
+      } else {
+        res = Object.assign({}, obj);
+      }
+      return res;
+      // console.log('copy result: ', res);
     },
-
+    log(t) {
+      console.log(t);
+    }
   },
   computed: {
     ...mapState({
       user: state => state.user,
       permissions: state => state.user.permissions,
-      accounts: state => state.accounts,
     }),
   },
   watch: {

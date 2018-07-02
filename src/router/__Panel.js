@@ -7,55 +7,60 @@ import CompaniesList from '@/components/panel/company/List';
 
 import Account from '@/components/panel/account/Account';
 import CreateAccount from '@/components/panel/account/Create';
+import EditAccount from '@/components/panel/account/Edit';
 import AccountTree from '@/components/panel/account/Tree';
+import CostCenter from '@/components/panel/account/CostCenter';
 
 
-export default [
-   {
-       name: 'Panel',
-       path: '/panel',
-       component: Panel,
-       children: [
-           {
-               name: 'Company',
-               path: 'company',
-               component: Company,
-               children: [
-                   {
-                       name: 'CreateCompany',
-                       path: 'create',
-                       component: CreateCompany,
-                   },
-                   {
-                       name: 'CompaniesList',
-                       path: 'list',
-                       component: CompaniesList,
-                   },
-                   {
-                       name: 'UpdateCompany',
-                       path: 'update/:id',
-                       component: UpdateCompany,
-                       props: true,
-                   }
-               ]
-           },
-           {
-               name: 'Account',
-               path: 'account',
-               component: Account,
-               children: [
-                   {
-                       name: 'CreateAccount',
-                       path: 'create',
-                       component: CreateAccount
-                   },{
-                       name: 'AccountTree',
-                       path: 'tree',
-                       component: AccountTree,
+export default [{
+  name: 'Panel',
+  path: '/panel',
+  component: Panel,
+  children: [{
+      name: 'Company',
+      path: 'company',
+      component: Company,
+      children: [{
+          name: 'CreateCompany',
+          path: 'create',
+          component: CreateCompany,
+        },
+        {
+          name: 'CompaniesList',
+          path: 'list',
+          component: CompaniesList,
+        },
+        {
+          name: 'UpdateCompany',
+          path: 'update/:id',
+          component: UpdateCompany,
+          props: true,
+        }
+      ]
+    },
+    {
+      name: 'Account',
+      path: 'account',
+      component: Account,
+      children: [{
+        name: 'CreateAccount',
+        path: 'create',
+        component: CreateAccount
+      }, {
+        name: 'EditAccount',
+        path: 'edit',
+        component: EditAccount
+      }, {
+        name: 'AccountTree',
+        path: 'tree',
+        component: AccountTree,
 
-                   }
-               ]
-           }
-       ]
-   }
-]
+      }, {
+        name: 'CostCenter',
+        path: 'costCenter',
+        component: CostCenter,
+
+      }]
+    }
+  ]
+}]
