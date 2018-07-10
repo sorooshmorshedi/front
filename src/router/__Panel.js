@@ -10,6 +10,7 @@ import CreateAccount from '@/components/panel/account/Create';
 import EditAccount from '@/components/panel/account/Edit';
 import AccountTree from '@/components/panel/account/Tree';
 import CostCenter from '@/components/panel/account/CostCenter';
+import IndependentAccount from '@/components/panel/account/IndependentAccount';
 
 
 export default [{
@@ -60,6 +61,10 @@ export default [{
         path: 'costCenter',
         component: CostCenter,
 
+      }, {
+        name: 'IndependentAccount',
+        path: 'independentAccount',
+        component: IndependentAccount,
       }]
     }
   ]

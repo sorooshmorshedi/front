@@ -24,7 +24,7 @@ export default {
   methods: {
     createCompany(){
       this.request({
-        url: this.endpoint('companies'),
+        url: this.endpoint('companies/'),
         method: 'post',
         data: this.company,
         success: data => {

@@ -11,6 +11,7 @@ export default new Vuex.Store({
       floatAccountGroups: [],
       accountTypes: [],
       costCenterGroups: [],
+      independentAccounts: [],
     },
   },
   mutations: {
@@ -22,6 +23,8 @@ export default new Vuex.Store({
       accounts.floatAccountGroups && (state.accounts.floatAccountGroups = accounts.floatAccountGroups);
       accounts.accountTypes && (state.accounts.accountTypes = accounts.accountTypes);
       accounts.costCenterGroups && (state.accounts.costCenterGroups = accounts.costCenterGroups);
+      accounts.independentAccounts && (state.accounts.independentAccounts = accounts.independentAccounts);
+
     },
   },
   getters: {

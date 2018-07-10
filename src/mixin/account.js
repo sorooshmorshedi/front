@@ -90,6 +90,7 @@ export default {
         this.getFloatAccountGroups(fource, false),
         this.getAccountTypes(fource, false),
         this.getCostCenterGroups(fource, false),
+        this.getIndependentAccounts(fource, false),
       ]).then(values => {
         this.init();
       })
@@ -148,6 +149,19 @@ export default {
         success: data => {
           this.$store.commit('setAccounts', {
             costCenterGroups: data
+          });
+          init && this.init();
+        }
+      })
+    },
+    getIndependentAccounts(fource = false, init = true) {
+      if (!fource && this.getIndependentAccounts.length) return;
+      return this.request({
+        url: this.endpoint('accounts/independentAccounts'),
+        method: 'get',
+        success: data => {
+          this.$store.commit('setAccounts', {
+            independentAccounts: data
           });
           init && this.init();
         }
@@ -308,6 +322,7 @@ export default {
       floatAccountGroups: state => state.accounts.floatAccountGroups,
       accountTypes: state => state.accounts.accountTypes,
       costCenterGroups: state => state.accounts.costCenterGroups,
+      independentAccounts: state => state.accounts.independentAccounts,
     }),
     accountsSelectValues() {
       if (!this.accounts) return [];

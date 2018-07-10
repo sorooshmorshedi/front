@@ -15,12 +15,16 @@
 
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">اطلاعات پایه</a>
           <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
+            <router-link class="dropdown-item" :to="{name:'UpdateCompany', params:{id: 1}}">مشخصات شرکت</router-link>
+            <div class="dropdown-divider"></div>
             <div class="dropdown-submenu ">
               <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">حساب</a>
               <div class="dropdown-menu " aria-labelledby="navbarDropdown">
                 <router-link class="dropdown-item" :to="{name:'CreateAccount'}">تعریف حساب</router-link>
                 <router-link class="dropdown-item" :to="{name:'EditAccount'}">ویرایش حساب</router-link>
                 <router-link class="dropdown-item" :to="{name:'AccountTree'}">نمودار درختی حساب ها</router-link>
+                <div class="dropdown-divider"></div>
+                <router-link class="dropdown-item" :to="{name:'IndependentAccount'}">حساب مستقل</router-link>
               </div>
             </div>
             <div class="dropdown-divider"></div>

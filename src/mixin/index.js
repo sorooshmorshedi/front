@@ -108,7 +108,7 @@ Vue.mixin({
     },
     endpoint(url) {
       if (url[0] == "/" || url[url.length - 1] == "/") {
-        throw "Bad URL";
+        // throw "Bad URL";
       }
       return "http://localhost:8000/" + url;
     },
