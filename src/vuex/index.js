@@ -13,6 +13,12 @@ export default new Vuex.Store({
       costCenterGroups: [],
       independentAccounts: [],
     },
+    wares: {
+      wareLevels: [],
+      wares: [],
+      wareHouses: [],
+      units: [],
+    }
   },
   mutations: {
     setUser(state, user) {
@@ -24,8 +30,13 @@ export default new Vuex.Store({
       accounts.accountTypes && (state.accounts.accountTypes = accounts.accountTypes);
       accounts.costCenterGroups && (state.accounts.costCenterGroups = accounts.costCenterGroups);
       accounts.independentAccounts && (state.accounts.independentAccounts = accounts.independentAccounts);
-
     },
+    setWares(state, wares) {
+      wares.wareLevels && (state.wares.wareLevels = wares.wareLevels);
+      wares.wares && (state.wares.wares = wares.wares);
+      wares.wareHouses && (state.wares.wareHouses = wares.wareHouses);
+      wares.units && (state.wares.units = wares.units);
+    }
   },
   getters: {
     accounts: state => state.accounts,

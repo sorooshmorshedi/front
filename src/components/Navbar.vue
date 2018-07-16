@@ -27,6 +27,16 @@
                 <router-link class="dropdown-item" :to="{name:'IndependentAccount'}">حساب مستقل</router-link>
               </div>
             </div>
+            <div class="dropdown-submenu ">
+              <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">کالا</a>
+              <div class="dropdown-menu " aria-labelledby="navbarDropdown">
+                <router-link class="dropdown-item" :to="{name:'CreateWare'}">تعریف کالا</router-link>
+                <router-link class="dropdown-item" :to="{name:'EditWare'}">ویرایش کالا</router-link>
+                <div class="dropdown-divider"></div>
+                <router-link class="dropdown-item" :to="{name:'WareHouse'}">انبار</router-link>
+                <router-link class="dropdown-item" :to="{name:'Unit'}">واحد</router-link>
+              </div>
+            </div>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'CostCenter'}">مرکز هزینه</router-link>
 

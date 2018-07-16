@@ -12,6 +12,11 @@ import AccountTree from '@/components/panel/account/Tree';
 import CostCenter from '@/components/panel/account/CostCenter';
 import IndependentAccount from '@/components/panel/account/IndependentAccount';
 
+import Ware from '@/components/panel/Ware/Ware';
+import CreateWare from '@/components/panel/Ware/Create';
+import EditWare from '@/components/panel/Ware/Edit';
+import WareHouse from '@/components/panel/Ware/WareHouse';
+import Unit from '@/components/panel/Ware/Unit';
 
 export default [{
   name: 'Panel',
@@ -65,6 +70,29 @@ export default [{
         name: 'IndependentAccount',
         path: 'independentAccount',
         component: IndependentAccount,
+      }]
+    },
+
+    {
+      name: 'Ware',
+      path: 'Ware',
+      component: Ware,
+      children: [{
+        name: 'CreateWare',
+        path: 'create',
+        component: CreateWare
+      }, {
+        name: 'EditWare',
+        path: 'edit',
+        component: EditWare
+      }, {
+        name: 'WareHouse',
+        path: 'wareHouse',
+        component: WareHouse
+      }, {
+        name: 'Unit',
+        path: 'unit',
+        component: Unit
       }]
     }
   ]

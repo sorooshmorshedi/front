@@ -13,7 +13,7 @@ import 'cleave.js'
 import Multiselect  from 'vue-multiselect'
 Vue.component('multiselect', Multiselect );
 
-import _ from 'underscore'
+import _ from 'lodash'
 window._ = _
 
 window.numeral = require('numeral')
