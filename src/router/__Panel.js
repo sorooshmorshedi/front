@@ -75,7 +75,7 @@ export default [{
 
     {
       name: 'Ware',
-      path: 'Ware',
+      path: 'ware',
       component: Ware,
       children: [{
         name: 'CreateWare',
