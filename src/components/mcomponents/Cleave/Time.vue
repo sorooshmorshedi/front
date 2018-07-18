@@ -1,18 +1,19 @@
 <template>
-  <input type="text" name="" value="" @input="change()" :id="inputId">
+  <input type="text" name="" value="" @input="change()" :id="inputId" dir="ltr">
 </template>
 
 <script>
 import Cleave from "cleave.js";
 export default {
-  name: "CleaveMoney",
+  name: "CleaveDate",
   props: ["value", "id"],
   data() {
     return {
       inputId: "",
+      formattedChangeLimit: 3,
       options: {
-        numeral: true,
-        numeralThousandsGroupStyle: "thousand"
+        time: true,
+        timePattern: ["h","m"]
       }
     };
   },
@@ -29,13 +30,17 @@ export default {
   },
   watch: {
     value() {
-      this.cleave.setRawValue(this.value);
+      if (this.cleave.getRawValue() != this.value) {
+        this.cleave.setRawValue(this.value);
+      }
     }
   },
   methods: {
     change() {
-      let value = this.cleave.getRawValue();
-      this.$emit("input", value);
+      setTimeout(() => {
+        let value = $("#" + this.inputId).val();
+        this.$emit("input", value);
+      }, 100);
     }
   }
 };
@@ -44,6 +49,5 @@ export default {
 <style lang="css" scoped>
 input {
   direction: ltr;
-  text-align: left;
 }
 </style>

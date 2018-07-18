@@ -236,6 +236,7 @@ export default {
           3: [],
         },
         costCenterGroups: [],
+        costCenters: [],
         floatAccountGroups: [],
         floatAccounts: [],
         accountTypes: [],
@@ -246,7 +247,7 @@ export default {
         let account = q.shift();
         res.levels[account.level].push(account)
         account.children && account.children.forEach(child => {
-          child.parent = account;
+          // child.parent = account;
           q.push(child)
         });
       }
@@ -254,6 +255,7 @@ export default {
         res.costCenterGroups.push({
           ...cc,
         })
+        res.costCenters.push(...cc.costCenters);
       })
       this.accountTypes.forEach(at => {
         res.accountTypes.push({

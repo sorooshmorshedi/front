@@ -18,6 +18,9 @@ export default new Vuex.Store({
       wares: [],
       wareHouses: [],
       units: [],
+    },
+    sanads: {
+      RPTypes: [],
     }
   },
   mutations: {
@@ -36,7 +39,12 @@ export default new Vuex.Store({
       wares.wares && (state.wares.wares = wares.wares);
       wares.wareHouses && (state.wares.wareHouses = wares.wareHouses);
       wares.units && (state.wares.units = wares.units);
+    },
+    setSanads(state, sanads) {
+      sanads.RPTypes && (state.sanads.RPTypes = sanads.RPTypes);
+
     }
+
   },
   getters: {
     accounts: state => state.accounts,

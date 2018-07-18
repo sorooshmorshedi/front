@@ -3,7 +3,28 @@ import {
 } from "vuex";
 
 export default {
-  
+  data() {
+    return {
+      pricing_types: [{
+          pk: 0,
+          name: 'فایفو'
+        },
+        {
+          pk: 1,
+          name: 'لایفو'
+        },
+        {
+          pk: 2,
+          name: 'میانگین موزون'
+        },
+        {
+          pk: 3,
+          name: 'ارزش ویژه'
+        },
+
+      ]
+    }
+  },
   methods: {
     getWareLevels(fource = false, init = true) {
       if (!fource && this.wareLevels.length) return;

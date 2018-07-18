@@ -30,24 +30,6 @@ export default {
         2: 2,
         3: 3
       },
-      pricing_types: [{
-          pk: 0,
-          name: 'فایفو'
-        },
-        {
-          pk: 1,
-          name: 'لایفو'
-        },
-        {
-          pk: 2,
-          name: 'میانگین موزون'
-        },
-        {
-          pk: 3,
-          name: 'ارزش ویژه'
-        },
-
-      ]
     }
   },
   created() {

@@ -12,11 +12,23 @@ import AccountTree from '@/components/panel/account/Tree';
 import CostCenter from '@/components/panel/account/CostCenter';
 import IndependentAccount from '@/components/panel/account/IndependentAccount';
 
-import Ware from '@/components/panel/Ware/Ware';
-import CreateWare from '@/components/panel/Ware/Create';
-import EditWare from '@/components/panel/Ware/Edit';
-import WareHouse from '@/components/panel/Ware/WareHouse';
-import Unit from '@/components/panel/Ware/Unit';
+import Ware from '@/components/panel/ware/Ware';
+import CreateWare from '@/components/panel/ware/Create';
+import EditWare from '@/components/panel/ware/Edit';
+import WareHouse from '@/components/panel/ware/WareHouse';
+import Unit from '@/components/panel/ware/Unit';
+
+import Sanad from '@/components/panel/sanad/Sanad';
+import CreateSanad from '@/components/panel/sanad/Create';
+
+import Receive from '@/components/panel/receive/Receive';
+import CreateReceive from '@/components/panel/receive/Create';
+
+import RPType from '@/components/panel/RPType/RPType';
+
+import Factor from '@/components/panel/factor/Factor';
+import CreateFactor from '@/components/panel/factor/Create';
+
 
 export default [{
   name: 'Panel',
@@ -94,6 +106,42 @@ export default [{
         path: 'unit',
         component: Unit
       }]
-    }
+    },
+    {
+      name: 'RPType',
+      path: 'receiveAndPaymentTypes',
+      component: RPType,
+    },
+    {
+      name: 'Receive',
+      path: 'receive',
+      component: Receive,
+      children: [{
+        name: 'CreateReceive',
+        path: 'create',
+        component: CreateReceive
+      }]
+    },
+    {
+      name: 'Sanad',
+      path: 'sanad',
+      component: Sanad,
+      children: [{
+        name: 'CreateSanad',
+        path: 'create',
+        component: CreateSanad
+      }]
+    },
+    {
+      name: 'Factor',
+      path: 'factor',
+      component: Factor,
+      children: [{
+        name: 'CreateFactor',
+        path: 'create',
+        component: CreateFactor
+      }]
+    },
+
   ]
 }]

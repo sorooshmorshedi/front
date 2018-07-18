@@ -12,7 +12,6 @@
           </a>
         </li>
         <li class="nav-item dropdown">
-
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">اطلاعات پایه</a>
           <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'UpdateCompany', params:{id: 1}}">مشخصات شرکت</router-link>
@@ -39,7 +38,20 @@
             </div>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'CostCenter'}">مرکز هزینه</router-link>
+            <div class="dropdown-divider"></div>
+            <router-link class="dropdown-item" :to="{name:'RPType'}">انواع دریافت و پرداخت</router-link>
 
+          </div>
+
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">عملیات های روزانه</a>
+          <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
+            <router-link class="dropdown-item" :to="{name:'CreateSanad'}">ثبت سند</router-link>
+            <div class="dropdown-divider"></div>
+            <router-link class="dropdown-item" :to="{name:'CreateFactor'}">ثبت فاکتور</router-link>
+            <div class="dropdown-divider"></div>
+            <router-link class="dropdown-item" :to="{name:'CreateReceive'}">ثبت دریافت</router-link>
           </div>
 
         </li>
