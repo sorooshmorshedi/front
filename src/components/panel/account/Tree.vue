@@ -13,11 +13,11 @@
             </button>
           </div>
           <div class="modal-body">
-            <vue-form-generator tag="div" :schema="(account.pk)?editSchema[account.level]:createSchema[account.level]" :model="account" />
+            <vue-form-generator tag="div" :schema="(account.id)?editSchema[account.level]:createSchema[account.level]" :model="account" />
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="account.pk" @click="updateAccount()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="account.id" @click="updateAccount()" type="button" class="btn btn-primary">ثبت</button>
             <button v-else @click="storeAccount()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
@@ -54,7 +54,7 @@ export default {
       this.modal("#account-modal", "show");
     },
     tpl(node, ctx) {
-      if (!node.pk) {
+      if (!node.id) {
         return <span domPropsInnerHTML={node.title} />;
       }
       return (

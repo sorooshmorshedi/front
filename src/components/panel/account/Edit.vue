@@ -10,6 +10,9 @@
               <a class="nav-item nav-link" id="nav-1-tab" data-toggle="tab" href="#nav-kol" role="tab">کل</a>
               <a class="nav-item nav-link" id="nav-2-tab" data-toggle="tab" href="#nav-moein" role="tab">معین</a>
               <a class="nav-item nav-link" id="nav-3-tab" data-toggle="tab" href="#nav-tafzili" role="tab">تفضیلی</a>
+              <a class="nav-item nav-link" id="nav-buyer-tab" data-toggle="tab" href="#nav-buyer" role="tab">خریدار</a>
+              <a class="nav-item nav-link" id="nav-seller-tab" data-toggle="tab" href="#nav-seller" role="tab">فروشنده</a>
+              <a class="nav-item nav-link" id="nav-bank-tab" data-toggle="tab" href="#nav-bank" role="tab">بانک</a>
               <a class="nav-item nav-link" id="nav-float-account-group-tab" data-toggle="tab" href="#nav-float-account-group" role="tab">گروه حساب تفضیلی شناور</a>
               <a class="nav-item nav-link" id="nav-4-tab" data-toggle="tab" href="#nav-float" role="tab">تفضیلی شناور</a>
             </div>
@@ -19,67 +22,103 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.levels[0]" v-model="account" track-by="pk" label="title" />
+                  <multiselect :options="this.accountsSelectValues.levels[0]" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[0]" :model="account" />
               <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-              <button v-if="account.pk" @click="deleteAccount(account)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;" >حذف</button>
+              <button v-if="account.id" @click="deleteAccount(account)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;">حذف</button>
             </div>
             <div class="tab-pane fade" id="nav-kol" role="tabpanel">
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.levels[1]" v-model="account" track-by="pk" label="title" />
+                  <multiselect :options="this.accountsSelectValues.levels[1]" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[1]" :model="account" />
               <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-              <button v-if="account.pk" @click="deleteAccount(account)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;" >حذف</button>
+              <button v-if="account.id" @click="deleteAccount(account)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;">حذف</button>
             </div>
             <div class="tab-pane fade" id="nav-moein" role="tabpanel">
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.levels[2]" v-model="account" track-by="pk" label="title" />
+                  <multiselect :options="this.accountsSelectValues.levels[2]" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[2]" :model="account" />
               <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-              <button v-if="account.pk" @click="deleteAccount(account)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;" >حذف</button>
+              <button v-if="account.id" @click="deleteAccount(account)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;">حذف</button>
             </div>
             <div class="tab-pane fade " id="nav-tafzili" role="tabpanel">
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.levels[3]" v-model="account" track-by="pk" label="title" />
+                  <multiselect :options="this.accountsSelectValues.levels[3]" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[3]" :model="account" />
               <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-              <button v-if="account.pk" @click="deleteAccount(account)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;" >حذف</button>
+              <button v-if="account.id" @click="deleteAccount(account)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;">حذف</button>
+            </div>
+            <div class="tab-pane fade  " id="nav-buyer" role="tabpanel">
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label for="">کد</label>
+                  <multiselect :options="this.accountsSelectValues.buyers" v-model="account" track-by="id" label="title" />
+                </div>
+              </div>
+              <vue-form-generator tag="div" :schema="editSchema.personAccount" :model="account" />
+              <hr> <br>
+              <vue-form-generator tag="div" v-if="account && account.person" :schema="editSchema.person" :model="account.person" />
+              <button @click="updatePerson()" class="btn btn-primary float-left submit-btn">ثبت</button>
+            </div>
+            <div class="tab-pane fade " id="nav-seller" role="tabpanel">
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label for="">کد</label>
+                  <multiselect :options="this.accountsSelectValues.sellers" v-model="account" track-by="id" label="title" />
+                </div>
+              </div>
+              <vue-form-generator tag="div" :schema="editSchema.personAccount" :model="account" />
+              <hr> <br>
+              <vue-form-generator tag="div" v-if="account && account.person" :schema="editSchema.person" :model="account.person" />
+              <button @click="updatePerson()" class="btn btn-primary float-left submit-btn">ثبت</button>
+            </div>
+            <div class="tab-pane fade " id="nav-bank" role="tabpanel">
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label for="">کد</label>
+                  <multiselect :options="this.accountsSelectValues.banks" v-model="account" track-by="id" label="title" />
+                </div>
+              </div>
+              <vue-form-generator tag="div" :schema="editSchema.bankAccount" :model="account" />
+              <hr> <br>
+              <vue-form-generator tag="div" v-if="account && account.bank" :schema="editSchema.bank" :model="account.bank" />
+              <button @click="updateBank()" class="btn btn-primary float-left submit-btn">ثبت</button>
             </div>
             <div class="tab-pane fade " id="nav-float-account-group" role="tabpanel">
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">گروه حساب تفضیلی شناور</label>
-                  <multiselect :options="this.accountsSelectValues.floatAccountGroups" v-model="floatAccountGroup" track-by="pk" label="name" />
+                  <multiselect :options="this.accountsSelectValues.floatAccountGroups" v-model="floatAccountGroup" track-by="id" label="name" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema.floatAccountGroup" :model="floatAccountGroup" />
               <button @click="updateFloatAccountGroup()" class="btn btn-primary float-left submit-btn">ثبت</button>
-              <button v-if="floatAccountGroup.pk" @click="deleteFloatAccountGroup(floatAccountGroup.pk)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;" >حذف</button>
+              <button v-if="floatAccountGroup.id" @click="deleteFloatAccountGroup(floatAccountGroup.id)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;">حذف</button>
             </div>
             <div class="tab-pane fade " id="nav-float" role="tabpanel">
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">حساب تفضیلی شناور</label>
-                  <multiselect :options="this.accountsSelectValues.floatAccounts" v-model="floatAccount" track-by="pk" label="name" />
+                  <multiselect :options="this.accountsSelectValues.floatAccounts" v-model="floatAccount" track-by="id" label="name" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema.floatAccounts" :model="floatAccount" />
               <button @click="updateFloatAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-              <button v-if="floatAccount.pk" @click="deleteFloatAccount(floatAccount.pk)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;" >حذف</button>
+              <button v-if="floatAccount.id" @click="deleteFloatAccount(floatAccount.id)" class="btn btn-danger float-left submit-btn" style="margin-left: 15px;">حذف</button>
             </div>
           </div>
         </div>
@@ -95,7 +134,7 @@ export default {
   name: "Edit",
   mixins: [accountMixin],
   created() {
-    this.mode = 'edit';
+    this.mode = "edit";
   },
   mounted() {
     $('a[data-toggle="tab"]').on("shown.bs.tab", e => {
@@ -107,7 +146,7 @@ export default {
     return {};
   },
   watch: {
-    account(){
+    account() {
       console.log(this.account);
     }
   }

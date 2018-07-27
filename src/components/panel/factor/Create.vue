@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group col-lg-12">
                   <label>کد - نام مشتری</label>
-                  <multiselect :options="accountsSelectValues.levels[3]" v-model="factor.customer" track-by="pk" label="title" />
+                  <multiselect :options="accountsSelectValues.levels[3]" v-model="factor.customer" track-by="id" label="title" />
                 </div>
               </div>
             </div>
@@ -53,10 +53,10 @@
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect :options="waresSelectValues.wareHouses" v-model="rows[i].wareHouse" track-by="pk" label="title" />
+                        <multiselect :options="waresSelectValues.wareHouses" v-model="rows[i].wareHouse" track-by="id" label="title" />
                       </td>
                       <td>
-                        <multiselect :options="wareHouseWares[i]" v-model="rows[i].ware" track-by="pk" label="title" />
+                        <multiselect :options="wareHouseWares[i]" v-model="rows[i].ware" track-by="id" label="title" />
                       </td>
                       <td>
                         <input type="number" class="form-control form-control-sm" v-model="rows[i].count">
@@ -127,7 +127,7 @@ export default {
         else {
           res.push(
             this.wares.filter(w => {
-              return w.wareHouse.pk == r.wareHouse.pk;
+              return w.wareHouse.id == r.wareHouse.id;
             })
           );
         }

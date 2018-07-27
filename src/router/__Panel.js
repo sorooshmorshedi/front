@@ -30,6 +30,10 @@ import Factor from '@/components/panel/factor/Factor';
 import CreateFactor from '@/components/panel/factor/Create';
 
 
+import Check from '@/components/panel/check/Check';
+import CheckBook from '@/components/panel/check/CheckBook';
+
+
 export default [{
   name: 'Panel',
   path: '/panel',
@@ -142,6 +146,16 @@ export default [{
         component: CreateFactor
       }]
     },
+    {
+      name: 'Check',
+      path: 'check',
+      component: Check,
+      children: [{
+        name: 'CheckBook',
+        path: 'checkBook',
+        component: CheckBook,
+      }]
+    }
 
   ]
 }]

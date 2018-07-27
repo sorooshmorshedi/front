@@ -3,8 +3,8 @@ import {
 } from "vuex";
 export default {
   methods: {
-    getAccounts(fource = false, init = true) {
-      if (!fource && this.accounts.length) return;
+    getAccounts(force = false, init = true) {
+      if (!force && this.accounts.length) return;
       return this.request({
         url: this.endpoint('accounts/accounts'),
         method: 'get',
@@ -16,8 +16,8 @@ export default {
         }
       })
     },
-    getFloatAccountGroups(fource = false, init = true) {
-      if (!fource && this.floatAccountGroups.length) return;
+    getFloatAccountGroups(force = false, init = true) {
+      if (!force && this.floatAccountGroups.length) return;
       return this.request({
         url: this.endpoint('accounts/floatAccountGroups'),
         method: 'get',
@@ -29,8 +29,8 @@ export default {
         }
       })
     },
-    getAccountTypes(fource = false, init = true) {
-      if (!fource && this.accountTypes.length) return;
+    getAccountTypes(force = false, init = true) {
+      if (!force && this.accountTypes.length) return;
       return this.request({
         url: this.endpoint('accounts/accountTypes'),
         method: 'get',
@@ -42,8 +42,8 @@ export default {
         }
       })
     },
-    getCostCenterGroups(fource = false, init = true) {
-      if (!fource && this.costCenterGroups.length) return;
+    getCostCenterGroups(force = false, init = true) {
+      if (!force && this.costCenterGroups.length) return;
       return this.request({
         url: this.endpoint('accounts/costCenterGroups'),
         method: 'get',
@@ -55,8 +55,8 @@ export default {
         }
       })
     },
-    getIndependentAccounts(fource = false, init = true) {
-      if (!fource && this.getIndependentAccounts.length) return;
+    getIndependentAccounts(force = false, init = true) {
+      if (!force && this.getIndependentAccounts.length) return;
       return this.request({
         url: this.endpoint('accounts/independentAccounts'),
         method: 'get',
@@ -72,7 +72,7 @@ export default {
       let data = this.copy(this.account);
       let parent = data.parent;
       Object.keys(data).forEach(key => {
-        if (data[key] && data[key].pk) data[key] = data[key].pk;
+        if (data[key] && data[key].id) data[key] = data[key].id;
       })
       this.request({
         url: this.endpoint('accounts/accounts'),
@@ -92,16 +92,15 @@ export default {
       Object.keys(data).forEach(key => {
         if (data[key]) {
           if (typeof data[key] == 'object') {
-            if (data[key].pk) data[key] = data[key].pk;
+            if (data[key].id) data[key] = data[key].id;
             else delete data[key];
           }
         } else {
           if (data[key] == null) delete data[key];
         }
       })
-      console.log(data);
       this.request({
-        url: this.endpoint('accounts/accounts/' + data.pk),
+        url: this.endpoint('accounts/accounts/' + data.id),
         method: 'put',
         data: data,
         success: data => {
@@ -115,7 +114,7 @@ export default {
     deleteAccount(node) {
       // add confirmation 
       this.request({
-        url: this.endpoint('accounts/accounts/' + node.pk),
+        url: this.endpoint('accounts/accounts/' + node.id),
         method: 'delete',
         success: data => {
           this.notify('حساب با موفقیت حذف شد', 'success');
@@ -139,7 +138,7 @@ export default {
     updateFloatAccountGroup() {
       let data = this.copy(this.floatAccountGroup);
       this.request({
-        url: this.endpoint('accounts/floatAccountGroups/' + data.pk),
+        url: this.endpoint('accounts/floatAccountGroups/' + data.id),
         method: 'put',
         data: data,
         success: data => {
@@ -149,9 +148,9 @@ export default {
       })
 
     },
-    deleteFloatAccountGroup(pk) {
+    deleteFloatAccountGroup(id) {
       this.request({
-        url: this.endpoint('accounts/floatAccountGroups/' + pk),
+        url: this.endpoint('accounts/floatAccountGroups/' + id),
         method: 'delete',
         success: data => {
           this.notify('گروه حساب شناور با موفقیت حذف شد', 'success');
@@ -162,7 +161,7 @@ export default {
     storeFloatAccount() {
       let data = this.copy(this.floatAccount);
       Object.keys(data).forEach(key => {
-        if (data[key] && data[key].pk) data[key] = data[key].pk;
+        if (data[key] && data[key].id) data[key] = data[key].id;
       })
       this.request({
         url: this.endpoint('accounts/floatAccounts'),
@@ -177,10 +176,10 @@ export default {
     updateFloatAccount() {
       let data = this.copy(this.floatAccount);
       Object.keys(data).forEach(key => {
-        if (data[key] && data[key].pk) data[key] = data[key].pk;
+        if (data[key] && data[key].id) data[key] = data[key].id;
       })
       this.request({
-        url: this.endpoint('accounts/floatAccounts/' + data.pk),
+        url: this.endpoint('accounts/floatAccounts/' + data.id),
         method: 'put',
         data: data,
         success: data => {
@@ -190,10 +189,10 @@ export default {
       })
 
     },
-    deleteFloatAccount(pk) {
+    deleteFloatAccount(id) {
       // add confirmation 
       this.request({
-        url: this.endpoint('accounts/floatAccounts/' + pk),
+        url: this.endpoint('accounts/floatAccounts/' + id),
         method: 'delete',
         success: data => {
           this.notify('حساب شناور با موفقیت حذف شد', 'success');
@@ -201,20 +200,147 @@ export default {
         }
       })
     },
+    storePerson() {
+      let data = this.copy(this.account);
+      Object.keys(data).forEach(key => {
+        if (data[key] && data[key].id) data[key] = data[key].id;
+      })
+      data.level = 3;
+      this.log('create person account');
+      this.request({
+        url: this.endpoint('accounts/accounts'),
+        method: 'post',
+        data: data,
+        success: data => {
+          let payload = this.copy(this.person);
+          Object.keys(payload).forEach(key => {
+            if (payload[key] && payload[key].id) payload[key] = payload[key].id;
+          })
+          payload.account = data.id;
+          this.log('create person');
+          this.request({
+            url: this.endpoint('accounts/persons'),
+            method: 'post',
+            data: payload,
+            success: data => {
+              this.notify('شخص با موفقیت ساخته شد', 'success');
+              this.getAccounts(true);
+              this.clearAccounts();
+            }
+          })
+        }
+      })
+
+    },
+    updatePerson() {
+      let data = this.copy(this.account);
+      Object.keys(data).forEach(key => {
+        if (data[key] && data[key].id) data[key] = data[key].id;
+      })
+      this.log('create person account');
+      this.request({
+        url: this.endpoint('accounts/accounts/' + this.account.id),
+        method: 'put',
+        data: data,
+        success: data => {
+          let payload = this.copy(this.account.person);
+          Object.keys(payload).forEach(key => {
+            if (payload[key] && payload[key].id) payload[key] = payload[key].id;
+          })
+          payload.account = data.id;
+          this.log('create person');
+          this.request({
+            url: this.endpoint('accounts/persons/' + this.account.id),
+            method: 'put',
+            data: payload,
+            success: data => {
+              this.notify('شخص با موفقیت ویرایش شد', 'success');
+              this.getAccounts(true);
+              this.clearAccounts();
+            }
+          })
+        }
+      })
+
+    },
+    storeBank() {
+      let data = this.copy(this.account);
+      Object.keys(data).forEach(key => {
+        if (data[key] && data[key].id) data[key] = data[key].id;
+      })
+      data.level = 3;
+      this.log('create bank account');
+      this.request({
+        url: this.endpoint('accounts/accounts'),
+        method: 'post',
+        data: data,
+        success: data => {
+          let payload = this.copy(this.bank);
+          Object.keys(payload).forEach(key => {
+            if (payload[key] && payload[key].id) payload[key] = payload[key].id;
+          })
+          payload.account = data.id;
+          this.log('create bank');
+          this.request({
+            url: this.endpoint('accounts/banks'),
+            method: 'post',
+            data: payload,
+            success: data => {
+              this.notify('بانک با موفقیت ساخته شد', 'success');
+              this.getAccounts(true);
+              this.clearAccounts();
+            }
+          })
+        }
+      })
+
+    },
+    updateBank() {
+      let data = this.copy(this.account);
+      Object.keys(data).forEach(key => {
+        if (data[key] && data[key].id) data[key] = data[key].id;
+      })
+      this.log('update bank account');
+      this.request({
+        url: this.endpoint('accounts/accounts/' + this.account.id),
+        method: 'put',
+        data: data,
+        success: data => {
+          let payload = this.copy(this.account.bank);
+          Object.keys(payload).forEach(key => {
+            if (payload[key] && payload[key].id) payload[key] = payload[key].id;
+          })
+          payload.account = data.id;
+          this.log('update bank');
+          this.request({
+            url: this.endpoint('accounts/banks/' + this.account.id),
+            method: 'put',
+            data: payload,
+            success: data => {
+              this.notify('بانک با موفقیت ویرایش شد', 'success');
+              this.getAccounts(true);
+              this.clearAccounts();
+            }
+          })
+        }
+      })
+
+    },
     clearAccounts() {
-      console.log('clear account object');
+      this.log('clear account object');
       this.account = {
         parent: null,
         level: this.account.level,
         code: '',
         type: null,
       };
-      Object.keys(this.floatAccount).forEach(k => {
-        this.floatAccount[k] = null;
-      });
-      Object.keys(this.floatAccountGroup).forEach(k => {
-        this.floatAccountGroup[k] = null;
-      });
+      let list = ['floatAccount', 'floatAccountGroup', 'person', 'bank'];
+      list.forEach(item => {
+        console.log(item);
+        Object.keys(this[item]).forEach(k => {
+          this[item][k] = null;
+        });
+      })
     },
   },
   computed: {
@@ -240,16 +366,27 @@ export default {
         floatAccountGroups: [],
         floatAccounts: [],
         accountTypes: [],
+        buyers: [],
+        sellers: [],
+        banks: [],
       };
       let q = [];
       this.accounts.forEach(acc => q.push(acc));
       while (q.length != 0) {
         let account = q.shift();
-        res.levels[account.level].push(account)
+
+        res.levels[account.level].push(account);
+
+        if (account.person && account.person.type == 'buyer') res.buyers.push(account);
+
+        if (account.person && account.person.type == 'seller') res.sellers.push(account);
+
+        if (account.bank) res.banks.push(account);
+
         account.children && account.children.forEach(child => {
-          // child.parent = account;
           q.push(child)
         });
+
       }
       this.costCenterGroups.forEach(cc => {
         res.costCenterGroups.push({

@@ -55,7 +55,7 @@
               <div class="row">
                 <div class="form-group col-12">
                   <label for="">نام مرکز هزینه</label>
-                  <multiselect label="name" track-by="pk" :options="accountsSelectValues.costCenterGroups" v-model="costCenter.group" />
+                  <multiselect label="name" track-by="id" :options="accountsSelectValues.costCenterGroups" v-model="costCenter.group" />
                 </div>
                 <div class="form-group col-12">
                   <label for="">نام مرکز هزینه</label>
@@ -70,7 +70,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!costCenterGroup.pk" @click="storeCC()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="!costCenterGroup.id" @click="storeCC()" type="button" class="btn btn-primary">ثبت</button>
             <button v-else @click="updateCC()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
@@ -102,7 +102,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!costCenterGroup.pk" @click="storeCCG()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="!costCenterGroup.id" @click="storeCCG()" type="button" class="btn btn-primary">ثبت</button>
             <button v-else @click="updateCCG()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
@@ -133,7 +133,7 @@ export default {
     updateCCG() {
       this.request({
         url: this.endpoint(
-          "accounts/costCenterGroups/" + this.costCenterGroup.pk
+          "accounts/costCenterGroups/" + this.costCenterGroup.id
         ),
         method: "put",
         data: this.costCenterGroup,
@@ -163,7 +163,7 @@ export default {
     },
     deleteCCG(ccg) {
       this.request({
-        url: this.endpoint("accounts/costCenterGroups/" + ccg.pk),
+        url: this.endpoint("accounts/costCenterGroups/" + ccg.id),
         method: "delete",
         success: data => {
           this.notify("گروه مرکز هزینه با موفقیت حذف شد", "success");
@@ -183,9 +183,9 @@ export default {
     },
     updateCC() {
       let payload = this.copy(this.costCenter);
-      payload.group = payload.group.pk;
+      payload.group = payload.group.id;
       this.request({
-        url: this.endpoint("accounts/costCenters/" + this.costCenter.pk),
+        url: this.endpoint("accounts/costCenters/" + this.costCenter.id),
         method: "put",
         data: payload,
         success: data => {
@@ -198,7 +198,7 @@ export default {
     },
     storeCC() {
       let payload = this.copy(this.costCenter);
-      payload.group = payload.group.pk;
+      payload.group = payload.group.id;
       this.request({
         url: this.endpoint("accounts/costCenters"),
         method: "post",
@@ -213,7 +213,7 @@ export default {
     },
     deleteCC(cc) {
       this.request({
-        url: this.endpoint("accounts/costCenters/" + cc.pk),
+        url: this.endpoint("accounts/costCenters/" + cc.id),
         method: "delete",
         success: data => {
           this.notify("مرکز هزینه با موفقیت حذف شد", "success");

@@ -122,13 +122,13 @@ export default {
         code
       ];
     },
-    async getData(fource = false) {
+    async getData(force = false) {
       this.log('Get all wares data');
       Promise.all([
-        this.getWareLevels(fource, false),
-        this.getWares(fource, false),
-        this.getWareHouses(fource, false),
-        this.getUnits(fource, false),
+        this.getWareLevels(force, false),
+        this.getWares(force, false),
+        this.getWareHouses(force, false),
+        this.getUnits(force, false),
         this.getAccounts(false, false),
       ]).then(values => {
         this.init();

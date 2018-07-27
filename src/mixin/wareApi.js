@@ -6,19 +6,19 @@ export default {
   data() {
     return {
       pricing_types: [{
-          pk: 0,
+          id: 0,
           name: 'فایفو'
         },
         {
-          pk: 1,
+          id: 1,
           name: 'لایفو'
         },
         {
-          pk: 2,
+          id: 2,
           name: 'میانگین موزون'
         },
         {
-          pk: 3,
+          id: 3,
           name: 'ارزش ویژه'
         },
 
@@ -26,8 +26,8 @@ export default {
     }
   },
   methods: {
-    getWareLevels(fource = false, init = true) {
-      if (!fource && this.wareLevels.length) return;
+    getWareLevels(force = false, init = true) {
+      if (!force && this.wareLevels.length) return;
       return this.request({
         url: this.endpoint('wares/wareLevels'),
         method: 'get',
@@ -39,8 +39,8 @@ export default {
         }
       })
     },
-    getWares(fource = false, init = true) {
-      if (!fource && this.wares.length) return;
+    getWares(force = false, init = true) {
+      if (!force && this.wares.length) return;
       return this.request({
         url: this.endpoint('wares/wares'),
         method: 'get',
@@ -59,8 +59,8 @@ export default {
         }
       })
     },
-    getWareHouses(fource = false, init = true) {
-      if (!fource && this.wareHouses.length) return;
+    getWareHouses(force = false, init = true) {
+      if (!force && this.wareHouses.length) return;
       return this.request({
         url: this.endpoint('wares/wareHouses'),
         method: 'get',
@@ -72,8 +72,8 @@ export default {
         }
       })
     },
-    getUnits(fource = false, init = true) {
-      if (!fource && this.units.length) return;
+    getUnits(force = false, init = true) {
+      if (!force && this.units.length) return;
       return this.request({
         url: this.endpoint('wares/units'),
         method: 'get',
@@ -85,8 +85,8 @@ export default {
         }
       })
     },
-    getAccounts(fource = false, init = true) {
-      if (!fource && this.accounts.length) return;
+    getAccounts(force = false, init = true) {
+      if (!force && this.accounts.length) return;
       return this.request({
         url: this.endpoint('accounts/accounts'),
         method: 'get',
@@ -102,7 +102,7 @@ export default {
       let data = this.copy(this.ware);
       let parent = data.parent;
       Object.keys(data).forEach(key => {
-        if (data[key] && data[key].pk != undefined) data[key] = data[key].pk;
+        if (data[key] && data[key].id != undefined) data[key] = data[key].id;
       })
       this.request({
         url: this.endpoint('wares/wares'),
@@ -120,10 +120,10 @@ export default {
       let data = this.copy(this.ware);
       let parent = data.parent;
       Object.keys(data).forEach(key => {
-        if (data[key] && data[key].pk != undefined) data[key] = data[key].pk;
+        if (data[key] && data[key].id != undefined) data[key] = data[key].id;
       })
       this.request({
-        url: this.endpoint('wares/wares/' + data.pk),
+        url: this.endpoint('wares/wares/' + data.id),
         method: 'put',
         data: data,
         success: data => {
@@ -137,7 +137,7 @@ export default {
     deleteWare(node) {
       // add confirmation 
       this.request({
-        url: this.endpoint('wares/wares/' + node.pk),
+        url: this.endpoint('wares/wares/' + node.id),
         method: 'delete',
         success: data => {
           this.notify('کالا با موفقیت حذف شد', 'success');
@@ -149,7 +149,7 @@ export default {
       let data = this.copy(this.wareLevel);
       let parent = data.parent;
       Object.keys(data).forEach(key => {
-        if (data[key] && data[key].pk) data[key] = data[key].pk;
+        if (data[key] && data[key].id) data[key] = data[key].id;
       })
       this.request({
         url: this.endpoint('wares/wareLevels'),
@@ -169,7 +169,7 @@ export default {
       Object.keys(data).forEach(key => {
         if (data[key]) {
           if (typeof data[key] == 'object') {
-            if (data[key].pk) data[key] = data[key].pk;
+            if (data[key].id) data[key] = data[key].id;
             else delete data[key];
           }
         } else {
@@ -177,7 +177,7 @@ export default {
         }
       })
       this.request({
-        url: this.endpoint('wares/wareLevels/' + data.pk),
+        url: this.endpoint('wares/wareLevels/' + data.id),
         method: 'put',
         data: data,
         success: data => {
@@ -191,7 +191,7 @@ export default {
     deleteWareLevel(node) {
       // add confirmation 
       this.request({
-        url: this.endpoint('wares/wareLevels/' + node.pk),
+        url: this.endpoint('wares/wareLevels/' + node.id),
         method: 'delete',
         success: data => {
           this.notify('کالا با موفقیت حذف شد', 'success');

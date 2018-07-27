@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-group col-12">
                   <label>حساب</label>
-                  <multiselect :options="this.accountsSelectValues.levels[3]" v-model="rptype.account" track-by="pk" label="title" />
+                  <multiselect :options="this.accountsSelectValues.levels[3]" v-model="rptype.account" track-by="id" label="title" />
                 </div>
                 <div class="form-group col-12">
                   <label>توضیحات</label>
@@ -91,7 +91,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!rptype.pk" @click="storeRPType()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="!rptype.id" @click="storeRPType()" type="button" class="btn btn-primary">ثبت</button>
             <button v-else @click="updateRPType()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
@@ -125,10 +125,10 @@ export default {
     updateRPType() {
       let data = {
         ...this.rptype,
-        account: this.rptype.account.pk
+        account: this.rptype.account.id
       };
       this.request({
-        url: this.endpoint("sanads/RPTypes/" + this.rptype.pk),
+        url: this.endpoint("sanads/RPTypes/" + this.rptype.id),
         method: "put",
         data: data,
         success: data => {
@@ -145,7 +145,7 @@ export default {
     storeRPType() {
       let data = {
         ...this.rptype,
-        account: this.rptype.account.pk
+        account: this.rptype.account.id
       };
       this.request({
         url: this.endpoint("sanads/RPTypes"),
@@ -161,7 +161,7 @@ export default {
     },
     deleteRPType(rptype) {
       this.request({
-        url: this.endpoint("sanads/RPTypes/" + rptype.pk),
+        url: this.endpoint("sanads/RPTypes/" + rptype.id),
         method: "delete",
         success: data => {
           this.notify("واحد با موفقیت حذف شد", "success");

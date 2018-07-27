@@ -21,7 +21,7 @@
                 </div>
                 <div class="form-group col-lg-8">
                   <label>کد - نام مشتری</label>
-                  <multiselect :options="accountsSelectValues.levels[3]" v-model="receive.account" track-by="pk" label="title" />
+                  <multiselect :options="accountsSelectValues.levels[3]" v-model="receive.account" track-by="id" label="title" />
                 </div>
                 <div class="col-lg-4">
                   <button type="button" name="" id="" class="btn btn-info">پرداخت شده برای فاکتور های</button>
@@ -54,14 +54,14 @@
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect :options="sanadsSelectValues.RPTypes" v-model="rows[i].type" track-by="pk" label="name" />
+                        <multiselect :options="sanadsSelectValues.RPTypes" v-model="rows[i].type" track-by="id" label="name" />
                       </td>
                       <td >
                         <multiselect
                           v-if="rows[i].type && rows[i].type.account.floatAccountGroup"
                           :options="rows[i].type.account.floatAccountGroup.floatAccounts"
                           v-model="rows[i].floatAccount"
-                          track-by="pk"
+                          track-by="id"
                           label="name"
                        />
                       </td>

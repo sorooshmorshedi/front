@@ -55,7 +55,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!independentAccount.pk" @click="storeIA()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="!independentAccount.id" @click="storeIA()" type="button" class="btn btn-primary">ثبت</button>
             <button v-else @click="updateIA()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default {
     updateIA() {
       this.request({
         url: this.endpoint(
-          "accounts/independentAccounts/" + this.independentAccount.pk
+          "accounts/independentAccounts/" + this.independentAccount.id
         ),
         method: "put",
         data: this.independentAccount,
@@ -114,7 +114,7 @@ export default {
     },
     deleteIA(ia) {
       this.request({
-        url: this.endpoint("accounts/independentAccounts/" + ia.pk),
+        url: this.endpoint("accounts/independentAccounts/" + ia.id),
         method: "delete",
         success: data => {
           this.notify("حساب مستقل با موفقیت حذف شد", "success");

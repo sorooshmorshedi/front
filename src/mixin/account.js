@@ -15,6 +15,8 @@ export default {
         code: '',
         type: {},
       },
+      person: {},
+      bank: {},
       floatAccount: {},
       floatAccountGroup: {},
       levels: {
@@ -50,6 +52,11 @@ export default {
       if (this.account.level == 0) {
         accounts = this.copy(this.accounts);
       } else {
+        if (['buyer', 'seller', 'bank'].includes(this.account.level)) {
+          this.account.parent = this.accountsSelectValues.levels[2].filter((acc) => {
+            return acc.code == '10101';
+          })[0]
+        }
         if (!this.account.parent) return '';
         accounts = this.account.parent.children;
       }
@@ -70,7 +77,7 @@ export default {
       this.account.code = code;
 
       if (this.account.parent) {
-        // this.account.type.pk = this.account.parent.type.pk;
+        // this.account.type.id = this.account.parent.type.id;
         this.account.type = this.account.parent.type;
       }
     },
@@ -82,14 +89,14 @@ export default {
         code
       ];
     },
-    async getData(fource = false) {
+    async getData(force = false) {
       this.log('Get all accounts data');
       Promise.all([
-        this.getAccounts(fource, false),
-        this.getFloatAccountGroups(fource, false),
-        this.getAccountTypes(fource, false),
-        this.getCostCenterGroups(fource, false),
-        this.getIndependentAccounts(fource, false),
+        this.getAccounts(force, false),
+        this.getFloatAccountGroups(force, false),
+        this.getAccountTypes(force, false),
+        this.getCostCenterGroups(force, false),
+        this.getIndependentAccounts(force, false),
       ]).then(values => {
         this.init();
       })

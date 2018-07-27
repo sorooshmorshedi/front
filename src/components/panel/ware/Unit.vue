@@ -59,7 +59,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!unit.pk" @click="storeUnit()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="!unit.id" @click="storeUnit()" type="button" class="btn btn-primary">ثبت</button>
             <button v-else @click="updateUnit()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default {
     },
     updateUnit() {
       this.request({
-        url: this.endpoint("wares/units/" + this.unit.pk),
+        url: this.endpoint("wares/units/" + this.unit.id),
         method: "put",
         data: this.unit,
         success: data => {
@@ -116,7 +116,7 @@ export default {
     },
     deleteUnit(unit) {
       this.request({
-        url: this.endpoint("wares/units/" + unit.pk),
+        url: this.endpoint("wares/units/" + unit.id),
         method: "delete",
         success: data => {
           this.notify("واحد با موفقیت حذف شد", "success");
@@ -127,9 +127,9 @@ export default {
   },
   computed: {
     unitCode() {
-      if(this.unit.pk) return this.unit.pk;
-      let unit = _.maxBy(this.units, u => u.pk);
-      if (unit) return unit.pk + 1;
+      if(this.unit.id) return this.unit.id;
+      let unit = _.maxBy(this.units, u => u.id);
+      if (unit) return unit.id + 1;
       else return 1;
     }
   }

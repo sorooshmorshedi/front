@@ -7,8 +7,8 @@ export default {
     return {}
   },
   methods: {
-    getRPTypes(fource = false, init = true) {
-      if (!fource && this.RPTypes.length) return;
+    getRPTypes(force = false, init = true) {
+      if (!force && this.RPTypes.length) return;
       return this.request({
         url: this.endpoint('sanads/RPTypes'),
         method: 'get',

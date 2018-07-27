@@ -10,6 +10,9 @@
               <a class="nav-item nav-link" id="nav-1-tab" data-toggle="tab" href="#nav-kol" role="tab">کل</a>
               <a class="nav-item nav-link" id="nav-2-tab" data-toggle="tab" href="#nav-moein" role="tab">معین</a>
               <a class="nav-item nav-link" id="nav-3-tab" data-toggle="tab" href="#nav-tafzili" role="tab">تفضیلی</a>
+              <a class="nav-item nav-link" id="nav-buyer-tab" data-toggle="tab" href="#nav-buyer" role="tab">خریدار</a>
+              <a class="nav-item nav-link" id="nav-seller-tab" data-toggle="tab" href="#nav-seller" role="tab">فروشنده</a>
+              <a class="nav-item nav-link" id="nav-bank-tab" data-toggle="tab" href="#nav-bank" role="tab">بانک</a>
               <a class="nav-item nav-link" id="nav-float-account-group-tab" data-toggle="tab" href="#nav-float-account-group" role="tab">گروه حساب تفضیلی شناور</a>
               <a class="nav-item nav-link" id="nav-4-tab" data-toggle="tab" href="#nav-float" role="tab">تفضیلی شناور</a>
             </div>
@@ -30,6 +33,24 @@
             <div class="tab-pane fade " id="nav-tafzili" role="tabpanel">
               <vue-form-generator tag="div" :schema="createSchema[3]" :model="account" />
               <button @click="storeAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
+            </div>
+            <div class="tab-pane fade  " id="nav-buyer" role="tabpanel">
+              <vue-form-generator tag="div" :schema="createSchema.personAccount" :model="account" />
+              <hr> <br>
+              <vue-form-generator tag="div" :schema="createSchema.person" :model="person" />
+              <button @click="storeBuyer()" class="btn btn-primary float-left submit-btn">ثبت</button>
+            </div>
+            <div class="tab-pane fade " id="nav-seller" role="tabpanel">
+              <vue-form-generator tag="div" :schema="createSchema.personAccount" :model="account" />
+              <hr> <br>
+              <vue-form-generator tag="div" :schema="createSchema.person" :model="person" />
+              <button @click="storeSeller()" class="btn btn-primary float-left submit-btn">ثبت</button>
+            </div>
+            <div class="tab-pane fade " id="nav-bank" role="tabpanel">
+              <vue-form-generator tag="div" :schema="createSchema.bankAccount" :model="account" />
+              <hr> <br>
+              <vue-form-generator tag="div" :schema="createSchema.bank" :model="bank" />
+              <button @click="storeBank()" class="btn btn-primary float-left submit-btn">ثبت</button>
             </div>
             <div class="tab-pane fade " id="nav-float-account-group" role="tabpanel">
               <vue-form-generator tag="div" :schema="createSchema.floatAccountGroup" :model="floatAccountGroup" />
@@ -64,7 +85,16 @@ export default {
   data() {
     return {};
   },
-  watch: {}
+  methods: {
+    storeBuyer(){
+      this.person.type = 'buyer';
+      this.storePerson();
+    },
+    storeSeller(){
+      this.person.type = 'seller';
+
+    }
+  }
 };
 </script>
 

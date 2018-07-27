@@ -59,7 +59,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!wareHouse.pk" @click="storeWH()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="!wareHouse.id" @click="storeWH()" type="button" class="btn btn-primary">ثبت</button>
             <button v-else @click="updateWH()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default {
     },
     updateWH() {
       this.request({
-        url: this.endpoint("wares/wareHouses/" + this.wareHouse.pk),
+        url: this.endpoint("wares/wareHouses/" + this.wareHouse.id),
         method: "put",
         data: this.wareHouse,
         success: data => {
@@ -116,7 +116,7 @@ export default {
     },
     deleteWH(wh) {
       this.request({
-        url: this.endpoint("wares/wareHouses/" + wh.pk),
+        url: this.endpoint("wares/wareHouses/" + wh.id),
         method: "delete",
         success: data => {
           this.notify("انبار با موفقیت حذف شد", "success");
@@ -127,9 +127,9 @@ export default {
   },
   computed: {
     wareHouseCode() {
-      if(this.wareHouse.pk) return this.wareHouse.pk;
-      let wh = _.maxBy(this.wareHouses, wh => wh.pk);
-      if (wh) return wh.pk + 1;
+      if(this.wareHouse.id) return this.wareHouse.id;
+      let wh = _.maxBy(this.wareHouses, wh => wh.id);
+      if (wh) return wh.id + 1;
       else return 1;
     }
   }

@@ -61,7 +61,7 @@ export default {
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'title',
-            trackBy: 'pk',
+            trackBy: 'id',
           },
           values: [],
         },
@@ -94,7 +94,7 @@ export default {
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'title',
-            trackBy: 'pk',
+            trackBy: 'id',
           },
           values: [],
         },
@@ -128,7 +128,7 @@ export default {
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'title',
-            trackBy: 'pk',
+            trackBy: 'id',
           },
           values: [],
         },
@@ -169,7 +169,7 @@ export default {
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'name',
-            trackBy: 'pk',
+            trackBy: 'id',
           },
           values: [],
         },
@@ -194,7 +194,7 @@ export default {
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'name',
-            trackBy: 'pk',
+            trackBy: 'id',
           },
           values: [],
         },
@@ -205,7 +205,7 @@ export default {
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'name',
-            trackBy: 'pk',
+            trackBy: 'id',
           },
           values: [],
         },
@@ -246,7 +246,7 @@ export default {
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'name',
-            trackBy: 'pk',
+            trackBy: 'id',
           },
           values: [],
         },
