@@ -21,6 +21,8 @@ export default new Vuex.Store({
     },
     sanads: {
       RPTypes: [],
+      sanads: [],
+      transactions: []
     }
   },
   mutations: {
@@ -42,6 +44,8 @@ export default new Vuex.Store({
     },
     setSanads(state, sanads) {
       sanads.RPTypes && (state.sanads.RPTypes = sanads.RPTypes);
+      sanads.sanads && (state.sanads.sanads = sanads.sanads);
+      sanads.transactions && (state.sanads.transactions = sanads.transactions);
 
     }
 

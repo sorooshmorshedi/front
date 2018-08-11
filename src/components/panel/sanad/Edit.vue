@@ -17,7 +17,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="waresSelectValues.levels[0]" v-model="wareLevel" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="waresSelectValues.levels[0]" v-model="wareLevel" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[0]" :model="wareLevel" />
@@ -27,7 +27,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="waresSelectValues.levels[1]" v-model="wareLevel" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="waresSelectValues.levels[1]" v-model="wareLevel" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[1]" :model="wareLevel" />
@@ -37,7 +37,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="waresSelectValues.levels[2]" v-model="wareLevel" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="waresSelectValues.levels[2]" v-model="wareLevel" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[2]" :model="wareLevel" />
@@ -47,7 +47,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="waresSelectValues.wares" v-model="ware" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="waresSelectValues.wares" v-model="ware" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[3]" :model="ware" />

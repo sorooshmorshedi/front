@@ -25,3 +25,24 @@
     margin-right: 15px;
   }
 }
+
+.input-field.ltr{
+  label {
+    -webkit-transform-origin: top left !important;
+    transform-origin: top left !important;
+    direction: ltr;
+    text-align: left;
+  }
+}
+
+.btn.submit {
+  min-width: 120px;
+}
+
+.table {
+  &.table-pointer {
+    tr {
+      cursor: pointer;
+    }
+  }
+}

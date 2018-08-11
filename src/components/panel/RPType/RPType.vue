@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-group col-12">
                   <label>حساب</label>
-                  <multiselect :options="this.accountsSelectValues.levels[3]" v-model="rptype.account" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.levels[3]" v-model="rptype.account" track-by="id" label="title" />
                 </div>
                 <div class="form-group col-12">
                   <label>توضیحات</label>

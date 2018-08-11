@@ -46,7 +46,7 @@
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect :options="accountsSelectValues.levels[3]" v-model="rows[i].account" track-by="id" label="title" />
+                        <multiselect dir="rtl"  :options="accountsSelectValues.levels[3]" v-model="rows[i].account" track-by="id" label="title" />
                       </td>
                       <td>
                         <input type="text" class="form-control form-control-sm">
@@ -55,10 +55,10 @@
                         <input type="text" class="form-control form-control-sm" v-model="rows[i].exp">
                       </td>
                       <td>
-                        <multiselect :options="floatAccounts(rows[i])" v-model="rows[i].floatAccount" track-by="id" label="name" />
+                        <multiselect dir="rtl"  :options="floatAccounts(rows[i])" v-model="rows[i].floatAccount" track-by="id" label="name" />
                       </td>
                       <td>
-                        <multiselect :options="costCenters(rows[i])" v-model="rows[i].costCenter" track-by="id" label="name" />
+                        <multiselect dir="rtl"  :options="costCenters(rows[i])" v-model="rows[i].costCenter" track-by="id" label="name" />
                       </td>
                       <td>
                         <money class="form-control form-control-sm" v-model="rows[i].bed" />

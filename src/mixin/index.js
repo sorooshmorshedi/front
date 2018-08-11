@@ -89,6 +89,9 @@ Vue.mixin({
           })
         })
     },
+    successNotify() {
+      this.notify('عملیات با موفقیت انجام شد','success')
+    },
     notify(msg, type) {
       $.notify({
         message: msg,
@@ -107,9 +110,9 @@ Vue.mixin({
           .height() - 50);
     },
     endpoint(url) {
-      if (url[0] == "/" || url[url.length - 1] == "/") {
+      // if (url[0] == "/" || url[url.length - 1] == "/") {
         // throw "Bad URL";
-      }
+      // }
       return "http://localhost:8000/" + url;
     },
     setToken(token) {

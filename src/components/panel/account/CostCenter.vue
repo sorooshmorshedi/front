@@ -55,7 +55,7 @@
               <div class="row">
                 <div class="form-group col-12">
                   <label for="">نام مرکز هزینه</label>
-                  <multiselect label="name" track-by="id" :options="accountsSelectValues.costCenterGroups" v-model="costCenter.group" />
+                  <multiselect dir="rtl"  label="name" track-by="id" :options="accountsSelectValues.costCenterGroups" v-model="costCenter.group" />
                 </div>
                 <div class="form-group col-12">
                   <label for="">نام مرکز هزینه</label>

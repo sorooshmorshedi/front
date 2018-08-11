@@ -22,7 +22,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.levels[0]" v-model="account" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.levels[0]" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[0]" :model="account" />
@@ -33,7 +33,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.levels[1]" v-model="account" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.levels[1]" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[1]" :model="account" />
@@ -44,7 +44,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.levels[2]" v-model="account" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.levels[2]" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[2]" :model="account" />
@@ -55,7 +55,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.levels[3]" v-model="account" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.levels[3]" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema[3]" :model="account" />
@@ -66,7 +66,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.buyers" v-model="account" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.buyers" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema.personAccount" :model="account" />
@@ -78,7 +78,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.sellers" v-model="account" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.sellers" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema.personAccount" :model="account" />
@@ -90,7 +90,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">کد</label>
-                  <multiselect :options="this.accountsSelectValues.banks" v-model="account" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.banks" v-model="account" track-by="id" label="title" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema.bankAccount" :model="account" />
@@ -102,7 +102,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">گروه حساب تفضیلی شناور</label>
-                  <multiselect :options="this.accountsSelectValues.floatAccountGroups" v-model="floatAccountGroup" track-by="id" label="name" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.floatAccountGroups" v-model="floatAccountGroup" track-by="id" label="name" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema.floatAccountGroup" :model="floatAccountGroup" />
@@ -113,7 +113,7 @@
               <div class="row">
                 <div class="form-group col-md-4">
                   <label for="">حساب تفضیلی شناور</label>
-                  <multiselect :options="this.accountsSelectValues.floatAccounts" v-model="floatAccount" track-by="id" label="name" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.floatAccounts" v-model="floatAccount" track-by="id" label="name" />
                 </div>
               </div>
               <vue-form-generator tag="div" :schema="editSchema.floatAccounts" :model="floatAccount" />

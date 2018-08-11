@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group col-lg-12">
                   <label>کد - نام مشتری</label>
-                  <multiselect :options="accountsSelectValues.levels[3]" v-model="factor.customer" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="accountsSelectValues.levels[3]" v-model="factor.customer" track-by="id" label="title" />
                 </div>
               </div>
             </div>
@@ -53,10 +53,10 @@
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect :options="waresSelectValues.wareHouses" v-model="rows[i].wareHouse" track-by="id" label="title" />
+                        <multiselect dir="rtl"  :options="waresSelectValues.wareHouses" v-model="rows[i].wareHouse" track-by="id" label="title" />
                       </td>
                       <td>
-                        <multiselect :options="wareHouseWares[i]" v-model="rows[i].ware" track-by="id" label="title" />
+                        <multiselect dir="rtl"  :options="wareHouseWares[i]" v-model="rows[i].ware" track-by="id" label="title" />
                       </td>
                       <td>
                         <input type="number" class="form-control form-control-sm" v-model="rows[i].count">
