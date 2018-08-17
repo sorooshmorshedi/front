@@ -24,14 +24,15 @@ import CreateSanad from '@/components/panel/sanad/Create';
 import Receive from '@/components/panel/receive/Receive';
 import CreateReceive from '@/components/panel/receive/Create';
 
-import RPType from '@/components/panel/RPType/RPType';
+import DefaultAccounts from '@/components/panel/defaultAccounts/DefaultAccounts';
 
 import Factor from '@/components/panel/factor/Factor';
 import CreateFactor from '@/components/panel/factor/Create';
 
 
-import Check from '@/components/panel/check/Check';
-import CheckBook from '@/components/panel/check/CheckBook';
+import Cheque from '@/components/panel/cheque/Cheque';
+import Chequebook from '@/components/panel/cheque/Chequebook';
+import ReceivedCheques from '@/components/panel/cheque/ReceivedCheques';
 
 
 export default [{
@@ -112,9 +113,9 @@ export default [{
       }]
     },
     {
-      name: 'RPType',
-      path: 'receiveAndPaymentTypes',
-      component: RPType,
+      name: 'DefaultAccounts',
+      path: 'defaultAccounts',
+      component: DefaultAccounts,
     },
     {
       name: 'Receive',
@@ -132,8 +133,9 @@ export default [{
       component: Sanad,
       children: [{
         name: 'CreateSanad',
-        path: 'create',
-        component: CreateSanad
+        path: 'create/:id?',
+        component: CreateSanad,
+        props: true,
       }]
     },
     {
@@ -147,14 +149,21 @@ export default [{
       }]
     },
     {
-      name: 'Check',
-      path: 'check',
-      component: Check,
+      name: 'Cheque',
+      path: 'cheque',
+      component: Cheque,
       children: [{
-        name: 'CheckBook',
-        path: 'checkBook',
-        component: CheckBook,
-      }]
+        name: 'Chequebook',
+        path: 'chequebook',
+        component: Chequebook,
+      },
+      {
+        name: 'ReceivedCheques',
+        path: 'receivedCheques',
+        component: ReceivedCheques,
+
+      }
+    ]
     }
 
   ]

@@ -176,6 +176,7 @@ export default {
   name: "Create",
   components: { money, date },
   mixins: [accountApiMixin, sanadApiMixin],
+  props: ["id"],
   data() {
     return {
       sanad: {
@@ -195,7 +196,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      $("#sanad-selection-modal").modal("show");
+      // $("#sanad-selection-modal").modal("show");
     }, 200);
   },
   computed: {
@@ -230,9 +231,19 @@ export default {
   },
   methods: {
     getData() {
-      this.getAccounts();
-      this.getCostCenterGroups();
-      this.getSanads();
+      Promise.all([
+        this.getAccounts(),
+        this.getCostCenterGroups(),
+        this.getSanads()
+      ]).then(data => {
+        if (this.id) {
+          let sanad = this.sanads.filter(s => s.id == this.id);
+          console.log(sanad);
+          if (sanad) {
+            this.selectSanad(sanad[0]);
+          }
+        }
+      });
     },
     selectSanad(sanad) {
       this.sanad = sanad;

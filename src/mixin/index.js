@@ -81,22 +81,25 @@ Vue.mixin({
           options.error && options.error(error.response);
           let errors = error.response.data;
           Object.keys(errors).forEach(err => {
-            $.notify({
-              message: err + ': ' + errors[err],
-            }, {
-              type: 'danger'
-            })
-          })
-        })
+            this.notify(err + ': ' + errors[err], 'danger');
+          });
+        });
+    },
+    extractIds(data) {
+      Object.keys(data).forEach(key => {
+        if (data[key] && data[key].id) data[key] = data[key].id;
+      });
+      return data;
     },
     successNotify() {
-      this.notify('عملیات با موفقیت انجام شد','success')
+      this.notify('عملیات با موفقیت انجام شد', 'success')
     },
     notify(msg, type) {
       $.notify({
         message: msg,
       }, {
         type: type,
+        z_index: 2000,
       })
     },
     hasPermission(permission) {
@@ -111,7 +114,7 @@ Vue.mixin({
     },
     endpoint(url) {
       // if (url[0] == "/" || url[url.length - 1] == "/") {
-        // throw "Bad URL";
+      // throw "Bad URL";
       // }
       return "http://localhost:8000/" + url;
     },

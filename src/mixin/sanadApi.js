@@ -23,19 +23,6 @@ export default {
         }
       })
     },
-    getRPTypes(force = false, init = true) {
-      if (!force && this.RPTypes.length) return;
-      return this.request({
-        url: this.endpoint('sanads/RPTypes'),
-        method: 'get',
-        success: data => {
-          this.$store.commit('setSanads', {
-            RPTypes: data
-          });
-          init && this.init();
-        }
-      })
-    },
     getTransactions(force = false, init = true) {
       if (!force && this.transactions.length) return;
       return this.request({
@@ -53,7 +40,6 @@ export default {
   },
   computed: {
     ...mapState({
-      RPTypes: state => state.sanads.RPTypes,
       sanads: state => state.sanads.sanads,
       transactions: state => state.sanads.transactions,
       receives: state => state.sanads.transactions.filter(o => o.type == 'receive'),
@@ -86,17 +72,12 @@ export default {
     sanadsSelectValues() {
       this.log('Generate sanadsSelectValues');
       let res = {
-        RPTypes: [],
+        defaultAccounts: [],
         sanads: [],
       }
-      res.RPTypes.push({
+      res.defaultAccounts.push({
         name: 'خنثی',
         id: null
-      });
-      this.RPTypes.forEach(rptype => {
-        res.RPTypes.push({
-          ...rptype,
-        });
       });
       this.sanads.forEach(sanad => {
         res.sanads.push({

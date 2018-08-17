@@ -1,8 +1,8 @@
 <template>
   <div class="row rtl">
     <div class="col-12 col-lg-12">
-      <div class="title">نوع های دریافت و پرداخت</div>
-      <button @click="createRPType()" type="button" class="btn btn-info">افزودن</button>
+      <div class="title">حساب های پیشفرض</div>
+      <button @click="createdefaultAccount()" type="button" class="btn btn-info">افزودن</button>
       <br>
       <table class="table">
         <thead>
@@ -18,35 +18,35 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(rptype, i) in RPTypes" :key="i">
+          <tr v-for="(defaultAccount, i) in defaultAccounts" :key="i">
             <td>{{ i+1 }}</td>
-            <td>{{ rptype.name }}</td>
-            <td>{{ rptype.account.title }}</td>
-            <td>{{ rptype.explanation }}</td>
+            <td>{{ defaultAccount.name }}</td>
+            <td>{{ defaultAccount.account.title }}</td>
+            <td>{{ defaultAccount.explanation }}</td>
             <td>
-              <i v-if="['both','receive'].includes(rptype.usage)" class="fas fa-check" />
+              <i v-if="['both','receive'].includes(defaultAccount.usage)" class="fas fa-check" />
             </td>
             <td>
-              <i v-if="['both','payment'].includes(rptype.usage)" class="fas fa-check" />
+              <i v-if="['both','payment'].includes(defaultAccount.usage)" class="fas fa-check" />
             </td>
             <td>
-              <i class="fas fa-pencil-alt text-warning" @click="editRPType(rptype)" />
+              <i class="fas fa-pencil-alt text-warning" @click="editdefaultAccount(defaultAccount)" />
             </td>
             <td>
-              <i class="fas fa-trash-alt text-danger" @click="deleteRPType(rptype)" />
+              <i class="fas fa-trash-alt text-danger" @click="deletedefaultAccount(defaultAccount)" />
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="modal fade" id="rptype" tabindex="-1">
+    <div class="modal fade" id="defaultAccount" tabindex="-1">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">واحد</h4>
+            <h4 class="modal-title">جزئیات حساب پیشفرض</h4>
             <button type="button" class="close" data-dismiss="modal">
-              <span arrptype-hidden="true">&times;</span>
+              <span ardefaultAccount-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
@@ -54,32 +54,32 @@
               <div class="row">
                 <div class="form-group col-12">
                   <label for="">نام</label>
-                  <input type="text" class="form-control" v-model="rptype.name">
+                  <input type="text" class="form-control" v-model="defaultAccount.name">
                 </div>
                 <div class="form-group col-12">
                   <label>حساب</label>
-                  <multiselect dir="rtl"  :options="this.accountsSelectValues.levels[3]" v-model="rptype.account" track-by="id" label="title" />
+                  <multiselect dir="rtl"  :options="this.accountsSelectValues.levels[3].filter(o => !o.floatAccountGroup)" v-model="defaultAccount.account" track-by="id" label="title" />
                 </div>
                 <div class="form-group col-12">
                   <label>توضیحات</label>
-                  <textarea class="form-control" rows="3" v-model="rptype.explanation"></textarea>
+                  <textarea class="form-control" rows="3" v-model="defaultAccount.explanation"></textarea>
                 </div>
 
                 <div class="col-12">
                   <div class="form-check col-12 col-lg-4">
-                    <input class="form-check-input" id="u1" type="radio" value="receive" v-model="rptype.usage">
+                    <input class="form-check-input" id="u1" type="radio" value="receive" v-model="defaultAccount.usage">
                     <label class="form-check-label" for="u1">
                       دریافت
                     </label>
                   </div>
                   <div class="form-check col-12 col-lg-4">
-                    <input class="form-check-input" id="u2" type="radio" value="payment" v-model="rptype.usage">
+                    <input class="form-check-input" id="u2" type="radio" value="payment" v-model="defaultAccount.usage">
                     <label class="form-check-label" for="u2">
                       پرداخت
                     </label>
                   </div>
                   <div class="form-check col-12 col-lg-4">
-                    <input class="form-check-input" id="u3" type="radio" value="both" v-model="rptype.usage">
+                    <input class="form-check-input" id="u3" type="radio" value="both" v-model="defaultAccount.usage">
                     <label class="form-check-label" for="u3">
                       هر دو
                     </label>
@@ -91,8 +91,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!rptype.id" @click="storeRPType()" type="button" class="btn btn-primary">ثبت</button>
-            <button v-else @click="updateRPType()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="!defaultAccount.id" @click="storedefaultAccount()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-else @click="updatedefaultAccount()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
       </div>
@@ -106,66 +106,66 @@ import accountApiMixin from "@/mixin/accountApi";
 import sanadtApiMixin from "@/mixin/sanadApi";
 
 export default {
-  mixins: [accountApiMixin, sanadtApiMixin],
-  name: "RPType",
+  mixins: [accountApiMixin],
+  name: "defaultAccount",
   data() {
     return {
-      rptype: {}
+      defaultAccount: {}
     };
   },
   created() {
-    this.getRPTypes();
+    this.getDefaultAccounts();
     this.getAccounts();
   },
   methods: {
-    editRPType(rptype) {
-      this.rptype = this.copy(rptype);
-      $("#rptype").modal("show");
+    editdefaultAccount(defaultAccount) {
+      this.defaultAccount = this.copy(defaultAccount);
+      $("#defaultAccount").modal("show");
     },
-    updateRPType() {
+    updatedefaultAccount() {
       let data = {
-        ...this.rptype,
-        account: this.rptype.account.id
+        ...this.defaultAccount,
+        account: this.defaultAccount.account.id
       };
       this.request({
-        url: this.endpoint("sanads/RPTypes/" + this.rptype.id),
+        url: this.endpoint("accounts/defaultAccounts/" + this.defaultAccount.id),
         method: "put",
         data: data,
         success: data => {
           this.notify("واحد با موفقیت ویرایش شد", "success");
-          this.getRPTypes(true);
-          $("#rptype").modal("hide");
-          this.rptype = {};
+          this.getDefaultAccounts(true);
+          $("#defaultAccount").modal("hide");
+          this.defaultAccount = {};
         }
       });
     },
-    createRPType() {
-      $("#rptype").modal("show");
+    createdefaultAccount() {
+      $("#defaultAccount").modal("show");
     },
-    storeRPType() {
+    storedefaultAccount() {
       let data = {
-        ...this.rptype,
-        account: this.rptype.account.id
+        ...this.defaultAccount,
+        account: this.defaultAccount.account.id
       };
       this.request({
-        url: this.endpoint("sanads/RPTypes"),
+        url: this.endpoint("accounts/defaultAccounts"),
         method: "post",
         data: data,
         success: data => {
           this.notify("واحد با موفقیت ساخته شد", "success");
-          this.getRPTypes(true);
-          $("#rptype").modal("hide");
-          this.rptype = {};
+          this.getDefaultAccounts(true);
+          $("#defaultAccount").modal("hide");
+          this.defaultAccount = {};
         }
       });
     },
-    deleteRPType(rptype) {
+    deletedefaultAccount(defaultAccount) {
       this.request({
-        url: this.endpoint("sanads/RPTypes/" + rptype.id),
+        url: this.endpoint("accounts/defaultAccounts/" + defaultAccount.id),
         method: "delete",
         success: data => {
           this.notify("واحد با موفقیت حذف شد", "success");
-          this.getRPTypes(true);
+          this.getDefaultAccounts(true);
         }
       });
     }

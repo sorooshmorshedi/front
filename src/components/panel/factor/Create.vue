@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group col-lg-12">
                   <label>کد - نام مشتری</label>
-                  <multiselect dir="rtl"  :options="accountsSelectValues.levels[3]" v-model="factor.customer" track-by="id" label="title" />
+                  <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="factor.customer" track-by="id" label="title" />
                 </div>
               </div>
             </div>
@@ -41,34 +41,56 @@
                   <thead>
                     <tr>
                       <th>#</th>
+                      <th>کالا</th>
                       <th>انبار</th>
-                      <th>کد - نام کالا</th>
-                      <th>مقدار</th>
-                      <th>فی</th>
-                      <th>مبلغ تخفیف</th>
-                      <th>مبلغ</th>
+                      <th>تعداد</th>
+                      <th>واحد</th>
+                      <th>قیمت واحد</th>
+                      <th>جمع</th>
+                      <th>تخفیف (مبلغ)</th>
+                      <th>تخفیف (درصد)</th>
+                      <th>جمع کل پس از تخفیف</th>
+
+                      <th v-if="hasTax">مالیات</th>
+                      <th v-if="hasTax">جمع مبلغ کل و مالیات</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect dir="rtl"  :options="waresSelectValues.wareHouses" v-model="rows[i].wareHouse" track-by="id" label="title" />
+                        <multiselect dir="rtl" :options="waresSelectValues.wares" v-model="rows[i].ware" track-by="id" label="title" />
                       </td>
                       <td>
-                        <multiselect dir="rtl"  :options="wareHouseWares[i]" v-model="rows[i].ware" track-by="id" label="title" />
+                        <multiselect v-if="rows[i].ware" dir="rtl" :options="waresSelectValues.wareHouses" v-model="rows[i].ware.wareHouse" track-by="id" label="title" />
+                        <span v-else> - </span>
                       </td>
                       <td>
-                        <input type="number" class="form-control form-control-sm" v-model="rows[i].count">
+                        <input dir="ltr" type="number" class="form-control form-control-sm" v-model="rows[i].count">
+                      </td>
+                      <td>
+                        {{ rows[i].ware?rows[i].ware.unit.name:' - ' }}
                       </td>
                       <td>
                         <money class="form-control form-control-sm" v-model="rows[i].fee" />
                       </td>
-                      <td>
-                        <money class="form-control form-control-sm" v-model="rows[i].discount" />
+                      <td dir="ltr">
+                        {{ rowSum(row) | toMoney}}
                       </td>
                       <td>
-                        <money class="form-control form-control-sm" disabled :value="rowValues[i]" />
+                        <money :disabled="rows[i].discountPercent != ''" class="form-control form-control-sm" v-model="rows[i].discountValue" />
+                      </td>
+                      <td>
+                        <input :disabled="rows[i].discountValue != ''" type="number" min=0 max=100 class="form-control form-control-sm" v-model="rows[i].discountPercent" />
+                      </td>
+                      <td dir="ltr">
+                        {{ rowSumAfterDiscount(row) | toMoney }}
+                      </td>
+                      <td>
+                        {{ rowTax(row) | toMoney }}
+                      </td>
+                      <td>
+                        {{ rowSumAfterTax(row) | toMoney }}
                       </td>
                     </tr>
                     <tr>
@@ -76,12 +98,40 @@
                     <tr class="bg-info text-white">
                       <td colspan="5"></td>
                       <td class="text-left">مجموع:</td>
-                      <td class="text-left">{{ sum | toMoney }}</td>
+                      <td class="text-left">{{ sum.sum | toMoney }}</td>
+                      <td colspan="2"></td>
+                      <td class="text-left">{{ sum.afterDiscount | toMoney }}</td>
+                      <td class="text-left">{{ sum.tax | toMoney }}</td>
+                      <td class="text-left">{{ sum.afterTax | toMoney }}</td>
                     </tr>
 
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+          <div class="row">
+
+            <div class="form-group col-lg-3">
+              <label>تخفیف فاکتور (مبلغ)</label>
+              <money :disabled="factor.discountPercent != ''" class="form-control" v-model="factor.discountValue" />
+            </div>
+            <div class="form-group col-lg-3">
+              <label>تخفیف فاکتور (درصد)</label>
+              <input :disabled="factor.discountValue != ''" type="number" min=0 max=100 class="form-control" v-model="factor.discountPercent" />
+            </div>
+
+            <div class="form-group col-lg-3">
+              <label>مالیات (درصد)</label>
+              <money :disabled="factor.taxPercent != ''" class="form-control" v-model="factor.taxValue" />
+            </div>
+            <div class="form-group col-lg-3">
+              <label>مالیات (مبلغ)</label>
+              <input :disabled="factor.taxValue != ''" type="number" min=0 max=100 class="form-control" v-model="factor.taxPercent" />
+            </div>
+            <div class="form-group col-lg-3">
+              <label></label>
+              <input type="text" class="form-control">
             </div>
           </div>
         </div>
@@ -102,23 +152,72 @@ export default {
   mixins: [accountApiMixin, wareApiMixin],
   data() {
     return {
-      factor: {},
-      rows: [{}]
+      factor: {
+        taxPercent: "",
+        taxValue: "",
+        discountPercent: "",
+        discountValue: ""
+      },
+      rows: [],
+      hasTax: true,
+      rowTemplate: {
+        discountValue: "",
+        discountPercent: ""
+      }
     };
   },
   created() {
     this.getAccounts();
     this.getWareHouses();
     this.getWares();
+    this.rows.push(this.rowTemplate);
   },
-  mounted() {},
+  methods: {
+    rowSum(row) {
+      if (!row.fee || !row.count) return 0;
+      return +row.fee * +row.count;
+    },
+    rowSumAfterDiscount(row) {
+      if (!this.rowSum(row)) return 0;
+      if (!row.discountValue && !row.discountPercent) return this.rowSum(row);
+      if (row.discountValue) return this.rowSum(row) - +row.discountValue;
+      else
+        return +(this.rowSum(row) * (100 - +row.discountPercent) / 100).toFixed(
+          2
+        );
+    },
+    rowTax(row) {
+      if (!this.rowSumAfterDiscount(row)) return 0;
+      if (!this.factor.taxValue && !this.factor.taxPercent) return 0;
+      if (this.factor.taxValue)
+        return +this.factor.taxValue / (this.rows.length - 1);
+      else
+        return +(
+          this.rowSumAfterDiscount(row) *
+          +this.factor.taxPercent /
+          100
+        ).toFixed(2);
+    },
+    rowSumAfterTax(row) {
+      if (!this.rowTax(row)) return this.rowSumAfterDiscount(row);
+      return this.rowSumAfterDiscount(row) + this.rowTax(row);
+    }
+  },
   computed: {
     sum() {
-      let sum = 0;
-      this.rowValues.forEach(rv => {
-        sum += rv;
+      let res = {
+        sum: 0,
+        afterDiscount: 0,
+        tax: 0,
+        afterTax: 0
+      };
+      this.rows.forEach(r => {
+        res.sum += this.rowSum(r);
+        res.afterDiscount += this.rowSumAfterDiscount(r);
+        res.tax += this.rowTax(r);
+        res.afterTax += this.rowSumAfterTax(r);
       });
-      return sum;
+      return res;
     },
     wareHouseWares() {
       let res = [];
@@ -133,25 +232,17 @@ export default {
         }
       });
       return res;
-    },
-    rowValues() {
-      let res = [];
-      this.rows.forEach((r, i) => {
-        if (!r.fee || !r.count) res.push(0);
-        else {
-          let value = r.fee * r.count;
-          if (r.discount) value -= r.discount;
-          res.push(value);
-        }
-      });
-      return res;
     }
   },
   watch: {
     rows: {
       handler() {
-        if (this.rows[this.rows.length - 1].wareHouse) {
-          this.rows.push({});
+        let row = this.rows[this.rows.length - 1];
+        if (row && row.ware) {
+          this.rows.push({
+            discountValue: "",
+            discountPercent: ""
+          });
         }
       },
       deep: true

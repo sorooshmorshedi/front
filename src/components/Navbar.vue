@@ -39,7 +39,7 @@
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'CostCenter'}">مرکز هزینه</router-link>
             <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'RPType'}">انواع دریافت و پرداخت</router-link>
+            <router-link class="dropdown-item" :to="{name:'DefaultAccounts'}">حساب های پیشفرض</router-link>
 
           </div>
 
@@ -56,7 +56,8 @@
             <div class="dropdown-submenu ">
               <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">دفتر چک</a>
               <div class="dropdown-menu " aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{name:'CheckBook'}">دسته چک</router-link>
+                <router-link class="dropdown-item" :to="{name:'Chequebook'}">دسته چک</router-link>
+                <router-link class="dropdown-item" :to="{name:'ReceivedCheques'}">چک های دریافتی</router-link>
               </div>
             </div>
           </div>

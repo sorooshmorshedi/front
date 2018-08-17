@@ -68,6 +68,19 @@ export default {
         }
       })
     },
+    getDefaultAccounts(force = false, init = true) {
+      if (!force && this.defaultAccounts.length) return;
+      return this.request({
+        url: this.endpoint('accounts/defaultAccounts'),
+        method: 'get',
+        success: data => {
+          this.$store.commit('setAccounts', {
+            defaultAccounts: data
+          });
+          init && this.init();
+        }
+      })
+    },
     storeAccount() {
       let data = this.copy(this.account);
       let parent = data.parent;
@@ -350,6 +363,7 @@ export default {
       accountTypes: state => state.accounts.accountTypes,
       costCenterGroups: state => state.accounts.costCenterGroups,
       independentAccounts: state => state.accounts.independentAccounts,
+      defaultAccounts: state => state.accounts.defaultAccounts,
     }),
     accountsSelectValues() {
       if (!this.accounts) return [];
@@ -369,6 +383,7 @@ export default {
         buyers: [],
         sellers: [],
         banks: [],
+        defaultAccounts: [],
       };
       let q = [];
       this.accounts.forEach(acc => q.push(acc));
@@ -409,6 +424,11 @@ export default {
           res.floatAccounts.push(fa);
         });
       })
+      this.defaultAccounts.forEach(da => {
+        res.defaultAccounts.push({
+          ...da,
+        });
+      });
       return res;
     },
   }

@@ -12,6 +12,7 @@ export default new Vuex.Store({
       accountTypes: [],
       costCenterGroups: [],
       independentAccounts: [],
+      defaultAccounts: [],
     },
     wares: {
       wareLevels: [],
@@ -20,10 +21,13 @@ export default new Vuex.Store({
       units: [],
     },
     sanads: {
-      RPTypes: [],
       sanads: [],
       transactions: []
-    }
+    },
+    cheques: {
+      chequebooks: [],
+      cheques: [],
+    },
   },
   mutations: {
     setUser(state, user) {
@@ -35,6 +39,7 @@ export default new Vuex.Store({
       accounts.accountTypes && (state.accounts.accountTypes = accounts.accountTypes);
       accounts.costCenterGroups && (state.accounts.costCenterGroups = accounts.costCenterGroups);
       accounts.independentAccounts && (state.accounts.independentAccounts = accounts.independentAccounts);
+      accounts.defaultAccounts && (state.accounts.defaultAccounts = accounts.defaultAccounts);
     },
     setWares(state, wares) {
       wares.wareLevels && (state.wares.wareLevels = wares.wareLevels);
@@ -43,10 +48,12 @@ export default new Vuex.Store({
       wares.units && (state.wares.units = wares.units);
     },
     setSanads(state, sanads) {
-      sanads.RPTypes && (state.sanads.RPTypes = sanads.RPTypes);
       sanads.sanads && (state.sanads.sanads = sanads.sanads);
       sanads.transactions && (state.sanads.transactions = sanads.transactions);
-
+    },
+    setCheques(state, cheques) {
+      cheques.chequebooks && (state.cheques.chequebooks = cheques.chequebooks);
+      cheques.cheques && (state.cheques.cheques = cheques.cheques);
     }
 
   },

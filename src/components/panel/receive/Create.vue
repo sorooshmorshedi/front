@@ -64,7 +64,7 @@
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect dir="rtl" :options="sanadsSelectValues.RPTypes" v-model="rows[i].type" track-by="id" label="name" />
+                        <multiselect dir="rtl" :options="sanadsSelectValues.defaultAccounts" v-model="rows[i].type" track-by="id" label="name" />
                       </td>
                       <td>
                         <multiselect dir="rtl" v-if="rows[i].type && rows[i].type.account.floatAccountGroup" :options="rows[i].type.account.floatAccountGroup.floatAccounts" v-model="rows[i].floatAccount" track-by="id" label="name" />
@@ -234,7 +234,7 @@ export default {
   methods: {
     getData() {
       this.getAccounts();
-      this.getRPTypes();
+      this.getDefaultAccounts();
       this.getTransactions();
     },
     selectTransaction(transaction) {
