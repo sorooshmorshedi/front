@@ -36,7 +36,7 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <div class="table-responsive">
+              <div class="table-responsive-lg">
                 <table class="table table-striped">
                   <thead>
                     <tr>
@@ -59,29 +59,29 @@
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect dir="rtl" :options="waresSelectValues.wares" v-model="rows[i].ware" track-by="id" label="title" />
+                        <multiselect :option-height="104" dir="rtl" :options="waresSelectValues.wares" v-model="rows[i].ware" track-by="id" label="title" />
                       </td>
                       <td>
                         <multiselect v-if="rows[i].ware" dir="rtl" :options="waresSelectValues.wareHouses" v-model="rows[i].ware.wareHouse" track-by="id" label="title" />
                         <span v-else> - </span>
                       </td>
                       <td>
-                        <input dir="ltr" type="number" class="form-control form-control-sm" v-model="rows[i].count">
+                        <input dir="ltr" type="number" class="form-control form-control" v-model="rows[i].count">
                       </td>
                       <td>
                         {{ rows[i].ware?rows[i].ware.unit.name:' - ' }}
                       </td>
                       <td>
-                        <money class="form-control form-control-sm" v-model="rows[i].fee" />
+                        <money class="form-control form-control" v-model="rows[i].fee" />
                       </td>
                       <td dir="ltr">
                         {{ rowSum(row) | toMoney}}
                       </td>
                       <td>
-                        <money :disabled="rows[i].discountPercent != ''" class="form-control form-control-sm" v-model="rows[i].discountValue" />
+                        <money :disabled="rows[i].discountPercent != ''" class="form-control form-control" v-model="rows[i].discountValue" />
                       </td>
                       <td>
-                        <input :disabled="rows[i].discountValue != ''" type="number" min=0 max=100 class="form-control form-control-sm" v-model="rows[i].discountPercent" />
+                        <input :disabled="rows[i].discountValue != ''" type="number" min=0 max=100 class="form-control form-control" v-model="rows[i].discountPercent" />
                       </td>
                       <td dir="ltr">
                         {{ rowSumAfterDiscount(row) | toMoney }}
@@ -111,37 +111,123 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-lg-4">
+              <h5>
+                هزینه های ثابت
+                <button @click="factorExpensesModal()" class="btn btn-info ">افزودن</button>
+              </h5>
+            </div>
+            <div class="col-lg-4">
+              <div class="row">
+                <div class="col-12">
+                  <div class="row">
+                    <div class="form-group col-lg-6">
+                      <label>تخفیف فاکتور (مبلغ)</label>
+                      <money :disabled="factor.discountPercent != ''" class="form-control" v-model="factor.discountValue" />
+                    </div>
+                    <div class="form-group col-lg-6">
+                      <label>تخفیف فاکتور (درصد)</label>
+                      <input :disabled="factor.discountValue != ''" type="number" min=0 max=100 class="form-control" v-model="factor.discountPercent" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="row">
+                    <div class="form-group col-lg-6">
+                      <label>مالیات (مبلغ)</label>
+                      <money :disabled="factor.taxPercent != ''" class="form-control" v-model="factor.taxValue" />
+                    </div>
+                    <div class="form-group col-lg-6">
+                      <label>مالیات (درصد)</label>
+                      <input :disabled="factor.taxValue != ''" type="number" min=0 max=100 class="form-control" v-model="factor.taxPercent" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 ">
+              <table class="table table-bordered finals">
+                <tbody>
+                  <tr>
+                    <th>جمع: </th>
+                    <td> {{ sum.sum | toMoney }} ریال </td>
+                  </tr>
+                  <tr>
+                    <th>مبلغ فاکتور پس از تخفیف: </th>
+                    <td> {{ sum.afterDiscount | toMoney }} ریال </td>
+                  </tr>
+                  <tr>
+                    <th>مبلغ کل فاکتور: </th>
+                    <td> {{ sum.total | toMoney }} ریال </td>
+                  </tr>
+                </tbody>
 
-            <div class="form-group col-lg-3">
-              <label>تخفیف فاکتور (مبلغ)</label>
-              <money :disabled="factor.discountPercent != ''" class="form-control" v-model="factor.discountValue" />
-            </div>
-            <div class="form-group col-lg-3">
-              <label>تخفیف فاکتور (درصد)</label>
-              <input :disabled="factor.discountValue != ''" type="number" min=0 max=100 class="form-control" v-model="factor.discountPercent" />
-            </div>
-
-            <div class="form-group col-lg-3">
-              <label>مالیات (درصد)</label>
-              <money :disabled="factor.taxPercent != ''" class="form-control" v-model="factor.taxValue" />
-            </div>
-            <div class="form-group col-lg-3">
-              <label>مالیات (مبلغ)</label>
-              <input :disabled="factor.taxValue != ''" type="number" min=0 max=100 class="form-control" v-model="factor.taxPercent" />
-            </div>
-            <div class="form-group col-lg-3">
-              <label></label>
-              <input type="text" class="form-control">
+              </table>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="factor-expenses-modal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              هزینه های ثابت فاکتور
+            </h4>
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-12">
+                  <div class="table-responsive-lg">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>نام هزینه ثابت</th>
+                          <th>مبلغ</th>
+                          <th>پرداخت کننده</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(e,i) in factorExpensesCopy" :key="i">
+                          <td>{{ i+1 }}</td>
+                          <td>
+                            <multiselect dir="rtl" label="name" track-by="id" :options="factorsSelectValues.factorExpenses" v-model="e.expense" />
+                          </td>
+                          <td>
+                            <money class="form-control" v-model="e.value" />
+                          </td>
+                          <td>
+                            <multiselect dir="rtl" label="title" track-by="id" :options="accountsSelectValues.levels[3]" v-model="e.payer" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+            <button @click="addExpenses()" type="button" class="btn btn-primary" data-dismiss="modal">ثبت</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
 import accountApiMixin from "@/mixin/accountApi";
+import factorApiMixin from "@/mixin/factorApi";
 import wareApiMixin from "@/mixin/wareApi";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
@@ -149,15 +235,17 @@ import mtime from "@/components/mcomponents/cleave/Time";
 export default {
   name: "Create",
   components: { money, date, mtime },
-  mixins: [accountApiMixin, wareApiMixin],
+  mixins: [accountApiMixin, wareApiMixin, factorApiMixin],
   data() {
     return {
       factor: {
         taxPercent: "",
         taxValue: "",
         discountPercent: "",
-        discountValue: ""
+        discountValue: "",
+        expenses: [{}]
       },
+      factorExpensesCopy: [],
       rows: [],
       hasTax: true,
       rowTemplate: {
@@ -170,6 +258,7 @@ export default {
     this.getAccounts();
     this.getWareHouses();
     this.getWares();
+    this.getFactorExpenses();
     this.rows.push(this.rowTemplate);
   },
   methods: {
@@ -201,6 +290,14 @@ export default {
     rowSumAfterTax(row) {
       if (!this.rowTax(row)) return this.rowSumAfterDiscount(row);
       return this.rowSumAfterDiscount(row) + this.rowTax(row);
+    },
+    factorExpensesModal() {
+      this.factorExpensesCopy = this.copy(this.factor.expenses);
+      $("#factor-expenses-modal").modal("show");
+    },
+    addExpenses() {
+      this.factor.expenses = this.copy(this.factorExpensesCopy);
+      this.factor.expenses.pop();
     }
   },
   computed: {
@@ -209,13 +306,15 @@ export default {
         sum: 0,
         afterDiscount: 0,
         tax: 0,
-        afterTax: 0
+        afterTax: 0,
+        total: 0
       };
       this.rows.forEach(r => {
         res.sum += this.rowSum(r);
         res.afterDiscount += this.rowSumAfterDiscount(r);
         res.tax += this.rowTax(r);
         res.afterTax += this.rowSumAfterTax(r);
+        res.total += this.rowSumAfterTax(r); // + factorExpenses
       });
       return res;
     },
@@ -246,14 +345,30 @@ export default {
         }
       },
       deep: true
+    },
+    factorExpensesCopy: {
+      handler() {
+        let expense = this.factorExpensesCopy[
+          this.factorExpensesCopy.length - 1
+        ];
+        if (expense && expense.expense) {
+          this.factorExpensesCopy.push({});
+        }
+      },
+      deep: true
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.finals {
+  td {
+    text-align: left;
+  }
+}
 .table-responsive {
-  overflow: visible;
+  overflow-y: show;
 }
 </style>
 

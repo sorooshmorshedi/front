@@ -39,7 +39,14 @@
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'CostCenter'}">مرکز هزینه</router-link>
             <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'DefaultAccounts'}">حساب های پیشفرض</router-link>
+
+            <div class="dropdown-submenu ">
+              <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">پیشفرض ها</a>
+              <div class="dropdown-menu " aria-labelledby="navbarDropdown">
+                <router-link class="dropdown-item" :to="{name:'DefaultAccounts'}">حساب های پیشفرض</router-link>
+                <router-link class="dropdown-item" :to="{name:'FactorExpenses'}">هزینه های ثابت فاکتور</router-link>
+              </div>
+            </div>
 
           </div>
 

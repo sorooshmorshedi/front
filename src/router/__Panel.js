@@ -28,6 +28,7 @@ import DefaultAccounts from '@/components/panel/defaultAccounts/DefaultAccounts'
 
 import Factor from '@/components/panel/factor/Factor';
 import CreateFactor from '@/components/panel/factor/Create';
+import FactorExpenses from '@/components/panel/factor/Expenses';
 
 
 import Cheque from '@/components/panel/cheque/Cheque';
@@ -143,27 +144,33 @@ export default [{
       path: 'factor',
       component: Factor,
       children: [{
-        name: 'CreateFactor',
-        path: 'create',
-        component: CreateFactor
-      }]
+          name: 'CreateFactor',
+          path: 'create',
+          component: CreateFactor
+        },
+        {
+          name: 'FactorExpenses',
+          path: 'expenses',
+          component: FactorExpenses
+        }
+      ]
     },
     {
       name: 'Cheque',
       path: 'cheque',
       component: Cheque,
       children: [{
-        name: 'Chequebook',
-        path: 'chequebook',
-        component: Chequebook,
-      },
-      {
-        name: 'ReceivedCheques',
-        path: 'receivedCheques',
-        component: ReceivedCheques,
+          name: 'Chequebook',
+          path: 'chequebook',
+          component: Chequebook,
+        },
+        {
+          name: 'ReceivedCheques',
+          path: 'receivedCheques',
+          component: ReceivedCheques,
 
-      }
-    ]
+        }
+      ]
     }
 
   ]

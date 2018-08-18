@@ -28,6 +28,10 @@ export default new Vuex.Store({
       chequebooks: [],
       cheques: [],
     },
+    factors: {
+      factors: [],
+      factorExpenses: [],
+    }
   },
   mutations: {
     setUser(state, user) {
@@ -54,6 +58,10 @@ export default new Vuex.Store({
     setCheques(state, cheques) {
       cheques.chequebooks && (state.cheques.chequebooks = cheques.chequebooks);
       cheques.cheques && (state.cheques.cheques = cheques.cheques);
+    },
+    setFactors(state, factors) {
+      factors.factorExpenses && (state.factors.factorExpenses = factors.factorExpenses);
+      factors.factors && (state.factors.factors = factors.factors);
     }
 
   },
