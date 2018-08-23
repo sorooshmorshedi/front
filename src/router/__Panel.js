@@ -21,13 +21,13 @@ import Unit from '@/components/panel/ware/Unit';
 import Sanad from '@/components/panel/sanad/Sanad';
 import CreateSanad from '@/components/panel/sanad/Create';
 
-import Receive from '@/components/panel/receive/Receive';
-import CreateReceive from '@/components/panel/receive/Create';
+import Transaction from '@/components/panel/transaction/Transaction';
+import TransactionForm from '@/components/panel/transaction/Form';
 
 import DefaultAccounts from '@/components/panel/defaultAccounts/DefaultAccounts';
 
 import Factor from '@/components/panel/factor/Factor';
-import CreateFactor from '@/components/panel/factor/Create';
+import FactorForm from '@/components/panel/factor/Form';
 import FactorExpenses from '@/components/panel/factor/Expenses';
 
 
@@ -119,13 +119,14 @@ export default [{
       component: DefaultAccounts,
     },
     {
-      name: 'Receive',
-      path: 'receive',
-      component: Receive,
+      name: 'Transaction',
+      path: 'transaction',
+      component: Transaction,
       children: [{
-        name: 'CreateReceive',
-        path: 'create',
-        component: CreateReceive
+        name: 'TransactionForm',
+        path: ':transactionType',
+        props: true,
+        component: TransactionForm
       }]
     },
     {
@@ -135,8 +136,8 @@ export default [{
       children: [{
         name: 'CreateSanad',
         path: 'create/:id?',
-        component: CreateSanad,
         props: true,
+        component: CreateSanad,
       }]
     },
     {
@@ -144,13 +145,15 @@ export default [{
       path: 'factor',
       component: Factor,
       children: [{
-          name: 'CreateFactor',
-          path: 'create',
-          component: CreateFactor
+          name: 'FactorForm',
+          path: 'form/:factorType/:id?',
+          props: true,
+          component: FactorForm
         },
         {
           name: 'FactorExpenses',
-          path: 'expenses',
+          path: 'expenses/:factorType',
+          props: true,
           component: FactorExpenses
         }
       ]

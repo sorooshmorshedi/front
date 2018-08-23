@@ -138,6 +138,19 @@ Vue.mixin({
     },
     log(t) {
       console.log(t);
+    },
+
+    openSanad(sanadId) {
+      let routeData = this.$router.resolve({
+        name: "CreateSanad",
+        params: {
+          id: sanadId
+        }
+      });
+      window.open(routeData.href, "_blank");
+    },
+    hasValue(v) {
+      return !['', 0, '0', undefined].includes(v);
     }
   },
   computed: {

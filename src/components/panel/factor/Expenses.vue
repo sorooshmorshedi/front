@@ -1,7 +1,7 @@
 <template>
   <div class="row rtl">
     <div class="col-12 col-lg-12">
-      <div class="title">هزینه های پیشفرض فاکتور</div>
+      <div class="title">هزینه های پیشفرض فاکتور {{ type.label }}</div>
       <button @click="createExpense()" type="button" class="btn btn-info">افزودن</button>
       <br>
       <table class="table">
@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(e, i) in factorExpenses" :key="i">
+          <tr v-for="(e, i) in factorExpenses.filter(o => o.type == type.name)" :key="i">
             <td>{{ i+1 }}</td>
             <td>{{ e.name }}</td>
             <td>{{ e.account.title }}</td>
@@ -36,7 +36,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">هزینه پیشفرض فاکتور</h4>
+            <h4 class="modal-title">هزینه پیشفرض فاکتور {{ type.label }}</h4>
             <button type="button" class="close" data-dismiss="modal">
               <span>&times;</span>
             </button>
@@ -78,16 +78,32 @@ import factorApiMixin from "@/mixin/factorApi";
 export default {
   mixins: [accountApiMixin, factorApiMixin],
   name: "Expenses",
+  props: ["factorType"],
   data() {
     return {
-      expense: {}
+      expense: {},
+      type: {}
     };
   },
   created() {
     this.getFactorExpenses();
     this.getAccounts();
+    this.init();
   },
   methods: {
+    init() {
+      if (this.factorType == "buy") {
+        this.type.label = "خرید";
+        this.type.name = "buy";
+        this.expense.type = "buy";
+      } else if (this.factorType == "sale") {
+        this.type.label = "فروش";
+        this.type.name = "sale";
+        this.expense.type = "sale";
+      } else {
+        console.error("404");
+      }
+    },
     editExpense(expense) {
       this.expense = this.copy(expense);
       $("#factor-expense-modal").modal("show");
@@ -95,7 +111,8 @@ export default {
     updateExpense() {
       let data = {
         ...this.expense,
-        account: this.expense.account.id
+        account: this.expense.account.id,
+        type: this.type.name
       };
       this.request({
         url: this.endpoint("factors/expenses/" + this.expense.id + "/"),
@@ -116,7 +133,8 @@ export default {
     storeExpense() {
       let data = {
         ...this.expense,
-        account: this.expense.account.id
+        account: this.expense.account.id,
+        type: this.type.name
       };
       this.request({
         url: this.endpoint("factors/expenses/"),
@@ -141,7 +159,11 @@ export default {
       });
     }
   },
-  computed: {}
+  watch: {
+    factorType() {
+      this.init();
+    }
+  }
 };
 </script>
 

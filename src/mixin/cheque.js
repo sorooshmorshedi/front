@@ -13,10 +13,8 @@ export default {
   methods: {
     submitChequeModal(type, cheque, chequebook) {
       this.clearCheques();
-      if (type == "paid") {
-        this.cheque = this.copy(cheque);
-        this.chequebook = this.copy(chequebook);
-      }
+      cheque && (this.cheque = this.copy(cheque));
+      chequebook && (this.chequebook = this.copy(chequebook));
       this.cheque.type = type;
       $("#submit-paid-cheque-modal").modal("show");
     },

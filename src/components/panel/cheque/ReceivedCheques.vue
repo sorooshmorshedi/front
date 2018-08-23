@@ -27,8 +27,10 @@
                       <td>{{ c.value }}</td>
                       <td>{{ c.status | chequeStatuses }}</td>
                       <td>
-                        <button :disabled="!canChangeStatus(c)" @click="changeChequeStatusModal(c)" type="button" class="btn btn-sm btn-info">تغییر وضعیت چک</button>
-                        <button @click="ChequeStatusChangesModal(c)" type="button" class="btn btn-sm btn-info">مشاهده تغییرات وضعیت چک</button>
+                        <button @click="changeChequeStatusModal(c)" :disabled="!canChangeStatus(c)" type="button" class="btn btn btn-info">تغییر وضعیت چک</button>
+                        <button @click="ChequeStatusChangesModal(c)" type="button" class="btn btn btn-info">مشاهده تغییرات وضعیت چک</button>
+                        <button @click="submitChequeModal('received',c)" :disabled="c.statusChanges.length != 1" type="button" class="btn btn btn-warning">ویرایش چک</button>
+                        <button @click="deleteCheque(c)" :disabled="c.statusChanges.length != 1" type="button" class="btn btn btn-danger">حذف چک</button>
                       </td>
                     </tr>
                   </tbody>

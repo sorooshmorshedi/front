@@ -44,7 +44,8 @@
               <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">پیشفرض ها</a>
               <div class="dropdown-menu " aria-labelledby="navbarDropdown">
                 <router-link class="dropdown-item" :to="{name:'DefaultAccounts'}">حساب های پیشفرض</router-link>
-                <router-link class="dropdown-item" :to="{name:'FactorExpenses'}">هزینه های ثابت فاکتور</router-link>
+                <router-link class="dropdown-item" :to="{name:'FactorExpenses', params: { factorType: 'buy'}}">هزینه های فاکتور خرید</router-link>
+                <router-link class="dropdown-item" :to="{name:'FactorExpenses', params: { factorType: 'sale'}}">هزینه های فاکتور فروش</router-link>
               </div>
             </div>
 
@@ -56,9 +57,20 @@
           <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'CreateSanad'}">ثبت سند</router-link>
             <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'CreateFactor'}">ثبت فاکتور</router-link>
+
+            <div class="dropdown-submenu ">
+              <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">فاکتور</a>
+              <div class="dropdown-menu " aria-labelledby="navbarDropdown">
+                <router-link class="dropdown-item" :to="{name:'FactorForm', params:{ factorType: 'buy'}}">ثبت فاکتور خرید</router-link>
+                <router-link class="dropdown-item" :to="{name:'FactorForm', params:{ factorType: 'backFromBuy'}}">ثبت فاکتور برگشت از خرید</router-link>
+                <router-link class="dropdown-item" :to="{name:'FactorForm', params:{ factorType: 'sale'}}">ثبت فاکتور فروش</router-link>
+                <router-link class="dropdown-item" :to="{name:'FactorForm', params:{ factorType: 'backFromSale'}}">ثبت فاکتور برگشت از فروش</router-link>
+              </div>
+            </div>
+
             <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'CreateReceive'}">ثبت دریافت</router-link>
+            <router-link class="dropdown-item" :to="{name:'TransactionForm', params: {transactionType: 'receive'}}">ثبت دریافت</router-link>
+            <router-link class="dropdown-item" :to="{name:'TransactionForm', params: {transactionType: 'payment'}}">ثبت پرداخت</router-link>
             <div class="dropdown-divider"></div>
             <div class="dropdown-submenu ">
               <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">دفتر چک</a>

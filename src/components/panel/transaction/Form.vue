@@ -64,7 +64,7 @@
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect dir="rtl" :options="sanadsSelectValues.defaultAccounts" v-model="rows[i].type" track-by="id" label="name" />
+                        <multiselect dir="rtl" :options="accountsSelectValues.defaultAccounts" v-model="rows[i].type" track-by="id" label="name" />
                       </td>
                       <td>
                         <multiselect dir="rtl" v-if="rows[i].type && rows[i].type.account.floatAccountGroup" :options="rows[i].type.account.floatAccountGroup.floatAccounts" v-model="rows[i].floatAccount" track-by="id" label="name" />
@@ -122,7 +122,7 @@
           <div class="modal-header">
             <h4 class="modal-title">{{ type.label }} ها</h4>
             <button type="button" class="close" data-dismiss="modal">
-              <span arrptype-hidden="true">&times;</span>
+              <span>&times;</span>
             </button>
           </div>
           <div class="modal-body">
@@ -170,6 +170,7 @@ export default {
   name: "Create",
   components: { money, date },
   mixins: [accountApiMixin, sanadApiMixin],
+  props: ["transactionType"],
   data() {
     return {
       transaction: {},
@@ -182,9 +183,7 @@ export default {
     };
   },
   created() {
-    this.type.label = "دریافت";
-    this.type.type = "receive";
-    this.transaction.type = "receive";
+    this.init();
     this.getData();
   },
   mounted() {
@@ -229,9 +228,25 @@ export default {
         }
       },
       deep: true
+    },
+    transactionType() {
+      this.init();
     }
   },
   methods: {
+    init() {
+      if (this.transactionType == "receive") {
+        this.type.label = "دریافت";
+        this.type.type = "receive";
+        this.transaction.type = "receive";
+      } else if (this.transactionType == "payment") {
+        this.type.label = "پرداخت";
+        this.type.type = "payment";
+        this.transaction.type = "payment";
+      } else {
+        console.error("404");
+      }
+    },
     getData() {
       this.getAccounts();
       this.getDefaultAccounts();

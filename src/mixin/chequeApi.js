@@ -54,9 +54,9 @@ export default {
       })
 
     },
-    deleteChequebook(node) {
+    deleteChequebook(chequebook) {
       this.request({
-        url: this.endpoint('cheques/chequebooks/' + node.id),
+        url: this.endpoint('cheques/chequebooks/' + chequebook.id),
         method: 'delete',
         success: data => {
           this.getChequebooks(true);
@@ -74,6 +74,16 @@ export default {
             cheques: data
           });
           init && this.init();
+        }
+      })
+    },
+    deleteCheque(cheque) {
+      this.request({
+        url: this.endpoint('cheques/cheques/' + cheque.id + '/'),
+        method: 'delete',
+        success: data => {
+          this.getCheques(true);
+          this.notify('چک با موفقیت حذف شد', 'success');
         }
       })
     },

@@ -125,7 +125,8 @@ export default {
         url: this.endpoint("cheques/cheques/changeStatus/" + this.cheque.id),
         data: {
           cheque: this.extractIds(this.cheque),
-          statusChange: this.extractIds(this.statusChange)
+          statusChange: this.extractIds(this.statusChange),
+          update: this.cheque.statusChanges.length == 1 ? true : false
         },
         method: "put",
         success: data => {

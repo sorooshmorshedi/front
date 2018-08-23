@@ -424,6 +424,10 @@ export default {
           res.floatAccounts.push(fa);
         });
       })
+      res.defaultAccounts.push({
+        name: 'خنثی',
+        id: null
+      });
       this.defaultAccounts.forEach(da => {
         res.defaultAccounts.push({
           ...da,

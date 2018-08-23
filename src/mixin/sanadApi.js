@@ -72,13 +72,8 @@ export default {
     sanadsSelectValues() {
       this.log('Generate sanadsSelectValues');
       let res = {
-        defaultAccounts: [],
         sanads: [],
       }
-      res.defaultAccounts.push({
-        name: 'خنثی',
-        id: null
-      });
       this.sanads.forEach(sanad => {
         res.sanads.push({
           ...sanad,
