@@ -14,8 +14,8 @@ export default {
       field = fields.filter(f => f.model == 'unit')[0];
       field && (field.values = data.units);
 
-      field = fields.filter(f => f.model == 'wareHouse')[0];
-      field && (field.values = data.wareHouses);
+      field = fields.filter(f => f.model == 'warehouse')[0];
+      field && (field.values = data.warehouses);
 
       field = fields.filter(f => f.model == 'ware')[0];
       field && (field.values = data.wares);
@@ -201,7 +201,7 @@ export default {
         {
           label: "انبار پیشفرض",
           type: "vueMultiSelect",
-          model: "wareHouse",
+          model: "warehouse",
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'name',

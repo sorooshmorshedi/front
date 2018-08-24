@@ -32,7 +32,7 @@
                 <router-link class="dropdown-item" :to="{name:'CreateWare'}">تعریف کالا</router-link>
                 <router-link class="dropdown-item" :to="{name:'EditWare'}">ویرایش کالا</router-link>
                 <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" :to="{name:'WareHouse'}">انبار</router-link>
+                <router-link class="dropdown-item" :to="{name:'Warehouse'}">انبار</router-link>
                 <router-link class="dropdown-item" :to="{name:'Unit'}">واحد</router-link>
               </div>
             </div>

@@ -16,7 +16,7 @@ export default {
         parent: {},
         pricing_type: {},
         unit: {},
-        wareHouse: {},
+        warehouse: {},
       },
       wareLevel: {
         code: '',
@@ -127,7 +127,7 @@ export default {
       Promise.all([
         this.getWareLevels(force, false),
         this.getWares(force, false),
-        this.getWareHouses(force, false),
+        this.getWarehouses(force, false),
         this.getUnits(force, false),
         this.getAccounts(false, false),
       ]).then(values => {
@@ -148,7 +148,7 @@ export default {
         parent: null,
         pricing_type: {},
         unit: {},
-        wareHouse: {},
+        warehouse: {},
       };
       this.wareLevel = {
         code: '',

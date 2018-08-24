@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(wh, i) in wareHouses" :key="i">
+          <tr v-for="(wh, i) in warehouses" :key="i">
             <td>{{ i+1 }}</td>
             <td>{{ wh.name }}</td>
             <td>{{ wh.explanation }}</td>
@@ -44,22 +44,22 @@
               <div class="row">
                 <div class="form-group col-12">
                   <label for="">کد انبار</label>
-                  <input type="text" class="form-control" :value="wareHouseCode" disabled>
+                  <input type="text" class="form-control" :value="warehouseCode" disabled>
                 </div>
                 <div class="form-group col-12">
                   <label for="">نام انبار</label>
-                  <input type="text" class="form-control" v-model="wareHouse.name">
+                  <input type="text" class="form-control" v-model="warehouse.name">
                 </div>
                 <div class="form-group col-12">
                   <label>توضیحات</label>
-                  <textarea class="form-control" rows="3" v-model="wareHouse.explanation"></textarea>
+                  <textarea class="form-control" rows="3" v-model="warehouse.explanation"></textarea>
                 </div>
               </div>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!wareHouse.id" @click="storeWH()" type="button" class="btn btn-primary">ثبت</button>
+            <button v-if="!warehouse.id" @click="storeWH()" type="button" class="btn btn-primary">ثبت</button>
             <button v-else @click="updateWH()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
@@ -73,28 +73,28 @@
 import wareMixin from "@/mixin/ware";
 export default {
   mixins: [wareMixin],
-  name: "WareHouse",
+  name: "Warehouse",
   data() {
     return {
-      wareHouse: {}
+      warehouse: {}
     };
   },
   created() {},
   methods: {
     editWH(wh) {
-      this.wareHouse = this.copy(wh);
+      this.warehouse = this.copy(wh);
       $("#wh").modal("show");
     },
     updateWH() {
       this.request({
-        url: this.endpoint("wares/wareHouses/" + this.wareHouse.id),
+        url: this.endpoint("wares/warehouses/" + this.warehouse.id),
         method: "put",
-        data: this.wareHouse,
+        data: this.warehouse,
         success: data => {
           this.notify("انبار با موفقیت ویرایش شد", "success");
-          this.getWareHouses(true);
+          this.getWarehouses(true);
           $("#wh").modal("hide");
-          this.wareHouse = {};
+          this.warehouse = {};
         }
       });
     },
@@ -103,32 +103,32 @@ export default {
     },
     storeWH() {
       this.request({
-        url: this.endpoint("wares/wareHouses"),
+        url: this.endpoint("wares/warehouses"),
         method: "post",
-        data: this.wareHouse,
+        data: this.warehouse,
         success: data => {
           this.notify("انبار با موفقیت ساخته شد", "success");
-          this.getWareHouses(true);
+          this.getWarehouses(true);
           $("#wh").modal("hide");
-          this.wareHouse = {};
+          this.warehouse = {};
         }
       });
     },
     deleteWH(wh) {
       this.request({
-        url: this.endpoint("wares/wareHouses/" + wh.id),
+        url: this.endpoint("wares/warehouses/" + wh.id),
         method: "delete",
         success: data => {
           this.notify("انبار با موفقیت حذف شد", "success");
-          this.getWareHouses(true);
+          this.getWarehouses(true);
         }
       });
     }
   },
   computed: {
-    wareHouseCode() {
-      if(this.wareHouse.id) return this.wareHouse.id;
-      let wh = _.maxBy(this.wareHouses, wh => wh.id);
+    warehouseCode() {
+      if(this.warehouse.id) return this.warehouse.id;
+      let wh = _.maxBy(this.warehouses, wh => wh.id);
       if (wh) return wh.id + 1;
       else return 1;
     }

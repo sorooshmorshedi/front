@@ -7,6 +7,48 @@ import {
 
 export default {
   methods: {
+    checkInventories() {
+      if (['buy', 'backFromSale'].includes(this.factor.type)) {
+        if (this.factor.id) this.updateFactor();
+        else this.storeFactor();
+        return;
+      }
+      let payload = [];
+      this.rows.forEach((row, i) => {
+        if (i == this.rows.length - 1) return;
+        payload.push({
+          ware: row.ware.id,
+          warehouse: row.ware.warehouse.id
+        });
+      });
+      console.log(payload);
+      this.request({
+        url: this.endpoint('wares/inventory/check'),
+        method: 'post',
+        data: payload,
+        success: data => {
+
+          let flag = true;
+          data.forEach((count, i) => {
+            if (this.rows[i].id) {
+              let item = this.factor.items.filter(o => o.id == this.rows[i].id)[0];
+              count += item.count;
+            }
+            if (count < this.rows[i].count) {
+              this.notify(`موجودی انبار ردیف ${i+1} کافی نمی باشد، موجودی این انبار برای این کالا ${count} می باشد`, 'danger');
+              flag = false
+            }
+          })
+
+          if (!flag) return;
+
+          if (this.factor.id) this.updateFactor();
+          else this.storeFactor();
+        }
+      })
+
+
+    },
     storeFactor() {
       let data = this.copy(this.factor);
       Object.keys(data).forEach(key => {
@@ -43,7 +85,7 @@ export default {
       this.rows.forEach((row, i) => {
         if (i == this.rows.length - 1) return;
         let item = this.copy(row);
-        item.wareHouse = item.ware.wareHouse;
+        item.warehouse = item.ware.warehouse;
         Object.keys(item).forEach(key => {
           if (item[key] && item[key].id) item[key] = item[key].id;
         });
@@ -155,11 +197,12 @@ export default {
     },
     deleteFactor(factor) {
       this.request({
-        url: this.endpoint('factors/factors/' + factor.id),
+        url: this.endpoint('factors/factors/' + factor.id + '/'),
         method: 'delete',
         success: data => {
           this.getFactors(true);
           this.successNotify();
+          this.clearFactor();
         }
       })
     },
@@ -195,10 +238,21 @@ export default {
         url: this.endpoint("factors/factors/updateSanad/" + factorId),
         method: "put",
         success: data => {
+          this.clearFactor();
           this.successNotify();
         }
       });
     },
+    clearFactor() {
+      this.factor = {
+        taxPercent: "",
+        taxValue: "",
+        discountPercent: "",
+        discountValue: "",
+        expenses: []
+      }
+      this.rows = [{}];
+    }
   },
   computed: {
     ...mapState({

@@ -59,14 +59,14 @@ export default {
         }
       })
     },
-    getWareHouses(force = false, init = true) {
-      if (!force && this.wareHouses.length) return;
+    getWarehouses(force = false, init = true) {
+      if (!force && this.warehouses.length) return;
       return this.request({
-        url: this.endpoint('wares/wareHouses'),
+        url: this.endpoint('wares/warehouses'),
         method: 'get',
         success: data => {
           this.$store.commit('setWares', {
-            wareHouses: data
+            warehouses: data
           });
           init && this.init();
         }
@@ -206,7 +206,7 @@ export default {
         parent: null,
         pricing_type: {},
         unit: {},
-        wareHouse: {},
+        warehouse: {},
       };
       this.wareLevel = {
         code: '',
@@ -226,7 +226,7 @@ export default {
     ...mapState({
       wareLevels: state => state.wares.wareLevels,
       wares: state => state.wares.wares,
-      wareHouses: state => state.wares.wareHouses,
+      warehouses: state => state.wares.warehouses,
       units: state => state.wares.units,
       accounts: state => state.accounts.accounts,
     }),
@@ -239,7 +239,7 @@ export default {
           2: [],
         },
         wares: [],
-        wareHouses: [],
+        warehouses: [],
         units: [],
         suppliers: [],
         pricing_types: this.pricing_types,
@@ -270,8 +270,8 @@ export default {
           ...w,
         });
       });
-      this.wareHouses.forEach(wh => {
-        res.wareHouses.push({
+      this.warehouses.forEach(wh => {
+        res.warehouses.push({
           ...wh
         })
       })

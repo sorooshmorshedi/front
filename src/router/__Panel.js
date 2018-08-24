@@ -15,7 +15,7 @@ import IndependentAccount from '@/components/panel/account/IndependentAccount';
 import Ware from '@/components/panel/ware/Ware';
 import CreateWare from '@/components/panel/ware/Create';
 import EditWare from '@/components/panel/ware/Edit';
-import WareHouse from '@/components/panel/ware/WareHouse';
+import Warehouse from '@/components/panel/ware/Warehouse';
 import Unit from '@/components/panel/ware/Unit';
 
 import Sanad from '@/components/panel/sanad/Sanad';
@@ -104,9 +104,9 @@ export default [{
         path: 'edit',
         component: EditWare
       }, {
-        name: 'WareHouse',
-        path: 'wareHouse',
-        component: WareHouse
+        name: 'Warehouse',
+        path: 'warehouse',
+        component: Warehouse
       }, {
         name: 'Unit',
         path: 'unit',

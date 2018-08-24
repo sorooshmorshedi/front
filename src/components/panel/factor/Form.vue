@@ -84,7 +84,7 @@
                         <multiselect :option-height="104" dir="rtl" :options="waresSelectValues.wares" v-model="rows[i].ware" track-by="id" label="title" />
                       </td>
                       <td>
-                        <multiselect v-if="rows[i].ware" dir="rtl" :allow-empty="false" :options="waresSelectValues.wareHouses" v-model="rows[i].ware.wareHouse" track-by="id" label="title" />
+                        <multiselect v-if="rows[i].ware" dir="rtl" :allow-empty="false" :options="waresSelectValues.warehouses" v-model="rows[i].ware.warehouse" track-by="id" label="title" />
                         <span v-else> - </span>
                       </td>
                       <td>
@@ -221,8 +221,9 @@
           </div>
           <hr>
           <div class="row ">
-            <div class="col-12 ">
-              <button @click="validate()" type="button" class="btn submit btn-primary float-left w-100px">ثبت</button>
+            <div class="col-12 text-left">
+              <button v-if="factor.id" @click="deleteFactor(factor)" type="button" class="btn btn-outline-danger">حذف فاکتور</button>
+              <button @click="validate()" type="button" class="btn submit btn-primary w-100px">ثبت</button>
             </div>
           </div>
         </div>
@@ -374,7 +375,7 @@ export default {
   created() {
     this.getAccounts();
     this.getFactors();
-    this.getWareHouses();
+    this.getWarehouses();
     this.getWares();
     this.getFactorExpenses();
     this.rows.push(this.copy(this.rowTemplate));
@@ -430,8 +431,7 @@ export default {
       );
 
       this.factor.type = this.factorType;
-      if (this.factor.id) this.updateFactor();
-      else this.storeFactor();
+      this.checkInventories();
     },
     selectFactor(factor) {
       this.factor = factor;
@@ -459,8 +459,8 @@ export default {
     },
     rowDiscount(row) {
       if (!this.rowSum(row)) return 0;
-      if (!row.discountValue && !row.discountPercent) return this.rowSum(row);
-      if (row.discountValue) return +row.discountValue;
+      if (!this.hasValue(row.discountValue) && !this.hasValue(row.discountPercent)) return 0;
+      if (this.hasValue(row.discountValue)) return +row.discountValue;
       else return +(this.rowSum(row) * +row.discountPercent / 100).toFixed(2);
     },
     rowSumAfterDiscount(row) {
@@ -559,14 +559,14 @@ export default {
 
       return res;
     },
-    wareHouseWares() {
+    warehouseWares() {
       let res = [];
       this.rows.forEach((r, i) => {
-        if (!r.wareHouse) res.push([]);
+        if (!r.warehouse) res.push([]);
         else {
           res.push(
             this.wares.filter(w => {
-              return w.wareHouse.id == r.wareHouse.id;
+              return w.warehouse.id == r.warehouse.id;
             })
           );
         }
@@ -576,7 +576,7 @@ export default {
   },
   watch: {
     rows: {
-      handler() {
+      handler(newRows, oldRows) {
         let row = this.rows[this.rows.length - 1];
         if (row && row.ware) {
           this.rows.push({

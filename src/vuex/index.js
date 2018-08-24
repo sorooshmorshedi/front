@@ -17,7 +17,7 @@ export default new Vuex.Store({
     wares: {
       wareLevels: [],
       wares: [],
-      wareHouses: [],
+      warehouses: [],
       units: [],
     },
     sanads: {
@@ -48,7 +48,7 @@ export default new Vuex.Store({
     setWares(state, wares) {
       wares.wareLevels && (state.wares.wareLevels = wares.wareLevels);
       wares.wares && (state.wares.wares = wares.wares);
-      wares.wareHouses && (state.wares.wareHouses = wares.wareHouses);
+      wares.warehouses && (state.wares.warehouses = wares.warehouses);
       wares.units && (state.wares.units = wares.units);
     },
     setSanads(state, sanads) {
