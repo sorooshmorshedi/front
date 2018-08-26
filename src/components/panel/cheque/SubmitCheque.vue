@@ -57,15 +57,15 @@
                 <div class="row">
                   <div class="form-group col-12 col-md-4">
                     <label for="">نام بانک</label>
-                    <input type="text" class="form-control" :value="cheque.bankName" :disabled="cheque.type == 'paid'">
+                    <input type="text" class="form-control" v-model="cheque.bankName" :disabled="cheque.type == 'paid'">
                   </div>
                   <div class="form-group col-12 col-md-4">
                     <label for="">نام شعبه</label>
-                    <input type="text" class="form-control" :value="cheque.branchName" :disabled="cheque.type == 'paid'">
+                    <input type="text" class="form-control" v-model="cheque.branchName" :disabled="cheque.type == 'paid'">
                   </div>
                   <div class="form-group col-12 col-md-4">
                     <label for="">شماره حساب چک</label>
-                    <input type="text" class="form-control" :value="cheque.accountNumber" :disabled="cheque.type == 'paid'">
+                    <input type="text" class="form-control" v-model="cheque.accountNumber" :disabled="cheque.type == 'paid'">
                   </div>
                 </div>
               </div>
@@ -121,14 +121,14 @@ export default {
     submitCheque() {
       if (!this.cheque.id) {
         this.storeCheque();
-        console.log("create cheque");
+        this.log("create cheque");
         return;
       }
       let update = false;
       if (this.cheque.statusChanges && this.cheque.statusChanges.length == 1)
         update = true;
 
-      console.log("change cheque status", this.cheque, update);
+      this.log("change cheque status", this.cheque, update);
       this.request({
         url: this.endpoint("cheques/cheques/changeStatus/" + this.cheque.id),
         data: {
