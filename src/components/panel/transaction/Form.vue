@@ -34,7 +34,7 @@
                   <date class="form-control" disabled/>
                 </div>
                 <div class="col-lg-4">
-                  <button type="button" name="" id="" class="btn btn-info">پرداخت شده برای فاکتور های</button>
+                  <button style="margin-top:27px" type="button" name="" id="" class="btn btn-info">پرداخت شده برای فاکتور های</button>
                 </div>
               </div>
             </div>
@@ -50,11 +50,12 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>نوع {{ type.label }}</th>
+                      <th style="width: 200px">نوع {{ type.label }}</th>
                       <th>حساب شناور</th>
                       <th>مبلغ</th>
                       <th>شماره مستند</th>
-                      <th>تاریخ {{ type.label }}/سررسید</th>
+                      <th>تاریخ {{ type.label }}</th>
+                      <th>سررسید</th>
                       <th>نام بانک</th>
                       <th>توضیح</th>
                       <th>فایل</th>
@@ -64,31 +65,34 @@
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect dir="rtl" :options="accountsSelectValues.defaultAccounts" v-model="rows[i].type" track-by="id" label="name" />
+                        <multiselect :disabled="hasCheque(row)" dir="rtl" :options="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))" v-model="rows[i].type" track-by="id" label="name" />
+                        <button v-if="isChequeType(row) && !hasCheque(row)" @click="openSubmitChequeModal(row, i)" type="button" class="submit-tcheque btn btn-secondary btn-sm btn-block">ثبت چک</button>
                       </td>
                       <td>
                         <multiselect dir="rtl" v-if="rows[i].type && rows[i].type.account.floatAccountGroup" :options="rows[i].type.account.floatAccountGroup.floatAccounts" v-model="rows[i].floatAccount" track-by="id" label="name" />
                       </td>
                       <td>
-                        <money class="form-control form-control-sm" v-model="rows[i].value" />
+                        <money :disabled="isChequeType(row)" class="form-control " v-model="rows[i].value" />
                       </td>
                       <td>
-                        <input type="text" class="form-control form-control-sm" v-model="rows[i].serial">
+                        <input :disabled="isChequeType(row)" type="text" class="form-control" v-model="rows[i].documentNumber">
                       </td>
                       <td>
-                        <date class="form-control form-control-sm" />
+                        <date :disabled="isChequeType(row)" class="form-control" v-model="rows[i].date" />
                       </td>
                       <td>
-                        <input type="text" class="form-control form-control-sm">
+                        <date class="form-control " disabled v-model="rows[i].due" />
                       </td>
                       <td>
-                        <input type="text" class="form-control form-control-sm">
+                        <input :disabled="isChequeType(row)" type="text" class="form-control form-control" v-model="rows[i].bankName">
                       </td>
                       <td>
-                        <input type="text" class="form-control form-control-sm">
+                        <input :disabled="isChequeType(row)" type="text" class="form-control form-control" v-model="rows[i].explanation">
                       </td>
                       <td>
-                        <button v-if="i != rows.length-1" @click="deleteRow(i)" type="button" class="btn btn-sm btn-warning">حذف ردیف</button>
+                      </td>
+                      <td>
+                        <button v-if="i != rows.length-1 && !hasCheque(row)" @click="deleteRow(i)" type="button" class="btn btn-sm btn-warning">حذف ردیف</button>
                       </td>
                     </tr>
                     <tr>
@@ -97,7 +101,7 @@
                       <td colspan="2"></td>
                       <td class="text-left">مجموع:</td>
                       <td class="">{{ sum | toMoney }}</td>
-                      <td colspan="5"></td>
+                      <td colspan="6"></td>
                       <td>
                         <button @click="deleteRow(0)" type="button" class="btn btn-sm btn-danger">حذف همه ردیف ها</button>
                       </td>
@@ -136,6 +140,7 @@
                         <th>توضیحات</th>
                         <th>تاریخ</th>
                         <th>شخص</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -144,6 +149,9 @@
                         <td>{{ t.explanation }}</td>
                         <td>{{ t.date }}</td>
                         <td>{{ t.account.title }}</td>
+                        <td>
+                          <button @click="openSanad(t.sanad)" class="btn btn-outline-info" type="button" id="button-addon1">مشاهده سند</button>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -158,18 +166,101 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="submit-cheque-modal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              ثبت چک
+              <span v-if="cheque.type == 'paid'">پرداختی</span>
+              <span v-else>دریافتی</span>
+            </h4>
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="">سریال چک</label>
+                  <input v-if="cheque.type == 'received'" type="number" class="form-control" v-model="cheque.serial">
+                  <multiselect v-else dir="rtl" label="title" track-by="id" :options="chequesSelectValues.cheques.filter(o => o.status == 'blank')" v-model="cheque" />
+                </div>
+                <div class="form-group col-12 col-md-6">
+                  <label v-if="cheque.type == 'paid'">دریافت کننده</label>
+                  <label v-else>پرداخت کننده</label>
+                  <multiselect disabled dir="rtl" label="name" track-by="id" :options="accountsSelectValues.levels[3]" :value="transaction.account" />
+                </div>
+                <div class="form-group col-12 col-md-6 offset-md-6" v-if="transaction.account && transaction.account.floatAccountGroup">
+                  <label for="">حساب شناور</label>
+                  <multiselect disabled dir="rtl" label="name" track-by="id" :options="transaction.account.floatAccountGroup.floatAccounts" v-model="transaction.floatAccount" />
+                </div>
+                <div class="form-group col-12 col-md-6">
+                  <label for="">مبلغ</label>
+                  <money class="form-control" v-model="cheque.value" />
+                </div>
+                <div class="form-group col-12 col-md-3">
+                  <label for="">تاریخ سررسید</label>
+                  <date class="form-control" v-model="cheque.due" :default-date="true" />
+                </div>
+                <div class="form-group col-12 col-md-3">
+                  <label v-if="cheque.type == 'paid'">تاریخ پرداخت</label>
+                  <label v-else>تاریخ دریافت</label>
+                  <date class="form-control" v-model="cheque.date" :default-date="true" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="row">
+                    <div class="form-group col-12" v-if="cheque.type == 'received'">
+                      <label for="">نوع چک</label>
+                      <multiselect dir="rtl" label="name" track-by="id" :options="[]" />
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-12 col-md-6">
+                  <label>شرح چک</label>
+                  <textarea class="form-control" v-model="cheque.explanation" style="height:126px;"></textarea>
+                </div>
+                <div class="col-12">
+                  <div class="row">
+                    <div class="form-group col-12 col-md-4">
+                      <label for="">نام بانک</label>
+                      <input type="text" class="form-control" v-model="cheque.bankName" :disabled="cheque.type == 'paid'">
+                    </div>
+                    <div class="form-group col-12 col-md-4">
+                      <label for="">نام شعبه</label>
+                      <input type="text" class="form-control" v-model="cheque.branchName" :disabled="cheque.type == 'paid'">
+                    </div>
+                    <div class="form-group col-12 col-md-4">
+                      <label for="">شماره حساب چک</label>
+                      <input type="text" class="form-control" v-model="cheque.accountNumber" :disabled="cheque.type == 'paid'">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+            <button @click="addCheque()" type="button" class="btn btn-primary w-100px">تایید</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import accountApiMixin from "@/mixin/accountApi";
 import sanadApiMixin from "@/mixin/sanadApi";
+import chequeMixin from "@/mixin/cheque";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 export default {
   name: "Create",
   components: { money, date },
-  mixins: [accountApiMixin, sanadApiMixin],
+  mixins: [accountApiMixin, sanadApiMixin, chequeMixin],
   props: ["transactionType"],
   data() {
     return {
@@ -177,9 +268,12 @@ export default {
       rows: [{}],
       type: {
         label: "",
-        type: ""
+        name: "",
+        chequeType: ""
       },
-      itemsToDelete: []
+      itemsToDelete: [],
+      cheque: {},
+      chequeRowIndex: null
     };
   },
   created() {
@@ -188,7 +282,8 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      $("#transaction-selection-modal").modal("show");
+      // $("#transaction-selection-modal").modal("show");
+      // this.submitChequeModal(this.type.name);
     }, 200);
   },
   computed: {
@@ -200,14 +295,14 @@ export default {
       return sum;
     },
     transactionCode() {
-      if (this.type.type == "receive") return this.receiveCode;
+      if (this.type.name == "receive") return this.receiveCode;
       else return this.paymentCode;
     },
     transactionsList() {
-      return this.transactions.filter(o => o.type == this.type.type);
+      return this.transactions.filter(o => o.type == this.type.name);
     },
     transactionAccounts() {
-      if (this.type.type == "receive") return this.accountsSelectValues.buyers;
+      if (this.type.name == "receive") return this.accountsSelectValues.buyers;
       else return this.accountsSelectValues.sellers;
     },
     transactionFloatAccounts() {
@@ -235,13 +330,17 @@ export default {
   },
   methods: {
     init() {
+      this.rows = [{}];
+      this.transaction = {};
       if (this.transactionType == "receive") {
         this.type.label = "دریافت";
-        this.type.type = "receive";
+        this.type.name = "receive";
+        this.type.chequeType = "received";
         this.transaction.type = "receive";
       } else if (this.transactionType == "payment") {
         this.type.label = "پرداخت";
-        this.type.type = "payment";
+        this.type.name = "payment";
+        this.type.chequeType = "paid";
         this.transaction.type = "payment";
       } else {
         console.error("404");
@@ -251,11 +350,15 @@ export default {
       this.getAccounts();
       this.getDefaultAccounts();
       this.getTransactions();
+      this.getChequebooks();
     },
     selectTransaction(transaction) {
+      this.rows = [];
       this.transaction = transaction;
       this.itemsToDelete = [];
-      this.rows = transaction.items;
+      transaction.items.forEach(item => {
+        this.rows.push(this.copy(item));
+      });
       this.rows.push({});
       $("#transaction-selection-modal").modal("hide");
     },
@@ -272,6 +375,27 @@ export default {
       }
     },
     validate() {
+      let isValid = true;
+      if (this.rows.length == 1) {
+        this.notify(`لطفا حداقل یک ردیف وارد کنید`, "danger");
+        isValid = false;
+      }
+      this.rows.forEach((r, i) => {
+        if (i == this.rows.length - 1) return;
+        if (!this.hasValue(r.value)) {
+          this.notify(`لطفا مبلغ ردیف ${i + 1} را وارد کنید`, "danger");
+          isValid = false;
+        }
+        if (!this.hasValue(r.date) || r.date.length != 10) {
+          this.notify(
+            `لطفا تاریخ ردیف ${i + 1} را به صورت صحیح وارد کنید`,
+            "danger"
+          );
+          isValid = false;
+        }
+      });
+      if (!isValid) return;
+
       if (this.transaction.id) this.updateTransaction();
       else this.storeTransaction();
     },
@@ -306,27 +430,36 @@ export default {
         }
       });
     },
-    syncTransactionItems() {
+    async syncTransactionItems() {
       let updatedItems = [];
       let newItems = [];
-      this.rows.forEach((row, i) => {
-        if (i == this.rows.length - 1) return;
-        let item = this.copy(row);
-        Object.keys(item).forEach(key => {
-          if (item[key] && item[key].id) item[key] = item[key].id;
-        });
-        if (item.id) {
-          updatedItems.push(item);
-        } else {
-          item.transaction = this.transaction.id;
-          newItems.push(item);
-        }
-      });
+      await Promise.all(
+        this.rows.map(async (row, i) => {
+          if (i == this.rows.length - 1) return row;
+          let item = this.copy(row);
+
+          if (this.hasCheque(item)) return row;
+
+          if (item.id) {
+            updatedItems.push(this.extractIds(item));
+          } else {
+            if (item.cheque) {
+              await this.submitCheque(item);
+            }
+            item.transaction = this.transaction.id;
+            item.account = item.type.account;
+            newItems.push(this.extractIds(item));
+          }
+        })
+      );
+      this.log("start syncing transaction items");
       Promise.all([
         this.storeTransactionItems(newItems),
         this.updateTransactionItems(updatedItems),
         this.deleteTransactionItems()
       ]).then(data => {
+        this.getTransactions(true);
+        this.getChequebooks(true);
         this.successNotify();
       });
     },
@@ -363,6 +496,89 @@ export default {
           this.itemsToDelete = [];
         }
       });
+    },
+    isChequeType(row) {
+      return row.type && row.type.programingName.includes("Cheque");
+    },
+    hasCheque(row) {
+      return row.cheque && typeof row.cheque == "number";
+    },
+    openSubmitChequeModal(row, i) {
+      this.cheque = {};
+      let account = this.transaction.account;
+      if (!account) {
+        this.notify(`ابتدا حساب را انتخاب کنید`, "danger");
+        return;
+      }
+      if (account.floatAccountGroup && !this.transaction.floatAccount) {
+        this.notify(`لطفا حساب شناور را انتخاب کنید`, "danger");
+        return;
+      }
+      this.cheque = this.copy(row.cheque);
+      this.cheque.type = this.type.chequeType;
+      this.chequeRowIndex = i;
+      $("#submit-cheque-modal").modal("show");
+    },
+    addCheque() {
+      if (!this.hasValue(this.cheque.serial)) {
+        this.notify("لطفا سریال چک را وارد کنید", "danger");
+        return;
+      }
+      if (!this.hasValue(this.cheque.value)) {
+        this.notify("لطفا مبلغ چک را وارد کنید", "danger");
+        return;
+      }
+      if (this.cheque.date.length != 10 || this.cheque.due.length != 10) {
+        this.notify("لطفا تاریخ های چک را به صورت صحیح وارد کنید", "danger");
+        return;
+      }
+      let row = this.rows[this.chequeRowIndex];
+      row.cheque = this.copy(this.cheque);
+      row.value = this.cheque.value;
+      row.documentNumber = this.cheque.serial;
+      row.date = this.cheque.date;
+      row.due = this.cheque.due;
+      row.bankName = this.cheque.bankName;
+      row.value = this.cheque.value;
+      row.explanation = this.cheque.explanation;
+      this.cheque = {};
+      $("#submit-cheque-modal").modal("hide");
+    },
+    async submitCheque(item) {
+      let cheque = item.cheque;
+      cheque.account = this.transaction.account;
+      cheque.floatAccount = this.transaction.floatAccount;
+      if (!cheque.id) {
+        await this.storeCheque(item);
+        console.log("create cheque");
+      }
+      let update = false;
+      if (cheque.statusChanges && cheque.statusChanges.length == 1)
+        update = true;
+
+      console.log("change cheque status");
+      return this.request({
+        url: this.endpoint("cheques/cheques/changeStatus/" + cheque.id),
+        data: {
+          cheque: this.extractIds(cheque),
+          statusChange: {},
+          update: update
+        },
+        method: "put",
+        success: data => {
+          this.log("Cheque submitd");
+        }
+      });
+    },
+    storeCheque(item) {
+      return this.request({
+        url: this.endpoint("cheques/cheques/"),
+        data: this.extractIds(item.cheque),
+        method: "post",
+        success: data => {
+          item.cheque.id = data.id;
+        }
+      });
     }
   }
 };
@@ -376,6 +592,10 @@ export default {
   input {
     text-align: center;
   }
+}
+.submit-tcheque {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 </style>
 

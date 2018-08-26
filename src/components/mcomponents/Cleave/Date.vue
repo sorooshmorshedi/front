@@ -29,13 +29,11 @@ export default {
   mounted() {
     this.cleave = new Cleave("#" + this.inputId, this.options);
     this.cleave.setRawValue(this.value);
-    console.log(this.defaultDate);
     if (this.defaultDate) {
       let now = moment()
         .format("jYYYY-jMM-jDD")
         .split("-")
         .join("");
-      console.log(now);
       this.cleave.setRawValue(now);
       this.change();
     }

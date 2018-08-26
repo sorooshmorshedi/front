@@ -67,7 +67,9 @@
                 <router-link class="dropdown-item" :to="{name:'FactorForm', params:{ factorType: 'backFromSale'}}">ثبت فاکتور برگشت از فروش</router-link>
               </div>
             </div>
-
+            <div class="dropdown-divider"></div>
+              <router-link class="dropdown-item" :to="{name:'ReceiptAndRemittance', params: {receiptType: 'receipt'}}">ثبت رسید</router-link>
+              <router-link class="dropdown-item" :to="{name:'ReceiptAndRemittance', params: {receiptType: 'remittance'}}">ثبت حواله</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'TransactionForm', params: {transactionType: 'receive'}}">ثبت دریافت</router-link>
             <router-link class="dropdown-item" :to="{name:'TransactionForm', params: {transactionType: 'payment'}}">ثبت پرداخت</router-link>

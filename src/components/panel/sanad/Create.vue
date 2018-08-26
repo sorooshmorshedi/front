@@ -71,7 +71,7 @@
                         <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="rows[i].account" track-by="id" label="title" />
                       </td>
                       <td>
-                        <input type="text" class="form-control form-control-sm" v-model="rows[i].explanation">
+                        <input type="text" class="form-control " v-model="rows[i].explanation">
                       </td>
                       <td>
                         <multiselect dir="rtl" :options="floatAccounts(rows[i])" v-model="rows[i].floatAccount" track-by="id" label="name" />
@@ -80,13 +80,13 @@
                         <multiselect dir="rtl" :options="costCenters(rows[i])" v-model="rows[i].costCenter" track-by="id" label="name" />
                       </td>
                       <td>
-                        <money :disabled="rows[i].bes != ''" class="form-control form-control-sm" v-model="rows[i].bed" />
+                        <money :disabled="rows[i].bes != ''" class="form-control " v-model="rows[i].bed" />
                       </td>
                       <td>
-                        <money :disabled="rows[i].bed != ''" class="form-control form-control-sm" v-model="rows[i].bes" />
+                        <money :disabled="rows[i].bed != ''" class="form-control " v-model="rows[i].bes" />
                       </td>
                       <td>
-                        <button v-if="i != rows.length-1" @click="deleteRow(i)" type="button" class="btn btn-sm btn-warning">حذف ردیف</button>
+                        <button v-if="i != rows.length-1" @click="deleteRow(i)" type="button" class="btn  btn-warning">حذف ردیف</button>
                       </td>
                     </tr>
                     <tr>
@@ -100,7 +100,7 @@
                       <td class="">{{ bedSum | toMoney }}</td>
                       <td class="">{{ besSum | toMoney }}</td>
                       <td>
-                        <button @click="deleteRow(0)" type="button" class="btn btn-sm btn-danger">حذف همه ردیف ها</button>
+                        <button @click="deleteRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
                       </td>
                     </tr>
 

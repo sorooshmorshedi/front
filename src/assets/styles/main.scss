@@ -79,5 +79,22 @@ input[type=number]::-webkit-outer-spin-button {
 
 .form-control:disabled,
 .form-control[readonly] {
-  background-color: #eff1f3;
+  background-color: #eff1f3 !important;
+}
+
+.w-100px {
+  width: 100px;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+}
+
+.multiselect, .multiselect__input, .multiselect__single {
+  font-size: 0.85rem !important;
+}
+
+
+.multiselect--active {
+  z-index: 100 !important;
 }

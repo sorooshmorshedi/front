@@ -56,7 +56,7 @@ export default {
     },
     deleteChequebook(chequebook) {
       this.request({
-        url: this.endpoint('cheques/chequebooks/' + chequebook.id),
+        url: this.endpoint('cheques/chequebooks/' + chequebook.id + '/'),
         method: 'delete',
         success: data => {
           this.getChequebooks(true);
@@ -94,16 +94,17 @@ export default {
       cheques: state => state.cheques.cheques,
     }),
     chequesSelectValues() {
-      if (!this.chequesbooks) return [];
+      this.log('Generate chequesSelectValues');
       let res = {
         chequebooks: [],
         cheques: [],
       };
+      if (!this.chequebooks.length) return res;
       res.chequebooks = this.copy(this.chequebooks);
       this.chequebooks.forEach(cb => {
         res.cheques = [
           ...res.cheques,
-          cb.cheques
+          ...cb.cheques
         ];
       });
       return res;

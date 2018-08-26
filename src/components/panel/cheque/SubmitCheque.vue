@@ -15,11 +15,11 @@
         <div class="modal-body">
           <div class="container-fluid">
             <div class="row">
-              <div class="form-group col-md-3">
+              <div class="form-group col-md-6">
                 <label for="">سریال چک</label>
                 <input type="number" class="form-control" v-model="cheque.serial" :disabled="cheque.type == 'paid'">
               </div>
-              <div class="form-group col-12 col-md-9">
+              <div class="form-group col-12 col-md-6">
                 <label v-if="cheque.type == 'paid'">دریافت کننده</label>
                 <label v-else>پرداخت کننده</label>
                 <multiselect dir="rtl" label="name" track-by="id" :options="accountsSelectValues.levels[3]" v-model="cheque.account" />
@@ -74,7 +74,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-          <button @click="submitCheque()" type="button" class="btn btn-primary">ثبت</button>
+          <button @click="submitCheque()" type="button" class="btn btn-primary w-100px">ثبت</button>
         </div>
       </div>
     </div>
@@ -88,7 +88,7 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 export default {
   name: "SubmitCheque",
-  props: ["inuseCheque", "inuseChequebook"],
+  props: ["inuseCheque", "inuseChequebook", "selectCheque"],
   components: { money, date },
   mixins: [accountApiMixin, chequeApiMixin],
   data() {
@@ -100,7 +100,9 @@ export default {
   },
   created() {
     this.getAccounts();
-    this.cheque = this.inuseCheque;
+    if (!this.selectCheque) {
+      this.cheque = this.inuseCheque;
+    }
   },
   watch: {
     inuseCheque() {
@@ -119,14 +121,20 @@ export default {
     submitCheque() {
       if (!this.cheque.id) {
         this.storeCheque();
+        console.log("create cheque");
         return;
       }
+      let update = false;
+      if (this.cheque.statusChanges && this.cheque.statusChanges.length == 1)
+        update = true;
+
+      console.log("change cheque status", this.cheque, update);
       this.request({
         url: this.endpoint("cheques/cheques/changeStatus/" + this.cheque.id),
         data: {
           cheque: this.extractIds(this.cheque),
           statusChange: this.extractIds(this.statusChange),
-          update: this.cheque.statusChanges.length == 1 ? true : false
+          update: update
         },
         method: "put",
         success: data => {
@@ -143,7 +151,7 @@ export default {
         data: this.extractIds(this.cheque),
         method: "post",
         success: data => {
-          this.cheque = data;
+          this.cheque.id = data.id;
           this.submitCheque();
         }
       });

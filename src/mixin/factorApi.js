@@ -124,7 +124,7 @@ export default {
         this.deleteFactorExpenses()
       ]).then(data => {
         this.getFactors(true);
-        this.updateFactorSanad(factorId);
+        this.updateFactorSanadAndReceipt(factorId);
       });
     },
     storeFactorItems(items) {
@@ -233,9 +233,9 @@ export default {
         }
       })
     },
-    updateFactorSanad(factorId) {
+    updateFactorSanadAndReceipt(factorId) {
       this.request({
-        url: this.endpoint("factors/factors/updateSanad/" + factorId),
+        url: this.endpoint("factors/factors/updateSanadAndReceipt/" + factorId),
         method: "put",
         success: data => {
           this.clearFactor();

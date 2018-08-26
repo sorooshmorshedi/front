@@ -31,6 +31,7 @@ export default new Vuex.Store({
     factors: {
       factors: [],
       factorExpenses: [],
+      receipts: [],
     }
   },
   mutations: {
@@ -62,6 +63,7 @@ export default new Vuex.Store({
     setFactors(state, factors) {
       factors.factorExpenses && (state.factors.factorExpenses = factors.factorExpenses);
       factors.factors && (state.factors.factors = factors.factors);
+      factors.receipts && (state.factors.receipts = factors.receipts);
     }
 
   },

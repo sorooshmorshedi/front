@@ -92,7 +92,7 @@ export default {
     },
     storeSeller(){
       this.person.type = 'seller';
-
+      this.storePerson();
     }
   }
 };

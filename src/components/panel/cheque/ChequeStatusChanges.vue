@@ -42,7 +42,7 @@
                           <router-link :to="{name: 'CreateSanad',params:{id: sc.sanad.id }}" target="_blank">مشاهده سند</router-link>
                         </td>
                         <td>
-                          <i v-if="i == statusChanges.length-1 && i != 0" @click.prevent="deleteStatusChange(sc)" class="fas fa-trash-alt text-danger" />
+                          <i v-if="i == statusChanges.length-1 && (cheque.type == 'paid' || i != 0)" @click.prevent="deleteStatusChange(sc)" class="fas fa-trash-alt text-danger" />
                         </td>
                       </tr>
                     </tbody>

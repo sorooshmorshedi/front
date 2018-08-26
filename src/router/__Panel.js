@@ -29,6 +29,7 @@ import DefaultAccounts from '@/components/panel/defaultAccounts/DefaultAccounts'
 import Factor from '@/components/panel/factor/Factor';
 import FactorForm from '@/components/panel/factor/Form';
 import FactorExpenses from '@/components/panel/factor/Expenses';
+import ReceiptAndRemittance from '@/components/panel/factor/ReceiptAndRemittance';
 
 
 import Cheque from '@/components/panel/cheque/Cheque';
@@ -155,8 +156,14 @@ export default [{
           path: 'expenses/:factorType',
           props: true,
           component: FactorExpenses
-        }
+        },
       ]
+    },
+    {
+      name: 'ReceiptAndRemittance',
+      path: 'receiptAndRemittance/:receiptType',
+      props: true,
+      component: ReceiptAndRemittance
     },
     {
       name: 'Cheque',

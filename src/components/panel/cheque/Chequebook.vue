@@ -13,7 +13,7 @@
                     {{ cb.account.title }}
                   </button>
                   <i class="fas fa-pencil-alt text-warning" @click="editCB(cb)" />
-                  <i class="fas fa-trash-alt text-danger" @click="deleteCB(cb)" />
+                  <i class="fas fa-trash-alt text-danger" @click="deleteChequebook(cb)" />
                 </h5>
               </div>
               <div :id="'collapse' + i" class="collapse show">
@@ -37,8 +37,9 @@
                         <td>{{ c.value }}</td>
                         <td>{{ c.status | chequeStatuses }}</td>
                         <td class="float-left">
-                          <button :disabled="c.status != 'blank'" @click="submitChequeModal('paid', c, cb)" type="button" class="btn btn-sm btn-info">ثبت چک</button>
-                          <button :disabled="c.status == 'blank'" @click="changeChequeStatusModal(c, cb)" type="button" class="btn btn-sm btn-info">تغییر وضعیت چک</button>
+                          <button :disabled="c.status != 'blank'" @click="submitChequeModal('paid', c, cb)" type="button" class="btn btn-info">ثبت چک</button>
+                          <button :disabled="c.status == 'blank'" @click="changeChequeStatusModal(c, cb)" type="button" class="btn btn-info">تغییر وضعیت چک</button>
+                          <button @click="ChequeStatusChangesModal(c)" type="button" class="btn btn btn-info">مشاهده تغییرات وضعیت چک</button>
                         </td>
                       </tr>
                     </tbody>
@@ -105,6 +106,8 @@
     <submit-cheque :inuse-cheque="cheque" :inuse-chequebook="chequebook" />
 
     <change-cheque-status :inuse-cheque="cheque" :inuse-chequebook="chequebook" />
+
+    <cheque-status-changes :cheque="cheque" />
 
   </div>
 </template>

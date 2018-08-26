@@ -86,10 +86,11 @@ Vue.mixin({
         });
     },
     extractIds(data) {
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
+      let res = this.copy(data);
+      Object.keys(res).forEach(key => {
+        if (res[key] && res[key].id) res[key] = res[key].id;
       });
-      return data;
+      return res;
     },
     successNotify() {
       this.notify('عملیات با موفقیت انجام شد', 'success')
@@ -150,7 +151,7 @@ Vue.mixin({
       window.open(routeData.href, "_blank");
     },
     hasValue(v) {
-      return !['', 0, '0', undefined].includes(v);
+      return !['', 0, '0', undefined, null].includes(v);
     }
   },
   computed: {
