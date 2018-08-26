@@ -82,7 +82,10 @@ export default {
   data() {
     return {
       expense: {},
-      type: {}
+      type: {
+        label: '',
+        name: '',
+      }
     };
   },
   created() {
