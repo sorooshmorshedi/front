@@ -114,10 +114,9 @@ Vue.mixin({
           .height() - 50);
     },
     endpoint(url) {
-      // if (url[0] == "/" || url[url.length - 1] == "/") {
-      // throw "Bad URL";
-      // }
-      return "http://localhost:8000/" + url;
+      if(this.isDev)
+        return "http://localhost:8000/" + url;
+      else return "http://api.sh.mmdmst.ir/" + url;
     },
     setToken(token) {
       localStorage.setItem('token', token);
@@ -140,7 +139,6 @@ Vue.mixin({
     log(t) {
       console.log(t);
     },
-
     openSanad(sanadId) {
       let routeData = this.$router.resolve({
         name: "CreateSanad",
@@ -159,6 +157,9 @@ Vue.mixin({
       user: state => state.user,
       permissions: state => state.user.permissions,
     }),
+    isDev() {
+      return process.env.NODE_ENV === 'development';
+    },
   },
   watch: {
     OGR() {
