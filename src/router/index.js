@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/auth/Login'
 
-import PanelRotues from './__Panel';
+import PanelRoutes from './__Panel';
+import ListsRoutes from './__Lists';
 
 Vue.use(Router)
 
@@ -14,7 +15,8 @@ export default new Router({
       component: Login,
       props: true,
     },
-    ...PanelRotues,
+    ...PanelRoutes,
+    ...ListsRoutes
   ],
   mode: 'history',
 })

@@ -54,8 +54,9 @@ export default {
       } else {
         if (['buyer', 'seller', 'bank'].includes(this.account.level)) {
           this.account.parent = this.accountsSelectValues.levels[2].filter((acc) => {
-            return acc.code == '10101';
+            return acc.code == '11004';
           })[0]
+          this.account.level = 3;
         }
         if (!this.account.parent) return '';
         accounts = this.account.parent.children;

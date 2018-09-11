@@ -113,7 +113,7 @@
             <div class="col-12 ">
               <button type="button" class="btn btn-info ">سند قبلی</button>
               <button type="button" class="btn btn-info ">سند بعدی</button>
-              <button @click="validate()" type="button" class="btn submit btn-primary float-left w-100px">ثبت</button>
+              <button @click="validate()" type="button" class="btn submit btn-primary float-left w-100px " :disabled="sanad.createType == 'auto'" >ثبت</button>
             </div>
           </div>
         </div>

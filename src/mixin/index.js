@@ -43,7 +43,8 @@ Vue.mixin({
           headers: headers,
           url: options.url,
           method: options.method,
-          data: options.data
+          data: options.data,
+          params: options.params,
         })
         .then((res) => {
           // console.log('success');

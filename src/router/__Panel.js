@@ -125,7 +125,7 @@ export default [{
       component: Transaction,
       children: [{
         name: 'TransactionForm',
-        path: ':transactionType',
+        path: ':transactionType/:id?',
         props: true,
         component: TransactionForm
       }]

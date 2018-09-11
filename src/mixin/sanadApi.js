@@ -23,10 +23,12 @@ export default {
         }
       })
     },
-    getTransactions(force = false, init = true) {
+    getTransactions(force = false, init = true, id = null) {
       if (!force && this.transactions.length) return;
+      let url = 'sanads/transactions';
+      if (id) url += '/' + id;
       return this.request({
-        url: this.endpoint('sanads/transactions'),
+        url: this.endpoint(url),
         method: 'get',
         success: data => {
           this.$store.commit('setSanads', {

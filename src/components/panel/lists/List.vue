@@ -3,7 +3,7 @@
 
 <script>
 export default {
-  name: '',
+  name: 'List',
   data() {
     return {}
   }
