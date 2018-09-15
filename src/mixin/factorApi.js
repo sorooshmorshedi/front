@@ -6,6 +6,16 @@ import {
 } from 'lodash';
 
 export default {
+  data() {
+    return {
+      factorCodes: {
+        buy: null,
+        backFromBuy: null,
+        sale: null,
+        backFromSale: null,
+      }
+    }
+  },
   methods: {
     checkInventories() {
       if (['buy', 'backFromSale'].includes(this.factor.type)) {
@@ -123,7 +133,7 @@ export default {
         this.updateFactorExpenses(updatedExpenses),
         this.deleteFactorExpenses()
       ]).then(data => {
-        this.getFactors(true);
+        this.getFactorCodes(true);
         this.updateFactorSanadAndReceipt(factorId);
       });
     },
@@ -200,7 +210,7 @@ export default {
         url: this.endpoint('factors/factors/' + factor.id + '/'),
         method: 'delete',
         success: data => {
-          this.getFactors(true);
+          this.getFactorCodes(true);
           this.successNotify();
           this.clearFactor();
         }
@@ -220,16 +230,13 @@ export default {
         }
       })
     },
-    getFactors(force = false, init = true) {
-      if (!force && this.factors.length) return;
+    getFactor(factorId) {
+      if (!factorId) return;
       return this.request({
-        url: this.endpoint('factors/factors/'),
+        url: this.endpoint('factors/factors/' + factorId + '/'),
         method: 'get',
         success: data => {
-          this.$store.commit('setFactors', {
-            factors: data
-          });
-          init && this.init();
+          this.selectFactor(data);
         }
       })
     },
@@ -252,36 +259,32 @@ export default {
         expenses: []
       }
       this.rows = [{}];
-    }
+    },
+    getFactorCodes() {
+      Object.keys(this.factorCodes).forEach(k => this.factorCodes[k] = null);
+      this.request({
+        url: this.endpoint("factors/factors/newCodes"),
+        method: "get",
+        success: data => {
+          this.factorCodes = data;
+        }
+      });
+    },
   },
   computed: {
     ...mapState({
-      factors: state => state.factors.factors,
       factorExpenses: state => state.factors.factorExpenses,
     }),
     factorsSelectValues() {
-      if (!this.factors) return [];
       let res = {
-        factors: [],
         factorExpenses: [],
       };
-      res.factors = this.copy(this.factors);
+      if (!this.factorsExpenses) return res;
       res.factorExpenses = this.copy(this.factorExpenses);
       return res;
     },
     factorCode() {
-      let localFactors = [];
-      if (this.factorType) {
-        localFactors = this.factors.filter(o => o.type == this.factorType);
-      } else {
-        localFactors = this.factors;
-      }
-      let last = maxBy(localFactors, o => o.code);
-      if (last) {
-        let code = +last.code + 1
-        return code;
-      }
-      return 1;
+      return this.factorCodes[this.factorType];
     },
   },
   filters: {},

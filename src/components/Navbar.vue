@@ -86,21 +86,22 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">فهرست فرم ها</a>
           <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
-            <!-- <router-link class="dropdown-item" :to="{name:'SanadsList'}">سند</router-link> -->
+            <router-link class="dropdown-item" :to="{name:'List', params: {form: 'sanad'}}">اسناد</router-link>
             <div class="dropdown-divider"></div>
-            <!-- <router-link class="dropdown-item" :to="{name:'FactorsList', params:{ factorType: 'buy'}}">فاکتور خرید</router-link>
-            <router-link class="dropdown-item" :to="{name:'FactorsList', params:{ factorType: 'backFromBuy'}}">فاکتور برگشت از خرید</router-link>
-            <router-link class="dropdown-item" :to="{name:'FactorsList', params:{ factorType: 'sale'}}">فاکتور فروش</router-link>
-            <router-link class="dropdown-item" :to="{name:'FactorsList', params:{ factorType: 'backFromSale'}}">فاکتور برگشت از فروش</router-link> -->
+            <router-link class="dropdown-item" :to="{name:'List', params:{ form: 'factor', type: 'buy'}}">فاکتور خرید</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params:{ form: 'factor', type: 'backFromBuy'}}">فاکتور برگشت از خرید</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params:{ form: 'factor', type: 'sale'}}">فاکتور فروش</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params:{ form: 'factor', type: 'backFromSale'}}">فاکتور برگشت از فروش</router-link>
             <div class="dropdown-divider"></div>
-            <!-- <router-link class="dropdown-item" :to="{name:'ReceiptAndRemittance', params: {receiptType: 'receipt'}}">رسید</router-link>
-            <router-link class="dropdown-item" :to="{name:'ReceiptAndRemittance', params: {receiptType: 'remittance'}}">حواله</router-link> -->
+            <router-link class="dropdown-item" :to="{name:'List', params: {form: 'receipt', type: 'receipt'}}">رسید</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params: {form: 'receipt', type: 'remittance'}}">حواله</router-link>
             <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'TransactionsList', params: {transactionType: 'receive'}}">دریافت</router-link>
-            <router-link class="dropdown-item" :to="{name:'TransactionsList', params: {transactionType: 'payment'}}">پرداخت</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params: {form:'transaction', type: 'receive'}}">دریافت</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params: {form:'transaction', type: 'payment'}}">پرداخت</router-link>
             <div class="dropdown-divider"></div>
-            <!-- <router-link class="dropdown-item" :to="{name:'ChequesList', params: {chequeType: 'paid'} }">چک های پرداختی</router-link>
-            <router-link class="dropdown-item" :to="{name:'ChequesList'}, params: {chequeType: 'received'} }">چک های دریافتی</router-link> -->
+            <router-link class="dropdown-item" :to="{name:'List', params: {form:'chequebook'}}">دست چک ها</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params: {form:'cheque', type: 'received'}}">چک های دریافتی</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params: {form:'cheque', type: 'paid'}}">چک های پرداختی</router-link>
           </div>
         </li>
       </ul>

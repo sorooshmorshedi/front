@@ -6,6 +6,14 @@ import {
 } from 'lodash';
 
 export default {
+  data() {
+    return {
+      codes: {
+        receipt: null,
+        remittance: null,
+      }
+    }
+  },
   methods: {
     storeReceipt() {
       let data = this.copy(this.receipt);
@@ -54,8 +62,8 @@ export default {
         this.updateReceiptItems(updatedItems),
         this.deleteReceiptItems(),
       ]).then(data => {
-        this.getReceipts(true);
         this.successNotify();
+        this.getReceiptCodes();
         this.clearReceipt();
       });
     },
@@ -98,29 +106,35 @@ export default {
         url: this.endpoint('factors/receipts/' + receipt.id + '/'),
         method: 'delete',
         success: data => {
-          this.getReceipts(true);
           this.successNotify();
           this.clearReceipt();
         }
       })
     },
-    getReceipts(force = false, init = true) {
-      if (!force && this.receipts.length) return;
+    getReceipt(id) {
+      if (!id) return;
       return this.request({
-        url: this.endpoint('factors/receipts/'),
+        url: this.endpoint('factors/receipts/' + id + '/'),
         method: 'get',
         success: data => {
-          this.$store.commit('setFactors', {
-            receipts: data
-          });
-          init && this.init();
+          this.selectReceipt(data);
         }
       })
     },
     clearReceipt() {
       this.receipt = {}
       this.rows = [{}];
-    }
+    },
+    getReceiptCodes() {
+      Object.keys(this.codes).forEach(k => this.codes[k] = null);
+      this.request({
+        url: this.endpoint("factors/receipts/newCodes"),
+        method: "get",
+        success: data => {
+          this.codes = data;
+        }
+      });
+    },
   },
   computed: {
     ...mapState({
@@ -138,19 +152,7 @@ export default {
       return res;
     },
     rarCode() {
-      console.log('reCode');
-      let localReceipts = [];
-      if (this.type.name) {
-        localReceipts = this.receipts.filter(o => o.type == this.type.name);
-      } else {
-        localReceipts = this.receipts;
-      }
-      let last = maxBy(localReceipts, o => o.code);
-      if (last) {
-        let code = +last.code + 1
-        return code;
-      }
-      return 1;
+      return this.codes[this.type.name]
     },
   },
 }

@@ -7,7 +7,11 @@ import {
 
 export default {
   data() {
-    return {}
+    return {
+      sanadCode: null,
+      receiveCode: null,
+      paymentCode: null,
+    }
   },
   methods: {
     getSanads(force = false, init = true) {
@@ -23,22 +27,33 @@ export default {
         }
       })
     },
-    getTransactions(force = false, init = true, id = null) {
-      if (!force && this.transactions.length) return;
-      let url = 'sanads/transactions';
-      if (id) url += '/' + id;
+    
+    clearSanads() {},
+    getSanadCode() {
       return this.request({
-        url: this.endpoint(url),
+        url: this.endpoint('sanads/sanads/newCode'),
         method: 'get',
         success: data => {
-          this.$store.commit('setSanads', {
-            transactions: data
-          });
-          init && this.init();
+          this.sanadCode = data
         }
       })
     },
-    clearSanads() {},
+    getTransactionCodes() {
+      this.request({
+        url: this.endpoint('sanads/transactions/newCode?type=receive'),
+        method: 'get',
+        success: data => {
+          this.receiveCode = data
+        }
+      })
+      this.request({
+        url: this.endpoint('sanads/transactions/newCode?type=payment'),
+        method: 'get',
+        success: data => {
+          this.paymentCode = data
+        }
+      })
+    },
   },
   computed: {
     ...mapState({
@@ -47,42 +62,5 @@ export default {
       receives: state => state.sanads.transactions.filter(o => o.type == 'receive'),
       payments: state => state.sanads.transactions.filter(o => o.type == 'payment'),
     }),
-    sanadCode() {
-      let lastSanad = maxBy(this.sanads, sanad => sanad.code);
-      if (lastSanad) {
-        let code = +lastSanad.code + 1
-        return code;
-      }
-      return 1;
-    },
-    receiveCode() {
-      let last = maxBy(this.receives.filter(o => o.type == 'receive'), o => o.code);
-      if (last) {
-        let code = +last.code + 1
-        return code;
-      }
-      return 1;
-    },
-    paymentCode() {
-      let last = maxBy(this.payments.filter(o => o.type == 'payment'), o => o.code);
-      if (last) {
-        let code = +last.code + 1
-        return code;
-      }
-      return 1;
-    },
-    sanadsSelectValues() {
-      this.log('Generate sanadsSelectValues');
-      let res = {
-        sanads: [],
-      }
-      this.sanads.forEach(sanad => {
-        res.sanads.push({
-          ...sanad,
-        });
-      });
-      return res;
-
-    }
   }
 }

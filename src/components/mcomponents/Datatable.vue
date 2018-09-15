@@ -5,8 +5,29 @@
         <thead>
           <tr>
             <th></th>
-            <th v-for="(col, i) in cols" :key="i">
-              <input v-for="(filter, j) in col.filters" :key="j" class="form-control" :type="col.type" :placeholder="'فیلتر ' + col.th" v-model="filters[filter]">
+            <th v-for="(col, i) in filterFields" :key="i">
+              <template v-for="(filter, j) in col.filters">
+
+                <input v-if="col.type == 'number'" :key="j" class="form-control text-center" type="number" :placeholder="filter.label" v-model="filters[filter.model]">
+
+                <input v-if="col.type == 'text'" :key="j" class="form-control text-center" type="text" :placeholder="filter.label" v-model="filters[filter.model]">
+
+                <select v-if="col.type == 'select'" :key="j" class="custom-select" v-model="filters[filter.model]">
+                  <option selected value="undefined">همه</option>
+                  <option v-for="(o,i) in col.original.options" :key="i" :value="o.value">{{ o.label }}</option>
+                </select>
+
+                <date v-if="col.type == 'date'" :key="j" class="form-control text-center" :placeholder="filter.label" v-model="filters[filter.model]" />
+
+                <money v-if="col.type == 'money'" :key="j" class="form-control text-center" :placeholder="filter.label" v-model="filters[filter.model]" />
+
+                <mtime v-if="col.type == 'time'" :key="j" class="form-control text-center" :placeholder="filter.label" v-model="filters[filter.model]" />
+
+              </template>
+
+            </th>
+            <th>
+              <button @click="clearFilters()" class="btn btn-block btn-info">خالی کردن فیلتر ها</button>
             </th>
           </tr>
           <tr>
@@ -17,44 +38,62 @@
               </span>
               {{ col.th }}
             </th>
+
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, i) in items" :key="i">
             <td> {{ offset+i+1 }} </td>
             <td v-for="(col, j) in cols" :key="j">
-              {{ item[col.td] }}
+              <template v-if="col.type == 'select'">
+                {{ getSelectLabel(item, col)}}
+              </template>
+              <template v-else-if="col.type == 'money' ">
+                {{ get(item, col.td) | toMoney }}
+              </template>
+              <template v-else>
+                {{ get(item, col.td) }}
+              </template>
+            </td>
+            <td>
+              <a v-if="routerName" @click.prevent="goToDetails(item)" href="">مشاهده جزئیات</a>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
     <nav aria-label="Page navigation rtl">
-        <ul class="pagination justify-content-center">
-          <li class="page-item " :class="{disabled: offset == 0}">
-            <a @click.prevent="previousPage()" class="page-link " href="#">
-              <i class="fas fa-angle-double-right  "></i>
-            </a>
-          </li>
-          <li class="page-item" v-for="(page, i) in pages.pages" :key="i" :class="{active: page == pages.currentPage}">
-            <a v-if="page == -1" @click.prevent class="page-link" href="#">...</a>
-            <a v-else @click.prevent="goToPage(page)" class="page-link" href="#">{{ page+1 }}</a>
-          </li>
-          <li class="page-item" :class="{disabled: offset + limit >= count}">
-            <a class="page-link" href="#" @click.prevent="nextPage()">
-              <i class="fas fa-angle-double-left"></i>
-            </a>
-          </li>
-        </ul>
+      <ul class="pagination justify-content-center">
+        <li class="page-item " :class="{disabled: offset == 0}">
+          <a @click.prevent="previousPage()" class="page-link " href="#">
+            <i class="fas fa-angle-double-right  "></i>
+          </a>
+        </li>
+        <li class="page-item" v-for="(page, i) in pages.pages" :key="i" :class="{active: page == pages.currentPage}">
+          <a v-if="page == -1" @click.prevent class="page-link" href="#">...</a>
+          <a v-else @click.prevent="goToPage(page)" class="page-link" href="#">{{ page+1 }}</a>
+        </li>
+        <li class="page-item" :class="{disabled: offset + limit >= count}">
+          <a class="page-link" href="#" @click.prevent="nextPage()">
+            <i class="fas fa-angle-double-left"></i>
+          </a>
+        </li>
+      </ul>
     </nav>
   </div>
 </template>
 
 <script>
+import money from "@/components/mcomponents/cleave/Money";
+import date from "@/components/mcomponents/cleave/Date";
+import mtime from "@/components/mcomponents/cleave/Time";
+import moment from "moment-jalaali";
 import _ from "lodash";
 export default {
   name: "Datatable",
-  props: ["url", "routerName", "cols"],
+  props: ["url", "routerName", "routerDefaultParams", "cols", "defaultFilters"],
+  components: { date, money, mtime },
   data() {
     return {
       items: [],
@@ -67,19 +106,32 @@ export default {
     };
   },
   created() {
-    this.getData();
-    this.debouncedGetData = _.debounce(this.getData, 300);
+    this.debouncedGetData = _.debounce(this.getData, 1000);
+    this.clearFilters();
   },
   mounted() {},
   watch: {
     filters: {
       handler() {
-        this.debouncedGetData();
+        if (this.debouncedGetData) this.debouncedGetData();
+        else this.getData();
       },
       deep: true
     },
     order() {
-      this.debouncedGetData();
+      this.getData();
+    },
+    url() {
+      this.items = [];
+      this.debouncedGetData && this.debouncedGetData();
+    },
+    defaultFilters() {
+      this.items = [];
+      if (this.defaultFilters) {
+        this.filters = { ...this.defaultFilters };
+      } else {
+        this.filters = {};
+      }
     }
   },
   computed: {
@@ -108,19 +160,56 @@ export default {
         currentPage,
         pages
       };
+    },
+    filterFields() {
+      let res = [];
+      for (let col of this.cols) {
+        let colFilters = [];
+        for (let filter of col.filters) {
+          if (typeof filter === "string") {
+            colFilters.push({
+              label: "فیلتر " + col.th,
+              model: filter
+            });
+          } else {
+            colFilters.push(filter);
+          }
+        }
+        res.push({
+          filters: colFilters,
+          type: col.type,
+          original: col
+        });
+      }
+      return res;
     }
   },
   methods: {
     getData() {
-      console.log("get data");
+      this.log("Get data");
+      let filters = {};
+      Object.keys(this.filters).forEach(k => {
+        if (["undefined", ""].includes(this.filters[k])) return;
+
+        if (k.includes("date") || k.includes("due")) {
+          let gDate = this.toGDate(this.filters[k]);
+          if (gDate == "Invalid date") {
+            this.notify("فرمت تاریخ وارد شده معتبر نمی باشد", "danger");
+            return;
+          }
+          filters[k] = gDate;
+        } else {
+          filters[k] = this.filters[k];
+        }
+      });
       this.request({
-        url: this.url,
+        url: this.endpoint(this.url),
         method: "get",
         params: {
           limit: this.limit,
           offset: this.offset,
           ordering: this.order,
-          ...this.filters
+          ...filters
         },
         success: data => {
           this.count = data.count;
@@ -132,7 +221,7 @@ export default {
       if (this.order == col.td) this.order = `-${col.td}`;
       else if (this.order == `-${col.td}`) this.order = "";
       else this.order = col.td;
-      console.log("ordered by ", this.order);
+      this.log("ordered by ", this.order);
     },
     orderClass(col) {
       let td = col.td;
@@ -151,6 +240,32 @@ export default {
     goToPage(n) {
       this.offset = this.limit * n;
       this.getData();
+    },
+    get(o, p) {
+      return _.get(o, p, "-");
+    },
+    goToDetails(item) {
+      let params = {
+        id: item.id
+      };
+      if (this.routerDefaultParams)
+        params = { ...params, ...this.routerDefaultParams };
+      this.$router.push({ name: this.routerName, params });
+    },
+    getSelectLabel(item, col) {
+      let option = col.options.filter(
+        o => this.get(item, col.td) == o.value
+      )[0];
+      if (option) return option.label;
+      console.warn(item, col);
+      return "-";
+    },
+    clearFilters() {
+      if (this.defaultFilters) {
+        this.filters = { ...this.defaultFilters };
+      } else {
+        this.filters = {};
+      }
     }
   }
 };
@@ -160,6 +275,10 @@ export default {
 .fixed-head {
   overflow-y: auto;
   max-height: calc(100vh - 100px);
+}
+
+.fixed-head thead tr:nth-child(1) th {
+  vertical-align: top;
 }
 
 .fixed-head thead tr:nth-child(2) {

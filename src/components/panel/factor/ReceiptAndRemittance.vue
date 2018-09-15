@@ -4,10 +4,10 @@
       <div class="card right ">
         <div class="card-body">
           <div class="title">
-            ثبت {{ type.label }}
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#receipt-selection-modal" style="margin-right:15px;">
+            {{ type.label }}
+            <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#receipt-selection-modal" style="margin-right:15px;">
               انتخاب {{ type.label }}
-            </button>
+            </button> -->
           </div>
           <div class="row">
             <div class="col-lg-6">
@@ -138,7 +138,7 @@ import mtime from "@/components/mcomponents/cleave/Time";
 export default {
   name: "ReceiptAndRemiitance",
   components: { date, mtime },
-  props: ["receiptType"],
+  props: ["receiptType",'id'],
   mixins: [wareApiMixin, ReceiptApiMixin],
   data() {
     return {
@@ -146,26 +146,33 @@ export default {
       rows: [],
       itemsToDelete: [],
       type: {
-        name: '',
-        label: '',
+        name: "",
+        label: ""
       },
       rowTemplate: {},
       Receipts: []
     };
   },
   created() {
-    this.getReceipts();
-    this.getWarehouses();
-    this.getWares();
-    this.rows.push(this.copy(this.rowTemplate));
+    this.getData();
     this.init();
   },
   methods: {
+    getData() {
+      this.getWarehouses();
+      this.getWares();
+      this.getReceiptCodes();
+      this.id && this.getReceipt(this.id);
+    },
     init() {
+      if (!this.id) {
+        this.receipt = {};
+        this.rows = [];
+        this.rows.push(this.copy(this.rowTemplate));
+      }
       this.type.name = this.receiptType;
       if (this.type.name == "receipt") this.type.label = "رسید";
       else this.type.label = "حواله";
-      this.receipt = {};
     },
     validate() {
       let isValid = true;
@@ -207,7 +214,9 @@ export default {
           let flag = true;
           data.forEach((count, i) => {
             if (this.rows[i].id) {
-              let item = this.receipt.items.filter(o => o.id == this.rows[i].id)[0];
+              let item = this.receipt.items.filter(
+                o => o.id == this.rows[i].id
+              )[0];
               count += item.count;
             }
             if (count < this.rows[i].count) {

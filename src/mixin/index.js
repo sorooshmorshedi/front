@@ -115,7 +115,7 @@ Vue.mixin({
           .height() - 50);
     },
     endpoint(url) {
-      if(this.isDev)
+      if (this.isDev)
         return "http://localhost:8000/" + url;
       else return "http://api.sh.mmdmst.ir/" + url;
     },
@@ -151,6 +151,11 @@ Vue.mixin({
     },
     hasValue(v) {
       return !['', 0, '0', undefined, null].includes(v);
+    },
+    toGDate(date) {
+      return moment(date, "jYYYY-jMM-jDD").format(
+        "YYYY-MM-DD"
+      );
     }
   },
   computed: {

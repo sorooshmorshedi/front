@@ -5,7 +5,6 @@
         <div class="card-body">
           <div class="title">
             ثبت {{ type.label }}
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#transaction-selection-modal" style="margin-right:15px;">انتخاب {{ type.label }}</button>
           </div>
           <div class="row">
             <div class="col-lg-8">
@@ -258,10 +257,10 @@ import chequeMixin from "@/mixin/cheque";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 export default {
-  name: "Create",
+  name: "Form",
   components: { money, date },
   mixins: [accountApiMixin, sanadApiMixin, chequeMixin],
-  props: ["transactionType"],
+  props: ["transactionType", "id"],
   data() {
     return {
       transaction: {},
@@ -326,12 +325,17 @@ export default {
     },
     transactionType() {
       this.init();
+    },
+    id() {
+      this.getTransaction(this.id);
     }
   },
   methods: {
     init() {
-      this.rows = [{}];
-      this.transaction = {};
+      if (!this.id) {
+        this.rows = [{}];
+        this.transaction = {};
+      }
       if (this.transactionType == "receive") {
         this.type.label = "دریافت";
         this.type.name = "receive";
@@ -349,8 +353,21 @@ export default {
     getData() {
       this.getAccounts();
       this.getDefaultAccounts();
-      this.getTransactions();
       this.getChequebooks();
+      console.log(this.id);
+      this.getTransaction(this.id);
+      this.getTransactionCodes();
+    },
+    getTransaction(id) {
+      if (!id) return;
+      let url = "sanads/transactions/" + id;
+      return this.request({
+        url: this.endpoint(url),
+        method: "get",
+        success: data => {
+          this.selectTransaction(data);
+        }
+      });
     },
     selectTransaction(transaction) {
       this.rows = [];
@@ -360,7 +377,6 @@ export default {
         this.rows.push(this.copy(item));
       });
       this.rows.push({});
-      $("#transaction-selection-modal").modal("hide");
     },
     deleteRow(index) {
       if (index == 0) {
@@ -458,8 +474,8 @@ export default {
         this.updateTransactionItems(updatedItems),
         this.deleteTransactionItems()
       ]).then(data => {
-        this.getTransactions(true);
         this.getChequebooks(true);
+        this.getTransactionCodes();
         this.successNotify();
       });
     },
@@ -498,7 +514,7 @@ export default {
       });
     },
     isChequeType(row) {
-      return row.type && row.type.programingName.includes("Cheque");
+      return row.type && row.type.programingName && row.type.programingName.includes("Cheque");
     },
     hasCheque(row) {
       return row.cheque && typeof row.cheque == "number";

@@ -161,7 +161,7 @@ export default [{
     },
     {
       name: 'ReceiptAndRemittance',
-      path: 'receiptAndRemittance/:receiptType',
+      path: 'receiptAndRemittance/:receiptType/:id?',
       props: true,
       component: ReceiptAndRemittance
     },

@@ -5,7 +5,7 @@
         <div class="card-body">
           <div class="title">
             ثبت فاکتور {{ factorLabel }}
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#factor-selection-modal" style="margin-right:15px;">انتخاب فاکتور</button>
+            <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#factor-selection-modal" style="margin-right:15px;">انتخاب فاکتور</button> -->
           </div>
           <div class="row">
             <div class="col-lg-8">
@@ -297,45 +297,6 @@
       </div>
     </div>
 
-    <div class="modal fade" id="factor-selection-modal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">فاکتور های ثبت شده</h4>
-            <button type="button" class="close" data-dismiss="modal">
-              <span arrptype-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12">
-                <div class="table-responsive">
-                  <table class="table table-striped table-hover table-pointer">
-                    <thead>
-                      <tr>
-                        <th>شماره فاکتور</th>
-                        <th>توضیحات</th>
-                        <th>تاریخ</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(factor,i) in factors.filter(o => o.type == factorType)" :key="i" @click="selectFactor(factor)">
-                        <td>{{ factor.code }}</td>
-                        <td>{{ factor.explanation }}</td>
-                        <td>{{ factor.date }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">بازگشت</button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -347,7 +308,7 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
 export default {
-  name: "Create",
+  name: "Form",
   components: { money, date, mtime },
   props: ["factorType", "id"],
   mixins: [accountApiMixin, wareApiMixin, factorApiMixin],
@@ -373,23 +334,30 @@ export default {
     };
   },
   created() {
-    this.getAccounts();
-    this.getFactors();
-    this.getWarehouses();
-    this.getWares();
-    this.getFactorExpenses();
-    this.rows.push(this.copy(this.rowTemplate));
     this.init();
+    this.getData();
   },
   methods: {
+    getData() {
+      this.getAccounts();
+      this.getFactorCodes();
+      this.getWarehouses();
+      this.getWares();
+      this.getFactorExpenses();
+      this.id && this.getFactor(this.id);
+    },
     init() {
-      this.factor = {
-        taxPercent: "",
-        taxValue: "",
-        discountPercent: "",
-        discountValue: "",
-        expenses: []
-      };
+      if (!this.id) {
+        this.factor = {
+          taxPercent: "",
+          taxValue: "",
+          discountPercent: "",
+          discountValue: "",
+          expenses: []
+        };
+        this.rows = [];
+        this.rows.push(this.copy(this.rowTemplate));
+      }
       switch (this.factorType) {
         case "sale":
           this.factorLabel = "فروش";
@@ -459,7 +427,11 @@ export default {
     },
     rowDiscount(row) {
       if (!this.rowSum(row)) return 0;
-      if (!this.hasValue(row.discountValue) && !this.hasValue(row.discountPercent)) return 0;
+      if (
+        !this.hasValue(row.discountValue) &&
+        !this.hasValue(row.discountPercent)
+      )
+        return 0;
       if (this.hasValue(row.discountValue)) return +row.discountValue;
       else return +(this.rowSum(row) * +row.discountPercent / 100).toFixed(2);
     },

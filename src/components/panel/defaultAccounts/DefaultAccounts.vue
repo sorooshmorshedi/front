@@ -24,10 +24,10 @@
             <td>{{ defaultAccount.account.title }}</td>
             <td>{{ defaultAccount.explanation }}</td>
             <td>
-              <i v-if="['both','receive'].includes(defaultAccount.usage)" class="fas fa-check" />
+              <i v-if="['receiveAndPayment','receive'].includes(defaultAccount.usage)" class="fas fa-check" />
             </td>
             <td>
-              <i v-if="['both','payment'].includes(defaultAccount.usage)" class="fas fa-check" />
+              <i v-if="['receiveAndPayment','payment'].includes(defaultAccount.usage)" class="fas fa-check" />
             </td>
             <td>
               <i class="fas fa-pencil-alt text-warning" @click="editdefaultAccount(defaultAccount)" />
@@ -79,7 +79,7 @@
                     </label>
                   </div>
                   <div class="form-check col-12 col-lg-4">
-                    <input class="form-check-input" id="u3" type="radio" value="both" v-model="defaultAccount.usage">
+                    <input class="form-check-input" id="u3" type="radio" value="receiveAndPayment" v-model="defaultAccount.usage">
                     <label class="form-check-label" for="u3">
                       هر دو
                     </label>
