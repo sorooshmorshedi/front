@@ -104,6 +104,13 @@
             <router-link class="dropdown-item" :to="{name:'List', params: {form:'cheque', type: 'paid'}}">چک های پرداختی</router-link>
           </div>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">گزارش</a>
+          <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
+            <router-link class="dropdown-item" :to="{name:'BalanceReport'}">تراز</router-link>
+            <div class="dropdown-divider"></div>
+          </div>
+        </li>
       </ul>
     </div>
   </nav>

@@ -1,16 +1,22 @@
 import Panel from '@/components/panel/Panel';
 
 import List from '@/components/panel/lists/List';
+import Balance from '@/components/panel/balance/Balance';
 
 export default [{
-  name: 'Lists',
-  path: '/panel',
+  name: 'Reports',
+  path: '/report',
   component: Panel,
   children: [{
       name: 'List',
       path: 'lists/:form/:type?',
       component: List,
       props: true,
+    },
+    {
+      name: 'BalanceReport',
+      path: 'balance',
+      component: Balance,
     }
   ]
 }]
