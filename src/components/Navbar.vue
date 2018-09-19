@@ -109,6 +109,7 @@
           <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'BalanceReport'}">تراز</router-link>
             <div class="dropdown-divider"></div>
+            <router-link class="dropdown-item" :to="{name:'LedgerReport'}">دفتر کل، معین، تفضیلی</router-link>
           </div>
         </li>
       </ul>

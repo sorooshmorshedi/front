@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import datatable from "@/components/mcomponents/datatable/server";
+import datatable from "@/components/mcomponents/datatable/Server";
 import formOptions from "./formOptions";
 export default {
   name: "List",

@@ -33,7 +33,7 @@
           <tr>
             <th>#</th>
             <th v-for="(col, i) in cols" :key="i" @click="orderBy(col)">
-              <span style="margin-left: 5px;">
+              <span style="margin-left: 5px;" v-if="col.sortable == undefined || col.sortable">
                 <i class="fas" :class="orderClass(col)"></i>
               </span>
               {{ col.th }}
@@ -50,10 +50,10 @@
                 {{ getSelectLabel(item, col)}}
               </template>
               <template v-else-if="col.type == 'money' ">
-                {{ get(item, col.td) | toMoney }}
+                {{ get(item, col) | toMoney }}
               </template>
               <template v-else>
-                {{ get(item, col.td) }}
+                {{ get(item, col) }}
               </template>
             </td>
             <td>
@@ -97,6 +97,7 @@ export default {
   data() {
     return {
       items: [],
+      oldItems: [],
       limit: 10,
       offset: 0,
       count: 0,
@@ -119,6 +120,7 @@ export default {
       deep: true
     },
     order() {
+      this.offset = 0;
       this.getData();
     },
     url() {
@@ -126,6 +128,11 @@ export default {
       this.debouncedGetData && this.debouncedGetData();
     },
     defaultFilters() {
+      let flag = true;
+      for (const df of Object.keys(this.defaultFilters)) {
+        if (this.filters[df] != this.defaultFilters[df]) flag = false;
+      }
+      if (flag) return;
       this.items = [];
       if (this.defaultFilters) {
         this.filters = { ...this.defaultFilters };
@@ -164,6 +171,10 @@ export default {
     filterFields() {
       let res = [];
       for (let col of this.cols) {
+        if (!col.filters) {
+          res.push({ filters: [] });
+          continue;
+        }
         let colFilters = [];
         for (let filter of col.filters) {
           if (typeof filter === "string") {
@@ -187,6 +198,10 @@ export default {
   methods: {
     getData() {
       this.log("Get data");
+      if (!this.url) {
+        this.warn("URL is not provided");
+        return;
+      }
       let filters = {};
       Object.keys(this.filters).forEach(k => {
         if (["undefined", ""].includes(this.filters[k])) return;
@@ -213,18 +228,23 @@ export default {
         },
         success: data => {
           this.count = data.count;
+          if (this.offset == 0) this.oldItems = [];
+          else this.oldItems = this.items;
           this.items = data.results;
         }
       });
     },
     orderBy(col) {
-      if (this.order == col.td) this.order = `-${col.td}`;
-      else if (this.order == `-${col.td}`) this.order = "";
-      else this.order = col.td;
-      this.log("ordered by ", this.order);
+      if (col.sortable == undefined || col.sortable) {
+        let newOrder = col.td.split(".").join("__");
+        if (this.order == newOrder) this.order = `-${newOrder}`;
+        else if (this.order == `-${newOrder}`) this.order = "";
+        else this.order = newOrder;
+        this.log("ordered by ", this.order);
+      }
     },
     orderClass(col) {
-      let td = col.td;
+      let td = col.td.split(".").join("__");
       if (this.order == td) return { "fa-sort-up": true };
       if (this.order == `-${td}`) return { "fa-sort-down": true };
       return { "fa-sort": true };
@@ -241,8 +261,11 @@ export default {
       this.offset = this.limit * n;
       this.getData();
     },
-    get(o, p) {
-      return _.get(o, p, "-");
+    get(item, col) {
+      if (col.render) {
+        return col.render(item, this.items, this.oldItems);
+      }
+      return _.get(item, col.td, "-");
     },
     goToDetails(item) {
       let params = {
@@ -253,9 +276,7 @@ export default {
       this.$router.push({ name: this.routerName, params });
     },
     getSelectLabel(item, col) {
-      let option = col.options.filter(
-        o => this.get(item, col.td) == o.value
-      )[0];
+      let option = col.options.filter(o => this.get(item, col) == o.value)[0];
       if (option) return option.label;
       console.warn(item, col);
       return "-";

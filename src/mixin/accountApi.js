@@ -355,6 +355,18 @@ export default {
         });
       })
     },
+    findAccount(value, property, accounts) {
+      if (!accounts) accounts = this.accounts;
+      for (const account of accounts) {
+        if (account[property] == value) {
+          return account;
+        }
+        if (account.children && account.children.length != 0) {
+          let acc = this.findAccount(value, property, account.children);
+          if (acc) return acc;
+        }
+      }
+    }
   },
   computed: {
     ...mapState({

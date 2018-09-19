@@ -2,6 +2,7 @@ import Panel from '@/components/panel/Panel';
 
 import List from '@/components/panel/lists/List';
 import Balance from '@/components/panel/balance/Balance';
+import Ledger from '@/components/panel/ledger/Ledger';
 
 export default [{
   name: 'Reports',
@@ -17,6 +18,17 @@ export default [{
       name: 'BalanceReport',
       path: 'balance',
       component: Balance,
+    },
+    {
+      name: 'LedgerReport',
+      path: 'ledger',
+      component: Ledger,
+      props: route => {
+        return {
+          ledgerAccountIds: route.query.accs
+        }
+
+      }
     }
   ]
 }]
