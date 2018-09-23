@@ -3,6 +3,7 @@ import Panel from '@/components/panel/Panel';
 import List from '@/components/panel/lists/List';
 import Balance from '@/components/panel/balance/Balance';
 import Ledger from '@/components/panel/ledger/Ledger';
+import Journal from '@/components/panel/journal/Journal';
 
 export default [{
   name: 'Reports',
@@ -27,8 +28,12 @@ export default [{
         return {
           ledgerAccountIds: route.query.accs
         }
-
       }
-    }
+    },
+    {
+      name: 'JournalReport',
+      path: 'journal',
+      component: Journal,
+    },
   ]
 }]

@@ -236,14 +236,20 @@ export default {
     },
     orderBy(col) {
       if (col.sortable == undefined || col.sortable) {
-        let newOrder = col.td.split(".").join("__");
-        if (this.order == newOrder) this.order = `-${newOrder}`;
-        else if (this.order == `-${newOrder}`) this.order = "";
-        else this.order = newOrder;
+        let newOrder;
+        if (col.order) {
+          this.order = col.order(this.order);
+        } else {
+          newOrder = col.td.split(".").join("__");
+          if (this.order == newOrder) this.order = `-${newOrder}`;
+          else if (this.order == `-${newOrder}`) this.order = "";
+          else this.order = newOrder;
+        }
         this.log("ordered by ", this.order);
       }
     },
     orderClass(col) {
+      if (col.orderClass) return col.orderClass(this.order);
       let td = col.td.split(".").join("__");
       if (this.order == td) return { "fa-sort-up": true };
       if (this.order == `-${td}`) return { "fa-sort-down": true };

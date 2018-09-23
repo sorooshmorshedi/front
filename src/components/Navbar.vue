@@ -110,6 +110,8 @@
             <router-link class="dropdown-item" :to="{name:'BalanceReport'}">تراز</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'LedgerReport'}">دفتر کل، معین، تفضیلی</router-link>
+            <div class="dropdown-divider"></div>
+            <router-link class="dropdown-item" :to="{name:'JournalReport'}">دفتر روزنامه</router-link>
           </div>
         </li>
       </ul>
