@@ -4,6 +4,7 @@ import List from '@/components/panel/lists/List';
 import Balance from '@/components/panel/balance/Balance';
 import Ledger from '@/components/panel/ledger/Ledger';
 import Journal from '@/components/panel/journal/Journal';
+import IncomeStatement from '@/components/panel/incomeStatement/IncomeStatement';
 
 export default [{
   name: 'Reports',
@@ -34,6 +35,11 @@ export default [{
       name: 'JournalReport',
       path: 'journal',
       component: Journal,
+    },
+    {
+      name: 'IncomeStatementReport',
+      path: 'incomeStatement',
+      component: IncomeStatement,
     },
   ]
 }]
