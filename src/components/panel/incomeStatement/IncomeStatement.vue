@@ -30,15 +30,16 @@
                               <th>#</th>
                               <th>شرح</th>
                               <th>مبلغ</th>
-                              <th>مبلغ</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr v-for="(r, i) in rows" :key="i">
                               <td>{{ i+1 }}</td>
-                              <td>{{ r.type.name }}</td>
-                              <td class="" dir="ltr">{{ r.remain?r.remain:'-' }}</td>
-                              <td class="" dir="ltr">{{ r.sum?r.sum:'-' }}</td>
+                              <td :class="{'text-bold': i == rows.length-1}">
+                                <span :class="{'text-danger': r.type.prefixColor == 'red', 'text-primary': r.type.prefixColor == 'blue'}" v-if="r.type.hasPrefix">{{ r.type.prefix }}</span>
+                                {{ r.type.name }}
+                              </td>
+                              <td  :class="{'text-bold': i == rows.length-1}" dir="ltr">{{ r.remain | toMoney }}</td>
                             </tr>
                           </tbody>
                         </table>

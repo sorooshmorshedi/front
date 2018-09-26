@@ -33,7 +33,7 @@
                   <date class="form-control" disabled/>
                 </div>
                 <div class="col-lg-4">
-                  <button style="margin-top:27px" type="button" name="" id="" class="btn btn-info">پرداخت شده برای فاکتور های</button>
+                  <button data-toggle="modal" data-target="#factors-modal" style="margin-top:27px" type="button" name="" id="" class="btn btn-info">پرداخت شده برای فاکتور های</button>
                 </div>
               </div>
             </div>
@@ -119,11 +119,11 @@
       </div>
     </div>
 
-    <div class="modal fade" id="transaction-selection-modal" tabindex="-1">
+    <div class="modal fade" id="factors-modal" tabindex="-1">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">{{ type.label }} ها</h4>
+            <h4 class="modal-title">فاکتور های پرداخت نشده</h4>
             <button type="button" class="close" data-dismiss="modal">
               <span>&times;</span>
             </button>
@@ -135,21 +135,21 @@
                   <table class="table table-striped table-hover table-pointer">
                     <thead>
                       <tr>
-                        <th>شماره {{ type.label }}</th>
+                        <th>شماره فاکتور</th>
                         <th>توضیحات</th>
                         <th>تاریخ</th>
-                        <th>شخص</th>
-                        <th></th>
+                        <th>مبلغ پرداخت شده</th>
+                        <th>مبلغ</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(t,i) in transactionsList" :key="i" @click="selectTransaction(t)">
-                        <td>{{ t.code }}</td>
-                        <td>{{ t.explanation }}</td>
-                        <td>{{ t.date }}</td>
-                        <td>{{ t.account.title }}</td>
+                      <tr v-for="(f,i) in factors" :key="i">
+                        <td>{{ f.code }}</td>
+                        <td>{{ f.explanation }}</td>
+                        <td>{{ f.date }}</td>
+                        <td>{{ f.paidValue }}</td>
                         <td>
-                          <button @click="openSanad(t.sanad)" class="btn btn-outline-info" type="button" id="button-addon1">مشاهده سند</button>
+                          <money class="form-control" type="text"  />
                         </td>
                       </tr>
                     </tbody>
@@ -159,8 +159,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button type="button" class="btn btn-primary">انتخاب</button>
+            <button type="button" class="btn btn-info w-100px" data-dismiss="modal">تایید</button>
           </div>
         </div>
       </div>
@@ -272,7 +271,8 @@ export default {
       },
       itemsToDelete: [],
       cheque: {},
-      chequeRowIndex: null
+      chequeRowIndex: null,
+      factors: []
     };
   },
   created() {
@@ -349,14 +349,32 @@ export default {
       } else {
         console.error("404");
       }
+      this.getNotPaidFactors();
     },
     getData() {
       this.getAccounts();
       this.getDefaultAccounts();
       this.getChequebooks();
-      console.log(this.id);
       this.getTransaction(this.id);
       this.getTransactionCodes();
+    },
+    getNotPaidFactors() {
+      return this.request({
+        url: this.endpoint("reports/lists/factors"),
+        method: "get",
+        params: {
+          offset: 0,
+          limit: 1000,
+          isPaid: false,
+          type__in:
+            this.type.name == "receive"
+              ? "sale,backFromBuy"
+              : "buy,backFromSale"
+        },
+        success: data => {
+          this.factors = data.results;
+        }
+      });
     },
     getTransaction(id) {
       if (!id) return;
@@ -514,7 +532,11 @@ export default {
       });
     },
     isChequeType(row) {
-      return row.type && row.type.programingName && row.type.programingName.includes("Cheque");
+      return (
+        row.type &&
+        row.type.programingName &&
+        row.type.programingName.includes("Cheque")
+      );
     },
     hasCheque(row) {
       return row.cheque && typeof row.cheque == "number";
@@ -571,8 +593,6 @@ export default {
       let update = false;
       if (cheque.statusChanges && cheque.statusChanges.length == 1)
         update = true;
-
-      console.log("change cheque status");
       return this.request({
         url: this.endpoint("cheques/cheques/changeStatus/" + cheque.id),
         data: {
