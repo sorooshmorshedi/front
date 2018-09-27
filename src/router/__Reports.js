@@ -5,6 +5,7 @@ import Balance from '@/components/panel/balance/Balance';
 import Ledger from '@/components/panel/ledger/Ledger';
 import Journal from '@/components/panel/journal/Journal';
 import IncomeStatement from '@/components/panel/incomeStatement/IncomeStatement';
+import BalanceSheet from '@/components/panel/balanceSheet/BalanceSheet';
 
 export default [{
   name: 'Reports',
@@ -40,6 +41,11 @@ export default [{
       name: 'IncomeStatementReport',
       path: 'incomeStatement',
       component: IncomeStatement,
+    },
+    {
+      name: 'BalanceSheetReport',
+      path: 'balanceSheet',
+      component: BalanceSheet,
     },
   ]
 }]
