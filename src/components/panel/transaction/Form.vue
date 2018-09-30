@@ -136,8 +136,10 @@
                     <thead>
                       <tr>
                         <th>شماره فاکتور</th>
+                        <th>نوع فاکتور</th>
                         <th>توضیحات</th>
                         <th>تاریخ</th>
+                        <th>جمع فاکتور</th>
                         <th>مبلغ پرداخت شده</th>
                         <th>مبلغ</th>
                       </tr>
@@ -145,8 +147,10 @@
                     <tbody>
                       <tr v-for="(f,i) in factors" :key="i">
                         <td>{{ f.code }}</td>
+                        <td>{{ factorTypes[f.type] }}</td>
                         <td>{{ f.explanation }}</td>
                         <td>{{ f.date }}</td>
+                        <td>{{ f.sanad.bed | toMoney }}</td>
                         <td>{{ f.paidValue }}</td>
                         <td>
                           <money class="form-control" type="text"  />
@@ -272,7 +276,13 @@ export default {
       itemsToDelete: [],
       cheque: {},
       chequeRowIndex: null,
-      factors: []
+      factors: [],
+      factorTypes: {
+        'buy': 'خرید',
+        'sale': 'فروش',
+        'backFromBuy': 'برگشت از خرید',
+        'backFromSale': 'برگشت از فروش'
+      }
     };
   },
   created() {

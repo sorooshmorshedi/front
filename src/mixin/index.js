@@ -201,7 +201,23 @@ Vue.mixin({
       return moment(date).format('jYYYY/jMM/jDD');
     },
     toMoney(m) {
-      return this.toMoney(m);
+      if (!m) return m;
+      let res = [];
+      m = m + '';
+      if (m.includes(',')) {
+        m = m.split(',');
+      } else {
+        m = m.split('');
+      }
+      let len = m.length;
+      m.reverse();
+      for (let i = 0; i < len; i++) {
+        if (i && i % 3 == 0) {
+          res.push(',');
+        }
+        res.push(m[i]);
+      }
+      return res.reverse().join('');
     },
   }
 })
