@@ -31,7 +31,6 @@ export default {
           warehouse: row.ware.warehouse.id
         });
       });
-      console.log(payload);
       this.request({
         url: this.endpoint('wares/inventory/check'),
         method: 'post',
@@ -107,7 +106,7 @@ export default {
         if (item.id) {
           updatedItems.push(item);
         } else {
-          item.factor = this.factor.id;
+          item.factor = factorId;
           newItems.push(item);
         }
       });
@@ -121,7 +120,7 @@ export default {
         if (item.id) {
           updatedExpenses.push(item);
         } else {
-          item.factor = this.factor.id;
+          item.factor = factorId;
           newExpenses.push(item);
         }
       });
@@ -222,7 +221,6 @@ export default {
         url: this.endpoint('factors/expenses/'),
         method: 'get',
         success: data => {
-          console.log(data);
           this.$store.commit('setFactors', {
             factorExpenses: data
           });
