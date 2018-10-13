@@ -205,12 +205,12 @@
                   </div>
                   <div class="form-group col-12 col-md-3">
                     <label for="">تاریخ سررسید</label>
-                    <date class="form-control" v-model="cheque.due" :default-date="true" />
+                    <date class="form-control" v-model="cheque.due" :default="true" />
                   </div>
                   <div class="form-group col-12 col-md-3">
                     <label v-if="cheque.type == 'paid'">تاریخ پرداخت</label>
                     <label v-else>تاریخ دریافت</label>
-                    <date class="form-control" v-model="cheque.date" :default-date="true" />
+                    <date class="form-control" v-model="cheque.date" :default="true" />
                   </div>
                   <div class="col-12 col-md-6">
                     <div class="row">

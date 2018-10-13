@@ -4,16 +4,17 @@
 
 <script>
 import Cleave from "cleave.js";
+import moment from "moment-jalaali";
 export default {
-  name: "CleaveDate",
-  props: ["value", "id"],
+  name: "CleaveTime",
+  props: ["value", "id", "default"],
   data() {
     return {
       inputId: "",
       formattedChangeLimit: 3,
       options: {
         time: true,
-        timePattern: ["h","m"]
+        timePattern: ["HH", "mm"]
       }
     };
   },
@@ -26,7 +27,14 @@ export default {
   },
   mounted() {
     this.cleave = new Cleave("#" + this.inputId, this.options);
-    this.cleave.setRawValue(this.value);
+    if (this.default) {
+      let now = moment()
+        .format(this.options.timePattern.join(':'))
+      this.cleave.setRawValue(now);
+      this.change();
+    } else {
+      this.cleave.setRawValue(this.value);
+    }
   },
   watch: {
     value() {

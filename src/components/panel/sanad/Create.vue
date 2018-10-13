@@ -5,7 +5,7 @@
         <div class="card-body">
           <div class="title">
             سند حسابداری
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#sanad-selection-modal" style="margin-right:15px;">انتخاب سند </button>
+            <router-link class="btn btn-info" :to="{name: 'List', params: {form: 'sanad'}}">انتخاب سند </router-link>
           </div>
           <div class="row">
             <div class="col-lg-6">
@@ -15,156 +15,112 @@
                   <input v-if="sanad.id" type="text" class="form-control" disabled v-model="sanad.code">
                   <input v-else type="text" class="form-control" disabled :value="sanadCode">
                 </div>
-                <div class="form-group col-lg-6">
-                  <label>تاریخ سند</label>
-                  <date class="form-control" v-model="sanad.date" default=1 />
-                </div>
-                <div class="form-group col-lg-6">
-                  <label>صادر کننده سند</label>
-                  <input type="text" class="form-control" disabled>
+                  <div class="form-group col-lg-6">
+                    <label>تاریخ سند</label>
+                    <date class="form-control" v-model="sanad.date" :default="true" />
+                  </div>
+                  <div class="form-group col-lg-6">
+                    <label>صادر کننده سند</label>
+                    <input type="text" class="form-control" disabled>
                 </div>
 
-                <div class="form-group col-lg-6">
-                  <label>نوع سند</label>
-                  <div style="margin-top: 8px;margin-right: 15px;">
+                    <div class="form-group col-lg-6">
+                      <label>نوع سند</label>
+                      <div style="margin-top: 8px;margin-right: 15px;">
 
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="temporary" v-model="sanad.type">
-                      <label class="form-check-label" for="exampleRadios1">
-                        موقت
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline" style="margin-right: 50px;">
-                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="definite" v-model="sanad.type">
-                      <label class="form-check-label" for="exampleRadios2">
-                        قطعی
-                      </label>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="temporary" v-model="sanad.type">
+                          <label class="form-check-label" for="exampleRadios1">
+                            موقت
+                          </label>
+                        </div>
+                        <div class="form-check form-check-inline" style="margin-right: 50px;">
+                          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="definite" v-model="sanad.type">
+                          <label class="form-check-label" for="exampleRadios2">
+                            قطعی
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <div class="form-group col-lg-6">
+                  <label>توضیحات سند</label>
+                  <textarea class="form-control" rows=5 v-model="sanad.explanation"></textarea>
+                </div>
               </div>
-            </div>
-            <div class="form-group col-lg-6">
-              <label>توضیحات سند</label>
-              <textarea class="form-control" rows=5 v-model="sanad.explanation"></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="table-responsive">
-                <table class="table table-striped ">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>شماره - نام حساب</th>
-                      <th>توضیحات</th>
-                      <th>تفضیلی شناور</th>
-                      <th>مرکز هزینه</th>
-                      <th>بدهکار</th>
-                      <th>بستانکار</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(row,i) in rows" :key="i">
-                      <td>{{ i+1 }}</td>
-                      <td>
-                        <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="rows[i].account" track-by="id" label="title" />
+              <div class="row">
+                <div class="col-12">
+                  <div class="table-responsive">
+                    <table class="table table-striped ">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>شماره - نام حساب</th>
+                          <th>توضیحات</th>
+                          <th>تفضیلی شناور</th>
+                          <th>مرکز هزینه</th>
+                          <th>بدهکار</th>
+                          <th>بستانکار</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(row,i) in rows" :key="i">
+                          <td>{{ i+1 }}</td>
+                          <td>
+                            <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="rows[i].account" track-by="id" label="title" />
+                          </td>
+                          <td>
+                            <input type="text" class="form-control " v-model="rows[i].explanation">
                       </td>
-                      <td>
-                        <input type="text" class="form-control " v-model="rows[i].explanation">
-                      </td>
-                      <td>
-                        <multiselect dir="rtl" :options="floatAccounts(rows[i])" v-model="rows[i].floatAccount" track-by="id" label="name" />
-                      </td>
-                      <td>
-                        <multiselect dir="rtl" :options="costCenters(rows[i])" v-model="rows[i].costCenter" track-by="id" label="name" />
-                      </td>
-                      <td>
-                        <money :disabled="rows[i].bes != ''" class="form-control " v-model="rows[i].bed" />
-                      </td>
-                      <td>
-                        <money :disabled="rows[i].bed != ''" class="form-control " v-model="rows[i].bes" />
-                      </td>
-                      <td>
-                        <button v-if="i != rows.length-1" @click="deleteRow(i)" type="button" class="btn  btn-warning">حذف ردیف</button>
-                      </td>
-                    </tr>
-                    <tr>
-                    </tr>
-                    <tr class="bg-info text-white">
-                      <td colspan="2">
-                        اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}
-                      </td>
-                      <td colspan="2"></td>
-                      <td class="text-left">مجموع:</td>
-                      <td class="">{{ bedSum | toMoney }}</td>
-                      <td class="">{{ besSum | toMoney }}</td>
-                      <td>
-                        <button @click="deleteRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
-                      </td>
-                    </tr>
+                          <td>
+                            <multiselect dir="rtl" :options="floatAccounts(rows[i])" v-model="rows[i].floatAccount" track-by="id" label="name" />
+                          </td>
+                          <td>
+                            <multiselect dir="rtl" :options="costCenters(rows[i])" v-model="rows[i].costCenter" track-by="id" label="name" />
+                          </td>
+                          <td>
+                            <money :disabled="rows[i].bes != ''" class="form-control " v-model="rows[i].bed" />
+                          </td>
+                          <td>
+                            <money :disabled="rows[i].bed != ''" class="form-control " v-model="rows[i].bes" />
+                          </td>
+                          <td>
+                            <button v-if="i != rows.length-1" @click="deleteRow(i)" type="button" class="btn  btn-warning">حذف ردیف</button>
+                          </td>
+                        </tr>
+                        <tr>
+                        </tr>
+                        <tr class="bg-info text-white">
+                          <td colspan="2">
+                            اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}
+                          </td>
+                          <td colspan="2"></td>
+                          <td class="text-left">مجموع:</td>
+                          <td class="">{{ bedSum | toMoney }}</td>
+                          <td class="">{{ besSum | toMoney }}</td>
+                          <td>
+                            <button @click="deleteRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
+                          </td>
+                        </tr>
 
-                  </tbody>
-                </table>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row rtl">
-            <div class="col-12 ">
-              <button type="button" class="btn btn-info ">سند قبلی</button>
-              <button type="button" class="btn btn-info ">سند بعدی</button>
-              <button @click="validate()" type="button" class="btn submit btn-primary float-left w-100px " :disabled="sanad.createType == 'auto'" >ثبت</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="sanad-selection-modal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">اسناد حسابداری</h4>
-            <button type="button" class="close" data-dismiss="modal">
-              <span arrptype-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12">
-                <div class="table-responsive">
-                  <table class="table table-striped table-hover table-pointer">
-                    <thead>
-                      <tr>
-                        <th>شماره سند</th>
-                        <th>توضیحات</th>
-                        <th>تاریخ</th>
-                        <th>جمع بدهکار</th>
-                        <th>جمع بستانکار</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(sanad,i) in sanads" :key="i" @click="selectSanad(sanad)">
-                        <td>{{ sanad.code }}</td>
-                        <td>{{ sanad.explanation }}</td>
-                        <td>{{ sanad.date }}</td>
-                        <td>{{ sanad.bed }}</td>
-                        <td>{{ sanad.bes }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+              <div class="row rtl">
+                <div class="col-12 ">
+                  <button type="button" class="btn btn-info ">سند قبلی</button>
+                  <button type="button" class="btn btn-info ">سند بعدی</button>
+                  <button @click="validate()" type="button" class="btn submit btn-primary float-left w-100px " :disabled="sanad.createType == 'auto'">ثبت</button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button type="button" class="btn btn-primary">انتخاب</button>
-          </div>
         </div>
+
       </div>
-    </div>
-  </div>
 </template>
 
 <script>

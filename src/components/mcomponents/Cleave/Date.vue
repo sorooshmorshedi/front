@@ -7,7 +7,7 @@ import Cleave from "cleave.js";
 import moment from "moment-jalaali";
 export default {
   name: "CleaveDate",
-  props: ["value", "id", "defaultDate"],
+  props: ["value", "id", "default"],
   data() {
     return {
       inputId: "",
@@ -29,7 +29,7 @@ export default {
   mounted() {
     this.cleave = new Cleave("#" + this.inputId, this.options);
     this.cleave.setRawValue(this.value);
-    if (this.defaultDate) {
+    if (this.default) {
       let now = moment()
         .format("jYYYY-jMM-jDD")
         .split("-")
@@ -40,7 +40,7 @@ export default {
   },
   watch: {
     value() {
-      if (!this.value && this.defaultDate) {
+      if (!this.value && this.default) {
         this.change();
         return;
       }

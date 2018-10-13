@@ -74,7 +74,7 @@
                 <div class="w-100"></div>
                 <div class="form-group col-12 col-md-4">
                   <label>تاریخ</label>
-                  <date class="form-control" v-model="statusChange.date" :default-date="true" />
+                  <date class="form-control" v-model="statusChange.date" :default="true" />
                 </div>
                 <div class="form-group col-12 col-md-8">
                   <label>توضیحات</label>

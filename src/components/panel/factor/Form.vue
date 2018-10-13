@@ -5,7 +5,7 @@
         <div class="card-body">
           <div class="title">
             ثبت فاکتور {{ factorLabel }}
-            <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#factor-selection-modal" style="margin-right:15px;">انتخاب فاکتور</button> -->
+            <router-link  class="btn btn-info" :to="{name:'List', params:{ form: 'factor', type: factorType}}">فاکتور خرید</router-link>
           </div>
           <div class="row">
             <div class="col-lg-8">
@@ -26,11 +26,11 @@
                 </div>
                 <div class="form-group col-lg-3">
                   <label>تاریخ فاکتور</label>
-                  <date class="form-control" v-model="factor.date" />
+                  <date class="form-control" v-model="factor.date" :default="true"  />
                 </div>
                 <div class="form-group col-lg-2">
                   <label>ساعت فاکتور</label>
-                  <mtime class="form-control" v-model="factor.time" />
+                  <mtime class="form-control" v-model="factor.time" :default="true" />
                 </div>
                 <div class="w-100"></div>
                 <div class="col-lg-3">
@@ -41,7 +41,7 @@
                   </div>
                 </div>
                 <div class="form-group col-lg-5">
-                  <label>کد - نام مشتری</label>
+                  <label>{{ accountName }}</label>
                   <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="factor.account" track-by="id" label="title" />
                 </div>
                 <div class="form-group col-lg-4" v-if="factor.account && factor.account.floatAccountGroup">
@@ -222,7 +222,6 @@
           <hr>
           <div class="row ">
             <div class="col-12 text-left">
-              <button v-if="factor.id" @click="deleteFactor(factor)" type="button" class="btn btn-outline-danger">حذف فاکتور</button>
               <button @click="validate()" type="button" class="btn submit btn-primary w-100px">ثبت</button>
             </div>
           </div>
@@ -544,6 +543,13 @@ export default {
         }
       });
       return res;
+    },
+    accountName(){
+      if(['buy', 'backFromSale'].includes(this.factorType)){
+        return 'فروشنده'
+      } else {
+        return 'مشتری'
+      }
     }
   },
   watch: {

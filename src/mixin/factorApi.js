@@ -204,17 +204,6 @@ export default {
         }
       });
     },
-    deleteFactor(factor) {
-      this.request({
-        url: this.endpoint('factors/factors/' + factor.id + '/'),
-        method: 'delete',
-        success: data => {
-          this.getFactorCodes(true);
-          this.successNotify();
-          this.clearFactor();
-        }
-      })
-    },
     getFactorExpenses(force = false, init = true) {
       if (!force && this.factorExpenses.length) return;
       return this.request({

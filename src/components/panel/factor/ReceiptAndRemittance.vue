@@ -20,11 +20,11 @@
                 <!-- <div class="w-100"></div> -->
                 <div class="form-group col-lg-4">
                   <label>تاریخ {{ type.label }}</label>
-                  <date class="form-control" v-model="receipt.date" />
+                  <date class="form-control" v-model="receipt.date" :default="true" />
                 </div>
                 <div class="form-group col-lg-4">
                   <label>ساعت {{ type.label }}</label>
-                  <mtime class="form-control" v-model="receipt.time" />
+                  <mtime class="form-control" v-model="receipt.time" :default="true" />
                 </div>
               </div>
             </div>
