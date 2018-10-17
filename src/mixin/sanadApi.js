@@ -14,21 +14,24 @@ export default {
     }
   },
   methods: {
-    getSanads(force = false, init = true) {
-      if (!force && this.sanads.length) return;
+    getSanad(factorId) {
       return this.request({
-        url: this.endpoint('sanads/sanads'),
+        url: this.endpoint('sanads/sanads/' + factorId),
         method: 'get',
         success: data => {
-          this.$store.commit('setSanads', {
-            sanads: data
-          });
-          init && this.init();
+          this.selectSanad(data);
         }
       })
     },
-    
-    clearSanads() {},
+    clearSanad() {
+      this.sanad = {
+        type: "temporary"
+      };
+      this.rows = [{
+        bed: "",
+        bes: ""
+      }];
+    },
     getSanadCode() {
       return this.request({
         url: this.endpoint('sanads/sanads/newCode'),

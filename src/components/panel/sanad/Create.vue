@@ -6,6 +6,10 @@
           <div class="title">
             سند حسابداری
             <router-link class="btn btn-info" :to="{name: 'List', params: {form: 'sanad'}}">انتخاب سند </router-link>
+            <router-link v-if="sanad.factor" class="btn btn-info" :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}">شماهده فاکتور این سند</router-link>
+            <router-link v-if="sanad.transaction" class="btn btn-info" :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}">
+            <span> مشاهده دریافت/پرداخت</span>
+            </router-link>
           </div>
           <div class="row">
             <div class="col-lg-6">
@@ -15,112 +19,115 @@
                   <input v-if="sanad.id" type="text" class="form-control" disabled v-model="sanad.code">
                   <input v-else type="text" class="form-control" disabled :value="sanadCode">
                 </div>
-                  <div class="form-group col-lg-6">
-                    <label>تاریخ سند</label>
-                    <date class="form-control" v-model="sanad.date" :default="true" />
-                  </div>
-                  <div class="form-group col-lg-6">
-                    <label>صادر کننده سند</label>
-                    <input type="text" class="form-control" disabled>
+                <div class="form-group col-lg-6">
+                  <label>تاریخ سند</label>
+                  <date class="form-control" v-model="sanad.date" :default="true" />
+                </div>
+                <div class="form-group col-lg-6">
+                  <label>صادر کننده سند</label>
+                  <input type="text" class="form-control" disabled>
                 </div>
 
-                    <div class="form-group col-lg-6">
-                      <label>نوع سند</label>
-                      <div style="margin-top: 8px;margin-right: 15px;">
+                <div class="form-group col-lg-6">
+                  <label>نوع سند</label>
+                  <div style="margin-top: 8px;margin-right: 15px;">
 
-                        <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="temporary" v-model="sanad.type">
-                          <label class="form-check-label" for="exampleRadios1">
-                            موقت
-                          </label>
-                        </div>
-                        <div class="form-check form-check-inline" style="margin-right: 50px;">
-                          <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="definite" v-model="sanad.type">
-                          <label class="form-check-label" for="exampleRadios2">
-                            قطعی
-                          </label>
-                        </div>
-                      </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="temporary" v-model="sanad.type">
+                      <label class="form-check-label" for="exampleRadios1">
+                        موقت
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline" style="margin-right: 50px;">
+                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="definite" v-model="sanad.type">
+                      <label class="form-check-label" for="exampleRadios2">
+                        قطعی
+                      </label>
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-lg-6">
-                  <label>توضیحات سند</label>
-                  <textarea class="form-control" rows=5 v-model="sanad.explanation"></textarea>
-                </div>
               </div>
-              <div class="row">
-                <div class="col-12">
-                  <div class="table-responsive">
-                    <table class="table table-striped ">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>شماره - نام حساب</th>
-                          <th>توضیحات</th>
-                          <th>تفضیلی شناور</th>
-                          <th>مرکز هزینه</th>
-                          <th>بدهکار</th>
-                          <th>بستانکار</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(row,i) in rows" :key="i">
-                          <td>{{ i+1 }}</td>
-                          <td>
-                            <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="rows[i].account" track-by="id" label="title" />
-                          </td>
-                          <td>
-                            <input type="text" class="form-control " v-model="rows[i].explanation">
+            </div>
+            <div class="form-group col-lg-6">
+              <label>توضیحات سند</label>
+              <textarea class="form-control" rows=5 v-model="sanad.explanation"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="table-responsive">
+                <table class="table table-striped ">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>شماره - نام حساب</th>
+                      <th>توضیحات</th>
+                      <th>تفضیلی شناور</th>
+                      <th>مرکز هزینه</th>
+                      <th>بدهکار</th>
+                      <th>بستانکار</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(row,i) in rows" :key="i">
+                      <td>{{ i+1 }}</td>
+                      <td>
+                        <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="rows[i].account" track-by="id" label="title" />
                       </td>
-                          <td>
-                            <multiselect dir="rtl" :options="floatAccounts(rows[i])" v-model="rows[i].floatAccount" track-by="id" label="name" />
-                          </td>
-                          <td>
-                            <multiselect dir="rtl" :options="costCenters(rows[i])" v-model="rows[i].costCenter" track-by="id" label="name" />
-                          </td>
-                          <td>
-                            <money :disabled="rows[i].bes != ''" class="form-control " v-model="rows[i].bed" />
-                          </td>
-                          <td>
-                            <money :disabled="rows[i].bed != ''" class="form-control " v-model="rows[i].bes" />
-                          </td>
-                          <td>
-                            <button v-if="i != rows.length-1" @click="deleteRow(i)" type="button" class="btn  btn-warning">حذف ردیف</button>
-                          </td>
-                        </tr>
-                        <tr>
-                        </tr>
-                        <tr class="bg-info text-white">
-                          <td colspan="2">
-                            اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}
-                          </td>
-                          <td colspan="2"></td>
-                          <td class="text-left">مجموع:</td>
-                          <td class="">{{ bedSum | toMoney }}</td>
-                          <td class="">{{ besSum | toMoney }}</td>
-                          <td>
-                            <button @click="deleteRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
-                          </td>
-                        </tr>
+                      <td>
+                        <input type="text" class="form-control " v-model="rows[i].explanation">
+                      </td>
+                      <td>
+                        <multiselect dir="rtl" :options="floatAccounts(rows[i])" v-model="rows[i].floatAccount" track-by="id" label="name" />
+                      </td>
+                      <td>
+                        <multiselect dir="rtl" :options="costCenters(rows[i])" v-model="rows[i].costCenter" track-by="id" label="name" />
+                      </td>
+                      <td>
+                        <money :disabled="rows[i].bes != ''" class="form-control " v-model="rows[i].bed" />
+                      </td>
+                      <td>
+                        <money :disabled="rows[i].bed != ''" class="form-control " v-model="rows[i].bes" />
+                      </td>
+                      <td>
+                        <button v-if="i != rows.length-1" @click="deleteRow(i)" type="button" class="btn  btn-warning">حذف ردیف</button>
+                      </td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    <tr class="bg-info text-white">
+                      <td colspan="2">
+                        اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}
+                      </td>
+                      <td colspan="2"></td>
+                      <td class="text-left">مجموع:</td>
+                      <td class="">{{ bedSum | toMoney }}</td>
+                      <td class="">{{ besSum | toMoney }}</td>
+                      <td>
+                        <button @click="deleteRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
+                      </td>
+                    </tr>
 
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div class="row rtl">
-                <div class="col-12 ">
-                  <button type="button" class="btn btn-info ">سند قبلی</button>
-                  <button type="button" class="btn btn-info ">سند بعدی</button>
-                  <button @click="validate()" type="button" class="btn submit btn-primary float-left w-100px " :disabled="sanad.createType == 'auto'">ثبت</button>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
+          <div class="row rtl">
+            <div class="col-12 col-md-6 ">
+              <button type="button" class="btn btn-info ">سند قبلی</button>
+              <button type="button" class="btn btn-info ">سند بعدی</button>
+            </div>
+            <div class="col-12 col-md-6 ltr text-left" dir="ltr">
+              <button @click="validate(true)" type="button" class="btn submit btn-primary foat-left " :disabled="sanad.createType == 'auto'">ثبت و صدور سند جدید</button>
+              <button @click="validate(false)" type="button" class="btn submit btn-primary loat-left w-100px " :disabled="sanad.createType == 'auto'">ثبت</button>
+            </div>
+          </div>
         </div>
-
       </div>
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -183,24 +190,19 @@ export default {
         }
       },
       deep: true
+    },
+    id() {
+      this.getData();
     }
   },
   methods: {
     getData() {
-      Promise.all([
-        this.getAccounts(),
-        this.getCostCenterGroups(),
-        this.getSanadCode(),
-        this.getSanads()
-      ]).then(data => {
-        if (this.id) {
-          let sanad = this.sanads.filter(s => s.id == this.id);
-          console.log(sanad);
-          if (sanad) {
-            this.selectSanad(sanad[0]);
-          }
-        }
-      });
+      this.getAccounts();
+      this.getCostCenterGroups();
+
+      if (this.id) {
+        this.getSanad(this.id);
+      } else this.getSanadCode();
     },
     selectSanad(sanad) {
       this.sanad = sanad;
@@ -230,11 +232,11 @@ export default {
         this.rows.splice(index, 1);
       }
     },
-    validate() {
-      if (this.sanad.id) this.updateSanad();
-      else this.storeSanad();
+    validate(clearSanad = false) {
+      if (this.sanad.id) this.updateSanad(clearSanad);
+      else this.storeSanad(clearSanad);
     },
-    storeSanad() {
+    storeSanad(clearSanad) {
       let data = this.copy(this.sanad);
       Object.keys(data).forEach(key => {
         if (data[key] && data[key].id) data[key] = data[key].id;
@@ -246,11 +248,11 @@ export default {
         data: data,
         success: data => {
           this.sanad = data;
-          this.syncSanadItems();
+          this.syncSanadItems(clearSanad);
         }
       });
     },
-    updateSanad() {
+    updateSanad(clearSanad) {
       let data = this.copy(this.sanad);
       Object.keys(data).forEach(key => {
         if (data[key] && data[key].id) data[key] = data[key].id;
@@ -261,11 +263,11 @@ export default {
         data: data,
         success: data => {
           this.sanad = data;
-          this.syncSanadItems();
+          this.syncSanadItems(clearSanad);
         }
       });
     },
-    syncSanadItems() {
+    syncSanadItems(clearSanad) {
       let updatedItems = [];
       let newItems = [];
       this.rows.forEach((row, i) => {
@@ -294,6 +296,17 @@ export default {
         this.updateSanadItems(updatedItems),
         this.deleteSanadItems()
       ]).then(data => {
+        if (clearSanad) {
+          this.clearSanad();
+          this.$router.push({
+            name: "CreateSanad"
+          });
+        } else {
+          this.$router.push({
+            name: "CreateSanad",
+            params: { id: this.sanad.id }
+          });
+        }
         this.successNotify();
       });
     },

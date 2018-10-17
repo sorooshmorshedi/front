@@ -223,7 +223,16 @@ export default {
         url: this.endpoint('factors/factors/' + factorId + '/'),
         method: 'get',
         success: data => {
-          this.selectFactor(data);
+          if (this.factorType) this.selectFactor(data);
+          else {
+            this.$router.push({
+              name: 'CreateFactor',
+              params: {
+                id: data.id,
+                type: data.type,
+              }
+            });
+          }
         }
       })
     },

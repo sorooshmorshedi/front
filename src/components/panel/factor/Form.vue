@@ -4,8 +4,8 @@
       <div class="card right ">
         <div class="card-body">
           <div class="title">
-            ثبت فاکتور {{ factorLabel }}
-            <router-link  class="btn btn-info" :to="{name:'List', params:{ form: 'factor', type: factorType}}">فاکتور خرید</router-link>
+            فاکتور {{ factorLabel }}
+            <router-link class="btn btn-info" :to="{name:'List', params:{ form: 'factor', type: factorType}}">انتخاب فاکتور</router-link>
           </div>
           <div class="row">
             <div class="col-lg-8">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="form-group col-lg-3">
                   <label>تاریخ فاکتور</label>
-                  <date class="form-control" v-model="factor.date" :default="true"  />
+                  <date class="form-control" v-model="factor.date" :default="true" />
                 </div>
                 <div class="form-group col-lg-2">
                   <label>ساعت فاکتور</label>
@@ -357,7 +357,10 @@ export default {
         this.rows = [];
         this.rows.push(this.copy(this.rowTemplate));
       }
-      switch (this.factorType) {
+      this.setFactorLabel(this.factorType);
+    },
+    setFactorLabel(factorType) {
+      switch (factorType) {
         case "sale":
           this.factorLabel = "فروش";
           break;
@@ -408,7 +411,7 @@ export default {
         this.rows.push(this.copy(item));
       });
       this.rows.push(this.copy(this.rowTemplate));
-      $("#factor-selection-modal").modal("hide");
+      this.setFactorLabel(factor.type);
     },
     deleteItemRow(index) {
       let row = this.rows[index];
@@ -432,7 +435,7 @@ export default {
       )
         return 0;
       if (this.hasValue(row.discountValue)) return +row.discountValue;
-      else return +(this.rowSum(row) * +row.discountPercent / 100).toFixed(2);
+      else return +((this.rowSum(row) * +row.discountPercent) / 100).toFixed(2);
     },
     rowSumAfterDiscount(row) {
       return this.rowSum(row) - this.rowDiscount(row);
@@ -441,8 +444,7 @@ export default {
       if (!this.rowSumAfterDiscount(row)) return 0;
       if (!this.factor.taxPercent) return 0;
       return +(
-        this.rowSumAfterDiscount(row) *
-        +this.factor.taxPercent /
+        (this.rowSumAfterDiscount(row) * +this.factor.taxPercent) /
         100
       ).toFixed(2);
     },
@@ -519,7 +521,7 @@ export default {
         res.afterDiscount -= +this.factor.discountValue;
       } else {
         res.afterDiscount =
-          res.afterDiscount * (100 - +this.factor.discountPercent) / 100;
+          (res.afterDiscount * (100 - +this.factor.discountPercent)) / 100;
       }
 
       if (this.hasValue(this.factor.taxValue)) {
@@ -544,11 +546,11 @@ export default {
       });
       return res;
     },
-    accountName(){
-      if(['buy', 'backFromSale'].includes(this.factorType)){
-        return 'فروشنده'
+    accountName() {
+      if (["buy", "backFromSale"].includes(this.factorType)) {
+        return "فروشنده";
       } else {
-        return 'مشتری'
+        return "مشتری";
       }
     }
   },
