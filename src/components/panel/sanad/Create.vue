@@ -8,7 +8,7 @@
             <router-link class="btn btn-info" :to="{name: 'List', params: {form: 'sanad'}}">انتخاب سند </router-link>
             <router-link v-if="sanad.factor" class="btn btn-info" :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}">شماهده فاکتور این سند</router-link>
             <router-link v-if="sanad.transaction" class="btn btn-info" :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}">
-            <span> مشاهده دریافت/پرداخت</span>
+              <span> مشاهده دریافت/پرداخت</span>
             </router-link>
           </div>
           <div class="row">
@@ -115,8 +115,10 @@
           </div>
           <div class="row rtl">
             <div class="col-12 col-md-6 ">
-              <button type="button" class="btn btn-info ">سند قبلی</button>
-              <button type="button" class="btn btn-info ">سند بعدی</button>
+              <button @click="goToSanad('first')" :disabled="sanad.code == 1 || sanadCode == 1" type="button" class="btn btn-info ">اولین سند</button>
+              <button @click="goToSanad('prev')" :disabled="sanad.code == 1 || !id" type="button" class="btn btn-info ">سند قبلی</button>
+              <button @click="goToSanad('next')" :disabled="sanad.code == sanadCode-1 || !id" type="button" class="btn btn-info ">سند بعدی</button>
+              <button @click="goToSanad('last')" :disabled="sanad.code == sanadCode-1 || sanadCode == 1" type="button" class="btn btn-info ">آخرین سند</button>
             </div>
             <div class="col-12 col-md-6 ltr text-left" dir="ltr">
               <button @click="validate(true)" type="button" class="btn submit btn-primary foat-left " :disabled="sanad.createType == 'auto'">ثبت و صدور سند جدید</button>
@@ -157,11 +159,7 @@ export default {
   created() {
     this.getData();
   },
-  mounted() {
-    setTimeout(() => {
-      // $("#sanad-selection-modal").modal("show");
-    }, 200);
-  },
+  mounted() {},
   computed: {
     bedSum() {
       let sum = 0;
@@ -190,21 +188,39 @@ export default {
         }
       },
       deep: true
-    },
-    id() {
-      this.getData();
     }
   },
   methods: {
     getData() {
       this.getAccounts();
       this.getCostCenterGroups();
+      this.getSanadCode();
 
-      if (this.id) {
-        this.getSanad(this.id);
-      } else this.getSanadCode();
+      if (this.id) this.getSanad(this.id);
+    },
+    goToSanad(pos) {
+      let newCode = null;
+      switch (pos) {
+        case "next":
+          newCode = this.sanad.code + 1;
+          break;
+        case "prev":
+          newCode = this.sanad.code - 1;
+          break;
+        case "first":
+          newCode = 1;
+          break;
+        case "last":
+          newCode = this.sanadCode - 1;
+          break;
+      }
+      if (newCode) this.getSanadByCode(newCode);
     },
     selectSanad(sanad) {
+      this.$router.push({
+        name: 'CreateSanad',
+        params: {id: sanad.id}
+      });
       this.sanad = sanad;
       this.itemsToDelete = [];
       this.rows = [];

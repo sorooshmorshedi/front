@@ -14,10 +14,22 @@ export default {
     }
   },
   methods: {
-    getSanad(factorId) {
+    getSanad(sanadId) {
       return this.request({
-        url: this.endpoint('sanads/sanads/' + factorId),
+        url: this.endpoint('sanads/sanads/' + sanadId),
         method: 'get',
+        success: data => {
+          this.selectSanad(data);
+        }
+      })
+    },
+    getSanadByCode(code) {
+      return this.request({
+        url: this.endpoint('sanads/sanads/getSanadByCode'),
+        method: 'get',
+        params: {
+          code
+        },
         success: data => {
           this.selectSanad(data);
         }
