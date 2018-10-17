@@ -10,7 +10,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/Login/:cb',
+      path: '/Login/:cb?',
       name: 'Login',
       component: Login,
       props: true,

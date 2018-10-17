@@ -72,7 +72,7 @@ export default {
           model: "type",
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
-            label: 'name',
+            label: 'title',
             trackBy: 'id',
           },
           values: [],
@@ -109,7 +109,7 @@ export default {
           model: "type",
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
-            label: 'name',
+            label: 'title',
             trackBy: 'id',
           },
           values: [],
@@ -147,7 +147,7 @@ export default {
           model: "type",
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
-            label: 'name',
+            label: 'title',
             trackBy: 'id',
           },
           values: [],

@@ -110,5 +110,16 @@ export default {
       this.setCodeAndType();
     },
   },
-  computed: {}
+  computed: {
+    hasValidCode() {
+      if (!this.account) return true;
+      let len = this.levelsLen[this.account.level];
+      let code = String(this.account.code);
+      let chunk = Number(code.substr(code.length - len, len));
+      if(code == '') return true;
+      if(chunk == 0) return false;
+      return true;
+
+    }
+  }
 }

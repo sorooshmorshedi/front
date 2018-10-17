@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(defaultAccount, i) in defaultAccounts" :key="i">
+          <tr v-for="(defaultAccount, i) in defaultAccounts.filter(o =>['receiveAndPayment','receive','payment'].includes(o.usage))" :key="i">
             <td>{{ i+1 }}</td>
             <td>{{ defaultAccount.name }}</td>
             <td>{{ defaultAccount.account.title }}</td>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-group col-12">
                   <label>حساب</label>
-                  <multiselect dir="rtl"  :options="this.accountsSelectValues.levels[3].filter(o => !o.floatAccountGroup)" v-model="defaultAccount.account" track-by="id" label="title" />
+                  <multiselect dir="rtl" :options="this.accountsSelectValues.levels[3].filter(o => !o.floatAccountGroup)" v-model="defaultAccount.account" track-by="id" label="title" />
                 </div>
                 <div class="form-group col-12">
                   <label>توضیحات</label>
@@ -107,7 +107,7 @@ import sanadtApiMixin from "@/mixin/sanadApi";
 
 export default {
   mixins: [accountApiMixin],
-  name: "defaultAccount",
+  name: "TransactionDefaultAccount",
   data() {
     return {
       defaultAccount: {}
@@ -128,11 +128,13 @@ export default {
         account: this.defaultAccount.account.id
       };
       this.request({
-        url: this.endpoint("accounts/defaultAccounts/" + this.defaultAccount.id),
+        url: this.endpoint(
+          "accounts/defaultAccounts/" + this.defaultAccount.id
+        ),
         method: "put",
         data: data,
         success: data => {
-          this.notify("واحد با موفقیت ویرایش شد", "success");
+          this.successNotify();
           this.getDefaultAccounts(true);
           $("#defaultAccount").modal("hide");
           this.defaultAccount = {};
@@ -152,7 +154,7 @@ export default {
         method: "post",
         data: data,
         success: data => {
-          this.notify("واحد با موفقیت ساخته شد", "success");
+          this.successNotify();
           this.getDefaultAccounts(true);
           $("#defaultAccount").modal("hide");
           this.defaultAccount = {};
@@ -164,7 +166,7 @@ export default {
         url: this.endpoint("accounts/defaultAccounts/" + defaultAccount.id),
         method: "delete",
         success: data => {
-          this.notify("واحد با موفقیت حذف شد", "success");
+          this.successNotify();
           this.getDefaultAccounts(true);
         }
       });

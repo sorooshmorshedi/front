@@ -190,6 +190,7 @@ export default {
       Promise.all([
         this.getAccounts(),
         this.getCostCenterGroups(),
+        this.getSanadCode(),
         this.getSanads()
       ]).then(data => {
         if (this.id) {

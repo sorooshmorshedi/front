@@ -28,8 +28,7 @@ export default {
   mounted() {
     this.cleave = new Cleave("#" + this.inputId, this.options);
     if (this.default) {
-      let now = moment()
-        .format(this.options.timePattern.join(':'))
+      let now = moment().format(this.options.timePattern.join(":"));
       this.cleave.setRawValue(now);
       this.change();
     } else {

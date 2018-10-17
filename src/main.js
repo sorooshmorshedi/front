@@ -5,13 +5,19 @@ import App from './App'
 import router from './router'
 import store from './vuex';
 
+
 require('bootstrap-v4-rtl');
 require('./mixin');
 
 import 'cleave.js'
 
-import Multiselect  from 'vue-multiselect'
-Vue.component('multiselect', Multiselect );
+import Multiselect from './components/mcomponents/multiselect.vue';
+Vue.component('multiselect', Multiselect);
+
+import {
+  VueContext
+} from 'vue-context';
+Vue.component('VueContext', VueContext);
 
 import _ from 'lodash'
 window._ = _
@@ -23,7 +29,7 @@ import VueFormGenerator from "vue-form-generator";
 Vue.use(VueFormGenerator);
 
 
-import 'vue-tree-halower/dist/halower-tree.min.css' 
+import 'vue-tree-halower/dist/halower-tree.min.css'
 import VTree from 'vue-tree-halower'
 Vue.use(VTree)
 

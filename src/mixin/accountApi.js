@@ -349,7 +349,6 @@ export default {
       };
       let list = ['floatAccount', 'floatAccountGroup', 'person', 'bank'];
       list.forEach(item => {
-        console.log(item);
         Object.keys(this[item]).forEach(k => {
           this[item][k] = null;
         });

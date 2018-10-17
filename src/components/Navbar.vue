@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top rtl">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top rtl" v-if="user.id">
     <a class="navbar-brand " href="#">سبحان حساب</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -19,8 +19,16 @@
             <div class="dropdown-submenu ">
               <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">حساب</a>
               <div class="dropdown-menu " aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{name:'CreateAccount'}">تعریف حساب</router-link>
-                <router-link class="dropdown-item" :to="{name:'EditAccount'}">ویرایش حساب</router-link>
+                <router-link class="dropdown-item" :to="{name:'CreateAccounts'}">تعریف حساب</router-link>
+                <router-link class="dropdown-item" :to="{name:'CreatePersonAccounts'}">تعریف خریدار/فروشنده</router-link>
+                <router-link class="dropdown-item" :to="{name:'CreateFloatAccounts'}">تعریف حساب شناور</router-link>
+                <router-link class="dropdown-item" :to="{name:'CreateBankAccounts'}">تعریف بانک</router-link>
+                <div class="dropdown-divider"></div>
+                <router-link class="dropdown-item" :to="{name:'EditAccounts'}">ویرایش حساب</router-link>
+                <router-link class="dropdown-item" :to="{name:'EditPersonAccounts'}">ویرایش خریدار/فروشنده</router-link>
+                <router-link class="dropdown-item" :to="{name:'EditFloatAccounts'}">ویرایش حساب شناور</router-link>
+                <router-link class="dropdown-item" :to="{name:'EditBankAccounts'}">ویرایش بانک</router-link>
+                <div class="dropdown-divider"></div>
                 <router-link class="dropdown-item" :to="{name:'AccountTree'}">نمودار درختی حساب ها</router-link>
                 <div class="dropdown-divider"></div>
                 <router-link class="dropdown-item" :to="{name:'IndependentAccount'}">حساب مستقل</router-link>
@@ -43,7 +51,19 @@
             <div class="dropdown-submenu ">
               <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">پیشفرض ها</a>
               <div class="dropdown-menu " aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{name:'DefaultAccounts'}">حساب های پیشفرض</router-link>
+
+                <div class="dropdown-submenu ">
+                  <a class="dropdown-item dropdown-toggle " data-toggle="dropdown" href="#">حساب های پیشفرض</a>
+                  <div class="dropdown-menu " aria-labelledby="navbarDropdown">
+                    <router-link class="dropdown-item" :to="{name:'TransactionDefaultAccounts'}">
+                       دریافت و پرداخت
+                    </router-link>
+                    <router-link class="dropdown-item" :to="{name:'FactorDefaultAccounts'}">
+                      فاکتور
+                    </router-link>
+                  </div>
+                </div>
+
                 <router-link class="dropdown-item" :to="{name:'FactorExpenses', params: { factorType: 'buy'}}">هزینه های فاکتور خرید</router-link>
                 <router-link class="dropdown-item" :to="{name:'FactorExpenses', params: { factorType: 'sale'}}">هزینه های فاکتور فروش</router-link>
               </div>
@@ -118,6 +138,11 @@
             <router-link class="dropdown-item" :to="{name:'BalanceSheetReport'}">ترازنامه</router-link>
           </div>
         </li>
+        <li class="nav-item left">
+          <a @click="logout()" class="exit-btn nav-link bg-danger text-white" href="#">
+            خروج
+          </a>
+        </li>
       </ul>
     </div>
   </nav>
@@ -129,7 +154,12 @@ export default {
   data() {
     return {};
   },
-  methods: {}
+  methods: {
+    logout() {
+      this.setToken("");
+      this.$router.push({ name: "Login" });
+    }
+  }
 };
 </script>
 
@@ -173,6 +203,16 @@ nav {
 }
 
 .dropdown-submenu:hover > a:after {
-  border-right-color: #fff;
+  border-right-color: #212121;
+}
+
+.exit-btn {
+  border-radius: 7px;
+}
+
+a.dropdown-item {
+  width: 100%;
+  display: block;
+  
 }
 </style>

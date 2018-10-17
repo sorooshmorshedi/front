@@ -1,7 +1,7 @@
 <template>
   <div class="rtl">
     <input type="text" v-model="searchAccount" />
-    <v-tree v-if="treeAccounts.length" class="rtl" ref='tree' :data='treeAccounts' :tpl="tpl"  />
+    <v-tree v-if="treeAccounts.length" class="rtl" ref='tree' :data='treeAccounts' :tpl="tpl" />
 
     <div class="modal" id="account-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
@@ -23,6 +23,27 @@
         </div>
       </div>
     </div>
+
+    <vue-context ref="menu" class="context-menu">
+      <ul slot-scope="child" v-if="child.data">
+        <li @click="editAccount(child.data.account)">
+          <i class="fas fa-pencil-alt text-warning" />
+          <span> ویرایش حساب </span>
+        </li>
+        <li @click="createAccount(child.data.account)" v-if="child.data.account != 3">
+          <i class="fas fa-plus text-success" />
+          <span> افزودن حساب فرزند </span>
+        </li>
+        <li @click="deleteAccount(child.data.account)">
+          <i class="fas fa-trash-alt text-danger" />
+          <span> حذف حساب </span>
+        </li>
+        <li @click="showLedger(child.data.account)">
+          دفتر این حساب
+        </li>
+      </ul>
+    </vue-context>
+
   </div>
 </template>
 
@@ -37,7 +58,7 @@ export default {
     return {
       searchAccount: "",
       // expandTo: null,
-      expandTo: '501010001',
+      expandTo: "501010001"
     };
   },
   methods: {
@@ -53,35 +74,31 @@ export default {
       this.account.level = node.level + 1;
       this.modal("#account-modal", "show");
     },
+    showLedger(account) {
+      let routeData = this.$router.resolve({
+        name: "LedgerReport",
+        query: { accs: [account.id] }
+      });
+      window.open(
+        routeData.href,
+        "_blank",
+        "location=yes,height=600,width=1200,scrollbars=yes,status=yes"
+      );
+    },
     tpl(node, ctx) {
       if (!node.id) {
         return <span domPropsInnerHTML={node.title} />;
       }
       return (
-        <span>
+        <span class="tree-tpl">
           <span
             domPropsInnerHTML={node.title}
-            onClick={() => {
-              // ctx.parent.nodeSelected(ctx.props.node);
-              // console.log(ctx.parent.getSelectedNodes());
+            onContextmenu={e => {
+              e.preventDefault();
+              this.account = node;
+              this.$refs.menu.open(e, { account: node});
             }}
           />
-          <i
-            class="fas fa-pencil-alt text-warning"
-            onClick={() => this.editAccount(node)}
-          />
-          <i
-            class="fas fa-trash-alt text-danger"
-            onClick={() => this.deleteAccount(node)}
-          />
-          {node.level < 3 ? (
-            <i
-              class="fas fa-plus text-success"
-              onClick={() => this.createAccount(node)}
-            />
-          ) : (
-            ""
-          )}
         </span>
       );
     }
@@ -96,8 +113,8 @@ export default {
   },
   computed: {
     treeAccounts() {
-      if(this.accounts.length == 0) return [];
-      console.log("treeAccounts", this.expandTo);
+      if (this.accounts.length == 0) return [];
+      console.log("reCreate treeAccounts");
       // let accounts = this.copy(this.accounts);
       let accounts = this.copy(this.accounts);
 
@@ -151,5 +168,9 @@ export default {
       max-width: 80%;
     }
   }
+}
+
+.tree-tpl {
+  cursor: default !important;
 }
 </style>

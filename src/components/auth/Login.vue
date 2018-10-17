@@ -1,19 +1,23 @@
 <template>
-  <div class="row rtl align-items-center justify-content-center" style="min-height:70vh">
-    <div class="col-sm-4 card">
-      <div class="card-body">
-        <form>
-          <div class="form-group">
-            <label for="username">نام کاربری</label>
-            <input type="text" class="form-control" name="username" id="username" aria-describedby="helpIdusername" placeholder="نام کاربری" v-model="username">
-          </div>
-          <div class="form-group">
-            <label for="password">رمز عبور</label>
-            <input type="password" class="form-control" name="password" id="password" aria-describedby="helpIdpassword" placeholder="رمز عبور" v-model="password">
-          </div>
-          <button @click.prevent="login()" type="submit" name="submit-btn" id="submit-btn" class="btn btn-primary " style="min-width:100px;">ورود</button>
-          <a name="" id="" class="secondary d-block d-sm-inline" href="#" role="button">رمز عبور خود را فراموش کرده اید؟</a>
-        </form>
+  <div class="row rtl align-items-center justify-content-center" id="login">
+    <div class="col-sm-4">
+      <div class=" card">
+        <img class="card-img-top" src="/static/img/SobhanAccountingLogo.png" alt="Card image cap">
+        <div class="card-body">
+          <h4 class="card-title">حسابداری آنلاین سبحان</h4>
+          <form>
+            <div class="form-group">
+              <label for="username">نام کاربری</label>
+              <input type="text" class="form-control" name="username" id="username" aria-describedby="helpIdusername" placeholder="نام کاربری" v-model="username">
+            </div>
+            <div class="form-group">
+              <label for="password">رمز عبور</label>
+              <input type="password" class="form-control" name="password" id="password" aria-describedby="helpIdpassword" placeholder="رمز عبور" v-model="password">
+            </div>
+            <button @click.prevent="login()" type="submit" name="submit-btn" id="submit-btn" class="btn btn-primary " style="min-width:100px;">ورود</button>
+            <a name="" id="" class="secondary d-block d-sm-inline" href="#" role="button">رمز عبور خود را فراموش کرده اید؟</a>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -22,15 +26,15 @@
 <script>
 export default {
   name: "Login",
-  props: ['cb'],
+  props: ["cb"],
   data() {
     return {
       username: "",
       password: "",
-      callback: 'Panel',
+      callback: "Panel"
     };
   },
-  created(){
+  created() {
     this.cb && (this.callback = this.cb);
   },
   methods: {
@@ -44,7 +48,7 @@ export default {
         },
         success: data => {
           this.$router.push({
-            name: this.cb
+            name: this.callback
           });
         },
         error: error => {
@@ -58,10 +62,13 @@ export default {
 
 <style scoped lang="scss">
 #login {
-  padding-bottom: 70px;
-  margin-bottom: 0px;
-  background-image: url("/static/img/login-background.jpg");
-  background-position: bottom;
-  background-size: cover;
+  margin-top: 15vh;
+  height: 70vh;
+  margin-bottom: 15vh;
+
+  .card-img-top {
+    width: 60%;
+    margin: 0px auto;
+  }
 }
 </style>

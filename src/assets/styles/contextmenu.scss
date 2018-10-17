@@ -1,0 +1,27 @@
+.context-menu {
+  width: auto !important;
+  transition: all .3;
+
+  ul {
+    margin: 0px !important;
+    padding: 0px 0px !important;
+    background-color: #fff !important;
+
+    li {
+      font-weight: normal !important;
+      padding: 8px 15px !important;
+
+      i {
+        float: right;
+        padding-left: 15px;
+        padding-top: 2px;
+        color: #212121 !important;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #eee;
+
+      }
+    }
+  }
+}

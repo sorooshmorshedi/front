@@ -6,9 +6,19 @@ import UpdateCompany from '@/components/panel/company/Update';
 import CompaniesList from '@/components/panel/company/List';
 
 import Account from '@/components/panel/account/Account';
-import CreateAccount from '@/components/panel/account/Create';
-import EditAccount from '@/components/panel/account/Edit';
+
+import CreateAccounts from '@/components/panel/account/CreateAccounts';
+import CreateFloatAccounts from '@/components/panel/account/CreateFloatAccounts';
+import CreatePersonAccounts from '@/components/panel/account/CreatePersonAccounts';
+import CreateBankAccounts from '@/components/panel/account/CreateBankAccounts';
+
+import EditAccounts from '@/components/panel/account/EditAccounts';
+import EditFloatAccounts from '@/components/panel/account/EditFloatAccounts';
+import EditPersonAccounts from '@/components/panel/account/EditPersonAccounts';
+import EditBankAccounts from '@/components/panel/account/EditBankAccounts';
+
 import AccountTree from '@/components/panel/account/Tree';
+
 import CostCenter from '@/components/panel/account/CostCenter';
 import IndependentAccount from '@/components/panel/account/IndependentAccount';
 
@@ -24,7 +34,8 @@ import CreateSanad from '@/components/panel/sanad/Create';
 import Transaction from '@/components/panel/transaction/Transaction';
 import TransactionForm from '@/components/panel/transaction/Form';
 
-import DefaultAccounts from '@/components/panel/defaultAccounts/DefaultAccounts';
+import TransactionDefaultAccounts from '@/components/panel/defaultAccounts/TransactionDefaultAccounts';
+import FactorDefaultAccounts from '@/components/panel/defaultAccounts/FactorDefaultAccounts';
 
 import Factor from '@/components/panel/factor/Factor';
 import FactorForm from '@/components/panel/factor/Form';
@@ -68,13 +79,37 @@ export default [{
       path: 'account',
       component: Account,
       children: [{
-        name: 'CreateAccount',
-        path: 'create',
-        component: CreateAccount
+        name: 'CreateAccounts',
+        path: 'createAccounts',
+        component: CreateAccounts
       }, {
-        name: 'EditAccount',
-        path: 'edit',
-        component: EditAccount
+        name: 'CreatePersonAccounts',
+        path: 'createPersonAccounts',
+        component: CreatePersonAccounts
+      }, {
+        name: 'CreateFloatAccounts',
+        path: 'createFloatAccounts',
+        component: CreateFloatAccounts
+      }, {
+        name: 'CreateBankAccounts',
+        path: 'createBankAccounts',
+        component: CreateBankAccounts
+      }, {
+        name: 'EditAccounts',
+        path: 'editAccounts',
+        component: EditAccounts
+      }, {
+        name: 'EditPersonAccounts',
+        path: 'editPersonAccounts',
+        component: EditPersonAccounts
+      }, {
+        name: 'EditFloatAccounts',
+        path: 'editFloatAccounts',
+        component: EditFloatAccounts
+      }, {
+        name: 'EditBankAccounts',
+        path: 'editBankAccounts',
+        component: EditBankAccounts
       }, {
         name: 'AccountTree',
         path: 'tree',
@@ -115,9 +150,14 @@ export default [{
       }]
     },
     {
-      name: 'DefaultAccounts',
-      path: 'defaultAccounts',
-      component: DefaultAccounts,
+      name: 'TransactionDefaultAccounts',
+      path: 'defaultAccounts/transaction',
+      component: TransactionDefaultAccounts,
+    },
+    {
+      name: 'FactorDefaultAccounts',
+      path: 'defaultAccounts/factor',
+      component: FactorDefaultAccounts,
     },
     {
       name: 'Transaction',

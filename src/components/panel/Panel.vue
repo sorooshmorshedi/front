@@ -4,15 +4,25 @@
 
 <script>
 export default {
-  name: 'Panel',
+  name: "Panel",
   data() {
-    return {}
+    return {};
   },
-  created(){
-    // if has no companey
-    // this.$router.push({name:'CreateCompany'});
+  created() {
+    this.getUser();
+  },
+  methods: {
+    getUser() {
+      this.request({
+        url: this.endpoint("users/getUser/"),
+        method: "get",
+        success: data => {
+          this.$store.commit("setUser", data);
+        }
+      });
+    }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
