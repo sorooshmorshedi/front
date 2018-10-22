@@ -82,14 +82,6 @@ export default {
         this.account.type = this.account.parent.type;
       }
     },
-    splitCode(code) {
-      return [
-        code.substr(0, 1),
-        code.substr(0, 3),
-        code.substr(0, 5),
-        code
-      ];
-    },
     async getData(force = false) {
       this.log('Get all accounts data');
       Promise.all([

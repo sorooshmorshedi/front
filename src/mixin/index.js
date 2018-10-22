@@ -25,7 +25,9 @@ Vue.mixin({
     }
 
   },
-  mounted() {},
+  mounted() {
+
+  },
   methods: {
     request(options) {
       // this.log('request through mixin');
@@ -85,6 +87,12 @@ Vue.mixin({
             this.notify(err + ': ' + errors[err], 'danger');
           });
         });
+    },
+    initTooltips() {
+      console.log('init tooltips');
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
     },
     extractIds(data) {
       let res = this.copy(data);

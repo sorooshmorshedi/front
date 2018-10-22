@@ -5,11 +5,24 @@
         <div class="card-body">
           <div class="title">
             سند حسابداری
+            <a @click.prevent="clearSanad()" href="#/" class="btn btn-info">جدید</a>
             <router-link class="btn btn-info" :to="{name: 'List', params: {form: 'sanad'}}">انتخاب سند </router-link>
-            <router-link v-if="sanad.factor" class="btn btn-info" :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}">شماهده فاکتور این سند</router-link>
+            <router-link v-if="sanad.factor" class="btn btn-info" :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}">مشاهده فاکتور این سند</router-link>
             <router-link v-if="sanad.transaction" class="btn btn-info" :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}">
               <span> مشاهده دریافت/پرداخت</span>
             </router-link>
+
+            <div class="dropdown open d-inline-block">
+              <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+                کپی سند
+              </button>
+              <div class="dropdown-menu">
+                <a @click.prevent="copySanadToNewSanad()" class="dropdown-item" href="#!">به سند جدید</a>
+                <h6 class="dropdown-header"></h6>
+                <a class="dropdown-item" href="#!">Another action</a>
+              </div>
+            </div>
+
           </div>
           <div class="row">
             <div class="col-lg-6">
@@ -65,26 +78,36 @@
                       <th>تفضیلی شناور</th>
                       <th>مرکز هزینه</th>
                       <th>بدهکار</th>
+                      <th>
+                        <a @click.prevent="xchangeValue()" href="">
+                          <i class="fas fa-exchange-alt"></i>
+                        </a>
+                      </th>
                       <th>بستانکار</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
-                      <td>
+                      <td v-tooltip="accountParentsName(row.account)">
                         <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="rows[i].account" track-by="id" label="title" />
                       </td>
                       <td>
                         <input type="text" class="form-control " v-model="rows[i].explanation">
                       </td>
-                      <td>
+                      <td v-tooltip="floatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''">
                         <multiselect dir="rtl" :options="floatAccounts(rows[i])" v-model="rows[i].floatAccount" track-by="id" label="name" />
                       </td>
-                      <td>
+                      <td v-tooltip="costCenters(rows[i]).length?row.account.costCenterGroup.name:''">
                         <multiselect dir="rtl" :options="costCenters(rows[i])" v-model="rows[i].costCenter" track-by="id" label="name" />
                       </td>
                       <td>
                         <money :disabled="rows[i].bes != ''" class="form-control " v-model="rows[i].bed" />
+                      </td>
+                      <td>
+                        <a @click.prevent="exchangeValue(rows[i])" href="" v-if="i != rows.length-1">
+                          <i class="fas fa-exchange-alt"></i>
+                        </a>
                       </td>
                       <td>
                         <money :disabled="rows[i].bed != ''" class="form-control " v-model="rows[i].bes" />
@@ -218,8 +241,8 @@ export default {
     },
     selectSanad(sanad) {
       this.$router.push({
-        name: 'CreateSanad',
-        params: {id: sanad.id}
+        name: "CreateSanad",
+        params: { id: sanad.id }
       });
       this.sanad = sanad;
       this.itemsToDelete = [];
@@ -236,6 +259,17 @@ export default {
       this.rows.push({ bed: "", bes: "" });
       $("#sanad-selection-modal").modal("hide");
     },
+    copySanadToNewSanad() {
+      let rows = this.copy(this.rows);
+      this.clearSanad();
+      this.rows = [];
+      for (const row of rows) {
+        this.rows.push({
+          ...row,
+          id: null
+        });
+      }
+    },
     deleteRow(index) {
       if (index == 0) {
         this.rows.forEach(row => {
@@ -251,6 +285,19 @@ export default {
     validate(clearSanad = false) {
       if (this.sanad.id) this.updateSanad(clearSanad);
       else this.storeSanad(clearSanad);
+    },
+    exchangeValue(row) {
+      if (row) {
+        let tmp = row.bed;
+        row.bed = row.bes;
+        row.bes = tmp;
+      } else {
+        for (const row of this.rows) {
+          let tmp = row.bed;
+          row.bed = row.bes;
+          row.bes = tmp;
+        }
+      }
     },
     storeSanad(clearSanad) {
       let data = this.copy(this.sanad);

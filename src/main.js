@@ -22,6 +22,10 @@ Vue.component('VueContext', VueContext);
 import _ from 'lodash'
 window._ = _
 
+
+import VTooltip from 'v-tooltip'
+Vue.use(VTooltip)
+
 window.numeral = require('numeral')
 
 import './assets/js/bootstrap-notify.min.js'

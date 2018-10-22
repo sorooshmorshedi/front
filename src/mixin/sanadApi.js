@@ -36,6 +36,9 @@ export default {
       })
     },
     clearSanad() {
+      this.$router.push({
+        name: "CreateSanad"
+      });
       this.sanad = {
         type: "temporary"
       };

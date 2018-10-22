@@ -354,6 +354,14 @@ export default {
         });
       })
     },
+    splitCode(code) {
+      return [
+        code.substr(0, 1),
+        code.substr(0, 3),
+        code.substr(0, 5),
+        code
+      ];
+    },
     findAccount(value, property, accounts) {
       if (!accounts) accounts = this.accounts;
       for (const account of accounts) {
@@ -365,7 +373,23 @@ export default {
           if (acc) return acc;
         }
       }
-    }
+    },
+    accountParentsName(account){
+      if(!account) return '';
+      let res = '';
+      let codes = this.splitCode(account.code);
+      for (const code of codes) {
+        let acc = this.findAccount(code, 'code');
+        if(!acc) {
+          console.log('no account for', code);
+          continue;
+        }
+        res += acc.name;
+        if(codes.indexOf(code) == code.length - 3) break;
+        res += ' > ';
+      }
+      return res;
+    },
   },
   computed: {
     ...mapState({
