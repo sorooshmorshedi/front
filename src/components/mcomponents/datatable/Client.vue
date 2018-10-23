@@ -13,7 +13,7 @@
                 <input v-if="col.type == 'text'" :key="j" class="form-control text-center" type="text" :placeholder="filter.label" v-model="filters[filter.model]">
 
                 <select v-if="col.type == 'select'" :key="j" class="custom-select" v-model="filters[filter.model]">
-                  <option selected value="undefined">همه</option>
+                  <option selected value="">همه</option>
                   <option v-for="(o,i) in col.original.options" :key="i" :value="o.value">{{ o.label }}</option>
                 </select>
 
@@ -26,9 +26,15 @@
               </template>
 
             </th>
-            <th>
+            <th v-if="routerName">
               <button @click="clearFilters()" class="btn btn-block btn-info">خالی کردن فیلتر ها</button>
             </th>
+          </tr>
+          <tr v-if="colHeaders">
+            <th v-for="(header, i) in colHeaders" :key="i" :colspan="header.colspan" class="text-center">
+              {{ header.title }}
+            </th>
+
           </tr>
           <tr>
             <th>#</th>
@@ -39,7 +45,7 @@
               {{ col.th }}
             </th>
 
-            <th></th>
+            <th v-if="routerName"></th>
           </tr>
         </thead>
         <tbody>
@@ -56,7 +62,7 @@
                 {{ get(item, col.td) }}
               </template>
             </td>
-            <td>
+            <td v-if="routerName">
               <a v-if="routerName" @click.prevent="goToDetails(item)" href="">مشاهده جزئیات</a>
             </td>
           </tr>
@@ -97,7 +103,8 @@ export default {
     "routerDefaultParams",
     "cols",
     "defaultFilters",
-    "data"
+    "data",
+    "colHeaders",
   ],
   components: { date, money, mtime },
   data() {
@@ -148,7 +155,9 @@ export default {
 
           if (
             arr.length == 1 &&
-            !String(item[arr[0]]).includes(String(this.filters[arr[0]]))
+            !String(this.get(item, arr[0])).includes(
+              String(this.filters[arr[0]])
+            )
           )
             return false;
 
@@ -156,12 +165,14 @@ export default {
           let filterValue = this.filters[filter];
           let filterType = arr[1];
 
+          if (!filterValue) continue;
+
           switch (filterType) {
             case "gte":
-              if (item[filterName] < filterValue) return false;
+              if (this.get(item, filterName) < filterValue) return false;
               break;
             case "lte":
-              if (item[filterName] > filterValue) return false;
+              if (this.get(item, filterName) > filterValue) return false;
               break;
           }
         }
@@ -214,6 +225,7 @@ export default {
       let res = [];
       for (let col of this.cols) {
         let colFilters = [];
+        if (!col.filters) continue;
         for (let filter of col.filters) {
           if (typeof filter === "string") {
             colFilters.push({
@@ -268,6 +280,7 @@ export default {
       });
     },
     orderBy(col) {
+      if (col.sortable == false) return;
       if (this.order == col.td) this.order = `-${col.td}`;
       else if (this.order == `-${col.td}`) this.order = "";
       else this.order = col.td;
@@ -275,6 +288,7 @@ export default {
     },
     orderClass(col) {
       let td = col.td;
+      if (col.sortable == false) return { hide: true };
       if (this.order == td) return { "fa-sort-up": true };
       if (this.order == `-${td}`) return { "fa-sort-down": true };
       return { "fa-sort": true };
@@ -307,7 +321,6 @@ export default {
         o => this.get(item, col.td) == o.value
       )[0];
       if (option) return option.label;
-      console.warn(item, col);
       return "-";
     },
     clearFilters() {

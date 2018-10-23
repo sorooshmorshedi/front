@@ -6,6 +6,7 @@ import Ledger from '@/components/panel/ledger/Ledger';
 import Journal from '@/components/panel/journal/Journal';
 import IncomeStatement from '@/components/panel/incomeStatement/IncomeStatement';
 import BalanceSheet from '@/components/panel/balanceSheet/BalanceSheet';
+import Inventory from '@/components/panel/inventory/Inventory';
 
 export default [{
   name: 'Reports',
@@ -29,6 +30,16 @@ export default [{
       props: route => {
         return {
           ledgerAccountIds: route.query.accs
+        }
+      }
+    },
+    {
+      name: 'InventoryReport',
+      path: 'inventory',
+      component: Inventory,
+      props: route => {
+        return {
+          wareId: route.query.wareId
         }
       }
     },

@@ -1,5 +1,5 @@
 <template>
-  <input type="text" name="" value="" @input="change()" :id="inputId">
+  <input dir="ltr" type="text" name="" value="" @input="change()" :id="inputId">
 </template>
 
 <script>

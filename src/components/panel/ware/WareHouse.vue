@@ -40,20 +40,18 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="form-group col-12">
-                  <label for="">کد انبار</label>
-                  <input type="text" class="form-control" :value="warehouseCode" disabled>
-                </div>
-                <div class="form-group col-12">
-                  <label for="">نام انبار</label>
-                  <input type="text" class="form-control" v-model="warehouse.name">
-                </div>
-                <div class="form-group col-12">
-                  <label>توضیحات</label>
-                  <textarea class="form-control" rows="3" v-model="warehouse.explanation"></textarea>
-                </div>
+            <div class="row">
+              <div class="form-group col-12">
+                <label for="">کد انبار</label>
+                <input type="text" class="form-control" :value="warehouseCode" disabled>
+              </div>
+              <div class="form-group col-12">
+                <label for="">نام انبار</label>
+                <input type="text" class="form-control" v-model="warehouse.name">
+              </div>
+              <div class="form-group col-12">
+                <label>توضیحات</label>
+                <textarea class="form-control" rows="3" v-model="warehouse.explanation"></textarea>
               </div>
             </div>
           </div>
@@ -127,7 +125,7 @@ export default {
   },
   computed: {
     warehouseCode() {
-      if(this.warehouse.id) return this.warehouse.id;
+      if (this.warehouse.id) return this.warehouse.id;
       let wh = _.maxBy(this.warehouses, wh => wh.id);
       if (wh) return wh.id + 1;
       else return 1;
