@@ -6,6 +6,7 @@
           <div class="title">
             فاکتور {{ factorLabel }}
             <router-link class="btn btn-info" :to="{name:'List', params:{ form: 'factor', type: factorType}}">انتخاب فاکتور</router-link>
+            <button class="btn btn-info" data-toggle="modal" data-target="#payments-modal">مشاهده دریافت/ پرداخت ها</button>
           </div>
           <div class="row">
             <div class="col-lg-8">
@@ -40,13 +41,16 @@
                     <label class="custom-control-label" for="customCheck1">فاکتور مالیات دارد</label>
                   </div>
                 </div>
-                <div class="form-group col-lg-5">
+                <div class="form-group col-lg-4">
                   <label>{{ accountName }}</label>
-                  <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="factor.account" track-by="id" label="title" />
+                  <multiselect v-tooltip="accountRemain(factor.account)" dir="rtl" :options="accountsSelectValues.levels[3]" v-model="factor.account" track-by="id" label="title" />
                 </div>
-                <div class="form-group col-lg-4" v-if="factor.account && factor.account.floatAccountGroup">
+                <div class="form-group col-lg-3" v-if="factor.account && factor.account.floatAccountGroup">
                   <label>حساب شناور</label>
                   <multiselect dir="rtl" :options="factor.account.floatAccountGroup.floatAccounts" v-model="factor.floatAccount" track-by="id" label="name" />
+                </div>
+                <div class="form-group col-lg-2">
+                  <button v-if="factor.account" @click="openLedger(factor.account)" class="btn btn-info btn-block btn-label-margin">مشاهده دفتر</button>
                 </div>
               </div>
             </div>
@@ -118,10 +122,11 @@
                         <button v-if="i != rows.length-1" @click="deleteItemRow(i)" type="button" class="btn btn-sm btn-warning">حذف ردیف</button>
                       </td>
                     </tr>
-                    <tr>
-                    </tr>
                     <tr class="bg-info text-white">
-                      <td colspan="13"></td>
+                      <td colspan="10"></td>
+                      <td>
+                        <button @click="deleteItemRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -222,7 +227,8 @@
           <hr>
           <div class="row ">
             <div class="col-12 text-left">
-              <button @click="validate()" type="button" class="btn submit btn-primary w-100px">ثبت</button>
+              <button @click="validate(false)" type="button" class="btn submit btn-primary loat-left w-100px ">ثبت</button>
+              <button @click="validate(true)" type="button" class="btn submit btn-primary foat-left ">ثبت و صدور سند جدید</button>
             </div>
           </div>
         </div>
@@ -284,6 +290,56 @@
                       </tbody>
                     </table>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
+            <button @click="addExpenses()" type="button" class="btn btn-primary">تایید</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="payments-modal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              دریافت/ پرداخت های فاکتور
+            </h4>
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="table-responsive-lg">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>مبغ</th>
+                        <th>کد دریافت/پرداخت</th>
+                        <th>تاریخ</th>
+                        <th>توضیحات</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(p,i) in factor.payments" :key="i">
+                        <td>{{ i+1 }}</td>
+                        <td>{{ p.value }}</td>
+                        <td>{{ p.transaction.code }}</td>
+                        <td>{{ p.transaction.date }}</td>
+                        <td>{{ p.transaction.explanation }}</td>
+                        <td>
+                          <a @click.prevent="openTransaction(p.transaction)" href="#/">مشاهده جزئیات</a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -375,7 +431,7 @@ export default {
           break;
       }
     },
-    validate() {
+    validate(clearFactor = false) {
       let isValid = true;
       if (this.rows.length == 1) {
         this.notify(`لطفا حداقل یک ردیف وارد کنید`, "danger");
@@ -401,7 +457,7 @@ export default {
       );
 
       this.factor.type = this.factorType;
-      this.checkInventories();
+      this.checkInventories(clearFactor);
     },
     selectFactor(factor) {
       this.factor = factor;
@@ -414,9 +470,16 @@ export default {
       this.setFactorLabel(factor.type);
     },
     deleteItemRow(index) {
-      let row = this.rows[index];
-      if (row.id) this.itemsToDelete.push(row.id);
-      this.rows.splice(index, 1);
+      if (index == 0) {
+        this.rows.forEach(row => {
+          if (row.id) this.itemsToDelete.push(row.id);
+        });
+        this.rows.splice(0, this.rows.length - 1);
+      } else {
+        let row = this.rows[index];
+        if (row.id) this.itemsToDelete.push(row.id);
+        this.rows.splice(index, 1);
+      }
     },
     deleteExpenseRow(index) {
       let row = this.factorExpensesCopy[index];
@@ -597,8 +660,14 @@ export default {
     text-align: left;
   }
 }
-.table-responsive {
-  overflow-y: show;
+
+.table-responsive-lg {
+  // overflow: visible;
+  th,
+  td,
+  input {
+    text-align: center;
+  }
 }
 </style>
 

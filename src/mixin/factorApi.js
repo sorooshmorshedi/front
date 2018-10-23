@@ -17,10 +17,10 @@ export default {
     }
   },
   methods: {
-    checkInventories() {
+    checkInventories(clearFactor) {
       if (['buy', 'backFromSale'].includes(this.factor.type)) {
-        if (this.factor.id) this.updateFactor();
-        else this.storeFactor();
+        if (this.factor.id) this.updateFactor(clearFactor);
+        else this.storeFactor(clearFactor);
         return;
       }
       let payload = [];
@@ -51,14 +51,14 @@ export default {
 
           if (!flag) return;
 
-          if (this.factor.id) this.updateFactor();
-          else this.storeFactor();
+          if (this.factor.id) this.updateFactor(clearFactor);
+          else this.storeFactor(clearFactor);
         }
       })
 
 
     },
-    storeFactor() {
+    storeFactor(clearFactor) {
       let data = this.copy(this.factor);
       Object.keys(data).forEach(key => {
         if (data[key] && data[key].id) data[key] = data[key].id;
@@ -69,11 +69,11 @@ export default {
         method: 'post',
         data: data,
         success: data => {
-          this.syncFactor(data.id);
+          this.syncFactor(data.id, clearFactor);
         }
       })
     },
-    updateFactor() {
+    updateFactor(clearFactor) {
       let data = this.copy(this.factor);
       Object.keys(data).forEach(key => {
         if (data[key] && data[key].id) data[key] = data[key].id;
@@ -83,12 +83,12 @@ export default {
         method: 'put',
         data: data,
         success: data => {
-          this.syncFactor(data.id);
+          this.syncFactor(data.id, clearFactor);
         }
       })
 
     },
-    syncFactor(factorId) {
+    syncFactor(factorId, clearFactor) {
       let updatedItems = [];
       let newItems = [];
       this.rows.forEach((row, i) => {
@@ -133,7 +133,7 @@ export default {
         this.deleteFactorExpenses()
       ]).then(data => {
         this.getFactorCodes(true);
-        this.updateFactorSanadAndReceipt(factorId);
+        this.updateFactorSanadAndReceipt(factorId, clearFactor);
       });
     },
     storeFactorItems(items) {
@@ -236,12 +236,29 @@ export default {
         }
       })
     },
-    updateFactorSanadAndReceipt(factorId) {
+    updateFactorSanadAndReceipt(factorId, clearFactor) {
       this.request({
         url: this.endpoint("factors/factors/updateSanadAndReceipt/" + factorId),
         method: "put",
         success: data => {
-          this.clearFactor();
+
+          if (clearFactor) {
+            this.clearFactor();
+            this.$router.push({
+              name: "FactorForm",
+              params: {
+                type: this.factorType,
+              }
+            });
+          } else {
+            this.$router.push({
+              name: "FactorForm",
+              params: {
+                type: this.factorType,
+                id: this.sanad.id
+              }
+            });
+          }
           this.successNotify();
         }
       });
@@ -265,6 +282,16 @@ export default {
           this.factorCodes = data;
         }
       });
+    },
+    openTransaction(transaction) {
+      let routeData = this.$router.resolve({
+        name: "TransactionForm",
+        params: {
+          transactionType: transaction.type,
+          id: transaction.id
+        }
+      });
+      window.open(routeData.href, "_blank");
     },
   },
   computed: {

@@ -374,21 +374,44 @@ export default {
         }
       }
     },
-    accountParentsName(account){
-      if(!account) return '';
+    accountParentsName(account) {
+      if (!account) return '';
       let res = '';
       let codes = this.splitCode(account.code);
       for (const code of codes) {
         let acc = this.findAccount(code, 'code');
-        if(!acc) {
+        if (!acc) {
           console.log('no account for', code);
           continue;
         }
         res += acc.name;
-        if(codes.indexOf(code) == code.length - 3) break;
+        if (codes.indexOf(code) == code.length - 3) break;
         res += ' > ';
       }
       return res;
+    },
+    accountRemain(account){
+      if(!account) return '';
+      let res = '';
+      res += 'مانده بدهکار: '
+        + this.toMoney(account.bed)
+        + "<br>"
+        + 'مانده بستانکار: '
+        + this.toMoney(account.bes);
+      return res;
+    },
+    openLedger(account) {
+      let routeData = this.$router.resolve({
+        name: "LedgerReport",
+        query: {
+          accs: [+account.id,]
+        }
+      });
+      window.open(
+        routeData.href,
+        "_blank",
+        "location=yes,height=600,width=1200,scrollbars=yes,status=yes"
+      );
     },
   },
   computed: {

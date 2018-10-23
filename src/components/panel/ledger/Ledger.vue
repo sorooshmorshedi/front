@@ -67,7 +67,6 @@ export default {
   },
   created() {
     this.getData();
-    console.log(this.ledgerAccountIds);
   },
   methods: {
     getData() {
@@ -79,13 +78,25 @@ export default {
         this.ledgers = [{}];
         return;
       }
-      for (const id of this.ledgerAccountIds) {
-        let acc = this.findAccount(id, "id");
-        this.ledgers.push({
-          level: acc.level,
-          account: acc,
-        })
+      if (typeof this.ledgerAccountIds == "string") {
+        let acc = this.findAccount(this.ledgerAccountIds, "id");
+        this.addLedger(acc);
+      } else {
+        for (const id of this.ledgerAccountIds) {
+          let acc = this.findAccount(id, "id");
+          if (!acc) {
+            console.error("There is no code ");
+            return;
+          }
+          this.addLedger(acc);
+        }
       }
+    },
+    addLedger(account) {
+      this.ledgers.push({
+        level: account.level,
+        account: account
+      });
     },
     deleteLedger(ledger) {
       this.ledgers.splice(this.ledgers.indexOf(ledger), 1);

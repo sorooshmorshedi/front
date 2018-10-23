@@ -38,7 +38,7 @@
           <i class="fas fa-trash-alt text-danger" />
           <span> حذف حساب </span>
         </li>
-        <li @click="showLedger(child.data.account)">
+        <li @click="openLedger(child.data.account)">
           دفتر این حساب
         </li>
       </ul>
@@ -73,17 +73,6 @@ export default {
       this.account.parent = node;
       this.account.level = node.level + 1;
       this.modal("#account-modal", "show");
-    },
-    showLedger(account) {
-      let routeData = this.$router.resolve({
-        name: "LedgerReport",
-        query: { accs: [account.id] }
-      });
-      window.open(
-        routeData.href,
-        "_blank",
-        "location=yes,height=600,width=1200,scrollbars=yes,status=yes"
-      );
     },
     tpl(node, ctx) {
       if (!node.id) {

@@ -126,6 +126,7 @@
                       <td class="text-left">مجموع:</td>
                       <td class="">{{ bedSum | toMoney }}</td>
                       <td class="">{{ besSum | toMoney }}</td>
+                      <td></td>
                       <td>
                         <button @click="deleteRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
                       </td>
