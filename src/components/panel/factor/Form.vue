@@ -6,7 +6,7 @@
           <div class="title">
             فاکتور {{ factorLabel }}
             <router-link class="btn btn-info" :to="{name:'List', params:{ form: 'factor', type: factorType}}">انتخاب فاکتور</router-link>
-            <button class="btn btn-info" data-toggle="modal" data-target="#payments-modal">مشاهده دریافت/ پرداخت ها</button>
+            <button v-if="this.id" class="btn btn-info" data-toggle="modal" data-target="#payments-modal">مشاهده دریافت/ پرداخت ها</button>
           </div>
           <div class="row">
             <div class="col-lg-8">

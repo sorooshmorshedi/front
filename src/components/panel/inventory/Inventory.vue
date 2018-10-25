@@ -5,7 +5,7 @@
         <div class="card-body">
           <div class="title">
             کاردکس کالا
-            <router-link :to="{name:'InventoryReport', query:{wareId:1}}">asoidfj</router-link>
+            <!-- <router-link :to="{name:'InventoryReport', query:{wareId:1}}">asoidfj</router-link> -->
           </div>
 
           <div class="row inventory">

@@ -5,7 +5,7 @@
         <div class="card-body">
           <div class="title">
             دفتر کل، معین، تفضیلی
-            <router-link :to="{name:'LedgerReport', query:{accs:[1,5]}}">asoidfj</router-link>
+            <!-- <router-link :to="{name:'LedgerReport', query:{accs:[1,5]}}">asoidfj</router-link> -->
           </div>
           <transition-group name="list">
 

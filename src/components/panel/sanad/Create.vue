@@ -12,7 +12,7 @@
               <span> مشاهده دریافت/پرداخت</span>
             </router-link>
 
-            <div class="dropdown open d-inline-block">
+            <div class="dropdown open d-inline-block" v-if="id">
               <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
                 کپی سند
               </button>
@@ -79,7 +79,7 @@
                       <th>مرکز هزینه</th>
                       <th>بدهکار</th>
                       <th>
-                        <a @click.prevent="xchangeValue()" href="">
+                        <a @click.prevent="exchangeValue()" href="">
                           <i class="fas fa-exchange-alt"></i>
                         </a>
                       </th>
@@ -120,13 +120,15 @@
                     </tr>
                     <tr class="bg-info text-white">
                       <td colspan="2">
-                        اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}
+                        <span v-if="bedSum != besSum">
+                          اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}
+                        </span>
                       </td>
                       <td colspan="2"></td>
                       <td class="text-left">مجموع:</td>
                       <td class="">{{ bedSum | toMoney }}</td>
-                      <td class="">{{ besSum | toMoney }}</td>
                       <td></td>
+                      <td class="">{{ besSum | toMoney }}</td>
                       <td>
                         <button @click="deleteRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
                       </td>
