@@ -1,6 +1,7 @@
 import createSchema from "@/components/panel/account/createSchema";
 import editSchema from "@/components/panel/account/editSchema";
 import AccountApi from "./accountApi";
+import _ from 'lodash'
 
 export default {
   mixins: [AccountApi],
@@ -61,9 +62,7 @@ export default {
         if (!this.account.parent) return '';
         accounts = this.account.parent.children;
       }
-      let lastAccount = accounts.sort((c1, c2) => {
-        return c1.code < c2.code
-      })[0];
+      let lastAccount = _.maxBy(accounts, o => o.code);
       let code = '';
       if (!lastAccount) {
         if (this.account.parent) code = this.account.parent.code;
