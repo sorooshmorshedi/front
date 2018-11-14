@@ -241,7 +241,7 @@ export default {
         url: this.endpoint("factors/factors/updateSanadAndReceipt/" + factorId),
         method: "put",
         success: data => {
-
+          this.successNotify();
           if (clearFactor) {
             this.clearFactor();
             this.$router.push({
@@ -259,7 +259,6 @@ export default {
               }
             });
           }
-          this.successNotify();
         }
       });
     },

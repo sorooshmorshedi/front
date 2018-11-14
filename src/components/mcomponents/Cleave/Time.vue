@@ -14,7 +14,7 @@ export default {
       formattedChangeLimit: 3,
       options: {
         time: true,
-        timePattern: ["HH", "mm"]
+        timePattern: ["h", "m"]
       }
     };
   },
@@ -28,7 +28,8 @@ export default {
   mounted() {
     this.cleave = new Cleave("#" + this.inputId, this.options);
     if (this.default) {
-      let now = moment().format(this.options.timePattern.join(":"));
+      let now = moment().format("HHMM");
+      console.log(now);
       this.cleave.setRawValue(now);
       this.change();
     } else {
@@ -37,7 +38,11 @@ export default {
   },
   watch: {
     value() {
-      if (this.cleave.getRawValue() != this.value) {
+      if (!this.value && this.default) {
+        this.change();
+        return;
+      }
+      if (this.value && this.cleave.getRawValue() != this.value) {
         this.cleave.setRawValue(this.value);
       }
     }
