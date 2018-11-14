@@ -23,8 +23,8 @@ export default {
       field = fields.filter(f => f.model == 'supplier')[0];
       field && (field.values = data.suppliers);
 
-      field = fields.filter(f => f.model == 'pricing_type')[0];
-      field && (field.values = data.pricing_types);
+      field = fields.filter(f => f.model == 'pricingType')[0];
+      field && (field.values = data.pricingTypes);
     }
 
   },
@@ -95,7 +95,7 @@ export default {
         {
           label: "نوع قیمت گذری",
           type: "vueMultiSelect",
-          model: "pricing_type",
+          model: "pricingType",
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'name',

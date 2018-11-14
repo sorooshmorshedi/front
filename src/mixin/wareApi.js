@@ -5,23 +5,14 @@ import {
 export default {
   data() {
     return {
-      pricing_types: [{
+      pricingTypes: [{
           id: 0,
           name: 'فایفو'
         },
         {
           id: 1,
-          name: 'لایفو'
-        },
-        {
-          id: 2,
           name: 'میانگین موزون'
         },
-        {
-          id: 3,
-          name: 'ارزش ویژه'
-        },
-
       ]
     }
   },
@@ -49,7 +40,7 @@ export default {
           data.forEach(w => {
             wares.push({
               ...w,
-              pricing_type: this.pricing_types[w.pricing_type],
+              pricingType: this.pricingTypes[w.pricingType],
             })
           })
           this.$store.commit('setWares', {
@@ -204,7 +195,7 @@ export default {
       this.ware = {
         code: '',
         parent: null,
-        pricing_type: {},
+        pricingType: {},
         unit: {},
         warehouse: {},
       };
@@ -242,7 +233,7 @@ export default {
         warehouses: [],
         units: [],
         suppliers: [],
-        pricing_types: this.pricing_types,
+        pricingTypes: this.pricingTypes,
       };
       let q = [];
       this.wareLevels.forEach(wl => q.push(wl));

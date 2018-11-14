@@ -14,7 +14,7 @@ export default {
       ware: {
         code: '',
         parent: {},
-        pricing_type: {},
+        pricingType: {},
         unit: {},
         warehouse: {},
       },
@@ -37,6 +37,9 @@ export default {
   },
   watch: {
     'wareLevel.parent': function () {
+      this.setWareLevelCode();
+    },
+    'wareLevel.level': function () {
       this.setWareLevelCode();
     },
     'ware.category': function () {
@@ -146,7 +149,7 @@ export default {
       this.ware = {
         code: '',
         parent: null,
-        pricing_type: {},
+        pricingType: {},
         unit: {},
         warehouse: {},
       };
