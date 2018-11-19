@@ -9,10 +9,13 @@ export default {
         url: this.endpoint('accounts/accounts'),
         method: 'get',
         success: data => {
+          console.log('Get Accounts : Done')
           this.$store.commit('setAccounts', {
             accounts: data
           });
+          console.log('Commit Accounts : Done')
           init && this.init();
+          console.log('Init:', init, ' : Done')
         }
       })
     },

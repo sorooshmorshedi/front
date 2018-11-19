@@ -83,6 +83,7 @@ export default {
     },
     async getData(force = false) {
       this.log('Get all accounts data');
+      // if(force) return;
       Promise.all([
         this.getAccounts(force, false),
         this.getFloatAccountGroups(force, false),
@@ -90,8 +91,11 @@ export default {
         this.getCostCenterGroups(force, false),
         this.getIndependentAccounts(force, false),
       ]).then(values => {
+        console.log(values);
+        this.log('Get Accounts Data : Done');
         this.init();
       })
+
     },
     init() {
       this.log('accounts initialization');
@@ -99,6 +103,7 @@ export default {
       this.editSchema.init(this.accountsSelectValues);
       this.clearAccounts();
       this.setCodeAndType();
+      this.log('Init Accounts : Done');
     },
   },
   computed: {

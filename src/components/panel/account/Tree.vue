@@ -103,17 +103,9 @@ export default {
   computed: {
     treeAccounts() {
       if (this.accounts.length == 0) return [];
-      console.log("reCreate treeAccounts");
-      // let accounts = this.copy(this.accounts);
-      let accounts = this.copy(this.accounts);
+      console.log("ReRreate TreeAccounts");
 
-      // let parts = this.splitCode(this.expandTo);
-      // let tmp = accounts.filter(acc => acc.code == parts[0])[0];
-      // tmp && (tmp.expanded = true);
-      // tmp && (tmp = tmp.children.filter(acc => acc.code == parts[1])[0]);
-      // tmp && (tmp.expanded = true);
-      // tmp && (tmp = tmp.children.filter(acc => acc.code == parts[2])[0]);
-      // tmp && (tmp.expanded = true);
+      let accounts = this.copy(this.accounts);
 
       let root = [
         {
@@ -122,7 +114,7 @@ export default {
           children: accounts
         }
       ];
-      // root = this.accounts;
+
       return root;
     }
   }
