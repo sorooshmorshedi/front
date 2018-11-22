@@ -130,8 +130,7 @@ export default {
   span {
     background-color: transparent !important;
   }
-  i {
-    cursor: pointer !important;
+  i { cursor: pointer !important;
     padding: 5px;
     border-radius: 3px;
     &:hover {

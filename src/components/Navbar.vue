@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top rtl" v-if="user.id">
-    <a class="navbar-brand " href="#">سبحان حساب</a>
+    <a class="navbar-brand " href="#">حسابداری سبحان</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -147,6 +147,11 @@
         </li>
       </ul>
     </div>
+
+
+    <a class="navbar-left" href="#">
+      <img class="logo img-fluid" src="/static/img/SobhanAccountingLogo.png" alt="" >
+    </a>
   </nav>
 </template>
 
@@ -166,6 +171,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.logo {
+  max-width: 40px;
+  padding: -10px;
+
+}
+
 nav {
   margin-bottom: 15px;
 }
