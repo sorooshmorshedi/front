@@ -5,7 +5,6 @@ import App from './App'
 import router from './router'
 import store from './vuex';
 
-
 require('bootstrap-v4-rtl');
 require('./mixin');
 
