@@ -66,7 +66,7 @@ export default {
         return;
       }
       for (const id of this.journalAccountIds) {
-        let acc = this.findAccount(id, "id");
+        let acc = this.findAccount('id', id);
         this.journals.push({
           level: acc.level,
           account: acc

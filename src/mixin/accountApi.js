@@ -365,7 +365,7 @@ export default {
         code
       ];
     },
-    findAccount(value, property, accounts) {
+    findAccount(property, value, accounts) {
       if (!accounts) accounts = this.accounts;
       for (const account of accounts) {
         if (account[property] == value) {
@@ -382,7 +382,7 @@ export default {
       let res = '';
       let codes = this.splitCode(account.code);
       for (const code of codes) {
-        let acc = this.findAccount(code, 'code');
+        let acc = this.findAccount('code', code);
         if (!acc) {
           console.log('no account for', code);
           continue;

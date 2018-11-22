@@ -47,19 +47,16 @@ export default {
   },
   methods: {
     setCodeAndType() {
-      if (this.mode != 'create') return;
+      if (this.mode != 'create' || this.accounts.length == 0) return;
       this.log('set new account code and type');
       let accounts = [];
       if (this.account.level == 0) {
         accounts = this.copy(this.accounts);
       } else {
-        if (['buyer', 'seller', 'bank'].includes(this.account.level)) {
-          this.account.parent = this.accountsSelectValues.levels[2].filter((acc) => {
-            return acc.code == '11004';
-          })[0]
-          this.account.level = 3;
+        if (!this.account.parent) {
+          console.error('Account does not have parent !', this.account);
+          return '';
         }
-        if (!this.account.parent) return '';
         accounts = this.account.parent.children;
       }
       let lastAccount = _.maxBy(accounts, o => o.code);
@@ -98,11 +95,11 @@ export default {
 
     },
     init() {
-      this.log('accounts initialization');
+      this.log('Init Accounts');
       this.createSchema.init(this.accountsSelectValues);
       this.editSchema.init(this.accountsSelectValues);
       this.clearAccounts();
-      this.setCodeAndType();
+      this.localAccountsInit && this.localAccountsInit();
       this.log('Init Accounts : Done');
     },
   },

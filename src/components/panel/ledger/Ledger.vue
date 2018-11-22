@@ -79,11 +79,11 @@ export default {
         return;
       }
       if (typeof this.ledgerAccountIds == "string") {
-        let acc = this.findAccount(this.ledgerAccountIds, "id");
+        let acc = this.findAccount("id", this.ledgerAccountIds);
         this.addLedger(acc);
       } else {
         for (const id of this.ledgerAccountIds) {
-          let acc = this.findAccount(id, "id");
+          let acc = this.findAccount('id', id);
           if (!acc) {
             console.error("There is no code ");
             return;
