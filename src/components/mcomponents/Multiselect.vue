@@ -31,7 +31,6 @@ export default {
     },
     change() {
       if (this.value != this.localValue) {
-        console.log("ha");
         this.$emit("input", this.localValue);
       }
     }

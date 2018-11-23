@@ -350,12 +350,15 @@ export default {
         code: '',
         type: null,
       };
+      let personType;
+      this.person && (personType = this.person.type);
       let list = ['floatAccount', 'floatAccountGroup', 'person', 'bank'];
       list.forEach(item => {
         Object.keys(this[item]).forEach(k => {
           this[item][k] = null;
         });
       })
+      this.person && (this.person.type = personType);
     },
     splitCode(code) {
       return [

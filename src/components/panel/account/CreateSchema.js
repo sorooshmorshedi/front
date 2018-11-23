@@ -219,22 +219,6 @@ export default {
 
         },
         {
-          label: "تاریخ ایجاد",
-          type: "input",
-          inputType: "text",
-          model: "created_at",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3"
-        },
-        {
-          label: "تاریخ آخرین ویرایش",
-          type: "input",
-          inputType: "text",
-          model: "updated_at",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3"
-        },
-        {
           label: "توضیحات",
           type: "textArea",
           model: "explanation",
@@ -266,17 +250,6 @@ export default {
           styleClasses: "col-sm-12 col-lg-6"
         },
         {
-          label: "گروه مرکز هزینه",
-          type: "vueMultiSelect",
-          model: "costCenterGroup",
-          styleClasses: "col-sm-12 col-lg-3",
-          selectOptions: {
-            label: 'name',
-            trackBy: 'id',
-          },
-          values: [],
-        },
-        {
           label: "گروه حساب تفضیلی شناور",
           type: "vueMultiSelect",
           model: "floatAccountGroup",
@@ -303,22 +276,6 @@ export default {
 
         },
         {
-          label: "تاریخ ایجاد",
-          type: "input",
-          inputType: "text",
-          model: "created_at",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3"
-        },
-        {
-          label: "تاریخ آخرین ویرایش",
-          type: "input",
-          inputType: "text",
-          model: "updated_at",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3"
-        },
-        {
           label: "توضیحات",
           type: "textArea",
           model: "explanation",
@@ -335,6 +292,23 @@ export default {
       legend: "",
       styleClasses: "row",
       fields: [{
+          label: "نوع حساب",
+          type: "select",
+          model: "personType",
+          styleClasses: "col-sm-12 col-lg-3",
+          selectOptions: {
+            label: 'name',
+            trackBy: 'id',
+          },
+          values: [{
+            name: 'حقیقی',
+            id: 'real'
+          }, {
+            name: 'حقوقی',
+            id: 'legal'
+          }]
+
+        },  {
           label: "موبایل",
           type: "input",
           inputType: "text",
@@ -493,22 +467,6 @@ export default {
           model: "max_bes",
           styleClasses: "col-sm-12 col-lg-3"
 
-        },
-        {
-          label: "تاریخ ایجاد",
-          type: "input",
-          inputType: "text",
-          model: "created_at",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3"
-        },
-        {
-          label: "تاریخ آخرین ویرایش",
-          type: "input",
-          inputType: "text",
-          model: "updated_at",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3"
         },
         {
           label: "توضیحات",
