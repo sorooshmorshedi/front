@@ -39,6 +39,7 @@
           <span> حذف حساب </span>
         </li>
         <li @click="openLedger(child.data.account)">
+          <i class="fas fa-book-open text-danger" />
           دفتر این حساب
         </li>
       </ul>
@@ -53,6 +54,11 @@ import accountMixin from "@/mixin/account";
 export default {
   name: "TreeView",
   mixins: [accountMixin],
+  props: {
+    noContext: {
+      default: false,
+    }
+  },
   created() {},
   data() {
     return {
@@ -83,6 +89,7 @@ export default {
           <span
             domPropsInnerHTML={node.title}
             onContextmenu={e => {
+              if(this.noContext) return;
               e.preventDefault();
               this.account = node;
               this.$refs.menu.open(e, { account: node});
