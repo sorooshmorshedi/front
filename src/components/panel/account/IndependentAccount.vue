@@ -1,34 +1,31 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12 col-lg-12">
-      <div class="title">حساب مستقل</div>
-      <button @click="createIA()" type="button" class="btn btn-info">افزودن حساب مستقل</button>
-      <br>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>نام</th>
-            <th>توضیحات</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(ia, i) in independentAccounts" :key="i">
-            <td>{{ i+1 }}</td>
-            <td>{{ ia.name }}</td>
-            <td>{{ ia.explanation }}</td>
-            <td>
-              <i class="fas fa-pencil-alt text-warning" @click="editIA(ia)" />
-            </td>
-            <td>
-              <i class="fas fa-trash-alt text-danger" @click="deleteIA(ia)" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div>
+    <button @click="createIA()" type="button" class="btn btn-info">افزودن حساب مستقل</button>
+    <br>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>نام</th>
+          <th>توضیحات</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(ia, i) in independentAccounts" :key="i">
+          <td>{{ i+1 }}</td>
+          <td>{{ ia.name }}</td>
+          <td>{{ ia.explanation }}</td>
+          <td>
+            <i class="fas fa-pencil-alt text-warning" @click="editIA(ia)"/>
+          </td>
+          <td>
+            <i class="fas fa-trash-alt text-danger" @click="deleteIA(ia)"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="modal fade" id="ia" tabindex="-1">
       <div class="modal-dialog modal-lg">
@@ -43,7 +40,7 @@
             <div class="container-fluid">
               <div class="row">
                 <div class="form-group col-12">
-                  <label for="">نام حساب مستقل</label>
+                  <label for>نام حساب مستقل</label>
                   <input type="text" class="form-control" v-model="independentAccount.name">
                 </div>
                 <div class="form-group col-12">
@@ -55,13 +52,17 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!independentAccount.id" @click="storeIA()" type="button" class="btn btn-primary">ثبت</button>
+            <button
+              v-if="!independentAccount.id"
+              @click="storeIA()"
+              type="button"
+              class="btn btn-primary"
+            >ثبت</button>
             <button v-else @click="updateIA()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 

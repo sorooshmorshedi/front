@@ -1,36 +1,48 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12 col rtl">
-      <div class="card right ">
-        <div class="card-body">
-          <div class="title">تعریف حساب شناور</div>
-          <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <a class="nav-item nav-link active" id="nav-float-account-group-tab" data-toggle="tab" href="#nav-float-account-group" role="tab">گروه حساب تفضیلی شناور</a>
-              <a class="nav-item nav-link" id="nav-4-tab" data-toggle="tab" href="#nav-float" role="tab">تفضیلی شناور</a>
-            </div>
-          </nav>
-          <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-float-account-group" role="tabpanel">
-              <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
-                <strong>خطا </strong> تعداد حساب های این سطح به حداکثر خود رسیده است
-              </div>
-              <template v-else>
-                <vue-form-generator tag="div" :schema="createSchema.floatAccountGroup" :model="floatAccountGroup" />
-                <button @click="storeFloatAccountGroup()" class="btn btn-primary float-left submit-btn">ثبت</button>
-              </template>
-            </div>
-            <div class="tab-pane fade " id="nav-float" role="tabpanel">
-              <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
-                <strong>خطا </strong> تعداد حساب های این سطح به حداکثر خود رسیده است
-              </div>
-              <template v-else>
-                <vue-form-generator tag="div" :schema="createSchema.floatAccounts" :model="floatAccount" />
-                <button @click="storeFloatAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-              </template>
-            </div>
-          </div>
+  <div class>
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a
+          class="nav-item nav-link active"
+          id="nav-float-account-group-tab"
+          data-toggle="tab"
+          href="#nav-float-account-group"
+          role="tab"
+        >گروه حساب تفضیلی شناور</a>
+        <a
+          class="nav-item nav-link"
+          id="nav-4-tab"
+          data-toggle="tab"
+          href="#nav-float"
+          role="tab"
+        >تفضیلی شناور</a>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-float-account-group" role="tabpanel">
+        <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
+          <strong>خطا</strong> تعداد حساب های این سطح به حداکثر خود رسیده است
         </div>
+        <template v-else>
+          <vue-form-generator
+            tag="div"
+            :schema="createSchema.floatAccountGroup"
+            :model="floatAccountGroup"
+          />
+          <button
+            @click="storeFloatAccountGroup()"
+            class="btn btn-primary float-left submit-btn"
+          >ثبت</button>
+        </template>
+      </div>
+      <div class="tab-pane fade" id="nav-float" role="tabpanel">
+        <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
+          <strong>خطا</strong> تعداد حساب های این سطح به حداکثر خود رسیده است
+        </div>
+        <template v-else>
+          <vue-form-generator tag="div" :schema="createSchema.floatAccounts" :model="floatAccount"/>
+          <button @click="storeFloatAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
+        </template>
       </div>
     </div>
   </div>
