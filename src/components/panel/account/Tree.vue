@@ -1,7 +1,11 @@
 <template>
   <div class="rtl">
+
     <input type="text" v-model="searchAccount" />
     <v-tree v-if="treeAccounts.length" class="rtl" ref='tree' :data='treeAccounts' :tpl="tpl" />
+
+    <!-- <input type="text" v-model="searchFloatAccount" />
+    <v-tree v-if="treeFloatAccounts.length" class="rtl" ref='floatTree' :data='treeFloatAccounts' :tpl="floatTpl" /> -->
 
     <div class="modal" id="account-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
@@ -63,8 +67,10 @@ export default {
   data() {
     return {
       searchAccount: "",
+      searchFloatAccount: "",
       // expandTo: null,
-      expandTo: "501010001"
+      expandTo: "501010001",
+
     };
   },
   methods: {
@@ -97,11 +103,26 @@ export default {
           />
         </span>
       );
+    },
+    floatTpl(node, ctx) {
+      // if (!node.id) {
+      //   return <span domPropsInnerHTML={node.title} />;
+      // }
+      return (
+        <span class="tree-tpl">
+          <span
+            domPropsInnerHTML={node.title}
+          />
+        </span>
+      );
     }
   },
   watch: {
     searchAccount() {
       this.$refs.tree.searchNodes(this.searchAccount);
+    },
+    searchFloatAccount() {
+      this.$refs.floatTree.searchNodes(this.searchFloatAccount);
     },
     "account.code": function() {
       this.expandTo = this.account.code;
@@ -110,7 +131,7 @@ export default {
   computed: {
     treeAccounts() {
       if (this.accounts.length == 0) return [];
-      console.log("ReRreate TreeAccounts");
+      console.log("ReCreate TreeAccounts");
 
       let accounts = this.copy(this.accounts);
 
@@ -122,6 +143,38 @@ export default {
         }
       ];
 
+      return root;
+    },
+    treeFloatAccounts(){
+
+      let root = [
+        {
+          title: "نمودار درختی حساب های شناور",
+          expanded: true,
+          children: []
+        }
+      ];
+      if(this.floatAccountGroups.length == 0) return root;
+
+      this.floatAccountGroups.forEach(g => {
+        let node = {
+            expanded: true,
+          id: g.id,
+          title: g.name,
+          children: []
+        };
+        g.floatAccounts.forEach(c => {
+          node.children.push({
+            expanded: true,
+            id: c.id,
+            title: c.name,
+            children: []
+          })
+        })
+        root[0].children.push(node);
+      });
+
+      console.log(root);
       return root;
     }
   }

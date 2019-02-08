@@ -10,6 +10,7 @@
               class="btn btn-info btn-sm"
               data-toggle="modal"
               data-target="#accounts"
+              v-if="showTree"
             >جستوجوی حساب</button>
           </div>
 
@@ -18,7 +19,7 @@
       </div>
     </div>
 
-    <div class="modal fade" id="accounts" tabindex="-1">
+    <div class="modal fade" id="accounts" tabindex="-1" v-if="showTree">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -36,6 +37,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -46,7 +48,8 @@ export default {
   components: { Tree },
   data() {
     return {
-      title: ""
+      title: "",
+      showTree: true,
     };
   },
   created() {
@@ -62,9 +65,11 @@ export default {
       let routeName = this.$router.currentRoute.name.toLowerCase();
       if (routeName.includes("edit")) this.title = "ویرایش حساب";
       if (routeName.includes("create")) this.title = "تعریف حساب";
-      if (routeName.includes("tree")) this.title = "نمودار درختی حساب ها";
+      if (routeName.includes("tree")) {
+        this.title = "نمودار درختی حساب ها";
+        this.showTree = false;
+      }
       if (routeName.includes("independentaccount")) this.title = "حساب مستقل";
-      console.log("rn", routeName);
     }
   }
 };
