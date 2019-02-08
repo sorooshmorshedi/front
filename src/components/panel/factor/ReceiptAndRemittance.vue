@@ -1,36 +1,41 @@
 <template>
   <div class="row rtl">
     <div class="col-12">
-      <div class="card right ">
+      <div class="card right">
         <div class="card-body">
           <div class="title">
             {{ type.label }}
             <!-- <button type="button" class="btn btn-info" data-toggle="modal" data-target="#receipt-selection-modal" style="margin-right:15px;">
               انتخاب {{ type.label }}
-            </button> -->
+            </button>-->
           </div>
           <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-sm-8">
               <div class="row">
-                <div class="form-group col-lg-4">
+                <div class="form-group col-lg-4 col-sm-4">
                   <label>شماره {{ type.label }}</label>
-                  <input v-if="receipt.id" type="text" class="form-control" disabled v-model="receipt.code">
+                  <input
+                    v-if="receipt.id"
+                    type="text"
+                    class="form-control"
+                    disabled
+                    v-model="receipt.code"
+                  >
                   <input v-else type="text" class="form-control" disabled :value="rarCode">
                 </div>
-                <!-- <div class="w-100"></div> -->
-                <div class="form-group col-lg-4">
+                <div class="form-group col-lg-4 col-sm-4">
                   <label>تاریخ {{ type.label }}</label>
-                  <date class="form-control" v-model="receipt.date" :default="true" />
+                  <date class="form-control" v-model="receipt.date" :default="true"/>
                 </div>
-                <div class="form-group col-lg-4">
+                <div class="form-group col-lg-4 col-sm-4">
                   <label>ساعت {{ type.label }}</label>
-                  <mtime class="form-control" v-model="receipt.time" :default="true" />
+                  <mtime class="form-control" v-model="receipt.time" :default="true"/>
                 </div>
               </div>
             </div>
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-6 col-sm-4">
               <label>توضیحات</label>
-              <textarea class="form-control" rows=3 v-model="receipt.explanation"></textarea>
+              <textarea class="form-control" rows="3" v-model="receipt.explanation"></textarea>
             </div>
           </div>
           <div class="row">
@@ -44,31 +49,57 @@
                       <th>انبار</th>
                       <th>تعداد</th>
                       <th>واحد</th>
-                      <th></th>
+                      <th class="d-print-none"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(row,i) in rows" :key="i">
+                    <tr
+                      v-for="(row,i) in rows"
+                      :key="i"
+                      :class="{'d-print-none': i == rows.length-1}"
+                    >
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect :option-height="104" dir="rtl" :options="waresSelectValues.wares" v-model="rows[i].ware" track-by="id" label="title" />
+                        <multiselect
+                          :option-height="104"
+                          dir="rtl"
+                          :options="waresSelectValues.wares"
+                          v-model="rows[i].ware"
+                          track-by="id"
+                          label="title"
+                        />
                       </td>
                       <td>
-                        <multiselect v-if="rows[i].ware" dir="rtl" :allow-empty="false" :options="waresSelectValues.warehouses" v-model="rows[i].ware.warehouse" track-by="id" label="title" />
-                        <span v-else> - </span>
+                        <multiselect
+                          v-if="rows[i].ware"
+                          dir="rtl"
+                          :allow-empty="false"
+                          :options="waresSelectValues.warehouses"
+                          v-model="rows[i].ware.warehouse"
+                          track-by="id"
+                          label="title"
+                        />
+                        <span v-else>-</span>
                       </td>
                       <td>
-                        <input dir="ltr" type="number" class="form-control form-control" v-model="rows[i].count">
+                        <input
+                          dir="ltr"
+                          type="number"
+                          class="form-control form-control"
+                          v-model="rows[i].count"
+                        >
                       </td>
-                      <td>
-                        {{ rows[i].ware?rows[i].ware.unit.name:' - ' }}
-                      </td>
-                      <td>
-                        <button v-if="i != rows.length-1" @click="deleteItemRow(i)" type="button" class="btn btn-sm btn-warning">حذف ردیف</button>
+                      <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
+                      <td class="d-print-none">
+                        <button
+                          v-if="i != rows.length-1"
+                          @click="deleteItemRow(i)"
+                          type="button"
+                          class="btn btn-sm btn-warning"
+                        >حذف ردیف</button>
                       </td>
                     </tr>
-                    <tr>
-                    </tr>
+                    <tr></tr>
                     <tr class="bg-info text-white">
                       <td colspan="13"></td>
                     </tr>
@@ -77,10 +108,15 @@
               </div>
             </div>
           </div>
-          <hr>
-          <div class="row ">
+          <hr class="d-print-none">
+          <div class="row d-print-none">
             <div class="col-12 text-left">
-              <button v-if="receipt.id" @click="deleteReceipt(receipt)" type="button" class="btn btn-outline-danger">حذف {{ type.label }}</button>
+              <button
+                v-if="receipt.id"
+                @click="deleteReceipt(receipt)"
+                type="button"
+                class="btn btn-outline-danger"
+              >حذف {{ type.label }}</button>
               <button @click="validate()" type="button" class="btn submit btn-primary w-100px">ثبت</button>
             </div>
           </div>
@@ -110,7 +146,11 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(receipt,i) in receipts.filter(o => o.type == type.name)" :key="i" @click="selectReceipt(receipt)">
+                      <tr
+                        v-for="(receipt,i) in receipts.filter(o => o.type == type.name)"
+                        :key="i"
+                        @click="selectReceipt(receipt)"
+                      >
                         <td>{{ receipt.code }}</td>
                         <td>{{ receipt.explanation }}</td>
                         <td>{{ receipt.date }}</td>
@@ -138,7 +178,7 @@ import mtime from "@/components/mcomponents/cleave/Time";
 export default {
   name: "ReceiptAndRemiitance",
   components: { date, mtime },
-  props: ["receiptType",'id'],
+  props: ["receiptType", "id"],
   mixins: [wareApiMixin, ReceiptApiMixin],
   data() {
     return {
