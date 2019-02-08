@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       title: "",
-      showTree: true,
+      showTree: null,
     };
   },
   created() {
@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     setTitle() {
+      this.setDefaultconfig();
       let routeName = this.$router.currentRoute.name.toLowerCase();
       if (routeName.includes("edit")) this.title = "ویرایش حساب";
       if (routeName.includes("create")) this.title = "تعریف حساب";
@@ -70,6 +71,9 @@ export default {
         this.showTree = false;
       }
       if (routeName.includes("independentaccount")) this.title = "حساب مستقل";
+    },
+    setDefaultconfig(){
+      this.showTree = true;
     }
   }
 };
