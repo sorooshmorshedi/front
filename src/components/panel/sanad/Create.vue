@@ -1,61 +1,95 @@
 <template>
   <div class="row rtl">
     <div class="col-12">
-      <div class="card right ">
+      <div class="card right">
         <div class="card-body">
           <div class="title">
             سند حسابداری
-            <a @click.prevent="clearSanad()" href="#/" class="btn btn-info">جدید</a>
-            <router-link class="btn btn-info" :to="{name: 'List', params: {form: 'sanad'}}">انتخاب سند </router-link>
-            <router-link v-if="sanad.factor" class="btn btn-info" :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}">مشاهده فاکتور این سند</router-link>
-            <router-link v-if="sanad.transaction" class="btn btn-info" :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}">
-              <span> مشاهده دریافت/پرداخت</span>
-            </router-link>
+            <span class="d-print-none">
+              <a @click.prevent="clearSanad()" href="#/" class="btn btn-info">جدید</a>
+              <router-link
+                class="btn btn-info"
+                :to="{name: 'List', params: {form: 'sanad'}}"
+              >انتخاب سند</router-link>
+              <router-link
+                v-if="sanad.factor"
+                class="btn btn-info"
+                :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}"
+              >مشاهده فاکتور این سند</router-link>
+              <router-link
+                v-if="sanad.transaction"
+                class="btn btn-info"
+                :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}"
+              >
+                <span>مشاهده دریافت/پرداخت</span>
+              </router-link>
+              <button class="btn btn-info" @click="print()">چاپ</button>
 
-            <div class="dropdown open d-inline-block" v-if="id">
-              <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
-                کپی سند
-              </button>
-              <div class="dropdown-menu">
-                <a @click.prevent="copySanadToNewSanad()" class="dropdown-item" href="#!">به سند جدید</a>
-                <h6 class="dropdown-header"></h6>
-                <a class="dropdown-item" href="#!">Another action</a>
+              <div class="dropdown open d-inline-block" v-if="id">
+                <button
+                  class="btn btn-info dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                >کپی سند</button>
+                <div class="dropdown-menu">
+                  <a
+                    @click.prevent="copySanadToNewSanad()"
+                    class="dropdown-item"
+                    href="#!"
+                  >به سند جدید</a>
+                  <h6 class="dropdown-header"></h6>
+                  <a class="dropdown-item" href="#!">Another action</a>
+                </div>
               </div>
-            </div>
-
+            </span>
           </div>
           <div class="row">
             <div class="col-lg-6">
               <div class="row">
-                <div class="form-group col-lg-6">
+                <div class="form-group col-lg-6 col-sm-2">
                   <label>شماره سند</label>
-                  <input v-if="sanad.id" type="text" class="form-control" disabled v-model="sanad.code">
+                  <input
+                    v-if="sanad.id"
+                    type="text"
+                    class="form-control"
+                    disabled
+                    v-model="sanad.code"
+                  >
                   <input v-else type="text" class="form-control" disabled :value="sanadCode">
                 </div>
-                <div class="form-group col-lg-6">
+                <div class="form-group col-lg-6 col-sm-2">
                   <label>تاریخ سند</label>
-                  <date class="form-control" v-model="sanad.date" :default="true" />
+                  <date class="form-control" v-model="sanad.date" :default="true"/>
                 </div>
-                <div class="form-group col-lg-6">
+                <div class="form-group col-lg-6 col-sm-4">
                   <label>صادر کننده سند</label>
                   <input type="text" class="form-control" disabled>
                 </div>
 
-                <div class="form-group col-lg-6">
+                <div class="form-group col-lg-6 col-sm-4">
                   <label>نوع سند</label>
                   <div style="margin-top: 8px;margin-right: 15px;">
-
                     <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="temporary" v-model="sanad.type">
-                      <label class="form-check-label" for="exampleRadios1">
-                        موقت
-                      </label>
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="exampleRadios"
+                        id="exampleRadios1"
+                        value="temporary"
+                        v-model="sanad.type"
+                      >
+                      <label class="form-check-label" for="exampleRadios1">موقت</label>
                     </div>
                     <div class="form-check form-check-inline" style="margin-right: 50px;">
-                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="definite" v-model="sanad.type">
-                      <label class="form-check-label" for="exampleRadios2">
-                        قطعی
-                      </label>
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="exampleRadios"
+                        id="exampleRadios2"
+                        value="definite"
+                        v-model="sanad.type"
+                      >
+                      <label class="form-check-label" for="exampleRadios2">قطعی</label>
                     </div>
                   </div>
                 </div>
@@ -63,13 +97,13 @@
             </div>
             <div class="form-group col-lg-6">
               <label>توضیحات سند</label>
-              <textarea class="form-control" rows=5 v-model="sanad.explanation"></textarea>
+              <textarea class="form-control" rows="5" v-model="sanad.explanation"></textarea>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
               <div class="table-responsive">
-                <table class="table table-striped ">
+                <table class="table table-striped">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -78,8 +112,8 @@
                       <th>تفضیلی شناور</th>
                       <th>مرکز هزینه</th>
                       <th>بدهکار</th>
-                      <th>
-                        <a @click.prevent="exchangeValue()" href="">
+                      <th class="d-print-none">
+                        <a @click.prevent="exchangeValue()" href>
                           <i class="fas fa-exchange-alt"></i>
                         </a>
                       </th>
@@ -90,71 +124,137 @@
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td v-tooltip="accountParentsName(row.account)">
-                        <multiselect dir="rtl" :options="accountsSelectValues.levels[3]" v-model="rows[i].account" track-by="id" label="title" />
+                        <multiselect
+                          dir="rtl"
+                          :options="accountsSelectValues.levels[3]"
+                          v-model="rows[i].account"
+                          track-by="id"
+                          label="title"
+                        />
                       </td>
                       <td>
-                        <input type="text" class="form-control " v-model="rows[i].explanation">
+                        <input type="text" class="form-control" v-model="rows[i].explanation">
                       </td>
-                      <td v-tooltip="floatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''">
-                        <multiselect dir="rtl" :options="floatAccounts(rows[i])" v-model="rows[i].floatAccount" track-by="id" label="name" />
+                      <td
+                        v-tooltip="floatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
+                      >
+                        <multiselect
+                          dir="rtl"
+                          :options="floatAccounts(rows[i])"
+                          v-model="rows[i].floatAccount"
+                          track-by="id"
+                          label="name"
+                        />
                       </td>
-                      <td v-tooltip="costCenters(rows[i]).length?row.account.costCenterGroup.name:''">
-                        <multiselect dir="rtl" :options="costCenters(rows[i])" v-model="rows[i].costCenter" track-by="id" label="name" />
+                      <td
+                        v-tooltip="costCenters(rows[i]).length?row.account.costCenterGroup.name:''"
+                      >
+                        <multiselect
+                          dir="rtl"
+                          :options="costCenters(rows[i])"
+                          v-model="rows[i].costCenter"
+                          track-by="id"
+                          label="name"
+                        />
                       </td>
                       <td>
-                        <money :disabled="rows[i].bes != ''" class="form-control " v-model="rows[i].bed" />
+                        <money
+                          :disabled="rows[i].bes != ''"
+                          class="form-control"
+                          v-model="rows[i].bed"
+                        />
                       </td>
-                      <td>
-                        <a @click.prevent="exchangeValue(rows[i])" href="" v-if="i != rows.length-1">
+                      <td class="d-print-none">
+                        <a @click.prevent="exchangeValue(rows[i])" href v-if="i != rows.length-1">
                           <i class="fas fa-exchange-alt"></i>
                         </a>
                       </td>
                       <td>
-                        <money :disabled="rows[i].bed != ''" class="form-control " v-model="rows[i].bes" />
+                        <money
+                          :disabled="rows[i].bed != ''"
+                          class="form-control"
+                          v-model="rows[i].bes"
+                        />
                       </td>
-                      <td>
-                        <button v-if="i != rows.length-1" @click="deleteRow(i)" type="button" class="btn  btn-warning">حذف ردیف</button>
+                      <td class="d-print-none">
+                        <button
+                          v-if="i != rows.length-1"
+                          @click="deleteRow(i)"
+                          type="button"
+                          class="btn btn-warning"
+                        >حذف ردیف</button>
                       </td>
                     </tr>
-                    <tr>
-                    </tr>
+                    <tr></tr>
                     <tr class="bg-info text-white">
                       <td colspan="2">
-                        <span v-if="bedSum != besSum">
-                          اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}
-                        </span>
+                        <span
+                          v-if="bedSum != besSum"
+                        >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}</span>
                       </td>
                       <td colspan="2"></td>
                       <td class="text-left">مجموع:</td>
-                      <td class="">{{ bedSum | toMoney }}</td>
-                      <td></td>
-                      <td class="">{{ besSum | toMoney }}</td>
-                      <td>
-                        <button @click="deleteRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
+                      <td class>{{ bedSum | toMoney }}</td>
+                      <td class="d-print-none"></td>
+                      <td class>{{ besSum | toMoney }}</td>
+                      <td class="d-print-none">
+                        <button
+                          @click="deleteRow(0)"
+                          type="button"
+                          class="btn btn-danger"
+                        >حذف همه ردیف ها</button>
                       </td>
                     </tr>
-
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
-          <div class="row rtl">
-            <div class="col-12 col-md-6 ">
-              <button @click="goToSanad('first')" :disabled="sanad.code == 1 || sanadCode == 1" type="button" class="btn btn-info ">اولین سند</button>
-              <button @click="goToSanad('prev')" :disabled="sanad.code == 1 || !id" type="button" class="btn btn-info ">سند قبلی</button>
-              <button @click="goToSanad('next')" :disabled="sanad.code == sanadCode-1 || !id" type="button" class="btn btn-info ">سند بعدی</button>
-              <button @click="goToSanad('last')" :disabled="sanad.code == sanadCode-1 || sanadCode == 1" type="button" class="btn btn-info ">آخرین سند</button>
+          <div class="row rtl d-print-none">
+            <div class="col-12 col-md-6">
+              <button
+                @click="goToSanad('first')"
+                :disabled="sanad.code == 1 || sanadCode == 1"
+                type="button"
+                class="btn btn-info"
+              >اولین سند</button>
+              <button
+                @click="goToSanad('prev')"
+                :disabled="sanad.code == 1 || !id"
+                type="button"
+                class="btn btn-info"
+              >سند قبلی</button>
+              <button
+                @click="goToSanad('next')"
+                :disabled="sanad.code == sanadCode-1 || !id"
+                type="button"
+                class="btn btn-info"
+              >سند بعدی</button>
+              <button
+                @click="goToSanad('last')"
+                :disabled="sanad.code == sanadCode-1 || sanadCode == 1"
+                type="button"
+                class="btn btn-info"
+              >آخرین سند</button>
             </div>
             <div class="col-12 col-md-6 ltr text-left" dir="ltr">
-              <button @click="validate(true)" type="button" class="btn submit btn-primary foat-left " :disabled="sanad.createType == 'auto'">ثبت و صدور سند جدید</button>
-              <button @click="validate(false)" type="button" class="btn submit btn-primary loat-left w-100px " :disabled="sanad.createType == 'auto'">ثبت</button>
+              <button
+                @click="validate(true)"
+                type="button"
+                class="btn submit btn-primary foat-left"
+                :disabled="sanad.createType == 'auto'"
+              >ثبت و صدور سند جدید</button>
+              <button
+                @click="validate(false)"
+                type="button"
+                class="btn submit btn-primary loat-left w-100px"
+                :disabled="sanad.createType == 'auto'"
+              >ثبت</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 

@@ -185,6 +185,9 @@ Vue.mixin({
       }
       return res.reverse().join('');
 
+    },
+    print(){
+      print();
     }
   },
   computed: {

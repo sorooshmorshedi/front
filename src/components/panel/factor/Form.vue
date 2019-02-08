@@ -1,62 +1,111 @@
 <template>
   <div class="row rtl">
     <div class="col-12">
-      <div class="card right ">
+      <div class="card right">
         <div class="card-body">
           <div class="title">
             فاکتور {{ factorLabel }}
-            <router-link class="btn btn-info" :to="{name:'List', params:{ form: 'factor', type: factorType}}">انتخاب فاکتور</router-link>
-            <button v-if="this.id" class="btn btn-info" data-toggle="modal" data-target="#payments-modal">مشاهده دریافت/ پرداخت ها</button>
+            <span class="d-print-none">
+              <router-link
+                class="btn btn-info"
+                :to="{name:'List', params:{ form: 'factor', type: factorType}}"
+              >انتخاب فاکتور</router-link>
+              <button
+                v-if="this.id"
+                class="btn btn-info"
+                data-toggle="modal"
+                data-target="#payments-modal"
+              >مشاهده دریافت/ پرداخت ها</button>
+              <button class="btn btn-info" @click="print()">چاپ</button>
+            </span>
           </div>
           <div class="row">
             <div class="col-lg-8">
               <div class="row">
-                <div class="form-group col-lg-3">
+                <div class="form-group col-lg-3 col-sm-2">
                   <label>شماره فاکتور</label>
-                  <input v-if="factor.id" type="text" class="form-control" disabled v-model="factor.code">
+                  <input
+                    v-if="factor.id"
+                    type="text"
+                    class="form-control"
+                    disabled
+                    v-model="factor.code"
+                  >
                   <input v-else type="text" class="form-control" disabled :value="factorCode">
                 </div>
-                <div class="col-lg-4" v-if="factor.sanad">
+                <div class="col-lg-4 col-sm-2" v-if="factor.sanad">
                   <label>شماره سند</label>
-                  <div class="input-group ">
+                  <div class="input-group">
                     <input type="text" class="form-control" disabled :value="factor.sanad">
-                    <div class="input-group-prepend">
-                      <button @click="openSanad(factor.sanad)" class="btn btn-outline-info" type="button" id="button-addon1">مشاهده سند</button>
+                    <div class="input-group-prepend d-print-none">
+                      <button
+                        @click="openSanad(factor.sanad)"
+                        class="btn btn-outline-info"
+                        type="button"
+                        id="button-addon1"
+                      >مشاهده سند</button>
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-lg-3 col-sm-2">
                   <label>تاریخ فاکتور</label>
-                  <date class="form-control" v-model="factor.date" :default="true" />
+                  <date class="form-control" v-model="factor.date" :default="true"/>
                 </div>
-                <div class="form-group col-lg-2">
+                <div class="form-group col-lg-2 col-sm-2">
                   <label>ساعت فاکتور</label>
-                  <mtime class="form-control" v-model="factor.time" :default="true" />
+                  <mtime class="form-control" v-model="factor.time" :default="true"/>
                 </div>
                 <div class="w-100"></div>
-                <div class="col-lg-3">
-                  <label><br> </label>
+                <div class="col-lg-3 d-print-none">
+                  <label>
+                    <br>
+                  </label>
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="hasTax">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customCheck1"
+                      v-model="hasTax"
+                    >
                     <label class="custom-control-label" for="customCheck1">فاکتور مالیات دارد</label>
                   </div>
                 </div>
-                <div class="form-group col-lg-4">
+                <div class="form-group col-lg-4 col-sm-4">
                   <label>{{ accountName }}</label>
-                  <multiselect v-tooltip="accountRemain(factor.account)" dir="rtl" :options="accountsSelectValues.levels[3]" v-model="factor.account" track-by="id" label="title" />
+                  <multiselect
+                    v-tooltip="accountRemain(factor.account)"
+                    dir="rtl"
+                    :options="accountsSelectValues.levels[3]"
+                    v-model="factor.account"
+                    track-by="id"
+                    label="title"
+                  />
                 </div>
-                <div class="form-group col-lg-3" v-if="factor.account && factor.account.floatAccountGroup">
+                <div
+                  class="form-group col-lg-3 col-sm-4"
+                  v-if="factor.account && factor.account.floatAccountGroup"
+                >
                   <label>حساب شناور</label>
-                  <multiselect dir="rtl" :options="factor.account.floatAccountGroup.floatAccounts" v-model="factor.floatAccount" track-by="id" label="name" />
+                  <multiselect
+                    dir="rtl"
+                    :options="factor.account.floatAccountGroup.floatAccounts"
+                    v-model="factor.floatAccount"
+                    track-by="id"
+                    label="name"
+                  />
                 </div>
-                <div class="form-group col-lg-2">
-                  <button v-if="factor.account" @click="openLedger(factor.account)" class="btn btn-info btn-block btn-label-margin">مشاهده دفتر</button>
+                <div class="form-group col-lg-2 d-print-none">
+                  <button
+                    v-if="factor.account"
+                    @click="openLedger(factor.account)"
+                    class="btn btn-info btn-block btn-label-margin"
+                  >مشاهده دفتر</button>
                 </div>
               </div>
             </div>
             <div class="form-group col-lg-4">
               <label>توضیحات</label>
-              <textarea class="form-control" rows=5 v-model="factor.exp"></textarea>
+              <textarea class="form-control" rows="5" v-model="factor.exp"></textarea>
             </div>
           </div>
           <div class="row">
@@ -78,54 +127,100 @@
 
                       <th v-if="hasTax">مالیات</th>
                       <th v-if="hasTax">جمع مبلغ کل و مالیات</th>
-                      <th></th>
+                      <th class="d-print-none"></th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(row,i) in rows" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect :option-height="104" dir="rtl" :options="waresSelectValues.wares" v-model="rows[i].ware" track-by="id" label="title" />
+                        <multiselect
+                          :option-height="104"
+                          dir="rtl"
+                          :options="waresSelectValues.wares"
+                          v-model="rows[i].ware"
+                          track-by="id"
+                          label="title"
+                        />
                       </td>
                       <td>
-                        <multiselect v-if="rows[i].ware" dir="rtl" :allow-empty="false" :options="waresSelectValues.warehouses" v-model="rows[i].ware.warehouse" track-by="id" label="title" />
-                        <span v-else> - </span>
+                        <multiselect
+                          v-if="rows[i].ware"
+                          dir="rtl"
+                          :allow-empty="false"
+                          :options="waresSelectValues.warehouses"
+                          v-model="rows[i].ware.warehouse"
+                          track-by="id"
+                          label="title"
+                        />
+                        <span v-else>-</span>
                       </td>
                       <td>
-                        <input dir="ltr" type="number" class="form-control form-control" v-model="rows[i].count">
+                        <input
+                          dir="ltr"
+                          type="number"
+                          class="form-control form-control"
+                          v-model="rows[i].count"
+                        >
                       </td>
+                      <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
                       <td>
-                        {{ rows[i].ware?rows[i].ware.unit.name:' - ' }}
-                      </td>
-                      <td>
-                        <money class="form-control form-control" v-model="rows[i].fee" />
+                        <money class="form-control form-control" v-model="rows[i].fee"/>
                       </td>
                       <td dir="ltr">
-                        <money class="form-control form-control" :value="rowSum(row)" disabled />
+                        <money class="form-control form-control" :value="rowSum(row)" disabled/>
                       </td>
                       <td>
-                        <money :disabled="hasValue(rows[i].discountPercent)" class="form-control form-control" v-model="rows[i].discountValue" />
+                        <money
+                          :disabled="hasValue(rows[i].discountPercent)"
+                          class="form-control form-control"
+                          v-model="rows[i].discountValue"
+                        />
                       </td>
                       <td>
-                        <input :disabled="hasValue(rows[i].discountValue)" type="number" min=0 max=100 class="form-control form-control" v-model="rows[i].discountPercent" />
+                        <input
+                          :disabled="hasValue(rows[i].discountValue)"
+                          type="number"
+                          min="0"
+                          max="100"
+                          class="form-control form-control"
+                          v-model="rows[i].discountPercent"
+                        >
                       </td>
                       <td dir="ltr">
-                        <money class="form-control form-control" :value="rowSumAfterDiscount(row)" disabled />
+                        <money
+                          class="form-control form-control"
+                          :value="rowSumAfterDiscount(row)"
+                          disabled
+                        />
                       </td>
                       <td v-if="hasTax">
-                        <money class="form-control form-control" :value="rowTax(row)" disabled />
+                        <money class="form-control form-control" :value="rowTax(row)" disabled/>
                       </td>
                       <td v-if="hasTax">
-                        <money class="form-control form-control" :value="rowSumAfterTax(row)" disabled />
+                        <money
+                          class="form-control form-control"
+                          :value="rowSumAfterTax(row)"
+                          disabled
+                        />
                       </td>
-                      <td>
-                        <button v-if="i != rows.length-1" @click="deleteItemRow(i)" type="button" class="btn btn-sm btn-warning">حذف ردیف</button>
+                      <td class="d-print-none">
+                        <button
+                          v-if="i != rows.length-1"
+                          @click="deleteItemRow(i)"
+                          type="button"
+                          class="btn btn-sm btn-warning"
+                        >حذف ردیف</button>
                       </td>
                     </tr>
                     <tr class="bg-info text-white">
-                      <td colspan="10"></td>
+                      <td :colspan="hasTax?12:10"></td>
                       <td>
-                        <button @click="deleteItemRow(0)" type="button" class="btn btn-danger">حذف همه ردیف ها</button>
+                        <button
+                          @click="deleteItemRow(0)"
+                          type="button"
+                          class="btn btn-danger d-print-none"
+                        >حذف همه ردیف ها</button>
                       </td>
                     </tr>
                   </tbody>
@@ -134,10 +229,13 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-sm-6">
               <h5>
                 هزینه های فاکتور
-                <button @click="factorExpensesModal()" class="btn btn-info ">افزودن / ویرایش</button>
+                <button
+                  @click="factorExpensesModal()"
+                  class="btn btn-info d-print-none"
+                >افزودن / ویرایش</button>
               </h5>
               <div class="table-responsive-lg">
                 <table class="table table-striped" v-if="factor.expenses.length">
@@ -155,21 +253,11 @@
                   <tbody>
                     <tr v-for="(e,i) in factor.expenses" :key="i">
                       <td>{{ i+1 }}</td>
-                      <td>
-                        {{ e.expense.name }}
-                      </td>
-                      <td>
-                        {{ e.value | toMoney }}
-                      </td>
-                      <td>
-                        {{ e.account.title }}
-                      </td>
-                      <td>
-                        {{ e.floatAccount?e.floatAccount.name:' - ' }}
-                      </td>
-                      <td>
-                        {{ e.explanation }}
-                      </td>
+                      <td>{{ e.expense.name }}</td>
+                      <td>{{ e.value | toMoney }}</td>
+                      <td>{{ e.account.title }}</td>
+                      <td>{{ e.floatAccount?e.floatAccount.name:' - ' }}</td>
+                      <td>{{ e.explanation }}</td>
                     </tr>
                     <tr class="bg-info text-white">
                       <td></td>
@@ -181,54 +269,87 @@
                 </table>
               </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-sm-6">
               <div class="row">
                 <div class="col-lg-12">
                   <table class="table table-bordered finals">
                     <tbody>
                       <tr>
-                        <th>جمع: </th>
-                        <td colspan="2"> {{ sum.sum | toMoney }} ریال </td>
+                        <th>جمع:</th>
+                        <td colspan="2">{{ sum.sum | toMoney }} ریال</td>
                       </tr>
                       <tr>
                         <th>تخفیف</th>
                         <td>
-                          <money :disabled="hasValue(factor.discountPercent)" class="form-control" v-model="factor.discountValue" placeholder="مبلغ" />
+                          <money
+                            :disabled="hasValue(factor.discountPercent)"
+                            class="form-control"
+                            v-model="factor.discountValue"
+                            placeholder="مبلغ"
+                          />
                         </td>
                         <td>
-                          <input :disabled="hasValue(factor.discountValue)" type="number" min=0 max=100 class="form-control" v-model="factor.discountPercent" placeholder="درصد" />
+                          <input
+                            :disabled="hasValue(factor.discountValue)"
+                            type="number"
+                            min="0"
+                            max="100"
+                            class="form-control"
+                            v-model="factor.discountPercent"
+                            placeholder="درصد"
+                          >
                         </td>
                       </tr>
                       <tr>
-                        <th>مبلغ فاکتور پس از تخفیف: </th>
-                        <td colspan="2"> {{ sum.afterDiscount | toMoney }} ریال </td>
+                        <th>مبلغ فاکتور پس از تخفیف:</th>
+                        <td colspan="2">{{ sum.afterDiscount | toMoney }} ریال</td>
                       </tr>
                       <tr v-if="hasTax">
                         <th>مالیات</th>
                         <td>
-                          <money :disabled="hasValue(factor.taxPercent)" class="form-control" v-model="factor.taxValue" placeholder="مبلغ" />
+                          <money
+                            :disabled="hasValue(factor.taxPercent)"
+                            class="form-control"
+                            v-model="factor.taxValue"
+                            placeholder="مبلغ"
+                          />
                         </td>
                         <td>
-                          <input :disabled="hasValue(factor.taxValue)" type="number" min=0 max=100 class="form-control" v-model="factor.taxPercent" placeholder="درصد" />
-                          <span v-if="factor.taxPercent">{{ sum.tax | toMoney }} ریال </span>
+                          <input
+                            :disabled="hasValue(factor.taxValue)"
+                            type="number"
+                            min="0"
+                            max="100"
+                            class="form-control"
+                            v-model="factor.taxPercent"
+                            placeholder="درصد"
+                          >
+                          <span v-if="factor.taxPercent">{{ sum.tax | toMoney }} ریال</span>
                         </td>
                       </tr>
                       <tr>
-                        <th>مبلغ کل فاکتور: </th>
-                        <td colspan="2"> {{ sum.total | toMoney }} ریال </td>
+                        <th>مبلغ کل فاکتور:</th>
+                        <td colspan="2">{{ sum.total | toMoney }} ریال</td>
                       </tr>
                     </tbody>
-
                   </table>
                 </div>
               </div>
             </div>
           </div>
-          <hr>
-          <div class="row ">
+          <hr class="d-print-none">
+          <div class="row d-print-none">
             <div class="col-12 text-left">
-              <button @click="validate(false)" type="button" class="btn submit btn-primary loat-left w-100px ">ثبت</button>
-              <button @click="validate(true)" type="button" class="btn submit btn-primary foat-left ">ثبت و صدور سند جدید</button>
+              <button
+                @click="validate(false)"
+                type="button"
+                class="btn submit btn-primary loat-left w-100px"
+              >ثبت</button>
+              <button
+                @click="validate(true)"
+                type="button"
+                class="btn submit btn-primary foat-left"
+              >ثبت و صدور سند جدید</button>
             </div>
           </div>
         </div>
@@ -239,9 +360,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">
-              هزینه های ثابت فاکتور
-            </h4>
+            <h4 class="modal-title">هزینه های ثابت فاکتور</h4>
             <button type="button" class="close" data-dismiss="modal">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -267,24 +386,47 @@
                         <tr v-for="(e,i) in factorExpensesCopy" :key="i">
                           <td>{{ i+1 }}</td>
                           <td>
-                            <multiselect dir="rtl" label="name" track-by="id" :options="factorsSelectValues.factorExpenses" v-model="e.expense" />
+                            <multiselect
+                              dir="rtl"
+                              label="name"
+                              track-by="id"
+                              :options="factorsSelectValues.factorExpenses"
+                              v-model="e.expense"
+                            />
                           </td>
                           <td>
-                            <money class="form-control" v-model="e.value" />
+                            <money class="form-control" v-model="e.value"/>
                           </td>
                           <td>
-                            <multiselect dir="rtl" label="title" track-by="id" :options="accountsSelectValues.levels[3]" v-model="e.account" />
+                            <multiselect
+                              dir="rtl"
+                              label="title"
+                              track-by="id"
+                              :options="accountsSelectValues.levels[3]"
+                              v-model="e.account"
+                            />
                           </td>
                           <td>
-                            <multiselect v-if="e.account && e.account.floatAccountGroup" dir="rtl" label="title" track-by="id" :options="e.account.floatAccountGroup.floatAccounts" v-model="e.floatAccount" />
-                            <span v-else> - </span>
+                            <multiselect
+                              v-if="e.account && e.account.floatAccountGroup"
+                              dir="rtl"
+                              label="title"
+                              track-by="id"
+                              :options="e.account.floatAccountGroup.floatAccounts"
+                              v-model="e.floatAccount"
+                            />
+                            <span v-else>-</span>
                           </td>
                           <td>
                             <textarea class="form-control" v-model="e.explanation" rows="1"></textarea>
                           </td>
                           <td>
-
-                            <button v-if="i != factorExpensesCopy.length-1" @click="deleteExpenseRow(i)" type="button" class="btn btn-sm btn-warning">حذف ردیف</button>
+                            <button
+                              v-if="i != factorExpensesCopy.length-1"
+                              @click="deleteExpenseRow(i)"
+                              type="button"
+                              class="btn btn-sm btn-warning"
+                            >حذف ردیف</button>
                           </td>
                         </tr>
                       </tbody>
@@ -306,9 +448,7 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">
-              دریافت/ پرداخت های فاکتور
-            </h4>
+            <h4 class="modal-title">دریافت/ پرداخت های فاکتور</h4>
             <button type="button" class="close" data-dismiss="modal">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -351,7 +491,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
