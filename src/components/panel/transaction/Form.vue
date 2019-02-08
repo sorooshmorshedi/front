@@ -9,30 +9,30 @@
           <div class="row">
             <div class="col-lg-8">
               <div class="row">
-                <div class="form-group col-lg-3">
+                <div class="form-group col-lg-3 col-sm-2">
                   <label>شماره {{ type.label }}</label>
                   <input v-if="transaction.id" type="text" class="form-control" disabled v-model="transaction.code">
                   <input v-else type="text" class="form-control" disabled :value="transactionCode">
                 </div>
-                <div class="form-group col-lg-5">
+                <div class="form-group col-lg-5 col-sm-3">
                   <label>کد - نام مشتری</label>
                   <multiselect dir="rtl" :options="transactionAccounts" v-model="transaction.account" track-by="id" label="title" />
                 </div>
-                <div class="form-group col-lg-4">
+                <div class="form-group col-lg-4 col-sm-3">
                   <template v-if="transaction.account && transaction.account.floatAccountGroup">
                     <label>حساب شناور</label>
                     <multiselect dir="rtl" :options="transactionFloatAccounts" v-model="transaction.floatAccount" track-by="id" label="name" />
                   </template>
                 </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-lg-3 col-sm-2">
                   <label>تاریخ</label>
                   <date class="form-control" v-model="transaction.date" />
                 </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-lg-3 col-sm-2">
                   <label>تاریخ راس</label>
                   <date class="form-control" disabled />
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3 d-print-none">
                   <button data-toggle="modal" data-target="#factors-modal" style="margin-top:27px" type="button" name="" id="" class="btn btn-info">پرداخت شده برای فاکتور های</button>
                 </div>
                 <div class="col-lg-3" v-if="transaction.sanad">
@@ -66,7 +66,7 @@
                       <th>سررسید</th>
                       <th>نام بانک</th>
                       <th>توضیح</th>
-                      <th>فایل</th>
+                      <th class="d-print-none">فایل</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -97,9 +97,9 @@
                       <td>
                         <input :disabled="isChequeType(row)" type="text" class="form-control form-control" v-model="rows[i].explanation">
                       </td>
-                      <td>
+                      <td class="d-print-none">
                       </td>
-                      <td>
+                      <td class="d-print-none">
                         <button v-if="i != rows.length-1 && !hasCheque(row)" @click="deleteRow(i)" type="button" class="btn btn-sm btn-warning">حذف ردیف</button>
                       </td>
                     </tr>
@@ -110,7 +110,7 @@
                       <td class="text-left">مجموع:</td>
                       <td class="">{{ sum | toMoney }}</td>
                       <td colspan="6"></td>
-                      <td>
+                      <td class="d-print-none">
                         <button @click="deleteRow(0)" type="button" class="btn btn-sm btn-danger">حذف همه ردیف ها</button>
                       </td>
                     </tr>
@@ -119,7 +119,7 @@
               </div>
             </div>
           </div>
-          <div class="row rtl">
+          <div class="row rtl d-print-none">
             <div class="col-12 ">
               <button @click="validate()" type="button" class="btn submit btn-primary float-left w-100px">ثبت</button>
             </div>
