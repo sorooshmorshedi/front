@@ -70,7 +70,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(row,i) in rows" :key="i">
+                    <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                       <td>{{ i+1 }}</td>
                       <td>
                         <multiselect :disabled="hasCheque(row)" dir="rtl" :options="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))" v-model="rows[i].type" track-by="id" label="name" />

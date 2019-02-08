@@ -131,7 +131,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(row,i) in rows" :key="i">
+                    <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                       <td>{{ i+1 }}</td>
                       <td>
                         <multiselect
