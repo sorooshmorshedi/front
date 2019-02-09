@@ -121,7 +121,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
+                    <tr
+                      v-for="(row,i) in rows"
+                      :key="i"
+                      :class="{'d-print-none': i == rows.length-1}"
+                    >
                       <td>{{ i+1 }}</td>
                       <td v-tooltip="accountParentsName(row.account)">
                         <multiselect
@@ -214,25 +218,25 @@
             <div class="col-12 col-md-6">
               <button
                 @click="goToSanad('first')"
-                :disabled="sanad.code == 1 || sanadCode == 1"
+                :disabled="!hasFirstSanad"
                 type="button"
                 class="btn btn-info"
               >اولین سند</button>
               <button
                 @click="goToSanad('prev')"
-                :disabled="sanad.code == 1 || !id"
+                :disabled="!hasPrevSanad"
                 type="button"
                 class="btn btn-info"
               >سند قبلی</button>
               <button
                 @click="goToSanad('next')"
-                :disabled="sanad.code == sanadCode-1 || !id"
+                :disabled="!hasNextSanad"
                 type="button"
                 class="btn btn-info"
               >سند بعدی</button>
               <button
                 @click="goToSanad('last')"
-                :disabled="sanad.code == sanadCode-1 || sanadCode == 1"
+                :disabled="!hasLastSanad"
                 type="button"
                 class="btn btn-info"
               >آخرین سند</button>
@@ -300,6 +304,23 @@ export default {
         if (r.bes) sum += +r.bes;
       });
       return sum;
+    },
+    hasFirstSanad() {
+      if (this.sanadCode == 1) return false;
+      return true;
+    },
+    hasNextSanad() {
+      if (this.sanad.code == this.sanadCode - 1) return false;
+      if (!this.id) return false;
+      return true;
+    },
+    hasPrevSanad() {
+      if (this.sanad.code == 1) return false;
+      return true;
+    },
+    hasLastSanad() {
+      if (this.sanadCode == 1) return false;
+      return true;
     }
   },
   watch: {
@@ -331,7 +352,7 @@ export default {
           newCode = this.sanad.code + 1;
           break;
         case "prev":
-          newCode = this.sanad.code - 1;
+          newCode = this.sanad.code ? this.sanad.code - 1 : this.sanadCode - 1;
           break;
         case "first":
           newCode = 1;
@@ -404,9 +425,7 @@ export default {
     },
     storeSanad(clearSanad) {
       let data = this.copy(this.sanad);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      });
+      data = this.extractIds(data);
       data.code = this.sanadCode;
       this.request({
         url: this.endpoint("sanads/sanads"),
@@ -438,10 +457,9 @@ export default {
       let newItems = [];
       this.rows.forEach((row, i) => {
         if (i == this.rows.length - 1) return;
+
         let item = this.copy(row);
-        Object.keys(item).forEach(key => {
-          if (item[key] && item[key].id) item[key] = item[key].id;
-        });
+        item = this.extractIds(item);
 
         if (row.bed) {
           item.value = row.bed;
@@ -467,6 +485,7 @@ export default {
           this.$router.push({
             name: "CreateSanad"
           });
+          this.getSanadCode();
         } else {
           this.$router.push({
             name: "CreateSanad",

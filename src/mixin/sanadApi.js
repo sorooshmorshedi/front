@@ -24,6 +24,7 @@ export default {
       })
     },
     getSanadByCode(code) {
+      this.log("Get sanad by code: ", code);
       return this.request({
         url: this.endpoint('sanads/sanads/getSanadByCode'),
         method: 'get',
