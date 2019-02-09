@@ -9,7 +9,7 @@
           </div>
           <transition-group name="list">
 
-            <div class="row ledger" v-for="(ledger, i) in ledgers" :key="i">
+            <div class="row ledger" v-for="(ledger, i) in ledgers" :key="ledger.account.id">
               <div class="col-lg-12">
                 <div class="card right ">
                   <div class="card-body">

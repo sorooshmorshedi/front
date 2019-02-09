@@ -1,37 +1,77 @@
 <template>
   <div>
     <div class="fixed-head">
-      <table class="table table-striped table-bordered ">
+      <table class="table table-striped table-bordered">
         <thead>
           <tr>
             <th></th>
             <th v-for="(col, i) in filterFields" :key="i">
               <template v-for="(filter, j) in col.filters">
-
-                <input v-if="col.type == 'number'" :key="j" class="form-control text-center" type="number" :placeholder="filter.label" v-model="filters[filter.model]">
-
-                <input v-if="col.type == 'text'" :key="j" class="form-control text-center" type="text" :placeholder="filter.label" v-model="filters[filter.model]">
-
-                <select v-if="col.type == 'select'" :key="j" class="custom-select" v-model="filters[filter.model]">
+                <input
+                  v-if="col.type == 'number'"
+                  :key="j"
+                  class="form-control text-center"
+                  type="number"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                >
+                
+                <input
+                  v-if="col.type == 'text'"
+                  :key="j"
+                  class="form-control text-center"
+                  type="text"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                >
+                
+                <select
+                  v-if="col.type == 'select'"
+                  :key="j"
+                  class="custom-select"
+                  v-model="filters[filter.model]"
+                >
                   <option selected value="undefined">همه</option>
-                  <option v-for="(o,i) in col.original.options" :key="i" :value="o.value">{{ o.label }}</option>
+                  <option
+                    v-for="(o,i) in col.original.options"
+                    :key="i"
+                    :value="o.value"
+                  >{{ o.label }}</option>
                 </select>
 
-                <date v-if="col.type == 'date'" :key="j" class="form-control text-center" :placeholder="filter.label" v-model="filters[filter.model]" />
+                <date
+                  v-if="col.type == 'date'"
+                  :key="j"
+                  class="form-control text-center"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                />
 
-                <money v-if="col.type == 'money'" :key="j" class="form-control text-center" :placeholder="filter.label" v-model="filters[filter.model]" />
+                <money
+                  v-if="col.type == 'money'"
+                  :key="j"
+                  class="form-control text-center"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                />
 
-                <mtime v-if="col.type == 'time'" :key="j" class="form-control text-center" :placeholder="filter.label" v-model="filters[filter.model]" />
-
+                <mtime
+                  v-if="col.type == 'time'"
+                  :key="j"
+                  class="form-control text-center"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                />
               </template>
-
             </th>
             <th>
               <button @click="clearFilters()" class="btn btn-block btn-info">خالی کردن فیلتر ها</button>
             </th>
           </tr>
+
           <tr>
             <th>#</th>
+
             <th v-for="(col, i) in cols" :key="i" @click="orderBy(col)">
               <span style="margin-left: 5px;" v-if="col.sortable == undefined || col.sortable">
                 <i class="fas" :class="orderClass(col)"></i>
@@ -44,20 +84,14 @@
         </thead>
         <tbody>
           <tr v-for="(item, i) in items" :key="i">
-            <td> {{ offset+i+1 }} </td>
+            <td>{{ offset+i+1 }}</td>
             <td v-for="(col, j) in cols" :key="j">
-              <template v-if="col.type == 'select'">
-                {{ getSelectLabel(item, col)}}
-              </template>
-              <template v-else-if="col.type == 'money' ">
-                {{ get(item, col) | toMoney }}
-              </template>
-              <template v-else>
-                {{ get(item, col) }}
-              </template>
+              <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
+              <template v-else-if="col.type == 'money' ">{{ get(item, col) | toMoney }}</template>
+              <template v-else>{{ get(item, col) }}</template>
             </td>
             <td>
-              <a v-if="routerName" @click.prevent="goToDetails(item)" href="">مشاهده جزئیات</a>
+              <a v-if="routerName" @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
             </td>
           </tr>
         </tbody>
@@ -65,12 +99,17 @@
     </div>
     <nav aria-label="Page navigation rtl">
       <ul class="pagination justify-content-center">
-        <li class="page-item " :class="{disabled: offset == 0}">
-          <a @click.prevent="previousPage()" class="page-link " href="#">
-            <i class="fas fa-angle-double-right  "></i>
+        <li class="page-item" :class="{disabled: offset == 0}">
+          <a @click.prevent="previousPage()" class="page-link" href="#">
+            <i class="fas fa-angle-double-right"></i>
           </a>
         </li>
-        <li class="page-item" v-for="(page, i) in pages.pages" :key="i" :class="{active: page == pages.currentPage}">
+        <li
+          class="page-item"
+          v-for="(page, i) in pages.pages"
+          :key="i"
+          :class="{active: page == pages.currentPage}"
+        >
           <a v-if="page == -1" @click.prevent class="page-link" href="#">...</a>
           <a v-else @click.prevent="goToPage(page)" class="page-link" href="#">{{ page+1 }}</a>
         </li>
@@ -98,7 +137,7 @@ export default {
     return {
       items: [],
       oldItems: [],
-      limit: 10,
+      limit: 7,
       offset: 0,
       count: 0,
       filters: {},
@@ -125,9 +164,12 @@ export default {
     },
     url() {
       this.items = [];
+      // Why condition?
       this.debouncedGetData && this.debouncedGetData();
     },
     defaultFilters() {
+      // Why check for difference with filters?
+      // Just reset filters
       let flag = true;
       for (const df of Object.keys(this.defaultFilters)) {
         if (this.filters[df] != this.defaultFilters[df]) flag = false;
@@ -150,7 +192,7 @@ export default {
       let pageLinkLimit = 2;
 
       if (currentPage >= 3) pages.push(-1);
-      for (let i = currentPage - pageLinkLimit; i <= currentPage; i++) {
+      for (let i = currentPage - pageLinkLimit; 0 < i <= currentPage; i++) {
         if (i < 0) continue;
         pages.push(i);
       }
