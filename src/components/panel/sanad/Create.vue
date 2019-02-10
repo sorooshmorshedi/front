@@ -485,13 +485,13 @@ export default {
           this.$router.push({
             name: "CreateSanad"
           });
-          this.getSanadCode();
         } else {
           this.$router.push({
             name: "CreateSanad",
             params: { id: this.sanad.id }
           });
         }
+        this.getSanadCode();
         this.successNotify();
       });
     },
