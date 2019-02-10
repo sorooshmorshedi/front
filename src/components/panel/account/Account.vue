@@ -13,7 +13,6 @@
               v-if="showTree"
             >جستوجوی حساب</button>
           </div>
-
           <router-view/>
         </div>
       </div>
