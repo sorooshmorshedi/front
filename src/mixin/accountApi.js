@@ -128,7 +128,11 @@ export default {
 
     },
     deleteAccount(node) {
-      // add confirmation 
+      if(!node) {
+        console.error("node is not provided")
+        return;
+      }
+      // todo: add confirmation 
       this.request({
         url: this.endpoint('accounts/accounts/' + node.id),
         method: 'delete',
@@ -165,6 +169,10 @@ export default {
 
     },
     deleteFloatAccountGroup(id) {
+      if(!id) {
+        console.error("id is not provided")
+        return;
+      }
       this.request({
         url: this.endpoint('accounts/floatAccountGroups/' + id),
         method: 'delete',
@@ -206,6 +214,10 @@ export default {
 
     },
     deleteFloatAccount(id) {
+      if(!id) {
+        console.error("id is not provided")
+        return;
+      }
       // add confirmation 
       this.request({
         url: this.endpoint('accounts/floatAccounts/' + id),

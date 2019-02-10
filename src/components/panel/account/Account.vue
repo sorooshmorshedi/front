@@ -37,7 +37,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -49,7 +48,7 @@ export default {
   data() {
     return {
       title: "",
-      showTree: null,
+      showTree: null
     };
   },
   created() {
@@ -72,7 +71,7 @@ export default {
       }
       if (routeName.includes("independentaccount")) this.title = "حساب مستقل";
     },
-    setDefaultconfig(){
+    setDefaultconfig() {
       this.showTree = true;
     }
   }
