@@ -127,7 +127,7 @@ export default {
         {
           label: "نوع حساب پیشفرض",
           type: "vueMultiSelect",
-          model: "title",
+          model: "type",
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'name',
@@ -173,7 +173,7 @@ export default {
         {
           label: "نوع حساب ",
           type: "vueMultiSelect",
-          model: "title",
+          model: "type",
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'name',
