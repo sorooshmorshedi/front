@@ -1,12 +1,10 @@
 <template>
   <div class="rtl">
-
-    <input type="text" v-model="searchAccount" />
-    <v-tree v-if="treeAccounts.length" class="rtl" ref='tree' :data='treeAccounts' :tpl="tpl" />
+    <input type="text" v-model="searchAccount">
+    <v-tree v-if="treeAccounts.length" class="rtl" ref="tree" :data="treeAccounts" :tpl="tpl"/>
 
     <!-- <input type="text" v-model="searchFloatAccount" />
-    <v-tree v-if="treeFloatAccounts.length" class="rtl" ref='floatTree' :data='treeFloatAccounts' :tpl="floatTpl" /> -->
-
+    <v-tree v-if="treeFloatAccounts.length" class="rtl" ref='floatTree' :data='treeFloatAccounts' :tpl="floatTpl" />-->
     <div class="modal" id="account-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -17,11 +15,20 @@
             </button>
           </div>
           <div class="modal-body">
-            <vue-form-generator tag="div" :schema="(account.id)?editSchema[account.level]:createSchema[account.level]" :model="account" />
+            <vue-form-generator
+              tag="div"
+              :schema="(account.id)?editSchema[account.level]:createSchema[account.level]"
+              :model="account"
+            />
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="account.id" @click="updateAccount()" type="button" class="btn btn-primary">ثبت</button>
+            <button
+              v-if="account.id"
+              @click="updateAccount()"
+              type="button"
+              class="btn btn-primary"
+            >ثبت</button>
             <button v-else @click="storeAccount()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
@@ -31,24 +38,23 @@
     <vue-context ref="menu" class="context-menu">
       <ul slot-scope="child" v-if="child.data">
         <li @click="editAccount(child.data.account)">
-          <i class="fas fa-pencil-alt text-warning" />
-          <span> ویرایش حساب </span>
+          <i class="fas fa-pencil-alt text-warning"/>
+          <span>ویرایش حساب</span>
         </li>
         <li @click="createAccount(child.data.account)" v-if="child.data.account != 3">
-          <i class="fas fa-plus text-success" />
-          <span> افزودن حساب فرزند </span>
+          <i class="fas fa-plus text-success"/>
+          <span>افزودن حساب فرزند</span>
         </li>
         <li @click="deleteAccount(child.data.account)">
-          <i class="fas fa-trash-alt text-danger" />
-          <span> حذف حساب </span>
+          <i class="fas fa-trash-alt text-danger"/>
+          <span>حذف حساب</span>
         </li>
         <li @click="openLedger(child.data.account)">
-          <i class="fas fa-book-open text-danger" />
+          <i class="fas fa-book-open text-danger"/>
           دفتر این حساب
         </li>
       </ul>
     </vue-context>
-
   </div>
 </template>
 
@@ -60,7 +66,7 @@ export default {
   mixins: [accountMixin],
   props: {
     noContext: {
-      default: false,
+      default: false
     }
   },
   created() {},
@@ -69,8 +75,7 @@ export default {
       searchAccount: "",
       searchFloatAccount: "",
       // expandTo: null,
-      expandTo: "501010001",
-
+      expandTo: "501010001"
     };
   },
   methods: {
@@ -95,10 +100,10 @@ export default {
           <span
             domPropsInnerHTML={node.title}
             onContextmenu={e => {
-              if(this.noContext) return;
+              if (this.noContext) return;
               e.preventDefault();
               this.account = node;
-              this.$refs.menu.open(e, { account: node});
+              this.$refs.menu.open(e, { account: node });
             }}
           />
         </span>
@@ -110,11 +115,15 @@ export default {
       // }
       return (
         <span class="tree-tpl">
-          <span
-            domPropsInnerHTML={node.title}
-          />
+          <span domPropsInnerHTML={node.title} />
         </span>
       );
+    },
+    collapse(accounts = this.treeAccounts) {
+      accounts.forEach(o => {
+        o.expanded = false;
+        if (o.children.length) this.collapse(o.children);
+      });
     }
   },
   watch: {
@@ -145,8 +154,7 @@ export default {
 
       return root;
     },
-    treeFloatAccounts(){
-
+    treeFloatAccounts() {
       let root = [
         {
           title: "نمودار درختی حساب های شناور",
@@ -154,11 +162,11 @@ export default {
           children: []
         }
       ];
-      if(this.floatAccountGroups.length == 0) return root;
+      if (this.floatAccountGroups.length == 0) return root;
 
       this.floatAccountGroups.forEach(g => {
         let node = {
-            expanded: true,
+          expanded: true,
           id: g.id,
           title: g.name,
           children: []
@@ -169,8 +177,8 @@ export default {
             id: c.id,
             title: c.name,
             children: []
-          })
-        })
+          });
+        });
         root[0].children.push(node);
       });
 
@@ -190,7 +198,8 @@ export default {
   span {
     background-color: transparent !important;
   }
-  i { cursor: pointer !important;
+  i {
+    cursor: pointer !important;
     padding: 5px;
     border-radius: 3px;
     &:hover {

@@ -28,7 +28,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <tree no-context="1"/>
+            <tree no-context="1" ref="accountsTree" />
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
@@ -47,11 +47,16 @@ export default {
   data() {
     return {
       title: "",
-      showTree: null
+      showTree: true
     };
   },
   created() {
     this.setTitle();
+  },
+  mounted() {
+    $('a[data-toggle="tab"]').on("shown.bs.tab", e => {
+      this.$refs.accountsTree.collapse();
+    });
   },
   watch: {
     $route(to, from) {

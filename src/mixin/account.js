@@ -54,7 +54,7 @@ export default {
         accounts = this.copy(this.accounts);
       } else {
         if (!this.account.parent) {
-          console.error('Account does not have parent !', this.account);
+          // console.error('Account does not have parent !', this.account);
           return '';
         }
         accounts = this.account.parent.children;
