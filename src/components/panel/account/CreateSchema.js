@@ -98,7 +98,7 @@ export default {
       legend: "",
       styleClasses: "row",
       fields: [{
-          label: "شماره حساب کل",
+          label: "نام و شماره حساب کل",
           type: "vueMultiSelect",
           model: "parent",
           styleClasses: "col-sm-12 col-lg-3",
@@ -144,7 +144,7 @@ export default {
       legend: "",
       styleClasses: "row",
       fields: [{
-          label: "شماره حساب معین",
+          label: "نام و شماره حساب معین",
           type: "vueMultiSelect",
           model: "parent",
           styleClasses: "col-sm-12 col-lg-3",
