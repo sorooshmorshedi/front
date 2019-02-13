@@ -224,22 +224,6 @@ export default {
           styleClasses: "col-sm-12 col-lg-3",
         },
         {
-          label: "تاریخ ایجاد",
-          type: "input",
-          inputType: "text",
-          model: "created_at",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3"
-        },
-        {
-          label: "تاریخ آخرین ویرایش",
-          type: "input",
-          inputType: "text",
-          model: "updated_at",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3"
-        },
-        {
           label: "تامین کننده اصلی",
           type: "vueMultiSelect",
           model: "supplier",
