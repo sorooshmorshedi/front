@@ -58,7 +58,7 @@
                 <div class="dropdown-divider"></div>
                 <router-link class="dropdown-item" :to="{name:'AccountTree'}">نمودار درختی حساب ها</router-link>
                 <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" :to="{name:'IndependentAccount'}">حساب مستقل</router-link>
+                <!-- <router-link class="dropdown-item" :to="{name:'IndependentAccount'}">حساب مستقل</router-link> -->
               </div>
             </div>
             <div class="dropdown-submenu">
