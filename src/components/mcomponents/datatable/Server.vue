@@ -148,7 +148,7 @@ export default {
       count: 0,
       filters: {},
       order: "",
-      debouncedGetData: null,
+      debouncedGetData: null
     };
   },
   created() {
