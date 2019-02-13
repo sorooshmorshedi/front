@@ -12,7 +12,6 @@ Vue.mixin({
     return {
       OGR: 0, //on going requests
       token: null,
-      errors: [],
     }
   },
   created() {
@@ -31,7 +30,6 @@ Vue.mixin({
   methods: {
     request(options) {
       // this.log('request through mixin');
-      this.errors = [];
       this.OGR++;
       let headers = {};
 
