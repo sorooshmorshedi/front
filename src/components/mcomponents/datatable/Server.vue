@@ -131,18 +131,24 @@ import moment from "moment-jalaali";
 import _ from "lodash";
 export default {
   name: "Datatable",
-  props: ["url", "routerName", "routerDefaultParams", "cols", "defaultFilters"],
+  props: {
+    url: {},
+    routerName: {},
+    routerDefaultParams: {},
+    cols: {},
+    defaultFilters: {}
+  },
   components: { date, money, mtime },
   data() {
     return {
       items: [],
       oldItems: [],
-      limit: 7,
+      limit: 10,
       offset: 0,
       count: 0,
       filters: {},
       order: "",
-      debouncedGetData: null
+      debouncedGetData: null,
     };
   },
   created() {
@@ -187,28 +193,26 @@ export default {
     pages() {
       let pages = [];
       let currentPage = this.offset / this.limit;
-      let lastPage = Math.floor(this.count / this.limit);
-
+      let lastPage = Math.ceil(this.count / this.limit);
       let pageLinkLimit = 2;
 
-      if (currentPage >= 3) pages.push(-1);
-      for (let i = currentPage - pageLinkLimit; 0 < i <= currentPage; i++) {
-        if (i < 0) continue;
+      let si = Math.max(currentPage - pageLinkLimit, 0);
+      let ei = Math.min(currentPage + pageLinkLimit + 1, lastPage);
+
+      if (si != 0) pages.push(-1);
+
+      for (let i = si; i < ei; i++) {
         pages.push(i);
       }
 
-      for (
-        let i = currentPage + 1;
-        i <= currentPage + pageLinkLimit && i <= lastPage;
-        i++
-      )
-        pages.push(i);
-      if (pages[pages.length - 1] != lastPage) pages.push(-1);
+      if (ei != lastPage) pages.push(-1);
 
-      return {
+      let res = {
         currentPage,
         pages
       };
+
+      return res;
     },
     filterFields() {
       let res = [];
@@ -307,6 +311,8 @@ export default {
     },
     goToPage(n) {
       this.offset = this.limit * n;
+      console.log(this.offset, this.limit, n);
+      // return;
       this.getData();
     },
     get(item, col) {
