@@ -95,7 +95,7 @@ Vue.mixin({
     extractIds(data) {
       let res = this.copy(data);
       Object.keys(res).forEach(key => {
-        if (res[key] && res[key].id) res[key] = res[key].id;
+        if (res[key] && (typeof (res[key]) == 'object' && 'id' in res[key])) res[key] = res[key].id;
       });
       return res;
     },
@@ -184,7 +184,7 @@ Vue.mixin({
       return res.reverse().join('');
 
     },
-    print(){
+    print() {
       print();
     }
   },
