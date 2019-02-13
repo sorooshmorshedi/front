@@ -26,6 +26,9 @@ export default {
         data: this.company,
         success: data => {
           this.notify('شرکت با موفقیت ویرایش شد','success');
+          this.$router.push({
+            name: 'CompaniesList'
+          })
         }
       })
     },
