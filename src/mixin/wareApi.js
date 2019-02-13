@@ -92,9 +92,10 @@ export default {
     storeWare() {
       let data = this.copy(this.ware);
       let parent = data.parent;
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id != undefined) data[key] = data[key].id;
-      })
+
+      data = this.extractIds(data);
+      data = this.rawData(data);
+
       this.request({
         url: this.endpoint('wares/wares'),
         method: 'post',
@@ -110,9 +111,10 @@ export default {
       this.log('update ware');
       let data = this.copy(this.ware);
       let parent = data.parent;
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id != undefined) data[key] = data[key].id;
-      })
+
+      data = this.extractIds(data);
+      data = this.rawData(data);
+
       this.request({
         url: this.endpoint('wares/wares/' + data.id),
         method: 'put',
@@ -212,6 +214,10 @@ export default {
       //   this.floatWareGroup[k] = null;
       // });
     },
+    rawData(data) {
+      data.price = data.price.split(',').join('');
+      return data;
+    }
   },
   computed: {
     ...mapState({

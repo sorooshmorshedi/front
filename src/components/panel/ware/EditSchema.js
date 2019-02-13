@@ -87,10 +87,13 @@ export default {
         },
         {
           label: "قیمت",
-          type: "input",
-          inputType: "text",
+          type: "cleave",
           model: "price",
-          styleClasses: "col-sm-12 col-lg-3"
+          cleaveOptions: {
+            numeral: true,
+            delimiter: ','
+          },
+          styleClasses: "col-sm-12 col-lg-3 ltr"
         },
         {
           label: "نوع قیمت گذری",
