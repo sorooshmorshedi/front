@@ -54,7 +54,7 @@ export default {
         accounts = this.copy(this.accounts);
       } else {
         if (!this.account.parent) {
-          // console.error('Account does not have parent !', this.account);
+          console.warn('Account does not have parent !', this.account);
           return '';
         }
         accounts = this.account.parent.children;
@@ -100,6 +100,7 @@ export default {
       this.editSchema.init(this.accountsSelectValues);
       this.clearAccounts();
       this.localAccountsInit && this.localAccountsInit();
+      this.setCodeAndType();
       this.log('Init Accounts : Done');
     },
   },
@@ -109,7 +110,9 @@ export default {
       let len = this.levelsLen[this.account.level];
       let code = String(this.account.code);
       let chunk = Number(code.substr(code.length - len, len));
+      console.log(this.account);
       if(code == '') return true;
+      console.log('ha');
       if(chunk == 0) return false;
       return true;
 
