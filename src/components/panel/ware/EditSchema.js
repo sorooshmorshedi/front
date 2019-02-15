@@ -150,7 +150,7 @@ export default {
           styleClasses: "col-sm-12 col-lg-3",
         },
         {
-          label: "حداقل موجودی",
+          label: "حداکثر موجودی",
           type: "input",
           inputType: "text",
           model: "max_inventroy",
