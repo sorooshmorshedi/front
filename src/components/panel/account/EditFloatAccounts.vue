@@ -32,6 +32,7 @@
             />
           </div>
         </div>
+        <hr>
         <vue-form-generator
           tag="div"
           :schema="editSchema.floatAccountGroup"
@@ -58,6 +59,7 @@
             />
           </div>
         </div>
+        <hr>
         <vue-form-generator tag="div" :schema="editSchema.floatAccounts" :model="floatAccount"/>
         <button @click="updateFloatAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
         <button

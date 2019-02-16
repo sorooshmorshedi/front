@@ -30,7 +30,7 @@
       <div class="tab-pane fade show active" id="nav-group" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>کد</label>
+            <label> نام و شماره حساب </label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[0]"
@@ -40,21 +40,22 @@
             />
           </div>
         </div>
+        <hr>
         <template v-if="account.id">
-        <vue-form-generator tag="div" :schema="editSchema[0]" :model="account" />
-        <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-        <button
-          v-if="account.id"
-          @click="deleteAccount(account)"
-          class="btn btn-danger float-left submit-btn"
-          style="margin-left: 15px;"
-        >حذف</button>
+          <vue-form-generator tag="div" :schema="editSchema[0]" :model="account"/>
+          <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
+          <button
+            v-if="account.id"
+            @click="deleteAccount(account)"
+            class="btn btn-danger float-left submit-btn"
+            style="margin-left: 15px;"
+          >حذف</button>
         </template>
       </div>
       <div class="tab-pane fade" id="nav-kol" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>کد</label>
+            <label> نام و شماره حساب </label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[1]"
@@ -64,21 +65,22 @@
             />
           </div>
         </div>
+        <hr>
         <template v-if="account.id">
-        <vue-form-generator tag="div" :schema="editSchema[1]" :model="account" />
-        <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-        <button
-          v-if="account.id"
-          @click="deleteAccount(account)"
-          class="btn btn-danger float-left submit-btn"
-          style="margin-left: 15px;"
-        >حذف</button>
+          <vue-form-generator tag="div" :schema="editSchema[1]" :model="account"/>
+          <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
+          <button
+            v-if="account.id"
+            @click="deleteAccount(account)"
+            class="btn btn-danger float-left submit-btn"
+            style="margin-left: 15px;"
+          >حذف</button>
         </template>
       </div>
       <div class="tab-pane fade" id="nav-moein" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>کد</label>
+            <label> نام و شماره حساب </label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[2]"
@@ -88,6 +90,7 @@
             />
           </div>
         </div>
+        <hr>
         <template v-if="account.id">
           <vue-form-generator tag="div" :schema="editSchema[2]" :model="account"/>
           <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
@@ -102,7 +105,7 @@
       <div class="tab-pane fade" id="nav-tafzili" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>کد</label>
+            <label> نام و شماره حساب </label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[3]"
@@ -112,15 +115,16 @@
             />
           </div>
         </div>
+        <hr>
         <template v-if="account.id">
-        <vue-form-generator tag="div" :schema="editSchema[3]" :model="account" />
-        <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-        <button
-          v-if="account.id"
-          @click="deleteAccount(account)"
-          class="btn btn-danger float-left submit-btn"
-          style="margin-left: 15px;"
-        >حذف</button>
+          <vue-form-generator tag="div" :schema="editSchema[3]" :model="account"/>
+          <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
+          <button
+            v-if="account.id"
+            @click="deleteAccount(account)"
+            class="btn btn-danger float-left submit-btn"
+            style="margin-left: 15px;"
+          >حذف</button>
         </template>
       </div>
     </div>

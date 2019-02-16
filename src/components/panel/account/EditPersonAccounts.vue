@@ -22,7 +22,7 @@
       <div class="tab-pane fade show active" id="nav-buyer" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>کد</label>
+            <label for>نام و شماره حساب</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.buyers"
@@ -32,6 +32,7 @@
             />
           </div>
         </div>
+        <hr>
         <vue-form-generator tag="div" :schema="editSchema.personAccount" :model="account"/>
         <hr>
         <br>
@@ -46,7 +47,7 @@
       <div class="tab-pane fade" id="nav-seller" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>کد</label>
+            <label for>نام و شماره حساب</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.sellers"
@@ -56,6 +57,7 @@
             />
           </div>
         </div>
+        <hr>
         <vue-form-generator tag="div" :schema="editSchema.personAccount" :model="account"/>
         <hr>
         <br>

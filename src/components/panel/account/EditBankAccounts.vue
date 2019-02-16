@@ -15,7 +15,7 @@
       <div class="tab-pane fade show active" id="nav-bank" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>کد</label>
+            <label for>نام و شماره حساب</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.banks"
@@ -25,6 +25,7 @@
             />
           </div>
         </div>
+        <hr>
         <vue-form-generator tag="div" :schema="editSchema.bankAccount" :model="account"/>
         <hr>
         <br>
