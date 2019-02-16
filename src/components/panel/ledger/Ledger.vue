@@ -1,22 +1,20 @@
 <template>
   <div class="row rtl">
     <div class="col-12">
-      <div class="card right ">
+      <div class="card right">
         <div class="card-body">
-          <div class="title">
-            دفتر کل، معین، تفضیلی
+          <div class="title">دفتر کل، معین، تفضیلی
             <!-- <router-link :to="{name:'LedgerReport', query:{accs:[1,5]}}">asoidfj</router-link> -->
           </div>
           <transition-group name="list">
-
-            <div class="row ledger" v-for="(ledger, i) in ledgers" :key="ledger.account.id">
+            <div class="row ledger" v-for="(ledger, i) in ledgers" :key="ledger.id">
               <div class="col-lg-12">
-                <div class="card right ">
+                <div class="card right">
                   <div class="card-body">
                     <div class="row">
                       <div class="form-group col-lg-2">
                         <label>سطح حساب</label>
-                        <select class="custom-select " v-model="ledger.level">
+                        <select class="custom-select" v-model="ledger.level">
                           <option value="0">گروه</option>
                           <option value="1">کل</option>
                           <option value="2">معین</option>
@@ -25,16 +23,32 @@
                       </div>
                       <div class="col-lg-4">
                         <label>حساب</label>
-                        <multiselect :disabled="ledger.level == undefined" dir="rtl" :options="ledger.level == undefined?[]:accountsSelectValues.levels[ledger.level]" v-model="ledger.account" track-by="id" label="title" />
+                        <multiselect
+                          :disabled="ledger.level == undefined"
+                          dir="rtl"
+                          :options="ledger.level == undefined?[]:accountsSelectValues.levels[ledger.level]"
+                          v-model="ledger.account"
+                          track-by="id"
+                          label="title"
+                        />
                       </div>
                       <div class="col-lg-4"></div>
                       <div class="col-lg-2" v-if="i != ledgers.length-1">
                         <label class="text-center d-block">بستن گزارش این حساب</label>
-                        <button @click="deleteLedger(ledger)" type="button" class="btn btn-warning btn-block">بستن</button>
+                        <button
+                          @click="deleteLedger(ledger)"
+                          type="button"
+                          class="btn btn-warning btn-block"
+                        >بستن</button>
                       </div>
 
                       <div class="col-lg-12">
-                        <datatable v-if="ledger.account" :cols="datatableCols.cols" :url="datatableCols.url" :default-filters="{ account__code__startswith:ledger.account.code }" />
+                        <datatable
+                          v-if="ledger.account"
+                          :cols="datatableCols.cols"
+                          :url="datatableCols.url"
+                          :default-filters="{ account__code__startswith:ledger.account.code }"
+                        />
                       </div>
                     </div>
                   </div>
@@ -45,7 +59,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -71,19 +84,23 @@ export default {
   methods: {
     getData() {
       this.getAccounts();
-      this.init();
+      // this.init();
     },
     init() {
       if (!this.ledgerAccountIds) {
-        this.ledgers = [{}];
+        this.ledgers = [
+          {
+            id: 0
+          }
+        ];
         return;
       }
       if (typeof this.ledgerAccountIds == "string") {
-        let acc = this.findAccount("id", this.ledgerAccountIds);
+        let acc = this.findAccount("id", +this.ledgerAccountIds);
         this.addLedger(acc);
       } else {
         for (const id of this.ledgerAccountIds) {
-          let acc = this.findAccount('id', id);
+          let acc = this.findAccount("id", id);
           if (!acc) {
             console.error("There is no code ");
             return;
@@ -94,6 +111,7 @@ export default {
     },
     addLedger(account) {
       this.ledgers.push({
+        id: account.id,
         level: account.level,
         account: account
       });
@@ -105,7 +123,7 @@ export default {
   watch: {
     ledgers: {
       handler() {
-        if (this.ledgers[this.ledgers.length - 1].level) this.ledgers.push({});
+        if (this.ledgers[this.ledgers.length - 1].level) this.ledgers.push({id: 0});
       },
       deep: true
     }
