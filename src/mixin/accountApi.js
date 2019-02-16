@@ -387,7 +387,7 @@ export default {
           return account;
         }
         if (account.children && account.children.length != 0) {
-          let acc = this.findAccount(value, property, account.children);
+          let acc = this.findAccount(property, value, account.children);
           if (acc) return acc;
         }
       }
