@@ -47,18 +47,7 @@ export default {
     groups: [{
       legend: "",
       styleClasses: "row",
-      fields: [{
-          label: "شماره گروه اصلی",
-          type: "vueMultiSelect",
-          model: "parent",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3",
-          selectOptions: {
-            label: 'title',
-            trackBy: 'code',
-          },
-          values: [],
-        },
+      fields: [
         {
           label: "نام حساب کل",
           type: "input",
@@ -84,18 +73,7 @@ export default {
     groups: [{
       legend: "",
       styleClasses: "row",
-      fields: [{
-          label: "نام و شماره حساب کل",
-          type: "vueMultiSelect",
-          model: "parent",
-          disabled: true,
-          styleClasses: "col-sm-12 col-lg-3",
-          selectOptions: {
-            label: 'name',
-            trackBy: 'code',
-          },
-          values: [],
-        },
+      fields: [
         {
           label: "نام حساب معین",
           type: "input",
@@ -122,18 +100,7 @@ export default {
     groups: [{
       legend: "",
       styleClasses: "row",
-      fields: [{
-          label: "نام و شماره حساب معین",
-          type: "vueMultiSelect",
-          disabled: true,
-          model: "parent",
-          styleClasses: "col-sm-12 col-lg-3",
-          selectOptions: {
-            label: 'name',
-            trackBy: 'code',
-          },
-          values: [],
-        },
+      fields: [
         {
           label: "نام حساب تفضیلی",
           type: "input",
@@ -534,18 +501,7 @@ export default {
           type: "input",
           inputType: "text",
           model: "name",
-          styleClasses: "col-sm-12 col-lg-3"
-        },
-        {
-          label: "گروه حساب تفضیلی شناور",
-          type: "vueMultiSelect",
-          model: "floatAccountGroup",
-          styleClasses: "col-sm-12 col-lg-3",
-          selectOptions: {
-            label: 'name',
-            trackBy: 'id',
-          },
-          values: [],
+          styleClasses: "col-sm-12 col-lg-6"
         },
         {
           label: "توضیحات",

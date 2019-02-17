@@ -30,7 +30,7 @@
       <div class="tab-pane fade show active" id="nav-group" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label> نام و شماره حساب </label>
+            <label>نام و شماره حساب</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[0]"
@@ -55,7 +55,7 @@
       <div class="tab-pane fade" id="nav-kol" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label> نام و شماره حساب </label>
+            <label>نام و شماره حساب</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[1]"
@@ -63,6 +63,10 @@
               track-by="id"
               label="title"
             />
+          </div>
+
+          <div class="col-md-8">
+            <account-parent-breadcrumb :account="account"/>
           </div>
         </div>
         <hr>
@@ -80,7 +84,7 @@
       <div class="tab-pane fade" id="nav-moein" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label> نام و شماره حساب </label>
+            <label>نام و شماره حساب</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[2]"
@@ -88,6 +92,9 @@
               track-by="id"
               label="title"
             />
+          </div>
+          <div class="col-md-8">
+            <account-parent-breadcrumb :account="account"/>
           </div>
         </div>
         <hr>
@@ -105,7 +112,7 @@
       <div class="tab-pane fade" id="nav-tafzili" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label> نام و شماره حساب </label>
+            <label>نام و شماره حساب</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[3]"
@@ -113,6 +120,9 @@
               track-by="id"
               label="title"
             />
+          </div>
+          <div class="col-md-8">
+            <account-parent-breadcrumb :account="account"/>
           </div>
         </div>
         <hr>
@@ -133,10 +143,12 @@
 
 <script>
 import accountMixin from "@/mixin/account";
+import AccountParentBreadcrumb from "@/components/panel/account/AccountParentBreadcrumb";
 
 export default {
   name: "Edit",
   mixins: [accountMixin],
+  components: { AccountParentBreadcrumb },
   created() {
     this.mode = "edit";
   },

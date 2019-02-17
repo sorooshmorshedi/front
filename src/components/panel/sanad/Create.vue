@@ -127,7 +127,7 @@
                       :class="{'d-print-none': i == rows.length-1}"
                     >
                       <td>{{ i+1 }}</td>
-                      <td v-tooltip="accountParentsName(row.account)">
+                      <td v-tooltip="accountParentsName(row.account).join(' > ')">
                         <multiselect
                           dir="rtl"
                           :options="accountsSelectValues.levels[3]"

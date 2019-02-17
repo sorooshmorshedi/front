@@ -49,7 +49,7 @@
       <div class="tab-pane fade" id="nav-float" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>حساب تفضیلی شناور</label>
+            <label>حساب تفضیلی شناور</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.floatAccounts"
@@ -57,6 +57,16 @@
               track-by="id"
               label="name"
             />
+          </div>
+          <div class="col-md-8">
+            <nav style="margin-top: 20px;" v-if="floatAccount.id">
+              <ol class="breadcrumb">
+                <li style="padding-left: 15px;">
+                  <b>گروه حساب تفضیلی شناور:</b>
+                </li>
+                <li class="breadcrumb-item">{{ floatAccount.floatAccountGroup.name }}</li>
+              </ol>
+            </nav>
           </div>
         </div>
         <hr>
