@@ -19,7 +19,12 @@
 
 .title {
   @include header;
+  &.secondary {
+    font-size: 1.2rem;
+    border-right-color: rgba($primary, .65);
+  }
 }
+
 
 .vue-form-generator {
   legend {

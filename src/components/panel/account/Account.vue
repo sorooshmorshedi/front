@@ -18,6 +18,33 @@
       </div>
     </div>
 
+    <div class="col-sm-6 float-accounts-container" v-if="showFloats">
+      <div class="card right">
+        <div class="card-body">
+          <div class="title secondary">گروه های حساب تفضیلی شناور</div>
+          <div id="accordion">
+            <div class="card" v-for="(fag, i) in floatAccountGroups" :key="fag.id">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <a
+                    data-toggle="collapse"
+                    :href="'#collapse-fag' + i"
+                    class="collapsed"
+                  >{{ fag.name }}</a>
+                </h6>
+              </div>
+
+              <div :id="'collapse-fag' + i" class="collapse">
+                <div class="card-body">
+                  <div v-for="fa in fag.floatAccounts" :key="fa.id">{{ fa.name }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade" id="accounts" tabindex="-1" v-if="showTree">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -28,7 +55,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <tree no-context="1" ref="accountsTree" />
+            <tree no-context="1" ref="accountsTree"/>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
@@ -41,13 +68,16 @@
 
 <script>
 import Tree from "@/components/panel/account/Tree";
+import accountMixin from "@/mixin/account";
 export default {
   name: "Account",
+  mixins: [accountMixin],
   components: { Tree },
   data() {
     return {
       title: "",
-      showTree: true
+      showTree: true,
+      showFloats: false
     };
   },
   created() {
@@ -67,6 +97,7 @@ export default {
     setTitle() {
       this.setDefaultconfig();
       let routeName = this.$router.currentRoute.name.toLowerCase();
+      console.log(routeName);
       if (routeName.includes("edit")) this.title = "ویرایش حساب";
       if (routeName.includes("create")) this.title = "تعریف حساب";
       if (routeName.includes("tree")) {
@@ -74,14 +105,21 @@ export default {
         this.showTree = false;
       }
       if (routeName.includes("independentaccount")) this.title = "حساب مستقل";
+      if (routeName.includes("createfloataccounts")) {
+        this.showFloats = true;
+      }
     },
     setDefaultconfig() {
       this.showTree = true;
+      this.showFloats = false;
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.float-accounts-container {
+  margin-top: 15px;
+}
 </style>
 
