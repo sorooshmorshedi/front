@@ -64,7 +64,7 @@
                 />
               </template>
             </th>
-            <th v-if="routerName">
+            <th>
               <button @click="clearFilters()" class="btn btn-block btn-info">خالی کردن فیلتر ها</button>
             </th>
           </tr>
@@ -85,7 +85,7 @@
               {{ col.th }}
             </th>
 
-            <th v-if="routerName"></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -96,7 +96,7 @@
               <template v-else-if="col.type == 'money' ">{{ get(item, col.td) | toMoney }}</template>
               <template v-else>{{ get(item, col.td) }}</template>
             </td>
-            <td v-if="routerName">
+            <td>
               <a v-if="routerName" @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
             </td>
           </tr>
