@@ -22,7 +22,7 @@
       <div class="tab-pane fade show active" id="nav-float-account-group" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>گروه حساب تفضیلی شناور</label>
+            <label>انتخاب گروه جهت ویرایش</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.floatAccountGroups"
@@ -49,7 +49,7 @@
       <div class="tab-pane fade" id="nav-float" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label>حساب تفضیلی شناور</label>
+            <label>انتخاب حساب جهت ویرایش</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.floatAccounts"

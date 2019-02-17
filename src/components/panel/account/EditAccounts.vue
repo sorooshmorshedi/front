@@ -30,7 +30,7 @@
       <div class="tab-pane fade show active" id="nav-group" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label>نام و شماره حساب</label>
+            <label>انتخاب حساب جهت ویرایش</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[0]"
@@ -55,7 +55,7 @@
       <div class="tab-pane fade" id="nav-kol" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label>نام و شماره حساب</label>
+            <label>انتخاب حساب جهت ویرایش</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[1]"
@@ -84,7 +84,7 @@
       <div class="tab-pane fade" id="nav-moein" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label>نام و شماره حساب</label>
+            <label>انتخاب حساب جهت ویرایش</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[2]"
@@ -112,7 +112,7 @@
       <div class="tab-pane fade" id="nav-tafzili" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label>نام و شماره حساب</label>
+            <label>انتخاب حساب جهت ویرایش</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.levels[3]"

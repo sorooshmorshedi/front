@@ -22,7 +22,7 @@
       <div class="tab-pane fade show active" id="nav-buyer" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>نام و شماره حساب</label>
+            <label>انتخاب حساب جهت ویرایش</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.buyers"
@@ -47,7 +47,7 @@
       <div class="tab-pane fade" id="nav-seller" role="tabpanel">
         <div class="row">
           <div class="form-group col-md-4">
-            <label for>نام و شماره حساب</label>
+            <label>انتخاب حساب جهت ویرایش</label>
             <multiselect
               dir="rtl"
               :options="this.accountsSelectValues.sellers"
