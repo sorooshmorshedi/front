@@ -308,26 +308,32 @@ export default {
             id: 'legal'
           }]
 
-        },  {
+        }, {
+          label: "شماره ملی",
+          type: "input",
+          inputType: "text",
+          model: "meli_code",
+          styleClasses: "col-sm-12 col-lg-3"
+        }, {
           label: "موبایل",
           type: "input",
           inputType: "text",
           model: "mobile",
-          styleClasses: "col-sm-12 col-lg-2"
+          styleClasses: "col-sm-12 col-lg-3"
         },
         {
           label: "شماره تلفن 1",
           type: "input",
           inputType: "text",
           model: "phone1",
-          styleClasses: "col-sm-12 col-lg-2"
+          styleClasses: "col-sm-12 col-lg-3"
         },
         {
           label: "شماره تلفن 2",
           type: "input",
           inputType: "text",
           model: "phone2",
-          styleClasses: "col-sm-12 col-lg-2"
+          styleClasses: "col-sm-12 col-lg-3"
         },
         {
           label: "وبسایت",
