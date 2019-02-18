@@ -6,12 +6,14 @@ export default {
       type: "date",
       sortable: false,
       filters: [{
-        label: 'از تاریخ',
-        model: "factor.date__gte"
-      }, {
-        label: 'تا تاریخ',
-        model: "factor.date__lte"
-      }]
+          label: "xxxx-xx-xx از تاریخ ",
+          model: "date__gte"
+        },
+        {
+          label: "xxxx-xx-xx تا تاریخ",
+          model: "date__lte"
+        }
+      ]
     },
     {
       th: "نوع فاکتور",
@@ -112,21 +114,20 @@ export default {
       filters: []
     },
   ],
-  colHeaders: [
-    {
-      colspan:'5',
+  colHeaders: [{
+      colspan: '5',
       title: '',
     },
     {
-      colspan:'3',
+      colspan: '3',
       title: 'وارده',
     },
     {
-      colspan:'3',
+      colspan: '3',
       title: 'صادره',
     },
     {
-      colspan:'3',
+      colspan: '3',
       title: 'مانده',
     },
   ]

@@ -5,13 +5,14 @@ export default {
       td: "sanad.date",
       type: "date",
       filters: [{
-        label: 'از تاریخ',
-        model: "sanad__date__gte"
-      }, {
-        label: 'تا تاریخ',
-        model: "sanad__date__lte"
-      }]
-
+          label: "xxxx-xx-xx از تاریخ ",
+          model: "date__gte"
+        },
+        {
+          label: "xxxx-xx-xx تا تاریخ",
+          model: "date__lte"
+        }
+      ]
     },
     {
       th: "شماره سند",

@@ -13,11 +13,11 @@
                   <div class="row">
                     <div class="form-group col-lg-2">
                       <label>از تاریخ</label>
-                      <date class="form-control" v-model="filters.from_date" />
+                      <date class="form-control" v-model="filters.from_date" placeholder="xxxx-xx-xx" />
                     </div>
                     <div class="form-group col-lg-2">
                       <label>تا تاریخ</label>
-                      <date class="form-control" v-model="filters.to_date" />
+                      <date class="form-control" v-model="filters.to_date" placeholder="xxxx-xx-xx" />
                     </div>
                     <div class="form-group col-lg-2">
                       <button @click="getData()" class="btn btn-info btn-label-margin w-100px">گزارش</button>
