@@ -3,6 +3,7 @@
     <div class="fixed-head">
       <table class="table table-striped table-bordered">
         <thead>
+          <!-- Filters -->
           <tr>
             <th></th>
             <th v-for="(col, i) in filterFields" :key="i">
@@ -68,6 +69,7 @@
               <button @click="clearFilters()" class="btn btn-block btn-info">خالی کردن فیلتر ها</button>
             </th>
           </tr>
+          <!-- Idk -->
           <tr v-if="colHeaders">
             <th
               v-for="(header, i) in colHeaders"
@@ -76,9 +78,10 @@
               class="text-center"
             >{{ header.title }}</th>
           </tr>
+          <!-- Headers (th) -->
           <tr>
             <th>#</th>
-            <th v-for="(col, i) in cols" :key="i" @click="orderBy(col)">
+            <th v-for="(col, i) in notHiddenCols" :key="i" @click="orderBy(col)">
               <span style="margin-left: 5px;">
                 <i class="fas" :class="orderClass(col)"></i>
               </span>
@@ -91,7 +94,7 @@
         <tbody>
           <tr v-for="(item, i) in items" :key="i">
             <td>{{ offset+i+1 }}</td>
-            <td v-for="(col, j) in cols" :key="j">
+            <td v-for="(col, j) in notHiddenCols" :key="j">
               <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
               <template v-else-if="col.type == 'money' ">{{ get(item, col.td) | toMoney }}</template>
               <template v-else>{{ get(item, col.td) }}</template>
@@ -137,14 +140,17 @@ import moment from "moment-jalaali";
 import _ from "lodash";
 export default {
   name: "Datatable",
-  props: [
-    "routerName",
-    "routerDefaultParams",
-    "cols",
-    "defaultFilters",
-    "data",
-    "colHeaders"
-  ],
+  props: {
+    routerName: {},
+    routerDefaultParams: {},
+    cols: {},
+    defaultFilters: {},
+    data: {},
+    colHeaders: {},
+    hiddenCols: {
+      default: []
+    }
+  },
   components: { date, money, mtime },
   data() {
     return {
@@ -152,30 +158,14 @@ export default {
       offset: 0,
       count: 0,
       filters: {},
-      order: "",
-      debouncedGetData: null
+      order: ""
     };
   },
   created() {
-    this.debouncedGetData = _.debounce(this.getData, 1000);
     this.clearFilters();
   },
   mounted() {},
   watch: {
-    filters: {
-      handler() {
-        if (this.debouncedGetData) this.debouncedGetData();
-        else this.getData();
-      },
-      deep: true
-    },
-    order() {
-      this.getData();
-    },
-    url() {
-      this.items = [];
-      this.debouncedGetData && this.debouncedGetData();
-    },
     defaultFilters() {
       this.items = [];
       if (this.defaultFilters) {
@@ -183,6 +173,20 @@ export default {
       } else {
         this.filters = {};
       }
+    },
+    sortItems(items) {
+      items.sort((a, b) => {
+        let rev = false;
+        let field = this.order.split("__").join("");
+        if (this.order[0] == "-") {
+          rev = true;
+          field = field.substr(1, field.length - 1);
+        }
+        if (a[field] > b[field]) {
+          return rev ? 1 : -1;
+        }
+        return rev ? -1 : 0;
+      });
     }
   },
   computed: {
@@ -218,19 +222,7 @@ export default {
         return true;
       });
 
-      this.order &&
-        res.sort((a, b) => {
-          let rev = false;
-          let field = this.order.split("__").join("");
-          if (this.order[0] == "-") {
-            rev = true;
-            field = field.substr(1, field.length - 1);
-          }
-          if (a[field] > b[field]) {
-            return rev ? 1 : -1;
-          }
-          return rev ? -1 : 0;
-        });
+      this.order && this.sortItems();
 
       return res;
     },
@@ -262,7 +254,7 @@ export default {
     },
     filterFields() {
       let res = [];
-      for (let col of this.cols) {
+      for (let col of this.notHiddenCols) {
         let colFilters = [];
         if (!col.filters) continue;
         for (let filter of col.filters) {
@@ -282,42 +274,15 @@ export default {
         });
       }
       return res;
+    },
+    notHiddenCols() {
+      return this.cols.filter(o => {
+        console.log(this.hiddenCols, o.td);
+        return !this.hiddenCols.includes(o.td);
+      });
     }
   },
   methods: {
-    getData() {
-      return;
-      this.log("Get data");
-      let filters = {};
-      Object.keys(this.filters).forEach(k => {
-        if (["undefined", ""].includes(this.filters[k])) return;
-
-        if (k.includes("date") || k.includes("due")) {
-          let gDate = this.toGDate(this.filters[k]);
-          if (gDate == "Invalid date") {
-            this.notify("فرمت تاریخ وارد شده معتبر نمی باشد", "danger");
-            return;
-          }
-          filters[k] = gDate;
-        } else {
-          filters[k] = this.filters[k];
-        }
-      });
-      this.request({
-        url: this.endpoint(this.url),
-        method: "get",
-        params: {
-          limit: this.limit,
-          offset: this.offset,
-          ordering: this.order,
-          ...filters
-        },
-        success: data => {
-          this.count = data.count;
-          this.items = data.results;
-        }
-      });
-    },
     orderBy(col) {
       if (col.sortable == false) return;
       if (this.order == col.td) this.order = `-${col.td}`;

@@ -29,5 +29,17 @@ export default {
       type: "money",
       filters: ["bes_sum"]
     },
+    {
+      th: "مانده بستانکار",
+      td: "bes_remain",
+      type: "money",
+      filters: ["bes_remain"]
+    },
+    {
+      th: "مانده بدهکار",
+      td: "bed_remain",
+      type: "money",
+      filters: ["bed_remain"]
+    },
   ],
 }

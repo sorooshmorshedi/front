@@ -1,27 +1,24 @@
 <template>
   <div class="row rtl">
     <div class="col-12">
-      <div class="card right ">
+      <div class="card right">
         <div class="card-body">
-          <div class="title">
-            تراز حساب ها
-          </div>
+          <div class="title">تراز حساب ها</div>
           <div class="row">
             <div class="col-lg-3">
-              <div class="card right ">
+              <div class="card right">
                 <div class="card-body">
                   <div class="row">
-
                     <div class="form-group col-12">
                       <label>تعداد ستون ها</label>
-                      <select class="custom-select " v-model="colsCount">
+                      <select class="custom-select" v-model="colsCount">
                         <option selected value="2">2</option>
                         <option value="4">4</option>
                       </select>
                     </div>
                     <div class="form-group col-12">
                       <label>سطح حساب</label>
-                      <select class="custom-select " v-model="accountFilters.level">
+                      <select class="custom-select" v-model="accountFilters.level">
                         <option selected value="all">همه</option>
                         <option value="0">گروه</option>
                         <option value="1">کل</option>
@@ -32,25 +29,25 @@
 
                     <div class="form-group col-6">
                       <label>از تاریخ</label>
-                      <date class="form-control" v-model="sanadFilters.from_date" />
+                      <date class="form-control" v-model="sanadFilters.from_date"/>
                     </div>
                     <div class="form-group col-6">
                       <label>تا تاریخ</label>
-                      <date class="form-control" v-model="sanadFilters.to_date" />
+                      <date class="form-control" v-model="sanadFilters.to_date"/>
                     </div>
 
                     <div class="form-group col-6">
                       <label>از شماره سند</label>
-                      <input type="number" class="form-control" v-model="sanadFilters.from_code" />
+                      <input type="number" class="form-control" v-model="sanadFilters.from_code">
                     </div>
                     <div class="form-group col-6">
                       <label>تا شماره سند</label>
-                      <input type="number" class="form-control" v-model="sanadFilters.to_code" />
+                      <input type="number" class="form-control" v-model="sanadFilters.to_code">
                     </div>
 
                     <div class="form-group col-12">
                       <label>وضعیت حساب ها</label>
-                      <select class="custom-select " v-model="accountFilters.status">
+                      <select class="custom-select" v-model="accountFilters.status">
                         <option selected value="all">همه</option>
                         <option value="withRemain">حساب های دارای مانده</option>
                         <option value="bedRemain">مانده بدهکار</option>
@@ -59,19 +56,17 @@
                         <option value="withTransaction">حساب های دارای گردش</option>
                       </select>
                     </div>
-
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-lg-9">
-              <datatable :cols="datatableCols.cols" :data="accounts" />
+              <datatable :cols="datatableCols.cols" :data="accounts" :hidden-cols="hiddenCols"/>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -186,6 +181,12 @@ export default {
         status: "all"
       };
       this.sanadFilters = {};
+    }
+  },
+  computed: {
+    hiddenCols() {
+      if (this.colsCount == 4) return [];
+      return ["bed_sum", "bes_sum"];
     }
   }
 };
