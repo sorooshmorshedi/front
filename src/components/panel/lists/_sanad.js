@@ -23,11 +23,11 @@ export default {
       td: "date",
       type: "date",
       filters: [{
-          label: "از تاریخ",
+          label: "xxxx-xx-xx از تاریخ ",
           model: "date__gte"
         },
         {
-          label: "تا تاریخ",
+          label: "xxxx-xx-xx تا تاریخ",
           model: "date__lte"
         }
       ]
