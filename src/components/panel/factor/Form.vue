@@ -22,7 +22,7 @@
           <div class="row">
             <div class="col-lg-8">
               <div class="row">
-                <div class="form-group col-lg-3 col-sm-2">
+                <div class="form-group col-lg-2 col-sm-2">
                   <label>شماره فاکتور</label>
                   <input
                     v-if="factor.id"
@@ -47,7 +47,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-lg-3 col-sm-2">
+                <div class="form-group col-lg-2 col-sm-2">
                   <label>تاریخ فاکتور</label>
                   <date class="form-control" v-model="factor.date" :default="true"/>
                 </div>
@@ -55,8 +55,12 @@
                   <label>ساعت فاکتور</label>
                   <mtime class="form-control" v-model="factor.time" :default="true"/>
                 </div>
+                <div v-if="hasBijak" class="form-group col-lg-2 col-sm-2">
+                  <label>بیجک</label>
+                  <input type="number" class="form-control" v-model="factor.bijak">
+                </div>
                 <div class="w-100"></div>
-                <div class="col-lg-3 d-print-none">
+                <div class="col-lg-2 d-print-none">
                   <label>
                     <br>
                   </label>
@@ -131,7 +135,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
+                    <tr
+                      v-for="(row,i) in rows"
+                      :key="i"
+                      :class="{'d-print-none': i == rows.length-1}"
+                    >
                       <td>{{ i+1 }}</td>
                       <td>
                         <multiselect
@@ -349,7 +357,7 @@
                 @click="validate(true)"
                 type="button"
                 class="btn submit btn-primary foat-left"
-              >ثبت و صدور سند جدید</button>
+              >ثبت و صدور فاکتور جدید</button>
             </div>
           </div>
         </div>
@@ -513,7 +521,8 @@ export default {
         taxValue: "",
         discountPercent: "",
         discountValue: "",
-        expenses: []
+        expenses: [],
+        bijak: null
       },
       factorExpensesCopy: [{}],
       rows: [],
@@ -754,6 +763,10 @@ export default {
       } else {
         return "مشتری";
       }
+    },
+    hasBijak() {
+      console.log(this.factorType);
+      return ["buy", "backFromBuy"].includes(this.factorType);
     }
   },
   watch: {
@@ -807,6 +820,10 @@ export default {
   input {
     text-align: center;
   }
+}
+.custom-checkbox {
+  padding-left: 0px;
+  margin-left: 0px;
 }
 </style>
 
