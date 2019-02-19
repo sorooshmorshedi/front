@@ -277,7 +277,6 @@ export default {
     },
     notHiddenCols() {
       return this.cols.filter(o => {
-        console.log(this.hiddenCols, o.td);
         return !this.hiddenCols.includes(o.td);
       });
     }

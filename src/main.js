@@ -37,6 +37,9 @@ import 'vue-tree-halower/dist/halower-tree.min.css'
 import VTree from 'vue-tree-halower'
 Vue.use(VTree)
 
+import VuePersianDatetimePicker from 'vue-persian-datetime-picker';
+Vue.component('date-picker', VuePersianDatetimePicker);
+
 Vue.config.productionTip = false
 
 new Vue({
