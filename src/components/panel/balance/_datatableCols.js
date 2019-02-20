@@ -1,3 +1,4 @@
+import _ from 'lodash';
 export default {
   cols: [{
       th: "کد حساب",
@@ -5,10 +6,37 @@ export default {
       type: "number",
       filters: [{
         label: 'از کد حساب',
-        model: "code__gte"
+        model: "code__from",
+        filter(item, value) {
+          if (!value) return true;
+          for (let i = value.length; i < 9; i++) value += '0'; switch (item.level) {
+            case 0:
+              return item.code >= value[0];
+            case 1:
+              return item.code >= value.substr(0, 3);
+            case 2:
+              return item.code >= value.substr(0, 5);
+            case 3:
+              return item.code >= value.substr(0, 9);
+          }
+        }
       }, {
         label: 'تا کد حساب',
-        model: "code__lte"
+        model: "code__to",
+        filter(item, value) {
+          if (!value) return true;
+          for (let i = value.length; i < 9; i++) value += '9';
+          switch (item.level) {
+            case 0:
+              return item.code <= value[0];
+            case 1:
+              return item.code <= value.substr(0, 3);
+            case 2:
+              return item.code <= value.substr(0, 5);
+            case 3:
+              return item.code <= value.substr(0, 9);
+          }
+        }
       }]
     },
     {

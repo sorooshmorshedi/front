@@ -158,7 +158,7 @@ export default {
       offset: 0,
       count: 0,
       filters: {},
-      order: ""
+      order: "",
     };
   },
   created() {
@@ -175,7 +175,7 @@ export default {
       }
     },
     sortItems(items) {
-      items.sort((a, b) => {
+      this.items.sort((a, b) => {
         let rev = false;
         let field = this.order.split("__").join("");
         if (this.order[0] == "-") {
@@ -187,7 +187,7 @@ export default {
         }
         return rev ? -1 : 0;
       });
-    }
+    },
   },
   computed: {
     items() {
@@ -201,12 +201,18 @@ export default {
             !String(this.get(item, arr[0])).includes(
               String(this.filters[arr[0]])
             )
-          )
+          ) {
             return false;
+          }
 
           let filterName = arr[0];
           let filterValue = this.filters[filter];
           let filterType = arr[1];
+
+          let filterFunction = this.getFilterFunction(filter);
+          if (filterFunction && !filterFunction(item, filterValue)) {
+            return false;
+          }
 
           if (!filterValue) continue;
 
@@ -216,6 +222,12 @@ export default {
               break;
             case "lte":
               if (this.get(item, filterName) > filterValue) return false;
+              break;
+            case "startswith":
+              return _.startsWith(this.get(item, filterName), filterValue);
+              break;
+            case "endswith":
+              return _.endsWith(this.get(item, filterName), filterValue);
               break;
           }
         }
@@ -331,6 +343,16 @@ export default {
         this.filters = { ...this.defaultFilters };
       } else {
         this.filters = {};
+      }
+    },
+    getFilterFunction(filterModel) {
+      for (const col of this.cols) {
+        for (const filter of col.filters) {
+          if (filter.model == filterModel) {
+            return filter.filter;
+          }
+        }
+        return null;
       }
     }
   }
