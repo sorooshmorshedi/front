@@ -34,9 +34,6 @@ export default {
       }
     }
   },
-  created() {
-    this.getData();
-  },
   watch: {
     'account.level': function () {
       this.setCodeAndType();
@@ -78,9 +75,8 @@ export default {
         this.account.type = this.account.parent.type;
       }
     },
-    async getData(force = false) {
-      this.log('Get all accounts data');
-      // if(force) return;
+    async getAllAccounts(force = false) {
+      this.log('Get All Accounts Data');
       Promise.all([
         this.getAccounts(force, false),
         this.getFloatAccountGroups(force, false),
@@ -88,8 +84,7 @@ export default {
         this.getCostCenterGroups(force, false),
         this.getIndependentAccounts(force, false),
       ]).then(values => {
-        console.log(values);
-        this.log('Get Accounts Data : Done');
+        this.log('Get All Accounts Data : Done');
         this.init();
       })
 
@@ -111,9 +106,9 @@ export default {
       let code = String(this.account.code);
       let chunk = Number(code.substr(code.length - len, len));
       console.log(this.account);
-      if(code == '') return true;
+      if (code == '') return true;
       console.log('ha');
-      if(chunk == 0) return false;
+      if (chunk == 0) return false;
       return true;
 
     }
