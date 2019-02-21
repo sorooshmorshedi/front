@@ -82,6 +82,7 @@ export default {
   },
   created() {
     this.setTitle();
+    this.getAllAccounts();
   },
   mounted() {
     $('a[data-toggle="tab"]').on("shown.bs.tab", e => {
