@@ -27,6 +27,16 @@
                       </select>
                     </div>
 
+                    <div class="form-group col-12">
+                      <label>حساب های خاص</label>
+                      <select class="custom-select" v-model="accountFilters.special">
+                        <option selected value="all">همه</option>
+                        <option value="bank">بانک</option>
+                        <option value="buyer">خریدار</option>
+                        <option value="seller">فروشنده</option>
+                      </select>
+                    </div>
+
                     <div class="form-group col-6">
                       <label>از تاریخ</label>
                       <date class="form-control" v-model="sanadFilters.from_date"/>
@@ -172,13 +182,28 @@ export default {
           if (acc.code < filters.from_code) return false;
         }
 
+        if (filters.special != "all") {
+          switch (filters.special) {
+            case "seller":
+              if (!acc._person || acc._person.type != "seller") return false;
+              break;
+            case "buyer":
+              if (!acc._person || acc._person.type != "buyer") return false;
+              break;
+            case "bank":
+              if (!acc._bank) return false;
+              break;
+          }
+        }
+
         return true;
       });
     },
     clearFilters() {
       this.accountFilters = {
         level: "all",
-        status: "all"
+        status: "all",
+        special: "all"
       };
       this.sanadFilters = {};
     }
