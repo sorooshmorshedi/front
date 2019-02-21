@@ -128,7 +128,7 @@ export default {
 
     },
     deleteAccount(node) {
-      if(!node) {
+      if (!node) {
         console.error("node is not provided")
         return;
       }
@@ -169,7 +169,7 @@ export default {
 
     },
     deleteFloatAccountGroup(id) {
-      if(!id) {
+      if (!id) {
         console.error("id is not provided")
         return;
       }
@@ -214,7 +214,7 @@ export default {
 
     },
     deleteFloatAccount(id) {
-      if(!id) {
+      if (!id) {
         console.error("id is not provided")
         return;
       }
@@ -377,13 +377,14 @@ export default {
       let levelCodeLens = [1, 3, 5, 9];
       levelCodeLens.forEach((len) => {
         let codePart = code.substr(0, len);
-        if(!res.includes(codePart)) res.push(codePart);
+        if (!res.includes(codePart)) res.push(codePart);
       })
       return res;
     },
     findAccount(property, value, accounts) {
       if (!accounts) accounts = this.accounts;
       for (const account of accounts) {
+        // console.log(account[property], value);
         if (account[property] == value) {
           return account;
         }
@@ -392,6 +393,8 @@ export default {
           if (acc) return acc;
         }
       }
+      // console.error('Account not found: ', property, '=', value);
+      return null;
     },
     accountParentsName(account) {
       if (!account) return [];
@@ -408,21 +411,21 @@ export default {
       }
       return res;
     },
-    accountRemain(account){
-      if(!account) return '';
+    accountRemain(account) {
+      if (!account) return '';
       let res = '';
-      res += 'مانده بدهکار: '
-        + this.toMoney(account.bed)
-        + "<br>"
-        + 'مانده بستانکار: '
-        + this.toMoney(account.bes);
+      res += 'مانده بدهکار: ' +
+        this.toMoney(account.bed) +
+        "<br>" +
+        'مانده بستانکار: ' +
+        this.toMoney(account.bes);
       return res;
     },
     openLedger(account) {
       let routeData = this.$router.resolve({
         name: "LedgerReport",
         query: {
-          accs: [+account.id,]
+          accs: [+account.id, ]
         }
       });
       window.open(
