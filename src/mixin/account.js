@@ -31,15 +31,18 @@ export default {
         1: 2,
         2: 2,
         3: 4
+      },
+      config: {
+        autoCodeAndType: true 
       }
     }
   },
   watch: {
     'account.level': function () {
-      this.setCodeAndType();
+      this.autoCodeAndType && this.setCodeAndType();
     },
     'account.parent': function () {
-      this.setCodeAndType();
+      this.autoCodeAndType && this.setCodeAndType();
     },
   },
   methods: {
@@ -105,9 +108,7 @@ export default {
       let len = this.levelsLen[this.account.level];
       let code = String(this.account.code);
       let chunk = Number(code.substr(code.length - len, len));
-      console.log(this.account);
       if (code == '') return true;
-      console.log('ha');
       if (chunk == 0) return false;
       return true;
 
