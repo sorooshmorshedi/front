@@ -21,7 +21,7 @@
           <hr>
           <br>
           <vue-form-generator tag="div" :schema="createSchema.bank" :model="bank"/>
-          <button @click="storeBank()" class="btn btn-primary float-left submit-btn">ثبت</button>
+          <button @click="storeBankAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
         </template>
       </div>
     </div>
@@ -40,14 +40,17 @@ export default {
   mounted() {
     this.account.level = 3;
     this.account.type = "bank";
+    this.account.parent = { code: "10101" };
+    this.setCodeAndType();
   },
   data() {
     return {};
   },
   watch: {},
   methods: {
-    localAccountsInit() {
+    storeBankAccount() {
       this.account.parent = this.findAccount("code", "10101");
+      this.storeBank();
     }
   }
 };

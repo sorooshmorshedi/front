@@ -55,6 +55,7 @@ export default {
   mixins: [accountMixin],
   created() {
     this.mode = "create";
+    this.config.autoCodeAndType = false;
   },
   mounted() {
     $('a[data-toggle="tab"]').on("shown.bs.tab", e => {
@@ -62,15 +63,32 @@ export default {
       let type = e.target.id.split("-")[1];
       this.account.level = 3;
       this.person.type = type;
+      this.setPersonAccountCode();
     });
     this.clearAccounts();
     this.account.level = 3;
     this.person.type = "buyer";
+    this.setPersonAccountCode();
   },
   data() {
     return {};
   },
   methods: {
+    setPersonAccountCode() {
+      if (!this.person.personType || !this.person.type) {
+        return;
+      }
+      let parentCode;
+      if (this.person.type == "buyer") {
+        if (this.person.personType == "real") parentCode = "10301";
+        else parentCode = "10302";
+      } else {
+        if (this.person.personType == "real") parentCode = "30101";
+        else parentCode = "30102";
+      }
+      this.account.parent = this.findAccount("code", parentCode);
+      this.setCodeAndType();
+    },
     storeBuyer() {
       this.person.type = "buyer";
       this.storePerson();
@@ -79,25 +97,13 @@ export default {
       this.person.type = "seller";
       this.storePerson();
     },
-    localAccountsInit() {}
+    localAccountsInit() {
+      this.person.type = "buyer";
+    }
   },
   watch: {
     "person.personType": function() {
-      if (!this.person.personType || !this.person.type) {
-        console.log(this.person.personType, this.person.type);
-        return;
-      }
-      let parentCode;
-      if (this.person.type == "buyer") {
-        if (this.person.personType.value == "real") parentCode = "10301";
-        else parentCode = "10302";
-      } else {
-        if (this.person.personType.value == "real") parentCode = "30101";
-        else parentCode = "30102";
-      }
-      this.account.parent = this.findAccount("code", parentCode);
-
-      this.setCodeAndType();
+      this.setPersonAccountCode();
     }
   }
 };
