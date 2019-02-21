@@ -66,7 +66,7 @@
           </div>
 
           <div class="col-md-8">
-            <account-parent-breadcrumb :account="account"/>
+            <account-parent-breadcrumb :base-account="account"/>
           </div>
         </div>
         <hr>
@@ -94,7 +94,7 @@
             />
           </div>
           <div class="col-md-8">
-            <account-parent-breadcrumb :account="account"/>
+            <account-parent-breadcrumb :base-account="account"/>
           </div>
         </div>
         <hr>
@@ -122,7 +122,7 @@
             />
           </div>
           <div class="col-md-8">
-            <account-parent-breadcrumb :account="account"/>
+            <account-parent-breadcrumb :base-account="account"/>
           </div>
         </div>
         <hr>
