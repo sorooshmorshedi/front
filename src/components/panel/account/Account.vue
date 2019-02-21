@@ -98,7 +98,6 @@ export default {
     setTitle() {
       this.setDefaultconfig();
       let routeName = this.$router.currentRoute.name.toLowerCase();
-      console.log(routeName);
       if (routeName.includes("edit")) this.title = "ویرایش حساب";
       if (routeName.includes("create")) this.title = "تعریف حساب";
       if (routeName.includes("tree")) {
