@@ -92,7 +92,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, i) in items" :key="i">
+          <!-- Rows -->
+          <tr v-for="(item, i) in items" :key="i" :class="item.classes">
             <td>{{ offset+i+1 }}</td>
             <td v-for="(col, j) in notHiddenCols" :key="j">
               <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
