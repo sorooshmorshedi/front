@@ -66,6 +66,19 @@
                         <option value="withTransaction">حساب های دارای گردش</option>
                       </select>
                     </div>
+
+                    <div class="form-group col-12">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input
+                            type="checkbox"
+                            class="form-check-input"
+                            v-model="accountFilters.showFloatAccounts"
+                          >
+                          نمایش حساب های تفضیلی شناور
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -150,9 +163,9 @@ export default {
       });
     },
     filterAccounts() {
-      console.log("filtering accounts");
+      this.log("filtering accounts");
       let filters = this.accountFilters;
-      this.accounts = this.allAccounts.filter(acc => {
+      let accounts = this.allAccounts.filter(acc => {
         if (filters.level != "all") {
           if (acc.level != filters.level) return false;
         }
@@ -198,12 +211,32 @@ export default {
 
         return true;
       });
+
+      let res = [];
+      for (const acc of accounts) {
+        res.push(acc);
+        if (filters.showFloatAccounts)
+          for (const floatAccount of acc._floatAccounts) {
+            res.push({
+              code: "",
+              name: floatAccount.name,
+              bes_sum: floatAccount.bes_sum,
+              bed_sum: floatAccount.bed_sum,
+              bes_remain: floatAccount.bes_remain,
+              bed_remain: floatAccount.bed_remain,
+              classes: "float-account-row"
+            });
+          }
+      }
+
+      this.accounts = res;
     },
     clearFilters() {
       this.accountFilters = {
         level: "all",
         status: "all",
-        special: "all"
+        special: "all",
+        showFloatAccounts: false,
       };
       this.sanadFilters = {};
     }
@@ -234,5 +267,14 @@ export default {
 
 .fa-sort {
   color: rgba(0, 0, 0, 0.3);
+}
+</style>
+
+<style lang="scss">
+.float-account-row {
+  background-color: #fafafa !important;
+  td:nth-child(3) {
+    padding-right: 30px;
+  }
 }
 </style>
