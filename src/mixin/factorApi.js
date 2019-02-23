@@ -301,7 +301,7 @@ export default {
       let res = {
         factorExpenses: [],
       };
-      if (!this.factorsExpenses) return res;
+      if (!this.factorExpenses) return res;
       res.factorExpenses = this.copy(this.factorExpenses);
       return res;
     },

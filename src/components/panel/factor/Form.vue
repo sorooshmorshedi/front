@@ -418,7 +418,7 @@
                             <multiselect
                               v-if="e.account && e.account.floatAccountGroup"
                               dir="rtl"
-                              label="title"
+                              label="name"
                               track-by="id"
                               :options="e.account.floatAccountGroup.floatAccounts"
                               v-model="e.floatAccount"
