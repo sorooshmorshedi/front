@@ -218,7 +218,7 @@ export default {
         if (filters.showFloatAccounts)
           for (const floatAccount of acc._floatAccounts) {
             res.push({
-              code: "",
+              code: "حساب شناور",
               name: floatAccount.name,
               bes_sum: floatAccount.bes_sum,
               bed_sum: floatAccount.bed_sum,
@@ -274,7 +274,7 @@ export default {
 .float-account-row {
   background-color: #fafafa !important;
   td:nth-child(3) {
-    padding-right: 30px;
+    // padding-right: 30px;
   }
 }
 </style>
