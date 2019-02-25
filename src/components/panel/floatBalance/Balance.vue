@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card right">
         <div class="card-body">
-          <div class="title">تراز حساب ها</div>
+          <div class="title">تراز حساب های شناور</div>
           <div class="row">
             <div class="col-lg-3">
               <div class="card right">
@@ -14,26 +14,6 @@
                       <select class="custom-select" v-model="colsCount">
                         <option selected value="2">2</option>
                         <option value="4">4</option>
-                      </select>
-                    </div>
-                    <div class="form-group col-12">
-                      <label>سطح حساب</label>
-                      <select class="custom-select" v-model="accountFilters.level">
-                        <option selected value="all">همه</option>
-                        <option value="0">گروه</option>
-                        <option value="1">کل</option>
-                        <option value="2">معین</option>
-                        <option value="3">تفضیلی</option>
-                      </select>
-                    </div>
-
-                    <div class="form-group col-12">
-                      <label>حساب های خاص</label>
-                      <select class="custom-select" v-model="accountFilters.special">
-                        <option selected value="all">همه</option>
-                        <option value="bank">بانک</option>
-                        <option value="buyer">خریدار</option>
-                        <option value="seller">فروشنده</option>
                       </select>
                     </div>
 
@@ -67,31 +47,6 @@
                       </select>
                     </div>
 
-                    <div class="form-group col-12">
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input
-                            type="checkbox"
-                            class="form-check-input"
-                            v-model="accountFilters.showFloatAccounts"
-                          >
-                          نمایش حساب های تفضیلی شناور
-                        </label>
-                      </div>
-                    </div>
-
-                    <div class="form-group col-12">
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input
-                            type="checkbox"
-                            class="form-check-input"
-                            v-model="accountFilters.showDifferences"
-                          >
-                          نمایش مغایرت حساب ها
-                        </label>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -164,7 +119,7 @@ export default {
         }
       });
       this.request({
-        url: this.endpoint("reports/balance"),
+        url: this.endpoint("reports/balance/floats"),
         method: "get",
         params: {
           ...filters
@@ -179,9 +134,6 @@ export default {
       this.log("filtering accounts");
       let filters = this.accountFilters;
       let accounts = this.allAccounts.filter(acc => {
-        if (filters.level != "all") {
-          if (acc.level != filters.level) return false;
-        }
 
         if (filters.status != "all") {
           switch (filters.status) {
@@ -203,59 +155,13 @@ export default {
           }
         }
 
-        if (filters.from_code) {
-          // todo: check for chilren too
-          if (acc.code < filters.from_code) return false;
-        }
-
-        if (filters.special != "all") {
-          switch (filters.special) {
-            case "seller":
-              if (!acc._person || acc._person.type != "seller") return false;
-              break;
-            case "buyer":
-              if (!acc._person || acc._person.type != "buyer") return false;
-              break;
-            case "bank":
-              if (!acc._bank) return false;
-              break;
-          }
-        }
-
-        if (filters.showDifferences) {
-          if (acc.bed_remain == 0 && acc.bes_remain == 0) return false;
-          if (acc.bed_remain == acc.bes_remain) return false;
-        }
-
         return true;
       });
 
-      let res = [];
-      for (const acc of accounts) {
-        res.push(acc);
-        if (filters.showFloatAccounts)
-          for (const floatAccount of acc._floatAccounts) {
-            res.push({
-              code: "حساب شناور",
-              name: floatAccount.name,
-              bes_sum: floatAccount.bes_sum,
-              bed_sum: floatAccount.bed_sum,
-              bes_remain: floatAccount.bes_remain,
-              bed_remain: floatAccount.bed_remain,
-              classes: "float-account-row"
-            });
-          }
-      }
-
-      this.accounts = res;
     },
     clearFilters() {
       this.accountFilters = {
-        level: "all",
         status: "all",
-        special: "all",
-        showFloatAccounts: false,
-        showDifferences: false
       };
       this.sanadFilters = {};
     }
