@@ -32,6 +32,19 @@ export default {
         }
       })
     },
+    getFloatAccounts(force = false, init = true) {
+      if (!force && this.floatAccounts.length) return;
+      return this.request({
+        url: this.endpoint('accounts/floatAccounts'),
+        method: 'get',
+        success: data => {
+          this.$store.commit('setAccounts', {
+            floatAccounts: data
+          });
+          init && this.init();
+        }
+      })
+    },
     getAccountTypes(force = false, init = true) {
       if (!force && this.accountTypes.length) return;
       return this.request({
@@ -177,6 +190,7 @@ export default {
         url: this.endpoint('accounts/floatAccountGroups/' + id),
         method: 'delete',
         success: data => {
+          this.getFloatAccounts();
           this.notify('گروه حساب شناور با موفقیت حذف شد', 'success');
           this.getFloatAccountGroups(true);
         }
@@ -184,9 +198,10 @@ export default {
     },
     storeFloatAccount() {
       let data = this.copy(this.floatAccount);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data);
+      for (const fg of data.floatAccountGroups) {
+        data.floatAccountGroups[data.floatAccountGroups.indexOf(fg)] = fg.id;
+      }
       this.request({
         url: this.endpoint('accounts/floatAccounts'),
         method: 'post',
@@ -199,16 +214,19 @@ export default {
     },
     updateFloatAccount() {
       let data = this.copy(this.floatAccount);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data);
+      let fags = [];
+      for (const fag of data.floatAccountGroups) {
+        fags.push(fag.id);
+      }
+      data.floatAccountGroups = fags;
       this.request({
         url: this.endpoint('accounts/floatAccounts/' + data.id),
         method: 'put',
         data: data,
         success: data => {
+          this.getFloatAccounts();
           this.notify('حساب شناور با موفقیت ویرایش شد', 'success');
-          this.clearAccounts();
         }
       })
 
@@ -355,7 +373,7 @@ export default {
 
     },
     clearAccounts() {
-      this.log('clear account object');
+      this.log('Clear account object');
       this.account = {
         parent: null,
         level: this.account.level,
@@ -367,7 +385,12 @@ export default {
       let list = ['floatAccount', 'floatAccountGroup', 'person', 'bank'];
       list.forEach(item => {
         Object.keys(this[item]).forEach(k => {
-          this[item][k] = null;
+          this[item] = this.copy(this[item]);
+          if (_.isArray(this[item][k])) {
+            this[item][k] = [];
+          } else {
+            this[item][k] = null;
+          }
         });
       })
       this.person && (this.person.type = personType);
@@ -439,6 +462,7 @@ export default {
     ...mapState({
       accounts: state => state.accounts.accounts,
       floatAccountGroups: state => state.accounts.floatAccountGroups,
+      floatAccounts: state => state.accounts.floatAccounts,
       accountTypes: state => state.accounts.accountTypes,
       costCenterGroups: state => state.accounts.costCenterGroups,
       independentAccounts: state => state.accounts.independentAccounts,
@@ -493,16 +517,24 @@ export default {
           ...at,
         })
       })
-      this.floatAccountGroups.forEach(fag => {
-        res.floatAccountGroups.push({
-          ...fag,
-          floatAccounts: [],
-        });
-        fag.floatAccounts.length && fag.floatAccounts.forEach(fa => {
-          fa.floatAccountGroup = fag;
-          res.floatAccounts.push(fa);
-        });
-      })
+
+      res.floatAccountGroups = this.floatAccountGroups;
+
+      this.floatAccounts.forEach(fa => {
+        let fags = [];
+        fa.floatAccountGroups && fa.floatAccountGroups.forEach(id => {
+          let fag;
+          if (typeof (id) !== 'number') {
+            fag = id;
+          } else {
+            fag = this.floatAccountGroups.filter(o => o.id == id)[0];
+          }
+          if (fag) fags.push(fag);
+        })
+        fa.floatAccountGroups = fags;
+        res.floatAccounts.push(fa);
+      });
+
       res.defaultAccounts.push({
         name: 'خنثی',
         id: null

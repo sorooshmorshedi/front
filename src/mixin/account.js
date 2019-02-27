@@ -83,6 +83,7 @@ export default {
       Promise.all([
         this.getAccounts(force, false),
         this.getFloatAccountGroups(force, false),
+        this.getFloatAccounts(force, false),
         this.getAccountTypes(force, false),
         this.getCostCenterGroups(force, false),
         this.getIndependentAccounts(force, false),

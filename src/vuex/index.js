@@ -9,6 +9,7 @@ export default new Vuex.Store({
     accounts: {
       accounts: [],
       floatAccountGroups: [],
+      floatAccounts: [],
       accountTypes: [],
       costCenterGroups: [],
       independentAccounts: [],
@@ -41,6 +42,7 @@ export default new Vuex.Store({
     setAccounts(state, accounts) {
       accounts.accounts && (state.accounts.accounts = accounts.accounts);
       accounts.floatAccountGroups && (state.accounts.floatAccountGroups = accounts.floatAccountGroups);
+      accounts.floatAccounts && (state.accounts.floatAccounts = accounts.floatAccounts);
       accounts.accountTypes && (state.accounts.accountTypes = accounts.accountTypes);
       accounts.costCenterGroups && (state.accounts.costCenterGroups = accounts.costCenterGroups);
       accounts.independentAccounts && (state.accounts.independentAccounts = accounts.independentAccounts);
