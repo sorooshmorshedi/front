@@ -139,6 +139,7 @@ export default {
   },
   computed: {
     treeAccounts() {
+      return [];
       if (this.accounts.length == 0) return [];
       console.log("ReCreate TreeAccounts");
 
