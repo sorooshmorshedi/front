@@ -21,7 +21,7 @@ export default {
       field = fields.filter(f => f.model == 'costCenterGroup')[0];
       field && (field.values = data.costCenterGroups);
 
-      field = fields.filter(f => f.model == 'floatAccountGroup')[0];
+      field = fields.filter(f => f.model == 'floatAccountGroups')[0];
       field && (field.values = data.floatAccountGroups);
 
       field = fields.filter(f => f.model == 'floatAccountGroup')[0];
@@ -47,8 +47,7 @@ export default {
     groups: [{
       legend: "",
       styleClasses: "row",
-      fields: [
-        {
+      fields: [{
           label: "نام حساب کل",
           type: "input",
           inputType: "text",
@@ -73,8 +72,7 @@ export default {
     groups: [{
       legend: "",
       styleClasses: "row",
-      fields: [
-        {
+      fields: [{
           label: "نام حساب معین",
           type: "input",
           inputType: "text",
@@ -100,8 +98,7 @@ export default {
     groups: [{
       legend: "",
       styleClasses: "row",
-      fields: [
-        {
+      fields: [{
           label: "نام حساب تفضیلی",
           type: "input",
           inputType: "text",
@@ -133,11 +130,12 @@ export default {
         {
           label: "گروه حساب تفضیلی شناور",
           type: "vueMultiSelect",
-          model: "floatAccountGroup",
+          model: "floatAccountGroups",
           styleClasses: "col-sm-12 col-lg-3",
           selectOptions: {
             label: 'name',
             trackBy: 'id',
+            multiple: true,
           },
           values: [],
         },
@@ -525,7 +523,19 @@ export default {
           type: "input",
           inputType: "text",
           model: "name",
-          styleClasses: "col-sm-12 col-lg-6"
+          styleClasses: "col-sm-12 col-lg-4"
+        },
+        {
+          label: "گروه حساب تفضیلی شناور",
+          type: "vueMultiSelect",
+          model: "floatAccountGroups",
+          styleClasses: "col-sm-12 col-lg-8",
+          selectOptions: {
+            label: 'name',
+            trackBy: 'id',
+            multiple: true,
+          },
+          values: [],
         },
         {
           label: "توضیحات",

@@ -33,18 +33,23 @@
           </div>
         </div>
         <hr>
-        <vue-form-generator
-          tag="div"
-          :schema="editSchema.floatAccountGroup"
-          :model="floatAccountGroup"
-        />
-        <button @click="updateFloatAccountGroup()" class="btn btn-primary float-left submit-btn">ثبت</button>
-        <button
-          v-if="floatAccountGroup.id"
-          @click="deleteFloatAccountGroup(floatAccountGroup.id)"
-          class="btn btn-danger float-left submit-btn"
-          style="margin-left: 15px;"
-        >حذف</button>
+        <template v-if="floatAccountGroup.id">
+          <vue-form-generator
+            tag="div"
+            :schema="editSchema.floatAccountGroup"
+            :model="floatAccountGroup"
+          />
+          <button
+            @click="updateFloatAccountGroup()"
+            class="btn btn-primary float-left submit-btn"
+          >ثبت</button>
+          <button
+            v-if="floatAccountGroup.id"
+            @click="deleteFloatAccountGroup(floatAccountGroup.id)"
+            class="btn btn-danger float-left submit-btn"
+            style="margin-left: 15px;"
+          >حذف</button>
+        </template>
       </div>
       <div class="tab-pane fade" id="nav-float" role="tabpanel">
         <div class="row">
@@ -58,26 +63,18 @@
               label="name"
             />
           </div>
-          <div class="col-md-8">
-            <nav style="margin-top: 20px;" v-if="floatAccount.id">
-              <ol class="breadcrumb">
-                <li style="padding-left: 15px;">
-                  <b>گروه حساب تفضیلی شناور:</b>
-                </li>
-                <li class="breadcrumb-item">{{ floatAccount.floatAccountGroup.name }}</li>
-              </ol>
-            </nav>
-          </div>
         </div>
         <hr>
-        <vue-form-generator tag="div" :schema="editSchema.floatAccounts" :model="floatAccount"/>
-        <button @click="updateFloatAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-        <button
-          v-if="floatAccount.id"
-          @click="deleteFloatAccount(floatAccount.id)"
-          class="btn btn-danger float-left submit-btn"
-          style="margin-left: 15px;"
-        >حذف</button>
+        <template v-if="floatAccount.id">
+          <vue-form-generator tag="div" :schema="editSchema.floatAccounts" :model="floatAccount"/>
+          <button @click="updateFloatAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
+          <button
+            v-if="floatAccount.id"
+            @click="deleteFloatAccount(floatAccount.id)"
+            class="btn btn-danger float-left submit-btn"
+            style="margin-left: 15px;"
+          >حذف</button>
+        </template>
       </div>
     </div>
   </div>
@@ -87,7 +84,6 @@
 import accountMixin from "@/mixin/account";
 
 export default {
-  name: "Edit",
   mixins: [accountMixin],
   created() {
     this.mode = "edit";
@@ -104,7 +100,7 @@ export default {
   },
   watch: {
     account() {
-      console.log(this.account);
+      // console.log(this.account);
     }
   }
 };

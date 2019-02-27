@@ -20,7 +20,7 @@ export default {
       field = fields.filter(f => f.model == 'floatAccountGroup')[0];
       field && (field.values = data.floatAccountGroups);
 
-      field = fields.filter(f => f.model == 'floatAccountGroup')[0];
+      field = fields.filter(f => f.model == 'floatAccountGroups')[0];
       field && (field.values = data.floatAccountGroups);
     })
 
@@ -545,16 +545,17 @@ export default {
           type: "input",
           inputType: "text",
           model: "name",
-          styleClasses: "col-sm-12 col-lg-3"
+          styleClasses: "col-sm-12 col-lg-4"
         },
         {
           label: "گروه حساب تفضیلی شناور",
           type: "vueMultiSelect",
-          model: "floatAccountGroup",
-          styleClasses: "col-sm-12 col-lg-3",
+          model: "floatAccountGroups",
+          styleClasses: "col-sm-12 col-lg-8",
           selectOptions: {
             label: 'name',
             trackBy: 'id',
+            multiple: true,
           },
           values: [],
         },
@@ -563,7 +564,7 @@ export default {
           type: "textArea",
           model: "explanation",
           rows: 4,
-          styleClasses: "col-sm-12 col-lg-6"
+          styleClasses: "col-sm-12 col-lg-9"
 
         }
       ]
