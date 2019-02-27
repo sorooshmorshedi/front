@@ -1,5 +1,6 @@
 <template>
   <vue-multiselect
+    :multiple="multiple"
     select-label
     select-group-label
     selected-label
@@ -23,7 +24,7 @@ import vueMultiselect from "vue-multiselect";
 export default {
   name: "Multiselect",
   components: { vueMultiselect },
-  props: ["value", "options", "trackBy", "label"],
+  props: ["value", "options", "trackBy", "label", "multiple"],
   data() {
     return {
       localValue: null
