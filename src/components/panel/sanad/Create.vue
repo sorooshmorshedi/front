@@ -140,11 +140,11 @@
                         <input type="text" class="form-control" v-model="rows[i].explanation">
                       </td>
                       <td
-                        v-tooltip="floatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
+                        v-tooltip="getFloatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
                       >
                         <multiselect
                           dir="rtl"
-                          :options="floatAccounts(rows[i])"
+                          :options="getFloatAccounts(rows[i])"
                           v-model="rows[i].floatAccount"
                           track-by="id"
                           label="name"
@@ -529,7 +529,7 @@ export default {
         }
       });
     },
-    floatAccounts(row) {
+    getFloatAccounts(row) {
       if (row.account && row.account.floatAccountGroup) {
         return row.account.floatAccountGroup.floatAccounts;
       } else {
