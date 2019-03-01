@@ -2,6 +2,7 @@ import Panel from '@/components/panel/Panel';
 
 import List from '@/components/panel/lists/List';
 import Balance from '@/components/panel/balance/Balance';
+import FloatBalance from '@/components/panel/FloatBalance/FloatBalance';
 import Ledger from '@/components/panel/ledger/Ledger';
 import Journal from '@/components/panel/journal/Journal';
 import IncomeStatement from '@/components/panel/incomeStatement/IncomeStatement';
@@ -22,6 +23,11 @@ export default [{
       name: 'BalanceReport',
       path: 'balance',
       component: Balance,
+    },
+    {
+      name: 'FloatBalanceReport',
+      path: 'balance/float',
+      component: FloatBalance,
     },
     {
       name: 'LedgerReport',

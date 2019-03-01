@@ -9,9 +9,9 @@ export default {
     },
     {
       th: "تفضیلی شناور",
-      td: "float_name",
+      td: "float_account_name",
       type: "text",
-      filters: ["float_name"]
+      filters: ["float_account_name"]
     },
     {
       th: "جمع بدهکار",
