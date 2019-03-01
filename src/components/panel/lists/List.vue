@@ -1,12 +1,18 @@
 <template>
   <div class="row rtl">
     <div class="col-12">
-      <div class="card right ">
+      <div class="card right">
         <div class="card-body">
-          <div class="title">
-            لیست {{ options.label }}
-          </div>
-          <datatable v-if="showTable" :cols="options.cols" :url="options.url" :default-filters="{type}" :router-name="options.routerName" :router-default-params="options.defaultParams" ref="datatable" />
+          <div class="title">لیست {{ options.label }}</div>
+          <datatable
+            v-if="showTable"
+            :cols="options.cols"
+            :url="options.url"
+            :default-filters="{type}"
+            :router-name="options.routerName"
+            :router-default-params="options.defaultParams"
+            ref="datatable"
+          />
         </div>
       </div>
     </div>

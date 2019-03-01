@@ -164,6 +164,8 @@
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">فهرست فرم ها</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'List', params: {form: 'sanad'}}">اسناد</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params: {form: 'sanadUnbalanced'}}">اسناد نامتوازن</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params: {form: 'sanadEmpty'}}">اسناد خالی</router-link>
             <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"
