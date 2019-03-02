@@ -186,6 +186,20 @@ Vue.mixin({
     },
     print() {
       print();
+    },
+    removeNode(arr, node, by = 'id') {
+      let index = _.findIndex(
+        arr,
+        o => o[by] == node[by]
+      );
+      arr.splice(index, 1);
+    },
+    replaceNode(arr, node, by = 'id') {
+      let index = _.findIndex(
+        arr,
+        o => o[by] == node[by]
+      );
+      arr.splice(index, 1, node);
     }
   },
   computed: {
