@@ -42,11 +42,11 @@ import FactorForm from '@/components/panel/factor/Form';
 import FactorExpenses from '@/components/panel/factor/Expenses';
 import ReceiptAndRemittance from '@/components/panel/factor/ReceiptAndRemittance';
 
-
 import Cheque from '@/components/panel/cheque/Cheque';
 import Chequebook from '@/components/panel/cheque/Chequebook';
 import ReceivedCheques from '@/components/panel/cheque/ReceivedCheques';
 
+import ExportVerifiers from '@/components/panel/exportVerifiers/ExportVerifiers';
 
 export default [{
   name: 'Panel',
@@ -221,6 +221,11 @@ export default [{
 
         }
       ]
+    },
+    {
+      name: 'ExportVerifiers',
+      path: 'exportVerifiers',
+      component: ExportVerifiers,
     }
 
   ]

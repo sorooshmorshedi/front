@@ -27,7 +27,11 @@
               <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">شرکت</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <router-link class="dropdown-item" :to="{name:'CompaniesList'}">لیست شرکت ها</router-link>
-                <router-link class="dropdown-item disabled" :event="''" :to="{name:'CreateCompany'}">تعریف شرکت</router-link>
+                <router-link
+                  class="dropdown-item disabled"
+                  :event="''"
+                  :to="{name:'CreateCompany'}"
+                >تعریف شرکت</router-link>
               </div>
             </div>
             <div class="dropdown-divider"></div>
@@ -101,6 +105,11 @@
                   class="dropdown-item"
                   :to="{name:'FactorExpenses', params: { factorType: 'sale'}}"
                 >هزینه های فاکتور فروش</router-link>
+                <div class="dropdown-divider"></div>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'ExportVerifiers'}"
+                >تایید کنندگان خروجی</router-link>
               </div>
             </div>
           </div>
@@ -164,8 +173,14 @@
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">فهرست فرم ها</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'List', params: {form: 'sanad'}}">اسناد</router-link>
-            <router-link class="dropdown-item" :to="{name:'List', params: {form: 'sanadUnbalanced'}}">اسناد نامتوازن</router-link>
-            <router-link class="dropdown-item" :to="{name:'List', params: {form: 'sanadEmpty'}}">اسناد خالی</router-link>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'List', params: {form: 'sanadUnbalanced'}}"
+            >اسناد نامتوازن</router-link>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'List', params: {form: 'sanadEmpty'}}"
+            >اسناد خالی</router-link>
             <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"
