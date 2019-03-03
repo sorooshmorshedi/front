@@ -60,11 +60,12 @@ Vue.mixin({
           if (!error.response) {
             console.warn('NO RESPONSE FROM SERVER');
             // console.warn('Call Success any way');
-            // options.success();
+            options.success();
             return;
           }
           if (this.OGR == 0) {
             console.warn('OGR IS ZERO');
+            options.success();
             return;
           }
           this.OGR--;
@@ -134,7 +135,6 @@ Vue.mixin({
       $(selector).modal(func);
     },
     copy(obj) {
-      // return JSON.parse(JSON.stringify(obj));
       let res = null;
       if (Array.isArray(obj)) {
         res = obj.slice();
@@ -142,10 +142,9 @@ Vue.mixin({
         res = Object.assign({}, obj);
       }
       return res;
-      // console.log('copy result: ', res);
     },
     log(t) {
-      console.log(t);
+      console.log(moment().format('HH:mm:ss:SS'), t);
     },
     openSanad(sanadId) {
       let routeData = this.$router.resolve({

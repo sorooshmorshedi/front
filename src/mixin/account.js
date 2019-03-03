@@ -39,10 +39,10 @@ export default {
   },
   watch: {
     'account.level': function () {
-      this.autoCodeAndType && this.setCodeAndType();
+      this.config.autoCodeAndType && this.setCodeAndType();
     },
     'account.parent': function () {
-      this.autoCodeAndType && this.setCodeAndType();
+      this.config.autoCodeAndType && this.setCodeAndType();
     },
   },
   methods: {
@@ -78,7 +78,7 @@ export default {
         this.account.type = this.account.parent.type;
       }
     },
-    async getAllAccounts(force = false) {
+    async getAllAccounts(force = false, callback = null) {
       this.log('Get All Accounts Data');
       Promise.all([
         this.getAccounts(force, false),
@@ -90,6 +90,7 @@ export default {
       ]).then(values => {
         this.log('Get All Accounts Data : Done');
         this.init();
+        callback && callback();
       })
 
     },

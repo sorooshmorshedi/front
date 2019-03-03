@@ -3,8 +3,6 @@
     <input type="text" v-model="searchAccount">
     <v-tree v-if="treeAccounts.length" class="rtl" ref="tree" :data="treeAccounts" :tpl="tpl"/>
 
-    <!-- <input type="text" v-model="searchFloatAccount" />
-    <v-tree v-if="treeFloatAccounts.length" class="rtl" ref='floatTree' :data='treeFloatAccounts' :tpl="floatTpl" />-->
     <div class="modal" id="account-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -109,22 +107,12 @@ export default {
         </span>
       );
     },
-    floatTpl(node, ctx) {
-      // if (!node.id) {
-      //   return <span domPropsInnerHTML={node.title} />;
-      // }
-      return (
-        <span class="tree-tpl">
-          <span domPropsInnerHTML={node.title} />
-        </span>
-      );
-    },
     collapse(accounts = this.treeAccounts) {
       accounts.forEach(o => {
         o.expanded = false;
         if (o.children.length) this.collapse(o.children);
       });
-    }
+    },
   },
   watch: {
     searchAccount() {
@@ -140,10 +128,13 @@ export default {
   computed: {
     treeAccounts() {
       return [];
+      this.log("ReCreate TreeAccounts");
       if (this.accounts.length == 0) return [];
-      console.log("ReCreate TreeAccounts");
 
-      let accounts = this.copy(this.accounts);
+      let accounts = [];
+      for (const account of this.accounts) {
+        accounts.push(account);
+      }
 
       let root = [
         {

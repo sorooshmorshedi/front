@@ -79,6 +79,7 @@ export default {
     this.mode = "create";
   },
   mounted() {
+    this.setCodeAndType();
     $('a[data-toggle="tab"]').on("shown.bs.tab", e => {
       this.clearAccounts();
       this.account.level = e.target.id.split("-")[1];
