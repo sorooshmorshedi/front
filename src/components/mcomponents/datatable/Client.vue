@@ -149,7 +149,9 @@ export default {
     data: {},
     colHeaders: {},
     hiddenCols: {
-      default: []
+      default() {
+        return [];
+      }
     }
   },
   components: { date, money, mtime },
@@ -159,7 +161,7 @@ export default {
       offset: 0,
       count: 0,
       filters: {},
-      order: "",
+      order: ""
     };
   },
   created() {
@@ -188,7 +190,7 @@ export default {
         }
         return rev ? -1 : 0;
       });
-    },
+    }
   },
   computed: {
     items() {
