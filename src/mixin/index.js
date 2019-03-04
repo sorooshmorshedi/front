@@ -47,25 +47,25 @@ Vue.mixin({
           params: options.params,
         })
         .then((res) => {
-          // console.log('success');
-          let data = res.data;
-          if (data.token) {
-            localStorage.setItem('token', data.token);
-            this.token = data.token;
+          try {
+            let data = res.data;
+            if (data.token) {
+              localStorage.setItem('token', data.token);
+              this.token = data.token;
+            }
+            this.OGR--;
+            options.success(res.data);
+          } catch (error) {
+            console.error('Error in then: ', error);
           }
-          this.OGR--;
-          options.success(res.data);
         })
         .catch((error) => {
           if (!error.response) {
             console.warn('NO RESPONSE FROM SERVER');
-            // console.warn('Call Success any way');
-            // options.success({});
             return;
           }
           if (this.OGR == 0) {
             console.warn('OGR IS ZERO');
-            // options.success();
             return;
           }
           this.OGR--;
