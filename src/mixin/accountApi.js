@@ -108,9 +108,9 @@ export default {
         method: 'post',
         data: data,
         success: data => {
+          this.notify('حساب با موفقیت ساخته شد', 'success');
           this.getData(true);
           this.modal("#account-modal", "hide");
-          this.notify('حساب با موفقیت ساخته شد', 'success');
         }
       })
     },
@@ -133,9 +133,9 @@ export default {
         method: 'put',
         data: data,
         success: data => {
+          this.notify('حساب با موفقیت ویرایش شد', 'success');
           this.getData(true);
           this.modal("#account-modal", "hide");
-          this.notify('حساب با موفقیت ویرایش شد', 'success');
         }
       })
 
@@ -190,8 +190,8 @@ export default {
         url: this.endpoint('accounts/floatAccountGroups/' + id),
         method: 'delete',
         success: data => {
-          this.getFloatAccounts();
           this.notify('گروه حساب شناور با موفقیت حذف شد', 'success');
+          this.getFloatAccounts();
           this.getFloatAccountGroups(true);
         }
       })
@@ -225,8 +225,8 @@ export default {
         method: 'put',
         data: data,
         success: data => {
-          this.getFloatAccounts();
           this.notify('حساب شناور با موفقیت ویرایش شد', 'success');
+          this.getFloatAccounts();
         }
       })
 

@@ -60,12 +60,12 @@ Vue.mixin({
           if (!error.response) {
             console.warn('NO RESPONSE FROM SERVER');
             // console.warn('Call Success any way');
-            options.success();
+            // options.success({});
             return;
           }
           if (this.OGR == 0) {
             console.warn('OGR IS ZERO');
-            options.success();
+            // options.success();
             return;
           }
           this.OGR--;
