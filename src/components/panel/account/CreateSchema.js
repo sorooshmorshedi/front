@@ -124,17 +124,6 @@ export default {
           model: "name",
           styleClasses: "col-sm-12 col-lg-4"
         },
-        {
-          label: "نوع حساب پیشفرض",
-          type: "vueMultiSelect",
-          model: "type",
-          styleClasses: "col-sm-12 col-lg-3",
-          selectOptions: {
-            label: 'name',
-            trackBy: 'id',
-          },
-          values: [],
-        }
       ]
     }]
 
@@ -169,17 +158,6 @@ export default {
           inputType: "text",
           model: "name",
           styleClasses: "col-sm-12 col-lg-3"
-        },
-        {
-          label: "نوع حساب ",
-          type: "vueMultiSelect",
-          model: "type",
-          styleClasses: "col-sm-12 col-lg-3",
-          selectOptions: {
-            label: 'name',
-            trackBy: 'id',
-          },
-          values: [],
         },
         {
           label: "گروه مرکز هزینه",

@@ -108,9 +108,9 @@ export default {
         method: 'post',
         data: data,
         success: data => {
-          this.notify('حساب با موفقیت ساخته شد', 'success');
-          this.getData(true);
+          this.getAccounts(true);
           this.modal("#account-modal", "hide");
+          this.notify('حساب با موفقیت ساخته شد', 'success');
         }
       })
     },
@@ -133,9 +133,9 @@ export default {
         method: 'put',
         data: data,
         success: data => {
-          this.notify('حساب با موفقیت ویرایش شد', 'success');
-          this.getData(true);
+          this.getAccounts(true);
           this.modal("#account-modal", "hide");
+          this.notify('حساب با موفقیت ویرایش شد', 'success');
         }
       })
 
@@ -150,9 +150,8 @@ export default {
         url: this.endpoint('accounts/accounts/' + node.id),
         method: 'delete',
         success: data => {
-          this.notify('حساب با موفقیت حذف شد', 'success');
-          this.$refs.tree && this.$refs.tree.delNode(node.parent, node)
           if (this.mode == 'edit') this.getAccounts(true);
+          this.notify('حساب با موفقیت حذف شد', 'success');
         }
       })
     },
@@ -163,8 +162,8 @@ export default {
         method: 'post',
         data: data,
         success: data => {
-          this.notify('گروه حساب شناور با موفقیت ساخته شد', 'success');
           this.getFloatAccountGroups(true);
+          this.notify('گروه حساب شناور با موفقیت ساخته شد', 'success');
         }
       })
     },
@@ -175,8 +174,8 @@ export default {
         method: 'put',
         data: data,
         success: data => {
-          this.notify('گروه حساب شناور با موفقیت ویرایش شد', 'success');
           this.getFloatAccountGroups(true);
+          this.notify('گروه حساب شناور با موفقیت ویرایش شد', 'success');
         }
       })
 
@@ -190,9 +189,9 @@ export default {
         url: this.endpoint('accounts/floatAccountGroups/' + id),
         method: 'delete',
         success: data => {
-          this.notify('گروه حساب شناور با موفقیت حذف شد', 'success');
           this.getFloatAccounts();
           this.getFloatAccountGroups(true);
+          this.notify('گروه حساب شناور با موفقیت حذف شد', 'success');
         }
       })
     },
@@ -207,8 +206,10 @@ export default {
         method: 'post',
         data: data,
         success: data => {
-          this.notify('حساب شناور با موفقیت ساخته شد', 'success');
           this.clearAccounts();
+          this.getFloatAccounts();
+          this.getFloatAccountGroups(true);
+          this.notify('حساب شناور با موفقیت ساخته شد', 'success');
         }
       })
     },
@@ -225,8 +226,8 @@ export default {
         method: 'put',
         data: data,
         success: data => {
-          this.notify('حساب شناور با موفقیت ویرایش شد', 'success');
           this.getFloatAccounts();
+          this.notify('حساب شناور با موفقیت ویرایش شد', 'success');
         }
       })
 
@@ -241,8 +242,8 @@ export default {
         url: this.endpoint('accounts/floatAccounts/' + id),
         method: 'delete',
         success: data => {
-          this.notify('حساب شناور با موفقیت حذف شد', 'success');
           this.getFloatAccountGroups(true);
+          this.notify('حساب شناور با موفقیت حذف شد', 'success');
         }
       })
     },
@@ -269,9 +270,9 @@ export default {
             method: 'post',
             data: payload,
             success: data => {
-              this.notify('شخص با موفقیت ساخته شد', 'success');
               this.getAccounts(true);
               this.clearAccounts();
+              this.notify('شخص با موفقیت ساخته شد', 'success');
             }
           })
         }
@@ -300,9 +301,9 @@ export default {
             method: 'put',
             data: payload,
             success: data => {
-              this.notify('شخص با موفقیت ویرایش شد', 'success');
               this.getAccounts(true);
               this.clearAccounts();
+              this.notify('شخص با موفقیت ویرایش شد', 'success');
             }
           })
         }
@@ -332,9 +333,9 @@ export default {
             method: 'post',
             data: payload,
             success: data => {
-              this.notify('بانک با موفقیت ساخته شد', 'success');
               this.getAccounts(true);
               this.clearAccounts();
+              this.notify('بانک با موفقیت ساخته شد', 'success');
             }
           })
         }
@@ -363,9 +364,9 @@ export default {
             method: 'put',
             data: payload,
             success: data => {
-              this.notify('بانک با موفقیت ویرایش شد', 'success');
               this.getAccounts(true);
               this.clearAccounts();
+              this.notify('بانک با موفقیت ویرایش شد', 'success');
             }
           })
         }
