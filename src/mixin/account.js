@@ -16,7 +16,9 @@ export default {
         code: '',
         type: {},
       },
-      person: {},
+      person: {
+        type: '',
+      },
       bank: {},
       floatAccount: {},
       floatAccountGroup: {},
@@ -33,7 +35,7 @@ export default {
         3: 4
       },
       config: {
-        autoCodeAndType: true 
+        autoCodeAndType: true
       }
     }
   },
@@ -90,7 +92,7 @@ export default {
       ]).then(values => {
         this.log('Get All Accounts Data : Done');
         this.init();
-        callback && callback();
+        if (typeof (callback) === 'function') callback();
       })
 
     },
@@ -115,5 +117,36 @@ export default {
       return true;
 
     }
+  }
+}
+
+export function fromCodeFilter(item, value) {
+  if (!value) return true;
+  for (let i = value.length; i < 9; i++) value += '0';
+  switch (item.level) {
+    case 0:
+      return item.code >= value[0];
+    case 1:
+      return item.code >= value.substr(0, 3);
+    case 2:
+      return item.code >= value.substr(0, 5);
+    case 3:
+      return item.code >= value.substr(0, 9);
+  }
+
+}
+
+export function toCodeFilter(item, value) {
+  if (!value) return true;
+  for (let i = value.length; i < 9; i++) value += '9';
+  switch (item.level) {
+    case 0:
+      return item.code <= value[0];
+    case 1:
+      return item.code <= value.substr(0, 3);
+    case 2:
+      return item.code <= value.substr(0, 5);
+    case 3:
+      return item.code <= value.substr(0, 9);
   }
 }
