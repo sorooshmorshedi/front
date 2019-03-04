@@ -176,20 +176,6 @@ export default {
       } else {
         this.filters = {};
       }
-    },
-    sortItems(items) {
-      this.items.sort((a, b) => {
-        let rev = false;
-        let field = this.order.split("__").join("");
-        if (this.order[0] == "-") {
-          rev = true;
-          field = field.substr(1, field.length - 1);
-        }
-        if (a[field] > b[field]) {
-          return rev ? 1 : -1;
-        }
-        return rev ? -1 : 0;
-      });
     }
   },
   computed: {
@@ -237,7 +223,7 @@ export default {
         return true;
       });
 
-      this.order && this.sortItems();
+      if (this.order) res = this.sortItems(res);
 
       return res;
     },
@@ -360,6 +346,21 @@ export default {
     },
     rowClick(item) {
       this.$emit("rowClick", item);
+    },
+    sortItems(items) {
+      items.sort((a, b) => {
+        let rev = false;
+        let field = this.order.split("__").join("");
+        if (this.order[0] == "-") {
+          rev = true;
+          field = field.substr(1, field.length - 1);
+        }
+        if (a[field] > b[field]) {
+          return rev ? 1 : -1;
+        }
+        return rev ? -1 : 0;
+      });
+      return items;
     }
   }
 };
