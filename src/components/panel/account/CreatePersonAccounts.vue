@@ -1,58 +1,65 @@
 <template>
-  <div class>
-    <nav>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <a
-          class="nav-item nav-link active"
-          id="nav-buyer-tab"
-          data-toggle="tab"
-          href="#nav-buyer"
-          role="tab"
-        >خریدار</a>
-        <a
-          class="nav-item nav-link"
-          id="nav-seller-tab"
-          data-toggle="tab"
-          href="#nav-seller"
-          role="tab"
-        >فروشنده</a>
-      </div>
-    </nav>
-    <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="nav-buyer" role="tabpanel">
-        <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
-          <strong>خطا</strong>تعداد حساب های این سطح به حداکثر خود رسیده است
+  <div class="row">
+    <div class="col-12 col-lg-7">
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a
+            class="nav-item nav-link active"
+            id="nav-buyer-tab"
+            data-toggle="tab"
+            href="#nav-buyer"
+            role="tab"
+          >خریدار</a>
+          <a
+            class="nav-item nav-link"
+            id="nav-seller-tab"
+            data-toggle="tab"
+            href="#nav-seller"
+            role="tab"
+          >فروشنده</a>
         </div>
-        <template v-else>
-          <vue-form-generator tag="div" :schema="createSchema.personAccount" :model="account"/>
-          <hr>
-          <br>
-          <vue-form-generator tag="div" :schema="createSchema.person" :model="person"/>
-          <button @click="storeBuyer()" class="btn btn-primary float-left submit-btn">ثبت</button>
-        </template>
-      </div>
-      <div class="tab-pane fade" id="nav-seller" role="tabpanel">
-        <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
-          <strong>خطا</strong>تعداد حساب های این سطح به حداکثر خود رسیده است
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-buyer" role="tabpanel">
+          <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
+            <strong>خطا</strong>تعداد حساب های این سطح به حداکثر خود رسیده است
+          </div>
+          <template v-else>
+            <vue-form-generator tag="div" :schema="createSchema.personAccount" :model="account"/>
+            <hr>
+            <br>
+            <vue-form-generator tag="div" :schema="createSchema.person" :model="person"/>
+            <button @click="storeBuyer()" class="btn btn-primary float-left submit-btn">ثبت</button>
+          </template>
         </div>
-        <template v-else>
-          <vue-form-generator tag="div" :schema="createSchema.personAccount" :model="account"/>
-          <hr>
-          <br>
-          <vue-form-generator tag="div" :schema="createSchema.person" :model="person"/>
-          <button @click="storeSeller()" class="btn btn-primary float-left submit-btn">ثبت</button>
-        </template>
+        <div class="tab-pane fade" id="nav-seller" role="tabpanel">
+          <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
+            <strong>خطا</strong>تعداد حساب های این سطح به حداکثر خود رسیده است
+          </div>
+          <template v-else>
+            <vue-form-generator tag="div" :schema="createSchema.personAccount" :model="account"/>
+            <hr>
+            <br>
+            <vue-form-generator tag="div" :schema="createSchema.person" :model="person"/>
+            <button @click="storeSeller()" class="btn btn-primary float-left submit-btn">ثبت</button>
+          </template>
+        </div>
       </div>
+    </div>
+    <div class="col-12 col-lg-5">
+      <accounts-list :accounts="personAccounsForList"/>
     </div>
   </div>
 </template>
 
 <script>
 import accountMixin from "@/mixin/account";
+import AccountsList from "./AccountsList";
 
 export default {
   name: "Create",
   mixins: [accountMixin],
+  components: { AccountsList },
   created() {
     this.mode = "create";
     this.config.autoCodeAndType = false;
@@ -102,8 +109,24 @@ export default {
     }
   },
   watch: {
+    accounts() {
+      this.log("watch: accounts");
+      this.clearAccounts();
+      this.account.level = 3;
+      this.person.type = "buyer";
+      this.setPersonAccountCode();
+    },
     "person.personType": function() {
       this.setPersonAccountCode();
+    }
+  },
+  computed: {
+    personAccounsForList() {
+      if (this.person.type) {
+        return this.accountsSelectValues[this.person.type + "s"];
+      } else {
+        return [];
+      }
     }
   }
 };

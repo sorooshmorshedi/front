@@ -1,39 +1,46 @@
 <template>
-  <div class>
-    <nav>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <a
-          class="nav-item nav-link active"
-          id="nav-bank-tab"
-          data-toggle="tab"
-          href="#nav-bank"
-          role="tab"
-        >بانک</a>
-      </div>
-    </nav>
-    <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="nav-bank" role="tabpanel">
-        <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
-          <strong>خطا</strong>تعداد حساب های این سطح به حداکثر خود رسیده است
+  <div class="row">
+    <div class="col-12 col-lg-7">
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a
+            class="nav-item nav-link active"
+            id="nav-bank-tab"
+            data-toggle="tab"
+            href="#nav-bank"
+            role="tab"
+          >بانک</a>
         </div>
-        <template v-else>
-          <vue-form-generator tag="div" :schema="createSchema.bankAccount" :model="account"/>
-          <hr>
-          <br>
-          <vue-form-generator tag="div" :schema="createSchema.bank" :model="bank"/>
-          <button @click="storeBankAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
-        </template>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-bank" role="tabpanel">
+          <div v-if="!hasValidCode" class="alert alert-warning" role="alert">
+            <strong>خطا</strong>تعداد حساب های این سطح به حداکثر خود رسیده است
+          </div>
+          <template v-else>
+            <vue-form-generator tag="div" :schema="createSchema.bankAccount" :model="account"/>
+            <hr>
+            <br>
+            <vue-form-generator tag="div" :schema="createSchema.bank" :model="bank"/>
+            <button @click="storeBankAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
+          </template>
+        </div>
       </div>
+    </div>
+    <div class="col-12 col-lg-5">
+      <accounts-list :accounts="accountsSelectValues.banks"/>
     </div>
   </div>
 </template>
 
 <script>
 import accountMixin from "@/mixin/account";
+import AccountsList from "./AccountsList";
 
 export default {
   name: "Create",
   mixins: [accountMixin],
+  components: { AccountsList },
   created() {
     this.mode = "create";
   },

@@ -1,52 +1,59 @@
 <template>
-  <div>
-    <nav>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <a
-          class="nav-item nav-link active"
-          id="nav-bank-tab"
-          data-toggle="tab"
-          href="#nav-bank"
-          role="tab"
-        >بانک</a>
-      </div>
-    </nav>
-    <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="nav-bank" role="tabpanel">
-        <div class="row">
-          <div class="form-group col-md-4">
-            <label>انتخاب حساب جهت ویرایش</label>
-            <multiselect
-              dir="rtl"
-              :options="this.accountsSelectValues.banks"
-              v-model="account"
-              track-by="id"
-              label="title"
-            />
-          </div>
+  <div class="row">
+    <div class="col-12 col-lg-7">
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a
+            class="nav-item nav-link active"
+            id="nav-bank-tab"
+            data-toggle="tab"
+            href="#nav-bank"
+            role="tab"
+          >بانک</a>
         </div>
-        <hr>
-        <vue-form-generator tag="div" :schema="editSchema.bankAccount" :model="account"/>
-        <hr>
-        <br>
-        <vue-form-generator
-          tag="div"
-          v-if="account && account.bank"
-          :schema="editSchema.bank"
-          :model="account.bank"
-        />
-        <button @click="updateBank()" class="btn btn-primary float-left submit-btn">ثبت</button>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-bank" role="tabpanel">
+          <div class="row">
+            <div class="form-group col-md-4">
+              <label>انتخاب حساب جهت ویرایش</label>
+              <multiselect
+                dir="rtl"
+                :options="this.accountsSelectValues.banks"
+                v-model="account"
+                track-by="id"
+                label="title"
+              />
+            </div>
+          </div>
+          <hr>
+          <vue-form-generator tag="div" :schema="editSchema.bankAccount" :model="account"/>
+          <hr>
+          <br>
+          <vue-form-generator
+            tag="div"
+            v-if="account && account.bank"
+            :schema="editSchema.bank"
+            :model="account.bank"
+          />
+          <button @click="updateBank()" class="btn btn-primary float-left submit-btn">ثبت</button>
+        </div>
       </div>
+    </div>
+    <div class="col-12 col-lg-5">
+      <accounts-list :accounts="accountsSelectValues.banks"/>
     </div>
   </div>
 </template>
 
 <script>
 import accountMixin from "@/mixin/account";
+import AccountsList from "./AccountsList";
 
 export default {
   name: "Edit",
   mixins: [accountMixin],
+  components: { AccountsList },
   created() {
     this.mode = "edit";
   },
