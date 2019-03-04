@@ -93,7 +93,7 @@
         </thead>
         <tbody>
           <!-- Rows -->
-          <tr v-for="(item, i) in items" :key="i" :class="item.classes">
+          <tr v-for="(item, i) in items" :key="i" :class="item.classes" @click="rowClick(item)">
             <td>{{ offset+i+1 }}</td>
             <td v-for="(col, j) in notHiddenCols" :key="j">
               <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
@@ -357,6 +357,9 @@ export default {
         }
         return null;
       }
+    },
+    rowClick(item) {
+      this.$emit("rowClick", item);
     }
   }
 };
@@ -365,7 +368,7 @@ export default {
 <style lang="scss" scoped>
 .fixed-head {
   overflow-y: auto;
-  max-height: calc(100vh - 100px);
+  max-height: calc(100vh - 200px);
 }
 
 .fixed-head thead tr:nth-child(1) th {
