@@ -123,7 +123,10 @@ export default {
   watch: {
     ledgers: {
       handler() {
-        if (this.ledgers[this.ledgers.length - 1].level) this.ledgers.push({id: 0});
+        let lastLedger = this.ledgers[this.ledgers.length - 1];
+        if (lastLedger.level) {
+          this.ledgers.push({ id: lastLedger.id + 1 });
+        }
       },
       deep: true
     }
