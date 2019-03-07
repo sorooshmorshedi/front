@@ -5,7 +5,8 @@
         <div class="modal-header">
           <h4 class="modal-title">
             تغییر وضعیت های چک
-          </h4>
+            {{ chequeLabel }}
+            </h4>
           <button type="button" class="close" data-dismiss="modal">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -13,6 +14,24 @@
         <div class="modal-body">
           <div class="container-fluid">
             <div class="row">
+              <div class="col-12">
+                <div class="row key-value-info">
+                  <div class="col-md-6">
+                    <span class="key">شماره چک:</span>
+                    <span class="value">{{ cheque.serial }}</span>
+                  </div>
+                  <div class="col-md-6">
+                    <span class="key">مبلغ چک:</span>
+                    <span class="value">{{ cheque.value | toMoney }}</span>
+                  </div>
+                  <div class="col-md-12" v-if="cheque.account">
+                    <span v-if="isPaidCheque" class="key">دریافت کننده:</span>
+                    <span v-else class="key">پرداخت کننده:</span>
+                    <span class="value">{{ cheque.account.title }}</span>
+                    <span v-if="cheque.floatAccount" class="value">{{ cheque.floatAccount.name }}</span>
+                  </div>
+                </div>
+              </div>
               <div class="col-12">
                 <div class="table-responsive">
                   <table class="table table-striped">
@@ -39,10 +58,17 @@
                         <td>{{ sc.sanad.items[1].account.name }}</td>
                         <td>{{ sc.explanation }}</td>
                         <td>
-                          <router-link :to="{name: 'CreateSanad',params:{id: sc.sanad.id }}" target="_blank">مشاهده سند</router-link>
+                          <router-link
+                            :to="{name: 'CreateSanad',params:{id: sc.sanad.id }}"
+                            target="_blank"
+                          >مشاهده سند</router-link>
                         </td>
                         <td>
-                          <i v-if="i == statusChanges.length-1 && (cheque.type == 'paid' || i != 0)" @click.prevent="deleteStatusChange(sc)" class="fas fa-trash-alt text-danger" />
+                          <i
+                            v-if="i == statusChanges.length-1 && (isPaidCheque || i != 0)"
+                            @click.prevent="deleteStatusChange(sc)"
+                            class="fas fa-trash-alt text-danger"
+                          />
                         </td>
                       </tr>
                     </tbody>
@@ -88,7 +114,7 @@ export default {
         url: this.endpoint("cheques/statusChange/" + sc.id),
         method: "delete",
         success: data => {
-          if (this.cheque.type == "paid") this.getChequebooks(true);
+          if (this.isPaidCheque) this.getChequebooks(true);
           else this.getCheques(true);
           this.statusChanges.splice(this.statusChanges.length - 1, 1);
           this.successNotify();

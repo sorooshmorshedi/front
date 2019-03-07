@@ -6,8 +6,30 @@ import {
 } from 'lodash';
 
 export default {
+  data() {
+    return {
+      chequeTypes: [{
+          label: 'شخصی',
+          value: 'p'
+        },
+        {
+          label: 'شخصی سایرین',
+          value: 'op'
+        },
+        {
+          label: 'شرکت',
+          value: 'c'
+        },
+        {
+          label: 'شرکت سایرین',
+          value: 'oc'
+        },
+
+      ]
+    };
+  },
   methods: {
-    getChequebooks(force = false, init = true) {
+    getChequebooks(force = false) {
       if (!force && this.chequebooks.length) return;
       return this.request({
         url: this.endpoint('cheques/chequebooks/'),
@@ -16,15 +38,12 @@ export default {
           this.$store.commit('setCheques', {
             chequebooks: data
           });
-          init && this.init();
         }
       })
     },
     storeChequebook() {
       let data = this.copy(this.chequebook);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data);
       data.code = this.chequebookCode;
       this.request({
         url: this.endpoint('cheques/chequebooks/'),
@@ -64,7 +83,7 @@ export default {
         }
       })
     },
-    getCheques(force = false, init = true) {
+    getCheques(force = false) {
       if (!force && this.cheques.length) return;
       return this.request({
         url: this.endpoint('cheques/cheques/'),
@@ -73,7 +92,6 @@ export default {
           this.$store.commit('setCheques', {
             cheques: data
           });
-          init && this.init();
         }
       })
     },
@@ -87,6 +105,15 @@ export default {
         }
       })
     },
+    // Helpers
+    lastStatusChangeDate(cheque) {
+      let lastStatusChange = _.maxBy(cheque.statusChanges, 'created_at');
+      if (lastStatusChange) return lastStatusChange.created_at;
+      return '-'
+    },
+    clearStatusChange() {
+      this.statusChange = {};
+    }
   },
   computed: {
     ...mapState({
@@ -116,6 +143,17 @@ export default {
         return code;
       }
       return 1;
+    },
+    // Helpers
+    isPaidCheque() {
+      if (!this.cheque) {
+        console.warn('No cheque data');
+        return false;
+      }
+      return this.cheque.received_or_paid == 'p'
+    },
+    chequeLabel() {
+      return this.isPaidCheque ? 'پرداختنی' : 'دریافتنی'
     },
   },
   filters: {

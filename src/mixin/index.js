@@ -81,13 +81,12 @@ Vue.mixin({
             return;
           }
           options.error && options.error(error.response);
-          // let errors = error.response.data;
-          // console.log(errors);
-          // return;
-          // this caused infinit loop
-          // Object.keys(errors).forEach(err => {
-          //   this.notify(err + ': ' + errors[err], 'danger');
-          // });
+          if (error.response && error.response.status == 400) {
+            let errors = error.response.data;
+            Object.keys(errors).forEach(err => {
+              this.notify(err + ': ' + errors[err], 'danger');
+            });
+          }
         });
     },
     initTooltips() {

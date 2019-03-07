@@ -163,8 +163,8 @@
             <div class="dropdown-submenu">
               <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">دفتر چک</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{name:'Chequebook'}">دسته چک</router-link>
-                <router-link class="dropdown-item" :to="{name:'ReceivedCheques'}">چک های دریافتی</router-link>
+                <router-link class="dropdown-item" :to="{name:'Chequebook'}">چک های پرداختنی</router-link>
+                <router-link class="dropdown-item" :to="{name:'ReceivedCheques'}">چک های دریافتنی</router-link>
               </div>
             </div>
           </div>

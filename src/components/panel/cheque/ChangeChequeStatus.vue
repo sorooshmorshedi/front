@@ -1,10 +1,16 @@
 <template>
-  <div class="modal fade" id="change-cheque-status-modal" tabindex="-1" v-if="cheque && cheque.account">
+  <div
+    class="modal fade"
+    id="change-cheque-status-modal"
+    tabindex="-1"
+    v-if="cheque && cheque.account"
+  >
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">
             تغییر وضعیت چک
+            {{ chequeLabel }}
           </h4>
           <button type="button" class="close" data-dismiss="modal">
             <span aria-hidden="true">&times;</span>
@@ -15,66 +21,95 @@
             <div class="title-2">مشخصات چک</div>
             <div class="row jumbotron">
               <div class="col-md-6">
-                <label> سریال چک: </label> {{ cheque.serial }}
+                <label>سریال چک:</label>
+                {{ cheque.serial }}
               </div>
               <div class="col-md-6">
-                <label>وضعیت: </label>
-                <span class="status-box">
-                  {{ cheque.status | chequeStatuses }}
-                </span>
+                <label>وضعیت:</label>
+                <span class="status-box">{{ cheque.status | chequeStatuses }}</span>
               </div>
               <div class="col-md-6">
-                <label> دریافت کننده: </label> {{ cheque.account.title }}
+                <label>دریافت کننده:</label>
+                {{ cheque.account.title }}
               </div>
               <div class="col-md-6" v-if="cheque.floatAccount">
-                <label> حساب شناور: </label> {{ cheque.floatAccount.name }}
+                <label>حساب شناور:</label>
+                {{ cheque.floatAccount.name }}
               </div>
               <div class="col-md-6">
-                <label> مبلغ: </label> {{ cheque.value | toMoney }}
+                <label>مبلغ:</label>
+                {{ cheque.value | toMoney }}
               </div>
               <div class="col-md-6">
-                <label> تاریخ سررسید: </label> {{ cheque.due }}
+                <label>تاریخ سررسید:</label>
+                {{ cheque.due }}
               </div>
               <div class="col-md-6">
-                <label v-if="cheque.type == 'paid'">تاریخ پرداخت:</label>
+                <label v-if="isPaidCheque">تاریخ پرداخت:</label>
                 <label v-else>تاریخ دریافت:</label>
                 {{ cheque.date }}
               </div>
-              <div class="col-md-6" v-if="cheque.type == 'received'">
+              <div class="col-md-6" v-if="!isPaidCheque">
                 <label>نوع چک:</label>
               </div>
               <div class="col-md-6">
-                <label> شرح چک: </label> {{ cheque.explanation }}
+                <label>شرح چک:</label>
+                {{ cheque.explanation }}
               </div>
               <div class="col-md-6">
-                <label>نام بانک: </label> {{ cheque.bankName }}
+                <label>نام بانک:</label>
+                {{ cheque.bankName }}
               </div>
               <div class="col-md-6">
-                <label>نام شعبه: </label> {{ cheque.branchName }}
+                <label>نام شعبه:</label>
+                {{ cheque.branchName }}
               </div>
               <div class="col-md-6">
-                <label>شماره حساب چک: </label> {{ cheque.accountNumber }}
+                <label>شماره حساب چک:</label>
+                {{ cheque.accountNumber }}
               </div>
             </div>
             <hr>
             <div class="row">
               <div class="col-12 col-md-4">
                 <label>تغییر وضعیت به</label>
-                <multiselect dir="rtl" label="label" track-by="name" :options="statuses" v-model="newStatus" />
+                <multiselect
+                  dir="rtl"
+                  label="label"
+                  track-by="name"
+                  :options="statuses"
+                  v-model="newStatus"
+                />
               </div>
               <template v-if="newStatus">
-                <div class="form-group col-12 col-md-8" v-if="newStatus.accountLabel">
-                  <label>{{ newStatus.accountLabel }}</label>
-                  <multiselect dir="rtl" label="name" track-by="id" :options="newStatusAccounts" v-model="statusChange.account" />
+                <div class="form-group col-12 col-md-8" v-if="newStatus.hasAccount">
+                  <label>{{ accountLabel(newStatus) }}</label>
+                  <multiselect
+                    :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
+                    dir="rtl"
+                    label="name"
+                    track-by="id"
+                    :options="newStatusAccounts"
+                    v-model="statusChange.account"
+                  />
                 </div>
-                <div class="form-group col-12 col-md-8 offset-md-4" v-if="statusChange.account && statusChange.account.floatAccountGroup">
+                <div
+                  class="form-group col-12 col-md-8 offset-md-4"
+                  v-if="statusChange.account && statusChange.account.floatAccountGroup"
+                >
                   <label>حساب شناور</label>
-                  <multiselect dir="rtl" label="name" track-by="id" :options="statusChange.account.floatAccountGroup.floatAccounts" v-model="statusChange.floatAccount" />
+                  <multiselect
+                    dir="rtl"
+                    label="name"
+                    track-by="id"
+                    :options="statusChange.account.floatAccountGroup.floatAccounts"
+                    v-model="statusChange.floatAccount"
+                  />
                 </div>
                 <div class="w-100"></div>
                 <div class="form-group col-12 col-md-4">
                   <label>تاریخ</label>
-                  <date class="form-control" v-model="statusChange.date" :default="true" />
+                  <date class="form-control" v-model="statusChange.date" :default="true"/>
                 </div>
                 <div class="form-group col-12 col-md-8">
                   <label>توضیحات</label>
@@ -144,7 +179,7 @@ export default {
         acc = this.defaultAccounts.filter(o => o.programingName == "cash")[0];
       }
       if (name == "passed") {
-        acc = this.defaultAccounts.filter(o => o.programingName == "bank")[0];
+        acc = { account: this.chequebook.account };
       }
       if (acc) this.statusChange.account = acc.account;
     }
@@ -156,7 +191,7 @@ export default {
         return;
       }
       let payload = this.extractIds(this.copy(this.statusChange));
-      if (this.cheque.type == "received") {
+      if (!this.isPaidCheque) {
         payload.bedAccount = payload.account;
         payload.bedFloatAccount = payload.floatAccount;
       } else {
@@ -172,9 +207,10 @@ export default {
         method: "post",
         success: data => {
           $("#change-cheque-status-modal").modal("hide");
-          if (this.cheque.type == "paid") this.getChequebooks(true);
+          if (this.isPaidCheque) this.getChequebooks(true);
           else this.getCheques(true);
           this.successNotify();
+          this.clearStatusChange();
         }
       });
     },
@@ -186,15 +222,20 @@ export default {
         method: "post",
         data: {
           date: this.statusChange.date,
-          explanation: this.statusChange.explanation,
+          explanation: this.statusChange.explanation
         },
         success: data => {
           $("#change-cheque-status-modal").modal("hide");
-          if (this.cheque.type == "paid") this.getChequebooks(true);
+          if (this.isPaidCheque) this.getChequebooks(true);
           else this.getCheques(true);
           this.successNotify();
         }
       });
+    },
+    accountLabel(status) {
+      if (status.accountLabel) return status.accountLabel;
+      if (this.isPaidCheque) return status.paidAccountLabel;
+      else return status.receivedAccountLabel;
     }
   },
   computed: {
@@ -207,38 +248,63 @@ export default {
     },
     statuses() {
       let statuses = [
-        { name: "revertInFlow", label: "ابطال در جریان", accountLabel: "" },
+        {
+          name: "revertInFlow",
+          label: "ابطال وضعیت  در جریان وصول",
+          hasAccount: false
+        },
         {
           name: "inFlow",
           label: "در جریان",
+          hasAccount: true,
           accountLabel: "حساب در جریان",
           defaultAccount: null
         },
-        { name: "passed", label: "پاس شده", accountLabel: "حساب وصول چک" },
-        { name: "bounced", label: "برگشتی", accountLabel: "" },
+        { name: "bounced", label: "برگشتی", hasAccount: false },
+        {
+          name: "passed",
+          label: "پاس شده",
+          hasAccount: true,
+          paidAccountDisable: true,
+          receivedAccountLabel: "حساب وصول چک",
+          paidAccountLabel: "حساب پرداخت کننده چک"
+        },
         {
           name: "cashed",
           label: "نقدی",
-          accountLabel: "حساب دریافت کننده وجه چک",
+          hasAccount: true,
+          receivedAccountLabel: "حساب دریافت کننده وجه چک",
+          paidAccountLabel: "حساب پرداخت کننده چک",
           defaultAccount: null
         },
-        { name: "revoked", label: "باطل شده", accountLabel: "" },
+        { name: "revoked", label: "باطل شده", hasAccount: false },
         {
           name: "transferred",
           label: "انتقالی",
+          hasAccount: true,
           accountLabel: "حساب گیرنده چک"
         }
       ];
       let res = [];
       statuses.forEach(s => {
-        if (this.cheque.type == "paid") {
-          if (["inFlow", "transferred"].includes(s.name)) return;
+        if (this.isPaidCheque) {
+          if (["inFlow", "revertInFlow", "transferred"].includes(s.name)) {
+            return;
+          }
         }
         if (this.cheque.status == "inFlow") {
           if (!["passed", "bounced", "revertInFlow"].includes(s.name)) return;
         }
         if (this.cheque.status == "bounced") {
-          if (!['revoked', 'transferred','inFlow', 'cashed', 'passed'].includes(s.name)) return;
+          if (
+            !["revoked", "transferred", "inFlow", "cashed", "passed"].includes(
+              s.name
+            )
+          )
+            return;
+        }
+        if (this.cheque.status == "notPassed") {
+          if (["revertInFlow"].includes(s.name)) return;
         }
         if (this.cheque.status == s.name) return;
         res.push(s);

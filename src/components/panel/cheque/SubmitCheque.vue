@@ -5,7 +5,7 @@
         <div class="modal-header">
           <h4 class="modal-title">
             ثبت چک
-            <span v-if="cheque.type == 'paid'">پرداختی</span>
+            <span v-if="isPaidCheque">پرداختی</span>
             <span v-else>دریافتی</span>
           </h4>
           <button type="button" class="close" data-dismiss="modal">
@@ -13,39 +13,65 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="container-fluid">
+          <div class="">
             <div class="row">
               <div class="form-group col-md-6">
-                <label for="">سریال چک</label>
-                <input type="number" class="form-control" v-model="cheque.serial" :disabled="cheque.type == 'paid'">
+                <label for>سریال چک</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  v-model="cheque.serial"
+                  :disabled="isPaidCheque"
+                >
               </div>
               <div class="form-group col-12 col-md-6">
-                <label v-if="cheque.type == 'paid'">دریافت کننده</label>
+                <label v-if="isPaidCheque">دریافت کننده</label>
                 <label v-else>پرداخت کننده</label>
-                <multiselect dir="rtl" label="name" track-by="id" :options="accountsSelectValues.levels[3]" v-model="cheque.account" />
+                <multiselect
+                  dir="rtl"
+                  label="name"
+                  track-by="id"
+                  :options="accountsSelectValues.levels[3]"
+                  v-model="cheque.account"
+                />
               </div>
-              <div class="form-group col-12 col-md-9 offset-md-3" v-if="cheque.account && cheque.account.floatAccountGroup">
-                <label for="">حساب شناور</label>
-                <multiselect dir="rtl" label="name" track-by="id" :options="cheque.account.floatAccountGroup.floatAccounts" v-model="cheque.floatAccount" />
+              <div
+                class="form-group col-12 col-md-9 offset-md-3"
+                v-if="cheque.account && cheque.account.floatAccountGroup"
+              >
+                <label for>حساب شناور</label>
+                <multiselect
+                  dir="rtl"
+                  label="name"
+                  track-by="id"
+                  :options="cheque.account.floatAccountGroup.floatAccounts"
+                  v-model="cheque.floatAccount"
+                />
               </div>
               <div class="form-group col-12 col-md-6">
-                <label for="">مبلغ</label>
-                <money class="form-control" v-model="cheque.value" />
+                <label for>مبلغ</label>
+                <money class="form-control" v-model="cheque.value"/>
               </div>
               <div class="form-group col-12 col-md-3">
-                <label for="">تاریخ سررسید</label>
-                <date class="form-control" v-model="cheque.due" :default="true" />
+                <label for>تاریخ سررسید</label>
+                <date class="form-control" v-model="cheque.due" :default="true"/>
               </div>
               <div class="form-group col-12 col-md-3">
-                <label v-if="cheque.type == 'paid'">تاریخ پرداخت</label>
+                <label v-if="isPaidCheque">تاریخ پرداخت</label>
                 <label v-else>تاریخ دریافت</label>
-                <date class="form-control" v-model="cheque.date" :default="true" />
+                <date class="form-control" v-model="cheque.date" :default="true"/>
               </div>
               <div class="col-12 col-md-6">
                 <div class="row">
-                  <div class="form-group col-12" v-if="cheque.type == 'received'">
-                    <label for="">نوع چک</label>
-                    <multiselect dir="rtl" label="name" track-by="id" :options="[]" />
+                  <div class="form-group col-12" v-if="!isPaidCheque">
+                    <label for>نوع چک</label>
+                    <select class="custom-select" v-model="cheque.type">
+                      <option
+                        v-for="type in chequeTypes"
+                        :key="type.value"
+                        :value="type.value"
+                      >{{ type.label }}</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -56,16 +82,31 @@
               <div class="col-12">
                 <div class="row">
                   <div class="form-group col-12 col-md-4">
-                    <label for="">نام بانک</label>
-                    <input type="text" class="form-control" v-model="cheque.bankName" :disabled="cheque.type == 'paid'">
+                    <label for>نام بانک</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="cheque.bankName"
+                      :disabled="isPaidCheque"
+                    >
                   </div>
                   <div class="form-group col-12 col-md-4">
-                    <label for="">نام شعبه</label>
-                    <input type="text" class="form-control" v-model="cheque.branchName" :disabled="cheque.type == 'paid'">
+                    <label for>نام شعبه</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="cheque.branchName"
+                      :disabled="isPaidCheque"
+                    >
                   </div>
                   <div class="form-group col-12 col-md-4">
-                    <label for="">شماره حساب چک</label>
-                    <input type="text" class="form-control" v-model="cheque.accountNumber" :disabled="cheque.type == 'paid'">
+                    <label for>شماره حساب چک</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="cheque.accountNumber"
+                      :disabled="isPaidCheque"
+                    >
                   </div>
                 </div>
               </div>
@@ -119,6 +160,9 @@ export default {
   },
   methods: {
     submitCheque() {
+      if (this.cheque.type) {
+        this.cheque.type = this.cheque.type.value;
+      }
       if (!this.cheque.id) {
         this.storeCheque();
         this.log("create cheque");
@@ -139,7 +183,7 @@ export default {
         method: "put",
         success: data => {
           $("#submit-paid-cheque-modal").modal("hide");
-          if (this.cheque.type == "paid") this.getChequebooks(true);
+          if (this.isPaidCheque) this.getChequebooks(true);
           else this.getCheques(true);
           this.successNotify();
         }
