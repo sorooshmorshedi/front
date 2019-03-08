@@ -36,7 +36,7 @@
       <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-group" role="tabpanel">
           <div class="row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-12">
               <label>انتخاب حساب جهت ویرایش</label>
               <multiselect
                 dir="rtl"
@@ -61,7 +61,7 @@
         </div>
         <div class="tab-pane fade" id="nav-kol" role="tabpanel">
           <div class="row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-12">
               <label>انتخاب حساب جهت ویرایش</label>
               <multiselect
                 dir="rtl"
@@ -72,7 +72,7 @@
               />
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-12">
               <account-parent-breadcrumb :base-account="account"/>
             </div>
           </div>
@@ -90,7 +90,7 @@
         </div>
         <div class="tab-pane fade" id="nav-moein" role="tabpanel">
           <div class="row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-12">
               <label>انتخاب حساب جهت ویرایش</label>
               <multiselect
                 dir="rtl"
@@ -100,7 +100,7 @@
                 label="title"
               />
             </div>
-            <div class="col-md-8">
+            <div class="col-md-12">
               <account-parent-breadcrumb :base-account="account"/>
             </div>
           </div>
@@ -118,7 +118,7 @@
         </div>
         <div class="tab-pane fade" id="nav-tafzili" role="tabpanel">
           <div class="row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-12">
               <label>انتخاب حساب جهت ویرایش</label>
               <multiselect
                 dir="rtl"
@@ -128,7 +128,7 @@
                 label="title"
               />
             </div>
-            <div class="col-md-8">
+            <div class="col-md-12">
               <account-parent-breadcrumb :base-account="account"/>
             </div>
           </div>
