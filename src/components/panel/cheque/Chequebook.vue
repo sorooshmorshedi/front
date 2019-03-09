@@ -18,7 +18,7 @@
                   <i class="fas fa-trash-alt text-danger" @click="deleteChequebook(cb)"/>
                 </h5>
               </div>
-              <div :id="'collapse' + i" class="collapse ">
+              <div :id="'collapse' + i" class="collapse">
                 <div class="card-body">
                   <table class="table table-striped">
                     <thead>
@@ -48,7 +48,7 @@
                             class="btn btn-info"
                           >ثبت چک</button>
                           <button
-                            :disabled="c.status == 'blank' || c.status == 'passed'"
+                            :disabled="!canChangeStatus(c)"
                             @click="changeChequeStatusModal(c, cb)"
                             type="button"
                             class="btn btn-info"
@@ -194,7 +194,11 @@ export default {
     receiver(cheque) {
       if (!cheque.account) return "-";
       let res = cheque.account.title;
-      if (cheque.floatAccount) res += ' > ' + cheque.floatAccount.name;
+      if (cheque.floatAccount) res += " > " + cheque.floatAccount.name;
+      return res;
+    },
+    canChangeStatus(cheque) {
+      let res = ["blank", "cashed", "passed", "revoked"].includes(cheque.status);
       return res;
     }
   }
