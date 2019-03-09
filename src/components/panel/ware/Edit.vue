@@ -100,6 +100,11 @@
               </div>
               <vue-form-generator tag="div" :schema="editSchema[3]" :model="ware"/>
               <button @click="updateWare()" class="btn btn-primary float-left submit-btn">ثبت</button>
+              <button
+                @click="deleteWare(ware)"
+                class="btn btn-danger float-left submit-btn"
+                style="margin-left: 15px;"
+              >حذف</button>
             </div>
           </div>
         </div>
