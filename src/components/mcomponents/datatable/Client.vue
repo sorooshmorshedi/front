@@ -97,7 +97,13 @@
         </thead>
         <tbody>
           <!-- Rows -->
-          <tr v-for="(item, i) in items" :key="i" :class="item.classes" @click="rowClick(item)">
+          <tr
+            v-for="(item, i) in items"
+            :key="i"
+            :class="item.classes"
+            @click="rowClick(item)"
+            @contextmenu="rowContextMenu($event, item)"
+          >
             <td>{{ offset+i+1 }}</td>
             <td v-for="(col, j) in notHiddenCols" :key="j">
               <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
@@ -350,6 +356,9 @@ export default {
     },
     rowClick(item) {
       this.$emit("rowClick", item);
+    },
+    rowContextMenu(e, item) {
+      this.$emit("rowContextMenu", e, item);
     },
     sortItems(items) {
       items.sort((a, b) => {
