@@ -130,12 +130,11 @@ export default {
         {
           label: "گروه حساب تفضیلی شناور",
           type: "vueMultiSelect",
-          model: "floatAccountGroups",
+          model: "floatAccountGroup",
           styleClasses: "col-sm-12 col-md-6",
           selectOptions: {
             label: 'name',
             trackBy: 'id',
-            multiple: true,
           },
           values: [],
         },
