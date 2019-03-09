@@ -198,7 +198,7 @@ export default {
       return res;
     },
     canChangeStatus(cheque) {
-      let res = ["blank", "cashed", "passed", "revoked"].includes(cheque.status);
+      let res = !["blank", "cashed", "passed", "revoked"].includes(cheque.status);
       return res;
     }
   }
