@@ -83,8 +83,7 @@ export default {
   },
   methods: {
     getData() {
-      this.getAccounts();
-      // this.init();
+      this.getAccounts(false, true);
     },
     init() {
       if (!this.ledgerAccountIds) {
