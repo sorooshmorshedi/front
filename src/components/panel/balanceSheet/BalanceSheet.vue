@@ -119,8 +119,8 @@
                               <td>{{ d.prepayments.remain }}</td>
                             </tr>
                             <tr>
-                              <td>{{ d.taxSave.name }}</td>
-                              <td>{{ d.taxSave.remain }}</td>
+                              <td>{{ d.saveTypes.name }}</td>
+                              <td>{{ d.saveTypes.remain }}</td>
                             </tr>
                             <tr>
                               <td>{{ d.paidDividends.name }}</td>
@@ -165,12 +165,8 @@
                               <td>{{ d.fund.remain }}</td>
                             </tr>
                             <tr>
-                              <td>{{ d.legalSaving.name }}</td>
-                              <td>{{ d.legalSaving.remain }}</td>
-                            </tr>
-                            <tr>
-                              <td>{{ d.otherSavings.name }}</td>
-                              <td>{{ d.otherSavings.remain }}</td>
+                              <td>{{ d.savings.name }}</td>
+                              <td>{{ d.savings.remain }}</td>
                             </tr>
                             <tr>
                               <td>{{ d.accumulatedProfit.name }}</td>
