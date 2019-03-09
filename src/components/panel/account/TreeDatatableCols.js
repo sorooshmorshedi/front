@@ -20,6 +20,28 @@ export default {
       ]
     },
     {
+      th: "سطح",
+      td: "level",
+      type: "select",
+      options: [{
+        label: 'گروه',
+        value: 0
+      }, {
+        label: 'کل',
+        value: 1
+
+      }, {
+        label: 'معین',
+        value: 2
+
+      }, {
+        label: 'تفضیلی',
+        value: 3
+      }],
+      filters: ["level"]
+    },
+
+    {
       th: "نام حساب",
       td: "name",
       type: "text",

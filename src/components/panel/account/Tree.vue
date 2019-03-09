@@ -1,6 +1,8 @@
 <template>
-  <div class="rtl">
-    <datatable :cols="datatableOptions.cols" :data="treeAccounts"/>
+  <div class="row rtl">
+    <div class="col-12">
+      <datatable :cols="datatableOptions.cols" :data="treeAccounts" @rowContextMenu="contextMenu"/>
+    </div>
 
     <div class="modal" id="account-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
@@ -81,6 +83,11 @@ export default {
       this.account.parent = node;
       this.account.level = node.level + 1;
       this.modal("#account-modal", "show");
+    },
+    contextMenu(e, item) {
+      e.preventDefault();
+      this.account = item;
+      this.$refs.menu.open(e, { account: item });
     }
   },
   watch: {},
@@ -101,13 +108,13 @@ export default {
 
 <style lang="scss">
 $pad: 30px;
-.level-1 td:nth-child(3) {
+.level-1 td:nth-child(4) {
   padding-right: $pad;
 }
-.level-2 td:nth-child(3) {
+.level-2 td:nth-child(4) {
   padding-right: $pad * 2;
 }
-.level-3 td:nth-child(3) {
+.level-3 td:nth-child(4) {
   padding-right: $pad * 3;
 }
 </style>
