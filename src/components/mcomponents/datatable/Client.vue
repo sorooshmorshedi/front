@@ -5,7 +5,13 @@
         <thead>
           <!-- Filters -->
           <tr>
-            <th></th>
+            <th>
+              <button
+                @click="clearFilters()"
+                class="btn btn-block btn-info"
+                id="clear-filters-btn"
+              >خالی کردن فیلتر ها</button>
+            </th>
             <th v-for="(col, i) in filterFields" :key="i">
               <template v-for="(filter, j) in col.filters">
                 <input
@@ -65,9 +71,7 @@
                 />
               </template>
             </th>
-            <th>
-              <button @click="clearFilters()" class="btn btn-block btn-info">خالی کردن فیلتر ها</button>
-            </th>
+            <!-- <th></th> -->
           </tr>
           <!-- Idk -->
           <tr v-if="colHeaders">
@@ -88,7 +92,7 @@
               {{ col.th }}
             </th>
 
-            <th></th>
+            <!-- <th></th> -->
           </tr>
         </thead>
         <tbody>
@@ -100,8 +104,8 @@
               <template v-else-if="col.type == 'money' ">{{ get(item, col.td) | toMoney }}</template>
               <template v-else>{{ get(item, col.td) }}</template>
             </td>
-            <td>
-              <a v-if="routerName" @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
+            <td v-if="routerName">
+              <a @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
             </td>
           </tr>
         </tbody>
@@ -367,5 +371,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('./datatable.scss');
+@import url("./datatable.scss");
 </style>
