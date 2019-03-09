@@ -488,11 +488,15 @@ export default {
         sellers: [],
         banks: [],
         defaultAccounts: [],
+        all: [],
       };
-      let q = [];
-      this.accounts.forEach(acc => q.push(acc));
-      while (q.length != 0) {
-        let account = q.shift();
+
+      // let q = [];
+      // this.accounts.forEach(acc => q.push(acc));
+      // while (q.length != 0) {
+        // let account = q.shift();
+      this.accounts.forEach(account => {
+        res.all.push(account);
 
         res.levels[account.level].push(account);
 
@@ -502,17 +506,20 @@ export default {
 
         if (account.bank) res.banks.push(account);
 
-        account.children && account.children.forEach(child => {
-          q.push(child)
-        });
+        // account.children && account.children.forEach(child => {
+        //   q.push(child)
+        // });
+      });
 
-      }
+      // }
+
       this.costCenterGroups.forEach(cc => {
         res.costCenterGroups.push({
           ...cc,
         })
         res.costCenters.push(...cc.costCenters);
       })
+
       this.accountTypes.forEach(at => {
         res.accountTypes.push({
           ...at,
@@ -545,6 +552,7 @@ export default {
           ...da,
         });
       });
+
       return res;
     },
   }
