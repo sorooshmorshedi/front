@@ -249,19 +249,6 @@ export default {
     statuses() {
       let statuses = [
         {
-          name: "revertInFlow",
-          label: "ابطال وضعیت  در جریان وصول",
-          hasAccount: false
-        },
-        {
-          name: "inFlow",
-          label: "در جریان",
-          hasAccount: true,
-          accountLabel: "حساب در جریان",
-          defaultAccount: null
-        },
-        { name: "bounced", label: "برگشتی", hasAccount: false },
-        {
           name: "passed",
           label: "پاس شده",
           hasAccount: true,
@@ -269,6 +256,13 @@ export default {
           receivedAccountLabel: "حساب وصول چک",
           paidAccountLabel: "حساب پرداخت کننده چک"
         },
+        {
+          name: "transferred",
+          label: "انتقالی",
+          hasAccount: true,
+          accountLabel: "حساب گیرنده چک"
+        },
+        { name: "bounced", label: "برگشتی", hasAccount: false },
         {
           name: "cashed",
           label: "نقدی",
@@ -279,10 +273,16 @@ export default {
         },
         { name: "revoked", label: "باطل شده", hasAccount: false },
         {
-          name: "transferred",
-          label: "انتقالی",
+          name: "inFlow",
+          label: "در جریان",
           hasAccount: true,
-          accountLabel: "حساب گیرنده چک"
+          accountLabel: "حساب در جریان",
+          defaultAccount: null
+        },
+        {
+          name: "revertInFlow",
+          label: "ابطال وضعیت  در جریان وصول",
+          hasAccount: false
         }
       ];
       let res = [];
