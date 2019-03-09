@@ -544,12 +544,12 @@ export default {
         });
       });
 
-      Object.values(res.levels).forEach(list => list.sort((a1, a2) => {
-        if (!a1.type) return 1;
-        if (!a2.type) return -1;
-        if (a1.type.usage == 'balanceSheet') return 1;
-        return -1;
-      }))
+      // Object.values(res.levels).forEach(list => list.sort((a1, a2) => {
+      //   if (!a1.type) return 1;
+      //   if (!a2.type) return -1;
+      //   if (a1.type.usage == 'balanceSheet') return 1;
+      //   return -1;
+      // }))
 
       return res;
     },
