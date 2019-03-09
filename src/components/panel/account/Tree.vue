@@ -1,7 +1,6 @@
 <template>
   <div class="rtl">
-    <input type="text" v-model="searchAccount">
-    <v-tree v-if="treeAccounts.length" class="rtl" ref="tree" :data="treeAccounts" :tpl="tpl"/>
+    <datatable :cols="datatableOptions.cols" :data="treeAccounts"/>
 
     <div class="modal" id="account-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
@@ -58,22 +57,16 @@
 
 <script>
 import accountMixin from "@/mixin/account";
+import datatable from "@/components/mcomponents/datatable/Client";
+import datatableOptions from "./TreeDatatableCols";
 
 export default {
-  name: "TreeView",
   mixins: [accountMixin],
-  props: {
-    noContext: {
-      default: false
-    }
-  },
-  created() {},
+  components: { datatable },
   data() {
     return {
-      searchAccount: "",
-      searchFloatAccount: "",
-      // expandTo: null,
-      expandTo: "501010001"
+      account: {},
+      datatableOptions
     };
   },
   methods: {
@@ -88,130 +81,33 @@ export default {
       this.account.parent = node;
       this.account.level = node.level + 1;
       this.modal("#account-modal", "show");
-    },
-    tpl(node, ctx) {
-      if (!node.id) {
-        return <span domPropsInnerHTML={node.title} />;
-      }
-      return (
-        <span class="tree-tpl">
-          <span
-            domPropsInnerHTML={node.title}
-            onContextmenu={e => {
-              if (this.noContext) return;
-              e.preventDefault();
-              this.account = node;
-              this.$refs.menu.open(e, { account: node });
-            }}
-          />
-        </span>
-      );
-    },
-    collapse(accounts = this.treeAccounts) {
-      accounts.forEach(o => {
-        o.expanded = false;
-        if (o.children.length) this.collapse(o.children);
-      });
-    },
-  },
-  watch: {
-    searchAccount() {
-      this.$refs.tree.searchNodes(this.searchAccount);
-    },
-    searchFloatAccount() {
-      this.$refs.floatTree.searchNodes(this.searchFloatAccount);
-    },
-    "account.code": function() {
-      this.expandTo = this.account.code;
     }
   },
+  watch: {},
   computed: {
     treeAccounts() {
-      return [];
-      this.log("ReCreate TreeAccounts");
-      if (this.accounts.length == 0) return [];
-
-      let accounts = [];
-      for (const account of this.accounts) {
-        accounts.push(account);
-      }
-
-      let root = [
-        {
-          title: "نمودار درختی حساب ها",
-          expanded: true,
-          children: accounts
+      let res = [];
+      this.accountsSelectValues.all.forEach(o => {
+        if (o) {
+          o.classes = "level-" + o.level;
+          res.push(o);
         }
-      ];
-
-      return root;
-    },
-    treeFloatAccounts() {
-      let root = [
-        {
-          title: "نمودار درختی حساب های شناور",
-          expanded: true,
-          children: []
-        }
-      ];
-      if (this.floatAccountGroups.length == 0) return root;
-
-      this.floatAccountGroups.forEach(g => {
-        let node = {
-          expanded: true,
-          id: g.id,
-          title: g.name,
-          children: []
-        };
-        g.floatAccounts.forEach(c => {
-          node.children.push({
-            expanded: true,
-            id: c.id,
-            title: c.name,
-            children: []
-          });
-        });
-        root[0].children.push(node);
       });
-
-      console.log(root);
-      return root;
+      return res;
     }
   }
 };
 </script>
 
-<style scoped lang="scss">
-.halo-tree {
-  margin-top: 15px;
+<style lang="scss">
+$pad: 30px;
+.level-1 td:nth-child(3) {
+  padding-right: $pad;
 }
-.halo-tree li span {
-  padding: 3px 5px;
-  span {
-    background-color: transparent !important;
-  }
-  i {
-    cursor: pointer !important;
-    padding: 5px;
-    border-radius: 3px;
-    &:hover {
-      background-color: #eee;
-    }
-  }
+.level-2 td:nth-child(3) {
+  padding-right: $pad * 2;
 }
-.halo-tree li span:hover {
-  background-color: transparent;
-  border-radius: 5px;
-}
-@media (min-width: 992px) {
-  #account-modal {
-    .modal-dialog {
-      max-width: 80%;
-    }
-  }
-}
-
-.tree-tpl {
-  cursor: default !important;
+.level-3 td:nth-child(3) {
+  padding-right: $pad * 3;
 }
 </style>
