@@ -3,7 +3,7 @@ import {
 } from "vuex";
 export default {
   methods: {
-    getAccounts(force = false, init = true) {
+    getAccounts(force = false, init = false) {
       if (!force && this.accounts.length) return;
       return this.request({
         url: this.endpoint('accounts/accounts'),
@@ -19,7 +19,7 @@ export default {
         }
       })
     },
-    getFloatAccountGroups(force = false, init = true) {
+    getFloatAccountGroups(force = false, init = false) {
       if (!force && this.floatAccountGroups.length) return;
       return this.request({
         url: this.endpoint('accounts/floatAccountGroups'),
@@ -32,7 +32,7 @@ export default {
         }
       })
     },
-    getFloatAccounts(force = false, init = true) {
+    getFloatAccounts(force = false, init = false) {
       if (!force && this.floatAccounts.length) return;
       return this.request({
         url: this.endpoint('accounts/floatAccounts'),
@@ -45,7 +45,7 @@ export default {
         }
       })
     },
-    getAccountTypes(force = false, init = true) {
+    getAccountTypes(force = false, init = false) {
       if (!force && this.accountTypes.length) return;
       return this.request({
         url: this.endpoint('accounts/accountTypes'),
@@ -58,7 +58,7 @@ export default {
         }
       })
     },
-    getCostCenterGroups(force = false, init = true) {
+    getCostCenterGroups(force = false, init = false) {
       if (!force && this.costCenterGroups.length) return;
       return this.request({
         url: this.endpoint('accounts/costCenterGroups'),
@@ -71,7 +71,7 @@ export default {
         }
       })
     },
-    getIndependentAccounts(force = false, init = true) {
+    getIndependentAccounts(force = false, init = false) {
       if (!force && this.getIndependentAccounts.length) return;
       return this.request({
         url: this.endpoint('accounts/independentAccounts'),
@@ -84,7 +84,7 @@ export default {
         }
       })
     },
-    getDefaultAccounts(force = false, init = true) {
+    getDefaultAccounts(force = false, init = false) {
       if (!force && this.defaultAccounts.length) return;
       return this.request({
         url: this.endpoint('accounts/defaultAccounts'),
