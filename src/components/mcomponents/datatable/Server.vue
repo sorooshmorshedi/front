@@ -347,26 +347,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fixed-head {
-  overflow-y: auto;
-  max-height: calc(100vh - 100px);
-}
-
-.fixed-head thead tr:nth-child(1) th {
-  vertical-align: top;
-}
-
-.fixed-head thead tr:nth-child(2) {
-  th {
-    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
-    position: sticky;
-    top: 0;
-    background-color: #eee;
-    cursor: pointer;
-  }
-}
-
-.fa-sort {
-  color: rgba(0, 0, 0, 0.3);
-}
+@import url('./datatable.scss');
 </style>
