@@ -39,7 +39,13 @@ export default {
           td: "name",
           type: "text",
           filters: ["name"]
-        }
+        },
+        {
+          th: "نوع",
+          td: "type.name",
+          type: "text",
+          filters: ["type.name"]
+        },
       ]
     };
   },
