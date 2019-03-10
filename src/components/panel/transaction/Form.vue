@@ -1,60 +1,89 @@
 <template>
   <div class="row rtl">
     <div class="col-12">
-      <div class="card right ">
+      <div class="card right">
         <div class="card-body">
-          <div class="title">
-            ثبت {{ type.label }}
-          </div>
+          <div class="title">ثبت {{ type.label }}</div>
           <div class="row">
             <div class="col-lg-8">
               <div class="row">
                 <div class="form-group col-lg-3 col-sm-2">
                   <label>شماره {{ type.label }}</label>
-                  <input v-if="transaction.id" type="text" class="form-control" disabled v-model="transaction.code">
+                  <input
+                    v-if="transaction.id"
+                    type="text"
+                    class="form-control"
+                    disabled
+                    v-model="transaction.code"
+                  >
                   <input v-else type="text" class="form-control" disabled :value="transactionCode">
                 </div>
                 <div class="form-group col-lg-5 col-sm-3">
                   <label>کد - نام مشتری</label>
-                  <multiselect dir="rtl" :options="transactionAccounts" v-model="transaction.account" track-by="id" label="title" />
+                  <multiselect
+                    dir="rtl"
+                    :options="transactionAccounts"
+                    v-model="transaction.account"
+                    track-by="id"
+                    label="title"
+                  />
                 </div>
                 <div class="form-group col-lg-4 col-sm-3">
                   <template v-if="transaction.account && transaction.account.floatAccountGroup">
                     <label>حساب شناور</label>
-                    <multiselect dir="rtl" :options="transactionFloatAccounts" v-model="transaction.floatAccount" track-by="id" label="name" />
+                    <multiselect
+                      dir="rtl"
+                      :options="transactionFloatAccounts"
+                      v-model="transaction.floatAccount"
+                      track-by="id"
+                      label="name"
+                    />
                   </template>
                 </div>
                 <div class="form-group col-lg-3 col-sm-2">
                   <label>تاریخ</label>
-                  <date class="form-control" v-model="transaction.date" />
+                  <date class="form-control" v-model="transaction.date" default="1"/>
                 </div>
                 <div class="form-group col-lg-3 col-sm-2">
                   <label>تاریخ راس</label>
-                  <date class="form-control" disabled />
+                  <date class="form-control" disabled/>
                 </div>
                 <div class="col-lg-3 d-print-none">
-                  <button data-toggle="modal" data-target="#factors-modal" style="margin-top:27px" type="button" name="" id="" class="btn btn-info">پرداخت شده برای فاکتور های</button>
+                  <button
+                    data-toggle="modal"
+                    data-target="#factors-modal"
+                    style="margin-top:27px"
+                    type="button"
+                    name
+                    id
+                    class="btn btn-info"
+                  >پرداخت شده برای فاکتور های</button>
                 </div>
                 <div class="col-lg-3" v-if="transaction.sanad">
                   <label>شماره سند</label>
-                  <div class="input-group ">
+                  <div class="input-group">
                     <input type="text" class="form-control" disabled :value="transaction.sanad">
                     <div class="input-group-prepend">
-                      <button @click="openSanad(transaction.sanad)" class="btn btn-outline-info" type="button" id="button-addon1">مشاهده سند</button>
+                      <button
+                        @click="openSanad(transaction.sanad)"
+                        class="btn btn-outline-info"
+                        type="button"
+                        id="button-addon1"
+                      >مشاهده سند</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="form-group col-lg-4">
-              <label>توضیحات {{ type.label }} </label>
-              <textarea class="form-control" rows=5 v-model="transaction.exp"></textarea>
+              <label>توضیحات {{ type.label }}</label>
+              <textarea class="form-control" rows="5" v-model="transaction.exp"></textarea>
             </div>
           </div>
           <div class="row">
             <div class="col-12">
               <div class="table-responsive">
-                <table class="table table-striped ">
+                <table class="table table-striped">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -70,48 +99,101 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
+                    <tr
+                      v-for="(row,i) in rows"
+                      :key="i"
+                      :class="{'d-print-none': i == rows.length-1}"
+                    >
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect :disabled="hasCheque(row)" dir="rtl" :options="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))" v-model="rows[i].type" track-by="id" label="name" />
-                        <button v-if="isChequeType(row) && !hasCheque(row)" @click="openSubmitChequeModal(row, i)" type="button" class="submit-tcheque btn btn-secondary btn-sm btn-block">ثبت چک</button>
+                        <multiselect
+                          :disabled="hasCheque(row)"
+                          dir="rtl"
+                          :options="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))"
+                          v-model="rows[i].type"
+                          track-by="id"
+                          label="name"
+                        />
+                        <button
+                          v-if="isChequeType(row) && !hasCheque(row)"
+                          @click="openSubmitChequeModal(row, i)"
+                          type="button"
+                          class="submit-tcheque btn btn-secondary btn-sm btn-block"
+                        >ثبت چک</button>
                       </td>
                       <td>
-                        <multiselect dir="rtl" v-if="rows[i].type && rows[i].type.account.floatAccountGroup" :options="rows[i].type.account.floatAccountGroup.floatAccounts" v-model="rows[i].floatAccount" track-by="id" label="name" />
+                        <multiselect
+                          dir="rtl"
+                          v-if="rows[i].type && rows[i].type.account.floatAccountGroup"
+                          :options="rows[i].type.account.floatAccountGroup.floatAccounts"
+                          v-model="rows[i].floatAccount"
+                          track-by="id"
+                          label="name"
+                        />
                       </td>
                       <td>
-                        <money :disabled="isChequeType(row)" class="form-control " v-model="rows[i].value" />
+                        <money
+                          :disabled="isChequeType(row)"
+                          class="form-control"
+                          v-model="rows[i].value"
+                        />
                       </td>
                       <td>
-                        <input :disabled="isChequeType(row)" type="text" class="form-control" v-model="rows[i].documentNumber">
+                        <input
+                          :disabled="isChequeType(row)"
+                          type="text"
+                          class="form-control"
+                          v-model="rows[i].documentNumber"
+                        >
                       </td>
                       <td>
-                        <date :disabled="isChequeType(row)" class="form-control" v-model="rows[i].date" />
+                        <date
+                          :disabled="isChequeType(row)"
+                          class="form-control"
+                          v-model="rows[i].date"
+                        />
                       </td>
                       <td>
-                        <date class="form-control " disabled v-model="rows[i].due" />
+                        <date class="form-control" disabled v-model="rows[i].due"/>
                       </td>
                       <td>
-                        <input :disabled="isChequeType(row)" type="text" class="form-control form-control" v-model="rows[i].bankName">
+                        <input
+                          :disabled="isChequeType(row)"
+                          type="text"
+                          class="form-control form-control"
+                          v-model="rows[i].bankName"
+                        >
                       </td>
                       <td>
-                        <input :disabled="isChequeType(row)" type="text" class="form-control form-control" v-model="rows[i].explanation">
+                        <input
+                          :disabled="isChequeType(row)"
+                          type="text"
+                          class="form-control form-control"
+                          v-model="rows[i].explanation"
+                        >
                       </td>
+                      <td class="d-print-none"></td>
                       <td class="d-print-none">
-                      </td>
-                      <td class="d-print-none">
-                        <button v-if="i != rows.length-1 && !hasCheque(row)" @click="deleteRow(i)" type="button" class="btn btn-sm btn-warning">حذف ردیف</button>
+                        <button
+                          v-if="i != rows.length-1 && !hasCheque(row)"
+                          @click="deleteRow(i)"
+                          type="button"
+                          class="btn btn-sm btn-warning"
+                        >حذف ردیف</button>
                       </td>
                     </tr>
-                    <tr>
-                    </tr>
+                    <tr></tr>
                     <tr class="bg-info text-white">
                       <td colspan="2"></td>
                       <td class="text-left">مجموع:</td>
-                      <td class="">{{ sum | toMoney }}</td>
+                      <td class>{{ sum | toMoney }}</td>
                       <td colspan="6"></td>
                       <td class="d-print-none">
-                        <button @click="deleteRow(0)" type="button" class="btn btn-sm btn-danger">حذف همه ردیف ها</button>
+                        <button
+                          @click="deleteRow(0)"
+                          type="button"
+                          class="btn btn-sm btn-danger"
+                        >حذف همه ردیف ها</button>
                       </td>
                     </tr>
                   </tbody>
@@ -120,8 +202,12 @@
             </div>
           </div>
           <div class="row rtl d-print-none">
-            <div class="col-12 ">
-              <button @click="validate()" type="button" class="btn submit btn-primary float-left w-100px">ثبت</button>
+            <div class="col-12">
+              <button
+                @click="validate()"
+                type="button"
+                class="btn submit btn-primary float-left w-100px"
+              >ثبت</button>
             </div>
           </div>
         </div>
@@ -162,7 +248,7 @@
                         <td>{{ f.sanad.bed | toMoney }}</td>
                         <td>{{ f.paidValue }}</td>
                         <td>
-                          <money class="form-control" type="text" v-model="f.payment.value" />
+                          <money class="form-control" type="text" v-model="f.payment.value"/>
                         </td>
                       </tr>
                     </tbody>
@@ -172,7 +258,12 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button :disabled="!isPaymentsValid" type="button" class="btn btn-info w-100px" data-dismiss="modal">تایید</button>
+            <button
+              :disabled="!isPaymentsValid"
+              type="button"
+              class="btn btn-info w-100px"
+              data-dismiss="modal"
+            >تایید</button>
           </div>
         </div>
       </div>
@@ -195,37 +286,66 @@
             <div class="container-fluid">
               <div class="row">
                 <div class="form-group col-md-6">
-                  <label for="">سریال چک</label>
-                  <input v-if="cheque.type == 'received'" type="number" class="form-control" v-model="cheque.serial">
-                  <multiselect v-else dir="rtl" label="title" track-by="id" :options="chequesSelectValues.cheques.filter(o => o.status == 'blank')" v-model="cheque" />
+                  <label for>سریال چک</label>
+                  <input
+                    v-if="cheque.type == 'received'"
+                    type="number"
+                    class="form-control"
+                    v-model="cheque.serial"
+                  >
+                  <multiselect
+                    v-else
+                    dir="rtl"
+                    label="title"
+                    track-by="id"
+                    :options="chequesSelectValues.cheques.filter(o => o.status == 'blank')"
+                    v-model="cheque"
+                  />
                 </div>
                 <div class="form-group col-12 col-md-6">
                   <label v-if="cheque.type == 'paid'">دریافت کننده</label>
                   <label v-else>پرداخت کننده</label>
-                  <multiselect disabled dir="rtl" label="name" track-by="id" :options="accountsSelectValues.levels[3]" :value="transaction.account" />
+                  <multiselect
+                    disabled
+                    dir="rtl"
+                    label="name"
+                    track-by="id"
+                    :options="accountsSelectValues.levels[3]"
+                    :value="transaction.account"
+                  />
                 </div>
-                <div class="form-group col-12 col-md-6 offset-md-6" v-if="transaction.account && transaction.account.floatAccountGroup">
-                  <label for="">حساب شناور</label>
-                  <multiselect disabled dir="rtl" label="name" track-by="id" :options="transaction.account.floatAccountGroup.floatAccounts" v-model="transaction.floatAccount" />
+                <div
+                  class="form-group col-12 col-md-6 offset-md-6"
+                  v-if="transaction.account && transaction.account.floatAccountGroup"
+                >
+                  <label for>حساب شناور</label>
+                  <multiselect
+                    disabled
+                    dir="rtl"
+                    label="name"
+                    track-by="id"
+                    :options="transaction.account.floatAccountGroup.floatAccounts"
+                    v-model="transaction.floatAccount"
+                  />
                 </div>
                 <div class="form-group col-12 col-md-6">
-                  <label for="">مبلغ</label>
-                  <money class="form-control" v-model="cheque.value" />
+                  <label for>مبلغ</label>
+                  <money class="form-control" v-model="cheque.value"/>
                 </div>
                 <div class="form-group col-12 col-md-3">
-                  <label for="">تاریخ سررسید</label>
-                  <date class="form-control" v-model="cheque.due" :default="true" />
+                  <label for>تاریخ سررسید</label>
+                  <date class="form-control" v-model="cheque.due" :default="true"/>
                 </div>
                 <div class="form-group col-12 col-md-3">
                   <label v-if="cheque.type == 'paid'">تاریخ پرداخت</label>
                   <label v-else>تاریخ دریافت</label>
-                  <date class="form-control" v-model="cheque.date" :default="true" />
+                  <date class="form-control" v-model="cheque.date" :default="true"/>
                 </div>
                 <div class="col-12 col-md-6">
                   <div class="row">
                     <div class="form-group col-12" v-if="cheque.type == 'received'">
-                      <label for="">نوع چک</label>
-                      <multiselect dir="rtl" label="name" track-by="id" :options="[]" />
+                      <label for>نوع چک</label>
+                      <multiselect dir="rtl" label="name" track-by="id" :options="[]"/>
                     </div>
                   </div>
                 </div>
@@ -236,16 +356,31 @@
                 <div class="col-12">
                   <div class="row">
                     <div class="form-group col-12 col-md-4">
-                      <label for="">نام بانک</label>
-                      <input type="text" class="form-control" v-model="cheque.bankName" :disabled="cheque.type == 'paid'" />
+                      <label for>نام بانک</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="cheque.bankName"
+                        :disabled="cheque.type == 'paid'"
+                      >
                     </div>
                     <div class="form-group col-12 col-md-4">
-                      <label for="">نام شعبه</label>
-                      <input type="text" class="form-control" v-model="cheque.branchName" :disabled="cheque.type == 'paid'" />
+                      <label for>نام شعبه</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="cheque.branchName"
+                        :disabled="cheque.type == 'paid'"
+                      >
                     </div>
                     <div class="form-group col-12 col-md-4">
-                      <label for="">شماره حساب چک</label>
-                      <input type="text" class="form-control" v-model="cheque.accountNumber" :disabled="cheque.type == 'paid'" />
+                      <label for>شماره حساب چک</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="cheque.accountNumber"
+                        :disabled="cheque.type == 'paid'"
+                      >
                     </div>
                   </div>
                 </div>
