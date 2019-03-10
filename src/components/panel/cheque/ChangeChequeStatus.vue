@@ -296,11 +296,7 @@ export default {
           if (!["passed", "bounced", "revertInFlow"].includes(s.name)) return;
         }
         if (this.cheque.status == "bounced") {
-          if (
-            !["revoked", "transferred", "inFlow", "cashed", "passed"].includes(
-              s.name
-            )
-          )
+          if (!["transferred", "inFlow", "cashed", "passed"].includes(s.name))
             return;
         }
         if (this.cheque.status == "notPassed") {
