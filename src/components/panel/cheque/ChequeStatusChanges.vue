@@ -6,23 +6,27 @@
           <h4 class="modal-title">
             تغییر وضعیت های چک
             {{ chequeLabel }}
-            </h4>
+          </h4>
           <button type="button" class="close" data-dismiss="modal">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <div class="container-fluid">
+          <div class="container">
             <div class="row">
               <div class="col-12">
                 <div class="row key-value-info">
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <span class="key">شماره چک:</span>
                     <span class="value">{{ cheque.serial }}</span>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <span class="key">مبلغ چک:</span>
                     <span class="value">{{ cheque.value | toMoney }}</span>
+                  </div>
+                  <div class="col-md-4">
+                    <span class="key">تاریخ سررسید:</span>
+                    <span class="value">{{ cheque.due }}</span>
                   </div>
                   <div class="col-md-12" v-if="cheque.account">
                     <span v-if="isPaidCheque" class="key">دریافت کننده:</span>
