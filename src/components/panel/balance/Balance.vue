@@ -223,8 +223,12 @@ export default {
         }
 
         if (filters.showDifferences) {
-          if (acc.bed_remain == 0 && acc.bes_remain == 0) return false;
-          if (acc.bed_remain == acc.bes_remain) return false;
+          if (!acc._type) return false;
+          let nature = acc._type.nature;
+          console.log(nature);
+          if (acc.bes_remain == 0 && acc.bed_remain == 0) return false;
+          if (nature == "bed" && acc.bes_remain == 0) return false;
+          if (nature == "bes" && acc.bed_remain == 0) return false;
         }
 
         return true;
