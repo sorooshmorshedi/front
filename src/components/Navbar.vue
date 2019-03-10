@@ -242,6 +242,10 @@
             <router-link class="dropdown-item" :to="{name:'JournalReport'}">دفتر روزنامه</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'IncomeStatementReport'}">سود و زیان</router-link>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'IncomeStatementReport', params: {detailed: 'detailed'}}"
+            >سود و زیان همراه با جزئیات</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'BalanceSheetReport'}">ترازنامه</router-link>
             <div class="dropdown-divider"></div>

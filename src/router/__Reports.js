@@ -56,8 +56,9 @@ export default [{
     },
     {
       name: 'IncomeStatementReport',
-      path: 'incomeStatement',
+      path: 'incomeStatement/:detailed?',
       component: IncomeStatement,
+      props: true,
     },
     {
       name: 'BalanceSheetReport',
