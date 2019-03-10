@@ -8,7 +8,7 @@
             v-if="showTable"
             :cols="options.cols"
             :url="options.url"
-            :default-filters="{type}"
+            :default-filters="defaultFilters"
             :router-name="options.routerName"
             :router-default-params="options.defaultParams"
             ref="datatable"
@@ -30,7 +30,8 @@ export default {
     return {
       formOptions: formOptions,
       options: {},
-      showTable: false
+      showTable: false,
+      defaultFilters: {}
     };
   },
   created() {
@@ -44,27 +45,33 @@ export default {
       switch (this.type) {
         case "receive":
           this.options.label = "دریافت ها";
-          this.options.defaultParams = {
+          this.defaultFilters = {
             transactionType: this.type
           };
           break;
         case "payment":
           this.options.label = "پرداخت ها";
-          this.options.defaultParams = {
+          this.defaultFilters = {
             transactionType: this.type
           };
           break;
         case "received":
           this.options.label = "چک های دریافتی";
+          this.defaultFilters = {
+            receved_or_paid: "r"
+          };
           break;
         case "paid":
           this.options.label = "چک های پرداختی";
+          this.defaultFilters = {
+            receved_or_paid: "p"
+          };
           break;
         default:
           break;
       }
       if (this.form == "factor") {
-        this.options.defaultParams = {
+        this.defaultFilters = {
           factorType: this.type
         };
         switch (this.type) {
@@ -83,7 +90,7 @@ export default {
         }
       }
       if (this.form == "receipt") {
-        this.options.defaultParams = {
+        this.defaultFilters = {
           receiptType: this.type
         };
         switch (this.type) {
@@ -96,9 +103,6 @@ export default {
         }
       }
       this.showTable = true;
-      this.$nextTick(() => {
-        this.$refs.datatable.$forceUpdate();
-      });
     }
   },
   watch: {

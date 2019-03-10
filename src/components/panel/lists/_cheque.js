@@ -3,7 +3,7 @@ export default {
   cols: [{
       th: "شماره",
       td: "serial",
-      type: "number",
+      type: "text",
       filters: ["serial__icontains"]
     },
     {
