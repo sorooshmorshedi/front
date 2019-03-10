@@ -220,7 +220,7 @@
             <router-link
               class="dropdown-item"
               :to="{name:'List', params: {form:'chequebook'}}"
-            >دست چک ها</router-link>
+            >ثبت چک</router-link>
             <router-link
               class="dropdown-item"
               :to="{name:'List', params: {form:'cheque', type: 'received'}}"
