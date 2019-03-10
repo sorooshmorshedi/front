@@ -18,7 +18,7 @@
               <div class="form-group col-md-6">
                 <label for>سریال چک</label>
                 <input
-                  type="number"
+                  type="text"
                   class="form-control"
                   v-model="cheque.serial"
                   :disabled="isPaidCheque"
