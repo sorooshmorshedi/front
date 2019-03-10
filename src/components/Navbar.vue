@@ -245,7 +245,7 @@
             <router-link
               class="dropdown-item"
               :to="{name:'IncomeStatementReport', params: {detailed: 'detailed'}}"
-            >سود و زیان همراه با جزئیات</router-link>
+            >سود و زیان تفصیلی</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'BalanceSheetReport'}">ترازنامه</router-link>
             <div class="dropdown-divider"></div>

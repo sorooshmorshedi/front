@@ -35,8 +35,7 @@
                             <tr>
                               <th>#</th>
                               <th>شرح</th>
-                              <th v-if="detailed">حساب</th>
-                              <th>مبلغ</th>
+                              <th colspan="2">مبلغ</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -50,21 +49,31 @@
                                   >{{ r.type.prefix }}</span>
                                   {{ r.type.name }}
                                 </td>
-                                <td v-if="detailed"></td>
+
                                 <td
                                   :class="{'text-bold': i == rows.length-1}"
                                   dir="ltr"
                                 >{{ r.remain | toMoney }}</td>
+                                <td v-if="detailed"></td>
                               </tr>
                               <template v-if="detailed">
                                 <template v-for="(acc, j) in r.accounts">
                                   <tr :key="i + '' + j">
                                     <td></td>
-                                    <td class="text-left">{{ j+1 }}</td>
-                                    <td>{{ acc.title }}</td>
+                                    <td class="account-row">{{ acc.title }}</td>
                                     <td>{{ acc.remain | toMoney }}</td>
+                                    <td></td>
                                   </tr>
                                 </template>
+                                <tr :key="i">
+                                  <td></td>
+                                  <td class="account-row">جمع {{ r.type.name }}</td>
+                                  <td></td>
+                                  <td
+                                    :class="{'text-bold': i == rows.length-1}"
+                                    dir="ltr"
+                                  >{{ r.remain | toMoney }}</td>
+                                </tr>
                               </template>
                             </template>
                           </tbody>
@@ -135,4 +144,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.account-row {
+  padding-right: 30px;
+}
 </style>
