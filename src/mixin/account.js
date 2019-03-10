@@ -53,15 +53,16 @@ export default {
       this.log('set new account code and type');
       let accounts = [];
       if (this.account.level == 0) {
-        accounts = this.copy(this.accounts);
+        accounts = this.accountsSelectValues.levels[0];
       } else {
         if (!this.account.parent) {
           console.warn('Account does not have parent !', this.account);
           return '';
         }
-        accounts = this.account.parent.children;
+        accounts = this.accountsSelectValues.levels[this.account.level].filter(o => _.startsWith(o.code, this.account.parent.code))
       }
       let lastAccount = _.maxBy(accounts, o => o.code);
+      console.log(lastAccount)
       let code = '';
       if (!lastAccount) {
         if (this.account.parent) code = this.account.parent.code;
