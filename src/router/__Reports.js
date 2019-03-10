@@ -62,8 +62,9 @@ export default [{
     },
     {
       name: 'BalanceSheetReport',
-      path: 'balanceSheet',
+      path: 'balanceSheet/:detailed?',
       component: BalanceSheet,
+      props: true,
     },
   ]
 }]
