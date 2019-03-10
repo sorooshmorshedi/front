@@ -10,7 +10,6 @@ import {
 Vue.mixin({
   data() {
     return {
-      OGR: 0, //on going requests
       token: null,
     }
   },
@@ -30,7 +29,7 @@ Vue.mixin({
   methods: {
     request(options) {
       // this.log('request through mixin');
-      this.OGR++;
+      this.$store.commit('incrementOGR');
       let headers = {};
 
       if (!this.token) console.warn('user is not login');
@@ -53,7 +52,7 @@ Vue.mixin({
               localStorage.setItem('token', data.token);
               this.token = data.token;
             }
-            this.OGR--;
+            this.$store.commit('decrementOGR');
             options.success(res.data);
           } catch (error) {
             console.error('Error in then: ', error);
@@ -68,7 +67,7 @@ Vue.mixin({
             console.warn('OGR IS ZERO');
             return;
           }
-          this.OGR--;
+          this.$store.commit('decrementOGR');
           if (error.response.status == 401) {
             if (this.$router.currentRoute.name == 'Login') return;
             this.notify('شما از سامانه خارج شده اید', 'warning');
@@ -207,18 +206,10 @@ Vue.mixin({
     ...mapState({
       user: state => state.user,
       permissions: state => state.user.permissions,
+      OGR: state => state.OGR
     }),
     isDev() {
       return process.env.NODE_ENV === 'development';
-    },
-  },
-  watch: {
-    OGR() {
-      if (this.OGR > 0) {
-        $('#loading').addClass('show');
-      } else {
-        $('#loading').removeClass('show');
-      }
     },
   },
   filters: {

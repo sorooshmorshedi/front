@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <loader />
     <m-navbar />
     <div class="container-fluid">
       <router-view></router-view>
@@ -11,11 +12,14 @@
 <script>
 import mNavbar from "./components/Navbar";
 import mFooter from "./components/Footer";
+import Loader from "./components/Loader";
+
 export default {
   name: "App",
   components: {
     mNavbar,
-    mFooter
+    mFooter,
+    Loader
   }
 };
 </script>

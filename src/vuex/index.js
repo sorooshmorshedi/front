@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: {},
+    OGR: 0, //on going requests
     accounts: {
       accounts: [],
       floatAccountGroups: [],
@@ -36,6 +37,12 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    incrementOGR(state) {
+      state.OGR++;
+    },
+    decrementOGR(state) {
+      state.OGR--;
+    },
     setUser(state, user) {
       state.user = user;
     },
@@ -72,5 +79,5 @@ export default new Vuex.Store({
   getters: {
     accounts: state => state.accounts,
     // accountTypes: state => state.accountTypes,
-  }
+  },
 })
