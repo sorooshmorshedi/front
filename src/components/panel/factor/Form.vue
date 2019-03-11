@@ -629,7 +629,6 @@ export default {
       this.setFactorLabel(factor.type);
 
       if (changeRoute) {
-        console.log('ha');
         this.$router.push({
           name: "FactorForm",
           params: {
@@ -815,11 +814,13 @@ export default {
       return true;
     },
     hasNext() {
+      if (!this.factor.code) return false;
       if (this.factor.code == this.factorCode - 1) return false;
       if (!this.id) return false;
       return true;
     },
     hasPrev() {
+      if (!this.factor.code) return false;
       if (this.factor.code == 1) return false;
       return true;
     },
