@@ -17,7 +17,7 @@ export default {
     }
   },
   methods: {
-    getWareLevels(force = false, init = true) {
+    getWareLevels(force = false, init = false) {
       if (!force && this.wareLevels.length) return;
       return this.request({
         url: this.endpoint('wares/wareLevels'),
@@ -30,7 +30,7 @@ export default {
         }
       })
     },
-    getWares(force = false, init = true) {
+    getWares(force = false, init = false) {
       if (!force && this.wares.length) return;
       return this.request({
         url: this.endpoint('wares/wares'),
@@ -50,7 +50,7 @@ export default {
         }
       })
     },
-    getWarehouses(force = false, init = true) {
+    getWarehouses(force = false, init = false) {
       if (!force && this.warehouses.length) return;
       return this.request({
         url: this.endpoint('wares/warehouses'),
@@ -63,7 +63,7 @@ export default {
         }
       })
     },
-    getUnits(force = false, init = true) {
+    getUnits(force = false, init = false) {
       if (!force && this.units.length) return;
       return this.request({
         url: this.endpoint('wares/units'),
@@ -76,7 +76,7 @@ export default {
         }
       })
     },
-    getAccounts(force = false, init = true) {
+    getAccounts(force = false, init = false) {
       if (!force && this.accounts.length) return;
       return this.request({
         url: this.endpoint('accounts/accounts'),
