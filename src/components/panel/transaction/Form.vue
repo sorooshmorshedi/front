@@ -161,7 +161,7 @@
                       </td>
                       <td>
                         <input
-                          :disabled="isChequeType(row)"
+                          :disabled="!hasBank(row)"
                           type="text"
                           class="form-control form-control"
                           v-model="rows[i].bankName"
@@ -827,6 +827,11 @@ export default {
           this.itemsToDelete = [];
         }
       });
+    },
+    hasBank(row) {
+      if (this.isChequeType(row)) return false;
+      if (row.type && row.type.programingName == "cash") return false;
+      return true;
     },
     isChequeType(row) {
       return (
