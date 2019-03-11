@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(defaultAccount, i) in defaultAccounts.filter(o =>['receiveAndPayment','receive','payment'].includes(o.usage))" :key="i">
+          <tr v-for="(defaultAccount, i) in defaultAccounts.filter(o =>['receiveAndPayment','receive','payment','none'].includes(o.usage))" :key="i">
             <td>{{ i+1 }}</td>
             <td>{{ defaultAccount.name }}</td>
             <td>{{ defaultAccount.account.title }}</td>
@@ -66,22 +66,28 @@
                 </div>
 
                 <div class="col-12">
-                  <div class="form-check col-12 col-lg-4">
+                  <div class="form-check col-12 col-lg-3">
                     <input class="form-check-input" id="u1" type="radio" value="receive" v-model="defaultAccount.usage">
                     <label class="form-check-label" for="u1">
                       دریافت
                     </label>
                   </div>
-                  <div class="form-check col-12 col-lg-4">
+                  <div class="form-check col-12 col-lg-3">
                     <input class="form-check-input" id="u2" type="radio" value="payment" v-model="defaultAccount.usage">
                     <label class="form-check-label" for="u2">
                       پرداخت
                     </label>
                   </div>
-                  <div class="form-check col-12 col-lg-4">
+                  <div class="form-check col-12 col-lg-3">
                     <input class="form-check-input" id="u3" type="radio" value="receiveAndPayment" v-model="defaultAccount.usage">
                     <label class="form-check-label" for="u3">
                       هر دو
+                    </label>
+                  </div>
+                  <div class="form-check col-12 col-lg-3">
+                    <input class="form-check-input" id="u4" type="radio" value="none" v-model="defaultAccount.usage">
+                    <label class="form-check-label" for="u4">
+                      هیچ کدام
                     </label>
                   </div>
                 </div>
