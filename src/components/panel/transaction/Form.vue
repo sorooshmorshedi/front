@@ -88,6 +88,7 @@
                     <tr>
                       <th>#</th>
                       <th style="width: 200px">نوع {{ type.label }}</th>
+                      <th>نام حساب</th>
                       <th>حساب شناور</th>
                       <th>مبلغ</th>
                       <th>شماره مستند</th>
@@ -95,7 +96,6 @@
                       <th>سررسید</th>
                       <th>نام بانک</th>
                       <th>توضیح</th>
-                      <th class="d-print-none">فایل</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -120,6 +120,9 @@
                           type="button"
                           class="submit-tcheque btn btn-secondary btn-sm btn-block"
                         >ثبت چک</button>
+                      </td>
+                      <td>
+                        <span v-if="rows[i].type">{{ rows[i].type.account.title }}</span>
                       </td>
                       <td>
                         <multiselect
@@ -172,7 +175,6 @@
                           v-model="rows[i].explanation"
                         >
                       </td>
-                      <td class="d-print-none"></td>
                       <td class="d-print-none">
                         <button
                           v-if="i != rows.length-1 && !hasCheque(row)"
@@ -201,7 +203,17 @@
               </div>
             </div>
           </div>
-          <div class="row rtl d-print-none">
+
+          <form-footer
+            :hasFirst="hasFirst"
+            :hasLast="hasLast"
+            :hasPrev="hasPrev"
+            :hasNext="hasNext"
+            :formName="type.label"
+            @goToForm="goToForm"
+            @validate="validate"
+          />
+          <!-- <div class="row rtl d-print-none">
             <div class="col-12">
               <button
                 @click="validate()"
@@ -209,7 +221,7 @@
                 class="btn submit btn-primary float-left w-100px"
               >ثبت</button>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -403,10 +415,11 @@ import sanadApiMixin from "@/mixin/sanadApi";
 import chequeMixin from "@/mixin/cheque";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import FormFooter from "@/components/panel/FormFooter";
 import _ from "lodash";
 export default {
   name: "Form",
-  components: { money, date },
+  components: { money, date, FormFooter },
   mixins: [accountApiMixin, sanadApiMixin, chequeMixin],
   props: ["transactionType", "id"],
   data() {
@@ -435,16 +448,26 @@ export default {
   },
   created() {
     this.d.getNotPaidFactors = _.debounce(this.getNotPaidFactors, 1000, {});
-    this.formInit();
-    this.getData();
-  },
-  mounted() {
-    setTimeout(() => {
-      // $("#transaction-selection-modal").modal("show");
-      // this.submitChequeModal(this.type.name);
-    }, 200);
+    this.initForm();
   },
   computed: {
+    hasFirst() {
+      if (this.transactionCode == 1) return false;
+      return true;
+    },
+    hasNext() {
+      if (this.transaction.code == this.transactionCode - 1) return false;
+      if (!this.id) return false;
+      return true;
+    },
+    hasPrev() {
+      if (this.transaction.code == 1) return false;
+      return true;
+    },
+    hasLast() {
+      if (this.transactionCode == 1) return false;
+      return true;
+    },
     sum() {
       let sum = 0;
       this.rows.forEach(r => {
@@ -490,14 +513,15 @@ export default {
       deep: true
     },
     transactionType(a, b) {
-      this.formInit();
+      this.initForm();
     },
     id() {
       this.getTransaction(this.id);
     }
   },
   methods: {
-    formInit() {
+    initForm() {
+      this.log("Init Transaction Form");
       if (!this.id) {
         this.rows = [{}];
         this.transaction = {};
@@ -506,16 +530,34 @@ export default {
         this.type.label = "دریافت";
         this.type.name = "receive";
         this.type.chequeType = "received";
-        this.transaction.type = "receive";
       } else if (this.transactionType == "payment") {
         this.type.label = "پرداخت";
         this.type.name = "payment";
         this.type.chequeType = "paid";
-        this.transaction.type = "payment";
       } else {
         console.error("404");
       }
-      this.getNotPaidFactors();
+      this.getData();
+    },
+    goToForm(pos) {
+      let newCode = null;
+      switch (pos) {
+        case "next":
+          newCode = this.transaction.code + 1;
+          break;
+        case "prev":
+          newCode = this.transaction.code
+            ? this.transaction.code - 1
+            : this.transactionCode - 1;
+          break;
+        case "first":
+          newCode = 1;
+          break;
+        case "last":
+          newCode = this.transactionCode - 1;
+          break;
+      }
+      if (newCode) this.getTransactionByCode(newCode);
     },
     getData() {
       this.getAccounts();
@@ -523,6 +565,7 @@ export default {
       this.getChequebooks();
       this.getTransaction(this.id);
       this.getTransactionCodes();
+      this.getNotPaidFactors();
     },
     getNotPaidFactors() {
       if (this.id) this.transaction.id = this.id;
@@ -568,7 +611,22 @@ export default {
         }
       });
     },
+    getTransactionByCode(code) {
+      let url = "sanads/transactions/getTransactionByCode";
+      return this.request({
+        url: this.endpoint(url),
+        method: "get",
+        params: { code },
+        success: data => {
+          this.selectTransaction(data);
+        }
+      });
+    },
     selectTransaction(transaction) {
+      this.$router.push({
+        name: "TransactionForm",
+        params: { id: transaction.id, transactionType: this.transactionType }
+      });
       this.rows = [];
       this.transaction = transaction;
       this.itemsToDelete = [];
@@ -589,7 +647,7 @@ export default {
         this.rows.splice(index, 1);
       }
     },
-    validate() {
+    validate(clearTransaction) {
       let isValid = true;
 
       if (this.rows.length == 1) {
@@ -617,7 +675,6 @@ export default {
         sum += +factor.payment.value;
       });
       if (sum != 0 && sum != this.sum) {
-        console.log(sum, this.sum);
         this.notify(
           "مبلغ وارد شده برای فاکتور های پرداختی برابر مجموع ردیف ها نیست",
           "danger"
@@ -627,23 +684,24 @@ export default {
 
       if (!isValid) return;
 
-      if (this.transaction.id) this.updateTransaction();
-      else this.storeTransaction();
+      if (this.transaction.id) this.updateTransaction(clearTransaction);
+      else this.storeTransaction(clearTransaction);
     },
-    storeTransaction() {
+    storeTransaction(clearTransaction) {
       let data = this.extractIds(this.transaction);
       data.code = this.transactionCode;
+      data.type = this.type.name;
       this.request({
         url: this.endpoint("sanads/transactions"),
         method: "post",
         data: data,
         success: data => {
           this.transaction.id = data.id;
-          this.syncTransactionItems();
+          this.syncTransactionItems(clearTransaction);
         }
       });
     },
-    updateTransaction() {
+    updateTransaction(clearTransaction) {
       let data = this.extractIds(this.transaction);
       this.request({
         url: this.endpoint("sanads/transactions/" + this.transaction.id),
@@ -651,11 +709,11 @@ export default {
         data: data,
         success: data => {
           this.transaction.id = data.id;
-          this.syncTransactionItems();
+          this.syncTransactionItems(clearTransaction);
         }
       });
     },
-    async syncTransactionItems() {
+    async syncTransactionItems(clearTransaction) {
       let updatedItems = [];
       let newItems = [];
       let updatedPayments = [];
@@ -700,6 +758,17 @@ export default {
         this.getChequebooks(true);
         this.getTransactionCodes();
         this.getNotPaidFactors();
+        if (clearTransaction) {
+          this.clearTransaction();
+        } else {
+          this.$router.push({
+            name: "TransactionForm",
+            params: {
+              id: this.transaction.id,
+              transactionType: this.transactionType
+            }
+          });
+        }
         this.successNotify();
       });
     },
@@ -843,6 +912,16 @@ export default {
           item.cheque.id = data.id;
         }
       });
+    },
+    clearTransaction() {
+      this.$router.push({
+        name: "TransactionForm",
+        params: {
+          transactionType: this.transactionType
+        }
+      });
+      this.rows = [{}];
+      this.transaction = {};
     }
   }
 };
