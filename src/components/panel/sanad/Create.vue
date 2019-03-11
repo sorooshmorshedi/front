@@ -214,48 +214,16 @@
               </div>
             </div>
           </div>
-          <div class="row rtl d-print-none">
-            <div class="col-12 col-md-6">
-              <button
-                @click="goToSanad('first')"
-                :disabled="!hasFirstSanad"
-                type="button"
-                class="btn btn-info"
-              >اولین سند</button>
-              <button
-                @click="goToSanad('prev')"
-                :disabled="!hasPrevSanad"
-                type="button"
-                class="btn btn-info"
-              >سند قبلی</button>
-              <button
-                @click="goToSanad('next')"
-                :disabled="!hasNextSanad"
-                type="button"
-                class="btn btn-info"
-              >سند بعدی</button>
-              <button
-                @click="goToSanad('last')"
-                :disabled="!hasLastSanad"
-                type="button"
-                class="btn btn-info"
-              >آخرین سند</button>
-            </div>
-            <div class="col-12 col-md-6 ltr text-left" dir="ltr">
-              <button
-                @click="validate(true)"
-                type="button"
-                class="btn submit btn-primary foat-left"
-                :disabled="sanad.createType == 'auto'"
-              >ثبت و صدور سند جدید</button>
-              <button
-                @click="validate(false)"
-                type="button"
-                class="btn submit btn-primary loat-left w-100px"
-                :disabled="sanad.createType == 'auto'"
-              >ثبت</button>
-            </div>
-          </div>
+          <form-footer
+            formName="سند"
+            :hasFirst="hasFirst"
+            :hasLast="hasLast"
+            :hasPrev="hasPrev"
+            :hasNext="hasNext"
+            :canSubmit="sanad.createType == 'auto'"
+            @goToForm="goToForm"
+            @validate="validate"
+          />
         </div>
       </div>
     </div>
@@ -267,9 +235,10 @@ import accountApiMixin from "@/mixin/accountApi";
 import sanadApiMixin from "@/mixin/sanadApi";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import FormFooter from "@/components/panel/FormFooter";
 export default {
   name: "Create",
-  components: { money, date },
+  components: { money, date, FormFooter },
   mixins: [accountApiMixin, sanadApiMixin],
   props: ["id"],
   data() {
@@ -305,20 +274,20 @@ export default {
       });
       return sum;
     },
-    hasFirstSanad() {
+    hasFirst() {
       if (this.sanadCode == 1) return false;
       return true;
     },
-    hasNextSanad() {
+    hasNext() {
       if (this.sanad.code == this.sanadCode - 1) return false;
       if (!this.id) return false;
       return true;
     },
-    hasPrevSanad() {
+    hasPrev() {
       if (this.sanad.code == 1) return false;
       return true;
     },
-    hasLastSanad() {
+    hasLast() {
       if (this.sanadCode == 1) return false;
       return true;
     }
@@ -345,7 +314,7 @@ export default {
 
       if (this.id) this.getSanad(this.id);
     },
-    goToSanad(pos) {
+    goToForm(pos) {
       let newCode = null;
       switch (pos) {
         case "next":
@@ -482,9 +451,6 @@ export default {
       ]).then(data => {
         if (clearSanad) {
           this.clearSanad();
-          this.$router.push({
-            name: "CreateSanad"
-          });
         } else {
           this.$router.push({
             name: "CreateSanad",
