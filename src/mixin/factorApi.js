@@ -60,44 +60,40 @@ export default {
     },
     storeFactor(clearFactor) {
       let data = this.copy(this.factor);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data);
       data.code = this.factorCode;
       this.request({
         url: this.endpoint('factors/factors/'),
         method: 'post',
         data: data,
         success: data => {
-          this.syncFactor(data.id, clearFactor);
+          this.factor.id = data.id;
+          this.syncFactor(data, clearFactor);
         }
       })
     },
     updateFactor(clearFactor) {
       let data = this.copy(this.factor);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data);
       this.request({
         url: this.endpoint('factors/factors/' + data.id + '/'),
         method: 'put',
         data: data,
         success: data => {
-          this.syncFactor(data.id, clearFactor);
+          this.syncFactor(data, clearFactor);
         }
       })
 
     },
-    syncFactor(factorId, clearFactor) {
+    syncFactor(factor, clearFactor) {
+      let factorId = factor.id;
       let updatedItems = [];
       let newItems = [];
       this.rows.forEach((row, i) => {
         if (i == this.rows.length - 1) return;
         let item = this.copy(row);
         item.warehouse = item.ware.warehouse;
-        Object.keys(item).forEach(key => {
-          if (item[key] && item[key].id) item[key] = item[key].id;
-        });
+        item = this.extractIds(item);
         ["discountPercent", "discountValue"].forEach(
           k => {
             if (item[k] == "") item[k] = 0;
@@ -114,9 +110,7 @@ export default {
       let newExpenses = [];
       this.factor.expenses.forEach((row, i) => {
         let item = this.copy(row);
-        Object.keys(item).forEach(key => {
-          if (item[key] && item[key].id) item[key] = item[key].id;
-        });
+        item = this.extractIds(item);
         if (item.id) {
           updatedExpenses.push(item);
         } else {
@@ -133,7 +127,7 @@ export default {
         this.deleteFactorExpenses()
       ]).then(data => {
         this.getFactorCodes(true);
-        this.updateFactorSanadAndReceipt(factorId, clearFactor);
+        this.updateFactorSanadAndReceipt(factor, clearFactor);
       });
     },
     storeFactorItems(items) {
@@ -213,32 +207,36 @@ export default {
           this.$store.commit('setFactors', {
             factorExpenses: data
           });
-          init && this.init();
+          // init && this.init();
         }
       })
     },
     getFactor(factorId) {
-      if (!factorId) return;
+      this.log('Get Factor By Id : ' + factorId);
       return this.request({
         url: this.endpoint('factors/factors/' + factorId + '/'),
         method: 'get',
         success: data => {
-          if (this.factorType) this.selectFactor(data);
-          else {
-            this.$router.push({
-              name: 'CreateFactor',
-              params: {
-                id: data.id,
-                type: data.type,
-              }
-            });
-          }
+          this.selectFactor(data);
         }
       })
     },
-    updateFactorSanadAndReceipt(factorId, clearFactor) {
+    getFactorByCode(code) {
+      this.log('Get Factor By Code : ', code);
+      return this.request({
+        url: this.endpoint('factors/getFactorByCode'),
+        method: 'get',
+        params: {
+          code
+        },
+        success: data => {
+          this.selectFactor(data, true)
+        }
+      })
+    },
+    updateFactorSanadAndReceipt(factor, clearFactor) {
       this.request({
-        url: this.endpoint("factors/factors/updateSanadAndReceipt/" + factorId),
+        url: this.endpoint("factors/factors/updateSanadAndReceipt/" + factor.id),
         method: "put",
         success: data => {
           this.successNotify();
@@ -247,17 +245,11 @@ export default {
             this.$router.push({
               name: "FactorForm",
               params: {
-                type: this.factorType,
+                factorType: this.factorType,
               }
             });
           } else {
-            this.$router.push({
-              name: "FactorForm",
-              params: {
-                type: this.factorType,
-                id: this.sanad.id
-              }
-            });
+            this.getFactorByCode(factor.code);
           }
         }
       });

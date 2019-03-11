@@ -346,7 +346,17 @@
             </div>
           </div>
           <hr class="d-print-none">
-          <div class="row d-print-none">
+
+          <form-footer
+            formName="فاکتور"
+            :hasFirst="hasFirst"
+            :hasLast="hasLast"
+            :hasPrev="hasPrev"
+            :hasNext="hasNext"
+            @goToForm="goToForm"
+            @validate="validate"
+          />
+          <!-- <div class="row d-print-none">
             <div class="col-12 text-left">
               <button
                 @click="validate(false)"
@@ -359,7 +369,7 @@
                 class="btn submit btn-primary foat-left"
               >ثبت و صدور فاکتور جدید</button>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -509,9 +519,10 @@ import wareApiMixin from "@/mixin/wareApi";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
+import FormFooter from "@/components/panel/FormFooter";
 export default {
   name: "Form",
-  components: { money, date, mtime },
+  components: { money, date, mtime, FormFooter },
   props: ["factorType", "id"],
   mixins: [accountApiMixin, wareApiMixin, factorApiMixin],
   data() {
@@ -537,8 +548,7 @@ export default {
     };
   },
   created() {
-    this.init();
-    this.getData();
+    this.initForm();
   },
   methods: {
     getData() {
@@ -547,9 +557,12 @@ export default {
       this.getWarehouses();
       this.getWares();
       this.getFactorExpenses();
-      this.id && this.getFactor(this.id);
+      if (this.id) {
+        this.getFactor(this.id);
+      }
     },
-    init() {
+    initForm() {
+      this.log("Init Form");
       if (!this.id) {
         this.factor = {
           taxPercent: "",
@@ -562,6 +575,7 @@ export default {
         this.rows.push(this.copy(this.rowTemplate));
       }
       this.setFactorLabel(this.factorType);
+      this.getData();
     },
     setFactorLabel(factorType) {
       switch (factorType) {
@@ -607,15 +621,23 @@ export default {
       this.factor.type = this.factorType;
       this.checkInventories(clearFactor);
     },
-    selectFactor(factor) {
+    selectFactor(factor, changeRoute = false) {
       this.factor = factor;
       this.itemsToDelete = [];
-      this.rows = [];
-      factor.items.forEach(item => {
-        this.rows.push(this.copy(item));
-      });
+      this.rows = factor.items;
       this.rows.push(this.copy(this.rowTemplate));
       this.setFactorLabel(factor.type);
+
+      if (changeRoute) {
+        console.log('ha');
+        this.$router.push({
+          name: "FactorForm",
+          params: {
+            id: factor.id,
+            factorType: factor.type
+          }
+        });
+      }
     },
     deleteItemRow(index) {
       if (index == 0) {
@@ -704,6 +726,26 @@ export default {
       this.factor.expenses = this.copy(this.factorExpensesCopy);
       this.factor.expenses.pop();
       this.factorExpensesCopy = [{}];
+    },
+    goToForm(pos) {
+      let newCode = null;
+      switch (pos) {
+        case "next":
+          newCode = this.factor.code + 1;
+          break;
+        case "prev":
+          newCode = this.factor.code
+            ? this.factor.code - 1
+            : this.factorCode - 1;
+          break;
+        case "first":
+          newCode = 1;
+          break;
+        case "last":
+          newCode = this.factorCode - 1;
+          break;
+      }
+      if (newCode) this.getFactorByCode(newCode);
     }
   },
   computed: {
@@ -765,11 +807,31 @@ export default {
       }
     },
     hasBijak() {
-      console.log(this.factorType);
       return ["buy", "backFromBuy"].includes(this.factorType);
+    },
+
+    hasFirst() {
+      if (this.factorCode == 1) return false;
+      return true;
+    },
+    hasNext() {
+      if (this.factor.code == this.factorCode - 1) return false;
+      if (!this.id) return false;
+      return true;
+    },
+    hasPrev() {
+      if (this.factor.code == 1) return false;
+      return true;
+    },
+    hasLast() {
+      if (this.factorCode == 1) return false;
+      return true;
     }
   },
   watch: {
+    $route() {
+      // this.initForm();
+    },
     rows: {
       handler(newRows, oldRows) {
         let row = this.rows[this.rows.length - 1];
@@ -794,7 +856,7 @@ export default {
       deep: true
     },
     factorType() {
-      this.init();
+      this.initForm();
     },
     hasTax() {
       if (this.hasTax == false) {
