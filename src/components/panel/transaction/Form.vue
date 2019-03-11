@@ -483,8 +483,7 @@ export default {
       return this.transactions.filter(o => o.type == this.type.name);
     },
     transactionAccounts() {
-      if (this.type.name == "receive") return this.accountsSelectValues.buyers;
-      else return this.accountsSelectValues.sellers;
+      return this.accountsSelectValues.persons;
     },
     transactionFloatAccounts() {
       if (
