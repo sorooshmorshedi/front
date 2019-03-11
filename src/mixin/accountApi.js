@@ -477,6 +477,7 @@ export default {
         accountTypes: [],
         buyers: [],
         sellers: [],
+        persons: [],
         banks: [],
         defaultAccounts: [],
         all: [],
@@ -491,9 +492,11 @@ export default {
 
         res.levels[account.level].push(account);
 
-        if (account.person && account.person.type == 'buyer') res.buyers.push(account);
-
-        if (account.person && account.person.type == 'seller') res.sellers.push(account);
+        if (account.person) {
+          res.persons.push(account);
+          if (account.person.type == 'buyer') res.buyers.push(account);
+          if (account.person.type == 'seller') res.sellers.push(account);
+        }
 
         if (account.bank) res.banks.push(account);
 
