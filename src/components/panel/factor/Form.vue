@@ -119,7 +119,6 @@
                     <tr>
                       <th>#</th>
                       <th>شرح</th>
-                      <th>کالا</th>
                       <th>انبار</th>
                       <th>تعداد</th>
                       <th>واحد</th>
@@ -131,6 +130,7 @@
 
                       <th v-if="hasTax">مالیات</th>
                       <th v-if="hasTax">جمع مبلغ کل و مالیات</th>
+                      <th>توضیحات</th>
                       <th class="d-print-none"></th>
                     </tr>
                   </thead>
@@ -141,13 +141,6 @@
                       :class="{'d-print-none': i == rows.length-1}"
                     >
                       <td>{{ i+1 }}</td>
-                      <td>
-                        <input
-                          type="text"
-                          class="form-control form-control"
-                          v-model="rows[i].explanation"
-                        >
-                      </td>
                       <td>
                         <multiselect
                           :option-height="104"
@@ -218,6 +211,13 @@
                           :value="rowSumAfterTax(row)"
                           disabled
                         />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          class="form-control form-control"
+                          v-model="rows[i].explanation"
+                        >
                       </td>
                       <td class="d-print-none">
                         <button
