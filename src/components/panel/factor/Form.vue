@@ -78,7 +78,7 @@
                   <multiselect
                     v-tooltip="accountRemain(factor.account)"
                     dir="rtl"
-                    :options="accountsSelectValues.levels[3]"
+                    :options="accountsSelectValues.persons"
                     v-model="factor.account"
                     track-by="id"
                     label="title"
