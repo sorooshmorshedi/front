@@ -3,22 +3,21 @@
     <div class="col-12">
       <div class="card right">
         <div class="card-body">
-          <div class="title">
-            فاکتور {{ factorLabel }}
-            <span class="d-print-none">
-              <router-link
-                class="btn btn-info"
-                :to="{name:'List', params:{ form: 'factor', type: factorType}}"
-              >انتخاب فاکتور</router-link>
-              <button
-                v-if="this.id"
-                class="btn btn-info"
-                data-toggle="modal"
-                data-target="#payments-modal"
-              >مشاهده دریافت/ پرداخت ها</button>
-              <button class="btn btn-info" @click="print()">چاپ</button>
-            </span>
-          </div>
+          <form-header
+            formName="فاکتور"
+            :title="'فاکتور ' + factorLabel"
+            :ListRouteParams="{form: 'factor', type: factorType}"
+            :exportParams="{id: this.id}"
+            @clearForm="clearSanad()"
+          >
+            <button
+              v-if="this.id"
+              class="btn btn-info"
+              data-toggle="modal"
+              data-target="#payments-modal"
+            >مشاهده دریافت/ پرداخت ها</button>
+          </form-header>
+
           <div class="row">
             <div class="col-lg-8">
               <div class="row">
@@ -230,7 +229,7 @@
                       </td>
                     </tr>
                     <tr class="bg-info text-white">
-                      <td :colspan="hasTax?12:10"></td>
+                      <td :colspan="hasTax?13:11"></td>
                       <td>
                         <button
                           @click="deleteItemRow(0)"
@@ -528,9 +527,10 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
 import FormFooter from "@/components/panel/FormFooter";
+import FormHeader from "@/components/panel/FormHeader";
 export default {
   name: "Form",
-  components: { money, date, mtime, FormFooter },
+  components: { money, date, mtime, FormFooter, FormHeader },
   props: ["factorType", "id"],
   mixins: [accountApiMixin, wareApiMixin, factorApiMixin],
   data() {

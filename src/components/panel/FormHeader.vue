@@ -8,7 +8,12 @@
         :to="{name: ListRouteName, params: ListRouteParams}"
       >انتخاب {{ formName }}</router-link>
 
-      <button class="btn btn-info" @click="print()">چاپ</button>
+      <template v-if="hasExport">
+        <a class="btn btn-info" :href="`javascript: w=window.open('` + printUrl + `');`">چاپ</a>
+        
+        <a class="btn btn-info" :href="`javascript: w=window.open('` + pdfUrl + `');`">PDF</a>
+        <!-- <a class="btn btn-info" :href="pdfUrl">PDF</a> -->
+      </template>
 
       <slot></slot>
     </span>
@@ -27,14 +32,51 @@ export default {
     ListRouteName: {
       default: "List"
     },
-    ListRouteParams: {}
+    ListRouteParams: {},
+    exportParams: {}
   },
   data() {
-    return {};
+    return {
+      exportBaseUrl: "reports/lists/"
+    };
   },
+  created() {},
   methods: {
     emit(event) {
       this.$emit(event);
+    },
+    addParams(url) {
+      Object.keys(this.ListRouteParams).forEach(k => {
+        url += k + "=" + this.ListRouteParams[k] + "&";
+      });
+      Object.keys(this.exportParams).forEach(k => {
+        url += k + "=" + this.exportParams[k] + "&";
+      });
+      return url;
+    }
+  },
+  computed: {
+    hasExport() {
+      if (
+        this.ListRouteName &&
+        this.ListRouteParams.form &&
+        this.exportParams &&
+        this.exportParams.id
+      )
+        return true;
+      return false;
+    },
+    printUrl() {
+      if (!this.hasExport) return "";
+      let path = this.exportBaseUrl + this.ListRouteParams.form + "s/html?";
+      path = this.addParams(path);
+      return this.endpoint(path);
+    },
+    pdfUrl() {
+      if (!this.hasExport) return "";
+      let path = this.exportBaseUrl + this.ListRouteParams.form + "s/pdf?";
+      path = this.addParams(path);
+      return this.endpoint(path);
     }
   }
 };

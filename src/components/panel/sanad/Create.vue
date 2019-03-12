@@ -7,6 +7,7 @@
             title="سند حسابداری"
             formName="سند"
             :ListRouteParams="{form: 'sanad'}"
+            :exportParams="{id: this.id}"
             @clearForm="clearSanad()"
           >
             <router-link
