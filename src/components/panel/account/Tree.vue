@@ -40,7 +40,7 @@
           <i class="fas fa-pencil-alt text-warning"/>
           <span>ویرایش حساب</span>
         </li>
-        <li @click="createAccount(child.data.account)" v-if="child.data.account != 3">
+        <li @click="createAccount(child.data.account)" v-if="child.data.account.level != 3">
           <i class="fas fa-plus text-success"/>
           <span>افزودن حساب فرزند</span>
         </li>
@@ -71,6 +71,9 @@ export default {
       datatableOptions
     };
   },
+  created() {
+    this.config.autoCodeAndType = false;
+  },
   methods: {
     editAccount(node) {
       this.mode = "edit";
@@ -82,6 +85,7 @@ export default {
       this.account = {};
       this.account.parent = node;
       this.account.level = node.level + 1;
+      this.setCodeAndType();
       this.modal("#account-modal", "show");
     },
     contextMenu(e, item) {
