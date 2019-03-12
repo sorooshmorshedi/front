@@ -42,18 +42,19 @@ export default {
       this.log("init list");
       this.showTable = false;
       this.options = this.formOptions[this.form];
+      let defaults;
       switch (this.type) {
         case "receive":
           this.options.label = "دریافت ها";
-          this.defaultFilters = {
-            transactionType: this.type
-          };
+          defaults = { transactionType: this.type };
+          this.defaultFilters = defaults;
+          this.options.defaultParams = defaults;
           break;
         case "payment":
           this.options.label = "پرداخت ها";
-          this.defaultFilters = {
-            transactionType: this.type
-          };
+          defaults = { transactionType: this.type };
+          this.defaultFilters = defaults;
+          this.options.defaultParams = defaults;
           break;
         case "received":
           this.options.label = "چک های دریافتی";
@@ -71,9 +72,9 @@ export default {
           break;
       }
       if (this.form == "factor") {
-        this.defaultFilters = {
-          factorType: this.type
-        };
+        defaults = { factorType: this.type };
+        this.defaultFilters = defaults;
+        this.options.defaultParams = defaults;
         switch (this.type) {
           case "buy":
             this.options.label = "فاکتور های خرید";
@@ -90,9 +91,9 @@ export default {
         }
       }
       if (this.form == "receipt") {
-        this.defaultFilters = {
-          receiptType: this.type
-        };
+        defaults = { receiptType: this.type };
+        this.defaultFilters = defaults;
+        this.options.defaultParams = defaults;
         switch (this.type) {
           case "receipt":
             this.options.label = "رسید ها";
