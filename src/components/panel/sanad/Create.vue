@@ -3,46 +3,43 @@
     <div class="col-12">
       <div class="card right">
         <div class="card-body">
-          <div class="title">
-            سند حسابداری
-            <span class="d-print-none">
-              <a @click.prevent="clearSanad()" href="#/" class="btn btn-info">جدید</a>
-              <router-link
-                class="btn btn-info"
-                :to="{name: 'List', params: {form: 'sanad'}}"
-              >انتخاب سند</router-link>
-              <router-link
-                v-if="sanad.factor"
-                class="btn btn-info"
-                :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}"
-              >مشاهده فاکتور این سند</router-link>
-              <router-link
-                v-if="sanad.transaction"
-                class="btn btn-info"
-                :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}"
-              >
-                <span>مشاهده دریافت/پرداخت</span>
-              </router-link>
-              <button class="btn btn-info" @click="print()">چاپ</button>
+          <form-header
+            title="سند حسابداری"
+            formName="سند"
+            :ListRouteParams="{form: 'sanad'}"
+            @clearForm="clearSanad()"
+          >
+            <router-link
+              v-if="sanad.factor"
+              class="btn btn-info"
+              :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}"
+            >مشاهده فاکتور این سند</router-link>
+            <router-link
+              v-if="sanad.transaction"
+              class="btn btn-info"
+              :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}"
+            >
+              <span>مشاهده دریافت/پرداخت</span>
+            </router-link>
 
-              <div class="dropdown open d-inline-block" v-if="id">
-                <button
-                  class="btn btn-info dropdown-toggle"
-                  type="button"
-                  data-toggle="dropdown"
-                >کپی سند</button>
-                <div class="dropdown-menu">
-                  <a
-                    @click.prevent="copySanadToNewSanad()"
-                    class="dropdown-item"
-                    href="#!"
-                  >به سند جدید</a>
-                  <h6 class="dropdown-header"></h6>
-                  <a class="dropdown-item" href="#!">Another action</a>
-                </div>
+            <div class="dropdown open d-inline-block" v-if="id">
+              <button
+                class="btn btn-info dropdown-toggle"
+                type="button"
+                data-toggle="dropdown"
+              >کپی سند</button>
+              <div class="dropdown-menu">
+                <a
+                  @click.prevent="copySanadToNewSanad()"
+                  class="dropdown-item"
+                  href="#!"
+                >به سند جدید</a>
+                <h6 class="dropdown-header"></h6>
+                <a class="dropdown-item" href="#!">Another action</a>
               </div>
-            </span>
-          </div>
+            </div>
+          </form-header>
+
           <div class="row">
             <div class="col-lg-6">
               <div class="row">
@@ -236,9 +233,10 @@ import sanadApiMixin from "@/mixin/sanadApi";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import FormFooter from "@/components/panel/FormFooter";
+import FormHeader from "@/components/panel/FormHeader";
 export default {
-  name: "Create",
-  components: { money, date, FormFooter },
+  name: "Form",
+  components: { money, date, FormFooter, FormHeader },
   mixins: [accountApiMixin, sanadApiMixin],
   props: ["id"],
   data() {
