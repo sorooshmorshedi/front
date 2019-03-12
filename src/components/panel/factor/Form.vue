@@ -119,6 +119,7 @@
                   <thead>
                     <tr>
                       <th>#</th>
+                      <th>شرح</th>
                       <th>کالا</th>
                       <th>انبار</th>
                       <th>تعداد</th>
@@ -141,6 +142,13 @@
                       :class="{'d-print-none': i == rows.length-1}"
                     >
                       <td>{{ i+1 }}</td>
+                      <td>
+                        <input
+                          type="text"
+                          class="form-control form-control"
+                          v-model="rows[i].explanation"
+                        >
+                      </td>
                       <td>
                         <multiselect
                           :option-height="104"
@@ -820,7 +828,7 @@ export default {
       return true;
     },
     hasPrev() {
-      if (!this.factor.code) return false;
+      if (this.factorCode == 1) return false;
       if (this.factor.code == 1) return false;
       return true;
     },
