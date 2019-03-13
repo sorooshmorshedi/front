@@ -630,6 +630,7 @@ export default {
       this.checkInventories(clearFactor);
     },
     selectFactor(factor, changeRoute = false) {
+      this.log("Selecting Factor : ", factor);
       this.factor = factor;
       this.itemsToDelete = [];
       this.rows = factor.items;
