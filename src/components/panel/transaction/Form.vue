@@ -3,15 +3,13 @@
     <div class="col-12">
       <div class="card right">
         <div class="card-body">
-
           <form-header
             :formName="type.label"
             :title="'ثبت ' + type.label"
             :ListRouteParams="{form: 'transaction', type: type.name}"
             :exportParams="{id: this.id}"
             @clearForm="clearFrom()"
-          >
-          </form-header>
+          ></form-header>
 
           <div class="row">
             <div class="col-lg-8">
@@ -161,6 +159,7 @@
                       <td>
                         <date
                           :disabled="isChequeType(row)"
+                          default="1"
                           class="form-control"
                           v-model="rows[i].date"
                         />
