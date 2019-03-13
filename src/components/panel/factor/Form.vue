@@ -15,7 +15,7 @@
               class="btn btn-info"
               data-toggle="modal"
               data-target="#payments-modal"
-            >مشاهده دریافت/ پرداخت ها</button>
+            >مشاهده {{ transactionType }} ها</button>
           </form-header>
 
           <div class="row">
@@ -836,6 +836,13 @@ export default {
     hasLast() {
       if (this.factorCode == 1) return false;
       return true;
+    }, 
+    transactionType(){
+      if (["buy", "backFromSale"].includes(this.factorType)) {
+        return "پرداخت ";
+      } else {
+        return "دریافت ";
+      }
     }
   },
   watch: {
