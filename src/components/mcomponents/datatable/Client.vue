@@ -11,6 +11,7 @@
                 class="btn btn-block btn-info"
                 id="clear-filters-btn"
               >خالی کردن فیلتر ها</button>
+              <button v-if="printable" @click="printTable()" class="btn btn-block btn-info">چاپ</button>
             </th>
             <th v-for="(col, i) in filterFields" :key="i">
               <template v-for="(filter, j) in col.filters">
@@ -162,6 +163,9 @@ export default {
       default() {
         return [];
       }
+    },
+    printable: {
+      default: false
     }
   },
   components: { date, money, mtime },
@@ -293,6 +297,11 @@ export default {
     }
   },
   methods: {
+    printTable() {
+      if (this.printable) {
+        print();
+      }
+    },
     orderBy(col) {
       if (col.sortable == false) return;
       if (this.order == col.td) this.order = `-${col.td}`;

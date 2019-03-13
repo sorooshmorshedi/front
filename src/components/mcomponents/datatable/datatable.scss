@@ -20,3 +20,10 @@
 .fa-sort {
   color: rgba(0, 0, 0, 0.3);
 }
+
+@media print {
+  .fixed-head {
+    height: auto;
+    max-height: none;
+  }
+}
