@@ -1,7 +1,12 @@
 <template>
   <div class="row rtl">
     <div class="col-12">
-      <datatable :cols="datatableOptions.cols" :data="treeAccounts" @rowContextMenu="contextMenu"/>
+      <datatable
+        :cols="datatableOptions.cols"
+        :data="treeAccounts"
+        @rowContextMenu="contextMenu"
+        :printable="true"
+      />
     </div>
 
     <div class="modal" id="account-modal" tabindex="-1" role="dialog">
