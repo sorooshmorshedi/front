@@ -613,7 +613,7 @@ export default {
           this.notify(`لطفا تعداد ردیف ${i + 1} را وارد کنید`, "danger");
           isValid = false;
         }
-        if (!r.fee || r.fee == 0) {
+        if (r.fee == undefined) {
           this.notify(`لطفا قیمت واحد ردیف ${i + 1} را وارد کنید`, "danger");
           isValid = false;
         }
