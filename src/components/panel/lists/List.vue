@@ -72,9 +72,9 @@ export default {
           break;
       }
       if (this.form == "factor") {
-        defaults = { factorType: this.type };
-        this.defaultFilters = defaults;
-        this.options.defaultParams = defaults;
+        this.defaultFilters = { type: this.type };
+        this.options.defaultParams = { factorType: this.type };
+
         switch (this.type) {
           case "buy":
             this.options.label = "فاکتور های خرید";
