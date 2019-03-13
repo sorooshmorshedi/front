@@ -3,7 +3,16 @@
     <div class="col-12">
       <div class="card right">
         <div class="card-body">
-          <div class="title">ثبت {{ type.label }}</div>
+
+          <form-header
+            :formName="type.label"
+            :title="'ثبت ' + type.label"
+            :ListRouteParams="{form: 'transaction', type: type.name}"
+            :exportParams="{id: this.id}"
+            @clearForm="clearFrom()"
+          >
+          </form-header>
+
           <div class="row">
             <div class="col-lg-8">
               <div class="row">
@@ -416,10 +425,11 @@ import chequeMixin from "@/mixin/cheque";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import FormFooter from "@/components/panel/FormFooter";
+import FormHeader from "@/components/panel/FormHeader";
 import _ from "lodash";
 export default {
   name: "Form",
-  components: { money, date, FormFooter },
+  components: { money, date, FormFooter, FormHeader },
   mixins: [accountApiMixin, sanadApiMixin, chequeMixin],
   props: ["transactionType", "id"],
   data() {
