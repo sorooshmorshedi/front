@@ -46,28 +46,30 @@ Vue.mixin({
           params: options.params,
         })
         .then((res) => {
+          this.$store.commit('decrementOGR');
           try {
             let data = res.data;
             if (data.token) {
               localStorage.setItem('token', data.token);
               this.token = data.token;
             }
-            this.$store.commit('decrementOGR');
             options.success(res.data);
           } catch (error) {
             console.error('Error in then: ', error);
           }
         })
         .catch((error) => {
+          this.$store.commit('decrementOGR');
+          console.log(error);
           if (!error.response) {
             console.warn('NO RESPONSE FROM SERVER');
+            this.notify('خطا در برقراری ارتباط با سرور', 'danger');
             return;
           }
           if (this.OGR == 0) {
             console.warn('OGR IS ZERO');
             return;
           }
-          this.$store.commit('decrementOGR');
           if (error.response.status == 401) {
             if (this.$router.currentRoute.name == 'Login') return;
             this.notify('شما از سامانه خارج شده اید', 'warning');
