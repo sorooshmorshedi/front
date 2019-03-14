@@ -624,7 +624,7 @@ export default {
       return this.request({
         url: this.endpoint(url),
         method: "get",
-        params: { code },
+        params: { type: this.transactionType, code },
         success: data => {
           this.selectTransaction(data);
         }
