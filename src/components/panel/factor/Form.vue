@@ -11,12 +11,14 @@
             @clearForm="clearSanad()"
           >
             <a
+              v-if="this.id"
               class="btn btn-info"
               :href="summarizedExportUrl.html"
               target="_blank"
               rel="noopener noreferrer"
             >چاپ فاکتور خلاصه</a>
             <a
+              v-if="this.id"
               class="btn btn-info"
               :href="summarizedExportUrl.pdf"
               target="_blank"
