@@ -9,9 +9,9 @@
       >انتخاب {{ formName }}</router-link>
 
       <template v-if="hasExport">
-        <a class="btn btn-info" :href="`javascript: w=window.open('` + printUrl + `');`">چاپ</a>
+        <a class="btn btn-info" :href="printUrl" target="_blank" rel="noopener noreferrer" >چاپ</a>
         
-        <a class="btn btn-info" :href="`javascript: w=window.open('` + pdfUrl + `');`">PDF</a>
+        <a class="btn btn-info" :href="pdfUrl" rel="noopener noreferrer">PDF</a>
         <!-- <a class="btn btn-info" :href="pdfUrl">PDF</a> -->
       </template>
 
