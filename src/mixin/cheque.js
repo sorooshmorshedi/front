@@ -16,7 +16,6 @@ export default {
       cheque && (this.cheque = this.copy(cheque));
       chequebook && (this.chequebook = this.copy(chequebook));
       this.cheque.received_or_paid = (received_or_paid == 'received') ? 'r' : 'p';
-      console.log(received_or_paid,this.cheque);
       $("#submit-paid-cheque-modal").modal("show");
     },
     changeChequeStatusModal(cheque, chequebook) {

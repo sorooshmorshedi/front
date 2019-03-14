@@ -157,6 +157,8 @@ export default {
   },
   watch: {
     inuseCheque() {
+      this.statusChange = {};
+      this.newStatus = null;
       if (this.inuseCheque) this.cheque = this.inuseCheque;
       if (this.inuseChequebook) {
         this.chequebook = this.inuseChequebook;
@@ -168,6 +170,7 @@ export default {
       }
     },
     newStatus() {
+      if(!this.newStatus) return;
       let name = this.newStatus.name;
       let acc = null;
       if (name == "inFlow") {
