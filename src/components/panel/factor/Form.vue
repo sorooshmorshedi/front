@@ -24,12 +24,17 @@
               target="_blank"
               rel="noopener noreferrer"
             >PDF فاکتور خلاصه</a>
+            <router-link
+              v-if="canSubmitTransaction"
+              class="btn btn-info"
+              :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{factorId: this.id}}"
+            >ثبت {{ transactionType.label }}</router-link>
             <button
               v-if="this.id"
               class="btn btn-info"
               data-toggle="modal"
               data-target="#payments-modal"
-            >مشاهده {{ transactionType }} ها</button>
+            >مشاهده {{ transactionType.label }} ها</button>
           </form-header>
 
           <div class="row">
@@ -771,6 +776,10 @@ export default {
     }
   },
   computed: {
+    canSubmitTransaction() {
+      if (!this.id) return false;
+      return this.factor.paidValue < this.sum.total;
+    },
     summarizedExportUrl() {
       let url =
         "reports/lists/factors/TEMP?form=factor&summarized=true&type=" +
@@ -864,11 +873,19 @@ export default {
       return true;
     },
     transactionType() {
+      let label;
+      let name;
       if (["buy", "backFromSale"].includes(this.factorType)) {
-        return "پرداخت ";
+        name = "payment";
+        label = "پرداخت ";
       } else {
-        return "دریافت ";
+        name = "receive";
+        label = "دریافت ";
       }
+      return {
+        label,
+        name
+      };
     }
   },
   watch: {

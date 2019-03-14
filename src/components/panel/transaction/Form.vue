@@ -430,7 +430,7 @@ export default {
   name: "Form",
   components: { money, date, FormFooter, FormHeader },
   mixins: [accountApiMixin, sanadApiMixin, chequeMixin],
-  props: ["transactionType", "id"],
+  props: ["transactionType", "id", "factorId"],
   data() {
     return {
       transaction: {},
@@ -532,7 +532,7 @@ export default {
       this.log("Init Transaction Form");
       if (!this.id) {
         this.rows = [{}];
-        this.transaction = {};
+        this.transaction = this.getTransactionTemplate();
       }
       if (this.transactionType == "receive") {
         this.type.label = "دریافت";
@@ -568,12 +568,30 @@ export default {
       if (newCode) this.getTransactionByCode(newCode);
     },
     getData() {
-      this.getAccounts();
-      this.getDefaultAccounts();
-      this.getChequebooks();
-      this.getTransaction(this.id);
-      this.getTransactionCodes();
-      this.getNotPaidFactors();
+      Promise.all([
+        this.getAccounts(),
+        this.getDefaultAccounts(),
+        this.getChequebooks(),
+        this.getTransaction(this.id),
+        this.getTransactionCodes(),
+        this.getNotPaidFactors()
+      ]).then(values => {
+        if (this.factorId) this.selectNotPaidFactor(this.factorId);
+      });
+    },
+    selectNotPaidFactor(factorId) {
+      let factor = this.factors.filter(o => o.id == factorId);
+      if (factor.length) factor = factor[0];
+      else {
+        console.error("Factor Not Found");
+        return;
+      }
+      this.transaction.account = factor.account;
+      this.transaction.floatAccount = factor.floatAccount;
+      let value = factor.sanad.bed - factor.paidValue;
+      this.rows[0].value = value;
+      this.rows.push({})
+      factor.payment.value = value;
     },
     getNotPaidFactors() {
       if (this.id) this.transaction.id = this.id;
@@ -626,15 +644,17 @@ export default {
         method: "get",
         params: { type: this.transactionType, code },
         success: data => {
-          this.selectTransaction(data);
+          this.selectTransaction(data, true);
         }
       });
     },
-    selectTransaction(transaction) {
-      this.$router.push({
-        name: "TransactionForm",
-        params: { id: transaction.id, transactionType: this.transactionType }
-      });
+    selectTransaction(transaction, redirect = false) {
+      if (redirect) {
+        this.$router.push({
+          name: "TransactionForm",
+          params: { id: transaction.id, transactionType: this.transactionType }
+        });
+      }
       this.rows = [];
       this.transaction = transaction;
       this.itemsToDelete = [];
@@ -927,6 +947,7 @@ export default {
       });
     },
     clearTransaction() {
+      this.log("Clear Transaction");
       this.$router.push({
         name: "TransactionForm",
         params: {
@@ -935,7 +956,14 @@ export default {
       });
       this.rows = [{}];
       this.transaction = {};
+    },
+    getTransactionTemplate(){
+      return {
+        account: null,
+        floatAccount: null,
+      }
     }
+
   }
 };
 </script>

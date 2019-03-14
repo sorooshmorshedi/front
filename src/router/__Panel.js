@@ -166,8 +166,13 @@ export default [{
       children: [{
         name: 'TransactionForm',
         path: ':transactionType/:id?',
-        props: true,
-        component: TransactionForm
+        component: TransactionForm,
+        props: route => {
+          return {
+            factorId: route.query.factorId,
+            ...route.params,
+          };
+        },
       }]
     },
     {
