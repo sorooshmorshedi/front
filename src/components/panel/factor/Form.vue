@@ -10,6 +10,18 @@
             :exportParams="{id: this.id}"
             @clearForm="clearSanad()"
           >
+            <a
+              class="btn btn-info"
+              :href="summarizedExportUrl.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >چاپ فاکتور خلاصه</a>
+            <a
+              class="btn btn-info"
+              :href="summarizedExportUrl.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >PDF فاکتور خلاصه</a>
             <button
               v-if="this.id"
               class="btn btn-info"
@@ -757,6 +769,18 @@ export default {
     }
   },
   computed: {
+    summarizedExportUrl() {
+      let url =
+        "reports/lists/factors/TEMP?form=factor&summarized=true&type=" +
+        this.factorType +
+        "&id=" +
+        this.id;
+      url = this.endpoint(url);
+      return {
+        html: url.replace("TEMP", "html"),
+        pdf: url.replace("TEMP", "pdf")
+      };
+    },
     sum() {
       let res = {
         sum: 0,
@@ -836,8 +860,8 @@ export default {
     hasLast() {
       if (this.factorCode == 1) return false;
       return true;
-    }, 
-    transactionType(){
+    },
+    transactionType() {
       if (["buy", "backFromSale"].includes(this.factorType)) {
         return "پرداخت ";
       } else {
