@@ -227,7 +227,8 @@ export default {
         url: this.endpoint('factors/getFactorByCode'),
         method: 'get',
         params: {
-          code
+          type: this.factorType,
+          code,
         },
         success: data => {
           this.selectFactor(data, true)
