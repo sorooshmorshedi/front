@@ -109,7 +109,7 @@
             <vue-form-generator tag="div" :schema="editSchema[2]" :model="account"/>
             <button @click="updateAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
             <button
-              v-if="account.id"
+              v-if="account.id && !isDefaultCode(account.code)"
               @click="deleteAccount(account)"
               class="btn btn-danger float-left submit-btn"
               style="margin-left: 15px;"

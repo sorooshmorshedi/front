@@ -67,13 +67,13 @@
           </div>
           <template v-else>
             <vue-form-generator tag="div" :schema="createSchema[3]" :model="account"/>
-            <button @click="storeAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
+            <button @click="storeTafsiliAccount()" class="btn btn-primary float-left submit-btn">ثبت</button>
           </template>
         </div>
       </div>
     </div>
     <div class="col-12 col-lg-5">
-      <accounts-list :accounts="accountsSelectValues.levels[account.level]" />
+      <accounts-list :accounts="accountsSelectValues.levels[account.level]"/>
     </div>
   </div>
 </template>
@@ -99,19 +99,23 @@ export default {
       this.account.level = e.target.id.split("-")[1];
     });
   },
+  computed: {},
   watch: {
     accounts() {
       if (!this.account.code) this.setCodeAndType();
     }
   },
   methods: {
-    storeBuyer() {
-      this.person.type = "buyer";
-      this.storePerson();
-    },
-    storeSeller() {
-      this.person.type = "seller";
-      this.storePerson();
+    storeTafsiliAccount() {
+      if (this.isDefaultCode(this.account.parent.code)) {
+        this.notify(
+          "برای تعریف اشخاص و یا بانک به صفحه مربوطه مراجعه کنید",
+          "danger"
+        );
+        return;
+      }
+
+      this.storeAccount();
     }
   }
 };

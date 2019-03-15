@@ -87,11 +87,11 @@ export default {
       }
       let parentCode;
       if (this.person.type == "buyer") {
-        if (this.person.personType == "real") parentCode = "10301";
-        else parentCode = "10302";
+        if (this.person.personType == "real") parentCode = this.DEFAULT_CODES.buyer.real;
+        else parentCode = this.DEFAULT_CODES.buyer.legal;
       } else {
-        if (this.person.personType == "real") parentCode = "30101";
-        else parentCode = "30102";
+        if (this.person.personType == "real") parentCode = this.DEFAULT_CODES.seller.real;
+        else parentCode = this.DEFAULT_CODES.seller.legal;
       }
       this.account.parent = this.findAccount("code", parentCode);
       this.setCodeAndType();

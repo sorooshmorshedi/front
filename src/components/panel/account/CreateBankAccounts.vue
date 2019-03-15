@@ -47,7 +47,7 @@ export default {
   mounted() {
     this.account.level = 3;
     this.account.type = "bank";
-    this.account.parent = { code: "10101" };
+    this.account.parent = { code: this.DEFAULT_CODES.bank };
     this.setCodeAndType();
   },
   data() {
@@ -56,7 +56,10 @@ export default {
   watch: {},
   methods: {
     storeBankAccount() {
-      this.account.parent = this.findAccount("code", "10101");
+      this.account.parent = this.findAccount(
+        "code",
+        this.DEFAULT_CODES.bank
+      );
       this.storeBank();
     }
   }

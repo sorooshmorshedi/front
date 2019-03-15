@@ -36,6 +36,17 @@ export default {
       },
       config: {
         autoCodeAndType: true
+      },
+      DEFAULT_CODES: {
+        buyer: {
+          real: "10301",
+          legal: "10302"
+        },
+        seller: {
+          real: "30101",
+          legal: "30102"
+        },
+        bank: "10101"
       }
     }
   },
@@ -106,6 +117,15 @@ export default {
       this.setCodeAndType();
       this.log('Init Accounts : Done');
     },
+    isDefaultCode(code) {
+      return [
+        this.DEFAULT_CODES.buyer.real,
+        this.DEFAULT_CODES.buyer.legal,
+        this.DEFAULT_CODES.seller.real,
+        this.DEFAULT_CODES.seller.legal,
+        this.DEFAULT_CODES.bank
+      ].includes(code);
+    }
   },
   computed: {
     hasValidCode() {
