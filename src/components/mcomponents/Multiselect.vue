@@ -14,6 +14,7 @@
     :track-by="trackBy"
     :label="label"
     @input="change"
+    @select="select"
   >
     <span slot="noResult">نتیجه ای یافت نشد</span>
     <span slot="noOptions">لیست خالی است</span>
@@ -50,7 +51,10 @@ export default {
       if (this.value != this.localValue) {
         this.$emit("input", this.localValue);
       }
-    }
+    },
+    select(selectedOption, id){
+      this.$emit('select', selectedOption, id);
+    },
   }
 };
 </script>
