@@ -184,12 +184,10 @@
                         <span v-else>-</span>
                       </td>
                       <td>
-                        <input
-                          dir="ltr"
-                          type="number"
+                        <money
                           class="form-control form-control"
                           v-model="rows[i].count"
-                        >
+                        />
                       </td>
                       <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
                       <td>
