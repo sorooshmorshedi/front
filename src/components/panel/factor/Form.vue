@@ -168,6 +168,7 @@
                           v-model="rows[i].ware"
                           track-by="id"
                           label="title"
+                          @select="setDefaultValue"
                         />
                       </td>
                       <td>
@@ -567,7 +568,8 @@ export default {
       hasTax: false,
       rowTemplate: {
         discountValue: "",
-        discountPercent: ""
+        discountPercent: "",
+        fee: ""
       },
       itemsToDelete: [],
       expensesToDelete: [],
@@ -603,6 +605,19 @@ export default {
       }
       this.setFactorLabel(this.factorType);
       this.getData();
+    },
+    setDefaultValue(ware) {
+      let value = ware.price;
+      console.log(value);
+      this.$nextTick(() => {
+        this.rows.forEach(row => {
+          if (!row.ware) return;
+          if (row.ware.id == ware.id) {
+            row.fee = value;
+            return;
+          }
+        });
+      });
     },
     setFactorLabel(factorType) {
       switch (factorType) {
@@ -852,7 +867,6 @@ export default {
     hasBijak() {
       return ["buy", "backFromBuy"].includes(this.factorType);
     },
-
     hasFirst() {
       if (this.factorCode == 1) return false;
       return true;
