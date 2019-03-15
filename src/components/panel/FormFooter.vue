@@ -27,18 +27,20 @@
       >آخرین {{ formName }}</button>
     </div>
     <div class="col-12 col-md-6 ltr text-left" dir="ltr">
-      <button
-        @click="validate(true)"
-        type="button"
-        class="btn submit btn-primary foat-left"
-        :disabled="!canSubmit"
-      >ثبت و صدور {{ formName }} جدید</button>
-      <button
-        @click="validate(false)"
-        type="button"
-        class="btn submit btn-primary loat-left w-100px"
-        :disabled="!canSubmit"
-      >ثبت</button>
+      <template v-if="isEditing">
+        <button
+          @click="validate(true)"
+          type="button"
+          class="btn submit btn-primary foat-left"
+          :disabled="!canSubmit"
+        >ثبت و صدور {{ formName }} جدید</button>
+        <button
+          @click="validate(false)"
+          type="button"
+          class="btn submit btn-primary loat-left w-100px"
+        >ثبت</button>
+      </template>
+      <button v-else @click="edit()" type="button" class="btn submit btn-info foat-left">ویرایش</button>
     </div>
   </div>
 </template>
@@ -63,10 +65,22 @@ export default {
     },
     canSubmit: {
       default: true
+    },
+    confirmEdit: {
+      default: true
     }
   },
   data() {
-    return {};
+    return {
+      isEditing: false
+    };
+  },
+  created() {
+    if (this.confirmEdit) {
+      this.isEditing = false;
+    } else {
+      this.isEditing = true;
+    }
   },
   methods: {
     goToForm(pos) {
@@ -74,6 +88,9 @@ export default {
     },
     validate(clearForm) {
       this.$emit("validate", clearForm);
+    },
+    edit() {
+      this.isEditing = true;
     }
   }
 };
