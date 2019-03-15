@@ -7,34 +7,39 @@
             formName="فاکتور"
             :title="'فاکتور ' + factorLabel"
             :ListRouteParams="{form: 'factor', type: factorType}"
-            :exportParams="{id: this.id}"
             @clearForm="clearSanad()"
           >
-            <a
-              v-if="this.id"
-              class="btn btn-info"
-              :href="summarizedExportUrl.html"
-              target="_blank"
-              rel="noopener noreferrer"
-            >چاپ فاکتور خلاصه</a>
-            <a
-              v-if="this.id"
-              class="btn btn-info"
-              :href="summarizedExportUrl.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-            >PDF فاکتور خلاصه</a>
-            <router-link
-              v-if="canSubmitTransaction"
-              class="btn btn-info"
-              :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{factorId: this.id}}"
-            >ثبت {{ transactionType.label }}</router-link>
-            <button
-              v-if="this.id"
-              class="btn btn-info"
-              data-toggle="modal"
-              data-target="#payments-modal"
-            >مشاهده {{ transactionType.label }} ها</button>
+            <template v-if="id">
+              <div class="dropdown d-inline">
+                <button
+                  class="btn btn-info dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                >خروجی</button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                  <a
+                    v-for="(el, i) in exportLinks"
+                    :key="i"
+                    class="dropdown-item"
+                    :href="el.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >{{ el.name }}</a>
+                  <!-- <div class="dropdown-divider"></div> -->
+                </div>
+              </div>
+
+              <router-link
+                v-if="canSubmitTransaction"
+                class="btn btn-info"
+                :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{factorId: id}}"
+              >ثبت {{ transactionType.label }}</router-link>
+              <button
+                class="btn btn-info"
+                data-toggle="modal"
+                data-target="#payments-modal"
+              >مشاهده {{ transactionType.label }} ها</button>
+            </template>
           </form-header>
 
           <div class="row">
@@ -184,10 +189,7 @@
                         <span v-else>-</span>
                       </td>
                       <td>
-                        <money
-                          class="form-control form-control"
-                          v-model="rows[i].count"
-                        />
+                        <money class="form-control form-control" v-model="rows[i].count"/>
                       </td>
                       <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
                       <td>
@@ -793,17 +795,49 @@ export default {
       if (!this.id) return false;
       return this.factor.paidValue < this.sum.total;
     },
-    summarizedExportUrl() {
+    exportLinks() {
       let url =
-        "reports/lists/factors/TEMP?form=factor&summarized=true&type=" +
+        "reports/lists/factors/TEMP?form=factor&type=" +
         this.factorType +
         "&id=" +
         this.id;
       url = this.endpoint(url);
-      return {
-        html: url.replace("TEMP", "html"),
-        pdf: url.replace("TEMP", "pdf")
-      };
+      let html = url.replace("TEMP", "html");
+      let pdf = url.replace("TEMP", "pdf");
+      return [
+        {
+          name: 'چاپ فاکتور',
+          url: html,
+        },
+        {
+          name: 'PDF فاکتور',
+          url: pdf,
+        },
+        {
+          name: 'چاپ فاکتور خلاصه',
+          url: html + '&summarized=1',
+        },
+        {
+          name: 'PDF فاکتور خلاصه',
+          url: pdf + '&summarized=1',
+        },
+        {
+          name: 'چاپ فاکتور به تنهایی',
+          url: html + '&hide_expenses=1',
+        },
+        {
+          name: 'PDF فاکتور به تنهایی',
+          url: pdf + '&hide_expenses=1',
+        },
+        {
+          name: 'چاپ هزینه های فاکتور',
+          url: html + '&hide_factor=1',
+        },
+        {
+          name: 'PDF هزینه های فاکتور',
+          url: pdf + '&hide_factor=1',
+        },
+      ]
     },
     sum() {
       let res = {
