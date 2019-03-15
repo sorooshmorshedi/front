@@ -9,6 +9,7 @@
             :ListRouteParams="{form: 'factor', type: factorType}"
             @clearForm="clearSanad()"
           >
+            <router-link class="btn btn-info" :to="{name: 'CreatePersonAccounts'}">تعریف حساب اشخاص</router-link>
             <template v-if="id">
               <div class="dropdown d-inline">
                 <button
@@ -28,7 +29,6 @@
                   <!-- <div class="dropdown-divider"></div> -->
                 </div>
               </div>
-
               <router-link
                 v-if="canSubmitTransaction"
                 class="btn btn-info"
@@ -383,20 +383,6 @@
             @goToForm="goToForm"
             @validate="validate"
           />
-          <!-- <div class="row d-print-none">
-            <div class="col-12 text-left">
-              <button
-                @click="validate(false)"
-                type="button"
-                class="btn submit btn-primary loat-left w-100px"
-              >ثبت</button>
-              <button
-                @click="validate(true)"
-                type="button"
-                class="btn submit btn-primary foat-left"
-              >ثبت و صدور فاکتور جدید</button>
-            </div>
-          </div>-->
         </div>
       </div>
     </div>
@@ -806,38 +792,38 @@ export default {
       let pdf = url.replace("TEMP", "pdf");
       return [
         {
-          name: 'چاپ فاکتور',
-          url: html,
+          name: "چاپ فاکتور",
+          url: html
         },
         {
-          name: 'PDF فاکتور',
-          url: pdf,
+          name: "PDF فاکتور",
+          url: pdf
         },
         {
-          name: 'چاپ فاکتور خلاصه',
-          url: html + '&summarized=1',
+          name: "چاپ فاکتور خلاصه",
+          url: html + "&summarized=1"
         },
         {
-          name: 'PDF فاکتور خلاصه',
-          url: pdf + '&summarized=1',
+          name: "PDF فاکتور خلاصه",
+          url: pdf + "&summarized=1"
         },
         {
-          name: 'چاپ فاکتور به تنهایی',
-          url: html + '&hide_expenses=1',
+          name: "چاپ فاکتور به تنهایی",
+          url: html + "&hide_expenses=1"
         },
         {
-          name: 'PDF فاکتور به تنهایی',
-          url: pdf + '&hide_expenses=1',
+          name: "PDF فاکتور به تنهایی",
+          url: pdf + "&hide_expenses=1"
         },
         {
-          name: 'چاپ هزینه های فاکتور',
-          url: html + '&hide_factor=1',
+          name: "چاپ هزینه های فاکتور",
+          url: html + "&hide_factor=1"
         },
         {
-          name: 'PDF هزینه های فاکتور',
-          url: pdf + '&hide_factor=1',
-        },
-      ]
+          name: "PDF هزینه های فاکتور",
+          url: pdf + "&hide_factor=1"
+        }
+      ];
     },
     sum() {
       let res = {
