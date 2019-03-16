@@ -97,7 +97,7 @@ export default {
       let data = {
         ...this.defaultAccount,
         account: this.defaultAccount.account.id,
-        usage: 'bank',
+        usage: 'factor',
       };
       this.request({
         url: this.endpoint("accounts/defaultAccounts/" + this.defaultAccount.id),
@@ -118,7 +118,7 @@ export default {
       let data = {
         ...this.defaultAccount,
         account: this.defaultAccount.account.id,
-        usage: 'bank',
+        usage: 'factor',
       };
       this.request({
         url: this.endpoint("accounts/defaultAccounts"),
