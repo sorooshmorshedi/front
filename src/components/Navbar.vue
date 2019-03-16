@@ -141,7 +141,7 @@
                 >ثبت فاکتور برگشت از فروش</router-link>
               </div>
             </div>
-            <div class="dropdown-divider"></div>
+            <!-- <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"
               :to="{name:'ReceiptAndRemittance', params: {receiptType: 'receipt'}}"
@@ -149,7 +149,7 @@
             <router-link
               class="dropdown-item"
               :to="{name:'ReceiptAndRemittance', params: {receiptType: 'remittance'}}"
-            >ثبت حواله</router-link>
+            >ثبت حواله</router-link> -->
             <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"
