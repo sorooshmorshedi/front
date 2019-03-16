@@ -72,15 +72,15 @@
                 </div>
                 <div class="form-group col-lg-2 col-sm-2">
                   <label>تاریخ فاکتور</label>
-                  <date class="form-control" v-model="factor.date" :default="true"/>
+                  <date class="form-control" v-model="factor.date" :default="true" :disabled="!editable" />
                 </div>
                 <div class="form-group col-lg-2 col-sm-2">
                   <label>ساعت فاکتور</label>
-                  <mtime class="form-control" v-model="factor.time" :default="true"/>
+                  <mtime class="form-control" v-model="factor.time" :default="true" :disabled="!editable" />
                 </div>
                 <div v-if="hasBijak" class="form-group col-lg-2 col-sm-2">
                   <label>بیجک</label>
-                  <input type="number" class="form-control" v-model="factor.bijak">
+                  <input type="number" class="form-control" v-model="factor.bijak" :disabled="!editable" />
                 </div>
                 <div class="w-100"></div>
                 <div class="col-lg-2 d-print-none">
@@ -92,7 +92,7 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="customCheck1"
-                      v-model="hasTax"
+                      v-model="hasTax" :disabled="!editable" 
                     >
                     <label class="custom-control-label" for="customCheck1">فاکتور مالیات دارد</label>
                   </div>
@@ -106,6 +106,7 @@
                     v-model="factor.account"
                     track-by="id"
                     label="title"
+ :disabled="!editable" 
                   />
                 </div>
                 <div
@@ -119,6 +120,7 @@
                     v-model="factor.floatAccount"
                     track-by="id"
                     label="name"
+ :disabled="!editable" 
                   />
                 </div>
                 <div class="form-group col-lg-2 d-print-none">
@@ -126,13 +128,14 @@
                     v-if="factor.account"
                     @click="openLedger(factor.account)"
                     class="btn btn-info btn-block btn-label-margin"
+
                   >مشاهده دفتر</button>
                 </div>
               </div>
             </div>
             <div class="form-group col-lg-4">
               <label>توضیحات</label>
-              <textarea class="form-control" rows="5" v-model="factor.exp"></textarea>
+              <textarea class="form-control" rows="5" v-model="factor.exp"  :disabled="!editable" ></textarea>
             </div>
           </div>
           <div class="row">
@@ -173,7 +176,7 @@
                           v-model="rows[i].ware"
                           track-by="id"
                           label="title"
-                          @select="setDefaultValue"
+                          @select="setDefaultValue" :disabled="!editable" 
                         />
                       </td>
                       <td>
@@ -184,30 +187,30 @@
                           :options="waresSelectValues.warehouses"
                           v-model="rows[i].ware.warehouse"
                           track-by="id"
-                          label="title"
+                          label="title" :disabled="!editable" 
                         />
                         <span v-else>-</span>
                       </td>
                       <td>
-                        <money class="form-control form-control" v-model="rows[i].count"/>
+                        <money class="form-control form-control" v-model="rows[i].count" :disabled="!editable" />
                       </td>
                       <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
                       <td>
-                        <money class="form-control form-control" v-model="rows[i].fee"/>
+                        <money class="form-control form-control" v-model="rows[i].fee" :disabled="!editable" />
                       </td>
                       <td dir="ltr">
                         <money class="form-control form-control" :value="rowSum(row)" disabled/>
                       </td>
                       <td>
                         <money
-                          :disabled="hasValue(rows[i].discountPercent)"
+                          :disabled="!editable || hasValue(rows[i].discountPercent)"
                           class="form-control form-control"
                           v-model="rows[i].discountValue"
                         />
                       </td>
                       <td>
                         <input
-                          :disabled="hasValue(rows[i].discountValue)"
+                          :disabled="!editable || hasValue(rows[i].discountValue)"
                           type="number"
                           min="0"
                           max="100"
@@ -223,7 +226,7 @@
                         />
                       </td>
                       <td v-if="hasTax">
-                        <money class="form-control form-control" :value="rowTax(row)" disabled/>
+                        <money class="form-control form-control" :value="rowTax(row)" disabled />
                       </td>
                       <td v-if="hasTax">
                         <money
@@ -237,6 +240,7 @@
                           type="text"
                           class="form-control form-control"
                           v-model="rows[i].explanation"
+ :disabled="!editable" 
                         >
                       </td>
                       <td class="d-print-none">
@@ -245,6 +249,7 @@
                           @click="deleteItemRow(i)"
                           type="button"
                           class="btn btn-sm btn-warning"
+ :disabled="!editable" 
                         >حذف ردیف</button>
                       </td>
                     </tr>
@@ -255,6 +260,7 @@
                           @click="deleteItemRow(0)"
                           type="button"
                           class="btn btn-danger d-print-none"
+ :disabled="!editable" 
                         >حذف همه ردیف ها</button>
                       </td>
                     </tr>
@@ -270,6 +276,7 @@
                 <button
                   @click="factorExpensesModal()"
                   class="btn btn-info d-print-none"
+ :disabled="!editable" 
                 >افزودن / ویرایش</button>
               </h5>
               <div class="table-responsive-lg">
@@ -317,7 +324,7 @@
                         <th>تخفیف</th>
                         <td>
                           <money
-                            :disabled="hasValue(factor.discountPercent)"
+                            :disabled="!editable || hasValue(factor.discountPercent)"
                             class="form-control"
                             v-model="factor.discountValue"
                             placeholder="مبلغ"
@@ -325,7 +332,7 @@
                         </td>
                         <td>
                           <input
-                            :disabled="hasValue(factor.discountValue)"
+                            :disabled="!editable || hasValue(factor.discountValue)"
                             type="number"
                             min="0"
                             max="100"
@@ -343,7 +350,7 @@
                         <th>مالیات</th>
                         <td>
                           <money
-                            :disabled="hasValue(factor.taxPercent)"
+                            :disabled="!editable || hasValue(factor.taxPercent)"
                             class="form-control"
                             v-model="factor.taxValue"
                             placeholder="مبلغ"
@@ -351,7 +358,7 @@
                         </td>
                         <td>
                           <input
-                            :disabled="hasValue(factor.taxValue)"
+                            :disabled="!editable || hasValue(factor.taxValue)"
                             type="number"
                             min="0"
                             max="100"
@@ -380,8 +387,10 @@
             :hasLast="hasLast"
             :hasPrev="hasPrev"
             :hasNext="hasNext"
+            :editable="editable"
             @goToForm="goToForm"
             @validate="validate"
+            @edit="makeFormEditable()"
           />
         </div>
       </div>
@@ -529,16 +538,15 @@
 import accountApiMixin from "@/mixin/accountApi";
 import factorApiMixin from "@/mixin/factorApi";
 import wareApiMixin from "@/mixin/wareApi";
+import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
-import FormFooter from "@/components/panel/FormFooter";
-import FormHeader from "@/components/panel/FormHeader";
 export default {
   name: "Form",
-  components: { money, date, mtime, FormFooter, FormHeader },
+  components: { money, date, mtime,},
   props: ["factorType", "id"],
-  mixins: [accountApiMixin, wareApiMixin, factorApiMixin],
+  mixins: [formsMixin, accountApiMixin, wareApiMixin, factorApiMixin],
   data() {
     return {
       factor: {
@@ -658,6 +666,7 @@ export default {
       this.setFactorLabel(factor.type);
 
       if (changeRoute) {
+        this.makeFormUneditable();
         this.$router.push({
           name: "FactorForm",
           params: {
@@ -774,7 +783,7 @@ export default {
           break;
       }
       if (newCode) this.getFactorByCode(newCode);
-    }
+    },
   },
   computed: {
     canSubmitTransaction() {

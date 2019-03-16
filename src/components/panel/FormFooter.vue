@@ -37,6 +37,7 @@
         <button
           @click="validate(false)"
           type="button"
+          :disabled="!canSubmit"
           class="btn submit btn-primary loat-left w-100px"
         >ثبت</button>
       </template>
@@ -68,6 +69,9 @@ export default {
     },
     confirmEdit: {
       default: true
+    },
+    editable: {
+      default: false
     }
   },
   data() {
@@ -78,11 +82,21 @@ export default {
   created() {
     if (this.confirmEdit) {
       this.isEditing = false;
+      this.setIsEditing();
     } else {
       this.isEditing = true;
     }
   },
+  watch: {
+    editable() {
+      console.log('ha');
+      this.setIsEditing();
+    }
+  },
   methods: {
+    setIsEditing(){
+      if (this.isEditing != this.editable) this.isEditing = this.editable;
+    },
     goToForm(pos) {
       this.$emit("goToForm", pos);
     },
@@ -90,6 +104,7 @@ export default {
       this.$emit("validate", clearForm);
     },
     edit() {
+      this.$emit("edit");
       this.isEditing = true;
     }
   }

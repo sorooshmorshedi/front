@@ -33,6 +33,7 @@
                     v-model="transaction.account"
                     track-by="id"
                     label="title"
+                    :disabled="!editable"
                   />
                 </div>
                 <div class="form-group col-lg-4 col-sm-3">
@@ -44,12 +45,18 @@
                       v-model="transaction.floatAccount"
                       track-by="id"
                       label="name"
+                      :disabled="!editable"
                     />
                   </template>
                 </div>
                 <div class="form-group col-lg-3 col-sm-2">
                   <label>تاریخ</label>
-                  <date class="form-control" v-model="transaction.date" default="1"/>
+                  <date
+                    class="form-control"
+                    v-model="transaction.date"
+                    default="1"
+                    :disabled="!editable"
+                  />
                 </div>
                 <div class="form-group col-lg-3 col-sm-2">
                   <label>تاریخ راس</label>
@@ -84,7 +91,12 @@
             </div>
             <div class="form-group col-lg-4">
               <label>توضیحات {{ type.label }}</label>
-              <textarea class="form-control" rows="5" v-model="transaction.exp"></textarea>
+              <textarea
+                class="form-control"
+                rows="5"
+                v-model="transaction.exp"
+                :disabled="!editable"
+              ></textarea>
             </div>
           </div>
           <div class="row">
@@ -114,7 +126,7 @@
                       <td>{{ i+1 }}</td>
                       <td>
                         <multiselect
-                          :disabled="hasCheque(row)"
+                          :disabled="!editable || hasCheque(row)"
                           dir="rtl"
                           :options="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))"
                           v-model="rows[i].type"
@@ -126,6 +138,7 @@
                           @click="openSubmitChequeModal(row, i)"
                           type="button"
                           class="submit-tcheque btn btn-secondary btn-sm btn-block"
+                          :disabled="!editable"
                         >ثبت چک</button>
                       </td>
                       <td>
@@ -139,18 +152,19 @@
                           v-model="rows[i].floatAccount"
                           track-by="id"
                           label="name"
+                          :disabled="!editable"
                         />
                       </td>
                       <td>
                         <money
-                          :disabled="isChequeType(row)"
+                          :disabled="!editable || isChequeType(row)"
                           class="form-control"
                           v-model="rows[i].value"
                         />
                       </td>
                       <td>
                         <input
-                          :disabled="isChequeType(row)"
+                          :disabled="!editable || isChequeType(row)"
                           type="text"
                           class="form-control"
                           v-model="rows[i].documentNumber"
@@ -158,7 +172,7 @@
                       </td>
                       <td>
                         <date
-                          :disabled="isChequeType(row)"
+                          :disabled="!editable || isChequeType(row)"
                           default="1"
                           class="form-control"
                           v-model="rows[i].date"
@@ -169,7 +183,7 @@
                       </td>
                       <td>
                         <input
-                          :disabled="!hasBank(row)"
+                          :disabled="!editable || !hasBank(row)"
                           type="text"
                           class="form-control form-control"
                           v-model="rows[i].bankName"
@@ -177,7 +191,7 @@
                       </td>
                       <td>
                         <input
-                          :disabled="isChequeType(row)"
+                          :disabled="!editable || isChequeType(row)"
                           type="text"
                           class="form-control form-control"
                           v-model="rows[i].explanation"
@@ -186,6 +200,7 @@
                       <td class="d-print-none">
                         <button
                           v-if="i != rows.length-1 && !hasCheque(row)"
+                          :disabled="!editable"
                           @click="deleteRow(i)"
                           type="button"
                           class="btn btn-sm btn-warning"
@@ -203,6 +218,7 @@
                           @click="deleteRow(0)"
                           type="button"
                           class="btn btn-sm btn-danger"
+                          :disabled="!editable"
                         >حذف همه ردیف ها</button>
                       </td>
                     </tr>
@@ -218,18 +234,11 @@
             :hasPrev="hasPrev"
             :hasNext="hasNext"
             :formName="type.label"
+            :editable="editable"
             @goToForm="goToForm"
             @validate="validate"
+            @edit="makeFormEditable()"
           />
-          <!-- <div class="row rtl d-print-none">
-            <div class="col-12">
-              <button
-                @click="validate()"
-                type="button"
-                class="btn submit btn-primary float-left w-100px"
-              >ثبت</button>
-            </div>
-          </div>-->
         </div>
       </div>
     </div>
@@ -268,7 +277,12 @@
                         <td>{{ f.sanad.bed | toMoney }}</td>
                         <td>{{ f.paidValue }}</td>
                         <td>
-                          <money class="form-control" type="text" v-model="f.payment.value"/>
+                          <money
+                            class="form-control"
+                            type="text"
+                            v-model="f.payment.value"
+                            :disabled="!editable"
+                          />
                         </td>
                       </tr>
                     </tbody>
@@ -421,15 +435,14 @@
 import accountApiMixin from "@/mixin/accountApi";
 import sanadApiMixin from "@/mixin/sanadApi";
 import chequeMixin from "@/mixin/cheque";
+import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
-import FormFooter from "@/components/panel/FormFooter";
-import FormHeader from "@/components/panel/FormHeader";
 import _ from "lodash";
 export default {
   name: "Form",
-  components: { money, date, FormFooter, FormHeader },
-  mixins: [accountApiMixin, sanadApiMixin, chequeMixin],
+  components: { money, date },
+  mixins: [formsMixin, accountApiMixin, sanadApiMixin, chequeMixin],
   props: ["transactionType", "id", "factorId"],
   data() {
     return {
@@ -590,7 +603,7 @@ export default {
       this.transaction.floatAccount = factor.floatAccount;
       let value = factor.sanad.bed - factor.paidValue;
       this.rows[0].value = value;
-      this.rows.push({})
+      this.rows.push({});
       factor.payment.value = value;
     },
     getNotPaidFactors() {
@@ -650,6 +663,7 @@ export default {
     },
     selectTransaction(transaction, redirect = false) {
       if (redirect) {
+        this.makeFormUneditable();
         this.$router.push({
           name: "TransactionForm",
           params: { id: transaction.id, transactionType: this.transactionType }
@@ -789,6 +803,7 @@ export default {
         if (clearTransaction) {
           this.clearTransaction();
         } else {
+          this.makeFormUneditable();
           this.$router.push({
             name: "TransactionForm",
             params: {
@@ -957,13 +972,12 @@ export default {
       this.rows = [{}];
       this.transaction = {};
     },
-    getTransactionTemplate(){
+    getTransactionTemplate() {
       return {
         account: null,
-        floatAccount: null,
-      }
+        floatAccount: null
+      };
     }
-
   }
 };
 </script>

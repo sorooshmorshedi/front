@@ -57,7 +57,12 @@
                 </div>
                 <div class="form-group col-lg-6 col-sm-2">
                   <label>تاریخ سند</label>
-                  <date class="form-control" v-model="sanad.date" :default="true"/>
+                  <date
+                    class="form-control"
+                    v-model="sanad.date"
+                    :default="true"
+                    :disabled="!editable"
+                  />
                 </div>
                 <div class="form-group col-lg-6 col-sm-4">
                   <label>صادر کننده سند</label>
@@ -75,6 +80,7 @@
                         id="exampleRadios1"
                         value="temporary"
                         v-model="sanad.type"
+                        :disabled="!editable"
                       >
                       <label class="form-check-label" for="exampleRadios1">موقت</label>
                     </div>
@@ -86,6 +92,7 @@
                         id="exampleRadios2"
                         value="definite"
                         v-model="sanad.type"
+                        :disabled="!editable"
                       >
                       <label class="form-check-label" for="exampleRadios2">قطعی</label>
                     </div>
@@ -95,7 +102,12 @@
             </div>
             <div class="form-group col-lg-6">
               <label>توضیحات سند</label>
-              <textarea class="form-control" rows="5" v-model="sanad.explanation"></textarea>
+              <textarea
+                class="form-control"
+                rows="5"
+                v-model="sanad.explanation"
+                :disabled="!editable"
+              ></textarea>
             </div>
           </div>
           <div class="row">
@@ -132,10 +144,16 @@
                           v-model="rows[i].account"
                           track-by="id"
                           label="title"
+                          :disabled="!editable"
                         />
                       </td>
                       <td>
-                        <input type="text" class="form-control" v-model="rows[i].explanation">
+                        <input
+                          type="text"
+                          class="form-control"
+                          v-model="rows[i].explanation"
+                          :disabled="!editable"
+                        >
                       </td>
                       <td
                         v-tooltip="getFloatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
@@ -146,6 +164,7 @@
                           v-model="rows[i].floatAccount"
                           track-by="id"
                           label="name"
+                          :disabled="!editable"
                         />
                       </td>
                       <td
@@ -157,11 +176,12 @@
                           v-model="rows[i].costCenter"
                           track-by="id"
                           label="name"
+                          :disabled="!editable"
                         />
                       </td>
                       <td>
                         <money
-                          :disabled="rows[i].bes != ''"
+                          :disabled="!editable || rows[i].bes != ''"
                           class="form-control"
                           v-model="rows[i].bed"
                         />
@@ -173,7 +193,7 @@
                       </td>
                       <td>
                         <money
-                          :disabled="rows[i].bed != ''"
+                          :disabled="!editable || rows[i].bed != ''"
                           class="form-control"
                           v-model="rows[i].bes"
                         />
@@ -184,6 +204,7 @@
                           @click="deleteRow(i)"
                           type="button"
                           class="btn btn-warning"
+                          :disabled="!editable"
                         >حذف ردیف</button>
                       </td>
                     </tr>
@@ -204,6 +225,7 @@
                           @click="deleteRow(0)"
                           type="button"
                           class="btn btn-danger"
+                          :disabled="!editable"
                         >حذف همه ردیف ها</button>
                       </td>
                     </tr>
@@ -218,9 +240,11 @@
             :hasLast="hasLast"
             :hasPrev="hasPrev"
             :hasNext="hasNext"
-            :canSubmit="sanad.createType == 'auto'"
+            :canSubmit="canSubmit"
+            :editable="editable"
             @goToForm="goToForm"
             @validate="validate"
+            @edit="makeFormEditable()"
           />
         </div>
       </div>
@@ -231,14 +255,13 @@
 <script>
 import accountApiMixin from "@/mixin/accountApi";
 import sanadApiMixin from "@/mixin/sanadApi";
+import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
-import FormFooter from "@/components/panel/FormFooter";
-import FormHeader from "@/components/panel/FormHeader";
 export default {
   name: "Form",
-  components: { money, date, FormFooter, FormHeader },
-  mixins: [accountApiMixin, sanadApiMixin],
+  components: { money, date },
+  mixins: [formsMixin, accountApiMixin, sanadApiMixin],
   props: ["id"],
   data() {
     return {
@@ -313,6 +336,10 @@ export default {
 
       if (this.id) this.getSanad(this.id);
     },
+    canSubmit() {
+      if (!this.sanad.createType) return true;
+      return this.sanad.createType == "auto";
+    },
     goToForm(pos) {
       let newCode = null;
       switch (pos) {
@@ -332,6 +359,7 @@ export default {
       if (newCode) this.getSanadByCode(newCode);
     },
     selectSanad(sanad) {
+      this.makeFormUneditable();
       this.$router.push({
         name: "CreateSanad",
         params: { id: sanad.id }
@@ -451,6 +479,7 @@ export default {
         if (clearSanad) {
           this.clearSanad();
         } else {
+          this.makeFormUneditable();
           this.$router.push({
             name: "CreateSanad",
             params: { id: this.sanad.id }
