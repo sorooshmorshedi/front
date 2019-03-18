@@ -20,7 +20,7 @@
             <span class="sr-only">(current)</span>
           </a>
         </li>
-        <li class="nav-item dropdown" v-if="user.username == 'admin'">
+        <li class="nav-item dropdown" v-if="username == 'admin'">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">اطلاعات پایه</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <div class="dropdown-submenu">
@@ -114,13 +114,13 @@
             </div>
           </div>
         </li>
-        <li class="nav-item dropdown" v-if="['admin', 'manager'].includes(user.username)">
+        <li class="nav-item dropdown" v-if="['admin', 'manager'].includes(username)">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">عملیات های روزانه</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <router-link
               class="dropdown-item"
               :to="{name:'CreateSanad'}"
-              v-if="user.username == 'admin'"
+              v-if="username == 'admin'"
             >ثبت سند</router-link>
             <div class="dropdown-divider"></div>
 
@@ -164,7 +164,7 @@
               :to="{name:'TransactionForm', params: {transactionType: 'payment'}}"
             >ثبت پرداخت</router-link>
             <div class="dropdown-divider"></div>
-            <div class="dropdown-submenu" v-if="user.username == 'admin'">
+            <div class="dropdown-submenu" v-if="username == 'admin'">
               <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">دفتر چک</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <router-link class="dropdown-item" :to="{name:'Chequebook'}">چک های پرداختنی</router-link>
@@ -179,16 +179,16 @@
             <router-link
               class="dropdown-item"
               :to="{name:'List', params: {form: 'sanad'}}"
-              v-if="user.username != 'manager'"
+              v-if="username != 'manager'"
             >اسناد</router-link>
             <router-link
               class="dropdown-item"
-              v-if="user.username != 'manager'"
+              v-if="username != 'manager'"
               :to="{name:'List', params: {form: 'sanadUnbalanced'}}"
             >اسناد نامتوازن</router-link>
             <router-link
               class="dropdown-item"
-              v-if="user.username != 'manager'"
+              v-if="username != 'manager'"
               :to="{name:'List', params: {form: 'sanadEmpty'}}"
             >اسناد خالی</router-link>
             <div class="dropdown-divider"></div>
@@ -229,22 +229,22 @@
             <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"
-              v-if="user.username != 'manager'"
+              v-if="username != 'manager'"
               :to="{name:'List', params: {form:'chequebook'}}"
             >ثبت چک</router-link>
             <router-link
               class="dropdown-item"
-              v-if="user.username != 'manager'"
+              v-if="username != 'manager'"
               :to="{name:'List', params: {form:'cheque', type: 'received'}}"
             >چک های دریافتی</router-link>
             <router-link
               class="dropdown-item"
-              v-if="user.username != 'manager'"
+              v-if="username != 'manager'"
               :to="{name:'List', params: {form:'cheque', type: 'paid'}}"
             >چک های پرداختی</router-link>
           </div>
         </li>
-        <li class="nav-item dropdown" v-if="user.username != 'manager'">
+        <li class="nav-item dropdown" v-if="username != 'manager'">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">گزارش</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'LedgerReport'}">دفتر کل، معین، تفضیلی</router-link>
@@ -287,6 +287,12 @@ export default {
     logout() {
       this.setToken("");
       this.$router.push({ name: "Login" });
+    }
+  },
+  computed: {
+    username(){
+      if(this.user.username.includes('manager')) return 'manager'
+      return this.user.username;
     }
   }
 };
