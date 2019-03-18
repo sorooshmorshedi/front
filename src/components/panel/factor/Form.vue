@@ -72,15 +72,30 @@
                 </div>
                 <div class="form-group col-lg-2 col-sm-2">
                   <label>تاریخ فاکتور</label>
-                  <date class="form-control" v-model="factor.date" :default="true" :disabled="!editable" />
+                  <date
+                    class="form-control"
+                    v-model="factor.date"
+                    :default="true"
+                    :disabled="!editable"
+                  />
                 </div>
                 <div class="form-group col-lg-2 col-sm-2">
                   <label>ساعت فاکتور</label>
-                  <mtime class="form-control" v-model="factor.time" :default="true" :disabled="!editable" />
+                  <mtime
+                    class="form-control"
+                    v-model="factor.time"
+                    :default="true"
+                    :disabled="!editable"
+                  />
                 </div>
                 <div v-if="hasBijak" class="form-group col-lg-2 col-sm-2">
                   <label>بیجک</label>
-                  <input type="number" class="form-control" v-model="factor.bijak" :disabled="!editable" />
+                  <input
+                    type="number"
+                    class="form-control"
+                    v-model="factor.bijak"
+                    :disabled="!editable"
+                  >
                 </div>
                 <div class="w-100"></div>
                 <div class="col-lg-2 d-print-none">
@@ -92,7 +107,8 @@
                       type="checkbox"
                       class="custom-control-input"
                       id="customCheck1"
-                      v-model="hasTax" :disabled="!editable" 
+                      v-model="hasTax"
+                      :disabled="!editable"
                     >
                     <label class="custom-control-label" for="customCheck1">فاکتور مالیات دارد</label>
                   </div>
@@ -106,7 +122,7 @@
                     v-model="factor.account"
                     track-by="id"
                     label="title"
- :disabled="!editable" 
+                    :disabled="!editable"
                   />
                 </div>
                 <div
@@ -120,7 +136,7 @@
                     v-model="factor.floatAccount"
                     track-by="id"
                     label="name"
- :disabled="!editable" 
+                    :disabled="!editable"
                   />
                 </div>
                 <div class="form-group col-lg-2 d-print-none">
@@ -128,14 +144,13 @@
                     v-if="factor.account"
                     @click="openLedger(factor.account)"
                     class="btn btn-info btn-block btn-label-margin"
-
                   >مشاهده دفتر</button>
                 </div>
               </div>
             </div>
             <div class="form-group col-lg-4">
               <label>توضیحات</label>
-              <textarea class="form-control" rows="5" v-model="factor.exp"  :disabled="!editable" ></textarea>
+              <textarea class="form-control" rows="5" v-model="factor.exp" :disabled="!editable"></textarea>
             </div>
           </div>
           <div class="row">
@@ -176,7 +191,7 @@
                           v-model="rows[i].ware"
                           track-by="id"
                           label="title"
-                          @select="setDefaultValue" :disabled="!editable" 
+                          :disabled="!editable"
                         />
                       </td>
                       <td>
@@ -187,19 +202,28 @@
                           :options="waresSelectValues.warehouses"
                           v-model="rows[i].ware.warehouse"
                           track-by="id"
-                          label="title" :disabled="!editable" 
+                          label="title"
+                          :disabled="!editable"
                         />
                         <span v-else>-</span>
                       </td>
                       <td>
-                        <money class="form-control form-control" v-model="rows[i].count" :disabled="!editable" />
+                        <money
+                          class="form-control form-control"
+                          v-model="rows[i].count"
+                          :disabled="!editable"
+                        />
                       </td>
                       <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
                       <td>
-                        <money class="form-control form-control" v-model="rows[i].fee" :disabled="!editable" />
+                        <money
+                          class="form-control form-control"
+                          v-model="rows[i].fee"
+                          :disabled="!editable"
+                        />
                       </td>
                       <td dir="ltr">
-                        <money class="form-control form-control" :value="rowSum(row)" disabled/>
+                        <money class="form-control form-control" :value="rowSum(rows[i])" disabled/>
                       </td>
                       <td>
                         <money
@@ -226,7 +250,7 @@
                         />
                       </td>
                       <td v-if="hasTax">
-                        <money class="form-control form-control" :value="rowTax(row)" disabled />
+                        <money class="form-control form-control" :value="rowTax(row)" disabled/>
                       </td>
                       <td v-if="hasTax">
                         <money
@@ -240,7 +264,7 @@
                           type="text"
                           class="form-control form-control"
                           v-model="rows[i].explanation"
- :disabled="!editable" 
+                          :disabled="!editable"
                         >
                       </td>
                       <td class="d-print-none">
@@ -249,7 +273,7 @@
                           @click="deleteItemRow(i)"
                           type="button"
                           class="btn btn-sm btn-warning"
- :disabled="!editable" 
+                          :disabled="!editable"
                         >حذف ردیف</button>
                       </td>
                     </tr>
@@ -260,7 +284,7 @@
                           @click="deleteItemRow(0)"
                           type="button"
                           class="btn btn-danger d-print-none"
- :disabled="!editable" 
+                          :disabled="!editable"
                         >حذف همه ردیف ها</button>
                       </td>
                     </tr>
@@ -276,7 +300,7 @@
                 <button
                   @click="factorExpensesModal()"
                   class="btn btn-info d-print-none"
- :disabled="!editable" 
+                  :disabled="!editable"
                 >افزودن / ویرایش</button>
               </h5>
               <div class="table-responsive-lg">
@@ -544,7 +568,7 @@ import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
 export default {
   name: "Form",
-  components: { money, date, mtime,},
+  components: { money, date, mtime },
   props: ["factorType", "id"],
   mixins: [formsMixin, accountApiMixin, wareApiMixin, factorApiMixin],
   data() {
@@ -600,18 +624,9 @@ export default {
       this.setFactorLabel(this.factorType);
       this.getData();
     },
-    setDefaultValue(ware) {
-      let value = ware.price;
-      console.log(value);
-      this.$nextTick(() => {
-        this.rows.forEach(row => {
-          if (!row.ware) return;
-          if (row.ware.id == ware.id) {
-            row.fee = value;
-            return;
-          }
-        });
-      });
+    setDefaultValue(row) {
+      let value = row.ware.price;
+      row.fee = value;
     },
     setFactorLabel(factorType) {
       switch (factorType) {
@@ -783,7 +798,7 @@ export default {
           break;
       }
       if (newCode) this.getFactorByCode(newCode);
-    },
+    }
   },
   computed: {
     canSubmitTransaction() {
@@ -845,22 +860,28 @@ export default {
         expenses: 0
       };
       this.rows.forEach(r => {
-        res.sum += this.rowSum(r);
+        res.sum += this.rowSumAfterDiscount(r);
         res.afterDiscount += this.rowSumAfterDiscount(r);
         res.tax += this.rowTax(r);
         res.afterTax += this.rowSumAfterTax(r);
-        res.total += this.rowSumAfterTax(r); // + factorExpenses
+        res.total += this.rowSumAfterTax(r);
       });
       this.factor.expenses.forEach(e => {
         res.expenses += +e.value;
       });
 
+      let overallDiscount = 0;
       if (this.hasValue(this.factor.discountValue)) {
-        res.afterDiscount -= +this.factor.discountValue;
+        overallDiscount = +this.factor.discountValue;
+        // res.afterDiscount -= +this.factor.discountValue;
       } else {
-        res.afterDiscount =
-          (res.afterDiscount * (100 - +this.factor.discountPercent)) / 100;
+        overallDiscount =
+          (res.afterDiscount * +this.factor.discountPercent) / 100;
+        // res.afterDiscount = (res.afterDiscount * (100 - +this.factor.discountPercent)) / 100;
       }
+      res.afterDiscount -= overallDiscount;
+      res.afterTax -= overallDiscount;
+      res.total -= overallDiscount;
 
       if (this.hasValue(this.factor.taxValue)) {
         res.afterTax += +this.factor.taxValue;
@@ -937,10 +958,8 @@ export default {
       handler(newRows, oldRows) {
         let row = this.rows[this.rows.length - 1];
         if (row && row.ware) {
-          this.rows.push({
-            discountValue: "",
-            discountPercent: ""
-          });
+          if (row.fee == "") this.setDefaultValue(row);
+          this.rows.push(this.copy(this.rowTemplate));
         }
       },
       deep: true
