@@ -242,20 +242,22 @@ export default {
         success: data => {
           this.successNotify();
           if (clearFactor) {
-            this.clearFactor();
-            this.$router.push({
-              name: "FactorForm",
-              params: {
-                factorType: this.factorType,
-              }
-            });
+            this.clearFactor(true);
           } else {
             this.getFactorByCode(factor.code);
           }
         }
       });
     },
-    clearFactor() {
+    clearFactor(redirect = false) {
+      if (redirect) {
+        this.$router.push({
+          name: "FactorForm",
+          params: {
+            factorType: this.factorType,
+          }
+        });
+      }
       this.factor = {
         taxPercent: "",
         taxValue: "",
@@ -263,7 +265,7 @@ export default {
         discountValue: "",
         expenses: []
       }
-      this.rows = [{}];
+      this.rows = [this.copy(this.rowTemplate)];
     },
     getFactorCodes() {
       Object.keys(this.factorCodes).forEach(k => this.factorCodes[k] = null);

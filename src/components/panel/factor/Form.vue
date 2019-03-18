@@ -7,7 +7,7 @@
             formName="فاکتور"
             :title="'فاکتور ' + factorLabel"
             :ListRouteParams="{form: 'factor', type: factorType}"
-            @clearForm="clearSanad()"
+            @clearForm="clearFactor(true)"
           >
             <router-link class="btn btn-info" :to="{name: 'CreatePersonAccounts'}">تعریف حساب اشخاص</router-link>
             <template v-if="id">
@@ -952,7 +952,7 @@ export default {
   },
   watch: {
     $route() {
-      // this.initForm();
+      this.initForm();
     },
     rows: {
       handler(newRows, oldRows) {
