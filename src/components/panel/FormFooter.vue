@@ -89,7 +89,6 @@ export default {
   },
   watch: {
     editable() {
-      console.log('ha');
       this.setIsEditing();
     }
   },
