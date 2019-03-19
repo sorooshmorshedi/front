@@ -38,8 +38,14 @@
           @click="validate(false)"
           type="button"
           :disabled="!canSubmit"
-          class="btn submit btn-primary loat-left w-100px"
+          class="btn submit btn-primary foat-left w-100px"
         >ثبت</button>
+        <button
+          @click="emitDelete"
+          type="button"
+          v-if="deletable"
+          class="btn submit btn-danger"
+        >حذف</button>
       </template>
       <button v-else @click="edit()" type="button" class="btn submit btn-info foat-left">ویرایش</button>
     </div>
@@ -71,6 +77,9 @@ export default {
       default: true
     },
     editable: {
+      default: false
+    },
+    deletable: {
       default: false
     }
   },
@@ -105,6 +114,9 @@ export default {
     edit() {
       this.$emit("edit");
       this.isEditing = true;
+    },
+    emitDelete(){
+      this.$emit('delete');
     }
   }
 };
