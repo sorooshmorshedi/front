@@ -21,7 +21,7 @@ export default {
   methods: {
     updateCompany(){
       this.request({
-        url: this.endpoint('companies/' + this.company.id),
+        url: this.endpoint('companies/' + this.company.id + '/'),
         method: 'put',
         data: this.company,
         success: data => {
@@ -34,7 +34,7 @@ export default {
     },
     getCompany(){
       this.request({
-        url: this.endpoint('companies/' + this.id),
+        url: this.endpoint('companies/' + this.id + '/'),
         method: 'get',
         success: data => {
           this.company = data;
