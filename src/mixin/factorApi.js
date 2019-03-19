@@ -85,6 +85,18 @@ export default {
       })
 
     },
+    deleteFactor() {
+      let data = this.copy(this.factor);
+      this.request({
+        url: this.endpoint('factors/factors/' + data.id + '/'),
+        method: 'delete',
+        success: data => {
+          this.successNotify()
+          this.clearFactor(true);
+        }
+      })
+
+    },
     syncFactor(factor, clearFactor) {
       let factorId = factor.id;
       let updatedItems = [];

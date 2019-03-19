@@ -412,9 +412,11 @@
             :hasPrev="hasPrev"
             :hasNext="hasNext"
             :editable="editable"
+            :deletable="this.id"
             @goToForm="goToForm"
             @validate="validate"
             @edit="makeFormEditable()"
+            @delete="deleteFactor()"
           />
         </div>
       </div>
