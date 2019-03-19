@@ -281,7 +281,7 @@
                       <td :colspan="hasTax?13:11"></td>
                       <td>
                         <button
-                          @click="deleteItemRow(0)"
+                          @click="deleteItemRow(-1)"
                           type="button"
                           class="btn btn-danger d-print-none"
                           :disabled="!editable"
@@ -692,7 +692,7 @@ export default {
       }
     },
     deleteItemRow(index) {
-      if (index == 0) {
+      if (index == -1) {
         this.rows.forEach(row => {
           if (row.id) this.itemsToDelete.push(row.id);
         });
