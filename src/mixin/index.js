@@ -128,7 +128,7 @@ Vue.mixin({
       if (this.isDev)
         return "http://localhost:8000/" + url;
       // else return "http://api.sh.mmdmst.ir/" + url;
-      else return "http://mmdmst.ir:8082/" + url;
+      else return "http://mmdmst.ir:8080/" + url;
     },
     setToken(token) {
       localStorage.setItem('token', token);
