@@ -94,7 +94,7 @@
               <textarea
                 class="form-control"
                 rows="5"
-                v-model="transaction.exp"
+                v-model="transaction.explanation"
                 :disabled="!editable"
               ></textarea>
             </div>

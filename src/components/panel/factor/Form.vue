@@ -150,7 +150,7 @@
             </div>
             <div class="form-group col-lg-4">
               <label>توضیحات</label>
-              <textarea class="form-control" rows="5" v-model="factor.exp" :disabled="!editable"></textarea>
+              <textarea class="form-control" rows="5" v-model="factor.explanation" :disabled="!editable"></textarea>
             </div>
           </div>
           <div class="row">
