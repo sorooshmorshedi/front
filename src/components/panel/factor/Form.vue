@@ -150,7 +150,12 @@
             </div>
             <div class="form-group col-lg-4">
               <label>توضیحات</label>
-              <textarea class="form-control" rows="5" v-model="factor.explanation" :disabled="!editable"></textarea>
+              <textarea
+                class="form-control"
+                rows="5"
+                v-model="factor.explanation"
+                :disabled="!editable"
+              ></textarea>
             </div>
           </div>
           <div class="row">
@@ -192,6 +197,7 @@
                           track-by="id"
                           label="title"
                           :disabled="!editable"
+                          @select="setDefaultValue"
                         />
                       </td>
                       <td>
@@ -627,8 +633,12 @@ export default {
       this.getData();
     },
     setDefaultValue(row) {
-      let value = row.ware.price;
-      row.fee = value;
+      if (!row.id) return;
+      this.$nextTick(() => {
+        let item = this.rows.filter(o => o.ware && o.ware.id == row.id)[0];
+        let value = item.ware.price;
+        item.fee = value;
+      });
     },
     setFactorLabel(factorType) {
       switch (factorType) {
