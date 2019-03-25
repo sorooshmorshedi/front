@@ -80,6 +80,7 @@ export default {
   },
   created() {
     this.getData();
+    this.init();
   },
   methods: {
     getData() {
