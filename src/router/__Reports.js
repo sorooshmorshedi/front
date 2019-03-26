@@ -4,6 +4,7 @@ import List from '@/components/panel/lists/List';
 import Balance from '@/components/panel/balance/Balance';
 import FloatBalance from '@/components/panel/FloatBalance/FloatBalance';
 import Ledger from '@/components/panel/ledger/Ledger';
+import Bill from '@/components/panel/bill/Bill';
 import Journal from '@/components/panel/journal/Journal';
 import IncomeStatement from '@/components/panel/incomeStatement/IncomeStatement';
 import BalanceSheet from '@/components/panel/balanceSheet/BalanceSheet';
@@ -38,6 +39,11 @@ export default [{
           ledgerAccountIds: route.query.accs
         }
       }
+    },
+    {
+      name: 'BillReport',
+      path: 'bill/:accountId?',
+      component: Bill
     },
     {
       name: 'InventoryReport',

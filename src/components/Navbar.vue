@@ -248,6 +248,7 @@
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">گزارش</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'LedgerReport'}">دفتر کل، معین، تفضیلی</router-link>
+            <router-link class="dropdown-item" :to="{name:'BillReport'}">صورت حساب تفصیلی </router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'BalanceReport'}">تراز</router-link>
             <router-link class="dropdown-item" :to="{name:'FloatBalanceReport'}">تراز شناور</router-link>
