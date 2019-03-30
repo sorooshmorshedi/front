@@ -8,7 +8,7 @@
             :title="'ثبت ' + type.label"
             :ListRouteParams="{form: 'transaction', type: type.name}"
             :exportParams="{id: this.id}"
-            @clearForm="clearFrom()"
+            @clearForm="clearTransaction"
           ></form-header>
 
           <div class="row">
@@ -288,7 +288,7 @@
                         <td>{{ factorTypes[f.type] }}</td>
                         <td>{{ f.explanation }}</td>
                         <td>{{ f.date }}</td>
-                        <td>{{ f.sanad.bed | toMoney }}</td>
+                        <td>{{ f.sum | toMoney }}</td>
                         <td>{{ f.paidValue }}</td>
                         <td>
                           <money
@@ -560,6 +560,10 @@ export default {
     },
     id() {
       this.getTransaction(this.id);
+    },
+    'transaction.account'(){
+      if(this.transaction.account)
+      this.d.getNotPaidFactors();
     }
   },
   methods: {
@@ -568,6 +572,7 @@ export default {
       if (!this.id) {
         this.rows = [{}];
         this.transaction = this.getTransactionTemplate();
+        this.factors = [];
       }
       if (this.transactionType == "receive") {
         this.type.label = "دریافت";
@@ -609,7 +614,6 @@ export default {
         this.getChequebooks(),
         this.getTransaction(this.id),
         this.getTransactionCodes(),
-        this.getNotPaidFactors()
       ]).then(values => {
         if (this.factorId) this.selectNotPaidFactor(this.factorId);
       });
@@ -635,7 +639,8 @@ export default {
         method: "get",
         params: {
           transactionType: this.type.name,
-          transactionId: this.transaction.id
+          transactionId: this.transaction.id,
+          accountId: this.transaction.account.id
         },
         success: data => {
           this.factors = [];
@@ -992,7 +997,8 @@ export default {
         }
       });
       this.rows = [{}];
-      this.transaction = {};
+      this.transaction = this.getTransactionTemplate();
+      this.factors = [];
     },
     getTransactionTemplate() {
       return {
