@@ -521,7 +521,7 @@ export default {
       for (const factor of this.factors) {
         sum += +factor.payment.value;
       }
-      return sum == this.sum;
+      return sum <= this.sum;
     }
   },
   watch: {
@@ -601,7 +601,7 @@ export default {
       }
       this.transaction.account = factor.account;
       this.transaction.floatAccount = factor.floatAccount;
-      let value = factor.sanad.bed - factor.paidValue;
+      let value = factor.sum - factor.paidValue;
       this.rows[0].value = value;
       this.rows.push({});
       factor.payment.value = value;
@@ -716,9 +716,9 @@ export default {
       this.factors.forEach(factor => {
         sum += +factor.payment.value;
       });
-      if (sum != 0 && sum != this.sum) {
+      if (sum != 0 && sum > this.sum) {
         this.notify(
-          "مبلغ وارد شده برای فاکتور های پرداختی برابر مجموع ردیف ها نیست",
+          "مبلغ وارد شده برای فاکتور های پرداختی باید کمتر و یا مساوری مجموع ردیف ها باشد",
           "danger"
         );
         isValid = false;
