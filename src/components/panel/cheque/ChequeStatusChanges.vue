@@ -58,8 +58,14 @@
                         <td>{{ sc.fromStatus | chequeStatuses }}</td>
                         <td>{{ sc.toStatus | chequeStatuses }}</td>
                         <td>{{ sc.date }}</td>
-                        <td>{{ sc.sanad.items[0].account.name }}</td>
-                        <td>{{ sc.sanad.items[1].account.name }}</td>
+                        <template v-if="sc.sanad.items.length">
+                          <td>{{ sc.sanad.items[0].account.name }}</td>
+                          <td>{{ sc.sanad.items[1].account.name }}</td>
+                        </template>
+                        <template v-else>
+                          <td>-</td>
+                          <td>-</td>
+                        </template>
                         <td>{{ sc.explanation }}</td>
                         <td>
                           <router-link

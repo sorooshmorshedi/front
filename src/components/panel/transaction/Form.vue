@@ -561,9 +561,8 @@ export default {
     id() {
       this.getTransaction(this.id);
     },
-    'transaction.account'(){
-      if(this.transaction.account)
-      this.d.getNotPaidFactors();
+    "transaction.account"() {
+      if (this.transaction.account) this.d.getNotPaidFactors();
     }
   },
   methods: {
@@ -613,13 +612,15 @@ export default {
         this.getDefaultAccounts(),
         this.getChequebooks(),
         this.getTransaction(this.id),
-        this.getTransactionCodes(),
+        this.getTransactionCodes()
       ]).then(values => {
         if (this.accountId) this.selectAccount(this.accountId);
       });
     },
-    selectAccount(accountId){
-      this.transaction.account = this.transactionAccounts.filter(o => o.id = accountId)[0]
+    selectAccount(accountId) {
+      this.transaction.account = this.transactionAccounts.filter(
+        o => (o.id = accountId)
+      )[0];
     },
     selectNotPaidFactor(factorId) {
       let factor = this.factors.filter(o => o.id == factorId);
@@ -665,7 +666,7 @@ export default {
             }
             this.factors.push(factor);
           }
-          if(this.factorId) this.selectNotPaidFactor(this.factorId);
+          if (this.factorId) this.selectNotPaidFactor(this.factorId);
         }
       });
     },
@@ -963,7 +964,6 @@ export default {
       cheque.floatAccount = this.transaction.floatAccount;
       if (!cheque.id) {
         await this.storeCheque(item);
-        console.log("create cheque");
       }
       let update = false;
       if (cheque.statusChanges && cheque.statusChanges.length == 1)
@@ -984,7 +984,10 @@ export default {
     storeCheque(item) {
       return this.request({
         url: this.endpoint("cheques/cheques/"),
-        data: this.extractIds(item.cheque),
+        data: {
+          ...this.extractIds(item.cheque),
+          has_transaction: true
+        },
         method: "post",
         success: data => {
           item.cheque.id = data.id;

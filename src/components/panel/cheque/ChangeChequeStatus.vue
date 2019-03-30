@@ -17,7 +17,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="container-fluid">
+          <div class="container">
             <div class="title-2">مشخصات چک</div>
             <div class="row jumbotron">
               <div class="col-md-6">
@@ -181,7 +181,7 @@ export default {
       if (name == "cashed") {
         acc = this.defaultAccounts.filter(o => o.programingName == "cash")[0];
       }
-      if (name == "passed") {
+      if (name == "passed" && this.chequebook) {
         acc = { account: this.chequebook.account };
       }
       if (acc) this.statusChange.account = acc.account;

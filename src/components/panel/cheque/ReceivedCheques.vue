@@ -34,7 +34,7 @@
                       <td>{{ payer(c) }}</td>
                       <td>{{ cheque.bankName }}</td>
                       <td>{{ c.explanation }}</td>
-                      <td>{{ c.value }}</td>
+                      <td>{{ c.value | toMoney }}</td>
                       <td>{{ c.due }}</td>
                       <td>{{ c.status | chequeStatuses }}</td>
                       <td>{{ lastStatusChangeDate(c) }}</td>
