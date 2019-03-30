@@ -289,7 +289,7 @@
                         <td>{{ f.explanation }}</td>
                         <td>{{ f.date }}</td>
                         <td>{{ f.sum | toMoney }}</td>
-                        <td>{{ f.paidValue }}</td>
+                        <td>{{ f.paidValue | toMoney }}</td>
                         <td>
                           <money
                             class="form-control"
@@ -465,7 +465,7 @@ export default {
   name: "Form",
   components: { money, date },
   mixins: [formsMixin, accountApiMixin, sanadApiMixin, chequeMixin],
-  props: ["transactionType", "id", "factorId"],
+  props: ["transactionType", "id", "accountId", "factorId"],
   data() {
     return {
       transaction: {},
@@ -615,8 +615,11 @@ export default {
         this.getTransaction(this.id),
         this.getTransactionCodes(),
       ]).then(values => {
-        if (this.factorId) this.selectNotPaidFactor(this.factorId);
+        if (this.accountId) this.selectAccount(this.accountId);
       });
+    },
+    selectAccount(accountId){
+      this.transaction.account = this.transactionAccounts.filter(o => o.id = accountId)[0]
     },
     selectNotPaidFactor(factorId) {
       let factor = this.factors.filter(o => o.id == factorId);
@@ -625,7 +628,6 @@ export default {
         console.error("Factor Not Found");
         return;
       }
-      this.transaction.account = factor.account;
       this.transaction.floatAccount = factor.floatAccount;
       let value = factor.sum - factor.paidValue;
       this.rows[0].value = value;
@@ -663,6 +665,7 @@ export default {
             }
             this.factors.push(factor);
           }
+          if(this.factorId) this.selectNotPaidFactor(this.factorId);
         }
       });
     },

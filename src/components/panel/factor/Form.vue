@@ -32,7 +32,7 @@
               <router-link
                 v-if="canSubmitTransaction"
                 class="btn btn-info"
-                :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{factorId: id}}"
+                :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{accountId: factor.account.id, factorId: id}}"
               >ثبت {{ transactionType.label }}</router-link>
               <button
                 class="btn btn-info"
@@ -542,7 +542,7 @@
                     <tbody>
                       <tr v-for="(p,i) in factor.payments" :key="i">
                         <td>{{ i+1 }}</td>
-                        <td>{{ p.value }}</td>
+                        <td>{{ p.value | toMoney }}</td>
                         <td>{{ p.transaction.code }}</td>
                         <td>{{ p.transaction.date }}</td>
                         <td>{{ p.transaction.explanation }}</td>
