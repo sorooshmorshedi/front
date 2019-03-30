@@ -26,15 +26,28 @@
                   <input v-else type="text" class="form-control" disabled :value="transactionCode">
                 </div>
                 <div class="form-group col-lg-5 col-sm-3">
-                  <label>کد - نام مشتری</label>
-                  <multiselect
-                    dir="rtl"
-                    :options="transactionAccounts"
-                    v-model="transaction.account"
-                    track-by="id"
-                    label="title"
-                    :disabled="!editable"
-                  />
+                  <div class="row">
+                    <div class="col-lg-8">
+                      <label>کد - نام مشتری</label>
+                      <multiselect
+                        dir="rtl"
+                        :options="transactionAccounts"
+                        v-model="transaction.account"
+                        track-by="id"
+                        label="title"
+                        :disabled="!editable"
+                      />
+                    </div>
+                    <div class="col-lg-4">
+                      <button
+                        style="margin-top:27px"
+                        type="button"
+                        class="btn btn-info btn-block"
+                        :disabled="!transaction.account"
+                        @click="openLedger(transaction.account)"
+                      >مشاهده دفتر</button>
+                    </div>
+                  </div>
                 </div>
                 <div class="form-group col-lg-4 col-sm-3">
                   <template v-if="transaction.account && transaction.account.floatAccountGroup">
