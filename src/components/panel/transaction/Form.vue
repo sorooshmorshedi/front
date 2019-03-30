@@ -279,6 +279,7 @@
                         <th>جمع فاکتور</th>
                         <th>مبلغ پرداخت شده</th>
                         <th>مبلغ</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -296,6 +297,14 @@
                             v-model="f.payment.value"
                             :disabled="!editable"
                           />
+                        </td>
+                        <td>
+                          <button
+                            @click="openFactor(f)"
+                            class="btn btn-outline-info"
+                            type="button"
+                            id="button-addon1"
+                          >مشاهده فاکتور</button>
                         </td>
                       </tr>
                     </tbody>

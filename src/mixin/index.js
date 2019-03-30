@@ -158,6 +158,16 @@ Vue.mixin({
       });
       window.open(routeData.href, "_blank");
     },
+    openFactor(factor) {
+      let routeData = this.$router.resolve({
+        name: "FactorForm",
+        params: {
+          factorType: factor.type,
+          id: factor.id
+        }
+      });
+      window.open(routeData.href, "_blank");
+    },
     hasValue(v) {
       return !['', 0, '0', undefined, null].includes(v);
     },
