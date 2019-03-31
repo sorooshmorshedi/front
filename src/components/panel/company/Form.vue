@@ -36,20 +36,6 @@ export default {
                 styleClasses: "col-sm-4 col-md-6"
               },
               {
-                label: "شروع سال مالی",
-                type: "input",
-                inputType: "text",
-                model: "fiscal_year_start",
-                styleClasses: "col-sm-4 col-md-3"
-              },
-              {
-                label: "پایان سال مالی",
-                type: "input",
-                inputType: "text",
-                model: "fiscal_year_end",
-                styleClasses: "col-sm-4 col-md-3 "
-              },
-              {
                 label: "آدرس 1",
                 type: "input",
                 inputType: "text",
