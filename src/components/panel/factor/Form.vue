@@ -195,7 +195,7 @@
                           :options="waresSelectValues.wares"
                           v-model="rows[i].ware"
                           track-by="id"
-                          label="title"
+                          label="name"
                           :disabled="!editable"
                           @select="setDefaultValue"
                         />
@@ -208,7 +208,7 @@
                           :options="waresSelectValues.warehouses"
                           v-model="rows[i].ware.warehouse"
                           track-by="id"
-                          label="title"
+                          label="name"
                           :disabled="!editable"
                         />
                         <span v-else>-</span>
