@@ -38,14 +38,14 @@ export default {
           inputType: "text",
           model: "code",
           disabled: true,
-          styleClasses: "col-sm-12 col-lg-2",
+          styleClasses: "col-sm-12 col-lg-4",
         },
         {
           label: "نام ماهیت",
           type: "input",
           inputType: "text",
           model: "name",
-          styleClasses: "col-sm-12 col-lg-10",
+          styleClasses: "col-sm-12 col-lg-8",
         },
       ]
     }]
@@ -58,7 +58,7 @@ export default {
           label: "ماهیت",
           type: "vueMultiSelect",
           model: "parent",
-          styleClasses: "col-sm-12 col-lg-3",
+          styleClasses: "col-sm-12 col-lg-12",
           selectOptions: {
             label: 'title',
             trackBy: 'id',
@@ -71,14 +71,14 @@ export default {
           inputType: "text",
           model: "code",
           disabled: true,
-          styleClasses: "col-sm-12 col-lg-2",
+          styleClasses: "col-sm-12 col-lg-4",
         },
         {
           label: "نام گروه",
           type: "input",
           inputType: "text",
           model: "name",
-          styleClasses: "col-sm-12 col-lg-7",
+          styleClasses: "col-sm-12 col-lg-8",
         },
       ]
     }]
@@ -91,7 +91,7 @@ export default {
           label: "کد گروه",
           type: "vueMultiSelect",
           model: "parent",
-          styleClasses: "col-sm-12 col-lg-3",
+          styleClasses: "col-sm-12 col-lg-12",
           selectOptions: {
             label: 'title',
             trackBy: 'id',
@@ -104,7 +104,7 @@ export default {
           inputType: "text",
           model: "code",
           disabled: true,
-          styleClasses: "col-sm-12 col-lg-2"
+          styleClasses: "col-sm-12 col-lg-4"
 
         },
         {
@@ -112,7 +112,7 @@ export default {
           type: "input",
           inputType: "text",
           model: "name",
-          styleClasses: "col-sm-12 col-lg-7"
+          styleClasses: "col-sm-12 col-lg-8"
         },
       ]
     }]
@@ -125,7 +125,7 @@ export default {
           label: "کد دسته بندی",
           type: "vueMultiSelect",
           model: "category",
-          styleClasses: "col-sm-12 col-lg-3",
+          styleClasses: "col-sm-12 col-lg-12",
           selectOptions: {
             label: 'title',
             trackBy: 'id',
@@ -138,22 +138,25 @@ export default {
           inputType: "text",
           model: "code",
           disabled: true,
-          styleClasses: "col-sm-12 col-lg-3"
-
+          styleClasses: "col-sm-12 col-lg-4"
         },
         {
           label: "نام کالا",
           type: "input",
           inputType: "text",
           model: "name",
-          styleClasses: "col-sm-12 col-lg-3"
+          styleClasses: "col-sm-12 col-lg-8"
         },
         {
-          label: "بارکد",
-          type: "input",
-          inputType: "text",
-          model: "barcode",
-          styleClasses: "col-sm-12 col-lg-3"
+          label: "واحد شمارش",
+          type: "vueMultiSelect",
+          model: "unit",
+          styleClasses: "col-sm-12 col-lg-4",
+          selectOptions: {
+            label: 'name',
+            trackBy: 'id',
+          },
+          values: [],
         },
         {
           label: "قیمت",
@@ -163,38 +166,14 @@ export default {
             numeral: true,
             delimiter: ','
           },
-          styleClasses: "col-sm-12 col-lg-3 ltr"
+          styleClasses: "col-sm-12 col-lg-4 ltr"
         },
+
         {
           label: "نوع قیمت گذری",
           type: "vueMultiSelect",
           model: "pricingType",
-          styleClasses: "col-sm-12 col-lg-3",
-          selectOptions: {
-            label: 'name',
-            trackBy: 'id',
-          },
-          values: [],
-        },
-        {
-          label: "حداقل فروش",
-          type: "input",
-          inputType: "text",
-          model: "min_sale",
-          styleClasses: "col-sm-12 col-lg-3",
-        },
-        {
-          label: "حداکثر فروش",
-          type: "input",
-          inputType: "text",
-          model: "max_sale",
-          styleClasses: "col-sm-12 col-lg-3",
-        },
-        {
-          label: "واحد شمارش",
-          type: "vueMultiSelect",
-          model: "unit",
-          styleClasses: "col-sm-12 col-lg-3",
+          styleClasses: "col-sm-12 col-lg-4",
           selectOptions: {
             label: 'name',
             trackBy: 'id',
@@ -205,7 +184,7 @@ export default {
           label: "انبار پیشفرض",
           type: "vueMultiSelect",
           model: "warehouse",
-          styleClasses: "col-sm-12 col-lg-3",
+          styleClasses: "col-sm-12 col-lg-4",
           selectOptions: {
             label: 'name',
             trackBy: 'id',
@@ -213,24 +192,47 @@ export default {
           values: [],
         },
         {
+          label: "بارکد",
+          type: "input",
+          inputType: "text",
+          model: "barcode",
+          styleClasses: "col-sm-12 col-lg-4"
+        },
+        {
+          label: "حداقل فروش",
+          type: "input",
+          inputType: "text",
+          model: "min_sale",
+          styleClasses: "col-sm-12 col-lg-4",
+        },
+        {
+          label: "حداکثر فروش",
+          type: "input",
+          inputType: "text",
+          model: "max_sale",
+          styleClasses: "col-sm-12 col-lg-4",
+        },
+
+
+        {
           label: "حداقل موجودی",
           type: "input",
           inputType: "text",
           model: "min_inventroy",
-          styleClasses: "col-sm-12 col-lg-3",
+          styleClasses: "col-sm-12 col-lg-4",
         },
         {
           label: "حداکثر موجودی",
           type: "input",
           inputType: "text",
           model: "max_inventroy",
-          styleClasses: "col-sm-12 col-lg-3",
+          styleClasses: "col-sm-12 col-lg-4",
         },
         {
           label: "تامین کننده اصلی",
           type: "vueMultiSelect",
           model: "supplier",
-          styleClasses: "col-sm-12 col-lg-3",
+          styleClasses: "col-sm-12 col-lg-6",
           selectOptions: {
             label: 'name',
             trackBy: 'id',
@@ -242,7 +244,7 @@ export default {
           type: "textArea",
           model: "explanation",
           rows: 4,
-          styleClasses: "col-sm-12 col-lg-9"
+          styleClasses: "col-sm-12 col-lg-6"
         },
       ]
     }]

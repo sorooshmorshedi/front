@@ -1,9 +1,9 @@
 <template>
   <div class="row rtl">
-    <div class="col-12 col rtl">
+    <div class="col-12 col-lg-7 rtl">
       <div class="card right">
         <div class="card-body">
-          <div class="title">تعریف کالا</div>
+          <div class="title">ویرایش کالا</div>
           <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
               <a
@@ -39,7 +39,7 @@
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-nature" role="tabpanel">
               <div class="row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-12">
                   <label for>کد</label>
                   <multiselect
                     dir="rtl"
@@ -50,12 +50,13 @@
                   />
                 </div>
               </div>
+              <hr>
               <vue-form-generator tag="div" :schema="editSchema[0]" :model="wareLevel"/>
               <button @click="updateWareLevel()" class="btn btn-primary float-left submit-btn">ثبت</button>
             </div>
             <div class="tab-pane fade" id="nav-group" role="tabpanel">
               <div class="row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-12">
                   <label for>کد</label>
                   <multiselect
                     dir="rtl"
@@ -66,12 +67,13 @@
                   />
                 </div>
               </div>
+              <hr>
               <vue-form-generator tag="div" :schema="editSchema[1]" :model="wareLevel"/>
               <button @click="updateWareLevel()" class="btn btn-primary float-left submit-btn">ثبت</button>
             </div>
             <div class="tab-pane fade" id="nav-category" role="tabpanel">
               <div class="row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-12">
                   <label for>کد</label>
                   <multiselect
                     dir="rtl"
@@ -82,12 +84,13 @@
                   />
                 </div>
               </div>
+              <hr>
               <vue-form-generator tag="div" :schema="editSchema[2]" :model="wareLevel"/>
               <button @click="updateWareLevel()" class="btn btn-primary float-left submit-btn">ثبت</button>
             </div>
             <div class="tab-pane fade" id="nav-ware" role="tabpanel">
               <div class="row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-12">
                   <label for>کد</label>
                   <multiselect
                     dir="rtl"
@@ -98,6 +101,7 @@
                   />
                 </div>
               </div>
+              <hr>
               <vue-form-generator tag="div" :schema="editSchema[3]" :model="ware"/>
               <button @click="updateWare()" class="btn btn-primary float-left submit-btn">ثبت</button>
               <button
@@ -110,15 +114,23 @@
         </div>
       </div>
     </div>
+    <div class="col-12 col-lg-5">
+      <wares-list :wares="waresList" @rowClick="rowClick"/>
+    </div>
   </div>
 </template>
 
 <script>
 import wareMixin from "@/mixin/ware";
+import WaresList from "./WaresList";
 
 export default {
   name: "Edit",
   mixins: [wareMixin],
+  components: { WaresList },
+  data() {
+    return {};
+  },
   created() {
     this.mode = "edit";
   },
@@ -128,8 +140,11 @@ export default {
       this.wareLevel.level = e.target.id.split("-")[1];
     });
   },
-  data() {
-    return {};
+  methods: {
+    rowClick(row) {
+      if (row.level == undefined) this.ware = row;
+      else this.wareLevel = row;
+    }
   },
   watch: {
     ware() {
@@ -137,6 +152,12 @@ export default {
         if (this.ware.price.includes(",")) return;
         this.ware.price = this.toMoney(this.ware.price);
       }
+    }
+  },
+  computed: {
+    waresList() {
+      if (this.wareLevel.level == 3) return this.waresSelectValues.wares;
+      else return this.waresSelectValues.levels[this.wareLevel.level];
     }
   }
 };

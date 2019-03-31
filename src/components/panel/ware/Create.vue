@@ -1,6 +1,6 @@
 <template>
   <div class="row rtl">
-    <div class="col-12 col rtl">
+    <div class="col-12 col-lg-7 rtl">
       <div class="card right">
         <div class="card-body">
           <div class="title">تعریف کالا</div>
@@ -57,15 +57,23 @@
         </div>
       </div>
     </div>
+    <div class="col-12 col-lg-5">
+      <wares-list :wares="waresList"/>
+    </div>
   </div>
 </template>
 
 <script>
 import wareMixin from "@/mixin/ware";
+import WaresList from "./WaresList";
 
 export default {
   name: "Create",
   mixins: [wareMixin],
+  components: { WaresList },
+  data() {
+    return {};
+  },
   created() {
     this.mode = "create";
   },
@@ -75,10 +83,12 @@ export default {
       this.wareLevel.level = e.target.id.split("-")[1];
     });
   },
-  data() {
-    return {};
-  },
-  watch: {}
+  computed: {
+    waresList() {
+      if (this.wareLevel.level == 3) return this.waresSelectValues.wares;
+      else return this.waresSelectValues.levels[this.wareLevel.level];
+    }
+  }
 };
 </script>
 
