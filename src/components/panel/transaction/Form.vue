@@ -618,9 +618,9 @@ export default {
       });
     },
     selectAccount(accountId) {
-      this.transaction.account = this.transactionAccounts.filter(
-        o => (o.id = accountId)
-      )[0];
+      this.log("Select Account : ", accountId);
+      let account = this.transactionAccounts.filter(o => (o.id == accountId))[0];
+      this.transaction.account = account;
     },
     selectNotPaidFactor(factorId) {
       let factor = this.factors.filter(o => o.id == factorId);
