@@ -49,9 +49,11 @@ export default {
     },
     {
       th: "مبلغ کل فاکتور",
-      td: "sanad.bed",
+      td: "total_sum",
       type: "money",
-      filters: ["sanad__bed__icontains"]
+      filters: [],
+      sortable: false,
+      
     },
   ],
 }
