@@ -277,8 +277,10 @@
                         <th>توضیحات</th>
                         <th>تاریخ</th>
                         <th>جمع فاکتور</th>
-                        <th>مبلغ پرداخت شده</th>
-                        <th>مبلغ</th>
+                        <th>پرداختی قبلی</th>
+                        <th v-if="!editable">پرداختی فعلی</th>
+                        <th>مانده</th>
+                        <th v-if="editable">پرداختی فعلی</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -289,12 +291,15 @@
                         <td>{{ f.explanation }}</td>
                         <td>{{ f.date }}</td>
                         <td>{{ f.sum | toMoney }}</td>
-                        <td>{{ f.paidValue | toMoney }}</td>
-                        <td>
+                        <td>{{ f.prevPaidValue | toMoney }}</td>
+                        <td v-if="!editable">{{ f.payment.value | toMoney }}</td>
+                        <td>{{ f.remain | toMoney }}</td>
+                        <td v-if="editable">
                           <money
                             class="form-control"
                             type="text"
                             v-model="f.payment.value"
+                            @input="validatePaidValue(f)"
                             :disabled="!editable"
                           />
                         </td>
@@ -586,6 +591,21 @@ export default {
       }
       this.getData();
     },
+    validatePaidValue(factor) {
+      let paymentValue = +factor.payment.value;
+      if (paymentValue < 0) {
+        factor.payment.value = 0;
+      } else if (paymentValue > 0) {
+        let remain = +factor.remain
+        let oldPayments = 0;
+        factor.payments.forEach(payment => {
+          if (payment.transaction == this.transaction.id)
+            oldPayments += +payment.value;
+        });
+        if (paymentValue - oldPayments > remain)
+          this.$nextTick(() => (factor.payment.value = remain + oldPayments));
+      }
+    },
     goToForm(pos) {
       let newCode = null;
       switch (pos) {
@@ -619,7 +639,7 @@ export default {
     },
     selectAccount(accountId) {
       this.log("Select Account : ", accountId);
-      let account = this.transactionAccounts.filter(o => (o.id == accountId))[0];
+      let account = this.transactionAccounts.filter(o => o.id == accountId)[0];
       this.transaction.account = account;
     },
     selectNotPaidFactor(factorId) {
@@ -648,6 +668,9 @@ export default {
         success: data => {
           this.factors = [];
           for (let factor of data) {
+            factor.prevPaidValue = factor.paidValue;
+            factor.remain = +factor.sum - +factor.paidValue;
+
             let payment = [];
             if (this.transaction.id) {
               payment = factor.payments.filter(p => {
@@ -657,7 +680,8 @@ export default {
 
             if (payment.length) {
               payment = payment[0];
-              factor.payment = payment;
+              factor.payment = this.copy(payment);
+              factor.prevPaidValue -= payment.value;
             } else {
               factor.payment = {
                 value: 0,
