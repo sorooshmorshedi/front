@@ -550,6 +550,10 @@
                           <a @click.prevent="openTransaction(p.transaction)" href="#/">مشاهده جزئیات</a>
                         </td>
                       </tr>
+                      <tr>
+                        <td>جمع:</td>
+                        <td>{{ paymentsSum | toMoney }}</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -813,6 +817,15 @@ export default {
     }
   },
   computed: {
+    paymentsSum() {
+      let sum = 0;
+      if (this.factor.payments) {
+        this.factor.payments.forEach(payment => {
+          sum += +payment.value;
+        });
+      }
+      return sum;
+    },
     canSubmitTransaction() {
       if (!this.id) return false;
       return this.factor.paidValue < this.sum.total;
