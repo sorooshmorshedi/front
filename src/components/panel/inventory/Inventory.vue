@@ -5,7 +5,6 @@
         <div class="card-body">
           <div class="title">
             کاردکس کالا
-            <!-- <router-link :to="{name:'InventoryReport', query:{wareId:1}}">asoidfj</router-link> -->
           </div>
 
           <div class="row inventory">
@@ -13,11 +12,11 @@
               <div class="card right ">
                 <div class="card-body">
                   <div class="row">
-                    <div class="form-group col-lg-2">
+                    <div class="form-group col-12 col-lg-6">
                       <label>کالا</label>
                       <multiselect :option-height="104" dir="rtl" :allow-empty="false" :options="waresSelectValues.wares" v-model="ware" track-by="id" label="title" />
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-12 col-lg-6">
                       <label>انبار</label>
                       <multiselect v-if="ware" dir="rtl" :allow-empty="false" :options="waresSelectValues.warehouses" v-model="ware.warehouse" track-by="id" label="title" />
                     </div>
