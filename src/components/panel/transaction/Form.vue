@@ -222,7 +222,7 @@
                     </tr>
                     <tr></tr>
                     <tr class="bg-info text-white">
-                      <td colspan="2"></td>
+                      <td colspan="3"></td>
                       <td class="text-left">مجموع:</td>
                       <td class>{{ sum | toMoney }}</td>
                       <td colspan="6"></td>
@@ -474,7 +474,7 @@ export default {
   data() {
     return {
       transaction: {},
-      rows: [{}],
+      rows: [],
       type: {
         label: "",
         name: "",
@@ -492,6 +492,9 @@ export default {
       },
       d: {
         getNotPaidFactors: null
+      },
+      rowTemplate: {
+        value: 0,
       }
     };
   },
@@ -555,7 +558,7 @@ export default {
     rows: {
       handler() {
         if (this.rows[this.rows.length - 1].type) {
-          this.rows.push({});
+          this.rows.push(this.copy(this.rowTemplate));
         }
       },
       deep: true
@@ -574,7 +577,7 @@ export default {
     initForm() {
       this.log("Init Transaction Form");
       if (!this.id) {
-        this.rows = [{}];
+        this.rows = [this.copy(this.rowTemplate)];
         this.transaction = this.getTransactionTemplate();
         this.factors = [];
       }
@@ -652,7 +655,7 @@ export default {
       this.transaction.floatAccount = factor.floatAccount;
       let value = factor.sum - factor.paidValue;
       this.rows[0].value = value;
-      this.rows.push({});
+      this.rows.push(this.copy(this.rowTemplate));
       factor.payment.value = value;
     },
     getNotPaidFactors() {
@@ -730,7 +733,7 @@ export default {
       transaction.items.forEach(item => {
         this.rows.push(this.copy(item));
       });
-      this.rows.push({});
+      this.rows.push(this.copy(this.rowTemplate));
     },
     deleteRow(index) {
       if (index == 0) {
@@ -1026,7 +1029,7 @@ export default {
           transactionType: this.transactionType
         }
       });
-      this.rows = [{}];
+      this.rows = [this.copy(this.rowTemplate)];
       this.transaction = this.getTransactionTemplate();
       this.factors = [];
     },
