@@ -116,7 +116,6 @@
                 <div class="form-group col-lg-4 col-sm-4">
                   <label>{{ accountName }}</label>
                   <multiselect
-                    v-tooltip="accountRemain(factor.account)"
                     dir="rtl"
                     :options="accountsSelectValues.persons"
                     v-model="factor.account"

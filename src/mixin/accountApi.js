@@ -426,14 +426,21 @@ export default {
       }
       return res;
     },
-    accountRemain(account) {
+    async accountRemain(account) {
       if (!account) return '';
+
       let res = '';
-      res += 'مانده بدهکار: ' +
-        this.toMoney(account.bed) +
-        "<br>" +
-        'مانده بستانکار: ' +
-        this.toMoney(account.bes);
+      await this.request({
+        url: this.endpoint('accounts/accounts/' + account.id + '/remain'),
+        method: 'get',
+        success: (data) => {
+          res += 'مانده بدهکار: ' +
+            this.toMoney(data.bed) +
+            "<br>" +
+            'مانده بستانکار: ' +
+            this.toMoney(data.bes);
+        }
+      })
       return res;
     },
     openLedger(account) {
