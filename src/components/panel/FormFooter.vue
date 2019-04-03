@@ -1,34 +1,37 @@
 <template>
   <div class="row rtl d-print-none">
     <div class="col-12 col-md-6">
-      <button
-        @click="goToForm('first')"
-        :disabled="!hasFirst"
-        type="button"
-        class="btn btn-info"
-      >اولین {{ formName }}</button>
-      <button
-        @click="goToForm('prev')"
-        :disabled="!hasPrev"
-        type="button"
-        class="btn btn-info"
-      >{{ formName }} قبلی</button>
-      <button
-        @click="goToForm('next')"
-        :disabled="!hasNext"
-        type="button"
-        class="btn btn-info"
-      >{{ formName }} بعدی</button>
-      <button
-        @click="goToForm('last')"
-        :disabled="!hasLast"
-        type="button"
-        class="btn btn-info"
-      >آخرین {{ formName }}</button>
+      <template v-if="showPagination">
+        <button
+          @click="goToForm('first')"
+          :disabled="!hasFirst"
+          type="button"
+          class="btn btn-info"
+        >اولین {{ formName }}</button>
+        <button
+          @click="goToForm('prev')"
+          :disabled="!hasPrev"
+          type="button"
+          class="btn btn-info"
+        >{{ formName }} قبلی</button>
+        <button
+          @click="goToForm('next')"
+          :disabled="!hasNext"
+          type="button"
+          class="btn btn-info"
+        >{{ formName }} بعدی</button>
+        <button
+          @click="goToForm('last')"
+          :disabled="!hasLast"
+          type="button"
+          class="btn btn-info"
+        >آخرین {{ formName }}</button>
+      </template>
     </div>
     <div class="col-12 col-md-6 ltr text-left" dir="ltr">
       <template v-if="isEditing">
         <button
+          v-if="hasSubmitAndClearForm"
           @click="validate(true)"
           type="button"
           class="btn submit btn-primary foat-left"
@@ -40,12 +43,7 @@
           :disabled="!canSubmit"
           class="btn submit btn-primary foat-left w-100px"
         >ثبت</button>
-        <button
-          @click="emitDelete"
-          type="button"
-          v-if="deletable"
-          class="btn submit btn-danger"
-        >حذف</button>
+        <button @click="emitDelete" type="button" v-if="deletable" class="btn submit btn-danger">حذف</button>
       </template>
       <button v-else @click="edit()" type="button" class="btn submit btn-info foat-left">ویرایش</button>
     </div>
@@ -57,6 +55,9 @@ export default {
   props: {
     formName: {
       required: true
+    },
+    showPagination: {
+      default: true
     },
     hasFirst: {
       required: true
@@ -81,6 +82,9 @@ export default {
     },
     deletable: {
       default: false
+    },
+    hasSubmitAndClearForm: {
+      default: true
     }
   },
   data() {
@@ -102,7 +106,7 @@ export default {
     }
   },
   methods: {
-    setIsEditing(){
+    setIsEditing() {
       if (this.isEditing != this.editable) this.isEditing = this.editable;
     },
     goToForm(pos) {
@@ -115,8 +119,8 @@ export default {
       this.$emit("edit");
       this.isEditing = true;
     },
-    emitDelete(){
-      this.$emit('delete');
+    emitDelete() {
+      this.$emit("delete");
     }
   }
 };

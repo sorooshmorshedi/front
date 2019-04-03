@@ -73,6 +73,8 @@
                 <div class="dropdown-divider"></div>
                 <router-link class="dropdown-item" :to="{name:'Warehouse'}">انبار</router-link>
                 <router-link class="dropdown-item" :to="{name:'Unit'}">واحد</router-link>
+                <div class="dropdown-divider"></div>
+                <router-link class="dropdown-item" :to="{name:'FirstPeriodInventory'}">ثبت موجودی اول دوره</router-link>
               </div>
             </div>
             <div class="dropdown-divider"></div>

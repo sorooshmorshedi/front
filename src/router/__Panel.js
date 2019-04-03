@@ -42,6 +42,8 @@ import FactorForm from '@/components/panel/factor/Form';
 import FactorExpenses from '@/components/panel/factor/Expenses';
 import ReceiptAndRemittance from '@/components/panel/factor/ReceiptAndRemittance';
 
+import FirstPeriodInventory from  '@/components/panel/firstPeriodInventory/FirstPeriodInventory';
+
 import Cheque from '@/components/panel/cheque/Cheque';
 import Chequebook from '@/components/panel/cheque/Chequebook';
 import ReceivedCheques from '@/components/panel/cheque/ReceivedCheques';
@@ -210,6 +212,11 @@ export default [{
       path: 'receiptAndRemittance/:receiptType/:id?',
       props: true,
       component: ReceiptAndRemittance
+    },
+    {
+      name: 'FirstPeriodInventory',
+      path: 'firstPeriodInventory',
+      component: FirstPeriodInventory
     },
     {
       name: 'Cheque',

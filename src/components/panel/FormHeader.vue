@@ -2,17 +2,16 @@
   <div class="title">
     {{ title }}
     <span class="d-print-none">
-      <a @click.prevent="emit('clearForm')" href="#/" class="btn btn-info">جدید</a>
+      <a v-if="hasClear" @click.prevent="emit('clearForm')" href="#/" class="btn btn-info">جدید</a>
       <router-link
+        v-if="hasList"
         class="btn btn-info"
         :to="{name: ListRouteName, params: ListRouteParams}"
       >انتخاب {{ formName }}</router-link>
 
       <template v-if="hasExport">
-        <a class="btn btn-info" :href="printUrl" target="_blank" rel="noopener noreferrer" >چاپ</a>
-        
+        <a class="btn btn-info" :href="printUrl" target="_blank" rel="noopener noreferrer">چاپ</a>
         <a class="btn btn-info" :href="pdfUrl" rel="noopener noreferrer">PDF</a>
-        <!-- <a class="btn btn-info" :href="pdfUrl">PDF</a> -->
       </template>
 
       <slot></slot>
@@ -31,6 +30,9 @@ export default {
     },
     ListRouteName: {
       default: "List"
+    },
+    hasClear: {
+      default: true
     },
     ListRouteParams: {},
     exportParams: {}
@@ -59,12 +61,16 @@ export default {
     hasExport() {
       if (
         this.ListRouteName &&
+        this.ListRouteParams &&
         this.ListRouteParams.form &&
         this.exportParams &&
         this.exportParams.id
       )
         return true;
       return false;
+    },
+    hasList() {
+      return this.ListRouteName;
     },
     printUrl() {
       if (!this.hasExport) return "";

@@ -32,7 +32,10 @@ export default {
       }, {
         label: 'برگشت از فروش',
         value: 'backFromSale'
-      }, ],
+      }, {
+        label: 'موجودی اول دوره',
+        value: 'fpi'
+      }],
       filters: ['factor.type']
     },
     {
