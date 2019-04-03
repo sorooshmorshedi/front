@@ -212,7 +212,10 @@ Vue.mixin({
         o => o[by] == node[by]
       );
       arr.splice(index, 1, node);
-    }
+    },
+    now() {
+      return moment().format('jYYYY/jMM/jDD');
+    },
   },
   computed: {
     ...mapState({

@@ -1,6 +1,6 @@
 <template>
-  <footer class="rtl" v-if="user.id">
-    <div class="row">
+  <footer class="rtl d-print-none" v-if="user.id">
+    <div class="row ">
       <div class="col-sm-4">
         نام کاربری: <span>{{ user.username }}</span>
       </div>
