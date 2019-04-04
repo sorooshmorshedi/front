@@ -16,10 +16,22 @@
           <tr v-for="(c, i) in companies" :key="i">
             <td>{{ i+1 }}</td>
             <td>{{ c.name }}</td>
-            <td>{{ c.financial_year.name }}</td>
-            <td>{{ c.financial_year.start }}</td>
-            <td>{{ c.financial_year.end }}</td>
+            <template v-if="isUserCompany(c)">
+              <td>{{ user.active_financial_year.name }}</td>
+              <td>{{ user.active_financial_year.start }}</td>
+              <td>{{ user.active_financial_year.end }}</td>
+            </template>
+            <template v-else>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+            </template>
             <td>
+              <button
+                @click="activeCompany(c)"
+                type="button"
+                class="btn btn-info"
+              >فعال کردن سال مالی</button>
               <router-link
                 :to="{name: 'UpdateCompany', params: {id: c.id}}"
                 class="btn btn-info"
@@ -69,6 +81,13 @@
                   <td>{{ fy.name }}</td>
                   <td>{{ fy.start }}</td>
                   <td>{{ fy.end }}</td>
+                  <td>
+                    <button
+                      @click="activeFinancialYear(fy)"
+                      type="button"
+                      class="btn btn-info"
+                    >فعال کردن سال مالی</button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -138,6 +157,7 @@ export default {
   created() {
     this.getCompanies();
   },
+  computed: {},
   methods: {
     getCompanies() {
       this.request({
@@ -163,6 +183,40 @@ export default {
           $("#financial-year-form").modal("hide");
         }
       });
+    },
+    activeFinancialYear(financialYear) {
+      this.request({
+        url: this.endpoint("users/setActiveFinancialYear"),
+        method: "post",
+        data: {
+          financial_year: financialYear.id
+        },
+        success: data => {
+          this.successNotify();
+          this.getCompanies();
+          $("#financial-years").modal("hide");
+        }
+      });
+    },
+    activeCompany(company) {
+      this.request({
+        url: this.endpoint("users/setActiveCompany"),
+        method: "post",
+        data: {
+          company: company.id
+        },
+        success: data => {
+          this.successNotify();
+          this.getCompanies();
+        }
+      });
+    },
+    isUserCompany(company) {
+      let activeCompany = this.user.active_company;
+      let activeFinancialYear = this.user.active_financial_year;
+      if (!activeCompany || !activeFinancialYear) return false;
+      if (company.id == activeCompany.id) return true;
+      return false;
     }
   }
 };
