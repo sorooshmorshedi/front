@@ -7,7 +7,7 @@
       <div class="col-sm-4">
       </div>
       <div class="col-sm-4 d-none d-sm-inline-block text-left" dir="ltr" >
-        ساعت و تاریخ روز: <span> {{ now }} </span>
+        ساعت و تاریخ روز: <span> {{ footerNow}} </span>
       </div>
     </div>
   </footer>
@@ -21,7 +21,7 @@ export default {
     return {};
   },
   computed: {
-    now(){
+    footerNow(){
       return moment().format('jYYYY/jMM/jDD HH:mm')
     }
   }
