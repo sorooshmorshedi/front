@@ -213,7 +213,7 @@ Vue.mixin({
       );
       arr.splice(index, 1, node);
     },
-    now() {
+    todayDate() {
       return moment().format('jYYYY/jMM/jDD');
     },
   },

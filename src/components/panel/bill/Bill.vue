@@ -5,7 +5,7 @@
         <div class="card-body">
           <div class="print-header d-none d-print-block">
             <h2>{{ company.name }}</h2>
-            <span class="float-left">تاریخ چاپ: {{ now() }}</span>
+            <span class="float-left">تاریخ چاپ: {{ todayDate() }}</span>
           </div>
           <div class="title">
             صورت حساب
