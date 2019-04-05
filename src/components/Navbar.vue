@@ -15,10 +15,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">
-            خانه
-            <span class="sr-only">(current)</span>
-          </a>
+          <router-link class="nav-link" :to="{name:'Home'}">خانه</router-link>
         </li>
         <li class="nav-item dropdown" v-if="username == 'admin'">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">اطلاعات پایه</a>
@@ -74,7 +71,10 @@
                 <router-link class="dropdown-item" :to="{name:'Warehouse'}">انبار</router-link>
                 <router-link class="dropdown-item" :to="{name:'Unit'}">واحد</router-link>
                 <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" :to="{name:'FirstPeriodInventory'}">ثبت موجودی اول دوره</router-link>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'FirstPeriodInventory'}"
+                >ثبت موجودی اول دوره</router-link>
               </div>
             </div>
             <div class="dropdown-divider"></div>
@@ -250,7 +250,7 @@
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">گزارش</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'LedgerReport'}">دفتر کل، معین، تفضیلی</router-link>
-            <router-link class="dropdown-item" :to="{name:'BillReport'}">صورت حساب تفصیلی </router-link>
+            <router-link class="dropdown-item" :to="{name:'BillReport'}">صورت حساب تفصیلی</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'BalanceReport'}">تراز</router-link>
             <router-link class="dropdown-item" :to="{name:'FloatBalanceReport'}">تراز شناور</router-link>
@@ -293,8 +293,8 @@ export default {
     }
   },
   computed: {
-    username(){
-      if(this.user.username.includes('manager')) return 'manager'
+    username() {
+      if (this.user.username.includes("manager")) return "manager";
       return this.user.username;
     }
   }

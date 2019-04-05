@@ -1,5 +1,7 @@
 import Panel from '@/components/panel/Panel';
 
+import Home from '@/components/panel/Home';
+
 import Company from '@/components/panel/company/Company';
 import CreateCompany from '@/components/panel/company/Create';
 import UpdateCompany from '@/components/panel/company/Update';
@@ -55,6 +57,11 @@ export default [{
   path: '/panel',
   component: Panel,
   children: [{
+
+      name: 'Home',
+      path: 'home',
+      component: Home,
+  },{
       name: 'Company',
       path: 'company',
       component: Company,

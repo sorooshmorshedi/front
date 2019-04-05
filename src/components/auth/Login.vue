@@ -31,7 +31,7 @@ export default {
     return {
       username: "",
       password: "",
-      callback: "Panel"
+      callback: "Home"
     };
   },
   created() {
