@@ -834,7 +834,9 @@ export default {
         "reports/lists/factors/TEMP?form=factor&type=" +
         this.factorType +
         "&id=" +
-        this.id;
+        this.id +
+        "&token=" +
+        this.token;
       url = this.endpoint(url);
       let html = url.replace("TEMP", "html");
       let pdf = url.replace("TEMP", "pdf");

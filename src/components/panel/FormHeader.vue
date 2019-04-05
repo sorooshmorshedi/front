@@ -54,6 +54,7 @@ export default {
       Object.keys(this.exportParams).forEach(k => {
         url += k + "=" + this.exportParams[k] + "&";
       });
+      url += "token=" + this.token;
       return url;
     }
   },
