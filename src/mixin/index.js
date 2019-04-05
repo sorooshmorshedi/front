@@ -60,14 +60,10 @@ Vue.mixin({
         })
         .catch((error) => {
           this.$store.commit('decrementOGR');
-          console.log(error);
+          this.log(error);
           if (!error.response) {
-            console.warn('NO RESPONSE FROM SERVER');
+            this.warn('NO RESPONSE FROM SERVER');
             this.notify('خطا در برقراری ارتباط با سرور', 'danger');
-            return;
-          }
-          if (this.OGR == 0) {
-            console.warn('OGR IS ZERO');
             return;
           }
           if (error.response.status == 401) {
@@ -81,7 +77,6 @@ Vue.mixin({
             });
             return;
           }
-          options.error && options.error(error.response);
           if (error.response && error.response.status == 400) {
             let errors = error.response.data;
             Object.keys(errors).forEach(err => {
