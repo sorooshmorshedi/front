@@ -96,6 +96,10 @@
                       :to="{name:'TransactionDefaultAccounts'}"
                     >دریافت و پرداخت</router-link>
                     <router-link class="dropdown-item" :to="{name:'FactorDefaultAccounts'}">فاکتور</router-link>
+                    <router-link
+                      class="dropdown-item"
+                      :to="{name:'CloseAccountsDefaultAccounts'}"
+                    >بستن حساب ها</router-link>
                   </div>
                 </div>
 

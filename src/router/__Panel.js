@@ -38,6 +38,7 @@ import TransactionForm from '@/components/panel/transaction/Form';
 
 import TransactionDefaultAccounts from '@/components/panel/defaultAccounts/TransactionDefaultAccounts';
 import FactorDefaultAccounts from '@/components/panel/defaultAccounts/FactorDefaultAccounts';
+import CloseAccountsDefaultAccounts from '@/components/panel/defaultAccounts/CloseAccountsDefaultAccounts';
 
 import Factor from '@/components/panel/factor/Factor';
 import FactorForm from '@/components/panel/factor/Form';
@@ -167,6 +168,11 @@ export default [{
       name: 'FactorDefaultAccounts',
       path: 'defaultAccounts/factor',
       component: FactorDefaultAccounts,
+    },
+    {
+      name: 'CloseAccountsDefaultAccounts',
+      path: 'defaultAccounts/closeAccounts',
+      component: CloseAccountsDefaultAccounts,
     },
     {
       name: 'Transaction',
