@@ -31,7 +31,7 @@
                 @click="activeCompany(c)"
                 type="button"
                 class="btn btn-info"
-              >فعال کردن سال مالی</button>
+              >فعال کردن شرکت</button>
               <router-link
                 :to="{name: 'UpdateCompany', params: {id: c.id}}"
                 class="btn btn-info"
