@@ -242,9 +242,11 @@
             :hasNext="hasNext"
             :canSubmit="canSubmit"
             :editable="editable"
+            :deletable="deletable"
             @goToForm="goToForm"
             @validate="validate"
             @edit="makeFormEditable()"
+            @delete="deleteSanad"
           />
         </div>
       </div>
@@ -312,6 +314,11 @@ export default {
     hasLast() {
       if (this.sanadCode == 1) return false;
       return true;
+    },
+    deletable() {
+      if (!this.id) return false;
+      if (!this.hasNext) return true;
+      return false;
     }
   },
   watch: {
@@ -418,6 +425,17 @@ export default {
           row.bes = tmp;
         }
       }
+    },
+    deleteSanad() {
+      this.request({
+        url: this.endpoint("sanads/sanads/" + this.sanad.id),
+        method: "delete",
+        success: data => {
+          this.clearSanad();
+          this.getSanadCode();
+          this.successNotify();
+        }
+      });
     },
     storeSanad(clearSanad) {
       let data = this.copy(this.sanad);
