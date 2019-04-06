@@ -201,6 +201,8 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
+import _ from 'lodash'
+
 export default {
   name: "Form",
   components: { money, date, mtime },
@@ -213,7 +215,7 @@ export default {
       rowTemplate: {
         fee: ""
       },
-      idsToDelete: [],
+      idsToDelete: []
     };
   },
   created() {
@@ -230,9 +232,11 @@ export default {
         url: this.endpoint("factors/firstPeriodInventory"),
         method: "get",
         success: data => {
-          this.factor = data;
-          this.rows = data.items;
-          this.rows.push(this.copy(this.rowTemplate));
+          if (!data.message) {
+            this.factor = data;
+            this.rows = data.items;
+            this.rows.push(this.copy(this.rowTemplate));
+          }
         }
       });
     },
@@ -276,7 +280,7 @@ export default {
         data: {
           factor: this.factor,
           items: items,
-          ids_to_delete: this.idsToDelete,
+          ids_to_delete: this.idsToDelete
         },
         success: data => {
           this.successNotify();
@@ -287,9 +291,9 @@ export default {
     deleteItemRow(index) {
       if (index == -1) {
         this.rows.forEach(row => {
-          if(row.id) this.idsToDelete.push(row.id);
+          if (row.id) this.idsToDelete.push(row.id);
         });
-        this.rows.splice(0, this.rows.length-1);
+        this.rows.splice(0, this.rows.length - 1);
       } else {
         let row = this.rows[index];
         if (row.id) this.idsToDelete.push(row.id);
