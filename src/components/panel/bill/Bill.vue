@@ -9,6 +9,7 @@
           </div>
           <div class="title">
             صورت حساب
+            <span v-if="account" class="d-none d-print-inline-block">{{ account.name }}</span>
             <span class="d-print-none">
               <a @click.prevent="print" href="#/" class="btn btn-info">چاپ</a>
             </span>
@@ -18,7 +19,7 @@
               <div class="card right">
                 <div class="card-body">
                   <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 d-print-none">
                       <label>حساب</label>
                       <multiselect
                         dir="rtl"

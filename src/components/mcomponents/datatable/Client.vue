@@ -4,7 +4,7 @@
       <table class="table table-striped table-bordered">
         <thead>
           <!-- Filters -->
-          <tr>
+          <tr class="d-print-none">
             <th>
               <button
                 @click="clearFilters()"
