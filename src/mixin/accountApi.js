@@ -99,16 +99,14 @@ export default {
     },
     storeAccount() {
       let data = this.copy(this.account);
-      let parent = data.parent;
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data);
       this.request({
         url: this.endpoint('accounts/accounts'),
         method: 'post',
         data: data,
         success: data => {
           this.getAccounts(true);
+          this.clearAccounts();
           this.modal("#account-modal", "hide");
           this.notify('حساب با موفقیت ساخته شد', 'success');
         }
@@ -117,7 +115,6 @@ export default {
     updateAccount() {
       this.log('update account');
       let data = this.copy(this.account);
-      let parent = data.parent;
       data = this.extractIds(data);
       this.request({
         url: this.endpoint('accounts/accounts/' + data.id),
@@ -125,6 +122,7 @@ export default {
         data: data,
         success: data => {
           this.getAccounts(true);
+          this.clearAccounts();
           this.modal("#account-modal", "hide");
           this.notify('حساب با موفقیت ویرایش شد', 'success');
         }
@@ -142,6 +140,7 @@ export default {
         method: 'delete',
         success: data => {
           if (this.mode == 'edit') this.getAccounts(true);
+          this.clearAccounts();
           this.notify('حساب با موفقیت حذف شد', 'success');
         }
       })
@@ -154,6 +153,7 @@ export default {
         data: data,
         success: data => {
           this.getFloatAccountGroups(true);
+          this.clearAccounts();
           this.notify('گروه حساب شناور با موفقیت ساخته شد', 'success');
         }
       })
@@ -166,6 +166,7 @@ export default {
         data: data,
         success: data => {
           this.getFloatAccountGroups(true);
+          this.clearAccounts();
           this.notify('گروه حساب شناور با موفقیت ویرایش شد', 'success');
         }
       })
@@ -182,6 +183,7 @@ export default {
         success: data => {
           this.getFloatAccounts();
           this.getFloatAccountGroups(true);
+          this.clearAccounts();
           this.notify('گروه حساب شناور با موفقیت حذف شد', 'success');
         }
       })
@@ -218,6 +220,7 @@ export default {
         data: data,
         success: data => {
           this.getFloatAccounts();
+          this.clearAccounts();
           this.notify('حساب شناور با موفقیت ویرایش شد', 'success');
         }
       })
@@ -234,15 +237,14 @@ export default {
         method: 'delete',
         success: data => {
           this.getFloatAccountGroups(true);
+          this.clearAccounts();
           this.notify('حساب شناور با موفقیت حذف شد', 'success');
         }
       })
     },
     storePerson() {
       let data = this.copy(this.account);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data);
       data.level = 3;
       this.log('create person account');
       this.request({
@@ -251,9 +253,7 @@ export default {
         data: data,
         success: data => {
           let payload = this.copy(this.person);
-          Object.keys(payload).forEach(key => {
-            if (payload[key] && payload[key].id) payload[key] = payload[key].id;
-          })
+          payload = this.extractIds(payload)
           payload.account = data.id;
           this.log('create person');
           this.request({
@@ -272,9 +272,7 @@ export default {
     },
     updatePerson() {
       let data = this.copy(this.account);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data)
       this.log('create person account');
       this.request({
         url: this.endpoint('accounts/accounts/' + this.account.id),
@@ -282,9 +280,7 @@ export default {
         data: data,
         success: data => {
           let payload = this.copy(this.account.person);
-          Object.keys(payload).forEach(key => {
-            if (payload[key] && payload[key].id) payload[key] = payload[key].id;
-          })
+          payload = this.extractIds(payload)
           payload.account = data.id;
           this.log('create person');
           this.request({
@@ -303,9 +299,7 @@ export default {
     },
     storeBank() {
       let data = this.copy(this.account);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data);
       data.level = 3;
       this.log('create bank account');
       this.request({
@@ -314,9 +308,7 @@ export default {
         data: data,
         success: data => {
           let payload = this.copy(this.bank);
-          Object.keys(payload).forEach(key => {
-            if (payload[key] && payload[key].id) payload[key] = payload[key].id;
-          })
+          payload = this.extractIds(payload);
           payload.account = data.id;
           this.log('create bank');
           this.request({
@@ -335,9 +327,7 @@ export default {
     },
     updateBank() {
       let data = this.copy(this.account);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      })
+      data = this.extractIds(data)
       this.log('update bank account');
       this.request({
         url: this.endpoint('accounts/accounts/' + this.account.id),
@@ -345,9 +335,7 @@ export default {
         data: data,
         success: data => {
           let payload = this.copy(this.account.bank);
-          Object.keys(payload).forEach(key => {
-            if (payload[key] && payload[key].id) payload[key] = payload[key].id;
-          })
+          payload = this.extractIds(payload)
           payload.account = data.id;
           this.log('update bank');
           this.request({
