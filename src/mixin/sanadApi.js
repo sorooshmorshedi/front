@@ -59,17 +59,11 @@ export default {
     },
     getTransactionCodes() {
       this.request({
-        url: this.endpoint('sanads/transactions/newCode?type=receive'),
+        url: this.endpoint('sanads/transactions/newCodes'),
         method: 'get',
         success: data => {
-          this.receiveCode = data
-        }
-      })
-      this.request({
-        url: this.endpoint('sanads/transactions/newCode?type=payment'),
-        method: 'get',
-        success: data => {
-          this.paymentCode = data
+          this.receiveCode = data['receive']
+          this.paymentCode = data['payment']
         }
       })
     },
