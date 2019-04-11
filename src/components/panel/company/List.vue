@@ -193,7 +193,7 @@ export default {
         },
         success: data => {
           this.successNotify();
-          this.getCompanies();
+          this.$store.commit("setUser", data);
           $("#financial-years").modal("hide");
         }
       });

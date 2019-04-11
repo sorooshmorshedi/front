@@ -191,8 +191,9 @@ export default {
     storeFloatAccount() {
       let data = this.copy(this.floatAccount);
       data = this.extractIds(data);
-      for (const fg of data.floatAccountGroups) {
-        data.floatAccountGroups[data.floatAccountGroups.indexOf(fg)] = fg.id;
+      data.syncFloatAccountGroups = []
+      for (const fag of data.floatAccountGroups) {
+        data.syncFloatAccountGroups.push(fag.id);
       }
       this.request({
         url: this.endpoint('accounts/floatAccounts'),
@@ -209,11 +210,9 @@ export default {
     updateFloatAccount() {
       let data = this.copy(this.floatAccount);
       data = this.extractIds(data);
-      let fags = [];
       for (const fag of data.floatAccountGroups) {
-        fags.push(fag.id);
+        data.syncFloatAccountGroups.push(fag.id);
       }
-      data.floatAccountGroups = fags;
       this.request({
         url: this.endpoint('accounts/floatAccounts/' + data.id),
         method: 'put',
@@ -519,16 +518,15 @@ export default {
 
       this.floatAccounts.forEach(fa => {
         let fags = [];
-        fa.floatAccountGroups && fa.floatAccountGroups.forEach(id => {
-          let fag;
-          if (typeof (id) !== 'number') {
-            fag = id;
-          } else {
-            fag = this.floatAccountGroups.filter(o => o.id == id)[0];
+        fa.floatAccountGroups.forEach(floatAccountGroup => {
+          if (typeof (floatAccountGroup) == 'number') {
+            let fag = this.floatAccountGroups.filter(o => o.id == floatAccountGroup)[0];
+            if (fag) fags.push(fag);
           }
-          if (fag) fags.push(fag);
         })
-        fa.floatAccountGroups = fags;
+        if (fags.length) {
+          fa.floatAccountGroups = fags;
+        }
         res.floatAccounts.push(fa);
       });
 
