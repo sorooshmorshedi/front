@@ -81,13 +81,14 @@ export default {
       sortable: false,
       filters: []
     },
-    {
+{
       th: "فی",
       td: "output.fee",
       type: "money",
       sortable: false,
       filters: []
     },
+
     {
       th: "مبلغ",
       td: "output.total",
@@ -99,13 +100,6 @@ export default {
       th: "مقدار",
       td: "remain.count",
       type: "number",
-      sortable: false,
-      filters: []
-    },
-    {
-      th: "فی",
-      td: "remain.fee",
-      type: "money",
       sortable: false,
       filters: []
     },
@@ -130,7 +124,7 @@ export default {
       title: 'صادره',
     },
     {
-      colspan: '3',
+      colspan: '2',
       title: 'مانده',
     },
   ]

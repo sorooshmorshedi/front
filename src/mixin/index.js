@@ -120,6 +120,7 @@ Vue.mixin({
           .height() - 50);
     },
     endpoint(url) {
+      // return "http://api.e7.mmdmst.ir/" + url;
       if (this.isDev)
         return "http://localhost:8000/" + url;
       // else return "http://api.sh.mmdmst.ir/" + url;

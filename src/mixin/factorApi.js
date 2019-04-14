@@ -38,12 +38,11 @@ export default {
         success: data => {
 
           let flag = true;
-          data.forEach((count, i) => {
-            if (this.rows[i].id) {
-              let item = this.factor.items.filter(o => o.id == this.rows[i].id)[0];
-              count += item.count;
-            }
-            if (count < this.rows[i].count) {
+          data.forEach((inventory, i) => {
+            let count = inventory.count
+            let row = this.rows.filter(o => o.ware && o.ware.id == inventory.ware)
+            if(row) count += row.count
+            if (count < row.count) {
               this.notify(`موجودی انبار ردیف ${i+1} کافی نمی باشد، موجودی این انبار برای این کالا ${count} می باشد`, 'danger');
               flag = false
             }
