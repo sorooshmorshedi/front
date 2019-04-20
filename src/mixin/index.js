@@ -39,12 +39,12 @@ Vue.mixin({
         options.method = 'get';
       }
       return axios.request({
-          headers: headers,
-          url: options.url,
-          method: options.method,
-          data: options.data,
-          params: options.params,
-        })
+        headers: headers,
+        url: options.url,
+        method: options.method,
+        data: options.data,
+        params: options.params,
+      })
         .then((res) => {
           this.$store.commit('decrementOGR');
           try {
@@ -105,9 +105,9 @@ Vue.mixin({
       $.notify({
         message: msg,
       }, {
-        type: type,
-        z_index: 2000,
-      })
+          type: type,
+          z_index: 2000,
+        })
     },
     hasPermission(permission) {
       return this.permissions && this.permissions.includes(permission);
@@ -117,7 +117,7 @@ Vue.mixin({
         .scrollTop($(selector)
           .offset()
           .top - $('selector')
-          .height() - 50);
+            .height() - 50);
     },
     endpoint(url) {
       // return "http://api.e7.mmdmst.ir/" + url;
@@ -183,7 +183,9 @@ Vue.mixin({
       }
       let len = m.length;
       m.reverse();
-      for (let i = 0; i < len; i++) {
+      let i = 0;
+      if (m.includes('.')) i = m.find('.');
+      for (i = 0; i < len; i++) {
         if (i && i % 3 == 0) {
           res.push(',');
         }
@@ -238,7 +240,9 @@ Vue.mixin({
       }
       let len = m.length;
       m.reverse();
-      for (let i = 0; i < len; i++) {
+      let i = 0;
+      // if (m.includes('.')) i = m.indexOf('.');
+      for (i = 0; i < len; i++) {
         if (i && i % 3 == 0) {
           res.push(',');
         }
