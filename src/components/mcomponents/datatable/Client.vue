@@ -108,7 +108,7 @@
             <td>{{ offset+i+1 }}</td>
             <td v-for="(col, j) in notHiddenCols" :key="j">
               <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
-              <template v-else-if="col.type == 'money' ">{{ get(item, col.td) | toMoney }}</template>
+              <template v-else-if="col.type == 'money' "><span dir="ltr">{{ get(item, col.td) | toMoney }}</span></template>
               <template v-else>{{ get(item, col.td) }}</template>
             </td>
             <td v-if="routerName">
