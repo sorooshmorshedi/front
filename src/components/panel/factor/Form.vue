@@ -2,7 +2,7 @@
   <div class="row rtl">
     <div class="col-12">
       <div class="card right">
-        <div class="card-body">
+        <div class="card-body" @keyup.enter="validate(true)">
           <form-header
             formName="فاکتور"
             :title="'فاکتور ' + factorLabel"
@@ -11,24 +11,7 @@
           >
             <router-link class="btn btn-info" :to="{name: 'CreatePersonAccounts'}">تعریف حساب اشخاص</router-link>
             <template v-if="id">
-              <div class="dropdown d-inline">
-                <button
-                  class="btn btn-info dropdown-toggle"
-                  type="button"
-                  data-toggle="dropdown"
-                >خروجی</button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-                  <a
-                    v-for="(el, i) in exportLinks"
-                    :key="i"
-                    class="dropdown-item"
-                    :href="el.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >{{ el.name }}</a>
-                  <!-- <div class="dropdown-divider"></div> -->
-                </div>
-              </div>
+              <button class="btn btn-info" data-toggle="modal" data-target="#exports-modal">خروجی</button>
               <router-link
                 v-if="canSubmitTransaction"
                 class="btn btn-info"
@@ -148,7 +131,7 @@
               </div>
             </div>
             <div class="form-group col-lg-4">
-              <label>توضیحات</label>
+              <label>شرح</label>
               <textarea
                 class="form-control"
                 rows="5"
@@ -566,6 +549,73 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="exports-modal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">خروجی</h4>
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-4">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="customCheck4"
+                    v-model="exportOptions.summarized"
+                  >
+                  <label class="custom-control-label" for="customCheck4">خلاصه کردن فاکتور</label>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="customCheck2"
+                    v-model="exportOptions.hide_expenses"
+                  >
+                  <label class="custom-control-label" for="customCheck2">مخفی کردن هزینه های فاکتور</label>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="customCheck3"
+                    v-model="exportOptions.hide_remain"
+                  >
+                  <label class="custom-control-label" for="customCheck3">مخفی کردن مانده حساب</label>
+                </div>
+              </div>
+              <div class="col-12 pt-3 text-center">
+                <a
+                  class="btn btn-info"
+                  :href="exportLinks.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >چاپ</a>
+                <a
+                  class="btn btn-info"
+                  :href="exportLinks.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >PDF</a>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -602,7 +652,12 @@ export default {
       },
       itemsToDelete: [],
       expensesToDelete: [],
-      factorLabel: ""
+      factorLabel: "",
+      exportOptions: {
+        summarized: false,
+        hide_expenses: false,
+        hide_remain: false
+      }
     };
   },
   created() {
@@ -838,42 +893,19 @@ export default {
         "&token=" +
         this.token;
       url = this.endpoint(url);
+
+      Object.keys(this.exportOptions).forEach(key => {
+        let value = this.exportOptions[key];
+        url += `&${key}=${value}`;
+      });
+
       let html = url.replace("TEMP", "html");
       let pdf = url.replace("TEMP", "pdf");
-      return [
-        {
-          name: "چاپ فاکتور",
-          url: html
-        },
-        {
-          name: "PDF فاکتور",
-          url: pdf
-        },
-        {
-          name: "چاپ فاکتور خلاصه",
-          url: html + "&summarized=1"
-        },
-        {
-          name: "PDF فاکتور خلاصه",
-          url: pdf + "&summarized=1"
-        },
-        {
-          name: "چاپ فاکتور به تنهایی",
-          url: html + "&hide_expenses=1"
-        },
-        {
-          name: "PDF فاکتور به تنهایی",
-          url: pdf + "&hide_expenses=1"
-        },
-        {
-          name: "چاپ هزینه های فاکتور",
-          url: html + "&hide_factor=1"
-        },
-        {
-          name: "PDF هزینه های فاکتور",
-          url: pdf + "&hide_factor=1"
-        }
-      ];
+
+      return {
+        html,
+        pdf
+      };
     },
     sum() {
       let res = {
