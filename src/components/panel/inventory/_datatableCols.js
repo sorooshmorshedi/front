@@ -46,6 +46,13 @@ export default {
     filters: ["factor.code"]
   },
   {
+    th: "شرح فاکتور",
+    td: "factor.explanation",
+    type: "text",
+    sortable: false,
+    filters: ["factor.explanation"]
+  },
+  {
     th: "نام حساب",
     td: "factor.account.name",
     type: "text",
