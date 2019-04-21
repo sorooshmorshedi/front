@@ -137,6 +137,7 @@
                 rows="5"
                 v-model="factor.explanation"
                 :disabled="!editable"
+                @keyup.enter.stop
               ></textarea>
             </div>
           </div>
