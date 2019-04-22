@@ -17,7 +17,7 @@
         <li class="nav-item active">
           <router-link class="nav-link" :to="{name:'Home'}">خانه</router-link>
         </li>
-        <li class="nav-item dropdown" v-if="username == 'admin'">
+        <li class="nav-item dropdown" >
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">اطلاعات پایه</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <div class="dropdown-submenu">
@@ -120,13 +120,12 @@
             </div>
           </div>
         </li>
-        <li class="nav-item dropdown" v-if="['admin', 'manager'].includes(username)">
+        <li class="nav-item dropdown" >
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">عملیات های روزانه</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <router-link
               class="dropdown-item"
               :to="{name:'CreateSanad'}"
-              v-if="username == 'admin'"
             >ثبت سند</router-link>
             <div class="dropdown-divider"></div>
 
@@ -170,7 +169,7 @@
               :to="{name:'TransactionForm', params: {transactionType: 'payment'}}"
             >ثبت پرداخت</router-link>
             <div class="dropdown-divider"></div>
-            <div class="dropdown-submenu" v-if="username == 'admin'">
+            <div class="dropdown-submenu" >
               <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">دفتر چک</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <router-link class="dropdown-item" :to="{name:'Chequebook'}">چک های پرداختنی</router-link>
@@ -185,16 +184,13 @@
             <router-link
               class="dropdown-item"
               :to="{name:'List', params: {form: 'sanad'}}"
-              v-if="username != 'manager'"
             >اسناد</router-link>
             <router-link
               class="dropdown-item"
-              v-if="username != 'manager'"
               :to="{name:'List', params: {form: 'sanadUnbalanced'}}"
             >اسناد نامتوازن</router-link>
             <router-link
               class="dropdown-item"
-              v-if="username != 'manager'"
               :to="{name:'List', params: {form: 'sanadEmpty'}}"
             >اسناد خالی</router-link>
             <div class="dropdown-divider"></div>
@@ -235,22 +231,19 @@
             <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"
-              v-if="username != 'manager'"
               :to="{name:'List', params: {form:'chequebook'}}"
             >ثبت چک</router-link>
             <router-link
               class="dropdown-item"
-              v-if="username != 'manager'"
               :to="{name:'List', params: {form:'cheque', type: 'received'}}"
             >چک های دریافتی</router-link>
             <router-link
               class="dropdown-item"
-              v-if="username != 'manager'"
               :to="{name:'List', params: {form:'cheque', type: 'paid'}}"
             >چک های پرداختی</router-link>
           </div>
         </li>
-        <li class="nav-item dropdown" v-if="username != 'manager'">
+        <li class="nav-item dropdown" >
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">گزارش</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'LedgerReport'}">دفتر کل، معین، تفضیلی</router-link>
