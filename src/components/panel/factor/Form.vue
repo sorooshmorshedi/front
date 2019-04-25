@@ -37,15 +37,19 @@
                     disabled
                     v-model="factor.code"
                   >
-                  <input v-else type="text" class="form-control" disabled :value="factorCode">
+                  <input v-else type="text" class="form-control" disabled :value="factorCode.code">
+                </div>
+                <div class="form-group col-lg-2 col-sm-2">
+                  <label>شماره قطعی</label>
+                  <input type="text" class="form-control" disabled :value="factor.definite_code">
                 </div>
                 <div class="col-lg-4 col-sm-2" v-if="factor.sanad">
                   <label>شماره سند</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" disabled :value="factor.sanad">
+                    <input type="text" class="form-control" disabled :value="factor.sanad.code">
                     <div class="input-group-prepend d-print-none">
                       <button
-                        @click="openSanad(factor.sanad)"
+                        @click="openSanad(factor.sanad.id)"
                         class="btn btn-outline-info"
                         type="button"
                         id="button-addon1"
@@ -402,11 +406,23 @@
             :hasNext="hasNext"
             :editable="editable"
             :deletable="this.id"
+            :canDelete="canDelete"
+            :canSubmit="canSubmit"
             @goToForm="goToForm"
             @validate="validate"
             @edit="makeFormEditable()"
             @delete="deleteFactor()"
-          />
+          >
+            <template>
+              <button
+                @click="definiteFactor"
+                type="button"
+                v-if="this.id"
+                :disabled="factor.is_definite"
+                class="btn submit btn-info foat-left w-100px"
+              >قطعی کردن فاکتور</button>
+            </template>
+          </form-footer>
         </div>
       </div>
     </div>
@@ -851,24 +867,7 @@ export default {
       this.factorExpensesCopy = [{}];
     },
     goToForm(pos) {
-      let newCode = null;
-      switch (pos) {
-        case "next":
-          newCode = this.factor.code + 1;
-          break;
-        case "prev":
-          newCode = this.factor.code
-            ? this.factor.code - 1
-            : this.factorCode - 1;
-          break;
-        case "first":
-          newCode = 1;
-          break;
-        case "last":
-          newCode = this.factorCode - 1;
-          break;
-      }
-      if (newCode) this.getFactorByCode(newCode);
+      this.getFactorByPosition(pos);
     }
   },
   computed: {
@@ -979,19 +978,34 @@ export default {
       return true;
     },
     hasNext() {
+      return true;
       if (!this.factor.code) return false;
       if (this.factor.code == this.factorCode - 1) return false;
       if (!this.id) return false;
       return true;
     },
     hasPrev() {
+      return true;
       if (this.factorCode == 1) return false;
       if (this.factor.code == 1) return false;
       return true;
     },
     hasLast() {
+      return true;
       if (this.factorCode == 1) return false;
       return true;
+    },
+    canSubmit(){
+      if(!this.factor.id) return true;
+      if(!this.factor.is_definite) return true;
+      if(this.factor.id == this.factorCode.last_definite_id) return true;
+      return false;
+    },
+    canDelete(){
+      if(!this.factor.id) return false;
+      if(!this.factor.is_definite && this.factor.id == this.factorCode.last_id) return true;
+      if(this.factor.is_definite && this.factor.id == this.factorCode.last_definite_id) return true;
+      return false;
     },
     transactionType() {
       let label;
