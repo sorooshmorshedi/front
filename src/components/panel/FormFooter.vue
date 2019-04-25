@@ -30,6 +30,7 @@
     </div>
     <div class="col-12 col-md-6 ltr text-left" dir="ltr">
       <template v-if="isEditing">
+        <slot></slot>
         <button
           v-if="hasSubmitAndClearForm"
           @click="validate(true)"
@@ -43,7 +44,13 @@
           :disabled="!canSubmit"
           class="btn submit btn-primary foat-left w-100px"
         >ثبت</button>
-        <button @click="emitDelete" type="button" v-if="deletable" class="btn submit btn-danger">حذف</button>
+        <button
+          @click="emitDelete"
+          type="button"
+          v-if="deletable"
+          :disabled="!canDelete"
+          class="btn submit btn-danger"
+        >حذف</button>
       </template>
       <button v-else @click="edit()" type="button" class="btn submit btn-info foat-left">ویرایش</button>
     </div>
@@ -72,6 +79,9 @@ export default {
       required: true
     },
     canSubmit: {
+      default: true
+    },
+    canDelete: {
       default: true
     },
     confirmEdit: {
