@@ -83,6 +83,7 @@ Vue.mixin({
               this.notify(err + ': ' + errors[err], 'danger');
             });
           }
+          options.error && options.error(error);
         });
     },
     initTooltips() {
