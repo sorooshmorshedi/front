@@ -40,8 +40,8 @@
                   <input v-else type="text" class="form-control" disabled :value="factorCode.code">
                 </div>
                 <div class="form-group col-lg-2 col-sm-2">
-                  <label>شماره قطعی</label>
-                  <input type="text" class="form-control" disabled :value="factor.definite_code">
+                  <label>عطف</label>
+                  <input type="text" class="form-control" disabled :value="factor.id">
                 </div>
                 <div class="col-lg-4 col-sm-2" v-if="factor.sanad">
                   <label>شماره سند</label>
@@ -995,16 +995,21 @@ export default {
       if (this.factorCode == 1) return false;
       return true;
     },
-    canSubmit(){
-      if(!this.factor.id) return true;
-      if(!this.factor.is_definite) return true;
-      if(this.factor.id == this.factorCode.last_definite_id) return true;
+    canSubmit() {
+      if (!this.factor.id) return true;
+      if (!this.factor.is_definite) return true;
+      if (this.factor.code == this.factorCode.code - 1) return true;
       return false;
     },
-    canDelete(){
-      if(!this.factor.id) return false;
-      if(!this.factor.is_definite && this.factor.id == this.factorCode.last_id) return true;
-      if(this.factor.is_definite && this.factor.id == this.factorCode.last_definite_id) return true;
+    canDelete() {
+      if (!this.factor.id) return false;
+      if (!this.factor.is_definite && this.factor.id == this.factorCode.last_id)
+        return true;
+      if (
+        this.factor.is_definite &&
+        this.factor.id == this.factorCode.last_definite_id
+      )
+        return true;
       return false;
     },
     transactionType() {
