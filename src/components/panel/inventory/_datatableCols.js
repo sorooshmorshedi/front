@@ -76,7 +76,7 @@ export default {
   },
   {
     th: "مبلغ",
-    td: "input.total",
+    td: "input.value",
     type: "money",
     sortable: false,
     filters: []
@@ -97,7 +97,7 @@ export default {
   },
   {
     th: "مبلغ",
-    td: "output.total",
+    td: "output.value",
     type: "money",
     sortable: false,
     filters: []
@@ -118,7 +118,7 @@ export default {
   },
   {
     th: "مبلغ",
-    td: "remain.total",
+    td: "remain.value",
     type: "money",
     sortable: false,
     filters: []
