@@ -31,13 +31,11 @@
                 <div class="form-group col-lg-2 col-sm-2">
                   <label>شماره فاکتور</label>
                   <input
-                    v-if="factor.id"
                     type="text"
                     class="form-control"
                     disabled
                     v-model="factor.code"
                   >
-                  <input v-else type="text" class="form-control" disabled :value="factorCode.code">
                 </div>
                 <div class="form-group col-lg-2 col-sm-2">
                   <label>عطف</label>
