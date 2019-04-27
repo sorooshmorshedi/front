@@ -72,7 +72,8 @@ Vue.mixin({
             this.$router.push({
               name: "Login",
               params: {
-                cb: this.$router.currentRoute.name
+                cb: this.$router.currentRoute.name,
+                cbp: this.$router.currentRoute.params
               }
             });
             return;

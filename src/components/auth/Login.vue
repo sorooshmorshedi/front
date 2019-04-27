@@ -31,11 +31,13 @@ export default {
     return {
       username: "",
       password: "",
-      callback: "Home"
+      callback: "Home",
+      callbackParams: {}
     };
   },
   created() {
     this.cb && (this.callback = this.cb);
+    this.cbp && (this.callbackParams = this.cbp)
   },
   methods: {
     login() {
@@ -48,7 +50,8 @@ export default {
         },
         success: data => {
           this.$router.push({
-            name: this.callback
+            name: this.callback,
+            params: this.callbackParams
           });
         },
         error: error => {

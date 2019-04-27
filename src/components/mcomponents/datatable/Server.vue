@@ -15,7 +15,7 @@
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
                 >
-                
+
                 <input
                   v-if="col.type == 'text'"
                   :key="j"
@@ -24,7 +24,7 @@
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
                 >
-                
+
                 <select
                   v-if="col.type == 'select'"
                   :key="j"
@@ -173,20 +173,24 @@ export default {
       // Why condition?
       this.debouncedGetData && this.debouncedGetData();
     },
-    defaultFilters() {
+    defaultFilters: {
       // Why check for difference with filters?
       // Just reset filters
-      let flag = true;
-      for (const df of Object.keys(this.defaultFilters)) {
-        if (this.filters[df] != this.defaultFilters[df]) flag = false;
-      }
-      if (flag) return;
-      this.items = [];
-      if (this.defaultFilters) {
-        this.filters = { ...this.defaultFilters };
-      } else {
-        this.filters = {};
-      }
+      handler() {
+        console.log('haa');
+        let flag = true;
+        for (const df of Object.keys(this.defaultFilters)) {
+          if (this.filters[df] != this.defaultFilters[df]) flag = false;
+        }
+        if (flag) return;
+        this.items = [];
+        if (this.defaultFilters) {
+          this.filters = { ...this.defaultFilters };
+        } else {
+          this.filters = {};
+        }
+      },
+      deep: true
     }
   },
   computed: {
@@ -347,5 +351,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('./datatable.scss');
+@import url("./datatable.scss");
 </style>

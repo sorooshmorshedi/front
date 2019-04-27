@@ -17,7 +17,7 @@
         <li class="nav-item active">
           <router-link class="nav-link" :to="{name:'Home'}">خانه</router-link>
         </li>
-        <li class="nav-item dropdown" >
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">اطلاعات پایه</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <div class="dropdown-submenu">
@@ -120,13 +120,10 @@
             </div>
           </div>
         </li>
-        <li class="nav-item dropdown" >
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">عملیات های روزانه</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <router-link
-              class="dropdown-item"
-              :to="{name:'CreateSanad'}"
-            >ثبت سند</router-link>
+            <router-link class="dropdown-item" :to="{name:'CreateSanad'}">ثبت سند</router-link>
             <div class="dropdown-divider"></div>
 
             <div class="dropdown-submenu">
@@ -169,7 +166,7 @@
               :to="{name:'TransactionForm', params: {transactionType: 'payment'}}"
             >ثبت پرداخت</router-link>
             <div class="dropdown-divider"></div>
-            <div class="dropdown-submenu" >
+            <div class="dropdown-submenu">
               <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">دفتر چک</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <router-link class="dropdown-item" :to="{name:'Chequebook'}">چک های پرداختنی</router-link>
@@ -181,10 +178,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">فهرست فرم ها</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form: 'sanad'}}"
-            >اسناد</router-link>
+            <router-link class="dropdown-item" :to="{name:'List', params: {form: 'sanad'}}">اسناد</router-link>
             <router-link
               class="dropdown-item"
               :to="{name:'List', params: {form: 'sanadUnbalanced'}}"
@@ -243,7 +237,7 @@
             >چک های پرداختی</router-link>
           </div>
         </li>
-        <li class="nav-item dropdown" >
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">گزارش</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <router-link class="dropdown-item" :to="{name:'LedgerReport'}">دفتر کل، معین، تفضیلی</router-link>
@@ -263,6 +257,15 @@
             <router-link class="dropdown-item" :to="{name:'BalanceSheetReport'}">ترازنامه</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'InventoryReport'}">کاردکس کالا</router-link>
+            <div class="dropdown-divider"></div>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'BuySaleReport', params: { type: 'buy'}}"
+            >گزارش خرید</router-link>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'BuySaleReport', params: { type: 'sale'}}"
+            >گزارش فروش</router-link>
           </div>
         </li>
         <li class="nav-item left">
