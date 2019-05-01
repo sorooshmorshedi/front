@@ -108,7 +108,7 @@ export default {
           if (clearFactor) {
             this.clearFactor(true);
           } else {
-            this.selectFactor(data);
+            this.selectFactor(data, true);
           }
         }
       })
@@ -124,7 +124,7 @@ export default {
           if (clearFactor) {
             this.clearFactor(true);
           } else {
-            this.selectFactor(data);
+            this.selectFactor(data, true);
           }
         }
       })

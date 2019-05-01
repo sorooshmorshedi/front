@@ -30,12 +30,7 @@
               <div class="row">
                 <div class="form-group col-lg-2 col-sm-2">
                   <label>شماره فاکتور</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    disabled
-                    v-model="factor.code"
-                  >
+                  <input type="text" class="form-control" disabled v-model="factor.code">
                 </div>
                 <div class="form-group col-lg-2 col-sm-2">
                   <label>عطف</label>
@@ -106,7 +101,7 @@
                     v-model="factor.account"
                     track-by="id"
                     label="title"
-                    :disabled="!editable"
+                    :disabled="!editable || hasNotEditableRow"
                   />
                 </div>
                 <div
@@ -120,7 +115,7 @@
                     v-model="factor.floatAccount"
                     track-by="id"
                     label="name"
-                    :disabled="!editable"
+                    :disabled="!editable || hasNotEditableRow"
                   />
                 </div>
                 <div class="form-group col-lg-2 d-print-none">
@@ -181,7 +176,7 @@
                           v-model="rows[i].ware"
                           track-by="id"
                           label="name"
-                          :disabled="!editable"
+                          :disabled="!editable || !row.is_editable"
                           @select="setDefaultValue"
                         />
                       </td>
@@ -194,7 +189,7 @@
                           v-model="rows[i].ware.warehouse"
                           track-by="id"
                           label="name"
-                          :disabled="!editable"
+                          :disabled="!editable || !row.is_editable"
                         />
                         <span v-else>-</span>
                       </td>
@@ -202,7 +197,7 @@
                         <money
                           class="form-control form-control"
                           v-model="rows[i].count"
-                          :disabled="!editable"
+                          :disabled="!editable || !row.is_editable"
                         />
                       </td>
                       <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
@@ -210,7 +205,7 @@
                         <money
                           class="form-control form-control"
                           v-model="rows[i].fee"
-                          :disabled="!editable"
+                          :disabled="!editable || !row.is_editable"
                         />
                       </td>
                       <td dir="ltr">
@@ -218,14 +213,14 @@
                       </td>
                       <td>
                         <money
-                          :disabled="!editable || hasValue(rows[i].discountPercent)"
+                          :disabled="!editable || hasValue(rows[i].discountPercent) || !row.is_editable"
                           class="form-control form-control"
                           v-model="rows[i].discountValue"
                         />
                       </td>
                       <td>
                         <input
-                          :disabled="!editable || hasValue(rows[i].discountValue)"
+                          :disabled="!editable || hasValue(rows[i].discountValue) || !row.is_editable"
                           type="number"
                           min="0"
                           max="100"
@@ -255,7 +250,7 @@
                           type="text"
                           class="form-control form-control"
                           v-model="rows[i].explanation"
-                          :disabled="!editable"
+                          :disabled="!editable || !row.is_editable"
                         >
                       </td>
                       <td class="d-print-none">
@@ -264,7 +259,7 @@
                           @click="deleteItemRow(i)"
                           type="button"
                           class="btn btn-sm btn-warning"
-                          :disabled="!editable"
+                          :disabled="!editable || !row.is_editable"
                         >حذف ردیف</button>
                       </td>
                     </tr>
@@ -275,7 +270,7 @@
                           @click="deleteItemRow(-1)"
                           type="button"
                           class="btn btn-danger d-print-none"
-                          :disabled="!editable"
+                          :disabled="!editable || hasNotEditableRow"
                         >حذف همه ردیف ها</button>
                       </td>
                     </tr>
@@ -413,10 +408,10 @@
           >
             <template>
               <button
-                @click="definiteFactor"
-                type="button"
                 v-if="this.id"
-                :disabled="factor.is_definite"
+                @click="definiteFactor"
+                :disabled="this.factor.is_definite"
+                type="button"
                 class="btn submit btn-info foat-left w-100px"
               >قطعی کردن فاکتور</button>
             </template>
@@ -663,7 +658,8 @@ export default {
       rowTemplate: {
         discountValue: "",
         discountPercent: "",
-        fee: ""
+        fee: "",
+        is_editable: true,
       },
       itemsToDelete: [],
       expensesToDelete: [],
@@ -869,6 +865,12 @@ export default {
     }
   },
   computed: {
+    hasNotEditableRow(){
+      if(!this.factor.id) return false;
+      for(const item of this.factor.items) {
+        if(!item.is_editable) return true
+      }
+    },
     paymentsSum() {
       let sum = 0;
       if (this.factor.payments) {
@@ -1001,14 +1003,11 @@ export default {
     },
     canDelete() {
       if (!this.factor.id) return false;
-      if (!this.factor.is_definite && this.factor.id == this.factorCode.last_id)
-        return true;
-      if (
-        this.factor.is_definite &&
-        this.factor.id == this.factorCode.last_definite_id
-      )
-        return true;
-      return false;
+      this.factor.items.forEach(item => {
+        if (!item.is_editable) {
+          return false;
+        }
+      });
     },
     transactionType() {
       let label;
