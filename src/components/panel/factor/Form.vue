@@ -77,8 +77,18 @@
                     :disabled="!editable"
                   >
                 </div>
+
+                <div class="form-group col-lg-2 col-sm-2">
+                  <label>نوع فاکتور</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    disabled=1
+                    :value="factor.is_definite?'قطعی':'موقت'"
+                  >
+                </div>
                 <div class="w-100"></div>
-                <div class="col-lg-2 d-print-none">
+                <div class="col-lg-2">
                   <label>
                     <br>
                   </label>

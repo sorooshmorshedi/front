@@ -135,7 +135,7 @@ export default {
         url: this.endpoint('factors/factors/definite/' + this.factor.id),
         method: 'post',
         success: data => {
-          this.selectFactor(data);
+          this.selectFactor(data, true);
           this.successNotify();
         }
       })
