@@ -4,7 +4,10 @@
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
-              <button @click="clearFilters()" class="btn btn-block btn-info">خالی کردن فیلتر ها</button>
+            <button @click="clearFilters()" class="btn btn-block btn-info">
+              خالی کردن
+              <br>فیلتر ها
+            </button>
             <th v-for="(col, i) in filterFields" :key="i">
               <template v-for="(filter, j) in col.filters">
                 <input
@@ -89,14 +92,14 @@
         </thead>
         <tbody>
           <tr v-for="(item, i) in items" :key="i" :class="itemRowClasses(item, i, items)">
-            <td v-if="hasSum && i == items.length-1" >جمع</td>
+            <td v-if="hasSum && i == items.length-1">جمع</td>
             <td v-else>{{ offset+i+1 }}</td>
             <td v-for="(col, j) in cols" :key="j">
               <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
               <template v-else-if="col.type == 'money' ">{{ get(item, col) | toMoney }}</template>
               <template v-else>{{ get(item, col) }}</template>
             </td>
-            <td v-if="routerName" >
+            <td v-if="routerName">
               <a @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
             </td>
           </tr>
@@ -145,8 +148,8 @@ export default {
     colHeaders: {},
     defaultFilters: {},
     hasSum: {
-      default: false,
-    },
+      default: false
+    }
   },
   components: { date, money, mtime },
   data() {
@@ -187,7 +190,6 @@ export default {
       // Why check for difference with filters?
       // Just reset filters
       handler() {
-        console.log("haa");
         let flag = true;
         for (const df of Object.keys(this.defaultFilters)) {
           if (this.filters[df] != this.defaultFilters[df]) flag = false;
@@ -357,10 +359,10 @@ export default {
       }
     },
     itemRowClasses(item, i, items) {
-      if(this.hasSum && i == items.length-1) {
-        return 'sum-row'
+      if (this.hasSum && i == items.length - 1) {
+        return "sum-row";
       }
-      return {}
+      return {};
     }
   }
 };
