@@ -74,7 +74,7 @@
             </th>
             <!-- <th></th> -->
           </tr>
-          <!-- Idk -->
+          <!-- Header of headers -->
           <tr v-if="colHeaders">
             <th
               v-for="(header, i) in colHeaders"

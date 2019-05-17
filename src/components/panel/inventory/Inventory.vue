@@ -38,10 +38,11 @@
 
                     <div class="col-lg-12">
                       <datatable
-                        v-if="rows.length"
+                        :url="url"
                         :cols="datatableCols.cols"
-                        :data="rows"
                         :colHeaders="datatableCols.colHeaders"
+                        hasSum=1
+                        sumColSpan=5
                       />
                     </div>
                   </div>
@@ -56,7 +57,7 @@
 </template>
 
 <script>
-import datatable from "@/components/mcomponents/datatable/Client";
+import datatable from "@/components/mcomponents/datatable/Server";
 import wareApiMixin from "@/mixin/wareApi";
 import datatableCols from "./_datatableCols";
 import _ from "lodash";
@@ -67,6 +68,7 @@ export default {
   props: ["wareId"],
   data() {
     return {
+      url: "",
       datatableCols,
       ware: null,
       rows: []
@@ -83,6 +85,10 @@ export default {
     },
     getInventoryReport() {
       if (!this.ware) return;
+
+      this.url = `reports/inventory?ware=${this.ware.id}&warehouse=${this.ware.warehouse.id}`;
+
+      return;
       this.request({
         url: this.endpoint("reports/inventory"),
         params: {
@@ -97,7 +103,7 @@ export default {
     init() {
       if (this.wareId) {
         this.ware = this.waresSelectValues.wares.filter(
-          o => (o.id == this.wareId)
+          o => o.id == this.wareId
         )[0];
       }
     }

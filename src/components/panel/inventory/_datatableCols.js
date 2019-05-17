@@ -7,11 +7,11 @@ export default {
     sortable: false,
     filters: [{
       label: "xxxx-xx-xx از تاریخ ",
-      model: "date__gte"
+      model: "factor__date__gte"
     },
     {
       label: "xxxx-xx-xx تا تاریخ",
-      model: "date__lte"
+      model: "factor__date__lte"
     }
     ]
   },
@@ -36,21 +36,21 @@ export default {
       label: 'موجودی اول دوره',
       value: 'fpi'
     }],
-    filters: ['factor.type']
+    filters: ['factor__type']
   },
   {
     th: "شماره فاکتور",
     td: "factor.code",
     type: "number",
     sortable: false,
-    filters: ["factor.code"]
+    filters: ["factor__code"]
   },
   {
     th: "شرح فاکتور",
     td: "factor.explanation",
     type: "text",
     sortable: false,
-    filters: ["factor.explanation"]
+    filters: ["factor__explanation"]
   },
   {
     th: "نام حساب",
@@ -58,7 +58,7 @@ export default {
     type: "text",
     sortable: false,
     sortable: false,
-    filters: ["factor.account.name"]
+    filters: ["factor__account__name__icontains"]
   },
   {
     th: "مقدار",
@@ -125,7 +125,7 @@ export default {
   },
   ],
   colHeaders: [{
-    colspan: '5',
+    colspan: '6',
     title: '',
   },
   {

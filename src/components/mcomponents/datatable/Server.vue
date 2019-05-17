@@ -4,7 +4,7 @@
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
-            <th></th>
+              <button @click="clearFilters()" class="btn btn-block btn-info">خالی کردن فیلتر ها</button>
             <th v-for="(col, i) in filterFields" :key="i">
               <template v-for="(filter, j) in col.filters">
                 <input
@@ -64,9 +64,16 @@
                 />
               </template>
             </th>
-            <th>
-              <button @click="clearFilters()" class="btn btn-block btn-info">خالی کردن فیلتر ها</button>
-            </th>
+          </tr>
+
+          <!-- Header of headers -->
+          <tr v-if="colHeaders">
+            <th
+              v-for="(header, i) in colHeaders"
+              :key="i"
+              :colspan="header.colspan"
+              class="text-center"
+            >{{ header.title }}</th>
           </tr>
 
           <tr>
@@ -78,20 +85,19 @@
               </span>
               {{ col.th }}
             </th>
-
-            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, i) in items" :key="i">
-            <td>{{ offset+i+1 }}</td>
+          <tr v-for="(item, i) in items" :key="i" :class="itemRowClasses(item, i, items)">
+            <td v-if="hasSum && i == items.length-1" >جمع</td>
+            <td v-else>{{ offset+i+1 }}</td>
             <td v-for="(col, j) in cols" :key="j">
               <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
               <template v-else-if="col.type == 'money' ">{{ get(item, col) | toMoney }}</template>
               <template v-else>{{ get(item, col) }}</template>
             </td>
-            <td>
-              <a v-if="routerName" @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
+            <td v-if="routerName" >
+              <a @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
             </td>
           </tr>
         </tbody>
@@ -136,7 +142,11 @@ export default {
     routerName: {},
     routerDefaultParams: {},
     cols: {},
-    defaultFilters: {}
+    colHeaders: {},
+    defaultFilters: {},
+    hasSum: {
+      default: false,
+    },
   },
   components: { date, money, mtime },
   data() {
@@ -177,7 +187,7 @@ export default {
       // Why check for difference with filters?
       // Just reset filters
       handler() {
-        console.log('haa');
+        console.log("haa");
         let flag = true;
         for (const df of Object.keys(this.defaultFilters)) {
           if (this.filters[df] != this.defaultFilters[df]) flag = false;
@@ -345,6 +355,12 @@ export default {
       } else {
         this.filters = {};
       }
+    },
+    itemRowClasses(item, i, items) {
+      if(this.hasSum && i == items.length-1) {
+        return 'sum-row'
+      }
+      return {}
     }
   }
 };
