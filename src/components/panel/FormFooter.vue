@@ -35,14 +35,14 @@
           v-if="hasSubmitAndClearForm"
           @click="validate(true)"
           type="button"
-          class="btn submit btn-primary foat-left"
+          class="btn submit btn-success foat-left"
           :disabled="!canSubmit"
         >ثبت و صدور {{ formName }} جدید</button>
         <button
           @click="validate(false)"
           type="button"
           :disabled="!canSubmit"
-          class="btn submit btn-primary foat-left w-100px"
+          class="btn submit btn-success foat-left w-100px"
         >ثبت</button>
         <button
           @click="emitDelete"

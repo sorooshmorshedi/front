@@ -422,7 +422,7 @@
                 @click="definiteFactor"
                 :disabled="this.factor.is_definite"
                 type="button"
-                class="btn submit btn-info foat-left w-100px"
+                class="btn submit btn-primary foat-left w-100px"
               >قطعی کردن فاکتور</button>
             </template>
           </form-footer>
