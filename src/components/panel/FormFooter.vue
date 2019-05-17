@@ -53,6 +53,7 @@
         >حذف</button>
       </template>
       <button v-else @click="edit()" type="button" class="btn submit btn-info foat-left">ویرایش</button>
+      <slot name="always"></slot>
     </div>
   </div>
 </template>

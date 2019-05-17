@@ -416,7 +416,7 @@
             @edit="makeFormEditable()"
             @delete="deleteFactor()"
           >
-            <template>
+            <template slot="always">
               <button
                 v-if="this.id"
                 @click="definiteFactor"
@@ -761,7 +761,8 @@ export default {
       );
 
       this.factor.type = this.factorType;
-      this.checkInventories(clearFactor);
+      if (this.factor.id) this.updateFactor(clearFactor);
+      else this.storeFactor(clearFactor);
     },
     selectFactor(factor, changeRoute = false) {
       this.log("Selecting Factor : ", factor);

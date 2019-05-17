@@ -17,46 +17,6 @@ export default {
     }
   },
   methods: {
-    checkInventories(clearFactor) {
-      if (['buy', 'backFromSale'].includes(this.factor.type)) {
-        if (this.factor.id) this.updateFactor(clearFactor);
-        else this.storeFactor(clearFactor);
-        return;
-      }
-      let payload = [];
-      this.rows.forEach((row, i) => {
-        if (i == this.rows.length - 1) return;
-        payload.push({
-          ware: row.ware.id,
-          warehouse: row.ware.warehouse.id
-        });
-      });
-      this.request({
-        url: this.endpoint('wares/inventory/check'),
-        method: 'post',
-        data: payload,
-        success: data => {
-
-          let flag = true;
-          data.forEach((inventory, i) => {
-            let count = inventory.count
-            let row = this.rows.filter(o => o.ware && o.ware.id == inventory.ware)
-            if (row) count += row.count
-            if (count < row.count) {
-              this.notify(`موجودی انبار ردیف ${i + 1} کافی نمی باشد، موجودی این انبار برای این کالا ${count} می باشد`, 'danger');
-              flag = false
-            }
-          })
-
-          if (!flag) return;
-
-          if (this.factor.id) this.updateFactor(clearFactor);
-          else this.storeFactor(clearFactor);
-        }
-      })
-
-
-    },
     getFactorPayload() {
       let factor = this.copy(this.factor);
       factor = this.extractIds(factor);
