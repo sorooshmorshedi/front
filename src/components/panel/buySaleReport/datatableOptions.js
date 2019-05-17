@@ -29,6 +29,22 @@ export default {
       filters: ["factor__type"],
     },
     {
+      th: "وضعیت",
+      td: "factor.is_definite",
+      type: "select",
+      options: [
+        {
+          label: 'قطعی',
+          value: true,
+        },
+        {
+          label: 'موقت',
+          value: false,
+        },
+      ],
+      filters: ["factor__is_definite"],
+    },
+    {
       th: "تاریخ",
       td: "factor.date",
       type: "date",
