@@ -1,5 +1,5 @@
 export default {
-  url: "reports/lists/factorItems",
+  url: "reports/buySale",
   cols: [{
       th: "نوع فاکتور",
       td: "factor.type",

@@ -18,23 +18,13 @@
                 label="title"
               />
             </div>
-            <div class="col-12 col-lg-6">
-              <label>انبار</label>
-              <multiselect
-                v-if="ware"
-                dir="rtl"
-                :allow-empty="false"
-                :options="waresSelectValues.warehouses"
-                v-model="ware.warehouse"
-                track-by="id"
-                label="title"
-              />
-            </div>
             <datatable
               v-if="ware"
               :cols="options.cols"
               :url="options.url"
               :default-filters="defaultFilters"
+              hasSum=1
+              sumColSpan=7
               ref="datatable"
               class="col-12 mt-4"
             />
@@ -65,7 +55,6 @@ export default {
       defaultFilters: {
         factor__type__in: "",
         ware: "",
-        warehouse: ""
       },
       layout: {
         title: ""
@@ -78,7 +67,7 @@ export default {
   },
   methods: {
     getData() {
-      Promise.all([this.getWares(), this.getWarehouses()]).then(data => {
+      Promise.all([this.getWares()]).then(data => {
         this.init();
       });
     },
@@ -99,14 +88,13 @@ export default {
     },
     setDefaultFilters() {
       if (this.type == "sale") {
-        this.defaultFilters["factor__type__in"] = ["sale", "backFromSale"].join(',');
+        this.defaultFilters["factor__type__in"] = ["sale", "backFromBuy"].join(',');
       } else {
-        this.defaultFilters["factor__type__in"] = ["buy", "backFromBuy"].join(',');
+        this.defaultFilters["factor__type__in"] = ["buy", "backFromSale"].join(',');
       }
     },
     selectWare() {
       this.defaultFilters["ware"] = this.ware.id;
-      this.defaultFilters["warehouse"] = this.ware.warehouse.id;
     }
   },
   watch: {
