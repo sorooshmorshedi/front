@@ -22,18 +22,6 @@
                         label="title"
                       />
                     </div>
-                    <div class="col-12 col-lg-6">
-                      <label>انبار</label>
-                      <multiselect
-                        v-if="ware"
-                        dir="rtl"
-                        :allow-empty="false"
-                        :options="waresSelectValues.warehouses"
-                        v-model="ware.warehouse"
-                        track-by="id"
-                        label="title"
-                      />
-                    </div>
                     <div class="col-lg-4"></div>
 
                     <div class="col-lg-12">
@@ -79,26 +67,13 @@ export default {
   },
   methods: {
     getData() {
-      Promise.all([this.getWares(), this.getWarehouses()]).then(data => {
+      Promise.all([this.getWares()]).then(data => {
         this.init();
       });
     },
     getInventoryReport() {
       if (!this.ware) return;
-
-      this.url = `reports/inventory?ware=${this.ware.id}&warehouse=${this.ware.warehouse.id}`;
-
-      return;
-      this.request({
-        url: this.endpoint("reports/inventory"),
-        params: {
-          ware: this.ware.id,
-          warehouse: this.ware.warehouse.id
-        },
-        success: data => {
-          this.rows = data;
-        }
-      });
+      this.url = `reports/inventory?ware=${this.ware.id}`;
     },
     init() {
       if (this.wareId) {
