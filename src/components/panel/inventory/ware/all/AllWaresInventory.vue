@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card right">
         <div class="card-body">
-          <div class="title">کاردکس کالا ها</div>
+          <div class="title">کاردکس همه کالا ها</div>
 
           <div class="row inventory">
             <div class="col-lg-12">
