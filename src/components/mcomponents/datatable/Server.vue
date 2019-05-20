@@ -261,7 +261,7 @@ export default {
     getData() {
       this.log("Get data");
       if (!this.url) {
-        this.warn("URL is not provided");
+        console.warn("URL is not provided");
         return;
       }
       let filters = {};

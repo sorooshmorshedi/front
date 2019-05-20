@@ -256,7 +256,8 @@
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'BalanceSheetReport'}">ترازنامه</router-link>
             <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'InventoryReport'}">کاردکس کالا</router-link>
+            <router-link class="dropdown-item" :to="{name:'DetailedWareInventoryReport'}">کاردکس کالا</router-link>
+            <router-link class="dropdown-item" :to="{name:'AllWaresInventoryReport'}">کاردکس کالا ها</router-link>
             <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"

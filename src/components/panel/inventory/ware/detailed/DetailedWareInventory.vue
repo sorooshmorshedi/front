@@ -29,8 +29,8 @@
                         :url="url"
                         :cols="datatableCols.cols"
                         :colHeaders="datatableCols.colHeaders"
+                        :defaultFilters="defaultFilters"
                         hasSum=1
-                        sumColSpan=5
                       />
                     </div>
                   </div>
@@ -50,16 +50,17 @@ import wareApiMixin from "@/mixin/wareApi";
 import datatableCols from "./_datatableCols";
 import _ from "lodash";
 export default {
-  name: "Inventory",
   components: { datatable },
   mixins: [wareApiMixin],
   props: ["wareId"],
   data() {
     return {
-      url: "",
+      url: "reports/inventory/ware",
       datatableCols,
       ware: null,
-      rows: []
+      defaultFilters: {
+        ware: null
+      },
     };
   },
   created() {
@@ -73,7 +74,7 @@ export default {
     },
     getInventoryReport() {
       if (!this.ware) return;
-      this.url = `reports/inventory?ware=${this.ware.id}`;
+      this.defaultFilters.ware = this.ware.id
     },
     init() {
       if (this.wareId) {
@@ -90,6 +91,8 @@ export default {
       },
       deep: true
     }
+  },
+  computed: {
   }
 };
 </script>

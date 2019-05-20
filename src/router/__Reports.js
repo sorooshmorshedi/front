@@ -8,7 +8,8 @@ import Bill from '@/components/panel/bill/Bill';
 import Journal from '@/components/panel/journal/Journal';
 import IncomeStatement from '@/components/panel/incomeStatement/IncomeStatement';
 import BalanceSheet from '@/components/panel/balanceSheet/BalanceSheet';
-import Inventory from '@/components/panel/inventory/Inventory';
+import DetailedWareInventory from '@/components/panel/inventory/ware/detailed/DetailedWareInventory';
+import AllWaresInventory from '@/components/panel/inventory/ware/all/AllWaresInventory';
 import BuySaleReport from '@/components/panel/buySaleReport/BuySaleReport';
 
 export default [{
@@ -47,14 +48,19 @@ export default [{
     component: Bill
   },
   {
-    name: 'InventoryReport',
-    path: 'inventory',
-    component: Inventory,
+    name: 'DetailedWareInventoryReport',
+    path: 'inventory/ware/detailed',
+    component: DetailedWareInventory,
     props: route => {
       return {
         wareId: route.query.wareId
       }
     }
+  },
+  {
+    name: 'AllWaresInventoryReport',
+    path: 'inventory/ware/all',
+    component: AllWaresInventory,
   },
   {
     name: 'JournalReport',
