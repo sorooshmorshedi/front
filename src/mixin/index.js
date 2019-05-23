@@ -109,6 +109,19 @@ Vue.mixin({
       }, {
           type: type,
           z_index: 2000,
+          allow_dismiss: true,
+          placement: {
+            from: "top",
+            align: "right"
+          },
+          offset: 50,
+          spacing: 10,
+          mouse_over: 'pause',
+          animate: {
+            enter: 'animated fadeInDown',
+            exit: 'animated fadeOutUp'
+          },
+
         })
     },
     hasPermission(permission) {

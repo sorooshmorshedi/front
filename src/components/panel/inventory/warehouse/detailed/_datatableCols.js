@@ -34,6 +34,12 @@ export default {
     }, {
       label: 'موجودی اول دوره',
       value: 'fpi'
+    }, {
+      label: 'وارده از انتقال',
+      value: 'it'
+    }, {
+      label: 'صادره با انتقال',
+      value: 'ot'
     }],
     filters: ['factor__type']
   },

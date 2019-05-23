@@ -45,6 +45,8 @@ import FactorForm from '@/components/panel/factor/Form';
 import FactorExpenses from '@/components/panel/factor/Expenses';
 import ReceiptAndRemittance from '@/components/panel/factor/ReceiptAndRemittance';
 
+import TransferForm from '@/components/panel/transfer/Form';
+
 import FirstPeriodInventory from  '@/components/panel/firstPeriodInventory/FirstPeriodInventory';
 
 import Cheque from '@/components/panel/cheque/Cheque';
@@ -219,6 +221,12 @@ export default [{
           component: FactorExpenses
         },
       ]
+    },
+    {
+      name: 'TransferForm',
+      path: 'transfer/form/:id?',
+      component: TransferForm,
+      props: true,
     },
     {
       name: 'ReceiptAndRemittance',

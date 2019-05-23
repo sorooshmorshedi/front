@@ -147,15 +147,8 @@
                 >ثبت فاکتور برگشت از فروش</router-link>
               </div>
             </div>
-            <!-- <div class="dropdown-divider"></div>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'ReceiptAndRemittance', params: {receiptType: 'receipt'}}"
-            >ثبت رسید</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'ReceiptAndRemittance', params: {receiptType: 'remittance'}}"
-            >ثبت حواله</router-link>-->
+            <div class="dropdown-divider"></div>
+            <router-link class="dropdown-item" :to="{name:'TransferForm'}">ثبت انتقال</router-link>
             <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"
@@ -205,15 +198,6 @@
               :to="{name:'List', params:{ form: 'factor', type: 'backFromSale'}}"
             >فاکتور برگشت از فروش</router-link>
             <div class="dropdown-divider"></div>
-            <!-- <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form: 'receipt', type: 'receipt'}}"
-            >رسید</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form: 'receipt', type: 'remittance'}}"
-            >حواله</router-link>-->
-            <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"
               :to="{name:'List', params: {form:'transaction', type: 'receive'}}"
@@ -256,10 +240,22 @@
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'BalanceSheetReport'}">ترازنامه</router-link>
             <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'DetailedWareInventoryReport'}">کاردکس کالا</router-link>
-            <router-link class="dropdown-item" :to="{name:'AllWaresInventoryReport'}">کاردکس همه کالا ها</router-link>
-            <router-link class="dropdown-item" :to="{name:'DetailedWarehouseInventoryReport'}">کاردکس انبار</router-link>
-            <router-link class="dropdown-item" :to="{name:'AllWarehousesInventoryReport'}">کاردکس انبار همه کالا ها</router-link>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'DetailedWareInventoryReport'}"
+            >کاردکس کالا</router-link>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'AllWaresInventoryReport'}"
+            >کاردکس همه کالا ها</router-link>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'DetailedWarehouseInventoryReport'}"
+            >کاردکس انبار</router-link>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'AllWarehousesInventoryReport'}"
+            >کاردکس انبار همه کالا ها</router-link>
             <div class="dropdown-divider"></div>
             <router-link
               class="dropdown-item"
