@@ -1007,10 +1007,7 @@ export default {
       return true;
     },
     canSubmit() {
-      if (!this.factor.id) return true;
-      if (!this.factor.is_definite) return true;
-      if (this.factor.code == this.factorCode.code - 1) return true;
-      return false;
+      return true;
     },
     canDelete() {
       if (!this.factor.id) return false;
