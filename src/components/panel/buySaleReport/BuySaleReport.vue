@@ -88,9 +88,9 @@ export default {
     },
     setDefaultFilters() {
       if (this.type == "sale") {
-        this.defaultFilters["factor__type__in"] = ["sale", "backFromBuy"].join(',');
+        this.defaultFilters["factor__type__in"] = ["sale", "backFromSale"].join(',');
       } else {
-        this.defaultFilters["factor__type__in"] = ["buy", "backFromSale"].join(',');
+        this.defaultFilters["factor__type__in"] = ["buy", "backFromBuy"].join(',');
       }
     },
     selectWare() {
