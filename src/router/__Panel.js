@@ -43,7 +43,6 @@ import CloseAccountsDefaultAccounts from '@/components/panel/defaultAccounts/Clo
 import Factor from '@/components/panel/factor/Factor';
 import FactorForm from '@/components/panel/factor/Form';
 import FactorExpenses from '@/components/panel/factor/Expenses';
-import ReceiptAndRemittance from '@/components/panel/factor/ReceiptAndRemittance';
 
 import TransferForm from '@/components/panel/transfer/Form';
 
@@ -227,12 +226,6 @@ export default [{
       path: 'transfer/form/:id?',
       component: TransferForm,
       props: true,
-    },
-    {
-      name: 'ReceiptAndRemittance',
-      path: 'receiptAndRemittance/:receiptType/:id?',
-      props: true,
-      component: ReceiptAndRemittance
     },
     {
       name: 'FirstPeriodInventory',
