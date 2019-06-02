@@ -46,6 +46,7 @@
                     <tr>
                       <th>#</th>
                       <th>نام/کد کالا</th>
+                      <th>موجودی انبار ها</th>
                       <th>از انبار</th>
                       <th>تعداد</th>
                       <th>واحد</th>
@@ -67,6 +68,14 @@
                           label="name"
                           :disabled="!editable"
                         />
+                      </td>
+                      <td class="d-print-none">
+                        <button
+                          v-if="row.ware"
+                          @click="showInventory(row.ware)"
+                          type="button"
+                          class="btn btn-sm btn-info"
+                        >مشاهده مانده</button>
                       </td>
                       <td>
                         <multiselect
@@ -121,7 +130,7 @@
                       </td>
                     </tr>
                     <tr class="bg-info text-white">
-                      <td :colspan="2"></td>
+                      <td :colspan="3"></td>
                       <td>جمع</td>
                       <td>{{ sum | toMoney }}</td>
                       <td :colspan="3"></td>
@@ -157,6 +166,43 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="inventory-modal" v-if="inventory.ware">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">موجودی انبار ها برای {{ inventory.ware.name }}</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+          <div class="modal-body">
+            <div class="container">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>انبار</th>
+                    <th>مانده</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(warehouse, i) in inventory.warehouses" :key="warehouse.id">
+                    <td>{{ i }}</td>
+                    <td>{{ warehouse.name }}</td>
+                    <td>{{ warehouse.remain_count }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -178,7 +224,11 @@ export default {
       transfer: {},
       rows: [],
       rowTemplate: {},
-      idsToDelete: []
+      idsToDelete: [],
+      inventory: {
+        ware: null,
+        warehouses: []
+      },
     };
   },
   created() {
@@ -201,6 +251,23 @@ export default {
         }
       });
     },
+    showInventory(ware) {
+      this.inventory.ware = ware;
+      this.getInventory(ware);
+    },
+    getInventory(ware) {
+      this.request({
+        url: this.endpoint(`wares/inventory/forWare`),
+        method: "get",
+        params: {
+          ware: ware.id
+        },
+        success: data => {
+          this.inventory.warehouses = data;
+          $('#inventory-modal').modal('show');
+        }
+      });
+    },
     initForm() {
       this.log("Init Form");
       this.rows = [];
@@ -209,9 +276,9 @@ export default {
     },
     validate(clearForm = false) {
       let isValid = true;
-      if(this.rows.length == 1) {
-          this.notify(`حداقل یک ردیف وارد کنید`, "danger");
-          isValid = false;
+      if (this.rows.length == 1) {
+        this.notify(`حداقل یک ردیف وارد کنید`, "danger");
+        isValid = false;
       }
       this.rows.forEach((r, i) => {
         if (i == this.rows.length - 1) return;
@@ -226,7 +293,7 @@ export default {
           );
           isValid = false;
         }
-        if(r.input_warehouse == r.output_warehouse) {
+        if (r.input_warehouse == r.output_warehouse) {
           this.notify(
             `لطفا انبار ورودی و خروجی ردیف ${i + 1} نمی تواند یکی باشد`,
             "danger"
@@ -264,7 +331,7 @@ export default {
     sum() {
       let res = 0;
       this.rows.forEach(row => {
-        if(row.count) res += +row.count;
+        if (row.count) res += +row.count;
       });
       return res;
     }
