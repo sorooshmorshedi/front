@@ -6,7 +6,7 @@
           <form-header
             formName="انتقال"
             title="انتقال بین انبار ها"
-            :hasClear="false"
+            @clearForm="clearForm(true)"
             :ListRouteName="false"
           ></form-header>
 
@@ -151,15 +151,13 @@
           <hr class="d-print-none">
 
           <form-footer
-            v-if="!this.id"
             formName="انتقال"
-            :showPagination="false"
-            :hasFirst="false"
-            :hasLast="false"
-            :hasPrev="false"
-            :hasNext="false"
+            :hasFirst="true"
+            :hasLast="true"
+            :hasPrev="true"
+            :hasNext="true"
             :editable="editable"
-            :hasSubmitAndClearForm="false"
+            @goToForm="goToForm"
             @validate="validate"
             @edit="makeFormEditable()"
           />
@@ -170,12 +168,12 @@
     <div class="modal fade" id="inventory-modal" v-if="inventory.ware">
       <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">موجودی انبار ها برای {{ inventory.ware.name }}</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
+          <div class="modal-header">
+            <h5 class="modal-title">موجودی انبار ها برای {{ inventory.ware.name }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           <div class="modal-body">
             <div class="container">
               <table class="table table-striped">
@@ -202,7 +200,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -228,7 +225,7 @@ export default {
       inventory: {
         ware: null,
         warehouses: []
-      },
+      }
     };
   },
   created() {
@@ -245,11 +242,24 @@ export default {
         url: this.endpoint(`factors/transfers/${this.id}/`),
         method: "get",
         success: data => {
-          this.transfer = data;
-          this.rows = data.items;
-          this.rows.push(this.copy(this.rowTemplate));
+          this.selectTransfer(data);
         }
       });
+    },
+    selectTransfer(transfer, changeRoute = false) {
+      this.transfer = transfer;
+      this.rows = transfer.items;
+      this.rows.push(this.copy(this.rowTemplate));
+
+      if (changeRoute) {
+        this.makeFormUneditable();
+        this.$router.push({
+          name: "TransferForm",
+          params: {
+            id: transfer.id
+          }
+        });
+      }
     },
     showInventory(ware) {
       this.inventory.ware = ware;
@@ -264,15 +274,24 @@ export default {
         },
         success: data => {
           this.inventory.warehouses = data;
-          $('#inventory-modal').modal('show');
+          $("#inventory-modal").modal("show");
         }
       });
     },
     initForm() {
       this.log("Init Form");
+      this.clearForm();
+      this.getData();
+    },
+    clearForm(changeRoute = false) {
+      this.transfer = {};
       this.rows = [];
       this.rows.push(this.copy(this.rowTemplate));
-      this.getData();
+      if (changeRoute) {
+        this.$router.push({
+          name: "TransferForm"
+        });
+      }
     },
     validate(clearForm = false) {
       let isValid = true;
@@ -302,9 +321,10 @@ export default {
         }
       });
       if (!isValid) return;
-      this.storeTransfer();
+      if (this.transfer.id) this.updateTransfer(clearForm);
+      else this.storeTransfer(clearForm);
     },
-    storeTransfer() {
+    storeTransfer(clearForm) {
       let items = this.rows.slice(0, this.rows.length - 1);
       items = items.map(this.extractIds);
       this.transfer.items = items;
@@ -316,6 +336,12 @@ export default {
         },
         success: data => {
           this.successNotify();
+          if (clearForm) {
+            this.clearForm();
+          } else {
+            this.selectTransfer(data, true);
+            this.makeFormUneditable();
+          }
         }
       });
     },
@@ -325,6 +351,24 @@ export default {
       } else {
         this.rows.splice(index, 1);
       }
+    },
+    goToForm(pos) {
+      return this.request({
+        url: this.endpoint("factors/getTransferByPosition"),
+        method: "get",
+        params: {
+          id: this.transfer.id,
+          position: pos
+        },
+        success: data => {
+          this.selectTransfer(data, true);
+        },
+        error: error => {
+          if (error.response.status == 404) {
+            this.notify("فاکتور وجود ندارد", "warning");
+          }
+        }
+      });
     }
   },
   computed: {
