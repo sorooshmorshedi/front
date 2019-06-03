@@ -7,7 +7,8 @@
             formName="انتقال"
             title="انتقال بین انبار ها"
             @clearForm="clearForm(true)"
-            :ListRouteName="false"
+            :ListRouteParams="{form: 'transfer'}"
+            :exportParams="{id: this.id}"
           ></form-header>
 
           <div class="row">
