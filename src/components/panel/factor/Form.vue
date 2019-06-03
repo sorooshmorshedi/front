@@ -741,6 +741,10 @@ export default {
         this.notify(`لطفا حداقل یک ردیف وارد کنید`, "danger");
         isValid = false;
       }
+      if(!this.factor.account) {
+        this.notify(`لطفا حساب را انتخاب کنید`, "danger");
+        isValid = false;
+      }
       this.rows.forEach((r, i) => {
         if (i == this.rows.length - 1) return;
         if (!r.count || r.count == 0) {
