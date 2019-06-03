@@ -157,9 +157,11 @@
             :hasPrev="true"
             :hasNext="true"
             :editable="editable"
+            :deletable="this.id"
             @goToForm="goToForm"
             @validate="validate"
             @edit="makeFormEditable()"
+            @delete="deleteTransfer()"
           />
         </div>
       </div>
@@ -342,6 +344,37 @@ export default {
             this.selectTransfer(data, true);
             this.makeFormUneditable();
           }
+        }
+      });
+    },
+    updateTransfer(clearForm) {
+      let items = this.rows.slice(0, this.rows.length - 1);
+      items = items.map(this.extractIds);
+      this.transfer.items = items;
+      this.request({
+        url: this.endpoint(`factors/transfers/${this.transfer.id}/`),
+        method: "put",
+        data: {
+          transfer: this.transfer
+        },
+        success: data => {
+          this.successNotify();
+          if (clearForm) {
+            this.clearForm();
+          } else {
+            this.selectTransfer(data, true);
+            this.makeFormUneditable();
+          }
+        }
+      });
+    },
+    deleteTransfer() {
+      this.request({
+        url: this.endpoint(`factors/transfers/${this.transfer.id}/`),
+        method: "delete",
+        success: data => {
+          this.successNotify();
+          this.clearForm(true);
         }
       });
     },
