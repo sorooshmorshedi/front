@@ -44,6 +44,13 @@ export default {
     filters: ['factor__type']
   },
   {
+    th: "عطف فاکتور",
+    td: "factor.id",
+    type: "number",
+    sortable: false,
+    filters: ["factor__id"]
+  },
+  {
     th: "شماره فاکتور",
     td: "factor.code",
     type: "number",
