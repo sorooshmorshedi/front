@@ -92,7 +92,7 @@
         </thead>
         <tbody>
           <tr v-for="(item, i) in items" :key="i" :class="itemRowClasses(item, i, items)">
-            <td v-if="hasSum && i == items.length-1">جمع</td>
+            <td v-if="hasSum && !hasNextPage && i == items.length-1">جمع</td>
             <td v-else>{{ offset+i+1 }}</td>
             <td v-for="(col, j) in cols" :key="j">
               <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
@@ -106,28 +106,48 @@
         </tbody>
       </table>
     </div>
-    <nav aria-label="Page navigation rtl">
-      <ul class="pagination justify-content-center">
-        <li class="page-item" :class="{disabled: offset == 0}">
-          <a @click.prevent="previousPage()" class="page-link" href="#">
-            <i class="fas fa-angle-double-right"></i>
-          </a>
-        </li>
-        <li
-          class="page-item"
-          v-for="(page, i) in pages.pages"
-          :key="i"
-          :class="{active: page == pages.currentPage}"
-        >
-          <a v-if="page == -1" @click.prevent class="page-link" href="#">...</a>
-          <a v-else @click.prevent="goToPage(page)" class="page-link" href="#">{{ page+1 }}</a>
-        </li>
-        <li class="page-item" :class="{disabled: offset + limit >= count}">
-          <a class="page-link" href="#" @click.prevent="nextPage()">
-            <i class="fas fa-angle-double-left"></i>
-          </a>
-        </li>
-      </ul>
+    <nav>
+      <div class="row">
+        <div class="col-md-6 col-12">
+          <ul class="pagination justify-content-left">
+            <li class="page-item" :class="{disabled: offset == 0}">
+              <a @click.prevent="previousPage()" class="page-link" href="#">
+                <i class="fas fa-angle-double-right"></i>
+              </a>
+            </li>
+            <li
+              class="page-item"
+              v-for="(page, i) in pages.pages"
+              :key="i"
+              :class="{active: page == pages.currentPage}"
+            >
+              <a v-if="page == -1" @click.prevent class="page-link" href="#">...</a>
+              <a v-else @click.prevent="goToPage(page)" class="page-link" href="#">{{ page+1 }}</a>
+            </li>
+            <li class="page-item" :class="{disabled: offset + limit >= count}">
+              <a class="page-link" href="#" @click.prevent="nextPage()">
+                <i class="fas fa-angle-double-left"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-6 col-12 justify-content-left">
+          <div class>
+            <div class="row">
+              <label class="text-left col-md-10 col-12">تعداد رکورد نمایشی</label>
+              <div class="col-md-2">
+                <select class="text-center custom-select col-12" v-model="limit">
+                  <option value="10" selected>10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="500">500</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
   </div>
 </template>
@@ -176,6 +196,9 @@ export default {
         else this.getData();
       },
       deep: true
+    },
+    limit() {
+      this.debouncedGetData();
     },
     order() {
       this.offset = 0;
@@ -229,6 +252,10 @@ export default {
       };
 
       return res;
+    },
+    hasNextPage() {
+      if (this.count > this.offset + this.limit) return true;
+      return false;
     },
     filterFields() {
       let res = [];
@@ -359,7 +386,7 @@ export default {
       }
     },
     itemRowClasses(item, i, items) {
-      if (this.hasSum && i == items.length - 1) {
+      if (this.hasSum && !this.hasNextPage && i == items.length - 1) {
         return "sum-row";
       }
       return {};
