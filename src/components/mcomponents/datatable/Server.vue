@@ -137,8 +137,8 @@
               <label class="text-left col-md-10 col-12">تعداد رکورد نمایشی</label>
               <div class="col-md-2">
                 <select class="text-center custom-select col-12" v-model="limit">
-                  <option value="10" selected>10</option>
-                  <option value="20">20</option>
+                  <option value="10" >10</option>
+                  <option value="20" selected>20</option>
                   <option value="50">50</option>
                   <option value="100">100</option>
                   <option value="500">500</option>
@@ -176,7 +176,7 @@ export default {
     return {
       items: [],
       oldItems: [],
-      limit: 10,
+      limit: 20,
       offset: 0,
       count: 0,
       filters: {},

@@ -25,7 +25,6 @@ export default {
       this.rows.forEach((row, i) => {
         if (i == this.rows.length - 1) return;
         let item = this.copy(row);
-        item.warehouse = item.ware.warehouse;
         item = this.extractIds(item);
         ["discountPercent", "discountValue"].forEach(
           k => {

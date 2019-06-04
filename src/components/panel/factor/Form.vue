@@ -83,7 +83,7 @@
                   <input
                     type="text"
                     class="form-control"
-                    disabled=1
+                    disabled="1"
                     :value="factor.is_definite?'قطعی':'موقت'"
                   >
                 </div>
@@ -187,7 +187,6 @@
                           track-by="id"
                           label="name"
                           :disabled="!editable || !row.is_editable"
-                          @select="setDefaultValue"
                         />
                       </td>
                       <td>
@@ -196,7 +195,7 @@
                           dir="rtl"
                           :allow-empty="false"
                           :options="waresSelectValues.warehouses"
-                          v-model="rows[i].ware.warehouse"
+                          v-model="rows[i].warehouse"
                           track-by="id"
                           label="name"
                           :disabled="!editable || !row.is_editable"
@@ -670,6 +669,8 @@ export default {
         discountPercent: "",
         fee: "",
         is_editable: true,
+        ware: null,
+        warehouse: null
       },
       itemsToDelete: [],
       expensesToDelete: [],
@@ -711,12 +712,11 @@ export default {
       this.setFactorLabel(this.factorType);
       this.getData();
     },
-    setDefaultValue(row) {
-      if (!row.id) return;
-      this.$nextTick(() => {
-        let item = this.rows.filter(o => o.ware && o.ware.id == row.id)[0];
-        let value = item.ware.price;
-        item.fee = value;
+    setDefaultValues() {
+      let items = this.rows.filter(o => o.ware);
+      items.forEach(item => {
+        if (!item.fee) item.fee = item.ware.price;
+        if (!item.warehouse) item.warehouse = item.ware.warehouse;
       });
     },
     setFactorLabel(factorType) {
@@ -741,7 +741,7 @@ export default {
         this.notify(`لطفا حداقل یک ردیف وارد کنید`, "danger");
         isValid = false;
       }
-      if(!this.factor.account) {
+      if (!this.factor.account) {
         this.notify(`لطفا حساب را انتخاب کنید`, "danger");
         isValid = false;
       }
@@ -880,10 +880,10 @@ export default {
     }
   },
   computed: {
-    hasNotEditableRow(){
-      if(!this.factor.id) return false;
-      for(const item of this.factor.items) {
-        if(!item.is_editable) return true
+    hasNotEditableRow() {
+      if (!this.factor.id) return false;
+      for (const item of this.factor.items) {
+        if (!item.is_editable) return true;
       }
     },
     paymentsSum() {
@@ -964,20 +964,6 @@ export default {
 
       return res;
     },
-    warehouseWares() {
-      let res = [];
-      this.rows.forEach((r, i) => {
-        if (!r.warehouse) res.push([]);
-        else {
-          res.push(
-            this.wares.filter(w => {
-              return w.warehouse.id == r.warehouse.id;
-            })
-          );
-        }
-      });
-      return res;
-    },
     accountName() {
       if (["buy", "backFromSale"].includes(this.factorType)) {
         return "فروشنده";
@@ -1045,9 +1031,9 @@ export default {
       handler(newRows, oldRows) {
         let row = this.rows[this.rows.length - 1];
         if (row && row.ware) {
-          if (row.fee == "") this.setDefaultValue(row);
           this.rows.push(this.copy(this.rowTemplate));
         }
+        this.setDefaultValues();
       },
       deep: true
     },
