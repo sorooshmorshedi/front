@@ -229,7 +229,7 @@
                       </td>
                       <td>
                         <input
-                          :disabled="!editable || hasValue(rows[i].discountValue) || !row.is_editable"
+                          :disabled="!editable || (hasValue(rows[i].discountValue) && !hasValue(rows[i].discountPercent)) || !row.is_editable"
                           type="number"
                           min="0"
                           max="100"
