@@ -107,11 +107,12 @@ Vue.mixin({
       $.notify({
         message: msg,
       }, {
+        delay: 100000,
           type: type,
           z_index: 2000,
           allow_dismiss: true,
           placement: {
-            from: "top",
+            from: "bottom",
             align: "right"
           },
           offset: 50,
