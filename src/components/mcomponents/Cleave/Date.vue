@@ -30,18 +30,14 @@ export default {
     this.cleave = new Cleave("#" + this.inputId, this.options);
     this.cleave.setRawValue(this.value);
     if (this.default) {
-      let now = moment()
-        .format("jYYYY-jMM-jDD")
-        .split("-")
-        .join("");
-      this.cleave.setRawValue(now);
-      this.change();
+      this.setDefaultValue();
     }
   },
   watch: {
     value() {
       if (!this.value && this.default) {
-        this.change();
+
+        this.setDefaultValue();
         return;
       }
       if (this.cleave.getRawValue() != this.value) {
@@ -55,6 +51,13 @@ export default {
         let value = $("#" + this.inputId).val();
         this.$emit("input", value);
       }, 100);
+    },
+    setDefaultValue(){
+      let now = moment()
+        .format("jYYYY-jMM-jDD")
+        .split("-")
+        .join("");
+      this.cleave.setRawValue(now);
     }
   }
 };
