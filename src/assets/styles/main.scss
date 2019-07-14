@@ -173,3 +173,8 @@ table {
     padding-right: .75rem;
   }
 }
+
+button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
