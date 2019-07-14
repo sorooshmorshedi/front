@@ -1,5 +1,5 @@
 <template>
-  <input type="text" name="" value="" @input="change()" :id="inputId" dir="ltr">
+  <input type="text" name value @input="change()" :id="inputId" dir="ltr" />
 </template>
 
 <script>
@@ -28,15 +28,15 @@ export default {
   },
   mounted() {
     this.cleave = new Cleave("#" + this.inputId, this.options);
-    this.cleave.setRawValue(this.value);
     if (this.default) {
       this.setDefaultValue();
+    } else {
+      this.cleave.setRawValue(this.value);
     }
   },
   watch: {
     value() {
       if (!this.value && this.default) {
-
         this.setDefaultValue();
         return;
       }
@@ -52,12 +52,13 @@ export default {
         this.$emit("input", value);
       }, 100);
     },
-    setDefaultValue(){
+    setDefaultValue() {
       let now = moment()
         .format("jYYYY-jMM-jDD")
         .split("-")
         .join("");
       this.cleave.setRawValue(now);
+      this.change();
     }
   }
 };
