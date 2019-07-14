@@ -14,6 +14,9 @@ import 'cleave.js'
 import Multiselect from './components/mcomponents/multiselect.vue';
 Vue.component('multiselect', Multiselect);
 
+import WareSelect from './components/selects/WareSelect.vue';
+Vue.component('WareSelect', WareSelect);
+
 import {
   VueContext
 } from 'vue-context';

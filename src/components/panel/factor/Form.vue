@@ -179,7 +179,13 @@
                     >
                       <td>{{ i+1 }}</td>
                       <td>
-                        <multiselect
+
+                        <ware-select
+                          v-model="rows[i].ware"
+                          :disabled="!editable || !row.is_editable"
+                        />
+
+                        <!-- <multiselect
                           :option-height="104"
                           dir="rtl"
                           :options="waresSelectValues.wares"
@@ -187,7 +193,7 @@
                           track-by="id"
                           label="name"
                           :disabled="!editable || !row.is_editable"
-                        />
+                        /> -->
                       </td>
                       <td>
                         <multiselect

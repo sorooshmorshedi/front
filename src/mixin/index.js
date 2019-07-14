@@ -39,12 +39,12 @@ Vue.mixin({
         options.method = 'get';
       }
       return axios.request({
-        headers: headers,
-        url: options.url,
-        method: options.method,
-        data: options.data,
-        params: options.params,
-      })
+          headers: headers,
+          url: options.url,
+          method: options.method,
+          data: options.data,
+          params: options.params,
+        })
         .then((res) => {
           this.$store.commit('decrementOGR');
           try {
@@ -108,22 +108,22 @@ Vue.mixin({
         message: msg,
       }, {
         delay: 100000,
-          type: type,
-          z_index: 2000,
-          allow_dismiss: true,
-          placement: {
-            from: "bottom",
-            align: "right"
-          },
-          offset: 50,
-          spacing: 10,
-          mouse_over: 'pause',
-          animate: {
-            enter: 'animated fadeInDown',
-            exit: 'animated fadeOutUp'
-          },
+        type: type,
+        z_index: 2000,
+        allow_dismiss: true,
+        placement: {
+          from: "bottom",
+          align: "right"
+        },
+        offset: 50,
+        spacing: 10,
+        mouse_over: 'pause',
+        animate: {
+          enter: 'animated fadeInDown',
+          exit: 'animated fadeOutUp'
+        },
 
-        })
+      })
     },
     hasPermission(permission) {
       return this.permissions && this.permissions.includes(permission);
@@ -133,7 +133,7 @@ Vue.mixin({
         .scrollTop($(selector)
           .offset()
           .top - $('selector')
-            .height() - 50);
+          .height() - 50);
     },
     endpoint(url) {
       // return "http://api.e7.mmdmst.ir/" + url;
@@ -230,6 +230,9 @@ Vue.mixin({
     todayDate() {
       return moment().format('jYYYY/jMM/jDD');
     },
+    getRandomId() {
+      return 'rid-' + Math.floor(Math.random() * 10000)
+    }
   },
   computed: {
     ...mapState({
