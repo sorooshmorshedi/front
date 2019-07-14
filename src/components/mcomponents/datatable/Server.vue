@@ -6,7 +6,7 @@
           <tr>
             <button @click="clearFilters()" class="btn btn-block btn-info">
               خالی کردن
-              <br>فیلتر ها
+              <br />فیلتر ها
             </button>
             <th v-for="(col, i) in filterFields" :key="i">
               <template v-for="(filter, j) in col.filters">
@@ -17,7 +17,7 @@
                   type="number"
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
-                >
+                />
 
                 <input
                   v-if="col.type == 'text'"
@@ -26,7 +26,7 @@
                   type="text"
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
-                >
+                />
 
                 <select
                   v-if="col.type == 'select'"
@@ -94,11 +94,13 @@
           <tr v-for="(item, i) in items" :key="i" :class="itemRowClasses(item, i, items)">
             <td v-if="hasSum && !hasNextPage && i == items.length-1">جمع</td>
             <td v-else>{{ offset+i+1 }}</td>
-            <td v-for="(col, j) in cols" :key="j">
-              <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
-              <template v-else-if="col.type == 'money' ">{{ get(item, col) | toMoney }}</template>
-              <template v-else>{{ get(item, col) }}</template>
-            </td>
+            <template v-for="(col, j) in cols">
+              <td v-if="col.type == 'select'" :key="j">{{ getSelectLabel(item, col)}}</td>
+              <td v-else-if="col.type == 'money' " :key="j" class="ltr">
+                {{ get(item, col) | toMoney }}
+              </td>
+              <td v-else :key="j">{{ get(item, col) }}</td>
+            </template>
             <td v-if="routerName">
               <a @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
             </td>
@@ -137,7 +139,7 @@
               <label class="text-left col-md-10 col-12">تعداد رکورد نمایشی</label>
               <div class="col-md-2">
                 <select class="text-center custom-select col-12" v-model="limit">
-                  <option value="10" >10</option>
+                  <option value="10">10</option>
                   <option value="20" selected>20</option>
                   <option value="50">50</option>
                   <option value="100">100</option>

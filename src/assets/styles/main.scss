@@ -36,15 +36,15 @@
 }
 
 .ltr {
+  direction: ltr;
+
   &.input-field label {
     -webkit-transform-origin: top left !important;
     transform-origin: top left !important;
-    direction: ltr;
     text-align: left;
   }
 
   input {
-    direction: ltr;
     text-align: left;
   }
 }
