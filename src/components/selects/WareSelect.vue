@@ -1,26 +1,27 @@
 <template>
-  <div class="ware-select-container">
-    <button
-      :disabled="!ware"
-      @click="showInventory(ware)"
-      type="button"
-      class="btn btn-info get-inventory-btn"
-    >
-      مم
-      <!-- مشاهده مانده -->
-    </button>
-
+  <div>
     <div class="select-container">
       <multiselect
-        :option-height="104"
         dir="rtl"
         :options="waresSelectValues.wares"
         v-model="ware"
         track-by="id"
         label="name"
         :disabled="disabled"
-      />
+        :hasAddonBtn="true"
+      >
+        <button
+          slot="addonBtn"
+          :disabled="!ware"
+          @click="showInventory(ware)"
+          type="button"
+          class="btn btn-info"
+        >
+          <i class="fas fa-boxes"></i>
+        </button>
+      </multiselect>
     </div>
+
     <div class="modal fade" :id="modalId" v-if="ware">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -105,30 +106,5 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.ware-select-container {
-  width: 280px;
-}
-.multiselect__tags {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
-
-.get-inventory-btn {
-  display: block;
-  margin-top: 4px;
-}
-
-.select-container {
-  width: 240px;
-  float: right;
-}
-.btn {
-  width: 40px;
-  margin: 0px;
-  height: 30px;
-  padding: 0px;
-  border: none;
-  float: right;
-}
+<style lang="scss" >
 </style>
