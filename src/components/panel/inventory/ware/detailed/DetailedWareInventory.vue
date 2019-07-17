@@ -26,6 +26,7 @@
 
                     <div class="col-lg-12">
                       <datatable
+                        v-if="ware"
                         :url="url"
                         :cols="datatableCols.cols"
                         :colHeaders="datatableCols.colHeaders"
