@@ -107,7 +107,7 @@ Vue.mixin({
       $.notify({
         message: msg,
       }, {
-        delay: 100000,
+        delay: 1000,
         type: type,
         z_index: 2000,
         allow_dismiss: true,
