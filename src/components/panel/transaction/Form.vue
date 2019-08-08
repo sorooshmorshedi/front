@@ -40,9 +40,8 @@
                     </div>
                     <div class="col-lg-4">
                       <button
-                        style="margin-top:27px"
                         type="button"
-                        class="btn btn-info btn-block"
+                        class="btn btn-info btn-block label-margin"
                         :disabled="!transaction.account"
                         @click="openLedger(transaction.account)"
                       >مشاهده دفتر</button>

@@ -18,13 +18,17 @@
                 label="title"
               />
             </div>
+            <div class="col-12 col-lg-2 label-margin" v-if="ware && ware.pricingType">
+              نحوه محاسبه:
+              <span>{{ ware.pricingType.name }}</span>
+            </div>
             <datatable
               v-if="ware"
               :cols="options.cols"
               :url="options.url"
               :default-filters="defaultFilters"
-              hasSum=1
-              sumColSpan=7
+              hasSum="1"
+              sumColSpan="7"
               ref="datatable"
               class="col-12 mt-4"
             />
@@ -54,7 +58,7 @@ export default {
       showTable: false,
       defaultFilters: {
         factor__type__in: "",
-        ware: "",
+        ware: ""
       },
       layout: {
         title: ""
@@ -88,9 +92,13 @@ export default {
     },
     setDefaultFilters() {
       if (this.type == "sale") {
-        this.defaultFilters["factor__type__in"] = ["sale", "backFromSale"].join(',');
+        this.defaultFilters["factor__type__in"] = ["sale", "backFromSale"].join(
+          ","
+        );
       } else {
-        this.defaultFilters["factor__type__in"] = ["buy", "backFromBuy"].join(',');
+        this.defaultFilters["factor__type__in"] = ["buy", "backFromBuy"].join(
+          ","
+        );
       }
     },
     selectWare() {
