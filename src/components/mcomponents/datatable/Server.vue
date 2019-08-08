@@ -290,7 +290,6 @@ export default {
     getData() {
       this.log("Get data");
       if (!this.url) {
-        console.warn("URL is not provided");
         return;
       }
       let filters = {};
@@ -356,8 +355,6 @@ export default {
     },
     goToPage(n) {
       this.offset = this.limit * n;
-      console.log(this.offset, this.limit, n);
-      // return;
       this.getData();
     },
     get(item, col) {
@@ -377,7 +374,6 @@ export default {
     getSelectLabel(item, col) {
       let option = col.options.filter(o => this.get(item, col) == o.value)[0];
       if (option) return option.label;
-      console.warn(item, col);
       return "-";
     },
     clearFilters() {
