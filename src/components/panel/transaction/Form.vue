@@ -247,9 +247,11 @@
             :hasNext="hasNext"
             :formName="type.label"
             :editable="editable"
+            :deletable="true"
             @goToForm="goToForm"
             @validate="validate"
             @edit="makeFormEditable()"
+            @delete="deleteTransaction()"
           />
         </div>
       </div>
@@ -493,7 +495,7 @@ export default {
         getNotPaidFactors: null
       },
       rowTemplate: {
-        value: 0,
+        value: 0
       }
     };
   },
@@ -598,7 +600,7 @@ export default {
       if (paymentValue < 0) {
         factor.payment.value = 0;
       } else if (paymentValue > 0) {
-        let remain = +factor.remain
+        let remain = +factor.remain;
         let oldPayments = 0;
         factor.payments.forEach(payment => {
           if (payment.transaction == this.transaction.id)
@@ -809,6 +811,17 @@ export default {
         success: data => {
           this.transaction.id = data.id;
           this.syncTransactionItems(clearTransaction);
+        }
+      });
+    },
+    deleteTransaction(clearTransaction) {
+      this.request({
+        url: this.endpoint("sanads/transactions/" + this.transaction.id),
+        method: "delete",
+        success: data => {
+          this.successNotify();
+          this.getTransactionCodes();
+          this.clearTransaction();
         }
       });
     },
