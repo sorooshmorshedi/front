@@ -534,7 +534,7 @@ export default {
       return this.transactions.filter(o => o.type == this.type.name);
     },
     transactionAccounts() {
-      return this.accountsSelectValues.persons;
+      return this.accountsSelectValues.levels[3];
     },
     transactionFloatAccounts() {
       if (
