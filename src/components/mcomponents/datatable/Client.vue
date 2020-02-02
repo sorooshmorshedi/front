@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div>
+      <button @click="download()" class="btn btn-block btn-info">دانلود اکسل</button>
+    </div>
     <div class="fixed-head">
       <table class="table table-striped table-bordered">
         <thead>
@@ -22,8 +25,8 @@
                   type="number"
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
-                >
-                
+                />
+
                 <input
                   v-if="col.type == 'text'"
                   :key="j"
@@ -31,8 +34,8 @@
                   type="text"
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
-                >
-                
+                />
+
                 <select
                   v-if="col.type == 'select'"
                   :key="j"
@@ -108,7 +111,9 @@
             <td>{{ offset+i+1 }}</td>
             <td v-for="(col, j) in notHiddenCols" :key="j">
               <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
-              <template v-else-if="col.type == 'money' "><span dir="ltr">{{ get(item, col.td) | toMoney }}</span></template>
+              <template v-else-if="col.type == 'money' ">
+                <span dir="ltr">{{ get(item, col.td) | toMoney }}</span>
+              </template>
               <template v-else>{{ get(item, col.td) }}</template>
             </td>
             <td v-if="routerName">
@@ -149,6 +154,7 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
 import moment from "moment-jalaali";
+import Papa from "papaparse";
 import _ from "lodash";
 export default {
   name: "Datatable",
@@ -301,6 +307,19 @@ export default {
       if (this.printable) {
         print();
       }
+    },
+    download() {
+      let csv = Papa.unparse(this.data, {
+        encoding: "utf8"
+      });
+
+      var csvData = new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8;" });
+      var csvURL = window.URL.createObjectURL(csvData);
+
+      var tempLink = document.createElement("a");
+      tempLink.href = csvURL;
+      tempLink.setAttribute("download", "download.csv");
+      tempLink.click();
     },
     orderBy(col) {
       if (col.sortable == false) return;

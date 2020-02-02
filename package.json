@@ -17,6 +17,7 @@
     "lodash": "^4.17.10",
     "moment-jalaali": "^0.7.2",
     "numeral": "^2.0.6",
+    "papaparse": "^5.1.0",
     "popper.js": "^1.14.3",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.5.2",
