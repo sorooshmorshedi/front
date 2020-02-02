@@ -138,7 +138,7 @@ Vue.mixin({
     endpoint(url) {
       // return "http://api.e7.mmdmst.ir/" + url;
       if (this.isDev)
-        return "http://localhost:8000/" + url;
+        return "http://localhost:8001/" + url;
       // else return "http://api.sh.mmdmst.ir/" + url;
       else return "http://api." + window.location.hostname + "/" + url;
     },
