@@ -320,6 +320,8 @@
             </div>
           </div>
           <div class="modal-footer">
+            <button @click="splitValue(true)" type="button" class="btn btn-info">سرشکن کردن از پایین</button>
+            <button @click="splitValue()" type="button" class="btn btn-info">سرشکن کردن از بالا</button>
             <button
               :disabled="!isPaymentsValid"
               type="button"
@@ -1050,6 +1052,28 @@ export default {
         account: null,
         floatAccount: null
       };
+    },
+    splitValue(reverse = false) {
+      let total = this.sum;
+      let factors = [];
+      let factor = {};
+      for (let i = 0; i < this.factors.length; i++) {
+        if (reverse) factor = this.factors[this.factors.length - i - 1];
+        else factor = this.factors[i];
+
+        if (total > 0) {
+          let remain = factor.remain;
+          if (total >= remain) {
+            factor.payment.value = remain;
+            total -= remain;
+          } else {
+            factor.payment.value = total;
+            total = 0;
+          }
+        } else {
+          factor.payment.value = 0;
+        }
+      }
     }
   }
 };
