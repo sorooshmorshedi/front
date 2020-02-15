@@ -34,7 +34,7 @@
                 <div class="col-lg-6 col-sm-12" v-if="factor.sanad">
                   <label>شماره سند</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" disabled :value="factor.sanad" />
+                    <input type="text" class="form-control" disabled :value="factor.sanad">
                     <div class="input-group-prepend d-print-none">
                       <button
                         @click="openSanad(factor.sanad)"
@@ -111,6 +111,7 @@
                           class="form-control form-control"
                           v-model="rows[i].count"
                           :disabled="!editable"
+                          decimalScale="6"
                         />
                       </td>
                       <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
@@ -122,7 +123,12 @@
                         />
                       </td>
                       <td dir="ltr">
-                        <money class="form-control form-control" :value="rowSum(rows[i])" disabled />
+                        <money
+                          class="form-control form-control"
+                          :value="rowSum(rows[i])"
+                          disabled
+                          decimalScale="6"
+                        />
                       </td>
                       <td>
                         <input
@@ -130,7 +136,7 @@
                           class="form-control form-control"
                           v-model="rows[i].explanation"
                           :disabled="!editable"
-                        />
+                        >
                       </td>
                       <td class="d-print-none">
                         <button
@@ -175,7 +181,7 @@
               </div>
             </div>
           </div>
-          <hr class="d-print-none" />
+          <hr class="d-print-none">
 
           <form-footer
             formName="موجودی اول دوره"
