@@ -35,7 +35,6 @@ export default {
         3: 4
       },
       config: {
-        autoCodeAndType: true
       },
       DEFAULT_CODES: {
         buyer: {
@@ -50,48 +49,7 @@ export default {
       }
     }
   },
-  watch: {
-    'account.level': function () {
-      this.config.autoCodeAndType && this.setCodeAndType();
-    },
-    'account.parent': function () {
-      this.config.autoCodeAndType && this.setCodeAndType();
-    },
-  },
   methods: {
-    setCodeAndType() {
-      if (this.mode != 'create' || this.accounts.length == 0) return;
-      this.log('set new account code and type');
-      let accounts = [];
-      if (this.account.level == 0) {
-        accounts = this.accountsSelectValues.levels[0];
-      } else {
-        if (!this.account.parent) {
-          console.warn('Account does not have parent !', this.account);
-          return '';
-        }
-        accounts = this.accountsSelectValues.levels[this.account.level].filter(o => _.startsWith(o.code, this.account.parent.code))
-      }
-      let lastAccount = _.maxBy(accounts, o => o.code);
-      console.log(lastAccount)
-      let code = '';
-      if (!lastAccount) {
-        if (this.account.parent) code = this.account.parent.code;
-        else code = '';
-        for (let i = 0; i < this.levelsLen[this.account.level]; i++) {
-          code += '0';
-        }
-        code = +code + 1;
-      } else {
-        code = +lastAccount.code + 1;
-      }
-      this.account.code = code;
-
-      if (this.account.parent) {
-        // this.account.type.id = this.account.parent.type.id;
-        this.account.type = this.account.parent.type;
-      }
-    },
     async getAllAccounts(force = false, callback = null) {
       this.log('Get All Accounts Data');
       Promise.all([
@@ -114,7 +72,6 @@ export default {
       this.editSchema.init(this.accountsSelectValues);
       this.clearAccounts();
       this.localAccountsInit && this.localAccountsInit();
-      this.setCodeAndType();
       this.log('Init Accounts : Done');
     },
     isDefaultCode(code) {

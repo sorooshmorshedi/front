@@ -62,7 +62,6 @@ export default {
   components: { AccountsList },
   created() {
     this.mode = "create";
-    this.config.autoCodeAndType = false;
   },
   mounted() {
     $('a[data-toggle="tab"]').on("shown.bs.tab", e => {
@@ -94,7 +93,6 @@ export default {
         else parentCode = this.DEFAULT_CODES.seller.legal;
       }
       this.account.parent = this.findAccount("code", parentCode);
-      this.setCodeAndType();
     },
     storeBuyer() {
       this.person.type = "buyer";

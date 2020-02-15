@@ -483,7 +483,6 @@ export default {
       // let account = q.shift();
       this.accounts.forEach(account => {
         res.all.push(account);
-
         res.levels[account.level].push(account);
 
         if (account.person) {

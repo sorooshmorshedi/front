@@ -77,7 +77,6 @@ export default {
     };
   },
   created() {
-    this.config.autoCodeAndType = false;
   },
   methods: {
     editAccount(node) {
@@ -90,7 +89,6 @@ export default {
       this.account = {};
       this.account.parent = node;
       this.account.level = node.level + 1;
-      this.setCodeAndType();
       this.modal("#account-modal", "show");
     },
     contextMenu(e, item) {

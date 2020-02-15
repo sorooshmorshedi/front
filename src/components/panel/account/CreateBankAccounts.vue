@@ -48,7 +48,6 @@ export default {
     this.account.level = 3;
     this.account.type = "bank";
     this.account.parent = { code: this.DEFAULT_CODES.bank };
-    this.setCodeAndType();
   },
   data() {
     return {};
