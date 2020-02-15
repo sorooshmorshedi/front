@@ -1,18 +1,25 @@
 <template>
-  <input dir="ltr" type="text" name="" value="" @input="change()" :id="inputId">
+  <input dir="ltr" type="text" name value @input="change()" :id="inputId">
 </template>
 
 <script>
 import Cleave from "cleave.js";
 export default {
   name: "CleaveMoney",
-  props: ["value", "id"],
+  props: {
+    value: {},
+    id: {},
+    decimalScale: {
+      default: 0
+    }
+  },
   data() {
     return {
       inputId: "",
       options: {
         numeral: true,
-        numeralThousandsGroupStyle: "thousand"
+        numeralThousandsGroupStyle: "thousand",
+        numeralDecimalScale: this.decimalScale
       }
     };
   },

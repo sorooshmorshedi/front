@@ -179,7 +179,6 @@
                     >
                       <td>{{ i+1 }}</td>
                       <td>
-
                         <ware-select
                           v-model="rows[i].ware"
                           :disabled="!editable || !row.is_editable"
@@ -193,7 +192,7 @@
                           track-by="id"
                           label="name"
                           :disabled="!editable || !row.is_editable"
-                        /> -->
+                        />-->
                       </td>
                       <td>
                         <multiselect
@@ -213,6 +212,7 @@
                           class="form-control form-control"
                           v-model="rows[i].count"
                           :disabled="!editable || !row.is_editable"
+                          decimalScale="6"
                         />
                       </td>
                       <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
@@ -224,7 +224,12 @@
                         />
                       </td>
                       <td dir="ltr">
-                        <money class="form-control form-control" :value="rowSum(rows[i])" disabled/>
+                        <money
+                          class="form-control form-control"
+                          :value="rowSum(rows[i])"
+                          disabled
+                          decimalScale="6"
+                        />
                       </td>
                       <td>
                         <money
@@ -247,14 +252,21 @@
                         <money
                           class="form-control form-control"
                           :value="rowSumAfterDiscount(row)"
+                          decimalScale="6"
                           disabled
                         />
                       </td>
                       <td v-if="hasTax">
-                        <money class="form-control form-control" :value="rowTax(row)" disabled/>
+                        <money
+                          class="form-control form-control"
+                          :value="rowTax(row)"
+                          disabled
+                          decimalScale="6"
+                        />
                       </td>
                       <td v-if="hasTax">
                         <money
+                          decimalScale="6"
                           class="form-control form-control"
                           :value="rowSumAfterTax(row)"
                           disabled
