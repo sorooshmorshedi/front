@@ -10,7 +10,7 @@
             @clearForm="clearFactor(true)"
           >
             <router-link
-              v-if="id && ['buy', 'sale'].includes(factorType)"
+              v-if="id && !isBack"
               class="btn btn-info"
               :to="{
               name: 'FactorForm',
@@ -179,6 +179,7 @@
                       <th v-if="hasTax">مالیات</th>
                       <th v-if="hasTax">جمع مبلغ کل و مالیات</th>
                       <th>توضیحات</th>
+                      <th v-if="isBuy">قیمت فروش</th>
                       <th class="d-print-none"></th>
                     </tr>
                   </thead>
@@ -290,6 +291,14 @@
                           v-model="rows[i].explanation"
                           :disabled="!editable || !row.is_editable"
                         >
+                      </td>
+                      <td v-if="isBuy">
+                        <money
+                          v-if="rows[i].ware"
+                          :disabled="!editable"
+                          class="form-control form-control"
+                          v-model="rows[i].sale_price"
+                        />
                       </td>
                       <td class="d-print-none">
                         <button
@@ -675,6 +684,10 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
+
+import formComputed from "./formComputed.js";
+import formMethods from "./formMethods.js";
+
 export default {
   name: "Form",
   components: { money, date, mtime },
@@ -689,7 +702,14 @@ export default {
       default: null
     }
   },
-  mixins: [formsMixin, accountApiMixin, wareApiMixin, factorApiMixin],
+  mixins: [
+    formsMixin,
+    accountApiMixin,
+    wareApiMixin,
+    factorApiMixin,
+    formComputed,
+    formMethods
+  ],
   data() {
     return {
       factor: {
@@ -723,356 +743,6 @@ export default {
   },
   created() {
     this.initForm();
-  },
-  methods: {
-    getData() {
-      this.getAccounts();
-      this.getFactorCodes();
-      this.getWarehouses();
-      this.getWares();
-      this.getFactorExpenses();
-      if (this.id) {
-        this.getFactor(this.id);
-      } else if (this.fromId) {
-        this.getFactor(this.fromId);
-      }
-    },
-    initForm() {
-      this.log("Init Form");
-      if (!this.id) {
-        this.factor = {
-          taxPercent: "",
-          taxValue: "",
-          discountPercent: "",
-          discountValue: "",
-          expenses: []
-        };
-        this.rows = [];
-        this.rows.push(this.copy(this.rowTemplate));
-      }
-      this.setFactorLabel(this.factorType);
-      this.getData();
-    },
-    setDefaultValues() {
-      let items = this.rows.filter(o => o.ware);
-      items.forEach(item => {
-        if (!item.fee) item.fee = item.ware.price;
-        if (!item.warehouse) item.warehouse = item.ware.warehouse;
-      });
-    },
-    setFactorLabel(factorType) {
-      switch (factorType) {
-        case "sale":
-          this.factorLabel = "فروش";
-          break;
-        case "backFromSale":
-          this.factorLabel = "برگشت از فروش";
-          break;
-        case "buy":
-          this.factorLabel = "خرید";
-          break;
-        case "backFromBuy":
-          this.factorLabel = "برگشت از خرید";
-          break;
-      }
-    },
-    validate(clearFactor = false) {
-      let isValid = true;
-      if (this.rows.length == 1) {
-        this.notify(`لطفا حداقل یک ردیف وارد کنید`, "danger");
-        isValid = false;
-      }
-      if (!this.factor.account) {
-        this.notify(`لطفا حساب را انتخاب کنید`, "danger");
-        isValid = false;
-      }
-      this.rows.forEach((r, i) => {
-        if (i == this.rows.length - 1) return;
-        if (!r.count || r.count == 0) {
-          this.notify(`لطفا تعداد ردیف ${i + 1} را وارد کنید`, "danger");
-          isValid = false;
-        }
-        if (r.fee == undefined) {
-          this.notify(`لطفا قیمت واحد ردیف ${i + 1} را وارد کنید`, "danger");
-          isValid = false;
-        }
-      });
-      if (!isValid) return;
-
-      ["discountPercent", "discountValue", "taxPercent", "taxValue"].forEach(
-        k => {
-          if (this.factor[k] == "") this.factor[k] = 0;
-        }
-      );
-
-      this.factor.type = this.factorType;
-      if (this.factor.id) this.updateFactor(clearFactor);
-      else this.storeFactor(clearFactor);
-    },
-    selectFactor(factor, changeRoute = false) {
-      this.log("Selecting Factor : ", factor);
-      this.factor = factor;
-      this.itemsToDelete = [];
-      this.rows = factor.items;
-      this.rows.push(this.copy(this.rowTemplate));
-
-      if (this.fromId && !changeRoute) {
-        delete this.factor.id;
-        this.rows.map(row => {
-          if (row.id) delete row.id;
-        });
-        this.factor.expenses.map(expense => {
-          if (expense.id) delete expense.id;
-        });
-      } else {
-        this.setFactorLabel(factor.type);
-        if (changeRoute) {
-          this.makeFormUneditable();
-          this.$router.push({
-            name: "FactorForm",
-            params: {
-              id: factor.id,
-              factorType: factor.type
-            }
-          });
-        }
-      }
-    },
-    deleteItemRow(index) {
-      if (index == -1) {
-        this.rows.forEach(row => {
-          if (row.id) this.itemsToDelete.push(row.id);
-        });
-        this.rows.splice(0, this.rows.length - 1);
-      } else {
-        let row = this.rows[index];
-        if (row.id) this.itemsToDelete.push(row.id);
-        this.rows.splice(index, 1);
-      }
-    },
-    deleteExpenseRow(index) {
-      let row = this.factorExpensesCopy[index];
-      if (row.id) this.expensesToDelete.push(row.id);
-      this.factorExpensesCopy.splice(index, 1);
-    },
-    rowSum(row) {
-      if (!this.hasValue(row.fee) || !this.hasValue(row.count)) return 0;
-      return +row.fee * +row.count;
-    },
-    rowDiscount(row) {
-      if (!this.rowSum(row)) return 0;
-      if (
-        !this.hasValue(row.discountValue) &&
-        !this.hasValue(row.discountPercent)
-      )
-        return 0;
-      if (this.hasValue(row.discountValue)) return +row.discountValue;
-      else return +((this.rowSum(row) * +row.discountPercent) / 100).toFixed(2);
-    },
-    rowSumAfterDiscount(row) {
-      return this.rowSum(row) - this.rowDiscount(row);
-    },
-    rowTax(row) {
-      if (!this.rowSumAfterDiscount(row)) return 0;
-      if (!this.factor.taxPercent) return 0;
-      return +(
-        (this.rowSumAfterDiscount(row) * +this.factor.taxPercent) /
-        100
-      ).toFixed(2);
-    },
-    rowSumAfterTax(row) {
-      if (!this.rowTax(row)) return this.rowSumAfterDiscount(row);
-      return this.rowSumAfterDiscount(row) + this.rowTax(row);
-    },
-    factorExpensesModal() {
-      if (this.factor.expenses.length) {
-        this.factorExpensesCopy = [];
-        this.factor.expenses.forEach(e => {
-          this.factorExpensesCopy.push(this.copy(e));
-        });
-      }
-      $("#factor-expenses-modal").modal("show");
-    },
-    addExpenses() {
-      let isValid = true;
-      this.factorExpensesCopy.forEach((e, i) => {
-        if (i == this.factorExpensesCopy.length - 1) return;
-        if (!e.expense) {
-          this.notify(`لطفا نام هزینه ردیف ${i + 1} را وارد کنید`, "danger");
-          isValid = false;
-        }
-        if (!e.value || e.value == 0) {
-          this.notify(`لطفا مبلغ ردیف ${i + 1} را وارد کنید`, "danger");
-          isValid = false;
-        }
-        if (!e.account) {
-          this.notify(
-            `لطفا حساب پرداخت کننده ردیف ${i + 1} را وارد کنید`,
-            "danger"
-          );
-          isValid = false;
-        }
-        if (e.account && e.account.floatAccountGroup && !e.floatAccount) {
-          this.notify(`لطفا حساب شناور ردیف ${i + 1} را وارد کنید`, "danger");
-          isValid = false;
-        }
-      });
-
-      if (!isValid) return;
-
-      $("#factor-expenses-modal").modal("hide");
-
-      this.factor.expenses = this.copy(this.factorExpensesCopy);
-      this.factor.expenses.pop();
-      this.factorExpensesCopy = [{}];
-    },
-    goToForm(pos) {
-      this.getFactorByPosition(pos);
-    }
-  },
-  computed: {
-    hasNotEditableRow() {
-      if (!this.factor.id) return false;
-      for (const item of this.factor.items) {
-        if (!item.is_editable) return true;
-      }
-    },
-    paymentsSum() {
-      let sum = 0;
-      if (this.factor.payments) {
-        this.factor.payments.forEach(payment => {
-          sum += +payment.value;
-        });
-      }
-      return sum;
-    },
-    canSubmitTransaction() {
-      if (!this.id) return false;
-      return this.factor.paidValue < this.sum.total;
-    },
-    exportLinks() {
-      let url =
-        "reports/lists/factors/TEMP?form=factor&type=" +
-        this.factorType +
-        "&id=" +
-        this.id +
-        "&token=" +
-        this.token;
-      url = this.endpoint(url);
-
-      Object.keys(this.exportOptions).forEach(key => {
-        let value = this.exportOptions[key];
-        url += `&${key}=${value}`;
-      });
-
-      let html = url.replace("TEMP", "html");
-      let pdf = url.replace("TEMP", "pdf");
-
-      return {
-        html,
-        pdf
-      };
-    },
-    sum() {
-      let res = {
-        sum: 0,
-        afterDiscount: 0,
-        tax: 0,
-        discount: 0,
-        afterTax: 0,
-        total: 0,
-        expenses: 0
-      };
-      this.rows.forEach(r => {
-        res.sum += this.rowSumAfterDiscount(r);
-        res.afterDiscount += this.rowSumAfterDiscount(r);
-        res.tax += this.rowTax(r);
-        res.afterTax += this.rowSumAfterTax(r);
-        res.total += this.rowSumAfterTax(r);
-      });
-      this.factor.expenses.forEach(e => {
-        res.expenses += +e.value;
-      });
-
-      let overallDiscount = 0;
-      if (this.hasValue(this.factor.discountValue)) {
-        overallDiscount = +this.factor.discountValue;
-        // res.afterDiscount -= +this.factor.discountValue;
-      } else {
-        overallDiscount =
-          (res.afterDiscount * +this.factor.discountPercent) / 100;
-        // res.afterDiscount = (res.afterDiscount * (100 - +this.factor.discountPercent)) / 100;
-      }
-      res.afterDiscount -= overallDiscount;
-      res.afterTax -= overallDiscount;
-      res.total -= overallDiscount;
-
-      if (this.hasValue(this.factor.taxValue)) {
-        res.afterTax += +this.factor.taxValue;
-        res.tax += +this.factor.taxValue;
-        res.total += +this.factor.taxValue;
-      }
-
-      return res;
-    },
-    accountName() {
-      if (["buy", "backFromSale"].includes(this.factorType)) {
-        return "فروشنده";
-      } else {
-        return "مشتری";
-      }
-    },
-    hasBijak() {
-      return ["buy", "backFromBuy"].includes(this.factorType);
-    },
-    hasFirst() {
-      if (this.factorCode == 1) return false;
-      return true;
-    },
-    hasNext() {
-      return true;
-      if (!this.factor.code) return false;
-      if (this.factor.code == this.factorCode - 1) return false;
-      if (!this.id) return false;
-      return true;
-    },
-    hasPrev() {
-      return true;
-      if (this.factorCode == 1) return false;
-      if (this.factor.code == 1) return false;
-      return true;
-    },
-    hasLast() {
-      return true;
-      if (this.factorCode == 1) return false;
-      return true;
-    },
-    canSubmit() {
-      return true;
-    },
-    canDelete() {
-      if (!this.factor.id) return false;
-      this.factor.items.forEach(item => {
-        if (!item.is_editable) {
-          return false;
-        }
-      });
-    },
-    transactionType() {
-      let label;
-      let name;
-      if (["buy", "backFromSale"].includes(this.factorType)) {
-        name = "payment";
-        label = "پرداخت ";
-      } else {
-        name = "receive";
-        label = "دریافت ";
-      }
-      return {
-        label,
-        name
-      };
-    }
   },
   watch: {
     $route() {
