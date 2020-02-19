@@ -142,14 +142,14 @@ export default {
           label: "حداقل فروش",
           type: "input",
           inputType: "text",
-          model: "min_sale",
+          model: "minSale",
           styleClasses: "col-sm-12 col-lg-4",
         },
         {
           label: "حداکثر فروش",
           type: "input",
           inputType: "text",
-          model: "max_sale",
+          model: "maxSale",
           styleClasses: "col-sm-12 col-lg-4",
         },
 
@@ -158,14 +158,14 @@ export default {
           label: "حداقل موجودی",
           type: "input",
           inputType: "text",
-          model: "min_inventroy",
+          model: "minInventory",
           styleClasses: "col-sm-12 col-lg-4",
         },
         {
           label: "حداکثر موجودی",
           type: "input",
           inputType: "text",
-          model: "max_inventroy",
+          model: "maxInventory",
           styleClasses: "col-sm-12 col-lg-4",
         },
         {
