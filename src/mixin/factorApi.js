@@ -192,6 +192,13 @@ export default {
       });
       window.open(routeData.href, "_blank");
     },
+    reverseType(factorType) {
+      let factorReverseTypes = {
+        sale: "backFromSale",
+        buy: "backFromBuy"
+      }
+      return factorReverseTypes[factorType]
+    }
   },
   computed: {
     ...mapState({

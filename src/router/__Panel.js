@@ -46,7 +46,7 @@ import FactorExpenses from '@/components/panel/factor/Expenses';
 
 import TransferForm from '@/components/panel/transfer/Form';
 
-import FirstPeriodInventory from  '@/components/panel/firstPeriodInventory/FirstPeriodInventory';
+import FirstPeriodInventory from '@/components/panel/firstPeriodInventory/FirstPeriodInventory';
 
 import Cheque from '@/components/panel/cheque/Cheque';
 import Chequebook from '@/components/panel/cheque/Chequebook';
@@ -63,7 +63,7 @@ export default [{
       name: 'Home',
       path: 'home',
       component: Home,
-  },{
+    }, {
       name: 'Company',
       path: 'company',
       component: Company,
@@ -210,8 +210,14 @@ export default [{
       children: [{
           name: 'FactorForm',
           path: 'form/:factorType/:id?',
-          props: true,
-          component: FactorForm
+          component: FactorForm,
+          props: route => {
+            return {
+              ...route.query,
+              ...route.params
+            }
+
+          }
         },
         {
           name: 'FactorExpenses',

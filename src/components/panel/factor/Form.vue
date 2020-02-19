@@ -9,6 +9,17 @@
             :ListRouteParams="{form: 'factor', type: factorType}"
             @clearForm="clearFactor(true)"
           >
+            <router-link
+              v-if="id && ['buy', 'sale'].includes(factorType)"
+              class="btn btn-info"
+              :to="{
+              name: 'FactorForm',
+              params: { factorType:reverseType(factorType)},
+              query: {fromId: id}}"
+            >
+              ثبت فاکتور برگشت از
+              <span v-html="factorLabel"></span>
+            </router-link>
             <router-link class="btn btn-info" :to="{name: 'CreatePersonAccounts'}">تعریف حساب اشخاص</router-link>
             <template v-if="id">
               <button class="btn btn-info" data-toggle="modal" data-target="#exports-modal">خروجی</button>
@@ -667,7 +678,17 @@ import mtime from "@/components/mcomponents/cleave/Time";
 export default {
   name: "Form",
   components: { money, date, mtime },
-  props: ["factorType", "id"],
+  props: {
+    factorType: {
+      required: true
+    },
+    id: {
+      default: false
+    },
+    fromId: {
+      default: null
+    }
+  },
   mixins: [formsMixin, accountApiMixin, wareApiMixin, factorApiMixin],
   data() {
     return {
@@ -712,6 +733,8 @@ export default {
       this.getFactorExpenses();
       if (this.id) {
         this.getFactor(this.id);
+      } else if (this.fromId) {
+        this.getFactor(this.fromId);
       }
     },
     initForm() {
@@ -792,17 +815,27 @@ export default {
       this.itemsToDelete = [];
       this.rows = factor.items;
       this.rows.push(this.copy(this.rowTemplate));
-      this.setFactorLabel(factor.type);
 
-      if (changeRoute) {
-        this.makeFormUneditable();
-        this.$router.push({
-          name: "FactorForm",
-          params: {
-            id: factor.id,
-            factorType: factor.type
-          }
+      if (this.fromId && !changeRoute) {
+        delete this.factor.id;
+        this.rows.map(row => {
+          if (row.id) delete row.id;
         });
+        this.factor.expenses.map(expense => {
+          if (expense.id) delete expense.id;
+        });
+      } else {
+        this.setFactorLabel(factor.type);
+        if (changeRoute) {
+          this.makeFormUneditable();
+          this.$router.push({
+            name: "FactorForm",
+            params: {
+              id: factor.id,
+              factorType: factor.type
+            }
+          });
+        }
       }
     },
     deleteItemRow(index) {
