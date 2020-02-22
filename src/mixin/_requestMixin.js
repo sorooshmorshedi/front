@@ -12,9 +12,8 @@ export default {
     request(options) {
 
       this.$store.commit('incrementOGR');
-      let headers = {
-        'Confirmed': true
-      };
+
+      let headers = {};
 
       this.appendToken(headers);
 

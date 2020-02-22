@@ -7,6 +7,8 @@ export default new Vuex.Store({
   state: {
     user: {},
     OGR: 0, //on going requests
+    now: null,
+    timeInterval: null,
     accounts: {
       accounts: [],
       floatAccountGroups: [],
@@ -42,6 +44,11 @@ export default new Vuex.Store({
     },
     decrementOGR(state) {
       state.OGR--;
+    },
+    setTime(state, time){
+      state.now = time;
+      state.timeInterval && clearInterval(state.timeInterval)
+      state.timeInterval = setInterval(() => state.now.add(1, 'second'), 1000)
     },
     setUser(state, user) {
       state.user = user;

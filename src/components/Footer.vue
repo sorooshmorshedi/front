@@ -1,13 +1,14 @@
 <template>
   <footer class="rtl d-print-none" v-if="user.id">
-    <div class="row ">
+    <div class="row">
       <div class="col-sm-4">
-        نام کاربری: <span>{{ user.username }}</span>
+        نام کاربری:
+        <span>{{ user.username }}</span>
       </div>
-      <div class="col-sm-4">
-      </div>
-      <div class="col-sm-4 d-none d-sm-inline-block text-left" dir="ltr" >
-        ساعت و تاریخ روز: <span> {{ footerNow}} </span>
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4 d-none d-sm-inline-block text-left" dir="ltr">
+        ساعت و تاریخ روز:
+        <span>{{ footerTime }}</span>
       </div>
     </div>
   </footer>
@@ -18,14 +19,21 @@ import moment from "moment-jalaali";
 export default {
   name: "Footer",
   data() {
-    return {};
+    return {
+      footerTime: ""
+    };
   },
-  computed: {
-    footerNow(){
-      return moment().format('jYYYY/jMM/jDD HH:mm')
+  mounted() {
+    this.updateFooterTime();
+    setInterval(() => {
+      this.updateFooterTime();
+    }, 1000);
+  },
+  methods: {
+    updateFooterTime() {
+      this.footerTime = this.now.format("jYYYY/jMM/jDD HH:mm:ss");
     }
   }
-
 };
 </script>
 

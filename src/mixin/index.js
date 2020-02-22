@@ -190,7 +190,8 @@ Vue.mixin({
     ...mapState({
       user: state => state.user,
       permissions: state => state.user.permissions,
-      OGR: state => state.OGR
+      OGR: state => state.OGR,
+      now: state => state.now
     }),
     isDev() {
       return process.env.NODE_ENV === 'development';
