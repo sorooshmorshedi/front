@@ -1,13 +1,15 @@
 import Vue from 'vue';
-import axios from 'axios';
 
 import moment from 'moment-jalaali';
+
+import RequestMixin from "./_requestMixin.js";
 
 import {
   mapState
 } from 'vuex'
 
 Vue.mixin({
+  mixins: [RequestMixin],
   data() {
     return {
       token: null,
@@ -27,65 +29,22 @@ Vue.mixin({
 
   },
   methods: {
-    request(options) {
-      // this.log('request through mixin');
-      this.$store.commit('incrementOGR');
-      let headers = {};
 
-      if (!this.token) console.warn('user is not login');
-      else headers["authorization"] = "JWT " + this.token;
-
-      if (!options.method) {
-        options.method = 'get';
+    askConfirmations(confirmations) {
+      /*
+      # Structure
+      confirmation = {
+        text: '',
       }
-      return axios.request({
-          headers: headers,
-          url: options.url,
-          method: options.method,
-          data: options.data,
-          params: options.params,
-        })
-        .then((res) => {
-          this.$store.commit('decrementOGR');
-          try {
-            let data = res.data;
-            if (data.token) {
-              localStorage.setItem('token', data.token);
-              this.token = data.token;
-            }
-            options.success(res.data);
-          } catch (error) {
-            console.error('Error in then: ', error);
-          }
-        })
-        .catch((error) => {
-          this.$store.commit('decrementOGR');
-          this.log(error);
-          if (!error.response) {
-            this.warn('NO RESPONSE FROM SERVER');
-            this.notify('خطا در برقراری ارتباط با سرور', 'danger');
-            return;
-          }
-          if (error.response.status == 401) {
-            if (this.$router.currentRoute.name == 'Login') return;
-            this.notify('شما از سامانه خارج شده اید', 'warning');
-            this.$router.push({
-              name: "Login",
-              params: {
-                cb: this.$router.currentRoute.name,
-                cbp: this.$router.currentRoute.params
-              }
-            });
-            return;
-          }
-          if (error.response && error.response.status == 400) {
-            let errors = error.response.data;
-            Object.keys(errors).forEach(err => {
-              this.notify(err + ': ' + errors[err], 'danger');
-            });
-          }
-          options.error && options.error(error);
-        });
+      */
+
+      for (const confirmation of confirmations) {
+        let confirmed = confirm(confirmation.text);
+        if (!confirmed) return false;
+      }
+
+      return true
+
     },
     initTooltips() {
       console.log('init tooltips');
@@ -134,13 +93,6 @@ Vue.mixin({
           .offset()
           .top - $('selector')
           .height() - 50);
-    },
-    endpoint(url) {
-      // return "http://api.e7.mmdmst.ir/" + url;
-      if (this.isDev)
-        return "http://localhost:8001/" + url;
-      // else return "http://api.sh.mmdmst.ir/" + url;
-      else return "http://api." + window.location.hostname + "/" + url;
     },
     setToken(token) {
       localStorage.setItem('token', token);
