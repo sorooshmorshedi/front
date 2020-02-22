@@ -52,7 +52,7 @@ export default {
       }, 100);
     },
     setDefaultValue(){
-      let now = moment().format("HHmm");
+      let now = this.now.format("HHmm");
       this.cleave.setRawValue(now);
       this.change();
     }

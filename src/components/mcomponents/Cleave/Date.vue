@@ -53,7 +53,7 @@ export default {
       }, 100);
     },
     setDefaultValue() {
-      let now = moment()
+      let now = this.now
         .format("jYYYY-jMM-jDD")
         .split("-")
         .join("");
