@@ -182,3 +182,12 @@ button:focus {
 .label-margin {
   margin-top: 30px
 }
+
+label,
+th {
+  &.required::before {
+    content: "*";
+    padding-left: 4px;
+    color: #f44336;
+  }
+}

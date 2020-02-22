@@ -62,7 +62,7 @@
                   </div>
                 </div>
                 <div class="form-group col-lg-2 col-sm-2">
-                  <label>تاریخ فاکتور</label>
+                  <label class="required">تاریخ فاکتور</label>
                   <date
                     class="form-control"
                     v-model="factor.date"
@@ -71,7 +71,7 @@
                   />
                 </div>
                 <div class="form-group col-lg-2 col-sm-2">
-                  <label>ساعت فاکتور</label>
+                  <label class="required">ساعت فاکتور</label>
                   <mtime
                     class="form-control"
                     v-model="factor.time"
@@ -115,7 +115,7 @@
                   </div>
                 </div>
                 <div class="form-group col-lg-4 col-sm-4">
-                  <label>{{ accountName }}</label>
+                  <label class="required">{{ accountName }}</label>
                   <multiselect
                     dir="rtl"
                     :options="accountsSelectValues.persons"
@@ -166,11 +166,11 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>شرح</th>
+                      <th class="required">شرح</th>
                       <th>انبار</th>
-                      <th>تعداد</th>
+                      <th class="required">تعداد</th>
                       <th>واحد</th>
-                      <th>قیمت واحد</th>
+                      <th class="required">قیمت واحد</th>
                       <th>جمع</th>
                       <th>تخفیف (مبلغ)</th>
                       <th>تخفیف (درصد)</th>
@@ -485,9 +485,9 @@
                       <thead>
                         <tr>
                           <th>#</th>
-                          <th>نام هزینه ثابت</th>
-                          <th>مبلغ</th>
-                          <th>پرداخت کننده</th>
+                          <th class="required">نام هزینه ثابت</th>
+                          <th class="required">مبلغ</th>
+                          <th class="required">پرداخت کننده</th>
                           <th>حساب شناور</th>
                           <th>توضیحات</th>
                           <th></th>

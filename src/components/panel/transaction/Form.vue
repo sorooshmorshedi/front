@@ -28,7 +28,7 @@
                 <div class="form-group col-lg-5 col-sm-3">
                   <div class="row">
                     <div class="col-lg-8">
-                      <label>کد - نام مشتری</label>
+                      <label class="required">کد - نام مشتری</label>
                       <multiselect
                         dir="rtl"
                         :options="transactionAccounts"
@@ -62,7 +62,7 @@
                   </template>
                 </div>
                 <div class="form-group col-lg-3 col-sm-2">
-                  <label>تاریخ</label>
+                  <label class="required">تاریخ</label>
                   <date
                     class="form-control"
                     v-model="transaction.date"
@@ -118,12 +118,12 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th style="width: 200px">نوع {{ type.label }}</th>
+                      <th class="required" style="width: 200px">نوع {{ type.label }}</th>
                       <th>نام حساب</th>
                       <th>حساب شناور</th>
-                      <th>مبلغ</th>
+                      <th class="required">مبلغ</th>
                       <th>شماره مستند</th>
-                      <th>تاریخ {{ type.label }}</th>
+                      <th class="required">تاریخ {{ type.label }}</th>
                       <th>سررسید</th>
                       <th>نام بانک</th>
                       <th>توضیح</th>
