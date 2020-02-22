@@ -49,6 +49,7 @@ export default {
           password: this.password
         },
         success: data => {
+          this.setToken(data.token);
           this.$router.push({
             name: this.callback,
             params: this.callbackParams
