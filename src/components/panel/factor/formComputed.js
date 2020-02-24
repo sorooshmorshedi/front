@@ -34,12 +34,19 @@ export default {
         url += `&${key}=${value}`;
       });
 
-      let html = url.replace("TEMP", "html");
-      let pdf = url.replace("TEMP", "pdf");
+      let factor = {
+        'html': url.replace("TEMP", "html"),
+        'pdf': url.replace("TEMP", "pdf")
+      }
+
+      let receipt = {
+        'html': factor.html + "&hide_prices=true",
+        'pdf': factor.pdf + "&hide_prices=true"
+      }
 
       return {
-        html,
-        pdf
+        factor,
+        receipt,
       };
     },
     sum() {
@@ -151,6 +158,16 @@ export default {
     },
     isBack() {
       return this.factorType.includes('back')
+    },
+    isBackFromBuy() {
+      return this.factorType == 'backFromBuy'
+    },
+    isBackFromSale() {
+      return this.factorType == 'backFromSale'
+    },
+    receiptLabel() {
+      if (this.isSale || this.isBackFromBuy) return 'حواله'
+      else return 'رسید'
     }
   },
 }

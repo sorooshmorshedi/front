@@ -654,16 +654,28 @@
               <div class="col-12 pt-3 text-center">
                 <a
                   class="btn btn-info"
-                  :href="exportLinks.html"
+                  :href="exportLinks.factor.html"
                   target="_blank"
                   rel="noopener noreferrer"
-                >چاپ</a>
+                >چاپ فاکتور</a>
                 <a
                   class="btn btn-info"
-                  :href="exportLinks.pdf"
+                  :href="exportLinks.factor.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                >PDF</a>
+                >PDF فاکتور</a>
+                <a
+                  class="btn btn-info"
+                  :href="exportLinks.receipt.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >چاپ {{receiptLabel}}</a>
+                <a
+                  class="btn btn-info"
+                  :href="exportLinks.receipt.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >PDF {{receiptLabel}}</a>
               </div>
             </div>
           </div>
