@@ -477,7 +477,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="container-fluid">
+            <div class="container">
               <div class="row">
                 <div class="col-12">
                   <div class="table-responsive-lg">

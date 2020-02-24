@@ -42,7 +42,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="container-fluid">
+            <div class="container">
               <div class="row">
                 <div class="form-group col-12">
                   <label for="">نام</label>
