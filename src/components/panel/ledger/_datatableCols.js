@@ -46,23 +46,15 @@ export default {
     },
     {
       th: "بدهکار",
-      td: "value",
+      td: "bed",
       type: "money",
       sortable: false,
-      render(item) {
-        if (item.valueType == 'bed') return item.value;
-        return 0;
-      }
     },
     {
       th: "بستانکار",
-      td: "value",
+      td: "bes",
       type: "money",
       sortable: false,
-      render(item) {
-        if (item.valueType == 'bes') return item.value;
-        return 0;
-      }
     },
     {
       th: "مانده",
@@ -70,34 +62,7 @@ export default {
       type: "money",
       sortable: false,
       render(item, items, oldItems) {
-        let remain, remainType, lastItem = null;
-        if (items.indexOf(item) == 0) {
-          if (oldItems.length != 0) {
-            lastItem = oldItems[oldItems.length - 1];
-          }
-        } else {
-          lastItem = items[items.indexOf(item) - 1];
-        }
-        if (lastItem) {
-          remain = lastItem.remain;
-          remainType = lastItem.remainType;
-        } else {
-          remain = 0;
-          remainType = item.valueType;
-        }
-
-        if (item.valueType == remainType) item.remain = remain + +item.value;
-        else item.remain = remain - +item.value;
-
-        if (item.remain < 0) {
-          item.remain = -item.remain;
-          item.remainType = remainType == 'bed' ? 'bes' : 'bed';
-        } else {
-          item.remainType = remainType;
-        }
-
-
-        return item.remain;
+        return item.bed - item.bes;
       },
     },
     {
@@ -106,9 +71,10 @@ export default {
       type: "string",
       sortable: false,
       render(item) {
-        if (item.remain == 0) return '';
-        if (item.remainType == 'bed') return 'بدهکار';
-        if (item.remainType == 'bes') return 'بستانکار';
+        let diff = item.bed > item.bes;
+        if (diff == 0) return '';
+        if (diff > 0) return 'بدهکار';
+        if (diff < 0) return 'بستانکار';
         return 'error';
       }
     },

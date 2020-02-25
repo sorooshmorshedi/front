@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     change() {
-      let value = this.cleave.getRawValue();
+      let value = Number(this.cleave.getRawValue());
       this.$emit("input", value);
     }
   }

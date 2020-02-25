@@ -47,61 +47,13 @@ export default {
     },
     {
       th: "بدهکار",
-      td: "value",
+      td: "bed",
       type: "money",
-      render(item) {
-        if (item.valueType == 'bed') return item.value;
-        return 0;
-      },
-      order(oldOrder) {
-        switch (oldOrder) {
-          case 'valueType,-value':
-            return 'valueType,value'
-          case 'valueType,value':
-            return ''
-          default:
-            return 'valueType,-value'
-        }
-      },
-      orderClass(order) {
-        switch (order) {
-          case 'valueType,-value':
-            return 'fa-sort-up'
-          case 'valueType,value':
-            return 'fa-sort-down'
-          default:
-            return 'fa-sort'
-        }
-      }
     },
     {
       th: "بستانکار",
-      td: "value",
+      td: "bes",
       type: "money",
-      render(item) {
-        if (item.valueType == 'bes') return item.value;
-        return 0;
-      },
-      order(oldOrder) {
-        switch (oldOrder) {
-          case '-valueType,-value':
-            return '-valueType,value'
-          case '-valueType,value':
-            return ''
-          default:
-            return '-valueType,-value'
-        }
-      },
-      orderClass(order) {
-        switch (order) {
-          case '-valueType,-value':
-            return 'fa-sort-up'
-          case '-valueType,value':
-            return 'fa-sort-down'
-          default:
-            return 'fa-sort'
-        }
-      }
     },
   ],
 }

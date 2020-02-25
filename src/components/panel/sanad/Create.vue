@@ -272,8 +272,8 @@ export default {
       },
       rows: [
         {
-          bed: "",
-          bes: ""
+          bed: 0,
+          bes: 0
         }
       ],
       itemsToDelete: []
@@ -327,8 +327,8 @@ export default {
         let row = this.rows[this.rows.length - 1];
         if (row && row.account) {
           this.rows.push({
-            bed: "",
-            bes: ""
+            bed: 0,
+            bes: 0
           });
         }
       },
@@ -375,15 +375,10 @@ export default {
       this.itemsToDelete = [];
       this.rows = [];
       sanad.items.forEach(item => {
-        let row = {
-          ...item,
-          bed: "",
-          bes: ""
-        };
-        row[item.valueType] = item.value;
+        let row = { ...item };
         this.rows.push(row);
       });
-      this.rows.push({ bed: "", bes: "" });
+      this.rows.push({ bed: 0, bes: 0 });
       $("#sanad-selection-modal").modal("hide");
     },
     copySanadToNewSanad() {
@@ -475,13 +470,6 @@ export default {
         let item = this.copy(row);
         item = this.extractIds(item);
 
-        if (row.bed) {
-          item.value = row.bed;
-          item.valueType = "bed";
-        } else {
-          item.value = row.bes;
-          item.valueType = "bes";
-        }
         if (item.id) {
           updatedItems.push(item);
         } else {
