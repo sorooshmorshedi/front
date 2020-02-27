@@ -86,7 +86,7 @@ export default {
     getCheques(force = false) {
       if (!force && this.cheques.length) return;
       return this.request({
-        url: this.endpoint('cheques/cheques/'),
+        url: this.endpoint('cheques/receivedCheques/'),
         method: 'get',
         success: data => {
           this.$store.commit('setCheques', {
@@ -97,7 +97,7 @@ export default {
     },
     deleteCheque(cheque) {
       this.request({
-        url: this.endpoint('cheques/cheques/' + cheque.id + '/'),
+        url: this.endpoint('cheques/receivedCheques/' + cheque.id + '/'),
         method: 'delete',
         success: data => {
           this.getCheques(true);

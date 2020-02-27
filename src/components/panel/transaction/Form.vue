@@ -1024,7 +1024,7 @@ export default {
     },
     storeCheque(item) {
       return this.request({
-        url: this.endpoint("cheques/cheques/"),
+        url: this.endpoint("cheques/receivedCheques/"),
         data: {
           ...this.extractIds(item.cheque),
           has_transaction: true

@@ -191,7 +191,7 @@ export default {
     },
     storeCheque() {
       this.request({
-        url: this.endpoint("cheques/cheques/"),
+        url: this.endpoint("cheques/receivedCheques/"),
         data: this.extractIds(this.cheque),
         method: "post",
         success: data => {
