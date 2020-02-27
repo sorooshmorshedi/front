@@ -125,12 +125,18 @@ export default {
           label: "کد دسته بندی",
           type: "vueMultiSelect",
           model: "category",
-          styleClasses: "col-sm-12 col-lg-12",
+          styleClasses: "col-sm-12 col-lg-8",
           selectOptions: {
             label: 'title',
             trackBy: 'id',
           },
           values: [],
+        },
+        {
+          label: "کالا خدماتی می باشد",
+          type: "checkbox",
+          model: "isService",
+          styleClasses: "col-sm-12 col-lg-4",
         },
         {
           label: "کد کالا",
@@ -173,6 +179,7 @@ export default {
           label: "نوع قیمت گذری",
           type: "vueMultiSelect",
           model: "pricingType",
+          id: "pricingType",
           styleClasses: "col-sm-12 col-lg-4",
           selectOptions: {
             label: 'name',

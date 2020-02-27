@@ -14,9 +14,10 @@ export default {
       ware: {
         code: '',
         parent: {},
-        pricingType: {},
+        pricingType: null,
         unit: {},
-        warehouse: {},
+        warehouse: null,
+        isService: false,
       },
       wareLevel: {
         code: '',
@@ -44,6 +45,20 @@ export default {
     },
     'ware.category': function () {
       this.setWareCode();
+    },
+    'ware.isService': function () {
+      let schema;
+      if (this.mode == 'create') schema = this.createSchema;
+      else schema = this.editSchema;
+
+      let models = ['pricingType', 'warehouse', 'barcode', 'minInventory', 'maxInventory', 'supplier']
+      let fields = schema[3].groups[0].fields;
+      let disabled = this.ware.isService;
+      for (const model of models) {
+        let field = fields.filter(f => f.model == model)[0];
+        if (disabled) field.disabled = true;
+        else delete field.disabled;
+      }
     }
   },
   methods: {
@@ -149,9 +164,9 @@ export default {
       this.ware = {
         code: '',
         parent: null,
-        pricingType: {},
+        pricingType: null,
         unit: {},
-        warehouse: {},
+        warehouse: null,
       };
       this.wareLevel = {
         code: '',
@@ -167,6 +182,5 @@ export default {
       // });
     },
   },
-  computed: {
-  }
+  computed: {}
 }
