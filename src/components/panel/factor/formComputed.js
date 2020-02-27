@@ -44,9 +44,15 @@ export default {
         'pdf': factor.pdf + "&hide_prices=true"
       }
 
+      let preFactor = {
+        'html': factor.html + "&pre_factor=true",
+        'pdf': factor.pdf + "&pre_factor=true"
+      }
+
       return {
         factor,
         receipt,
+        preFactor,
       };
     },
     sum() {

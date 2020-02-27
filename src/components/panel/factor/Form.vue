@@ -676,6 +676,18 @@
                   target="_blank"
                   rel="noopener noreferrer"
                 >PDF {{receiptLabel}}</a>
+                <a
+                  class="btn btn-info"
+                  :href="exportLinks.preFactor.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >چاپ پیش فاکتور</a>
+                <a
+                  class="btn btn-info"
+                  :href="exportLinks.preFactor.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >PDF پیش فاکتور</a>
               </div>
             </div>
           </div>
