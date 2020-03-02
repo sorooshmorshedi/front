@@ -28,10 +28,6 @@ export default new Vuex.Store({
       sanads: [],
       transactions: []
     },
-    cheques: {
-      chequebooks: [],
-      cheques: [],
-    },
     factors: {
       factors: [],
       factorExpenses: [],
@@ -71,10 +67,6 @@ export default new Vuex.Store({
     setSanads(state, sanads) {
       sanads.sanads && (state.sanads.sanads = sanads.sanads);
       sanads.transactions && (state.sanads.transactions = sanads.transactions);
-    },
-    setCheques(state, cheques) {
-      cheques.chequebooks && (state.cheques.chequebooks = cheques.chequebooks);
-      cheques.cheques && (state.cheques.cheques = cheques.cheques);
     },
     setFactors(state, factors) {
       factors.factorExpenses && (state.factors.factorExpenses = factors.factorExpenses);

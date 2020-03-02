@@ -24,15 +24,27 @@ import datatable from "@/components/mcomponents/datatable/Server";
 import formOptions from "./formOptions";
 export default {
   name: "List",
-  props: ["form", "type"],
+  props: {
+    form: { required: true },
+    type: {},
+    filters: {
+      default() {
+        return JSON.stringify({});
+      }
+    }
+  },
   components: { datatable },
   data() {
     return {
       formOptions: formOptions,
       options: {},
-      showTable: false,
-      defaultFilters: {}
+      showTable: false
     };
+  },
+  computed: {
+    defaultFilters() {
+      return JSON.parse(this.filters);
+    }
   },
   created() {
     this.init();
@@ -59,13 +71,13 @@ export default {
         case "received":
           this.options.label = "چک های دریافتی";
           this.defaultFilters = {
-            receved_or_paid: "r"
+            received_or_paid: "r"
           };
           break;
         case "paid":
           this.options.label = "چک های پرداختی";
           this.defaultFilters = {
-            receved_or_paid: "p"
+            received_or_paid: "p"
           };
           break;
         default:

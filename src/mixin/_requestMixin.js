@@ -11,11 +11,11 @@ export default {
     },
     request(options) {
 
-      this.$store.commit('incrementOGR');
+      if (options.loading != false) this.$store.commit('incrementOGR');
 
       let headers = {};
 
-      this.appendToken(headers);
+      if (options.token != false) this.appendToken(headers);
 
       if (!options.method) {
         options.method = 'get';
@@ -38,6 +38,7 @@ export default {
           options.success(res.data);
         })
         .catch((error) => {
+          console.log(error);
           this.$store.commit('decrementOGR');
           if (error.response) {
             let statusCode = error.response.status
@@ -46,7 +47,7 @@ export default {
             else if (statusCode == 406) this.handle_406(error, options);
             options.error && options.error(error);
           } else {
-            this.handle_noResponse(error);
+            this.handle_noResponse(error, options);
           }
         });
     },
@@ -86,8 +87,8 @@ export default {
       }
       this.request(options);
     },
-    handle_noResponse(error) {
-      console.warn('NO RESPONSE FROM SERVER');
+    handle_noResponse(error, options) {
+      console.warn('NO RESPONSE FROM SERVER: ', options.url);
       this.notify('خطا در برقراری ارتباط با سرور', 'danger');
       return;
 

@@ -162,8 +162,15 @@
             <div class="dropdown-submenu">
               <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">دفتر چک</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{name:'Chequebook'}">چک های پرداختنی</router-link>
-                <router-link class="dropdown-item" :to="{name:'ReceivedCheques'}">چک های دریافتنی</router-link>
+                <router-link class="dropdown-item" :to="{name:'ChequebookForm'}">ثبت دفتر چک</router-link>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'ChequeForm', params: {receivedOrPaid: 'p'}}"
+                >ثبت چک پرداختی</router-link>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'ChequeForm', params: {receivedOrPaid: 'r'}}"
+                >ثبت چک دریافتی</router-link>
               </div>
             </div>
           </div>
@@ -210,7 +217,7 @@
             <router-link
               class="dropdown-item"
               :to="{name:'List', params: {form:'chequebook'}}"
-            >ثبت چک</router-link>
+            >دسته چک ها</router-link>
             <router-link
               class="dropdown-item"
               :to="{name:'List', params: {form:'cheque', type: 'received'}}"

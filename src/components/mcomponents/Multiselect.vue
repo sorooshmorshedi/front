@@ -1,12 +1,13 @@
 <template>
   <div class="m-multiselect-container" :class="containerClasses">
     <div class="addon-btn-wrapper">
-      <slot name="addonBtn" />
+      <slot name="addonBtn"/>
     </div>
     <div class="select-container">
       <vue-multiselect
         :multiple="multiple"
         :disabled="disabled"
+        :internalSearch="internalSearch"
         select-label
         select-group-label
         selected-label
@@ -20,6 +21,7 @@
         :label="label"
         @input="change"
         @select="select"
+        @search-change="searchChange"
       >
         <span slot="noResult">نتیجه ای یافت نشد</span>
         <span slot="noOptions">لیست خالی است</span>
@@ -40,7 +42,8 @@ export default {
     "label",
     "multiple",
     "disabled",
-    "hasAddonBtn"
+    "hasAddonBtn",
+    "internalSearch"
   ],
   data() {
     return {
@@ -69,6 +72,9 @@ export default {
     },
     select(selectedOption, id) {
       this.$emit("select", selectedOption, id);
+    },
+    searchChange(value) {
+      this.$emit("search-change", value);
     }
   },
   computed: {

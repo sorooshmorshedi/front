@@ -20,92 +20,99 @@ export default [{
   path: '/report',
   component: Panel,
   children: [{
-    name: 'List',
-    path: 'lists/:form/:type?',
-    component: List,
-    props: true,
-  },
-  {
-    name: 'BalanceReport',
-    path: 'balance',
-    component: Balance,
-  },
-  {
-    name: 'FloatBalanceReport',
-    path: 'balance/float',
-    component: FloatBalance,
-  },
-  {
-    name: 'LedgerReport',
-    path: 'ledger',
-    component: Ledger,
-    props: route => {
-      return {
-        ledgerAccountIds: route.query.accs
+      name: 'List',
+      path: 'lists/:form/:type?',
+      component: List,
+      props: (route) => {
+        console.log(route.query);
+        return {
+          ...route.params,
+          ...route.query
+        }
+      },
+    },
+    {
+      name: 'BalanceReport',
+      path: 'balance',
+      component: Balance,
+    },
+    {
+      name: 'FloatBalanceReport',
+      path: 'balance/float',
+      component: FloatBalance,
+    },
+    {
+      name: 'LedgerReport',
+      path: 'ledger',
+      component: Ledger,
+      props: route => {
+        return {
+          ledgerAccountIds: route.query.accs
+        }
+      }
+    },
+    {
+      name: 'BillReport',
+      path: 'bill/:accountId?',
+      component: Bill
+    },
+    {
+      name: 'DetailedWareInventoryReport',
+      path: 'inventory/ware/detailed',
+      component: DetailedWareInventory,
+      props: route => {
+        return {
+          wareId: route.query.wareId
+        }
+      }
+    },
+    {
+      name: 'DetailedWarehouseInventoryReport',
+      path: 'inventory/warehouse/detailed',
+      component: DetailedWarehouseInventory,
+      props: route => {
+        return {
+          warehouseId: route.query.warehouseId
+        }
+      }
+    },
+    {
+      name: 'AllWaresInventoryReport',
+      path: 'inventory/ware/all',
+      component: AllWaresInventory,
+    },
+    {
+      name: 'AllWarehousesInventoryReport',
+      path: 'inventory/warehouse/all',
+      component: AllWarehousesInventory,
+    },
+    {
+      name: 'JournalReport',
+      path: 'journal',
+      component: Journal,
+    },
+    {
+      name: 'IncomeStatementReport',
+      path: 'incomeStatement/:detailed?',
+      component: IncomeStatement,
+      props: true,
+    },
+    {
+      name: 'BalanceSheetReport',
+      path: 'balanceSheet/:detailed?',
+      component: BalanceSheet,
+      props: true,
+    },
+    {
+      name: 'BuySaleReport',
+      path: 'buySaleReport/:type',
+      component: BuySaleReport,
+      props: route => {
+        return {
+          wareId: route.query.wareId,
+          ...route.params
+        }
       }
     }
-  },
-  {
-    name: 'BillReport',
-    path: 'bill/:accountId?',
-    component: Bill
-  },
-  {
-    name: 'DetailedWareInventoryReport',
-    path: 'inventory/ware/detailed',
-    component: DetailedWareInventory,
-    props: route => {
-      return {
-        wareId: route.query.wareId
-      }
-    }
-  },
-  {
-    name: 'DetailedWarehouseInventoryReport',
-    path: 'inventory/warehouse/detailed',
-    component: DetailedWarehouseInventory,
-    props: route => {
-      return {
-        warehouseId: route.query.warehouseId
-      }
-    }
-  },
-  {
-    name: 'AllWaresInventoryReport',
-    path: 'inventory/ware/all',
-    component: AllWaresInventory,
-  },
-  {
-    name: 'AllWarehousesInventoryReport',
-    path: 'inventory/warehouse/all',
-    component: AllWarehousesInventory,
-  },
-  {
-    name: 'JournalReport',
-    path: 'journal',
-    component: Journal,
-  },
-  {
-    name: 'IncomeStatementReport',
-    path: 'incomeStatement/:detailed?',
-    component: IncomeStatement,
-    props: true,
-  },
-  {
-    name: 'BalanceSheetReport',
-    path: 'balanceSheet/:detailed?',
-    component: BalanceSheet,
-    props: true,
-  },
-  {
-    name: 'BuySaleReport',
-    path: 'buySaleReport/:type',
-    component: BuySaleReport,
-    props: route => {
-      return {
-        wareId: route.query.wareId,
-        ...route.params
-      }
-    }
-  }]
+  ]
 }]

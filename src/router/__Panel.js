@@ -48,9 +48,12 @@ import TransferForm from '@/components/panel/transfer/Form';
 
 import FirstPeriodInventory from '@/components/panel/firstPeriodInventory/FirstPeriodInventory';
 
+import Chequebook from '../components/panel/chequebook/Chequebook.vue';
+import ChequebookForm from '../components/panel/chequebook/ChequebookForm.vue';
+
 import Cheque from '@/components/panel/cheque/Cheque';
-import Chequebook from '@/components/panel/cheque/Chequebook';
-import ReceivedCheques from '@/components/panel/cheque/ReceivedCheques';
+import ChequeDetail from '../components/panel/cheque/ChequeDetail.vue';
+import ChequeForm from '../components/panel/cheque/ChequeForm.vue';
 
 import ExportVerifiers from '@/components/panel/exportVerifiers/ExportVerifiers';
 
@@ -243,18 +246,33 @@ export default [{
       path: 'cheque',
       component: Cheque,
       children: [{
-          name: 'Chequebook',
-          path: 'chequebook',
-          component: Chequebook,
+          name: 'ChequeDetail',
+          path: ':id/detail',
+          component: ChequeDetail,
+          props: true,
         },
         {
-          name: 'ReceivedCheques',
-          path: 'receivedCheques',
-          component: ReceivedCheques,
-
-        }
+          name: 'ChequeForm',
+          path: 'form/:receivedOrPaid/:id?',
+          component: ChequeForm,
+          props: true,
+        },
       ]
     },
+    {
+      name: 'Chequebook',
+      path: 'chequebook',
+      component: Chequebook,
+      children: [{
+          name: 'ChequebookForm',
+          path: 'form/:id?',
+          component: ChequebookForm,
+          props: true,
+        },
+
+      ]
+    },
+
     {
       name: 'ExportVerifiers',
       path: 'exportVerifiers',

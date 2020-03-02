@@ -1,5 +1,6 @@
 export default {
   url: "reports/lists/cheques",
+  routerName: 'ChequeDetail',
   cols: [{
       th: "شماره",
       td: "serial",

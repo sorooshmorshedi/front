@@ -347,113 +347,11 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for>سریال چک</label>
-                  <input
-                    v-if="cheque.type == 'received'"
-                    type="number"
-                    class="form-control"
-                    v-model="cheque.serial"
-                  >
-                  <multiselect
-                    v-else
-                    dir="rtl"
-                    label="title"
-                    track-by="id"
-                    :options="chequesSelectValues.cheques.filter(o => o.status == 'blank')"
-                    v-model="cheque"
-                  />
-                </div>
-                <div class="form-group col-12 col-md-6">
-                  <label v-if="cheque.type == 'paid'">دریافت کننده</label>
-                  <label v-else>پرداخت کننده</label>
-                  <multiselect
-                    disabled
-                    dir="rtl"
-                    label="name"
-                    track-by="id"
-                    :options="accountsSelectValues.levels[3]"
-                    :value="transaction.account"
-                  />
-                </div>
-                <div
-                  class="form-group col-12 col-md-6 offset-md-6"
-                  v-if="transaction.account && transaction.account.floatAccountGroup"
-                >
-                  <label for>حساب شناور</label>
-                  <multiselect
-                    disabled
-                    dir="rtl"
-                    label="name"
-                    track-by="id"
-                    :options="transaction.account.floatAccountGroup.floatAccounts"
-                    v-model="transaction.floatAccount"
-                  />
-                </div>
-                <div class="form-group col-12 col-md-6">
-                  <label for>مبلغ</label>
-                  <money class="form-control" v-model="cheque.value"/>
-                </div>
-                <div class="form-group col-12 col-md-3">
-                  <label for>تاریخ سررسید</label>
-                  <date class="form-control" v-model="cheque.due" :default="true"/>
-                </div>
-                <div class="form-group col-12 col-md-3">
-                  <label v-if="cheque.type == 'paid'">تاریخ پرداخت</label>
-                  <label v-else>تاریخ دریافت</label>
-                  <date class="form-control" v-model="cheque.date" :default="true"/>
-                </div>
-                <div class="col-12 col-md-6">
-                  <div class="row">
-                    <div class="form-group col-12" v-if="cheque.type == 'received'">
-                      <label for>نوع چک</label>
-                      <multiselect dir="rtl" label="name" track-by="id" :options="[]"/>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group col-12 col-md-6">
-                  <label>شرح چک</label>
-                  <textarea class="form-control" v-model="cheque.explanation" style="height:126px;"></textarea>
-                </div>
-                <div class="col-12">
-                  <div class="row">
-                    <div class="form-group col-12 col-md-4">
-                      <label for>نام بانک</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="cheque.bankName"
-                        :disabled="cheque.type == 'paid'"
-                      >
-                    </div>
-                    <div class="form-group col-12 col-md-4">
-                      <label for>نام شعبه</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="cheque.branchName"
-                        :disabled="cheque.type == 'paid'"
-                      >
-                    </div>
-                    <div class="form-group col-12 col-md-4">
-                      <label for>شماره حساب چک</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="cheque.accountNumber"
-                        :disabled="cheque.type == 'paid'"
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button @click="addCheque()" type="button" class="btn btn-primary w-100px">تایید</button>
+            <cheque-form
+              :receivedOrPaid="transactionType[0]"
+              :modalMode="true"
+              @submit="addCheque(cheque)"
+            />
           </div>
         </div>
       </div>
@@ -464,15 +362,17 @@
 <script>
 import accountApiMixin from "@/mixin/accountApi";
 import sanadApiMixin from "@/mixin/sanadApi";
-import chequeMixin from "@/mixin/cheque";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import _ from "lodash";
+
+import ChequeForm from "../cheque/ChequeForm.vue";
+
 export default {
   name: "Form",
-  components: { money, date },
-  mixins: [formsMixin, accountApiMixin, sanadApiMixin, chequeMixin],
+  components: { ChequeForm, money, date },
+  mixins: [formsMixin, accountApiMixin, sanadApiMixin],
   props: ["transactionType", "id", "accountId", "factorId"],
   data() {
     return {

@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="modal fade"
-    id="change-cheque-status-modal"
-    tabindex="-1"
-    v-if="cheque && cheque.account"
-  >
+  <div class="modal fade" id="change-cheque-status-modal" tabindex="-1" v-if="cheque">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -18,58 +13,6 @@
         </div>
         <div class="modal-body">
           <div class="container">
-            <div class="title-2">مشخصات چک</div>
-            <div class="row jumbotron">
-              <div class="col-md-6">
-                <label>سریال چک:</label>
-                {{ cheque.serial }}
-              </div>
-              <div class="col-md-6">
-                <label>وضعیت:</label>
-                <span class="status-box">{{ cheque.status | chequeStatuses }}</span>
-              </div>
-              <div class="col-md-6">
-                <label>دریافت کننده:</label>
-                {{ cheque.account.title }}
-              </div>
-              <div class="col-md-6" v-if="cheque.floatAccount">
-                <label>حساب شناور:</label>
-                {{ cheque.floatAccount.name }}
-              </div>
-              <div class="col-md-6">
-                <label>مبلغ:</label>
-                {{ cheque.value | toMoney }}
-              </div>
-              <div class="col-md-6">
-                <label>تاریخ سررسید:</label>
-                {{ cheque.due }}
-              </div>
-              <div class="col-md-6">
-                <label v-if="isPaidCheque">تاریخ پرداخت:</label>
-                <label v-else>تاریخ دریافت:</label>
-                {{ cheque.date }}
-              </div>
-              <div class="col-md-6" v-if="!isPaidCheque">
-                <label>نوع چک:</label>
-              </div>
-              <div class="col-md-6">
-                <label>شرح چک:</label>
-                {{ cheque.explanation }}
-              </div>
-              <div class="col-md-6">
-                <label>نام بانک:</label>
-                {{ cheque.bankName }}
-              </div>
-              <div class="col-md-6">
-                <label>نام شعبه:</label>
-                {{ cheque.branchName }}
-              </div>
-              <div class="col-md-6">
-                <label>شماره حساب چک:</label>
-                {{ cheque.accountNumber }}
-              </div>
-            </div>
-            <hr>
             <div class="row">
               <div class="col-12 col-md-4">
                 <label>تغییر وضعیت به</label>
@@ -130,116 +73,24 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountApi";
-import chequeApiMixin from "@/mixin/chequeApi";
+import getChequeApiMixin from "./getChequeApi.js";
 import sanadApiMixin from "@/mixin/sanadApi";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 export default {
   name: "ChangeChequeStatus",
-  props: ["inuseCheque", "inuseChequebook"],
+  props: {
+    cheque: {
+      required: true
+    }
+  },
   components: { money, date },
-  mixins: [accountApiMixin, chequeApiMixin, sanadApiMixin],
+  mixins: [accountApiMixin, getChequeApiMixin, sanadApiMixin],
   data() {
     return {
-      cheque: null,
-      chequebook: null,
       statusChange: {},
       newStatus: null
     };
-  },
-  created() {
-    this.getAccounts();
-    this.getDefaultAccounts();
-    this.cheque = this.inuseCheque;
-  },
-  mounted() {
-    // $("#change-cheque-status-modal").modal("show");
-  },
-  watch: {
-    inuseCheque() {
-      this.statusChange = {};
-      this.newStatus = null;
-      if (this.inuseCheque) this.cheque = this.inuseCheque;
-      if (this.inuseChequebook) {
-        this.chequebook = this.inuseChequebook;
-        if (this.chequebook.account) {
-          this.statusChange.bankName = this.chequebook.account.bank.name;
-          this.statusChange.branchName = this.chequebook.account.bank.branch;
-          this.statusChange.chequeAccountNumber = this.chequebook.account.bank.accountNumber;
-        }
-      }
-    },
-    newStatus() {
-      if(!this.newStatus) return;
-      let name = this.newStatus.name;
-      let acc = null;
-      if (name == "inFlow") {
-        acc = this.defaultAccounts.filter(
-          o => o.programingName == "inFlowDocuments"
-        )[0];
-      }
-      if (name == "cashed") {
-        acc = this.defaultAccounts.filter(o => o.programingName == "cash")[0];
-      }
-      if (name == "passed" && this.chequebook) {
-        acc = { account: this.chequebook.account };
-      }
-      if (acc) this.statusChange.account = acc.account;
-    }
-  },
-  methods: {
-    submitCheque() {
-      if (this.newStatus.name == "revertInFlow") {
-        this.revertInFlow();
-        return;
-      }
-      let payload = this.extractIds(this.copy(this.statusChange));
-      if (!this.isPaidCheque) {
-        payload.bedAccount = payload.account;
-        payload.bedFloatAccount = payload.floatAccount;
-      } else {
-        payload.besAccount = payload.account;
-        payload.besFloatAccount = payload.floatAccount;
-      }
-      payload.toStatus = this.newStatus.name;
-      payload.cheque = this.cheque.id;
-
-      this.request({
-        url: this.endpoint("cheques/cheques/changeStatus/" + this.cheque.id),
-        data: payload,
-        method: "post",
-        success: data => {
-          $("#change-cheque-status-modal").modal("hide");
-          if (this.isPaidCheque) this.getChequebooks(true);
-          else this.getCheques(true);
-          this.successNotify();
-          this.clearStatusChange();
-        }
-      });
-    },
-    revertInFlow() {
-      this.request({
-        url: this.endpoint(
-          "cheques/cheques/revertInFlowStatus/" + this.cheque.id
-        ),
-        method: "post",
-        data: {
-          date: this.statusChange.date,
-          explanation: this.statusChange.explanation
-        },
-        success: data => {
-          $("#change-cheque-status-modal").modal("hide");
-          if (this.isPaidCheque) this.getChequebooks(true);
-          else this.getCheques(true);
-          this.successNotify();
-        }
-      });
-    },
-    accountLabel(status) {
-      if (status.accountLabel) return status.accountLabel;
-      if (this.isPaidCheque) return status.paidAccountLabel;
-      else return status.receivedAccountLabel;
-    }
   },
   computed: {
     newStatusAccounts() {
@@ -309,19 +160,87 @@ export default {
         res.push(s);
       });
       return res;
+    },
+    chequebook() {
+      return this.cheque.chequebook;
+    },
+    chequeLabel() {
+      return this.isPaidCheque ? "پرداختنی" : "دریافتنی";
+    }
+  },
+  created() {
+    this.getAccounts();
+    this.getDefaultAccounts();
+  },
+  watch: {
+    newStatus() {
+      if (!this.newStatus) return;
+      let name = this.newStatus.name;
+      let acc = null;
+      if (name == "inFlow") {
+        acc = this.defaultAccounts.filter(
+          o => o.programingName == "inFlowDocuments"
+        )[0];
+      }
+      if (name == "cashed") {
+        acc = this.defaultAccounts.filter(o => o.programingName == "cash")[0];
+      }
+      if (name == "passed" && this.chequebook) {
+        acc = { account: this.chequebook.account };
+      }
+      if (acc) this.statusChange.account = acc.account;
+    }
+  },
+  methods: {
+    submitCheque() {
+      if (this.newStatus.name == "revertInFlow") {
+        this.revertInFlow();
+        return;
+      }
+      let payload = this.extractIds(this.copy(this.statusChange));
+      payload.to_status = this.newStatus.name;
+      payload.cheque = this.cheque.id;
+
+      this.request({
+        url: this.endpoint("cheques/cheques/changeStatus/" + this.cheque.id),
+        data: payload,
+        method: "post",
+        success: data => {
+          $("#change-cheque-status-modal").modal("hide");
+          this.$emit("statusChange");
+          this.successNotify();
+          this.clearStatusChange();
+        }
+      });
+    },
+    revertInFlow() {
+      this.request({
+        url: this.endpoint(
+          "cheques/cheques/revertInFlowStatus/" + this.cheque.id
+        ),
+        method: "post",
+        data: {
+          date: this.statusChange.date,
+          explanation: this.statusChange.explanation
+        },
+        success: data => {
+          $("#change-cheque-status-modal").modal("hide");
+          this.successNotify();
+        }
+      });
+    },
+    accountLabel(status) {
+      if (status.accountLabel) return status.accountLabel;
+      if (this.isPaidCheque) return status.paidAccountLabel;
+      else return status.receivedAccountLabel;
+    },
+    clearStatusChange() {
+      this.statusChange = {};
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
-.jumbotron {
-  padding: 15px 10px;
-}
-.status-box {
-  background-color: white;
-  padding: 4px 8px;
-  border-radius: 5px;
-}
 </style>
 

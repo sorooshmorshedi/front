@@ -6,7 +6,7 @@
           <tr>
             <button @click="clearFilters()" class="btn btn-block btn-info">
               خالی کردن
-              <br />فیلتر ها
+              <br>فیلتر ها
             </button>
             <th v-for="(col, i) in filterFields" :key="i">
               <template v-for="(filter, j) in col.filters">
@@ -17,7 +17,7 @@
                   type="number"
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
-                />
+                >
 
                 <input
                   v-if="col.type == 'text'"
@@ -26,7 +26,7 @@
                   type="text"
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
-                />
+                >
 
                 <select
                   v-if="col.type == 'select'"
@@ -96,13 +96,15 @@
             <td v-else>{{ offset+i+1 }}</td>
             <template v-for="(col, j) in cols">
               <td v-if="col.type == 'select'" :key="j">{{ getSelectLabel(item, col)}}</td>
-              <td v-else-if="col.type == 'money' " :key="j" class="ltr">
-                {{ get(item, col) | toMoney }}
-              </td>
+              <td
+                v-else-if="col.type == 'money' "
+                :key="j"
+                class="ltr"
+              >{{ get(item, col) | toMoney }}</td>
               <td v-else :key="j">{{ get(item, col) }}</td>
             </template>
             <td v-if="routerName">
-              <a @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
+              <router-link :to="routerParam(item)">مشاهده جزئیات</router-link>
             </td>
           </tr>
         </tbody>
@@ -363,13 +365,13 @@ export default {
       }
       return _.get(item, col.td, "-");
     },
-    goToDetails(item) {
+    routerParam(item) {
       let params = {
         id: item.id
       };
       if (this.routerDefaultParams)
         params = { ...params, ...this.routerDefaultParams };
-      this.$router.push({ name: this.routerName, params });
+      return { name: this.routerName, params };
     },
     getSelectLabel(item, col) {
       let option = col.options.filter(o => this.get(item, col) == o.value)[0];

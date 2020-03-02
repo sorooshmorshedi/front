@@ -185,13 +185,13 @@
 
           <form-footer
             formName="موجودی اول دوره"
-            :showPagination="false"
+            :showNavigationButtons="false"
             :hasFirst="false"
             :hasLast="false"
             :hasPrev="false"
             :hasNext="false"
             :editable="editable"
-            :hasSubmitAndClearForm="false"
+            :showSubmitAndClearForm="false"
             @validate="validate"
             @edit="makeFormEditable()"
           />

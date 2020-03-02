@@ -38,6 +38,7 @@ export default {
       this.request({
         url: this.endpoint(`home/time`),
         method: "get",
+        token: false,
         success: data => {
           let now = moment(data.time);
           this.$store.commit("setTime", now);

@@ -1,5 +1,6 @@
 export default {
   url: "reports/lists/chequebooks",
+  routerName: 'ChequebookForm',
   cols: [{
       th: "حساب",
       td: "account.name",

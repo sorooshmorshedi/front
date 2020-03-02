@@ -1,7 +1,7 @@
 <template>
   <div class="row rtl d-print-none">
     <div class="col-12 col-md-6">
-      <template v-if="showPagination">
+      <template v-if="showNavigationButtons">
         <button
           @click="goToForm('first')"
           :disabled="!hasFirst"
@@ -32,7 +32,7 @@
       <template v-if="isEditing">
         <slot></slot>
         <button
-          v-if="hasSubmitAndClearForm"
+          v-if="showSubmitAndClearForm"
           @click="validate(true)"
           type="button"
           class="btn submit btn-success foat-left"
@@ -64,7 +64,7 @@ export default {
     formName: {
       required: true
     },
-    showPagination: {
+    showNavigationButtons: {
       default: true
     },
     hasFirst: {
@@ -94,7 +94,7 @@ export default {
     deletable: {
       default: false
     },
-    hasSubmitAndClearForm: {
+    showSubmitAndClearForm: {
       default: true
     }
   },

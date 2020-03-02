@@ -25,7 +25,7 @@
                   type="number"
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
-                />
+                >
 
                 <input
                   v-if="col.type == 'text'"
@@ -34,7 +34,7 @@
                   type="text"
                   :placeholder="filter.label"
                   v-model="filters[filter.model]"
-                />
+                >
 
                 <select
                   v-if="col.type == 'select'"
@@ -117,7 +117,7 @@
               <template v-else>{{ get(item, col.td) }}</template>
             </td>
             <td v-if="routerName">
-              <a @click.prevent="goToDetails(item)" href>مشاهده جزئیات</a>
+              <router-link :to="routerParam(item)">مشاهده جزئیات</router-link>
             </td>
           </tr>
         </tbody>
@@ -313,7 +313,9 @@ export default {
         encoding: "utf8"
       });
 
-      var csvData = new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8;" });
+      var csvData = new Blob(["\ufeff", csv], {
+        type: "text/csv;charset=utf-8;"
+      });
       var csvURL = window.URL.createObjectURL(csvData);
 
       var tempLink = document.createElement("a");
@@ -350,13 +352,13 @@ export default {
     get(o, p) {
       return _.get(o, p, "-");
     },
-    goToDetails(item) {
+    routerParam(item) {
       let params = {
         id: item.id
       };
       if (this.routerDefaultParams)
         params = { ...params, ...this.routerDefaultParams };
-      this.$router.push({ name: this.routerName, params });
+      return { name: this.routerName, params };
     },
     getSelectLabel(item, col) {
       let option = col.options.filter(
