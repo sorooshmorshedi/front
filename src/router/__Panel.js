@@ -31,7 +31,7 @@ import Warehouse from '@/components/panel/ware/Warehouse';
 import Unit from '@/components/panel/ware/Unit';
 
 import Sanad from '@/components/panel/sanad/Sanad';
-import CreateSanad from '@/components/panel/sanad/Create';
+import SanadForm from '@/components/panel/sanad/Form';
 
 import Transaction from '@/components/panel/transaction/Transaction';
 import TransactionForm from '@/components/panel/transaction/Form';
@@ -200,10 +200,10 @@ export default [{
       path: 'sanad',
       component: Sanad,
       children: [{
-        name: 'CreateSanad',
-        path: 'create/:id?',
+        name: 'SanadForm',
+        path: 'form/:id?',
         props: true,
-        component: CreateSanad,
+        component: SanadForm,
       }]
     },
     {

@@ -55,5 +55,5 @@ export default {
     },
   ],
   label: 'اسناد',
-  routerName: 'CreateSanad'
+  routerName: 'SanadForm'
 }

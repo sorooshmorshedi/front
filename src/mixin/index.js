@@ -116,7 +116,7 @@ Vue.mixin({
     },
     openSanad(sanadId) {
       let routeData = this.$router.resolve({
-        name: "CreateSanad",
+        name: "SanadForm",
         params: {
           id: sanadId
         }

@@ -123,7 +123,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">عملیات های روزانه</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <router-link class="dropdown-item" :to="{name:'CreateSanad'}">ثبت سند</router-link>
+            <router-link class="dropdown-item" :to="{name:'SanadForm'}">ثبت سند</router-link>
             <div class="dropdown-divider"></div>
 
             <div class="dropdown-submenu">

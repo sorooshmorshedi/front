@@ -112,7 +112,7 @@
                       <td>
                         <router-link
                           v-if="sc.sanad"
-                          :to="{name: 'CreateSanad',params:{id: sc.sanad.id }}"
+                          :to="{name: 'SanadForm',params:{id: sc.sanad.id }}"
                           target="_blank"
                         >مشاهده سند</router-link>
                       </td>

@@ -181,7 +181,7 @@
                       </td>
                       <td>
                         <money
-                          :disabled="!editable || rows[i].bes != ''"
+                          :disabled="!editable || rows[i].bes != 0"
                           class="form-control"
                           v-model="rows[i].bed"
                         />
@@ -193,7 +193,7 @@
                       </td>
                       <td>
                         <money
-                          :disabled="!editable || rows[i].bed != ''"
+                          :disabled="!editable || rows[i].bed != 0"
                           class="form-control"
                           v-model="rows[i].bes"
                         />
@@ -222,7 +222,7 @@
                       <td class>{{ besSum | toMoney }}</td>
                       <td class="d-print-none">
                         <button
-                          @click="deleteRow(0)"
+                          @click="deleteRow(-1)"
                           type="button"
                           class="btn btn-danger"
                           :disabled="!editable"
@@ -368,7 +368,7 @@ export default {
     selectSanad(sanad) {
       this.makeFormUneditable();
       this.$router.push({
-        name: "CreateSanad",
+        name: "SanadForm",
         params: { id: sanad.id }
       });
       this.sanad = sanad;
@@ -393,7 +393,7 @@ export default {
       }
     },
     deleteRow(index) {
-      if (index == 0) {
+      if (index == -1) {
         this.rows.forEach(row => {
           if (row.id) this.itemsToDelete.push(row.id);
         });
@@ -421,6 +421,33 @@ export default {
         }
       }
     },
+    getSerialized() {
+      let data = {
+        sanad: this.extractIds(this.sanad),
+        items: {
+          ids_to_delete: this.itemsToDelete,
+          items: []
+        }
+      };
+
+      this.rows.forEach((row, i) => {
+        if (i == this.rows.length - 1) return;
+
+        let item = this.copy(row);
+        item = this.extractIds(item);
+
+        data.items.items.push(item);
+      });
+
+      return data;
+    },
+    setSanad(sanad) {
+      this.makeFormUneditable();
+      this.$router.push({
+        name: "SanadForm",
+        params: { id: sanad.id }
+      });
+    },
     deleteSanad() {
       this.request({
         url: this.endpoint("sanads/sanads/" + this.sanad.id),
@@ -433,99 +460,36 @@ export default {
       });
     },
     storeSanad(clearSanad) {
-      let data = this.copy(this.sanad);
-      data = this.extractIds(data);
-      data.code = this.sanadCode;
+      let data = this.getSerialized();
       this.request({
         url: this.endpoint("sanads/sanads"),
         method: "post",
         data: data,
         success: data => {
-          this.sanad = data;
-          this.syncSanadItems(clearSanad);
+          if (clearSanad) {
+            this.clearSanad();
+          } else {
+            this.setSanad(data);
+          }
+          this.getSanadCode();
+          this.successNotify();
         }
       });
     },
     updateSanad(clearSanad) {
-      let data = this.copy(this.sanad);
-      Object.keys(data).forEach(key => {
-        if (data[key] && data[key].id) data[key] = data[key].id;
-      });
+      let data = this.getSerialized();
       this.request({
         url: this.endpoint("sanads/sanads/" + this.sanad.id),
         method: "put",
         data: data,
         success: data => {
-          this.sanad = data;
-          this.syncSanadItems(clearSanad);
-        }
-      });
-    },
-    syncSanadItems(clearSanad) {
-      let updatedItems = [];
-      let newItems = [];
-      this.rows.forEach((row, i) => {
-        if (i == this.rows.length - 1) return;
-
-        let item = this.copy(row);
-        item = this.extractIds(item);
-
-        if (item.id) {
-          updatedItems.push(item);
-        } else {
-          item.sanad = this.sanad.id;
-          newItems.push(item);
-        }
-      });
-      Promise.all([
-        this.storeSanadItems(newItems),
-        this.updateSanadItems(updatedItems),
-        this.deleteSanadItems()
-      ]).then(data => {
-        if (clearSanad) {
-          this.clearSanad();
-        } else {
-          this.makeFormUneditable();
-          this.$router.push({
-            name: "CreateSanad",
-            params: { id: this.sanad.id }
-          });
-        }
-        this.getSanadCode();
-        this.successNotify();
-      });
-    },
-    storeSanadItems(items) {
-      if (!items.length) return;
-      return this.request({
-        url: this.endpoint("sanads/sanadItems/"),
-        method: "post",
-        data: items,
-        success: data => {
-          this.log(items.length + " sanad items created");
-        }
-      });
-    },
-    updateSanadItems(items) {
-      if (!items.length) return;
-      return this.request({
-        url: this.endpoint("sanads/sanadItems/mass"),
-        method: "put",
-        data: items,
-        success: data => {
-          this.log(items.length + " sanad items updated");
-        }
-      });
-    },
-    deleteSanadItems() {
-      if (!this.itemsToDelete.length) return;
-      return this.request({
-        url: this.endpoint("sanads/sanadItems/mass"),
-        method: "delete",
-        data: this.itemsToDelete,
-        success: data => {
-          this.log(this.itemsToDelete.length + " sanad items deleted");
-          this.itemsToDelete = [];
+          if (clearSanad) {
+            this.clearSanad();
+          } else {
+            this.setSanad(data);
+          }
+          this.getSanadCode();
+          this.successNotify();
         }
       });
     },
