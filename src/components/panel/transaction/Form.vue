@@ -217,6 +217,12 @@
                           type="button"
                           class="btn btn-sm btn-warning"
                         >حذف ردیف</button>
+                        <router-link
+                          v-if="hasCheque(row) && row.cheque.id"
+                          class="btn btn-sm btn-info"
+                          :to="{name:'ChequeDetail', params:{id: row.cheque.id}}"
+                          target="_blank"
+                        >مشاهده جزئیات چک</router-link>
                       </td>
                     </tr>
                     <tr></tr>
@@ -339,7 +345,7 @@
           <div class="modal-header">
             <h4 class="modal-title">
               ثبت چک
-              <span v-if="cheque.type == 'paid'">پرداختی</span>
+              <span v-if="this.transactionType == 'payment'">پرداختی</span>
               <span v-else>دریافتی</span>
             </h4>
             <button type="button" class="close" data-dismiss="modal">
@@ -350,7 +356,8 @@
             <cheque-form
               :receivedOrPaid="transactionType[0]"
               :modalMode="true"
-              @submit="addCheque(cheque)"
+              :account="transaction.account"
+              @submit="addCheque"
             />
           </div>
         </div>
@@ -384,7 +391,6 @@ export default {
         chequeType: ""
       },
       itemsToDelete: [],
-      cheque: {},
       chequeRowIndex: null,
       factors: [],
       factorTypes: {
@@ -536,7 +542,6 @@ export default {
       Promise.all([
         this.getAccounts(),
         this.getDefaultAccounts(),
-        this.getChequebooks(),
         this.getTransaction(this.id),
         this.getTransactionCodes()
       ]).then(values => {
@@ -690,29 +695,81 @@ export default {
       if (this.transaction.id) this.updateTransaction(clearTransaction);
       else this.storeTransaction(clearTransaction);
     },
+    getSerialized() {
+      let data = {};
+
+      data.transaction = this.extractIds(this.transaction);
+      data.transaction.code = this.transactionCode;
+      data.transaction.type = this.type.name;
+
+      data.items = {
+        items: [],
+        ids_to_delete: this.itemsToDelete
+      };
+      this.rows.forEach((row, i) => {
+        if (i == this.rows.length - 1) return row;
+        let item = this.copy(row);
+
+        if (!item.id) {
+          item.account = item.type.account;
+        }
+
+        if (item.cheque) {
+          item.cheque = this.extractIds(item.cheque);
+        }
+
+        data.items.items.push(this.extractIds(item, "cheque"));
+      });
+
+      data.payments = {
+        items: [],
+        ids_to_delete: []
+      };
+      this.factors.forEach(factor => {
+        let payment = factor.payment;
+        data.payments.items.push(payment);
+      });
+
+      return data;
+    },
+    setTransaction(transaction) {
+      this.makeFormUneditable();
+      this.$router.push({
+        name: "TransactionForm",
+        params: {
+          id: transaction.id,
+          transactionType: this.transactionType
+        }
+      });
+    },
     storeTransaction(clearTransaction) {
-      let data = this.extractIds(this.transaction);
-      data.code = this.transactionCode;
-      data.type = this.type.name;
       this.request({
         url: this.endpoint("sanads/transactions"),
         method: "post",
-        data: data,
+        data: this.getSerialized(),
         success: data => {
-          this.transaction.id = data.id;
-          this.syncTransactionItems(clearTransaction);
+          if (clearTransaction) {
+            this.clearTransaction();
+          } else {
+            this.setTransaction(data);
+          }
+          this.successNotify();
         }
       });
     },
     updateTransaction(clearTransaction) {
-      let data = this.extractIds(this.transaction);
+      let data = this.getSerialized();
       this.request({
         url: this.endpoint("sanads/transactions/" + this.transaction.id),
         method: "put",
         data: data,
         success: data => {
-          this.transaction.id = data.id;
-          this.syncTransactionItems(clearTransaction);
+          if (clearTransaction) {
+            this.clearTransaction();
+          } else {
+            this.setTransaction(data);
+          }
+          this.successNotify();
         }
       });
     },
@@ -724,122 +781,6 @@ export default {
           this.successNotify();
           this.getTransactionCodes();
           this.clearTransaction();
-        }
-      });
-    },
-    async syncTransactionItems(clearTransaction) {
-      let updatedItems = [];
-      let newItems = [];
-      let updatedPayments = [];
-      let newPayments = [];
-
-      await Promise.all(
-        this.rows.map(async (row, i) => {
-          if (i == this.rows.length - 1) return row;
-          let item = this.copy(row);
-
-          if (this.hasCheque(item)) return row;
-
-          if (item.id) {
-            updatedItems.push(this.extractIds(item));
-          } else {
-            if (item.cheque) {
-              await this.submitCheque(item);
-            }
-            item.transaction = this.transaction.id;
-            item.account = item.type.account;
-            newItems.push(this.extractIds(item));
-          }
-        })
-      );
-
-      this.factors.forEach(factor => {
-        let payment = factor.payment;
-        payment.transaction = this.transaction.id;
-        if (payment.id) updatedPayments.push(payment);
-        else if (payment.value != 0) newPayments.push(payment);
-      });
-
-      this.log("start syncing transaction");
-
-      Promise.all([
-        this.storeTransactionItems(newItems),
-        this.updateTransactionItems(updatedItems),
-        this.deleteTransactionItems(),
-        this.storePayments(newPayments),
-        this.updatePayments(updatedPayments)
-      ]).then(data => {
-        this.getChequebooks(true);
-        this.getTransactionCodes();
-        this.getNotPaidFactors();
-        if (clearTransaction) {
-          this.clearTransaction();
-        } else {
-          this.makeFormUneditable();
-          this.$router.push({
-            name: "TransactionForm",
-            params: {
-              id: this.transaction.id,
-              transactionType: this.transactionType
-            }
-          });
-        }
-        this.successNotify();
-      });
-    },
-    storePayments(items) {
-      if (!items.length) return;
-      return this.request({
-        url: this.endpoint("factors/factorPayments/mass"),
-        method: "post",
-        data: items,
-        success: data => {
-          this.log(items.length + " factor payments created");
-        }
-      });
-    },
-    updatePayments(items) {
-      if (!items.length) return;
-      return this.request({
-        url: this.endpoint("factors/factorPayments/mass"),
-        method: "put",
-        data: items,
-        success: data => {
-          this.log(items.length + " factor payments updated");
-        }
-      });
-    },
-    storeTransactionItems(items) {
-      if (!items.length) return;
-      return this.request({
-        url: this.endpoint("sanads/transactionItems/"),
-        method: "post",
-        data: items,
-        success: data => {
-          this.log(items.length + " transaction items created");
-        }
-      });
-    },
-    updateTransactionItems(items) {
-      if (!items.length) return;
-      return this.request({
-        url: this.endpoint("sanads/transactionItems/mass"),
-        method: "put",
-        data: items,
-        success: data => {
-          this.log(items.length + " transaction items updated");
-        }
-      });
-    },
-    deleteTransactionItems() {
-      if (!this.itemsToDelete.length) return;
-      return this.request({
-        url: this.endpoint("sanads/transactionItems/mass"),
-        method: "delete",
-        data: this.itemsToDelete,
-        success: data => {
-          this.log(this.itemsToDelete.length + " transaction items deleted");
-          this.itemsToDelete = [];
         }
       });
     },
@@ -856,10 +797,9 @@ export default {
       );
     },
     hasCheque(row) {
-      return row.cheque && typeof row.cheque == "number";
+      return row.cheque;
     },
     openSubmitChequeModal(row, i) {
-      this.cheque = {};
       let account = this.transaction.account;
       if (!account) {
         this.notify(`ابتدا حساب را انتخاب کنید`, "danger");
@@ -869,71 +809,33 @@ export default {
         this.notify(`لطفا حساب شناور را انتخاب کنید`, "danger");
         return;
       }
-      this.cheque = this.copy(row.cheque);
-      this.cheque.type = this.type.chequeType;
       this.chequeRowIndex = i;
       $("#submit-cheque-modal").modal("show");
     },
-    addCheque() {
-      if (!this.hasValue(this.cheque.serial)) {
+    addCheque(cheque) {
+      console.log(cheque);
+      if (!this.hasValue(cheque.serial)) {
         this.notify("لطفا سریال چک را وارد کنید", "danger");
         return;
       }
-      if (!this.hasValue(this.cheque.value)) {
+      if (!this.hasValue(cheque.value)) {
         this.notify("لطفا مبلغ چک را وارد کنید", "danger");
         return;
       }
-      if (this.cheque.date.length != 10 || this.cheque.due.length != 10) {
+      if (cheque.date.length != 10 || cheque.due.length != 10) {
         this.notify("لطفا تاریخ های چک را به صورت صحیح وارد کنید", "danger");
         return;
       }
       let row = this.rows[this.chequeRowIndex];
-      row.cheque = this.copy(this.cheque);
-      row.value = this.cheque.value;
-      row.documentNumber = this.cheque.serial;
-      row.date = this.cheque.date;
-      row.due = this.cheque.due;
-      row.bankName = this.cheque.bankName;
-      row.value = this.cheque.value;
-      row.explanation = this.cheque.explanation;
-      this.cheque = {};
+      row.cheque = cheque;
+      row.value = cheque.value;
+      row.documentNumber = cheque.serial;
+      row.date = cheque.date;
+      row.due = cheque.due;
+      row.bankName = cheque.bankName;
+      row.value = cheque.value;
+      row.explanation = cheque.explanation;
       $("#submit-cheque-modal").modal("hide");
-    },
-    async submitCheque(item) {
-      let cheque = item.cheque;
-      cheque.account = this.transaction.account;
-      cheque.floatAccount = this.transaction.floatAccount;
-      if (!cheque.id) {
-        await this.storeCheque(item);
-      }
-      let update = false;
-      if (cheque.statusChanges && cheque.statusChanges.length == 1)
-        update = true;
-      return this.request({
-        url: this.endpoint("cheques/cheques/changeStatus/" + cheque.id),
-        data: {
-          cheque: this.extractIds(cheque),
-          statusChange: {},
-          update: update
-        },
-        method: "put",
-        success: data => {
-          this.log("Cheque submitd");
-        }
-      });
-    },
-    storeCheque(item) {
-      return this.request({
-        url: this.endpoint("cheques/receivedCheques/"),
-        data: {
-          ...this.extractIds(item.cheque),
-          has_transaction: true
-        },
-        method: "post",
-        success: data => {
-          item.cheque.id = data.id;
-        }
-      });
     },
     clearTransaction() {
       this.log("Clear Transaction");

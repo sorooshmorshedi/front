@@ -48,6 +48,7 @@
                 track-by="id"
                 :options="accountsSelectValues.levels[3]"
                 v-model="cheque.account"
+                :disabled="modalMode"
               />
             </div>
             <div
@@ -169,6 +170,9 @@ export default {
     },
     modalMode: {
       default: false
+    },
+    account: {
+      default: null
     }
   },
   components: { money, date },
@@ -176,7 +180,8 @@ export default {
   data() {
     return {
       cheque: {
-        received_or_paid: this.receivedOrPaid
+        received_or_paid: this.receivedOrPaid,
+        account: this.account
       },
       paidCheques: [],
       chequeTypes: [
@@ -238,6 +243,16 @@ export default {
       return false;
     }
   },
+  watch: {
+    account() {
+      this.cheque.account = this.account;
+    },
+    cheque() {
+      if (this.modalMode) {
+        this.cheque.account = this.account;
+      }
+    }
+  },
   created() {
     this.getAccounts();
     if (this.id) {
@@ -250,21 +265,17 @@ export default {
   },
   methods: {
     validate(clearForm) {
-      if (this.cheque.id && this.cheque.statusChanges.length == 1) {
+      if (this.modalMode) {
+        this.$emit("submit", this.extractIds(this.cheque));
+      } else if (this.cheque.id && this.cheque.statusChanges.length == 1) {
         this.updateCheque(clearForm);
       } else {
         this.submitCheque(clearForm);
       }
     },
     submitCheque(clearForm) {
-      if (this.cheque.type) {
-        this.cheque.type = this.cheque.type.value;
-      }
-
-      this.log("change cheque status", this.cheque);
-
       this.request({
-        url: this.endpoint("cheques/cheques/submit"),
+        url: this.endpoint("cheques/cheques/submit/"),
         data: this.extractIds(this.cheque),
         method: "post",
         success: data => {

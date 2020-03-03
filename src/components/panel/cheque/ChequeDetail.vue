@@ -100,7 +100,7 @@
                       <td>{{ sc.fromStatus | chequeStatuses }}</td>
                       <td>{{ sc.toStatus | chequeStatuses }}</td>
                       <td>{{ sc.date }}</td>
-                      <template v-if="sc.sanad.items.length">
+                      <template v-if="sc.sanad && sc.sanad.items.length">
                         <td>{{ sc.sanad.items[0].account.name }}</td>
                         <td>{{ sc.sanad.items[1].account.name }}</td>
                       </template>
@@ -111,6 +111,7 @@
                       <td>{{ sc.explanation }}</td>
                       <td>
                         <router-link
+                          v-if="sc.sanad"
                           :to="{name: 'CreateSanad',params:{id: sc.sanad.id }}"
                           target="_blank"
                         >مشاهده سند</router-link>

@@ -52,9 +52,10 @@ Vue.mixin({
         $('[data-toggle="tooltip"]').tooltip()
       })
     },
-    extractIds(data) {
+    extractIds(data, exclude = []) {
       let res = this.copy(data);
       Object.keys(res).forEach(key => {
+        if (exclude.includes(key)) return;
         if (res[key] && (typeof (res[key]) == 'object' && 'id' in res[key])) res[key] = res[key].id;
       });
       return res;
