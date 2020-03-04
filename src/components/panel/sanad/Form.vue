@@ -45,7 +45,7 @@
             <div class="col-lg-6">
               <div class="row">
                 <div class="form-group col-lg-6 col-sm-2">
-                  <label>شماره سند</label>
+                  <label class="required">شماره سند</label>
                   <input
                     v-if="sanad.id"
                     type="text"
@@ -56,7 +56,7 @@
                   <input v-else type="text" class="form-control" disabled :value="sanadCode">
                 </div>
                 <div class="form-group col-lg-6 col-sm-2">
-                  <label>تاریخ سند</label>
+                  <label class="required">تاریخ سند</label>
                   <date
                     class="form-control"
                     v-model="sanad.date"
@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="form-group col-lg-6 col-sm-4">
-                  <label>نوع سند</label>
+                  <label class="required">نوع سند</label>
                   <div style="margin-top: 8px;margin-right: 15px;">
                     <div class="form-check form-check-inline">
                       <input
@@ -117,7 +117,7 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>شماره - نام حساب</th>
+                      <th class="required">شماره - نام حساب</th>
                       <th>توضیحات</th>
                       <th>تفضیلی شناور</th>
                       <th>مرکز هزینه</th>

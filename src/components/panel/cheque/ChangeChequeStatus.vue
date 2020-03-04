@@ -15,7 +15,7 @@
           <div class="container">
             <div class="row">
               <div class="col-12 col-md-4">
-                <label>تغییر وضعیت به</label>
+                <label class="required">تغییر وضعیت به</label>
                 <multiselect
                   dir="rtl"
                   label="label"
@@ -26,7 +26,7 @@
               </div>
               <template v-if="newStatus">
                 <div class="form-group col-12 col-md-8" v-if="newStatus.hasAccount">
-                  <label>{{ accountLabel(newStatus) }}</label>
+                  <label class="required">{{ accountLabel(newStatus) }}</label>
                   <multiselect
                     :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
                     dir="rtl"
@@ -40,7 +40,7 @@
                   class="form-group col-12 col-md-8 offset-md-4"
                   v-if="statusChange.account && statusChange.account.floatAccountGroup"
                 >
-                  <label>حساب شناور</label>
+                  <label class="required">حساب شناور</label>
                   <multiselect
                     dir="rtl"
                     label="name"
@@ -51,7 +51,7 @@
                 </div>
                 <div class="w-100"></div>
                 <div class="form-group col-12 col-md-4">
-                  <label>تاریخ</label>
+                  <label class="required">تاریخ</label>
                   <date class="form-control" v-model="statusChange.date" :default="true"/>
                 </div>
                 <div class="form-group col-12 col-md-8">

@@ -19,7 +19,7 @@
 
           <div class="row">
             <div v-if="!id && isPaidCheque" class="form-group col-12 col-md-6">
-              <label>چک</label>
+              <label class="required">چک</label>
               <multiselect
                 dir="rtl"
                 label="title"
@@ -31,7 +31,7 @@
               />
             </div>
             <div v-else class="form-group col-md-6">
-              <label for>سریال چک</label>
+              <label class="required">سریال چک</label>
               <input
                 type="text"
                 class="form-control"
@@ -40,8 +40,8 @@
               >
             </div>
             <div class="form-group col-12 col-md-6">
-              <label v-if="isPaidCheque">دریافت کننده</label>
-              <label v-else>پرداخت کننده</label>
+              <label class="required" v-if="isPaidCheque">دریافت کننده</label>
+              <label class="required" v-else>پرداخت کننده</label>
               <multiselect
                 dir="rtl"
                 label="name"
@@ -55,7 +55,7 @@
               class="form-group col-12 col-md-9 offset-md-3"
               v-if="cheque.account && cheque.account.floatAccountGroup"
             >
-              <label for>حساب شناور</label>
+              <label class="required" for>حساب شناور</label>
               <multiselect
                 dir="rtl"
                 label="name"
@@ -65,16 +65,16 @@
               />
             </div>
             <div class="form-group col-12 col-md-6">
-              <label for>مبلغ</label>
+              <label class="required" for>مبلغ</label>
               <money class="form-control" v-model="cheque.value"/>
             </div>
             <div class="form-group col-12 col-md-3">
-              <label for>تاریخ سررسید</label>
+              <label class="required" for>تاریخ سررسید</label>
               <date class="form-control" v-model="cheque.due" :default="true"/>
             </div>
             <div class="form-group col-12 col-md-3">
-              <label v-if="isPaidCheque">تاریخ پرداخت</label>
-              <label v-else>تاریخ دریافت</label>
+              <label class="required" v-if="isPaidCheque">تاریخ پرداخت</label>
+              <label class="required" v-else>تاریخ دریافت</label>
               <date class="form-control" v-model="cheque.date" :default="true"/>
             </div>
             <div class="col-12 col-md-6">
