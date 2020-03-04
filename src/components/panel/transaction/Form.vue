@@ -85,13 +85,19 @@
                     class="btn btn-info"
                   >پرداخت شده برای فاکتور های</button>
                 </div>
-                <div class="col-lg-3" v-if="transaction.sanad">
+                <div class="col-lg-3">
                   <label>شماره سند</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" disabled :value="transaction.sanad">
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="transaction.sanad_code"
+                      :disabled="transaction.id"
+                    >
                     <div class="input-group-prepend">
                       <button
                         @click="openSanad(transaction.sanad)"
+                        :disabled="!transaction.sanad"
                         class="btn btn-outline-info"
                         type="button"
                         id="button-addon1"
