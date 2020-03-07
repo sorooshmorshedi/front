@@ -91,6 +91,16 @@
                 </div>
               </div>
             </div>
+
+            <div class="form-group col-md-6">
+              <label>شماره سند</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="cheque.sanad_code"
+                :disabled="!canSetSanadCode"
+              >
+            </div>
             <div class="form-group col-12 col-md-6">
               <label>شرح چک</label>
               <textarea class="form-control" v-model="cheque.explanation" style="height:126px;"></textarea>
@@ -214,6 +224,14 @@ export default {
       else title += "دریافتی";
       return title;
     },
+    canSetSanadCode() {
+      let statusChange = this.cheque.statusChanges;
+      if (statusChange) {
+        return statusChange.length == 0;
+      } else {
+        return true;
+      }
+    },
 
     canDeleteCheque() {
       if (this.isPaidCheque) return false;
@@ -267,9 +285,7 @@ export default {
     validate(clearForm) {
       if (this.modalMode) {
         this.$emit("submit", this.extractIds(this.cheque));
-      } else if (this.cheque.id && this.cheque.statusChanges.length == 1) {
-        this.updateCheque(clearForm);
-      } else {
+      } else if (this.cheque.id) {
         this.submitCheque(clearForm);
       }
     },
@@ -365,14 +381,12 @@ export default {
         params: {
           limit: 30,
           offset: 0,
-          filters: {
-            serial__icontains: value,
-            account__icontains: value,
-            chequebook__explanation__icontains: value,
-            chequebook__account__name__icontains: value,
-            status: "blank",
-            received_or_paid: "p"
-          }
+          serial__icontains: value,
+          account__icontains: value,
+          chequebook__explanation__icontains: value,
+          chequebook__account__name__icontains: value,
+          status: "blank",
+          received_or_paid: "p"
         },
         success: data => {
           this.paidCheques = data.results;

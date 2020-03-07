@@ -38,12 +38,16 @@ export default {
     return {
       formOptions: formOptions,
       options: {},
-      showTable: false
+      showTable: false,
+      defaults: {}
     };
   },
   computed: {
     defaultFilters() {
-      return JSON.parse(this.filters);
+      return {
+        ...JSON.parse(this.filters),
+        ...this.defaults
+      };
     }
   },
   created() {
@@ -54,29 +58,26 @@ export default {
       this.log("init list");
       this.showTable = false;
       this.options = this.formOptions[this.form];
-      let defaults;
       switch (this.type) {
         case "receive":
           this.options.label = "دریافت ها";
           defaults = { transactionType: this.type };
-          this.defaultFilters = defaults;
           this.options.defaultParams = defaults;
           break;
         case "payment":
           this.options.label = "پرداخت ها";
           defaults = { transactionType: this.type };
-          this.defaultFilters = defaults;
           this.options.defaultParams = defaults;
           break;
         case "received":
           this.options.label = "چک های دریافتی";
-          this.defaultFilters = {
+          this.defaults = {
             received_or_paid: "r"
           };
           break;
         case "paid":
           this.options.label = "چک های پرداختی";
-          this.defaultFilters = {
+          this.defaults = {
             received_or_paid: "p"
           };
           break;
@@ -84,7 +85,7 @@ export default {
           break;
       }
       if (this.form == "factor") {
-        this.defaultFilters = { type: this.type };
+        this.defaults = { type: this.type };
         this.options.defaultParams = { factorType: this.type };
 
         switch (this.type) {
@@ -104,7 +105,7 @@ export default {
       }
       if (this.form == "receipt") {
         defaults = { receiptType: this.type };
-        this.defaultFilters = defaults;
+        this.defaults = defaults;
         this.options.defaultParams = defaults;
         switch (this.type) {
           case "receipt":

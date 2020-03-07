@@ -25,7 +25,11 @@
                 />
               </div>
               <template v-if="newStatus">
-                <div class="form-group col-12 col-md-8" v-if="newStatus.hasAccount">
+                <div class="form-group col-md-8">
+                  <label>شماره سند</label>
+                  <input type="text" class="form-control" v-model="statusChange.sanad_code">
+                </div>
+                <div class="form-group col-12 col-md-12" v-if="newStatus.hasAccount">
                   <label class="required">{{ accountLabel(newStatus) }}</label>
                   <multiselect
                     :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
@@ -37,7 +41,7 @@
                   />
                 </div>
                 <div
-                  class="form-group col-12 col-md-8 offset-md-4"
+                  class="form-group col-12 col-md-12 offset-md-4"
                   v-if="statusChange.account && statusChange.account.floatAccountGroup"
                 >
                   <label class="required">حساب شناور</label>
