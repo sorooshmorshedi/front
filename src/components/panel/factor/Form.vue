@@ -208,7 +208,7 @@
                       </td>
                       <td>
                         <multiselect
-                          v-if="rows[i].ware"
+                          v-if="rows[i].ware && !rows[i].ware.isService"
                           dir="rtl"
                           :allow-empty="false"
                           :options="waresSelectValues.warehouses"
