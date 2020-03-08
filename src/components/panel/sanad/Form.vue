@@ -159,7 +159,7 @@
                         v-tooltip="getFloatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
                       >
                         <multiselect
-                        v-if="getFloatAccounts(rows[i]).length"
+                          v-if="getFloatAccounts(rows[i]).length"
                           dir="rtl"
                           :options="getFloatAccounts(rows[i])"
                           v-model="rows[i].floatAccount"
