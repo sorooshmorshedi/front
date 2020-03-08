@@ -52,7 +52,7 @@
               />
             </div>
             <div
-              class="form-group col-12 col-md-9 offset-md-3"
+              class="form-group col-12 col-md-6 offset-md-6"
               v-if="cheque.account && cheque.account.floatAccountGroup"
             >
               <label class="required" for>حساب شناور</label>

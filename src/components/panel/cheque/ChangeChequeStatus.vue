@@ -22,6 +22,7 @@
                   track-by="name"
                   :options="statuses"
                   v-model="newStatus"
+                  @change="clearForm"
                 />
               </div>
               <template v-if="newStatus">
@@ -29,30 +30,33 @@
                   <label>شماره سند</label>
                   <input type="text" class="form-control" v-model="statusChange.sanad_code">
                 </div>
-                <div class="form-group col-12 col-md-12" v-if="newStatus.hasAccount">
-                  <label class="required">{{ accountLabel(newStatus) }}</label>
-                  <multiselect
-                    :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
-                    dir="rtl"
-                    label="name"
-                    track-by="id"
-                    :options="newStatusAccounts"
-                    v-model="statusChange.account"
-                  />
-                </div>
-                <div
-                  class="form-group col-12 col-md-12 offset-md-4"
-                  v-if="statusChange.account && statusChange.account.floatAccountGroup"
-                >
-                  <label class="required">حساب شناور</label>
-                  <multiselect
-                    dir="rtl"
-                    label="name"
-                    track-by="id"
-                    :options="statusChange.account.floatAccountGroup.floatAccounts"
-                    v-model="statusChange.floatAccount"
-                  />
-                </div>
+                <template v-if="newStatus.hasAccount">
+                  <div class="form-group col-12 col-md-12">
+                    <label class="required">{{ accountLabel(newStatus) }}</label>
+                    <multiselect
+                      :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
+                      dir="rtl"
+                      label="name"
+                      track-by="id"
+                      :options="newStatusAccounts"
+                      v-model="statusChange.account"
+                    />
+                  </div>
+                  <div
+                    class="form-group col-12 col-md-12"
+                    v-if="statusChange.account && statusChange.account.floatAccountGroup"
+                  >
+                    <label class="required">حساب شناور</label>
+                    <multiselect
+                      :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
+                      dir="rtl"
+                      label="name"
+                      track-by="id"
+                      :options="statusChange.account.floatAccountGroup.floatAccounts"
+                      v-model="statusChange.floatAccount"
+                    />
+                  </div>
+                </template>
                 <div class="w-100"></div>
                 <div class="form-group col-12 col-md-4">
                   <label class="required">تاریخ</label>
@@ -97,6 +101,9 @@ export default {
     };
   },
   computed: {
+    isPaidCheque() {
+      return this.cheque.received_or_paid == "p";
+    },
     newStatusAccounts() {
       let name = this.newStatus.name;
       if (name == "passed") {
@@ -196,6 +203,9 @@ export default {
     }
   },
   methods: {
+    clearForm() {
+      this.statusChange = {};
+    },
     submitCheque() {
       if (this.newStatus.name == "revertInFlow") {
         this.revertInFlow();

@@ -3,6 +3,8 @@ export default {
   init(data) {
     let fields;
     let field;
+
+    data.floatAccountGroups;
     Object.keys(this).forEach(i => {
 
       if (!this[i].groups) return;

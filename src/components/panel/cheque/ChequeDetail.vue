@@ -131,15 +131,15 @@
 
             <div class="col-12 text-left">
               <router-link
-                v-if="canEditCheque"
-                class="btn btn btn-info w-100px"
-                :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
-              >ویرایش</router-link>
-              <router-link
                 v-if="canSubmitCheque"
                 class="btn btn btn-info w-100px"
                 :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
               >ثبت</router-link>
+              <router-link
+                v-else-if="canEditCheque"
+                class="btn btn btn-info w-100px"
+                :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
+              >ویرایش</router-link>
               <button
                 @click="changeChequeStatusModal()"
                 :disabled="!canChangeStatus"
