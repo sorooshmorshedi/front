@@ -50,7 +50,7 @@
                 </div>
                 <div class="form-group col-lg-4 col-sm-3">
                   <template v-if="transaction.account && transaction.account.floatAccountGroup">
-                    <label>حساب شناور</label>
+                    <label class="required">حساب شناور</label>
                     <multiselect
                       dir="rtl"
                       :options="transactionFloatAccounts"
@@ -126,7 +126,7 @@
                       <th>#</th>
                       <th class="required" style="width: 200px">نوع {{ type.label }}</th>
                       <th>نام حساب</th>
-                      <th>حساب شناور</th>
+                      <th class="required">حساب شناور</th>
                       <th class="required">مبلغ</th>
                       <th>شماره مستند</th>
                       <th class="required">تاریخ {{ type.label }}</th>
@@ -854,6 +854,7 @@ export default {
       this.rows = [this.copy(this.rowTemplate)];
       this.transaction = this.getTransactionTemplate();
       this.factors = [];
+      this.itemsToDelete = [];
     },
     getTransactionTemplate() {
       return {
