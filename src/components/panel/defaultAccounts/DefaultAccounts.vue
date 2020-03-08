@@ -81,7 +81,10 @@
                     label="title"
                   />
                 </div>
-                <div class="form-group col-12">
+                <div
+                  class="form-group col-12"
+                  v-if="defaultAccount.account && defaultAccount.account.floatAccountGroup"
+                >
                   <label>حساب شناور</label>
                   <multiselect
                     dir="rtl"

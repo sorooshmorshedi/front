@@ -22,10 +22,10 @@
             <td>{{ e.account.title }}</td>
             <td>{{ e.explanation }}</td>
             <td>
-              <i class="fas fa-pencil-alt text-warning" @click="editExpense(e)" />
+              <i class="fas fa-pencil-alt text-warning" @click="editExpense(e)"/>
             </td>
             <td>
-              <i class="fas fa-trash-alt text-danger" @click="deleteExpense(e)" />
+              <i class="fas fa-trash-alt text-danger" @click="deleteExpense(e)"/>
             </td>
           </tr>
         </tbody>
@@ -44,13 +44,32 @@
           <div class="modal-body">
             <div class="container">
               <div class="row">
-                <div class="form-group col-12">
-                  <label for="">نام</label>
+                <div class="form-goup col-12">
+                  <label for>نام</label>
                   <input type="text" class="form-control" v-model="expense.name">
                 </div>
                 <div class="form-group col-12">
                   <label>حساب</label>
-                  <multiselect dir="rtl" :options="this.accountsSelectValues.levels[3]" v-model="expense.account" track-by="id" label="title" />
+                  <multiselect
+                    dir="rtl"
+                    :options="this.accountsSelectValues.levels[3]"
+                    v-model="expense.account"
+                    track-by="id"
+                    label="title"
+                  />
+                </div>
+                <div
+                  class="form-group col-12"
+                  v-if="expense.account && expense.account.floatAccountGroup"
+                >
+                  <label>حساب شناور</label>
+                  <multiselect
+                    dir="rtl"
+                    :options="expense.account.floatAccountGroup.floatAccounts"
+                    v-model="expense.floatAccount"
+                    track-by="id"
+                    label="name"
+                  />
                 </div>
                 <div class="form-group col-12">
                   <label>توضیحات</label>
@@ -61,13 +80,17 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button v-if="!expense.id" @click="storeExpense()" type="button" class="btn btn-primary">ثبت</button>
+            <button
+              v-if="!expense.id"
+              @click="storeExpense()"
+              type="button"
+              class="btn btn-primary"
+            >ثبت</button>
             <button v-else @click="updateExpense()" type="button" class="btn btn-primary">ثبت</button>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -83,8 +106,8 @@ export default {
     return {
       expense: {},
       type: {
-        label: '',
-        name: '',
+        label: "",
+        name: ""
       }
     };
   },
@@ -111,16 +134,21 @@ export default {
       this.expense = this.copy(expense);
       $("#factor-expense-modal").modal("show");
     },
-    updateExpense() {
+    getSerialized() {
       let data = {
         ...this.expense,
         account: this.expense.account.id,
         type: this.type.name
       };
+      let floatAccount = this.expense.floatAccount;
+      if (floatAccount) data.floatAccount = floatAccount.id;
+      return data;
+    },
+    updateExpense() {
       this.request({
         url: this.endpoint("factors/expenses/" + this.expense.id + "/"),
         method: "put",
-        data: data,
+        data: this.getSerialized(),
         success: data => {
           this.successNotify();
           this.getFactorExpenses(true);
@@ -134,15 +162,10 @@ export default {
       $("#factor-expense-modal").modal("show");
     },
     storeExpense() {
-      let data = {
-        ...this.expense,
-        account: this.expense.account.id,
-        type: this.type.name
-      };
       this.request({
         url: this.endpoint("factors/expenses/"),
         method: "post",
-        data: data,
+        data: this.getSerialized(),
         success: data => {
           this.successNotify();
           this.getFactorExpenses(true);
