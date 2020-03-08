@@ -93,12 +93,15 @@
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <router-link
                       class="dropdown-item"
-                      :to="{name:'TransactionDefaultAccounts'}"
+                      :to="{name:'DefaultAccounts', params: {usage: 'transaction'}}"
                     >دریافت و پرداخت</router-link>
-                    <router-link class="dropdown-item" :to="{name:'FactorDefaultAccounts'}">فاکتور</router-link>
                     <router-link
                       class="dropdown-item"
-                      :to="{name:'CloseAccountsDefaultAccounts'}"
+                      :to="{name:'DefaultAccounts', params: {usage: 'factor'}}"
+                    >فاکتور</router-link>
+                    <router-link
+                      class="dropdown-item"
+                      :to="{name:'DefaultAccounts', params: {usage: 'closeAccounts'}}"
                     >بستن حساب ها</router-link>
                   </div>
                 </div>

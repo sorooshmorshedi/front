@@ -36,9 +36,7 @@ import SanadForm from '@/components/panel/sanad/Form';
 import Transaction from '@/components/panel/transaction/Transaction';
 import TransactionForm from '@/components/panel/transaction/Form';
 
-import TransactionDefaultAccounts from '@/components/panel/defaultAccounts/TransactionDefaultAccounts';
-import FactorDefaultAccounts from '@/components/panel/defaultAccounts/FactorDefaultAccounts';
-import CloseAccountsDefaultAccounts from '@/components/panel/defaultAccounts/CloseAccountsDefaultAccounts';
+import DefaultAccounts from '@/components/panel/defaultAccounts/DefaultAccounts';
 
 import Factor from '@/components/panel/factor/Factor';
 import FactorForm from '@/components/panel/factor/Form';
@@ -164,19 +162,10 @@ export default [{
       }]
     },
     {
-      name: 'TransactionDefaultAccounts',
-      path: 'defaultAccounts/transaction',
-      component: TransactionDefaultAccounts,
-    },
-    {
-      name: 'FactorDefaultAccounts',
-      path: 'defaultAccounts/factor',
-      component: FactorDefaultAccounts,
-    },
-    {
-      name: 'CloseAccountsDefaultAccounts',
-      path: 'defaultAccounts/closeAccounts',
-      component: CloseAccountsDefaultAccounts,
+      name: 'DefaultAccounts',
+      path: 'defaultAccounts/:usage',
+      component: DefaultAccounts,
+      props: true
     },
     {
       name: 'Transaction',
