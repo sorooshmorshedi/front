@@ -34,7 +34,7 @@
                 <div class="col-lg-6 col-sm-12" v-if="factor.sanad">
                   <label>شماره سند</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" disabled :value="factor.sanad">
+                    <input type="text" class="form-control" disabled :value="factor.sanad.code">
                     <div class="input-group-prepend d-print-none">
                       <button
                         @click="openSanad(factor.sanad)"
