@@ -1,9 +1,9 @@
 <template>
-<div class="row">
+  <div class="row">
     <div class="col-12">
       <button @click="closeAccounts" type="button" class="btn btn-primary">بستن حساب ها</button>
-      </div> 
-</div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -25,7 +25,7 @@ export default {
         }
       });
     },
-    closeAccounts(){
+    closeAccounts() {
       this.request({
         url: this.endpoint("companies/closeAccounts"),
         method: "post",

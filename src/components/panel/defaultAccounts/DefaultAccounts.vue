@@ -162,7 +162,7 @@
 </template>
 
 <script>
-import accountApiMixin from "@/mixin/accountApi";
+import accountApiMixin from "@/mixin/accountMixin";
 import sanadtApiMixin from "@/mixin/sanadApi";
 
 export default {

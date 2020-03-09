@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {
   fromCodeFilter,
   toCodeFilter
-} from '@/mixin/account.js'
+} from '@/mixin/accountMixin'
 
 export default {
   cols: [{

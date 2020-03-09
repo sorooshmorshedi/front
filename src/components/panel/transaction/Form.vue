@@ -373,7 +373,7 @@
 </template>
 
 <script>
-import accountApiMixin from "@/mixin/accountApi";
+import accountApiMixin from "@/mixin/accountMixin";
 import sanadApiMixin from "@/mixin/sanadApi";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";

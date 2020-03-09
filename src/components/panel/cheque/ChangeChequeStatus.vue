@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import accountApiMixin from "@/mixin/accountApi";
+import accountApiMixin from "@/mixin/accountMixin";
 import getChequeApiMixin from "./getChequeApi.js";
 import sanadApiMixin from "@/mixin/sanadApi";
 import money from "@/components/mcomponents/cleave/Money";

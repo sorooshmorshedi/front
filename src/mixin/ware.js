@@ -2,7 +2,7 @@ import createSchema from "@/components/panel/ware/CreateSchema";
 import editSchema from "@/components/panel/ware/EditSchema";
 
 import WareApi from "./wareApi";
-import AccountApi from "./accountApi";
+import AccountApi from "./accountMixin";
 
 export default {
   mixins: [WareApi, AccountApi],
@@ -131,14 +131,6 @@ export default {
       }
       this.ware.code = code;
       this.log('Calculated Ware Code: ', this.ware.code);
-    },
-    splitCode(code) {
-      return [
-        code.substr(0, 1),
-        code.substr(0, 3),
-        code.substr(0, 5),
-        code
-      ];
     },
     async getData(force = false) {
       this.log('Get all wares data');

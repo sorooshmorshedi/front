@@ -701,7 +701,7 @@
 </template>
 
 <script>
-import accountApiMixin from "@/mixin/accountApi";
+import accountApiMixin from "@/mixin/accountMixin";
 import factorApiMixin from "@/mixin/factorApi";
 import wareApiMixin from "@/mixin/wareApi";
 import formsMixin from "@/mixin/forms";

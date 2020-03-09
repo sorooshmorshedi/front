@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import accountApiMixin from "@/mixin/accountApi";
+import accountApiMixin from "@/mixin/accountMixin";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 

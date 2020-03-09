@@ -7,22 +7,12 @@ import CreateCompany from '@/components/panel/company/Create';
 import UpdateCompany from '@/components/panel/company/Update';
 import CompaniesList from '@/components/panel/company/List';
 
-import Account from '@/components/panel/account/Account';
-
-import CreateAccounts from '@/components/panel/account/CreateAccounts';
-import CreateFloatAccounts from '@/components/panel/account/CreateFloatAccounts';
-import CreatePersonAccounts from '@/components/panel/account/CreatePersonAccounts';
-import CreateBankAccounts from '@/components/panel/account/CreateBankAccounts';
-
-import EditAccounts from '@/components/panel/account/EditAccounts';
-import EditFloatAccounts from '@/components/panel/account/EditFloatAccounts';
-import EditPersonAccounts from '@/components/panel/account/EditPersonAccounts';
-import EditBankAccounts from '@/components/panel/account/EditBankAccounts';
-
+import Accounts from '../components/panel/account/Accounts.vue';
+import FloatAccounts from '../components/panel/account/FloatAccounts.vue';
+import FloatAccountGroups from '../components/panel/account/FloatAccountGroups.vue';
 import AccountTree from '@/components/panel/account/Tree';
 
-import CostCenter from '@/components/panel/account/CostCenter';
-import IndependentAccount from '@/components/panel/account/IndependentAccount';
+import DefaultAccounts from '@/components/panel/defaultAccounts/DefaultAccounts';
 
 import Ware from '@/components/panel/ware/Ware';
 import CreateWare from '@/components/panel/ware/Create';
@@ -36,7 +26,6 @@ import SanadForm from '@/components/panel/sanad/Form';
 import Transaction from '@/components/panel/transaction/Transaction';
 import TransactionForm from '@/components/panel/transaction/Form';
 
-import DefaultAccounts from '@/components/panel/defaultAccounts/DefaultAccounts';
 
 import Factor from '@/components/panel/factor/Factor';
 import FactorForm from '@/components/panel/factor/Form';
@@ -87,58 +76,27 @@ export default [{
       ]
     },
     {
-      name: 'Account',
-      path: 'account',
-      component: Account,
-      children: [{
-        name: 'CreateAccounts',
-        path: 'createAccounts',
-        component: CreateAccounts
-      }, {
-        name: 'CreatePersonAccounts',
-        path: 'createPersonAccounts',
-        component: CreatePersonAccounts
-      }, {
-        name: 'CreateFloatAccounts',
-        path: 'createFloatAccounts',
-        component: CreateFloatAccounts
-      }, {
-        name: 'CreateBankAccounts',
-        path: 'createBankAccounts',
-        component: CreateBankAccounts
-      }, {
-        name: 'EditAccounts',
-        path: 'editAccounts',
-        component: EditAccounts
-      }, {
-        name: 'EditPersonAccounts',
-        path: 'editPersonAccounts',
-        component: EditPersonAccounts
-      }, {
-        name: 'EditFloatAccounts',
-        path: 'editFloatAccounts',
-        component: EditFloatAccounts
-      }, {
-        name: 'EditBankAccounts',
-        path: 'editBankAccounts',
-        component: EditBankAccounts
-      }, {
-        name: 'AccountTree',
-        path: 'tree',
-        component: AccountTree,
+      name: 'Accounts',
+      path: 'accounts/:level/:account_type?',
+      component: Accounts,
+      props: true
 
-      }, {
-        name: 'CostCenter',
-        path: 'costCenter',
-        component: CostCenter,
-
-      }, {
-        name: 'IndependentAccount',
-        path: 'independentAccount',
-        component: IndependentAccount,
-      }]
     },
-
+    {
+      name: 'FloatAccounts',
+      path: 'floatAccounts',
+      component: FloatAccounts
+    },
+    {
+      name: 'FloatAccountGroups',
+      path: 'floatAccountGroups',
+      component: FloatAccountGroups
+    },
+    {
+      name: 'AccountTree',
+      path: 'tree',
+      component: AccountTree,
+    },
     {
       name: 'Ware',
       path: 'ware',

@@ -15,6 +15,20 @@ Vue.mixin({
       token: null,
     }
   },
+  computed: {
+    ...mapState({
+      user: state => state.user,
+      permissions: state => state.user.permissions,
+      OGR: state => state.OGR,
+      now: state => state.now
+    }),
+    isDev() {
+      return process.env.NODE_ENV === 'development';
+    },
+    query() {
+      return this.$route.query;
+    }
+  },
   created() {
 
     this.token = localStorage.getItem('token');
@@ -23,11 +37,8 @@ Vue.mixin({
         name: 'Login'
       });
     }
-
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
 
     askConfirmations(confirmations) {
@@ -163,40 +174,27 @@ Vue.mixin({
       return res.reverse().join('');
 
     },
-    print() {
-      print();
-    },
-    removeNode(arr, node, by = 'id') {
-      let index = _.findIndex(
-        arr,
-        o => o[by] == node[by]
-      );
-      arr.splice(index, 1);
-    },
-    replaceNode(arr, node, by = 'id') {
-      let index = _.findIndex(
-        arr,
-        o => o[by] == node[by]
-      );
-      arr.splice(index, 1, node);
-    },
     todayDate() {
       return moment().format('jYYYY/jMM/jDD');
     },
     getRandomId() {
       return 'rid-' + Math.floor(Math.random() * 10000)
-    }
-  },
-  computed: {
-    ...mapState({
-      user: state => state.user,
-      permissions: state => state.user.permissions,
-      OGR: state => state.OGR,
-      now: state => state.now
-    }),
-    isDev() {
-      return process.env.NODE_ENV === 'development';
     },
+
+    updateQueryString(key, value) {
+      let route = this.$route;
+
+      let query = {
+        ...route.query
+      };
+      query[key] = value
+
+      this.$router.push({
+        name: route.name,
+        params: route.params,
+        query: query
+      })
+    }
   },
   filters: {
     toJalali(date) {

@@ -17,6 +17,9 @@ Vue.component('multiselect', Multiselect);
 import WareSelect from './components/selects/WareSelect.vue';
 Vue.component('WareSelect', WareSelect);
 
+import money from "@/components/mcomponents/cleave/Money";
+Vue.component('money', money);
+
 import {
   VueContext
 } from 'vue-context';

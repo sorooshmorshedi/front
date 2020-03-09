@@ -30,6 +30,11 @@ export default {
       isAppReady: false
     };
   },
+  watch: {
+    $route() {
+      this.modal(".modal", "hide");
+    }
+  },
   created() {
     this.getDateTime();
   },

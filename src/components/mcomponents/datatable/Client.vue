@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="d-none">
       <button @click="download()" class="btn btn-block btn-info">دانلود اکسل</button>
     </div>
     <div class="fixed-head">

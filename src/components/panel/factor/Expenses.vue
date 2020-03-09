@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import accountApiMixin from "@/mixin/accountApi";
+import accountApiMixin from "@/mixin/accountMixin";
 import factorApiMixin from "@/mixin/factorApi";
 
 export default {

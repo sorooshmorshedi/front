@@ -24,7 +24,6 @@ export default [{
       path: 'lists/:form/:type?',
       component: List,
       props: (route) => {
-        console.log(route.query);
         return {
           ...route.params,
           ...route.query

@@ -37,7 +37,7 @@
 
 <script>
 import datatable from "@/components/mcomponents/datatable/Server";
-import accountApiMixin from "@/mixin/accountApi";
+import accountApiMixin from "@/mixin/accountMixin";
 import datatableCols from "./_datatableCols";
 import _ from "lodash";
 export default {

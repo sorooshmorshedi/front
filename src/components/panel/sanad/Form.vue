@@ -257,7 +257,7 @@
 </template>
 
 <script>
-import accountApiMixin from "@/mixin/accountApi";
+import accountApiMixin from "@/mixin/accountMixin";
 import sanadApiMixin from "@/mixin/sanadApi";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
@@ -340,7 +340,6 @@ export default {
   methods: {
     getData() {
       this.getAccounts();
-      this.getCostCenterGroups();
       this.getSanadCode();
 
       if (this.id) this.getSanad(this.id);

@@ -1,7 +1,7 @@
 import {
   fromCodeFilter,
   toCodeFilter
-} from "@/mixin/account.js";
+} from "@/mixin/accountMixin";
 export default {
   cols: [{
       th: "کد حساب",

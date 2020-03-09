@@ -93,7 +93,7 @@
 
 <script>
 import date from "@/components/mcomponents/cleave/Date";
-import accountApiMixin from "@/mixin/accountApi";
+import accountApiMixin from "@/mixin/accountMixin";
 export default {
   name: "IncomeStatement",
   components: { date },

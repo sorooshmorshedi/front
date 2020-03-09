@@ -35,31 +35,36 @@
             <div class="dropdown-submenu">
               <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">حساب</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{name:'CreateAccounts'}">تعریف حساب</router-link>
                 <router-link
                   class="dropdown-item"
-                  :to="{name:'CreatePersonAccounts'}"
+                  :to="{name:'Accounts', params:{level: 0}}"
+                >گروه حساب</router-link>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'Accounts', params:{level: 1}}"
+                >حساب کل</router-link>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'Accounts', params:{level: 2}}"
+                >حساب معین</router-link>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'Accounts', params:{level: 3}}"
+                >حساب تفضیلی</router-link>
+                <div class="dropdown-divider"></div>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'Accounts', params:{level: 3, account_type: 'p'}}"
                 >تعریف خریدار/فروشنده</router-link>
                 <router-link
                   class="dropdown-item"
-                  :to="{name:'CreateFloatAccounts'}"
-                >تعریف حساب شناور</router-link>
-                <router-link class="dropdown-item" :to="{name:'CreateBankAccounts'}">تعریف بانک</router-link>
+                  :to="{name:'Accounts', params:{level: 3, account_type: 'b'}}"
+                >تعریف بانک</router-link>
                 <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" :to="{name:'EditAccounts'}">ویرایش حساب</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'EditPersonAccounts'}"
-                >ویرایش خریدار/فروشنده</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'EditFloatAccounts'}"
-                >ویرایش حساب شناور</router-link>
-                <router-link class="dropdown-item" :to="{name:'EditBankAccounts'}">ویرایش بانک</router-link>
+                <router-link class="dropdown-item" :to="{name:'FloatAccounts'}">حساب شناور</router-link>
+                <router-link class="dropdown-item" :to="{name:'FloatAccountGroups'}">گروه حساب شناور</router-link>
                 <div class="dropdown-divider"></div>
                 <router-link class="dropdown-item" :to="{name:'AccountTree'}">نمودار درختی حساب ها</router-link>
-                <div class="dropdown-divider"></div>
-                <!-- <router-link class="dropdown-item" :to="{name:'IndependentAccount'}">حساب مستقل</router-link> -->
               </div>
             </div>
             <div class="dropdown-submenu">
@@ -77,8 +82,6 @@
                 >ثبت موجودی اول دوره</router-link>
               </div>
             </div>
-            <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'CostCenter'}">مرکز هزینه</router-link>
             <div class="dropdown-divider"></div>
 
             <div class="dropdown-submenu">
