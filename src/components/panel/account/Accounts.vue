@@ -39,16 +39,6 @@
 
         <template v-if="hasDetail">
           <div class="form-group col-12 col-md-6">
-            <label>گروه مرکز هزینه</label>
-            <multiselect
-              dir="rtl"
-              :options="accountsSelectValues.costCenterGroups"
-              v-model="item.costCenterGroup"
-              track-by="id"
-              label="name"
-            />
-          </div>
-          <div class="form-group col-12 col-md-6">
             <label>گروه حساب تفضیلی شناور</label>
             <multiselect
               dir="rtl"
@@ -57,6 +47,18 @@
               track-by="id"
               label="name"
             />
+          </div>
+          <div class="form-group col-12 col-md-6">
+            <template v-if="hasCostCenter">
+              <label>گروه مرکز هزینه</label>
+              <multiselect
+                dir="rtl"
+                :options="accountsSelectValues.costCenterGroups"
+                v-model="item.costCenterGroup"
+                track-by="id"
+                label="name"
+              />
+            </template>
           </div>
           <div class="form-group col-12 col-md-6">
             <label>سقف بدهکاری</label>
@@ -288,6 +290,13 @@ export default {
     },
     hasDetail() {
       return this.level == 3;
+    },
+    hasCostCenter() {
+      if (this.item.parent) {
+        return this.item.parent.code[0] == 6;
+      } else if (this.item.id) {
+        return this.item.code[0] == 6;
+      }
     },
     isBank() {
       return this.account_type == "b";
