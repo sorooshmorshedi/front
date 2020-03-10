@@ -62,6 +62,21 @@
                 track-by="id"
                 :options="cheque.account.floatAccountGroup.floatAccounts"
                 v-model="cheque.floatAccount"
+                :disabled="modalMode"
+              />
+            </div>
+            <div
+              class="form-group col-12 col-md-6 offset-md-6"
+              v-if="cheque.account && cheque.account.costCenterGroup"
+            >
+              <label class="required" for>مرکز هزینه</label>
+              <multiselect
+                dir="rtl"
+                label="name"
+                track-by="id"
+                :options="cheque.account.costCenterGroup.floatAccounts"
+                v-model="cheque.costCenter"
+                :disabled="modalMode"
               />
             </div>
             <div class="form-group col-12 col-md-6">
@@ -183,6 +198,12 @@ export default {
     },
     account: {
       default: null
+    },
+    floatAccount: {
+      default: null
+    },
+    costCenter: {
+      default: null
     }
   },
   components: { money, date },
@@ -263,11 +284,17 @@ export default {
   },
   watch: {
     account() {
-      this.cheque.account = this.account;
+      this.setAccounts();
+    },
+    floatAccount() {
+      this.setAccounts();
+    },
+    costCenter() {
+      this.setAccounts();
     },
     cheque() {
       if (this.modalMode) {
-        this.cheque.account = this.account;
+        this.setAccounts();
       }
     }
   },
@@ -282,10 +309,15 @@ export default {
     }
   },
   methods: {
+    setAccounts() {
+      this.cheque.account = this.account;
+      this.cheque.floatAccount = this.floatAccount;
+      this.cheque.costCenter = this.costCenter;
+    },
     validate(clearForm) {
       if (this.modalMode) {
         this.$emit("submit", this.extractIds(this.cheque));
-      } else if (this.cheque.id) {
+      } else {
         this.submitCheque(clearForm);
       }
     },

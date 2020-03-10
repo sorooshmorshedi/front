@@ -9,7 +9,14 @@
             :ListRouteParams="{form: 'transaction', type: type.name}"
             :exportParams="{id: this.id}"
             @clearForm="clearTransaction"
-          ></form-header>
+          >
+              <button
+                data-toggle="modal"
+                data-target="#factors-modal"
+                type="button"
+                class="btn btn-info"
+              >پرداخت شده برای فاکتور های</button>
+          </form-header>
 
           <div class="row">
             <div class="col-lg-8">
@@ -25,7 +32,40 @@
                   >
                   <input v-else type="text" class="form-control" disabled :value="transactionCode">
                 </div>
-                <div class="form-group col-lg-5 col-sm-3">
+                <div class="form-group col-lg-3 col-sm-2">
+                  <label class="required">تاریخ</label>
+                  <date
+                    class="form-control"
+                    v-model="transaction.date"
+                    default="1"
+                    :disabled="!editable"
+                  />
+                </div>
+                <div class="form-group col-lg-3 col-sm-2">
+                  <label>تاریخ راس</label>
+                  <date class="form-control" disabled/>
+                </div>
+                <div class="form-group col-lg-3">
+                  <label>شماره سند</label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="transaction.sanad_code"
+                      :disabled="transaction.id"
+                    >
+                    <div class="input-group-prepend">
+                      <button
+                        @click="openSanad(transaction.sanad)"
+                        :disabled="!transaction.sanad"
+                        class="btn btn-outline-info"
+                        type="button"
+                        id="button-addon1"
+                      >مشاهده سند</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-lg-6 col-sm-3">
                   <div class="row">
                     <div class="col-lg-8">
                       <label class="required">کد - نام مشتری</label>
@@ -48,7 +88,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-lg-4 col-sm-3">
+                <div class="form-group col-lg-3 col-sm-3">
                   <template v-if="transaction.account && transaction.account.floatAccountGroup">
                     <label class="required">حساب شناور</label>
                     <multiselect
@@ -61,49 +101,18 @@
                     />
                   </template>
                 </div>
-                <div class="form-group col-lg-3 col-sm-2">
-                  <label class="required">تاریخ</label>
-                  <date
-                    class="form-control"
-                    v-model="transaction.date"
-                    default="1"
-                    :disabled="!editable"
-                  />
-                </div>
-                <div class="form-group col-lg-3 col-sm-2">
-                  <label>تاریخ راس</label>
-                  <date class="form-control" disabled/>
-                </div>
-                <div class="col-lg-3 d-print-none">
-                  <button
-                    data-toggle="modal"
-                    data-target="#factors-modal"
-                    style="margin-top:27px"
-                    type="button"
-                    name
-                    id
-                    class="btn btn-info"
-                  >پرداخت شده برای فاکتور های</button>
-                </div>
-                <div class="col-lg-3">
-                  <label>شماره سند</label>
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      v-model="transaction.sanad_code"
-                      :disabled="transaction.id"
-                    >
-                    <div class="input-group-prepend">
-                      <button
-                        @click="openSanad(transaction.sanad)"
-                        :disabled="!transaction.sanad"
-                        class="btn btn-outline-info"
-                        type="button"
-                        id="button-addon1"
-                      >مشاهده سند</button>
-                    </div>
-                  </div>
+                <div class="form-group col-lg-3 col-sm-3">
+                  <template v-if="transaction.account && transaction.account.costCenterGroup">
+                    <label class="required">مرکز هزینه</label>
+                    <multiselect
+                      dir="rtl"
+                      :options="transactionCostCenters"
+                      v-model="transaction.costCenter"
+                      track-by="id"
+                      label="name"
+                      :disabled="!editable"
+                    />
+                  </template>
                 </div>
               </div>
             </div>
@@ -127,6 +136,7 @@
                       <th class="required" style="width: 200px">نوع {{ type.label }}</th>
                       <th>نام حساب</th>
                       <th class="required">حساب شناور</th>
+                      <th class="required">مرکز هزینه</th>
                       <th class="required">مبلغ</th>
                       <th>شماره مستند</th>
                       <th class="required">تاریخ {{ type.label }}</th>
@@ -168,6 +178,17 @@
                           v-if="rows[i].type && rows[i].type.account.floatAccountGroup"
                           :options="rows[i].type.account.floatAccountGroup.floatAccounts"
                           v-model="rows[i].floatAccount"
+                          track-by="id"
+                          label="name"
+                          :disabled="!editable"
+                        />
+                      </td>
+                      <td>
+                        <multiselect
+                          dir="rtl"
+                          v-if="rows[i].type && rows[i].type.account.costCenterGroup"
+                          :options="rows[i].type.account.costCenterGroup.floatAccounts"
+                          v-model="rows[i].costCenter"
                           track-by="id"
                           label="name"
                           :disabled="!editable"
@@ -363,6 +384,8 @@
               :receivedOrPaid="transactionType[0]"
               :modalMode="true"
               :account="transaction.account"
+              :floatAccount="transaction.floatAccount"
+              :costCenter="transaction.costCenter"
               @submit="addCheque"
             />
           </div>
@@ -458,6 +481,15 @@ export default {
         this.transaction.account.floatAccountGroup
       ) {
         return this.transaction.account.floatAccountGroup.floatAccounts;
+      }
+      return [];
+    },
+    transactionCostCenters() {
+      if (
+        this.transaction.account &&
+        this.transaction.account.costCenterGroup
+      ) {
+        return this.transaction.account.costCenterGroup.floatAccounts;
       }
       return [];
     },
@@ -567,6 +599,7 @@ export default {
         return;
       }
       this.transaction.floatAccount = factor.floatAccount;
+      this.transaction.costCenter = factor.costCenter;
       let value = factor.sum - factor.paidValue;
       this.rows[0].value = value;
       this.rows.push(this.copy(this.rowTemplate));
@@ -815,6 +848,10 @@ export default {
         this.notify(`لطفا حساب شناور را انتخاب کنید`, "danger");
         return;
       }
+      if (account.costCenterGroup && !this.transaction.costCenter) {
+        this.notify(`لطفا مرکز هزینه را انتخاب کنید`, "danger");
+        return;
+      }
       this.chequeRowIndex = i;
       $("#submit-cheque-modal").modal("show");
     },
@@ -859,7 +896,8 @@ export default {
     getTransactionTemplate() {
       return {
         account: null,
-        floatAccount: null
+        floatAccount: null,
+        costCenter: null
       };
     },
     splitValue(reverse = false) {

@@ -56,6 +56,20 @@
                       v-model="statusChange.floatAccount"
                     />
                   </div>
+                  <div
+                    class="form-group col-12 col-md-12"
+                    v-if="statusChange.account && statusChange.account.costCenterGroup"
+                  >
+                    <label class="required">مرکز هزینه</label>
+                    <multiselect
+                      :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
+                      dir="rtl"
+                      label="name"
+                      track-by="id"
+                      :options="statusChange.account.costCenterGroup.floatAccounts"
+                      v-model="statusChange.costCenter"
+                    />
+                  </div>
                 </template>
                 <div class="w-100"></div>
                 <div class="form-group col-12 col-md-4">

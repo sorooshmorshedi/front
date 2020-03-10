@@ -39,7 +39,6 @@
                 v-model="chequebook.account"
               />
             </div>
-
             <div
               class="form-group col-12 col-md-9 offset-md-3"
               v-if="chequebook.account && chequebook.account.floatAccountGroup"
@@ -52,6 +51,20 @@
                 track-by="id"
                 :options="chequebook.account.floatAccountGroup.floatAccounts"
                 v-model="chequebook.floatAccount"
+              />
+            </div>
+            <div
+              class="form-group col-12 col-md-9 offset-md-3"
+              v-if="chequebook.account && chequebook.account.costCenterGroup"
+            >
+              <label for>مرکز هزینه</label>
+              <multiselect
+                :disabled="!editable"
+                dir="rtl"
+                label="name"
+                track-by="id"
+                :options="chequebook.account.costCenterGroup.floatAccounts"
+                v-model="chequebook.costCenter"
               />
             </div>
             <div class="form-group col-12">

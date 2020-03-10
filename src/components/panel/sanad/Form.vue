@@ -170,16 +170,18 @@
                         <span v-else>-</span>
                       </td>
                       <td
-                        v-tooltip="costCenters(rows[i]).length?row.account.costCenterGroup.name:''"
+                        v-tooltip="getCostCenters(rows[i]).length?row.account.costCenterGroup.name:''"
                       >
                         <multiselect
+                          v-if="getCostCenters(rows[i]).length"
                           dir="rtl"
-                          :options="costCenters(rows[i])"
+                          :options="getCostCenters(rows[i])"
                           v-model="rows[i].costCenter"
                           track-by="id"
                           label="name"
                           :disabled="!editable"
                         />
+                        <span v-else>-</span>
                       </td>
                       <td>
                         <money
@@ -501,9 +503,9 @@ export default {
         return [];
       }
     },
-    costCenters(row) {
+    getCostCenters(row) {
       if (row.account && row.account.costCenterGroup) {
-        return row.account.costCenterGroup.costCenters;
+        return row.account.costCenterGroup.floatAccounts;
       } else {
         return [];
       }

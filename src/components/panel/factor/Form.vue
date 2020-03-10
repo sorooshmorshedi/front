@@ -20,7 +20,10 @@
               ثبت فاکتور برگشت از
               <span v-html="factorLabel"></span>
             </router-link>
-            <router-link class="btn btn-info" :to="{name: 'CreatePersonAccounts'}">تعریف حساب اشخاص</router-link>
+            <router-link
+              class="btn btn-info"
+              :to="{name: 'Accounts', params: {level: 3, account_type: 'p'}, query: {showForm: true}}"
+            >تعریف حساب اشخاص</router-link>
             <template v-if="id">
               <button class="btn btn-info" data-toggle="modal" data-target="#exports-modal">خروجی</button>
               <router-link
@@ -99,21 +102,6 @@
                   >
                 </div>
                 <div class="w-100"></div>
-                <div class="col-lg-2">
-                  <label>
-                    <br>
-                  </label>
-                  <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="customCheck1"
-                      v-model="hasTax"
-                      :disabled="!editable"
-                    >
-                    <label class="custom-control-label" for="customCheck1">فاکتور مالیات دارد</label>
-                  </div>
-                </div>
                 <div class="form-group col-lg-4 col-sm-4">
                   <label class="required">{{ accountName }}</label>
                   <multiselect
@@ -139,12 +127,43 @@
                     :disabled="!editable || hasNotEditableRow"
                   />
                 </div>
+
+                <div
+                  class="form-group col-lg-3 col-sm-4"
+                  v-if="factor.account && factor.account.costCenterGroup"
+                >
+                  <label>مرکز هزینه</label>
+                  <multiselect
+                    dir="rtl"
+                    :options="factor.account.costCenterGroup.floatAccounts"
+                    v-model="factor.costCenter"
+                    track-by="id"
+                    label="name"
+                    :disabled="!editable || hasNotEditableRow"
+                  />
+                </div>
                 <div class="form-group col-lg-2 d-print-none">
                   <button
                     v-if="factor.account"
                     @click="openLedger(factor.account)"
                     class="btn btn-info btn-block btn-label-margin"
                   >مشاهده دفتر</button>
+                </div>
+
+                <div class="col-lg-2">
+                  <label>
+                    <br>
+                  </label>
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customCheck1"
+                      v-model="hasTax"
+                      :disabled="!editable"
+                    >
+                    <label class="custom-control-label" for="customCheck1">فاکتور مالیات دارد</label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -346,6 +365,7 @@
                       <th>پرداخت کننده</th>
 
                       <th>حساب شناور</th>
+                      <th>مرکز هزینه</th>
                       <th>توضیحات</th>
                     </tr>
                   </thead>
@@ -356,6 +376,7 @@
                       <td>{{ e.value | toMoney }}</td>
                       <td>{{ e.account.title }}</td>
                       <td>{{ e.floatAccount?e.floatAccount.name:' - ' }}</td>
+                      <td>{{ e.costCenter?e.costCenter.name:' - ' }}</td>
                       <td>{{ e.explanation }}</td>
                     </tr>
                     <tr class="bg-info text-white">
@@ -488,7 +509,8 @@
                           <th class="required">نام هزینه ثابت</th>
                           <th class="required">مبلغ</th>
                           <th class="required">پرداخت کننده</th>
-                          <th>حساب شناور</th>
+                          <th class="required">حساب شناور</th>
+                          <th class="required">مرکز هزینه</th>
                           <th>توضیحات</th>
                           <th></th>
                         </tr>
@@ -525,6 +547,17 @@
                               track-by="id"
                               :options="e.account.floatAccountGroup.floatAccounts"
                               v-model="e.floatAccount"
+                            />
+                            <span v-else>-</span>
+                          </td>
+                          <td>
+                            <multiselect
+                              v-if="e.account && e.account.costCenterGroup"
+                              dir="rtl"
+                              label="name"
+                              track-by="id"
+                              :options="e.account.costCenterGroup.floatAccounts"
+                              v-model="e.costCenter"
                             />
                             <span v-else>-</span>
                           </td>

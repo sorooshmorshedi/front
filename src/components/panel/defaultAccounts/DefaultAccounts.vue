@@ -95,6 +95,19 @@
                     label="name"
                   />
                 </div>
+                <div
+                  class="form-group col-12"
+                  v-if="defaultAccount.account && defaultAccount.account.costCenterGroup"
+                >
+                  <label>حساب شناور</label>
+                  <multiselect
+                    dir="rtl"
+                    :options="defaultAccount.account.costCenterGroup.floatAccounts"
+                    v-model="defaultAccount.costCenter"
+                    track-by="id"
+                    label="name"
+                  />
+                </div>
                 <div class="form-group col-12">
                   <label>توضیحات</label>
                   <textarea class="form-control" rows="3" v-model="defaultAccount.explanation"></textarea>
@@ -208,11 +221,9 @@ export default {
     },
     getSerialized() {
       let data = {
-        ...this.defaultAccount,
+        ...this.extractIds(this.defaultAccount),
         account: this.defaultAccount.account.id
       };
-      let floatAccount = this.defaultAccount.floatAccount;
-      if (floatAccount) data.floatAccount = floatAccount.id;
 
       if (!this.defaultAccount.usage) data.usage = this.usage;
       return data;
