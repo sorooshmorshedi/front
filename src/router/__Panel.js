@@ -84,13 +84,13 @@ export default [{
     },
     {
       name: 'FloatAccountGroups',
-      path: 'floatAccountGroups/:isCostCenter?',
+      path: 'floatAccountGroups/:is_cost_center?',
       component: FloatAccountGroups,
       props: true
     },
     {
       name: 'FloatAccounts',
-      path: 'floatAccounts/:isCostCenter?',
+      path: 'floatAccounts/:is_cost_center?',
       component: FloatAccounts,
       props: true
     },

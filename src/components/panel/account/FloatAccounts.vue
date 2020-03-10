@@ -43,7 +43,7 @@ import ListModalFormMixin from "../../mcomponents/form/ListModalForm.js";
 export default {
   mixins: [ListModalFormMixin, AccountApiMixin],
   props: {
-    isCostCenter: {
+    is_cost_center: {
       default: false
     }
   },
@@ -51,7 +51,7 @@ export default {
     return {
       baseUrl: "accounts/floatAccounts",
       itemTemplate: {
-        is_cost_center: this.isCostCenter == "true"
+        is_cost_center: this.is_cost_center
       },
       cols: [
         {
@@ -76,13 +76,16 @@ export default {
     },
     items() {
       return this.floatAccounts.filter(
-        o => o.is_cost_center == (this.isCostCenter == "true")
+        o => o.is_cost_center == this.isCostCenter
       );
     },
     groupOptions() {
       return this.floatAccountGroups.filter(
-        o => o.is_cost_center == (this.isCostCenter == "true")
+        o => o.is_cost_center == this.isCostCenter
       );
+    },
+    isCostCenter() {
+      return ["true", true].includes(this.is_cost_center);
     }
   },
   methods: {

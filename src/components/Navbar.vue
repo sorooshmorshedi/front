@@ -69,11 +69,11 @@
 
                 <router-link
                   class="dropdown-item"
-                  :to="{name:'FloatAccountGroups', params:{isCostCenter: true}}"
+                  :to="{name:'FloatAccountGroups', params:{is_cost_center: true}}"
                 >گروه مرکز هزینه</router-link>
                 <router-link
                   class="dropdown-item"
-                  :to="{name:'FloatAccounts', params:{isCostCenter: true}}"
+                  :to="{name:'FloatAccounts', params:{is_cost_center: true}}"
                 >مرکز هزینه</router-link>
 
                 <div class="dropdown-divider"></div>
