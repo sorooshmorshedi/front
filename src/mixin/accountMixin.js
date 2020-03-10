@@ -94,8 +94,9 @@ export default {
     },
     getFloatAccountGroups(force = false, init = false) {
       if (!force && this.floatAccountGroups.length) return;
+
       return this.request({
-        url: this.endpoint('accounts/floatAccountGroups'),
+        url: this.endpoint("accounts/floatAccountGroups"),
         method: 'get',
         success: data => {
           this.$store.commit('setAccounts', {

@@ -7,10 +7,11 @@ export default {
   data() {
     return {
       item: {},
+      itemTemplate: {},
 
       // must be set
-      cols: [],
-      baseUrl: ''
+      // cols: [],
+      // baseUrl: ''
     };
   },
   watch: {
@@ -20,6 +21,7 @@ export default {
   },
   created() {
     this.getData();
+    this.clearForm();
   },
   mounted() {
     this.queryChanged();
@@ -41,7 +43,7 @@ export default {
     },
     clearForm() {
       // must be implemented, but by default
-      this.item = {};
+      this.item = {...this.itemTemplate};
     },
     getSerialized() {
       // must be implemented, but by default

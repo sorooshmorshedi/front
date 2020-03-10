@@ -1,8 +1,8 @@
 <template>
   <div class="rtl">
     <list-modal-form
-      title="گروه حساب شناور"
-      :items="floatAccountGroups"
+      :title="title"
+      :items="items"
       :cols="cols"
       :deletable="item.id"
       @rowClick="setItem"
@@ -30,10 +30,17 @@ import ListModalFormMixin from "../../mcomponents/form/ListModalForm.js";
 
 export default {
   mixins: [ListModalFormMixin, AccountApiMixin],
+  props: {
+    isCostCenter: {
+      default: false
+    }
+  },
   data() {
     return {
-      item: {},
       baseUrl: "accounts/floatAccountGroups",
+      itemTemplate: {
+        is_cost_center: this.isCostCenter == "true"
+      },
       cols: [
         {
           th: "نام گروه",
@@ -49,6 +56,17 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    title() {
+      if (this.isCostCenter) return "گروه مرکز هزینه";
+      else return "گروه حساب شناور";
+    },
+    items() {
+      return this.floatAccountGroups.filter(
+        o => o.is_cost_center == (this.isCostCenter == "true")
+      );
+    }
   },
   methods: {
     getData() {

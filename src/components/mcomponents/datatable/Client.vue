@@ -4,7 +4,7 @@
       <button @click="download()" class="btn btn-block btn-info">دانلود اکسل</button>
     </div>
     <div class="fixed-head">
-      <table class="table table-striped table-bordered">
+      <table class="table table-striped table-bordered table-hover">
         <thead>
           <!-- Filters -->
           <tr class="d-print-none">

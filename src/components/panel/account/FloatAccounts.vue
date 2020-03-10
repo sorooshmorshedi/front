@@ -1,8 +1,8 @@
 <template>
   <div class="rtl">
     <list-modal-form
-      title="حساب شناور"
-      :items="floatAccounts"
+      :title="title"
+      :items="items"
       :cols="cols"
       :deletable="item.id"
       @rowClick="setItem"
@@ -25,7 +25,7 @@
           <label class="required">گروه</label>
           <multiselect
             dir="rtl"
-            :options="floatAccountGroups"
+            :options="groupOptions"
             v-model="item.floatAccountGroups"
             track-by="id"
             label="name"
@@ -42,10 +42,17 @@ import ListModalFormMixin from "../../mcomponents/form/ListModalForm.js";
 
 export default {
   mixins: [ListModalFormMixin, AccountApiMixin],
+  props: {
+    isCostCenter: {
+      default: false
+    }
+  },
   data() {
     return {
-      item: {},
       baseUrl: "accounts/floatAccounts",
+      itemTemplate: {
+        is_cost_center: this.isCostCenter == "true"
+      },
       cols: [
         {
           th: "نام حساب",
@@ -62,9 +69,26 @@ export default {
       ]
     };
   },
+  computed: {
+    title() {
+      if (this.isCostCenter) return "مرکز هزینه";
+      else return "حساب شناور";
+    },
+    items() {
+      return this.floatAccounts.filter(
+        o => o.is_cost_center == (this.isCostCenter == "true")
+      );
+    },
+    groupOptions() {
+      return this.floatAccountGroups.filter(
+        o => o.is_cost_center == (this.isCostCenter == "true")
+      );
+    }
+  },
   methods: {
-    getData(){
+    getData() {
       this.getFloatAccounts(true);
+      this.getFloatAccountGroups(true);
     },
     getSerialized() {
       let data = this.copy(this.item);

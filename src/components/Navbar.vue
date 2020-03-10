@@ -52,18 +52,32 @@
                   :to="{name:'Accounts', params:{level: 3}}"
                 >حساب تفضیلی</router-link>
                 <div class="dropdown-divider"></div>
+
                 <router-link
                   class="dropdown-item"
                   :to="{name:'Accounts', params:{level: 3, account_type: 'p'}}"
-                >تعریف خریدار/فروشنده</router-link>
+                >اشخاص</router-link>
+
                 <router-link
                   class="dropdown-item"
                   :to="{name:'Accounts', params:{level: 3, account_type: 'b'}}"
-                >تعریف بانک</router-link>
+                >بانک</router-link>
+
                 <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" :to="{name:'FloatAccounts'}">حساب شناور</router-link>
                 <router-link class="dropdown-item" :to="{name:'FloatAccountGroups'}">گروه حساب شناور</router-link>
+                <router-link class="dropdown-item" :to="{name:'FloatAccounts'}">حساب شناور</router-link>
+
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'FloatAccountGroups', params:{isCostCenter: true}}"
+                >گروه مرکز هزینه</router-link>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'FloatAccounts', params:{isCostCenter: true}}"
+                >مرکز هزینه</router-link>
+
                 <div class="dropdown-divider"></div>
+
                 <router-link class="dropdown-item" :to="{name:'AccountTree'}">نمودار درختی حساب ها</router-link>
               </div>
             </div>
@@ -241,7 +255,10 @@
             <router-link class="dropdown-item" :to="{name:'BillReport'}">صورت حساب تفصیلی</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'AccountsBalanceReport'}">تراز</router-link>
-            <router-link class="dropdown-item" :to="{name:'FloatAccountsBalanceReportByGroup'}">تراز شناور بر اساس گروه</router-link>
+            <router-link
+              class="dropdown-item"
+              :to="{name:'FloatAccountsBalanceReportByGroup'}"
+            >تراز شناور بر اساس گروه</router-link>
             <router-link class="dropdown-item" :to="{name:'FloatAccountsBalanceReport'}">تراز شناور</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'JournalReport'}">دفتر روزنامه</router-link>
