@@ -20,30 +20,6 @@ export default {
   mixins: [accountMixin],
   props: ["baseAccount"],
   methods: {
-    splitCode(code) {
-      let res = [];
-      let levelCodeLens = [1, 3, 5, 9];
-      levelCodeLens.forEach(len => {
-        let codePart = code.substr(0, len);
-        if (!res.includes(codePart)) res.push(codePart);
-      });
-      return res;
-    },
-    accountParentsName(account) {
-      if (!account) return [];
-      let res = [];
-      let codes = this.splitCode(account.code);
-      for (const code of codes) {
-        let acc = this.findAccount("code", code);
-        if (!acc) {
-          console.log("no account for", code);
-          continue;
-        }
-        res.push(acc.name);
-        if (codes.indexOf(code) == code.length - 3) break;
-      }
-      return res;
-    }
   }
 };
 </script>

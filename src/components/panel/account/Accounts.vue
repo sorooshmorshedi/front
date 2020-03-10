@@ -307,6 +307,7 @@ export default {
   methods: {
     getData() {
       this.getAccounts(true);
+      this.getFloatAccountGroups(true);
     },
     getTitle(level, account_type = "o") {
       if (account_type == "b") return "حساب بانک";

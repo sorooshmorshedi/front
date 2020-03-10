@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="rtl">
     <list-modal-form
       title="گروه حساب شناور"
       :items="floatAccountGroups"

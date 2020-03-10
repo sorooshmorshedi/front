@@ -240,8 +240,9 @@
             <router-link class="dropdown-item" :to="{name:'LedgerReport'}">دفتر کل، معین، تفضیلی</router-link>
             <router-link class="dropdown-item" :to="{name:'BillReport'}">صورت حساب تفصیلی</router-link>
             <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'BalanceReport'}">تراز</router-link>
-            <router-link class="dropdown-item" :to="{name:'FloatBalanceReport'}">تراز شناور</router-link>
+            <router-link class="dropdown-item" :to="{name:'AccountsBalanceReport'}">تراز</router-link>
+            <router-link class="dropdown-item" :to="{name:'FloatAccountsBalanceReportByGroup'}">تراز شناور بر اساس گروه</router-link>
+            <router-link class="dropdown-item" :to="{name:'FloatAccountsBalanceReport'}">تراز شناور</router-link>
             <div class="dropdown-divider"></div>
             <router-link class="dropdown-item" :to="{name:'JournalReport'}">دفتر روزنامه</router-link>
             <div class="dropdown-divider"></div>

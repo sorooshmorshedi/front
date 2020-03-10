@@ -1,8 +1,11 @@
 import Panel from '@/components/panel/Panel';
 
 import List from '@/components/panel/lists/List';
-import Balance from '@/components/panel/balance/Balance';
-import FloatBalance from '@/components/panel/FloatBalance/FloatBalance';
+
+import AccountsBalance from '../components/panel/balance/accounts/AccountsBalance';
+import FloatAccountsBalanceByGroup from '../components/panel/balance/floatAccountsByGroup/FloatAccountsBalanceByGroup';
+import FloatAccountsBalance from '../components/panel/balance/floatAccounts/FloatAccountsBalance';
+
 import Ledger from '@/components/panel/ledger/Ledger';
 import Bill from '@/components/panel/bill/Bill';
 import Journal from '@/components/panel/journal/Journal';
@@ -31,14 +34,19 @@ export default [{
       },
     },
     {
-      name: 'BalanceReport',
-      path: 'balance',
-      component: Balance,
+      name: 'AccountsBalanceReport',
+      path: 'balance/accounts',
+      component: AccountsBalance,
     },
     {
-      name: 'FloatBalanceReport',
-      path: 'balance/float',
-      component: FloatBalance,
+      name: 'FloatAccountsBalanceReportByGroup',
+      path: 'balance/floatAccountsByGroup',
+      component: FloatAccountsBalanceByGroup,
+    },
+    {
+      name: 'FloatAccountsBalanceReport',
+      path: 'balance/floatAccounts',
+      component: FloatAccountsBalance,
     },
     {
       name: 'LedgerReport',
