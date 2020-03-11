@@ -1,21 +1,50 @@
 <template>
   <div class="row rtl align-items-center justify-content-center" id="login">
     <div class="col-sm-4">
-      <div class=" card">
+      <div class="card">
         <img class="card-img-top" src="/static/img/SobhanAccountingLogo.png" alt="Card image cap">
         <div class="card-body">
           <h4 class="card-title">حسابداری آنلاین سبحان</h4>
           <form>
             <div class="form-group">
               <label for="username">نام کاربری</label>
-              <input type="text" class="form-control" name="username" id="username" aria-describedby="helpIdusername" placeholder="نام کاربری" v-model="username">
+              <input
+                type="text"
+                class="form-control"
+                name="username"
+                id="username"
+                aria-describedby="helpIdusername"
+                placeholder="نام کاربری"
+                v-model="username"
+              >
             </div>
             <div class="form-group">
               <label for="password">رمز عبور</label>
-              <input type="password" class="form-control" name="password" id="password" aria-describedby="helpIdpassword" placeholder="رمز عبور" v-model="password">
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                id="password"
+                aria-describedby="helpIdpassword"
+                placeholder="رمز عبور"
+                v-model="password"
+              >
             </div>
-            <button @click.prevent="login()" type="submit" name="submit-btn" id="submit-btn" class="btn btn-primary " style="min-width:100px;">ورود</button>
-            <a name="" id="" class="secondary d-block d-sm-inline" href="#" role="button">رمز عبور خود را فراموش کرده اید؟</a>
+            <button
+              @click.prevent="login()"
+              type="submit"
+              name="submit-btn"
+              id="submit-btn"
+              class="btn btn-primary"
+              style="min-width:100px;"
+            >ورود</button>
+            <a
+              name
+              id
+              class="secondary d-block d-sm-inline"
+              href="#"
+              role="button"
+            >رمز عبور خود را فراموش کرده اید؟</a>
           </form>
         </div>
       </div>
@@ -26,19 +55,13 @@
 <script>
 export default {
   name: "Login",
-  props: ["cb"],
   data() {
     return {
       username: "",
-      password: "",
-      callback: "Home",
-      callbackParams: {}
+      password: ""
     };
   },
-  created() {
-    this.cb && (this.callback = this.cb);
-    this.cbp && (this.callbackParams = this.cbp)
-  },
+  created() {},
   methods: {
     login() {
       this.request({
@@ -50,13 +73,12 @@ export default {
         },
         success: data => {
           this.setToken(data.token);
-          this.$router.push({
-            name: this.callback,
-            params: this.callbackParams
-          });
-        },
-        error: error => {
-          console.log("error", error);
+          let redirectUrl = this.query.redirectUrl;
+          if (redirectUrl) {
+            this.$router.push(redirectUrl);
+          } else {
+            this.$router.push({ name: "Home" });
+          }
         }
       });
     }

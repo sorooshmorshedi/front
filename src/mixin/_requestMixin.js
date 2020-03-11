@@ -3,7 +3,6 @@ export default {
   methods: {
 
     endpoint(url) {
-      // return "http://api.e7.mmdmst.ir/" + url;
       if (this.isDev)
         return "http://localhost:8001/" + url;
       // else return "http://api.sh.mmdmst.ir/" + url;
@@ -63,9 +62,8 @@ export default {
       this.notify('شما از سامانه خارج شده اید', 'warning');
       this.$router.push({
         name: "Login",
-        params: {
-          cb: this.$router.currentRoute.name,
-          cbp: this.$router.currentRoute.params
+        query: {
+          redirectUrl: this.$route.fullPath
         }
       });
     },
