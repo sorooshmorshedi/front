@@ -51,6 +51,19 @@
                           </label>
                         </div>
                       </div>
+
+                      <div class="form-group col-12">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input
+                              type="checkbox"
+                              class="form-check-input"
+                              v-model="accountFilters.showCostCenters"
+                            >
+                            نمایش مرکز هزینه
+                          </label>
+                        </div>
+                      </div>
                     </template>
 
                     <div class="form-group col-12">
@@ -160,6 +173,9 @@ export default {
     this.clearFilters();
   },
   watch: {
+    url() {
+      this.getData();
+    },
     sanadFilters: {
       handler() {
         if (this.debouncedGetData) this.debouncedGetData();
@@ -204,7 +220,6 @@ export default {
       });
     },
     filterAccounts() {
-      this.log("filtering accounts");
       let filters = this.accountFilters;
       let accounts = this.allAccounts.filter(acc => {
         if (filters.level != "all") {
@@ -253,7 +268,6 @@ export default {
         if (filters.showDifferences) {
           if (!acc._type) return false;
           let nature = acc._type.nature;
-          console.log(nature);
           if (acc.bes_remain == 0 && acc.bed_remain == 0) return false;
           if (nature == "bed" && acc.bes_remain == 0) return false;
           if (nature == "bes" && acc.bed_remain == 0) return false;
@@ -265,7 +279,7 @@ export default {
       let res = [];
       for (const acc of accounts) {
         res.push(acc);
-        if (filters.showFloatAccounts)
+        if (filters.showFloatAccounts) {
           for (const floatAccount of acc._floatAccounts) {
             res.push({
               code: "حساب شناور",
@@ -277,6 +291,20 @@ export default {
               classes: "float-account-row"
             });
           }
+        }
+        if (filters.showCostCenters) {
+          for (const floatAccount of acc._costCenters) {
+            res.push({
+              code: "مرکز هزینه",
+              name: floatAccount.name,
+              bes_sum: floatAccount.bes_sum,
+              bed_sum: floatAccount.bed_sum,
+              bes_remain: floatAccount.bes_remain,
+              bed_remain: floatAccount.bed_remain,
+              classes: "float-account-row"
+            });
+          }
+        }
       }
 
       this.accounts = res;
@@ -287,6 +315,7 @@ export default {
         status: "all",
         special: "all",
         showFloatAccounts: false,
+        showCostCenters: false,
         showDifferences: false
       };
       this.sanadFilters = {};

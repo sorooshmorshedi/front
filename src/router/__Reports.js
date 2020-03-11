@@ -40,13 +40,15 @@ export default [{
     },
     {
       name: 'FloatAccountsBalanceReportByGroup',
-      path: 'balance/floatAccountsByGroup',
+      path: 'balance/floatAccountsByGroup/:is_cost_center?',
       component: FloatAccountsBalanceByGroup,
+      props: true
     },
     {
       name: 'FloatAccountsBalanceReport',
-      path: 'balance/floatAccounts',
+      path: 'balance/floatAccounts/:is_cost_center?',
       component: FloatAccountsBalance,
+      props: true
     },
     {
       name: 'LedgerReport',
