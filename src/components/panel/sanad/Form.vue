@@ -35,8 +35,6 @@
                   class="dropdown-item"
                   href="#!"
                 >به سند جدید</a>
-                <h6 class="dropdown-header"></h6>
-                <a class="dropdown-item" href="#!">Another action</a>
               </div>
             </div>
           </form-header>
@@ -389,9 +387,9 @@ export default {
       this.clearSanad();
       this.rows = [];
       for (const row of rows) {
+        if (row.id) delete row.id;
         this.rows.push({
-          ...row,
-          id: null
+          ...row
         });
       }
     },
