@@ -37,6 +37,8 @@
                 >به سند جدید</a>
               </div>
             </div>
+
+            <button @click="reorderSanads" class="btn btn-info">مرتب کردن کد اسناد بر اساس تاریخ</button>
           </form-header>
 
           <div class="row">
@@ -507,6 +509,17 @@ export default {
       } else {
         return [];
       }
+    },
+
+    reorderSanads() {
+      this.request({
+        url: this.endpoint("sanads/sanads/reorder"),
+        method: "post",
+        success: data => {
+          this.getSanadCode();
+          this.successNotify();
+        }
+      });
     }
   }
 };
