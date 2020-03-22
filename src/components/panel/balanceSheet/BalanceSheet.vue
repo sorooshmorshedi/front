@@ -28,6 +28,19 @@
                     <div class="form-group col-lg-2">
                       <button @click="getData()" class="btn btn-info btn-label-margin w-100px">گزارش</button>
                     </div>
+                    <div class="form-group col-lg-2">
+                      <div class="form-check btn-label-margin">
+                        <label class="form-check-label">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            v-model="filters.skipClosingSanad"
+                            :value="false"
+                          >
+                          در نظر نگرفتن سند بستن
+                        </label>
+                      </div>
+                    </div>
                     <div class="w-100"></div>
                     <template v-if="!_.isEmpty(d)">
                       <div class="col-lg-6">
