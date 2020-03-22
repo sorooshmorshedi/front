@@ -164,6 +164,8 @@ export default {
           if (typeof data[key] == 'object') {
             if (data[key].id) data[key] = data[key].id;
             else delete data[key];
+          } else {
+            if (data[key] == "") data[key] = null;
           }
         } else {
           if (data[key] == null) delete data[key];

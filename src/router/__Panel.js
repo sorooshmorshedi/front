@@ -44,6 +44,8 @@ import ChequeForm from '../components/panel/cheque/ChequeForm.vue';
 
 import ExportVerifiers from '@/components/panel/exportVerifiers/ExportVerifiers';
 
+import Closing from '../components/panel/closing/Closing';
+
 export default [{
   name: 'Panel',
   path: '/panel',
@@ -226,6 +228,12 @@ export default [{
       name: 'ExportVerifiers',
       path: 'exportVerifiers',
       component: ExportVerifiers,
+    },
+
+    {
+      name: 'Closing',
+      path: 'closing',
+      component: Closing,
     }
 
   ]

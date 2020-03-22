@@ -110,7 +110,7 @@
                     v-model="factor.account"
                     track-by="id"
                     label="title"
-                    :disabled="!editable || hasNotEditableRow"
+                    :disabled="!editable"
                   />
                 </div>
                 <div
@@ -124,7 +124,7 @@
                     v-model="factor.floatAccount"
                     track-by="id"
                     label="name"
-                    :disabled="!editable || hasNotEditableRow"
+                    :disabled="!editable"
                   />
                 </div>
 
@@ -139,7 +139,7 @@
                     v-model="factor.costCenter"
                     track-by="id"
                     label="name"
-                    :disabled="!editable || hasNotEditableRow"
+                    :disabled="!editable"
                   />
                 </div>
                 <div class="form-group col-lg-2 d-print-none">
@@ -212,18 +212,8 @@
                       <td>
                         <ware-select
                           v-model="rows[i].ware"
-                          :disabled="!editable || !row.is_editable"
+                          :disabled="!editable"
                         />
-
-                        <!-- <multiselect
-                          :option-height="104"
-                          dir="rtl"
-                          :options="waresSelectValues.wares"
-                          v-model="rows[i].ware"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable || !row.is_editable"
-                        />-->
                       </td>
                       <td>
                         <multiselect
@@ -234,7 +224,7 @@
                           v-model="rows[i].warehouse"
                           track-by="id"
                           label="name"
-                          :disabled="!editable || !row.is_editable"
+                          :disabled="!editable"
                         />
                         <span v-else>-</span>
                       </td>
@@ -242,7 +232,7 @@
                         <money
                           class="form-control form-control"
                           v-model="rows[i].count"
-                          :disabled="!editable || !row.is_editable"
+                          :disabled="!editable"
                           decimalScale="6"
                         />
                       </td>
@@ -251,7 +241,7 @@
                         <money
                           class="form-control form-control"
                           v-model="rows[i].fee"
-                          :disabled="!editable || !row.is_editable"
+                          :disabled="!editable"
                         />
                       </td>
                       <td dir="ltr">
@@ -264,14 +254,14 @@
                       </td>
                       <td>
                         <money
-                          :disabled="!editable || hasValue(rows[i].discountPercent) || !row.is_editable"
+                          :disabled="!editable || hasValue(rows[i].discountPercent)"
                           class="form-control form-control"
                           v-model="rows[i].discountValue"
                         />
                       </td>
                       <td>
                         <input
-                          :disabled="!editable || (hasValue(rows[i].discountValue) && !hasValue(rows[i].discountPercent)) || !row.is_editable"
+                          :disabled="!editable || (hasValue(rows[i].discountValue) && !hasValue(rows[i].discountPercent))"
                           type="number"
                           min="0"
                           max="100"
@@ -308,7 +298,7 @@
                           type="text"
                           class="form-control form-control"
                           v-model="rows[i].explanation"
-                          :disabled="!editable || !row.is_editable"
+                          :disabled="!editable"
                         >
                       </td>
                       <td v-if="isBuy">
@@ -325,7 +315,7 @@
                           @click="deleteItemRow(i)"
                           type="button"
                           class="btn btn-sm btn-warning"
-                          :disabled="!editable || !row.is_editable"
+                          :disabled="!editable"
                         >حذف ردیف</button>
                       </td>
                     </tr>
@@ -336,7 +326,7 @@
                           @click="deleteItemRow(-1)"
                           type="button"
                           class="btn btn-danger d-print-none"
-                          :disabled="!editable || hasNotEditableRow"
+                          :disabled="!editable"
                         >حذف همه ردیف ها</button>
                       </td>
                     </tr>
@@ -784,7 +774,6 @@ export default {
         discountValue: "",
         discountPercent: "",
         fee: "",
-        is_editable: true,
         ware: null,
         warehouse: null
       },

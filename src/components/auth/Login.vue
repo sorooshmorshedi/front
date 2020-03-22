@@ -71,6 +71,7 @@ export default {
           username: this.username,
           password: this.password
         },
+        token: false,
         success: data => {
           this.setToken(data.token);
           let redirectUrl = this.query.redirectUrl;

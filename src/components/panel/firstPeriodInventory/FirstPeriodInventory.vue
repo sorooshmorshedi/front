@@ -288,7 +288,7 @@ export default {
         method: "post",
         data: {
           factor: this.factor,
-          items: items,
+          factor_items: items,
           ids_to_delete: this.idsToDelete
         },
         success: data => {

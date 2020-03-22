@@ -310,6 +310,9 @@
             >گزارش فروش</router-link>
           </div>
         </li>
+        <li class="nav-item">
+          <router-link class="nav-link" :to="{name:'Closing'}">عملیات بستن و انتقال</router-link>
+        </li>
         <li class="nav-item left">
           <a @click="logout()" class="exit-btn nav-link bg-danger text-white" href="#">خروج</a>
         </li>

@@ -292,6 +292,7 @@ export default {
       return this.level == 3;
     },
     hasCostCenter() {
+      return true;
       if (this.item.parent) {
         return this.item.parent.code[0] == 6;
       } else if (this.item.id) {

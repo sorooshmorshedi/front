@@ -1,11 +1,5 @@
 export default {
   computed: {
-    hasNotEditableRow() {
-      if (!this.factor.id) return false;
-      for (const item of this.factor.items) {
-        if (!item.is_editable) return true;
-      }
-    },
     paymentsSum() {
       let sum = 0;
       if (this.factor.payments) {
@@ -135,11 +129,7 @@ export default {
     },
     canDelete() {
       if (!this.factor.id) return false;
-      this.factor.items.forEach(item => {
-        if (!item.is_editable) {
-          return false;
-        }
-      });
+      return true;
     },
     transactionType() {
       let label;

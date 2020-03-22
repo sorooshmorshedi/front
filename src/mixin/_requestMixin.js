@@ -54,7 +54,7 @@ export default {
       if (!this.token) {
         console.warn('user is not login');
       } else {
-        headers["authorization"] = "JWT " + this.token;
+        headers["Authorization"] = "Token " + this.token;
       }
     },
     handle_401(error) {
