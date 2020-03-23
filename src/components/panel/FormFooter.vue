@@ -28,7 +28,7 @@
         >آخرین {{ formName }}</button>
       </template>
     </div>
-    <div class="col-12 col-md-6 ltr text-left" dir="ltr">
+    <div class="col-12 col-md-6 ltr text-left" dir="ltr" v-if="!financialYear.is_closed">
       <template v-if="isEditing">
         <slot></slot>
         <button

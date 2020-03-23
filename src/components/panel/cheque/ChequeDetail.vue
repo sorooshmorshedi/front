@@ -118,7 +118,7 @@
                       </td>
                       <td>
                         <i
-                          v-if="i == statusChanges.length-1 && (isPaidCheque || i != 0)"
+                          v-if="i == statusChanges.length-1 && (isPaidCheque || i != 0) && !this.financialYear.is_closed"
                           @click.prevent="deleteStatusChange(sc)"
                           class="fas fa-trash-alt text-danger"
                         />
@@ -183,12 +183,14 @@ export default {
       return [];
     },
     canSubmitCheque() {
-      return this.statusChanges.length == 0;
+      return this.statusChanges.length == 0 && !this.financialYear.is_closed;
     },
     canEditCheque() {
-      return this.statusChanges.length <= 1;
+      return this.statusChanges.length <= 1 && !this.financialYear.is_closed;
     },
     canChangeStatus() {
+      if (this.financialYear.is_closed) return false;
+
       let s = this.cheque.status;
       if (["passed", "cashed", "revoked", "transferred", "blank"].includes(s))
         return false;
