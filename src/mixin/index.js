@@ -18,6 +18,7 @@ Vue.mixin({
   computed: {
     ...mapState({
       user: state => state.user,
+      financialYear: state => state.user ? state.user.active_financial_year : {},
       permissions: state => state.user.permissions,
       OGR: state => state.OGR,
       now: state => state.now
