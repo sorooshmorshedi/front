@@ -32,11 +32,13 @@ export default {
   },
   mounted() {
     this.cleave = new Cleave("#" + this.inputId, this.options);
-    this.cleave.setRawValue(this.value);
+    let value = Number(this.value);
+    this.cleave.setRawValue(value);
   },
   watch: {
     value() {
-      this.cleave.setRawValue(this.value);
+      let value = Number(this.value);
+      this.cleave.setRawValue(value);
     }
   },
   methods: {
