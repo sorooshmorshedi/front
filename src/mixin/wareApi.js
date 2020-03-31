@@ -76,19 +76,6 @@ export default {
         }
       })
     },
-    getAccounts(force = false, init = false) {
-      if (!force && this.accounts.length) return;
-      return this.request({
-        url: this.endpoint('accounts/accounts'),
-        method: 'get',
-        success: data => {
-          this.$store.commit('setAccounts', {
-            accounts: data
-          });
-          init && this.init();
-        }
-      })
-    },
     storeWare() {
       let data = this.copy(this.ware);
       let parent = data.parent;
@@ -227,7 +214,7 @@ export default {
       wares: state => state.wares.wares,
       warehouses: state => state.wares.warehouses,
       units: state => state.wares.units,
-      accounts: state => state.accounts.accounts,
+      accounts: state => state.accounts,
     }),
     waresSelectValues() {
       this.log('Generate wares SelectValues');

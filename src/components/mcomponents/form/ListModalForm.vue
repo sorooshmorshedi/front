@@ -3,35 +3,35 @@
     <div class="col-12">
       <div class="card right">
         <div class="card-body">
-          <div class="title">
+          <div class="title" v-if="showTitle">
             {{ title }}
-            <button class="btn btn-info" @click="openModal">
+            <button class="btn btn-info" @click="emitClearForm">
               تعریف
               {{ title }}
               جدید
             </button>
+            <slot name="header-buttons"></slot>
           </div>
-          <datatable :cols="cols" :data="items" @rowClick="rowClick"/>
-        </div>
-      </div>
-    </div>
+          <div class="row">
+            <div class="col-12" :class="{'col-md-6': showList, 'col-md-12': !showList}">
+              <slot name="default"></slot>
 
-    <div class="modal fade" id="form">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ title }}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <slot/>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-            <button v-if="deletable" @click="emitDelete" type="button" class="btn btn-danger">حذف</button>
-            <button @click="emitSubmit" type="button" class="btn btn-primary w-100px">ثبت</button>
+              <hr>
+
+              <div class="text-left">
+                <button
+                  v-if="deletable"
+                  @click="emitDelete"
+                  type="button"
+                  class="btn btn-danger"
+                >حذف</button>
+                <button @click="emitSubmit" type="button" class="btn btn-primary w-100px">ثبت</button>
+              </div>
+            </div>
+
+            <div class="table-pointer col-12 col-md-6" v-if="showList">
+              <datatable :cols="cols" :data="items" @rowClick="rowClick"/>
+            </div>
           </div>
         </div>
       </div>
@@ -55,12 +55,16 @@ export default {
     },
     deletable: {
       default: true
+    },
+    showList: {
+      default: true
+    },
+    showTitle: {
+      default: true
     }
   },
   data() {
-    return {
-      isModalOpen: false
-    };
+    return {};
   },
   watch: {
     query() {
@@ -71,18 +75,7 @@ export default {
     this.queryChanged();
   },
   methods: {
-    queryChanged() {
-      if (this.query.showForm && !this.isModalOpen) this.openModal();
-    },
-    openModal() {
-      this.emitClearForm();
-      this.isModalOpen = true;
-      this.modal("#form");
-    },
-    hideModal() {
-      this.isModalOpen = false;
-      this.modal("#form", "hide");
-    },
+    queryChanged() {},
     emitClearForm() {
       this.$emit("clearForm");
     },

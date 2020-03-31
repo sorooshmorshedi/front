@@ -9,15 +9,11 @@ export default new Vuex.Store({
     OGR: 0, //on going requests
     now: null,
     timeInterval: null,
-    accounts: {
-      accounts: [],
-      floatAccountGroups: [],
-      floatAccounts: [],
-      accountTypes: [],
-      costCenterGroups: [],
-      independentAccounts: [],
-      defaultAccounts: [],
-    },
+    accounts: [],
+    floatAccountGroups: [],
+    floatAccounts: [],
+    accountTypes: [],
+    defaultAccounts: [],
     wares: {
       wareLevels: [],
       wares: [],
@@ -41,7 +37,7 @@ export default new Vuex.Store({
     decrementOGR(state) {
       state.OGR--;
     },
-    setTime(state, time){
+    setTime(state, time) {
       state.now = time;
       state.timeInterval && clearInterval(state.timeInterval)
       state.timeInterval = setInterval(() => state.now.add(1, 'second'), 1000)
@@ -49,14 +45,26 @@ export default new Vuex.Store({
     setUser(state, user) {
       state.user = user;
     },
-    setAccounts(state, accounts) {
-      accounts.accounts && (state.accounts.accounts = accounts.accounts);
-      accounts.floatAccountGroups && (state.accounts.floatAccountGroups = accounts.floatAccountGroups);
-      accounts.floatAccounts && (state.accounts.floatAccounts = accounts.floatAccounts);
-      accounts.accountTypes && (state.accounts.accountTypes = accounts.accountTypes);
-      accounts.costCenterGroups && (state.accounts.costCenterGroups = accounts.costCenterGroups);
-      accounts.independentAccounts && (state.accounts.independentAccounts = accounts.independentAccounts);
-      accounts.defaultAccounts && (state.accounts.defaultAccounts = accounts.defaultAccounts);
+    setAccounts(state, data) {
+      state.accounts = data;
+    },
+    setFloatAccountGroups(state, data) {
+      state.floatAccountGroups = data;
+    },
+    setFloatAccounts(state, data) {
+      state.floatAccounts = data;
+    },
+    setAccountTypes(state, data) {
+      state.accountTypes = data;
+    },
+    setCostCenterGroups(state, data) {
+      state.costCenterGroups = data;
+    },
+    setIndependentAccounts(state, data) {
+      state.independentAccounts = data;
+    },
+    setDefaultAccounts(state, data) {
+      state.defaultAccounts = data;
     },
     setWares(state, wares) {
       wares.wareLevels && (state.wares.wareLevels = wares.wareLevels);

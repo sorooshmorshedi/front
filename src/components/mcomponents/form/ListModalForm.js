@@ -4,6 +4,11 @@ export default {
   components: {
     ListModalForm
   },
+  props: {
+    itemObject: {
+      default: null
+    }
+  },
   data() {
     return {
       item: {},
@@ -17,6 +22,9 @@ export default {
   watch: {
     query() {
       this.queryChanged();
+    },
+    itemObject() {
+      if (this.itemObject) this.setItem(this.itemObject);
     }
   },
   created() {
@@ -25,8 +33,12 @@ export default {
   },
   mounted() {
     this.queryChanged();
+    if (this.itemObject) this.setItem(this.itemObject);
   },
   methods: {
+    /*
+      Set default fields with data query.item
+    */
     queryChanged() {
       let item = this.query.item;
       for (let key in item) {
@@ -43,7 +55,9 @@ export default {
     },
     clearForm() {
       // must be implemented, but by default
-      this.item = {...this.itemTemplate};
+      this.item = {
+        ...this.itemTemplate
+      };
     },
     getSerialized() {
       // must be implemented, but by default
@@ -62,7 +76,6 @@ export default {
           this.clearForm();
           this.getData();
           this.successNotify();
-          this.$refs.listModelForm.hideModal();
         }
       });
     },
@@ -75,7 +88,6 @@ export default {
           this.clearForm();
           this.getData();
           this.successNotify();
-          this.$refs.listModelForm.hideModal();
         }
       });
     },
@@ -87,7 +99,6 @@ export default {
           this.clearForm();
           this.getData();
           this.successNotify();
-          this.$refs.listModelForm.hideModal();
         }
       });
     }

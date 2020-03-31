@@ -20,10 +20,9 @@ Vue.component('WareSelect', WareSelect);
 import money from "@/components/mcomponents/cleave/Money";
 Vue.component('money', money);
 
-import {
-  VueContext
-} from 'vue-context';
-Vue.component('VueContext', VueContext);
+import ContextMenu from "@/components/mcomponents/ContextMenu";
+Vue.component('ContextMenu', ContextMenu);
+
 
 import _ from 'lodash'
 window._ = _

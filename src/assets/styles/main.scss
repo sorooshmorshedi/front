@@ -53,11 +53,9 @@
   min-width: 120px;
 }
 
-.table {
-  &.table-pointer {
-    tr {
-      cursor: pointer;
-    }
+.table-pointer {
+  tr {
+    cursor: pointer;
   }
 }
 
@@ -102,6 +100,10 @@ input[type=number]::-webkit-outer-spin-button {
 
 .w-100px {
   width: 100px;
+}
+
+.w-80px {
+  width: 80px;
 }
 
 .table th,

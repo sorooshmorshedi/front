@@ -4,15 +4,14 @@ import {
 export default {
   computed: {
     ...mapState({
-      accounts: state => state.accounts.accounts,
-      floatAccountGroups: state => state.accounts.floatAccountGroups,
-      floatAccounts: state => state.accounts.floatAccounts,
-      accountTypes: state => state.accounts.accountTypes,
-      costCenterGroups: state => state.accounts.costCenterGroups,
-      defaultAccounts: state => state.accounts.defaultAccounts,
+      accounts: state => state.accounts,
+      floatAccountGroups: state => state.floatAccountGroups,
+      floatAccounts: state => state.floatAccounts,
+      accountTypes: state => state.accountTypes,
+      costCenterGroups: state => state.costCenterGroups,
+      defaultAccounts: state => state.defaultAccounts,
     }),
     accountsSelectValues() {
-      if (!this.accounts) return [];
       this.log('Generate accountsSelectValues');
       let res = {
         levels: {
@@ -33,6 +32,7 @@ export default {
         defaultAccounts: [],
         all: [],
       };
+      if (!this.accounts) return res;
 
       this.accounts.forEach(account => {
         res.all.push(account);
@@ -83,9 +83,7 @@ export default {
         method: 'get',
         success: data => {
           this.log('Get Accounts : Done')
-          this.$store.commit('setAccounts', {
-            accounts: data
-          });
+          this.$store.commit('setAccounts', data);
           this.log('Commit Accounts : Done')
           init && this.init();
           this.log('Init:', init, ' : Done')
@@ -99,9 +97,7 @@ export default {
         url: this.endpoint("accounts/floatAccountGroups"),
         method: 'get',
         success: data => {
-          this.$store.commit('setAccounts', {
-            floatAccountGroups: data
-          });
+          this.$store.commit('setFloatAccountGroups', data);
           init && this.init();
         }
       })
@@ -112,9 +108,7 @@ export default {
         url: this.endpoint('accounts/floatAccounts'),
         method: 'get',
         success: data => {
-          this.$store.commit('setAccounts', {
-            floatAccounts: data
-          });
+          this.$store.commit('setFloatAccounts', data);
           init && this.init();
         }
       })
@@ -125,9 +119,7 @@ export default {
         url: this.endpoint('accounts/accountTypes'),
         method: 'get',
         success: data => {
-          this.$store.commit('setAccounts', {
-            accountTypes: data
-          });
+          this.$store.commit('setAccountTypes', data);
           init && this.init();
         }
       })
@@ -138,9 +130,7 @@ export default {
         url: this.endpoint('accounts/defaultAccounts'),
         method: 'get',
         success: data => {
-          this.$store.commit('setAccounts', {
-            defaultAccounts: data
-          });
+          this.$store.commit('setDefaultAccounts', data);
           init && this.init();
         }
       })
@@ -196,7 +186,22 @@ export default {
         if (codes.indexOf(code) == code.length - 3) break;
       }
       return res;
-    }
+    },
+
+    getTitle(level, account_type = "o") {
+      if (account_type == "b") return "حساب بانک";
+      if (account_type == "p") return "حساب اشخاص";
+      switch (Number(level)) {
+        case 0:
+          return "گروه";
+        case 1:
+          return "کل";
+        case 2:
+          return "معین";
+        case 3:
+          return "تفصیلی";
+      }
+    },
   },
 }
 
