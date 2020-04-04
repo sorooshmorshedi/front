@@ -1,22 +1,22 @@
-import Panel from '@/components/panel/Panel';
+import Panel from '@/views/panel/Panel.vue';
 
-import List from '@/components/panel/lists/List';
+import List from '@/views/panel/lists/List.vue';
 
-import AccountsBalance from '../components/panel/balance/accounts/AccountsBalance';
-import FloatAccountsBalanceByGroup from '../components/panel/balance/floatAccountsByGroup/FloatAccountsBalanceByGroup';
-import FloatAccountsBalance from '../components/panel/balance/floatAccounts/FloatAccountsBalance';
+import AccountsBalance from '../views/panel/balance/accounts/AccountsBalance.vue';
+import FloatAccountsBalanceByGroup from '../views/panel/balance/floatAccountsByGroup/FloatAccountsBalanceByGroup.vue';
+import FloatAccountsBalance from '../views/panel/balance/floatAccounts/FloatAccountsBalance.vue';
 
-import Ledger from '@/components/panel/ledger/Ledger';
-import Bill from '@/components/panel/bill/Bill';
-import Journal from '@/components/panel/journal/Journal';
-import IncomeStatement from '@/components/panel/incomeStatement/IncomeStatement';
-import BalanceSheet from '@/components/panel/balanceSheet/BalanceSheet';
-import BuySaleReport from '@/components/panel/buySaleReport/BuySaleReport';
+import Ledger from '@/views/panel/ledger/Ledger.vue';
+import Bill from '@/views/panel/bill/Bill.vue';
+import Journal from '@/views/panel/journal/Journal.vue';
+import IncomeStatement from '@/views/panel/incomeStatement/IncomeStatement.vue';
+import BalanceSheet from '@/views/panel/balanceSheet/BalanceSheet.vue';
+import BuySaleReport from '@/views/panel/buySaleReport/BuySaleReport.vue';
 
-import DetailedWareInventory from '@/components/panel/inventory/ware/detailed/DetailedWareInventory';
-import AllWaresInventory from '@/components/panel/inventory/ware/all/AllWaresInventory';
-import DetailedWarehouseInventory from '@/components/panel/inventory/warehouse/detailed/DetailedWarehouseInventory';
-import AllWarehousesInventory from '@/components/panel/inventory/warehouse/all/AllWarehousesInventory';
+import DetailedWareInventory from '@/views/panel/inventory/ware/detailed/DetailedWareInventory.vue';
+import AllWaresInventory from '@/views/panel/inventory/ware/all/AllWaresInventory.vue';
+import DetailedWarehouseInventory from '@/views/panel/inventory/warehouse/detailed/DetailedWarehouseInventory.vue';
+import AllWarehousesInventory from '@/views/panel/inventory/warehouse/all/AllWarehousesInventory.vue';
 
 export default [{
   name: 'Reports',
@@ -54,7 +54,7 @@ export default [{
       name: 'LedgerReport',
       path: 'ledger',
       component: Ledger,
-      props: route => {
+      props: (route) => {
         return {
           ledgerAccountIds: route.query.accs
         }
@@ -69,7 +69,7 @@ export default [{
       name: 'DetailedWareInventoryReport',
       path: 'inventory/ware/detailed',
       component: DetailedWareInventory,
-      props: route => {
+      props: (route) => {
         return {
           wareId: route.query.wareId
         }
@@ -79,7 +79,7 @@ export default [{
       name: 'DetailedWarehouseInventoryReport',
       path: 'inventory/warehouse/detailed',
       component: DetailedWarehouseInventory,
-      props: route => {
+      props: (route) => {
         return {
           warehouseId: route.query.warehouseId
         }
@@ -116,7 +116,7 @@ export default [{
       name: 'BuySaleReport',
       path: 'buySaleReport/:type',
       component: BuySaleReport,
-      props: route => {
+      props: (route) => {
         return {
           wareId: route.query.wareId,
           ...route.params

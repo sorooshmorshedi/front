@@ -1,5 +1,5 @@
-import createSchema from "@/components/panel/ware/CreateSchema";
-import editSchema from "@/components/panel/ware/EditSchema";
+import createSchema from "@/views/panel/ware/CreateSchema";
+import editSchema from "@/views/panel/ware/EditSchema";
 
 import WareApi from "./wareApi";
 import AccountApi from "./accountMixin";

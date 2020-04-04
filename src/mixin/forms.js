@@ -1,5 +1,6 @@
-import FormFooter from "@/components/panel/FormFooter";
-import FormHeader from "@/components/panel/FormHeader";
+import FormFooter from "@/components/form/FormFooter";
+import FormHeader from "@/components/form/FormHeader";
+
 export default {
   components: {
     FormFooter,

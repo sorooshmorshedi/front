@@ -1,50 +1,50 @@
-import Panel from '@/components/panel/Panel';
+import Panel from '@/views/panel/Panel.vue';
 
-import Home from '@/components/panel/Home';
+import Home from '@/views/panel/Home.vue';
 
-import Company from '@/components/panel/company/Company';
-import CreateCompany from '@/components/panel/company/Create';
-import UpdateCompany from '@/components/panel/company/Update';
-import CompaniesList from '@/components/panel/company/List';
+import Company from '@/views/panel/company/Company.vue';
+import CreateCompany from '@/views/panel/company/Create.vue';
+import UpdateCompany from '@/views/panel/company/Update.vue';
+import CompaniesList from '@/views/panel/company/List.vue';
 
-import Accounts from '../components/panel/account/Accounts.vue';
-import FloatAccounts from '../components/panel/account/FloatAccounts.vue';
-import FloatAccountGroups from '../components/panel/account/FloatAccountGroups.vue';
-import AccountTree from '@/components/panel/account/Tree';
+import Accounts from '../views/panel/account/Accounts.vue';
+import FloatAccounts from '../views/panel/account/FloatAccounts.vue';
+import FloatAccountGroups from '../views/panel/account/FloatAccountGroups.vue';
+import AccountTree from '@/views/panel/account/Tree.vue';
 
-import DefaultAccounts from '@/components/panel/defaultAccounts/DefaultAccounts';
+import DefaultAccounts from '@/views/panel/defaultAccounts/DefaultAccounts.vue';
 
-import Ware from '@/components/panel/ware/Ware';
-import CreateWare from '@/components/panel/ware/Create';
-import EditWare from '@/components/panel/ware/Edit';
-import Warehouse from '@/components/panel/ware/Warehouse';
-import Unit from '@/components/panel/ware/Unit';
+import Ware from '@/views/panel/ware/Ware.vue';
+import CreateWare from '@/views/panel/ware/Create.vue';
+import EditWare from '@/views/panel/ware/Edit.vue';
+import Warehouse from '@/views/panel/ware/WareHouse.vue';
+import Unit from '@/views/panel/ware/Unit.vue';
 
-import Sanad from '@/components/panel/sanad/Sanad';
-import SanadForm from '@/components/panel/sanad/Form';
+import Sanad from '@/views/panel/sanad/Sanad.vue';
+import SanadForm from '@/views/panel/sanad/Form.vue';
 
-import Transaction from '@/components/panel/transaction/Transaction';
-import TransactionForm from '@/components/panel/transaction/Form';
+import Transaction from '@/views/panel/transaction/Transaction.vue';
+import TransactionForm from '@/views/panel/transaction/Form.vue';
 
 
-import Factor from '@/components/panel/factor/Factor';
-import FactorForm from '@/components/panel/factor/Form';
-import FactorExpenses from '@/components/panel/factor/Expenses';
+import Factor from '@/views/panel/factor/Factor.vue';
+import FactorForm from '@/views/panel/factor/Form.vue';
+import FactorExpenses from '@/views/panel/factor/Expenses.vue';
 
-import TransferForm from '@/components/panel/transfer/Form';
+import TransferForm from '@/views/panel/transfer/Form.vue';
 
-import FirstPeriodInventory from '@/components/panel/firstPeriodInventory/FirstPeriodInventory';
+import FirstPeriodInventory from '@/views/panel/firstPeriodInventory/FirstPeriodInventory.vue';
 
-import Chequebook from '../components/panel/chequebook/Chequebook.vue';
-import ChequebookForm from '../components/panel/chequebook/ChequebookForm.vue';
+import Chequebook from '../views/panel/chequebook/Chequebook.vue';
+import ChequebookForm from '../views/panel/chequebook/ChequebookForm.vue';
 
-import Cheque from '@/components/panel/cheque/Cheque';
-import ChequeDetail from '../components/panel/cheque/ChequeDetail.vue';
-import ChequeForm from '../components/panel/cheque/ChequeForm.vue';
+import Cheque from '@/views/panel/cheque/Cheque.vue';
+import ChequeDetail from '../views/panel/cheque/ChequeDetail.vue';
+import ChequeForm from '../views/panel/cheque/ChequeForm.vue';
 
-import ExportVerifiers from '@/components/panel/exportVerifiers/ExportVerifiers';
+import ExportVerifiers from '@/views/panel/exportVerifiers/ExportVerifiers.vue';
 
-import Closing from '../components/panel/closing/Closing';
+import Closing from '../views/panel/closing/Closing.vue';
 
 export default [{
   name: 'Panel',
@@ -137,7 +137,7 @@ export default [{
         name: 'TransactionForm',
         path: ':transactionType/:id?',
         component: TransactionForm,
-        props: route => {
+        props: (route) => {
           return {
             factorId: route.query.factorId,
             accountId: route.query.accountId,
@@ -165,7 +165,7 @@ export default [{
           name: 'FactorForm',
           path: 'form/:factorType/:id?',
           component: FactorForm,
-          props: route => {
+          props: (route) => {
             return {
               ...route.query,
               ...route.params
