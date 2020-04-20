@@ -42,6 +42,7 @@ export default {
           if (error.response) {
             let statusCode = error.response.status
             if (statusCode == 401) this.handle_401(error);
+            else if (statusCode == 403) this.handle_403(error);
             else if (statusCode == 400) this.handle_400(error);
             else if (statusCode == 406) this.handle_406(error, options);
             options.error && options.error(error);
@@ -56,6 +57,9 @@ export default {
       } else {
         headers["Authorization"] = "Token " + this.token;
       }
+    },
+    handle_403(error) {
+      this.notify('شما اجازه انجام این عملیات را ندارید', 'warning');
     },
     handle_401(error) {
       if (this.$router.currentRoute.name == 'Login') return;

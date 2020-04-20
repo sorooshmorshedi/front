@@ -19,6 +19,17 @@ export default {
       // baseUrl: ''
     };
   },
+  computed: {
+    createUrl() {
+      return this.baseUrl
+    },
+    updateUrl() {
+      return this.item.id && `${this.baseUrl}/${this.item.id}`
+    },
+    deleteUrl() {
+      return this.item.id && `${this.baseUrl}/${this.item.id}`
+    },
+  },
   watch: {
     query() {
       this.queryChanged();
@@ -69,7 +80,7 @@ export default {
     },
     storeItem() {
       this.request({
-        url: this.endpoint(this.baseUrl),
+        url: this.endpoint(this.createUrl),
         method: "post",
         data: this.getSerialized(),
         success: data => {
@@ -81,7 +92,7 @@ export default {
     },
     updateItem() {
       this.request({
-        url: this.endpoint(this.baseUrl + "/" + this.item.id),
+        url: this.endpoint(this.updateUrl),
         method: "put",
         data: this.getSerialized(),
         success: data => {
@@ -93,7 +104,7 @@ export default {
     },
     deleteItem() {
       this.request({
-        url: this.endpoint(this.baseUrl + "/" + this.item.id),
+        url: this.endpoint(this.deleteUrl),
         method: "delete",
         success: data => {
           this.clearForm();

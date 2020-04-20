@@ -19,13 +19,14 @@
               <hr>
 
               <div class="text-left">
+                <slot name="actions"></slot>
                 <button
                   v-if="deletable"
                   @click="emitDelete"
                   type="button"
                   class="btn btn-danger"
                 >حذف</button>
-                <button @click="emitSubmit" type="button" class="btn btn-primary w-100px">ثبت</button>
+                <button @click="emitSubmit" type="button" class="btn btn-primary w-100px mr-1">ثبت</button>
               </div>
             </div>
 

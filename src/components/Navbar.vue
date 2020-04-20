@@ -20,6 +20,10 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">اطلاعات پایه</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'Users'}"
+                >کاربران</router-link>
             <div class="dropdown-submenu">
               <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">شرکت</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">

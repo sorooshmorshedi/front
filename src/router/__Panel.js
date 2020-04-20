@@ -7,6 +7,8 @@ import CreateCompany from '@/views/panel/company/Create.vue';
 import UpdateCompany from '@/views/panel/company/Update.vue';
 import CompaniesList from '@/views/panel/company/List.vue';
 
+import Users from '@/views/panel/user/Users';
+
 import Accounts from '../views/panel/account/Accounts.vue';
 import FloatAccounts from '../views/panel/account/FloatAccounts.vue';
 import FloatAccountGroups from '../views/panel/account/FloatAccountGroups.vue';
@@ -51,10 +53,15 @@ export default [{
   path: '/panel',
   component: Panel,
   children: [{
-
       name: 'Home',
       path: 'home',
       component: Home,
+    },
+    {
+      name: 'Users',
+      path: 'users',
+      component: Users,
+
     }, {
       name: 'Company',
       path: 'company',
@@ -82,7 +89,6 @@ export default [{
       path: 'accounts/:level/:account_type?',
       component: Accounts,
       props: true
-
     },
     {
       name: 'FloatAccountGroups',
