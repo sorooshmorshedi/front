@@ -1,5 +1,5 @@
 <template>
-  <router-view v-if="user && financialYear"/>
+  <router-view v-if="user"/>
 </template>
 
 <script>
@@ -18,6 +18,8 @@ export default {
         method: "get",
         success: data => {
           this.$store.commit("setUser", data);
+
+          if(!this.financialYear) this.$router.push({name: 'CompaniesList'})
         }
       });
     }
