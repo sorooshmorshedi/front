@@ -1,7 +1,6 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <button @click="closeAccounts" type="button" class="btn btn-primary">بستن حساب ها</button>
     </div>
   </div>
 </template>
