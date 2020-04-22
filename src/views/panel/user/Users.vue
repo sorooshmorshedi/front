@@ -29,6 +29,18 @@
             <label>کلمه عبور</label>
             <input type="text" class="form-control" v-model="item.password" />
           </div>
+
+          <div class="form-group col-12">
+            <label>نقش ها</label>
+            <multiselect
+              dir="rtl"
+              :options="roles"
+              v-model="item.roles"
+              track-by="id"
+              label="name"
+              :multiple="true"
+            />
+          </div>
         </div>
       </template>
       <template #actions>
@@ -67,15 +79,20 @@
 </template>
 <script>
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import getRolesApi from "../role/getRolesApi";
 
 export default {
-  mixins: [ListModalFormMixin],
+  mixins: [ListModalFormMixin, getRolesApi],
   props: {},
   data() {
     return {
       baseUrl: "users/list",
       items: [],
+      roles: [],
       newPassword: "",
+      itemTemplate: {
+        roles: [] 
+      },
       cols: [
         {
           th: "نام",
@@ -112,7 +129,7 @@ export default {
   methods: {
     getData() {
       this.getUsers();
-      this.getPermissions();
+      this.getRoles(this.setRoles);
     },
     getUsers() {
       this.request({
@@ -123,7 +140,9 @@ export default {
         }
       });
     },
-    getPermissions() {},
+    setRoles(data) {
+      this.roles = data;
+    },
     changePassword() {
       this.request({
         url: this.endpoint(`users/changePassword`),
@@ -138,8 +157,12 @@ export default {
           this.modal("#change-password", "hide");
         }
       });
+    },
+    getSerialized() {
+      let user = { ...this.item }
+      user.roles = this.item.roles.map(o => o.id);
+      return user;
     }
-    // getSerialized() {}
   }
 };
 </script>

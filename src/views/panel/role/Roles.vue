@@ -27,7 +27,7 @@
                 type="checkbox"
                 class="form-check-input"
                 @change="togglePermission(permission)"
-                :checked="isCheckedPermission(permission)"
+                v-model="permissionsModel[String(permission.id)]"
               />
               {{ permission.name }}
             </label>
@@ -39,9 +39,10 @@
 </template>
 <script>
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import getRolesApi from "./getRolesApi";
 
 export default {
-  mixins: [ListModalFormMixin],
+  mixins: [ListModalFormMixin, getRolesApi],
   props: {},
   data() {
     return {
@@ -58,8 +59,9 @@ export default {
       ],
       itemTemplate: {
         name: "",
-        permissions: []
-      }
+        permissions: [],
+      },
+      permissionsModel: {}
     };
   },
   computed: {
@@ -74,32 +76,35 @@ export default {
     }
   },
   methods: {
-    clearForm(){
-      this.item = {...this.itemTemplate};
-      this.allPermissions = this.allPermissions;
+    clearForm() {
+      this.item = { ...this.itemTemplate };
+      this.permissionsModel = {}
     },
-    togglePermission(permission){
-      if(this.isCheckedPermission(permission)){
-        this.item.permissions = this.item.permissions.filter(id => id != permission.id);
+    setItem(item){
+      this.item = item;
+      this.permissionsModel = {}
+      for(const permission of item.permissions){
+        this.permissionsModel[String(permission)] = true
+      }
+    },
+    togglePermission(permission) {
+      if (this.isCheckedPermission(permission)) {
+        this.item.permissions = this.item.permissions.filter(
+          id => id != permission.id
+        );
       } else {
         this.item.permissions.push(permission.id);
       }
     },
-    isCheckedPermission(permission){
-      return this.item.permissions.filter(id => id == permission.id).length
+    isCheckedPermission(permission) {
+      return this.item.permissions.filter(id => id == permission.id).length;
     },
     getData() {
-      this.getRoles();
+      this.getRoles(this.setRoles);
       this.getPermissions();
     },
-    getRoles() {
-      this.request({
-        url: this.endpoint(`users/roles/list`),
-        method: "get",
-        success: data => {
-          this.items = data;
-        }
-      });
+    setRoles(data) {
+      this.items = data;
     },
     getPermissions() {
       this.request({
