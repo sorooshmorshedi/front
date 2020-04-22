@@ -8,6 +8,7 @@ import UpdateCompany from '@/views/panel/company/Update.vue';
 import CompaniesList from '@/views/panel/company/List.vue';
 
 import Users from '@/views/panel/user/Users';
+import Roles from '@/views/panel/role/Roles';
 
 import Accounts from '../views/panel/account/Accounts.vue';
 import FloatAccounts from '../views/panel/account/FloatAccounts.vue';
@@ -61,7 +62,10 @@ export default [{
       name: 'Users',
       path: 'users',
       component: Users,
-
+    },{
+      name: 'Roles',
+      path: 'roles',
+      component: Roles,
     }, {
       name: 'Company',
       path: 'company',

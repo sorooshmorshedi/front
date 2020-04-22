@@ -24,6 +24,10 @@
                   class="dropdown-item"
                   :to="{name:'Users'}"
                 >کاربران</router-link>
+                <router-link
+                  class="dropdown-item"
+                  :to="{name:'Roles'}"
+                >نقش ها</router-link>
             <div class="dropdown-submenu">
               <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">شرکت</a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
