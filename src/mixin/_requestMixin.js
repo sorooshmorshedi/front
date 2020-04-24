@@ -59,7 +59,7 @@ export default {
       }
     },
     handle_403(error) {
-      this.notify('شما اجازه انجام این عملیات را ندارید', 'warning');
+      this.notify(error.response.data.detail, 'warning');
     },
     handle_401(error) {
       if (this.$router.currentRoute.name == 'Login') return;

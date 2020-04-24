@@ -646,7 +646,7 @@ export default {
     },
     getTransaction(id) {
       if (!id) return;
-      let url = "sanads/transactions/" + id;
+      let url = "transactions/" + id;
       return this.request({
         url: this.endpoint(url),
         method: "get",
@@ -656,7 +656,7 @@ export default {
       });
     },
     getTransactionByCode(code) {
-      let url = "sanads/transactions/getTransactionByCode";
+      let url = "transactions/getTransactionByCode";
       return this.request({
         url: this.endpoint(url),
         method: "get",
@@ -783,7 +783,7 @@ export default {
     },
     storeTransaction(clearTransaction) {
       this.request({
-        url: this.endpoint("sanads/transactions"),
+        url: this.endpoint("transactions/"),
         method: "post",
         data: this.getSerialized(),
         success: data => {
@@ -799,7 +799,7 @@ export default {
     updateTransaction(clearTransaction) {
       let data = this.getSerialized();
       this.request({
-        url: this.endpoint("sanads/transactions/" + this.transaction.id),
+        url: this.endpoint("transactions/" + this.transaction.id),
         method: "put",
         data: data,
         success: data => {
@@ -814,7 +814,7 @@ export default {
     },
     deleteTransaction(clearTransaction) {
       this.request({
-        url: this.endpoint("sanads/transactions/" + this.transaction.id),
+        url: this.endpoint("transactions/" + this.transaction.id),
         method: "delete",
         success: data => {
           this.successNotify();

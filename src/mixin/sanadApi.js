@@ -16,7 +16,7 @@ export default {
   methods: {
     getSanad(sanadId) {
       return this.request({
-        url: this.endpoint('sanads/sanads/' + sanadId),
+        url: this.endpoint('sanads/' + sanadId),
         method: 'get',
         success: data => {
           this.selectSanad(data);
@@ -26,7 +26,7 @@ export default {
     getSanadByCode(code) {
       this.log("Get sanad by code: ", code);
       return this.request({
-        url: this.endpoint('sanads/sanads/getSanadByCode'),
+        url: this.endpoint('sanads/getSanadByCode'),
         method: 'get',
         params: {
           code
@@ -50,7 +50,7 @@ export default {
     },
     getSanadCode() {
       return this.request({
-        url: this.endpoint('sanads/sanads/newCode'),
+        url: this.endpoint('sanads/newCode'),
         method: 'get',
         success: data => {
           this.sanadCode = data
@@ -59,7 +59,7 @@ export default {
     },
     getTransactionCodes() {
       this.request({
-        url: this.endpoint('sanads/transactions/newCodes'),
+        url: this.endpoint('transactions/newCodes'),
         method: 'get',
         success: data => {
           this.receiveCode = data['receive']

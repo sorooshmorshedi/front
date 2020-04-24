@@ -61,13 +61,13 @@ export default {
       switch (this.type) {
         case "receive":
           this.options.label = "دریافت ها";
-          defaults = { transactionType: this.type };
-          this.options.defaultParams = defaults;
+          this.defaults = { transactionType: this.type };
+          this.options.defaultParams = this.defaults;
           break;
         case "payment":
           this.options.label = "پرداخت ها";
-          defaults = { transactionType: this.type };
-          this.options.defaultParams = defaults;
+          this.defaults = { transactionType: this.type };
+          this.options.defaultParams = this.defaults;
           break;
         case "received":
           this.options.label = "چک های دریافتی";

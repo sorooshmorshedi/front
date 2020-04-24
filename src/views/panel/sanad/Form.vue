@@ -453,7 +453,7 @@ export default {
     },
     deleteSanad() {
       this.request({
-        url: this.endpoint("sanads/sanads/" + this.sanad.id),
+        url: this.endpoint("sanads/" + this.sanad.id),
         method: "delete",
         success: data => {
           this.clearSanad();
@@ -465,7 +465,7 @@ export default {
     storeSanad(clearSanad) {
       let data = this.getSerialized();
       this.request({
-        url: this.endpoint("sanads/sanads"),
+        url: this.endpoint("sanads/"),
         method: "post",
         data: data,
         success: data => {
@@ -482,7 +482,7 @@ export default {
     updateSanad(clearSanad) {
       let data = this.getSerialized();
       this.request({
-        url: this.endpoint("sanads/sanads/" + this.sanad.id),
+        url: this.endpoint("sanads/" + this.sanad.id),
         method: "put",
         data: data,
         success: data => {
@@ -513,7 +513,7 @@ export default {
 
     reorderSanads() {
       this.request({
-        url: this.endpoint("sanads/sanads/reorder"),
+        url: this.endpoint("sanads/reorder"),
         method: "post",
         success: data => {
           this.getSanadCode();

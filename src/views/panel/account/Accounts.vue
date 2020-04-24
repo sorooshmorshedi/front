@@ -22,8 +22,9 @@
             :key="i"
             v-if="i-1 != level"
             tag="button"
-            class="btn btn-info ml-2"
-            :to="{name:'Accounts', level: i-1}"
+            class="btn btn-info mr-2"
+            @click="log('haaa')"
+            :to="`/panel/accounts/${i-1}`"
           >تعریف {{ getTitle(i-1) }}</router-link>
         </template>
       </template>
@@ -58,11 +59,11 @@
           </template>
           <div class="form-group col-12">
             <label>کد</label>
-            <input type="text" class="form-control" v-model="item.code" disabled>
+            <input type="text" class="form-control" v-model="item.code" disabled />
           </div>
           <div class="form-group col-12">
             <label class="required">نام</label>
-            <input type="text" class="form-control" v-model="item.name">
+            <input type="text" class="form-control" v-model="item.name" />
           </div>
 
           <div class="col-12 mt-3" v-if="item.id">
@@ -124,11 +125,11 @@
             </div>
             <div class="form-group col-12 col-md-6">
               <label>سقف بدهکاری</label>
-              <money class="form-control" v-model="item.max_bed"/>
+              <money class="form-control" v-model="item.max_bed" />
             </div>
             <div class="form-group col-12 col-md-6">
               <label>سقف بستانکاری</label>
-              <money class="form-control" v-model="item.max_bed"/>
+              <money class="form-control" v-model="item.max_bed" />
             </div>
             <div class="form-group col-12 col-md-12">
               <label>توضیحات</label>
@@ -139,33 +140,33 @@
           <template v-if="isBank">
             <div class="form-group col-12 col-md-4">
               <label>نام بانک</label>
-              <input type="text" class="form-control" v-model="item.bank_name">
+              <input type="text" class="form-control" v-model="item.bank_name" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>نام شعبه</label>
-              <input type="text" class="form-control" v-model="item.branch_name">
+              <input type="text" class="form-control" v-model="item.branch_name" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>کد شعبه</label>
-              <input type="text" class="form-control" v-model="item.branch_code">
+              <input type="text" class="form-control" v-model="item.branch_code" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>شماره حساب</label>
-              <input type="text" class="form-control" v-model="item.account_number">
+              <input type="text" class="form-control" v-model="item.account_number" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>کد شبا</label>
-              <input type="text" class="form-control" v-model="item.sheba">
+              <input type="text" class="form-control" v-model="item.sheba" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>شماره تماس</label>
-              <input type="text" class="form-control" v-model="item.phone">
+              <input type="text" class="form-control" v-model="item.phone" />
             </div>
           </template>
 
           <template v-if="isPerson">
             <div class="col-12">
-              <hr>
+              <hr />
             </div>
             <div class="form-group col-12 col-md-4">
               <label class="required">حساب شخص</label>
@@ -178,7 +179,7 @@
                     type="radio"
                     value="b"
                     id="buyer"
-                  >
+                  />
                   <label class="form-check-label" for="buyer">خریدار</label>
                 </div>
                 <div class="form-check form-check-inline">
@@ -189,7 +190,7 @@
                     type="radio"
                     value="s"
                     id="seller"
-                  >
+                  />
                   <label class="form-check-label" for="seller">فروشنده</label>
                 </div>
               </div>
@@ -205,7 +206,7 @@
                     type="radio"
                     :value="true"
                     id="real"
-                  >
+                  />
                   <label class="form-check-label" for="real">حقیقی</label>
                 </div>
                 <div class="form-check form-check-inline">
@@ -216,70 +217,70 @@
                     type="radio"
                     :value="false"
                     id="legal"
-                  >
+                  />
                   <label class="form-check-label" for="legal">حقوقی</label>
                 </div>
               </div>
             </div>
             <div class="form-group col-12 col-md-4">
               <label>موبایل</label>
-              <input type="text" class="form-control" v-model="item.mobile">
+              <input type="text" class="form-control" v-model="item.mobile" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>شماره تماس 1</label>
-              <input type="text" class="form-control" v-model="item.phone_1">
+              <input type="text" class="form-control" v-model="item.phone_1" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>شماره تماس 2</label>
-              <input type="text" class="form-control" v-model="item.phone_2">
+              <input type="text" class="form-control" v-model="item.phone_2" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>شماره ملی</label>
-              <input type="text" class="form-control" v-model="item.melli_code">
+              <input type="text" class="form-control" v-model="item.melli_code" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>وبسایت</label>
-              <input type="text" class="form-control" v-model="item.website">
+              <input type="text" class="form-control" v-model="item.website" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>فکس</label>
-              <input type="text" class="form-control" v-model="item.fax">
+              <input type="text" class="form-control" v-model="item.fax" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>ایمیل</label>
-              <input type="text" class="form-control" v-model="item.email">
+              <input type="text" class="form-control" v-model="item.email" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>استان</label>
-              <input type="text" class="form-control" v-model="item.province">
+              <input type="text" class="form-control" v-model="item.province" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>شهر</label>
-              <input type="text" class="form-control" v-model="item.city">
+              <input type="text" class="form-control" v-model="item.city" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>کد پستی</label>
-              <input type="text" class="form-control" v-model="item.postal_code">
+              <input type="text" class="form-control" v-model="item.postal_code" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>آدرس 1</label>
-              <input type="text" class="form-control" v-model="item.address_1">
+              <input type="text" class="form-control" v-model="item.address_1" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>آدرس 2</label>
-              <input type="text" class="form-control" v-model="item.address_2">
+              <input type="text" class="form-control" v-model="item.address_2" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>شماره حساب 1</label>
-              <input type="text" class="form-control" v-model="item.account_number_1">
+              <input type="text" class="form-control" v-model="item.account_number_1" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>شماره حساب 2</label>
-              <input type="text" class="form-control" v-model="item.account_number_2">
+              <input type="text" class="form-control" v-model="item.account_number_2" />
             </div>
             <div class="form-group col-12 col-md-4">
               <label>کد اقتصادی</label>
-              <input type="text" class="form-control" v-model="item.eghtesadi_code">
+              <input type="text" class="form-control" v-model="item.eghtesadi_code" />
             </div>
           </template>
         </div>
