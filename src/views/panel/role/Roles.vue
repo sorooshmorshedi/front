@@ -17,20 +17,27 @@
             <label class="required">نام</label>
             <input type="text" class="form-control" v-model="item.name" />
           </div>
-          <div
-            class="form-check col-12 col-md-4"
-            v-for="(permission, i) in allPermissions"
-            :key="i"
-          >
-            <label class="form-check-label mt-1">
-              <input
-                type="checkbox"
-                class="form-check-input"
-                @change="togglePermission(permission)"
-                v-model="permissionsModel[String(permission.id)]"
-              />
-              {{ permission.name }}
-            </label>
+          <div class="col-12">
+            <div class="row" v-for="(model, i) in Object.keys(allPermissions)" :key="i">
+              <div class="col-12 text-bold">
+                {{ model }}
+              </div>
+              <div
+                class="form-check col-12 col-md-6"
+                v-for="(permission, i) in allPermissions[model]"
+                :key="i"
+              >
+                <label class="form-check-label mt-1">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    @change="togglePermission(permission)"
+                    v-model="permissionsModel[String(permission.id)]"
+                  />
+                  {{ permission.name }}
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       </template>
@@ -59,7 +66,7 @@ export default {
       ],
       itemTemplate: {
         name: "",
-        permissions: [],
+        permissions: []
       },
       permissionsModel: {}
     };
@@ -78,13 +85,13 @@ export default {
   methods: {
     clearForm() {
       this.item = { ...this.itemTemplate };
-      this.permissionsModel = {}
+      this.permissionsModel = {};
     },
-    setItem(item){
+    setItem(item) {
       this.item = item;
-      this.permissionsModel = {}
-      for(const permission of item.permissions){
-        this.permissionsModel[String(permission)] = true
+      this.permissionsModel = {};
+      for (const permission of item.permissions) {
+        this.permissionsModel[String(permission)] = true;
       }
     },
     togglePermission(permission) {
