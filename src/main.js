@@ -37,6 +37,9 @@ import VueFormGenerator from "vue-form-generator";
 Vue.use(VueFormGenerator);
 
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker';
+import vuetify from './plugins/vuetify';
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 Vue.component('date-picker', VuePersianDatetimePicker);
 
 Vue.config.productionTip = false
@@ -44,5 +47,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')

@@ -1,22 +1,40 @@
 <template>
-  <div class="title">
-    {{ title }}
-    <span class="d-print-none">
-      <a v-if="hasClear" @click.prevent="emit('clearForm')" href="#/" class="btn btn-info">جدید</a>
-      <router-link
+  <v-card
+    flat
+    class="pa-2 teal lighten-r white--text d-flex justify-space-between flex-column flex-md-row"
+  >
+    <div>
+      <span class="title">{{ title }}</span>
+    </div>
+    <div style="line-height: 33px">
+      <v-btn
+        small
+        v-if="hasClear"
+        @click.prevent="emit('clearForm')"
+        href="#/"
+        class="light-blue white--text mr-1"
+      >جدید</v-btn>
+      <v-btn
+        small
         v-if="hasList"
-        class="btn btn-info"
+        class="light-blue white--text mr-1"
         :to="{name: ListRouteName, params: ListRouteParams}"
-      >انتخاب {{ formName }}</router-link>
+      >انتخاب {{ formName }}</v-btn>
 
       <template v-if="hasExport">
-        <a class="btn btn-info" :href="printUrl" target="_blank" rel="noopener noreferrer">چاپ</a>
-        <a class="btn btn-info" :href="pdfUrl" rel="noopener noreferrer">PDF</a>
+        <v-btn
+          small
+          class="export-btn mr-1"
+          :href="printUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+        >چاپ</v-btn>
+        <v-btn small class="export-btn mr-1" :href="pdfUrl" rel="noopener noreferrer">PDF</v-btn>
       </template>
 
       <slot></slot>
-    </span>
-  </div>
+    </div>
+  </v-card>
 </template>
 
 <script>

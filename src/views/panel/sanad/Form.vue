@@ -1,259 +1,260 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <form-header
-            title="سند حسابداری"
-            formName="سند"
-            :ListRouteParams="{form: 'sanad'}"
-            :exportParams="{id: this.id}"
-            @clearForm="clearSanad()"
-          >
-            <router-link
-              v-if="sanad.factor"
-              class="btn btn-info"
-              :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}"
-            >مشاهده فاکتور این سند</router-link>
-            <router-link
-              v-if="sanad.transaction"
-              class="btn btn-info"
-              :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}"
-            >
-              <span>مشاهده دریافت/پرداخت</span>
-            </router-link>
+  <div class="card right">
+    <div class="card-body">
+      <form-header
+        title="سند حسابداری"
+        formName="سند"
+        :ListRouteParams="{form: 'sanad'}"
+        :exportParams="{id: this.id}"
+        @clearForm="clearSanad()"
+      >
+        <v-btn
+          small
+          v-if="sanad.factor"
+          class="blue white--text mr-1"
+          :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}"
+        >مشاهده فاکتور این سند</v-btn>
+        <v-btn
+          small
+          v-if="sanad.transaction"
+          class="blue white--text mr-1"
+          :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}"
+        >
+          <span>مشاهده دریافت/پرداخت</span>
+        </v-btn>
 
-            <div class="dropdown open d-inline-block" v-if="id">
-              <button
-                class="btn btn-info dropdown-toggle"
-                type="button"
-                data-toggle="dropdown"
-              >کپی سند</button>
-              <div class="dropdown-menu">
-                <a
-                  @click.prevent="copySanadToNewSanad()"
-                  class="dropdown-item"
-                  href="#!"
-                >به سند جدید</a>
-              </div>
-            </div>
+        <v-btn
+          small
+          @click.prevent="copySanadToNewSanad()"
+          class="blue white--text mr-1"
+        >کپی سند به سند جدید</v-btn>
 
-            <button @click="reorderSanads" class="btn btn-info">مرتب کردن کد اسناد بر اساس تاریخ</button>
-          </form-header>
+        <v-btn
+          small
+          @click="reorderSanads"
+          class="blue white--text mr-1"
+        >مرتب کردن کد اسناد بر اساس تاریخ</v-btn>
+      </form-header>
 
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="row">
-                <div class="form-group col-lg-6 col-sm-2">
-                  <label class="required">شماره سند</label>
-                  <input
-                    v-if="sanad.id"
-                    type="text"
-                    class="form-control"
-                    disabled
-                    v-model="sanad.code"
-                  >
-                  <input v-else type="text" class="form-control" disabled :value="sanadCode">
-                </div>
-                <div class="form-group col-lg-6 col-sm-2">
-                  <label class="required">تاریخ سند</label>
-                  <date
-                    class="form-control"
-                    v-model="sanad.date"
-                    :default="true"
-                    :disabled="!editable"
-                  />
-                </div>
-                <div class="form-group col-lg-6 col-sm-4">
-                  <label>صادر کننده سند</label>
-                  <input type="text" class="form-control" disabled>
-                </div>
-
-                <div class="form-group col-lg-6 col-sm-4">
-                  <label class="required">نوع سند</label>
-                  <div style="margin-top: 8px;margin-right: 15px;">
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="exampleRadios"
-                        id="exampleRadios1"
-                        value="temporary"
-                        v-model="sanad.type"
-                        :disabled="!editable"
-                      >
-                      <label class="form-check-label" for="exampleRadios1">موقت</label>
-                    </div>
-                    <div class="form-check form-check-inline" style="margin-right: 50px;">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="exampleRadios"
-                        id="exampleRadios2"
-                        value="definite"
-                        v-model="sanad.type"
-                        :disabled="!editable"
-                      >
-                      <label class="form-check-label" for="exampleRadios2">قطعی</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-lg-6">
-              <label>توضیحات سند</label>
-              <textarea
+      <v-row class="mt-2">
+        <v-col cols="12" lg="6">
+          <v-row>
+            <v-col cols="12" lg="6">
+              <v-text-field
+                required
+                label="شماره سند"
+                outlined
+                disabled
+                hide-details
+                dense
+                v-model="sanad.code"
+                v-if="sanad.id"
+                background-color="white"
+              ></v-text-field>
+              <v-text-field
+                small
+                required
+                label="شماره سند"
+                outlined
+                hide-details
+                dense
+                disabled
+                :value="sanadCode"
+                v-else
+                background-color="white"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" lg="6">
+              <date
                 class="form-control"
-                rows="5"
+                v-model="sanad.date"
+                label="تاریخ سند"
+                :default="true"
+                :disabled="!editable"
+              />
+            </v-col>
+            <v-col cols="12" lg="12">
+              <v-text-field
+                label="صادر کننده سند"
+                disabled
+                outlined
+                hide-details
+                dense
+                background-color="white"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="12" lg="6">
+          <v-row>
+            <v-col cols="12" lg="12">
+              <v-textarea
+                label="توضیحات سند"
                 v-model="sanad.explanation"
                 :disabled="!editable"
-              ></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th class="required">شماره - نام حساب</th>
-                      <th>توضیحات</th>
-                      <th class="required">تفضیلی شناور</th>
-                      <th>مرکز هزینه</th>
-                      <th>بدهکار</th>
-                      <th class="d-print-none">
-                        <a @click.prevent="exchangeValue()" href>
-                          <i class="fas fa-exchange-alt"></i>
-                        </a>
-                      </th>
-                      <th>بستانکار</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="(row,i) in rows"
-                      :key="i"
-                      :class="{'d-print-none': i == rows.length-1}"
-                    >
-                      <td>{{ i+1 }}</td>
-                      <td v-tooltip="accountParentsName(row.account).join(' > ')">
-                        <multiselect
-                          dir="rtl"
-                          :options="accountsSelectValues.levels[3]"
-                          v-model="rows[i].account"
-                          track-by="id"
-                          label="title"
-                          :disabled="!editable"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="rows[i].explanation"
-                          :disabled="!editable"
-                        >
-                      </td>
-                      <td
-                        v-tooltip="getFloatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
-                      >
-                        <multiselect
-                          v-if="getFloatAccounts(rows[i]).length"
-                          dir="rtl"
-                          :options="getFloatAccounts(rows[i])"
-                          v-model="rows[i].floatAccount"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable"
-                        />
-                        <span v-else>-</span>
-                      </td>
-                      <td
-                        v-tooltip="getCostCenters(rows[i]).length?row.account.costCenterGroup.name:''"
-                      >
-                        <multiselect
-                          v-if="getCostCenters(rows[i]).length"
-                          dir="rtl"
-                          :options="getCostCenters(rows[i])"
-                          v-model="rows[i].costCenter"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable"
-                        />
-                        <span v-else>-</span>
-                      </td>
-                      <td>
-                        <money
-                          :disabled="!editable || rows[i].bes != 0"
-                          class="form-control"
-                          v-model="rows[i].bed"
-                        />
-                      </td>
-                      <td class="d-print-none">
-                        <a @click.prevent="exchangeValue(rows[i])" href v-if="i != rows.length-1">
-                          <i class="fas fa-exchange-alt"></i>
-                        </a>
-                      </td>
-                      <td>
-                        <money
-                          :disabled="!editable || rows[i].bed != 0"
-                          class="form-control"
-                          v-model="rows[i].bes"
-                        />
-                      </td>
-                      <td class="d-print-none">
-                        <button
-                          v-if="i != rows.length-1"
-                          @click="deleteRow(i)"
-                          type="button"
-                          class="btn btn-warning"
-                          :disabled="!editable"
-                        >حذف ردیف</button>
-                      </td>
-                    </tr>
-                    <tr></tr>
-                    <tr class="bg-info text-white">
-                      <td colspan="2">
-                        <span
-                          v-if="bedSum != besSum"
-                        >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}</span>
-                      </td>
-                      <td colspan="2"></td>
-                      <td class="text-left">مجموع:</td>
-                      <td class>{{ bedSum | toMoney }}</td>
-                      <td class="d-print-none"></td>
-                      <td class>{{ besSum | toMoney }}</td>
-                      <td class="d-print-none">
-                        <button
-                          @click="deleteRow(-1)"
-                          type="button"
-                          class="btn btn-danger"
-                          :disabled="!editable"
-                        >حذف همه ردیف ها</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <form-footer
-            formName="سند"
-            :hasFirst="hasFirst"
-            :hasLast="hasLast"
-            :hasPrev="hasPrev"
-            :hasNext="hasNext"
-            :canSubmit="canSubmit"
-            :editable="editable"
-            :deletable="deletable"
-            @goToForm="goToForm"
-            @validate="validate"
-            @edit="makeFormEditable()"
-            @delete="deleteSanad"
-          />
-        </div>
-      </div>
+                outlined
+                hide-details
+                dense
+                height="105"
+                background-color="white"
+              ></v-textarea>
+            </v-col>
+          </v-row>
+        </v-col>
+
+        <v-col cols="12">
+          <v-simple-table class="app-background-color form-items">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th class="required">شماره - نام حساب</th>
+                <th>توضیحات</th>
+                <th class="required">تفضیلی شناور</th>
+                <th>مرکز هزینه</th>
+                <th>بدهکار</th>
+                <th class="d-print-none">
+                  <a @click.prevent="exchangeValue()" href>
+                    <i class="fas fa-exchange-alt"></i>
+                  </a>
+                </th>
+                <th>بستانکار</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
+                <td>{{ i+1 }}</td>
+                <td v-tooltip="accountParentsName(row.account).join(' > ')">
+                  <v-autocomplete
+                    :items="accountsSelectValues.levels[3]"
+                    search
+                    outlined
+                    dense
+                    v-model="rows[i].account"
+                    :title="rows[i].account"
+                    item-value="id"
+                    item-text="title"
+                    :disabled="!editable"
+                    hide-details
+                    height="40"
+                    background-color="white"
+                    return-object
+                  ></v-autocomplete>
+                </td>
+                <td>
+                  <v-text-field
+                    v-model="rows[i].explanation"
+                    :disabled="!editable"
+                    outlined
+                    background-color="white"
+                    dense
+                    hide-details
+                  />
+                </td>
+                <td
+                  v-tooltip="getFloatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
+                >
+                  <v-autocomplete
+                    v-if="getFloatAccounts(rows[i]).length"
+                    search
+                    outlined
+                    dense
+                    :items="getFloatAccounts(rows[i])"
+                    v-model="rows[i].floatAccount"
+                    item-value="id"
+                    item-text="name"
+                    return-object
+                    :disabled="!editable"
+                    hide-details
+                    height="40"
+                    background-color="white"
+                  ></v-autocomplete>
+                  <span v-else>-</span>
+                </td>
+                <td v-tooltip="getCostCenters(rows[i]).length?row.account.costCenterGroup.name:''">
+                  <v-autocomplete
+                    v-if="getCostCenters(rows[i]).length"
+                    search
+                    outlined
+                    dense
+                    :items="getCostCenters(rows[i])"
+                    v-model="rows[i].costCenter"
+                    item-value="id"
+                    item-text="name"
+                    return-object
+                    :disabled="!editable"
+                    hide-details
+                    height="40"
+                    background-color="white"
+                  ></v-autocomplete>
+                  <span v-else>-</span>
+                </td>
+                <td>
+                  <money
+                    :disabled="!editable || rows[i].bes != 0"
+                    class="form-control"
+                    v-model="rows[i].bed"
+                  />
+                </td>
+                <td class="d-print-none">
+                  <a @click.prevent="exchangeValue(rows[i])" href v-if="i != rows.length-1">
+                    <i class="fas fa-exchange-alt"></i>
+                  </a>
+                </td>
+                <td>
+                  <money
+                    :disabled="!editable || rows[i].bed != 0"
+                    class="form-control"
+                    v-model="rows[i].bes"
+                  />
+                </td>
+                <td class="d-print-none">
+                  <v-btn
+                    v-if="i != rows.length-1"
+                    @click="deleteRow(i)"
+                    class="red--text"
+                    icon
+                    :disabled="!editable"
+                  >
+                    <v-icon>delete</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+              <tr class="grey lighten-3 text-white">
+                <td colspan="2">
+                  <span
+                    v-if="bedSum != besSum"
+                  >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}</span>
+                </td>
+                <td colspan="2"></td>
+                <td class="text-left">مجموع:</td>
+                <td class>{{ bedSum | toMoney }}</td>
+                <td class="d-print-none"></td>
+                <td class>{{ besSum | toMoney }}</td>
+                <td class="d-print-none">
+                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!editable">
+                    <v-icon>delete_sweep</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-col>
+      </v-row>
+
+      <form-footer
+        formName="سند"
+        :hasFirst="hasFirst"
+        :hasLast="hasLast"
+        :hasPrev="hasPrev"
+        :hasNext="hasNext"
+        :canSubmit="canSubmit"
+        :editable="editable"
+        :deletable="deletable"
+        @goToForm="goToForm"
+        @validate="validate"
+        @edit="makeFormEditable()"
+        @delete="deleteSanad"
+      />
     </div>
   </div>
 </template>
@@ -446,10 +447,6 @@ export default {
     },
     setSanad(sanad) {
       this.makeFormUneditable();
-      this.$router.push({
-        name: "SanadForm",
-        params: { id: sanad.id }
-      });
     },
     deleteSanad() {
       this.request({
@@ -526,12 +523,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.table-responsive {
-  overflow: visible;
-  th,
-  td,
-  input {
-    text-align: center;
+.form-items {
+  table {
+    th,
+    td,
+    input {
+      text-align: center;
+    }
+
+    th {
+      background-color: #eeeeee !important;
+      // background-color: #009688 !important;
+      // color: white !important;
+    }
+
+    td {
+      padding: 2px !important;
+    }
   }
 }
 </style>

@@ -1,61 +1,45 @@
 <template>
-  <div class="row rtl d-print-none">
-    <div class="col-12 col-md-6">
+  <v-card flat class="pa-1 d-flex justify-space-between flex-column flex-md-row align-center">
+    <div>
       <template v-if="showNavigationButtons">
-        <button
-          @click="goToForm('first')"
-          :disabled="!hasFirst"
-          type="button"
-          class="btn btn-info"
-        >اولین {{ formName }}</button>
-        <button
-          @click="goToForm('prev')"
-          :disabled="!hasPrev"
-          type="button"
-          class="btn btn-info"
-        >{{ formName }} قبلی</button>
-        <button
-          @click="goToForm('next')"
-          :disabled="!hasNext"
-          type="button"
-          class="btn btn-info"
-        >{{ formName }} بعدی</button>
-        <button
-          @click="goToForm('last')"
-          :disabled="!hasLast"
-          type="button"
-          class="btn btn-info"
-        >آخرین {{ formName }}</button>
+        <v-btn @click="goToForm('first')" :disabled="!hasFirst" title="اولین" icon>
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M4,5V19L11,12M18,5V19H20V5M11,5V19L18,12" />
+          </svg>
+        </v-btn>
+        <v-btn @click="goToForm('prev')" :disabled="!hasPrev" icon title="قبلی" class="pr-1">
+          <v-icon>skip_next</v-icon>
+        </v-btn>
+        <v-btn @click="goToForm('next')" :disabled="!hasNext" icon title="بعدی" class="pr-1">
+          <v-icon>skip_previous</v-icon>
+        </v-btn>
+        <v-btn @click="goToForm('last')" :disabled="!hasLast" icon title="آخرین" class="pr-1">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M20,5V19L13,12M6,5V19H4V5M13,5V19L6,12" />
+          </svg>
+        </v-btn>
       </template>
     </div>
-    <div class="col-12 col-md-6 ltr text-left" dir="ltr" v-if="!financialYear.is_closed">
+    <div v-if="!financialYear.is_closed" class="order-first order-md-last">
       <template v-if="isEditing">
         <slot></slot>
-        <button
+        <v-btn @click="emitDelete" v-if="deletable" :disabled="!canDelete" color="red" outlined>حذف</v-btn>
+        <v-btn
+          @click="validate(false)"
+          :disabled="!canSubmit"
+          class="w-100px mr-1 green white--text"
+        >ثبت</v-btn>
+        <v-btn
           v-if="showSubmitAndClearForm"
           @click="validate(true)"
-          type="button"
-          class="btn submit btn-success foat-left"
+          class="mr-1 green white--text"
           :disabled="!canSubmit"
-        >ثبت و صدور {{ formName }} جدید</button>
-        <button
-          @click="validate(false)"
-          type="button"
-          :disabled="!canSubmit"
-          class="btn submit btn-success foat-left w-100px"
-        >ثبت</button>
-        <button
-          @click="emitDelete"
-          type="button"
-          v-if="deletable"
-          :disabled="!canDelete"
-          class="btn submit btn-danger"
-        >حذف</button>
+        >ثبت و صدور {{ formName }} جدید</v-btn>
       </template>
-      <button v-else @click="edit()" type="button" class="btn submit btn-info foat-left">ویرایش</button>
+      <v-btn v-else @click="edit()" class="submit amber">ویرایش</v-btn>
       <slot name="always"></slot>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script>

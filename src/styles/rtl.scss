@@ -1,0 +1,27 @@
+* {
+  letter-spacing: 0;
+}
+
+.v-list-item__action,
+.v-list-item__icon:not(.v-list-group__header__append-icon) {
+
+  // margin-right: 0px !important;
+  // margin-left: 32px !important;
+}
+
+.v-list--dense .v-list-group--no-action>.v-list-group__items>div>.v-list-item {
+  padding-left: 16px !important;
+  padding-right: 64px !important;
+}
+
+.v-list-item__title {
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr;
+}
+
+.v-application--is-rtl .v-list--dense.v-list--nav .v-list-group--no-action.v-list-group--sub-group>.v-list-group__items>div>.v-list-item {
+  padding-right: 80px !important;
+}

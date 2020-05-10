@@ -1,349 +1,608 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top rtl" v-if="user.id">
-    <a class="navbar-brand" href="#">حسابداری سبحان</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <router-link class="nav-link" :to="{name:'Home'}">خانه</router-link>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">اطلاعات پایه</a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'Users'}"
-                >کاربران</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'Roles'}"
-                >نقش ها</router-link>
-            <div class="dropdown-submenu">
-              <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">شرکت</a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{name:'CompaniesList'}">لیست شرکت ها</router-link>
-                <router-link
-                  class="dropdown-item disabled"
-                  :event="''"
-                  :to="{name:'CreateCompany'}"
-                >تعریف شرکت</router-link>
-              </div>
-            </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-submenu">
-              <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">حساب</a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'Accounts', params:{level: 0}}"
-                >گروه حساب</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'Accounts', params:{level: 1}}"
-                >حساب کل</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'Accounts', params:{level: 2}}"
-                >حساب معین</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'Accounts', params:{level: 3}}"
-                >حساب تفضیلی</router-link>
-                <div class="dropdown-divider"></div>
-
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'Accounts', params:{level: 3, account_type: 'p'}}"
-                >اشخاص</router-link>
-
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'Accounts', params:{level: 3, account_type: 'b'}}"
-                >بانک</router-link>
-
-                <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" :to="{name:'FloatAccountGroups'}">گروه حساب شناور</router-link>
-                <router-link class="dropdown-item" :to="{name:'FloatAccounts'}">حساب شناور</router-link>
-
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'FloatAccountGroups', params:{is_cost_center: true}}"
-                >گروه مرکز هزینه</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'FloatAccounts', params:{is_cost_center: true}}"
-                >مرکز هزینه</router-link>
-
-                <div class="dropdown-divider"></div>
-
-                <router-link class="dropdown-item" :to="{name:'AccountTree'}">نمودار درختی حساب ها</router-link>
-              </div>
-            </div>
-            <div class="dropdown-submenu">
-              <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">کالا</a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{name:'CreateWare'}">تعریف کالا</router-link>
-                <router-link class="dropdown-item" :to="{name:'EditWare'}">ویرایش کالا</router-link>
-                <div class="dropdown-divider"></div>
-                <router-link class="dropdown-item" :to="{name:'Warehouse'}">انبار</router-link>
-                <router-link class="dropdown-item" :to="{name:'Unit'}">واحد</router-link>
-                <div class="dropdown-divider"></div>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'FirstPeriodInventory'}"
-                >ثبت موجودی اول دوره</router-link>
-              </div>
-            </div>
-            <div class="dropdown-divider"></div>
-
-            <div class="dropdown-submenu">
-              <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">پیشفرض ها</a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <div class="dropdown-submenu">
-                  <a
-                    class="dropdown-item dropdown-toggle"
-                    data-toggle="dropdown"
-                    href="#"
-                  >حساب های پیشفرض</a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <router-link
-                      class="dropdown-item"
-                      :to="{name:'DefaultAccounts', params: {usage: 'transaction'}}"
-                    >دریافت و پرداخت</router-link>
-                    <router-link
-                      class="dropdown-item"
-                      :to="{name:'DefaultAccounts', params: {usage: 'factor'}}"
-                    >فاکتور</router-link>
-                    <router-link
-                      class="dropdown-item"
-                      :to="{name:'DefaultAccounts', params: {usage: 'closeAccounts'}}"
-                    >بستن حساب ها</router-link>
-                  </div>
-                </div>
-
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'FactorExpenses', params: { factorType: 'buy'}}"
-                >هزینه های فاکتور خرید</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'FactorExpenses', params: { factorType: 'sale'}}"
-                >هزینه های فاکتور فروش</router-link>
-                <div class="dropdown-divider"></div>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'ExportVerifiers'}"
-                >تایید کنندگان خروجی</router-link>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">عملیات های روزانه</a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <router-link class="dropdown-item" :to="{name:'SanadForm'}">ثبت سند</router-link>
-            <div class="dropdown-divider"></div>
-
-            <div class="dropdown-submenu">
-              <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">فاکتور</a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'FactorForm', params:{ factorType: 'buy'}}"
-                >ثبت فاکتور خرید</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'FactorForm', params:{ factorType: 'backFromBuy'}}"
-                >ثبت فاکتور برگشت از خرید</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'FactorForm', params:{ factorType: 'sale'}}"
-                >ثبت فاکتور فروش</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'FactorForm', params:{ factorType: 'backFromSale'}}"
-                >ثبت فاکتور برگشت از فروش</router-link>
-              </div>
-            </div>
-            <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'TransferForm'}">ثبت انتقال</router-link>
-            <div class="dropdown-divider"></div>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'TransactionForm', params: {transactionType: 'receive'}}"
-            >ثبت دریافت</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'TransactionForm', params: {transactionType: 'payment'}}"
-            >ثبت پرداخت</router-link>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-submenu">
-              <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">دفتر چک</a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link class="dropdown-item" :to="{name:'ChequebookForm'}">ثبت دفتر چک</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'ChequeForm', params: {receivedOrPaid: 'p'}}"
-                >ثبت چک پرداختی</router-link>
-                <router-link
-                  class="dropdown-item"
-                  :to="{name:'ChequeForm', params: {receivedOrPaid: 'r'}}"
-                >ثبت چک دریافتی</router-link>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">فهرست فرم ها</a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <router-link class="dropdown-item" :to="{name:'List', params: {form: 'sanad'}}">اسناد</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form: 'sanadUnbalanced'}}"
-            >اسناد نامتوازن</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form: 'sanadEmpty'}}"
-            >اسناد خالی</router-link>
-            <div class="dropdown-divider"></div>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params:{ form: 'factor', type: 'buy'}}"
-            >فاکتور خرید</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params:{ form: 'factor', type: 'backFromBuy'}}"
-            >فاکتور برگشت از خرید</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params:{ form: 'factor', type: 'sale'}}"
-            >فاکتور فروش</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params:{ form: 'factor', type: 'backFromSale'}}"
-            >فاکتور برگشت از فروش</router-link>
-            <div class="dropdown-divider"></div>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form:'transaction', type: 'receive'}}"
-            >دریافت</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form:'transaction', type: 'payment'}}"
-            >پرداخت</router-link>
-            <div class="dropdown-divider"></div>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form:'chequebook'}}"
-            >دسته چک ها</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form:'cheque', type: 'received'}}"
-            >چک های دریافتی</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'List', params: {form:'cheque', type: 'paid'}}"
-            >چک های پرداختی</router-link>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">گزارش</a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <router-link class="dropdown-item" :to="{name:'LedgerReport'}">دفتر کل، معین، تفضیلی</router-link>
-            <router-link class="dropdown-item" :to="{name:'BillReport'}">صورت حساب تفصیلی</router-link>
-
-            <div class="dropdown-divider"></div>
-
-            <router-link class="dropdown-item" :to="{name:'AccountsBalanceReport'}">تراز</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'FloatAccountsBalanceReportByGroup'}"
-            >تراز شناور بر اساس گروه</router-link>
-            <router-link class="dropdown-item" :to="{name:'FloatAccountsBalanceReport'}">تراز شناور</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'FloatAccountsBalanceReportByGroup', params: {is_cost_center:true}}"
-            >تراز مرکز هزینه بر اساس گروه</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'FloatAccountsBalanceReport', params: {is_cost_center:true}}"
-            >تراز مرکز هزینه</router-link>
-
-            <div class="dropdown-divider"></div>
-
-            <router-link class="dropdown-item" :to="{name:'JournalReport'}">دفتر روزنامه</router-link>
-            <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'IncomeStatementReport'}">سود و زیان</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'IncomeStatementReport', params: {detailed: 'detailed'}}"
-            >سود و زیان تفصیلی</router-link>
-            <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" :to="{name:'BalanceSheetReport'}">ترازنامه</router-link>
-            <div class="dropdown-divider"></div>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'DetailedWareInventoryReport'}"
-            >کاردکس کالا</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'AllWaresInventoryReport'}"
-            >کاردکس همه کالا ها</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'DetailedWarehouseInventoryReport'}"
-            >کاردکس انبار</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'AllWarehousesInventoryReport'}"
-            >کاردکس انبار همه کالا ها</router-link>
-            <div class="dropdown-divider"></div>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'BuySaleReport', params: { type: 'buy'}}"
-            >گزارش خرید</router-link>
-            <router-link
-              class="dropdown-item"
-              :to="{name:'BuySaleReport', params: { type: 'sale'}}"
-            >گزارش فروش</router-link>
-          </div>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" :to="{name:'Closing'}">عملیات بستن و انتقال</router-link>
-        </li>
-        <li class="nav-item left">
-          <a @click="logout()" class="exit-btn nav-link bg-danger text-white" href="#">خروج</a>
-        </li>
-      </ul>
-    </div>
-
-    <a class="navbar-left" href="#">
-      <img class="logo img-fluid" src="/static/img/SobhanAccountingLogo.png" alt>
-    </a>
-  </nav>
+  <v-list nav dense class="navbar-list">
+    <navbar-list-item v-for="(route, i) in routes" :key="i" :route="route" />
+  </v-list>
 </template>
 
 <script>
+import NavbarListItem from "./NavbarListItem";
 export default {
   name: "NavBar",
+  components: { NavbarListItem },
   data() {
-    return {};
+    return {
+      routes: [
+        {
+          to: {
+            name: "Home"
+          },
+          title: "خانه"
+        },
+        {
+          title: "اطلاعات پایه",
+          children: [
+            {
+              to: {
+                name: "Users"
+              },
+              title: "کاربران"
+            },
+            {
+              to: {
+                name: "Roles"
+              },
+              title: "نقش ها"
+            },
+            {
+              title: "شرکت",
+              children: [
+                {
+                  to: {
+                    name: "CompaniesList"
+                  },
+                  title: "لیست شرکت ها"
+                },
+                {
+                  to: {
+                    name: "CreateCompany"
+                  },
+                  title: "تعریف شرکت"
+                }
+              ]
+            },
+            {
+              title: "حساب",
+              children: [
+                {
+                  to: {
+                    name: "Accounts",
+                    params: {
+                      level: 0
+                    }
+                  },
+                  title: "گروه حساب"
+                },
+                {
+                  to: {
+                    name: "Accounts",
+                    params: {
+                      level: 1
+                    }
+                  },
+                  title: "حساب کل"
+                },
+                {
+                  to: {
+                    name: "Accounts",
+                    params: {
+                      level: 2
+                    }
+                  },
+                  title: "حساب معین"
+                },
+                {
+                  to: {
+                    name: "Accounts",
+                    params: {
+                      level: 3
+                    }
+                  },
+                  title: "حساب تفضیلی"
+                },
+                {
+                  to: {
+                    name: "Accounts",
+                    params: {
+                      level: 3,
+                      account_type: "p"
+                    }
+                  },
+                  title: "اشخاص"
+                },
+                {
+                  to: {
+                    name: "Accounts",
+                    params: {
+                      level: 3,
+                      account_type: "b"
+                    }
+                  },
+                  title: "بانک"
+                },
+                {
+                  to: {
+                    name: "FloatAccountGroups"
+                  },
+                  title: "گروه حساب شناور"
+                },
+                {
+                  to: {
+                    name: "FloatAccounts"
+                  },
+                  title: "حساب شناور"
+                },
+                {
+                  to: {
+                    name: "FloatAccountGroups",
+                    params: {
+                      is_cost_center: true
+                    }
+                  },
+                  title: "گروه مرکز هزینه"
+                },
+                {
+                  to: {
+                    name: "FloatAccounts",
+                    params: {
+                      is_cost_center: true
+                    }
+                  },
+                  title: "مرکز هزینه"
+                },
+                {
+                  to: {
+                    name: "AccountTree"
+                  },
+                  title: "نمودار درختی حساب ها"
+                }
+              ]
+            },
+            {
+              title: "کالا",
+              children: [
+                {
+                  to: {
+                    name: "CreateWare"
+                  },
+                  title: "تعریف کالا"
+                },
+                {
+                  to: {
+                    name: "EditWare"
+                  },
+                  title: "ویرایش کالا"
+                },
+                {
+                  to: {
+                    name: "Warehouse"
+                  },
+                  title: "انبار"
+                },
+                {
+                  to: {
+                    name: "Unit"
+                  },
+                  title: "واحد"
+                },
+                {
+                  to: {
+                    name: "FirstPeriodInventory"
+                  },
+                  title: "ثبت موجودی اول دوره"
+                }
+              ]
+            },
+            {
+              title: "پیشفرض ها",
+              children: [
+                {
+                  title: "حساب های پیشفرض",
+                  children: [
+                    {
+                      to: {
+                        name: "DefaultAccounts",
+                        params: {
+                          usage: "transaction"
+                        }
+                      },
+                      title: "دریافت و پرداخت"
+                    },
+                    {
+                      to: {
+                        name: "DefaultAccounts",
+                        params: {
+                          usage: "factor"
+                        }
+                      },
+                      title: "فاکتور"
+                    },
+                    {
+                      to: {
+                        name: "DefaultAccounts",
+                        params: {
+                          usage: "closeAccounts"
+                        }
+                      },
+                      title: "بستن حساب ها"
+                    }
+                  ]
+                },
+                {
+                  to: {
+                    name: "FactorExpenses",
+                    params: {
+                      factorType: "buy"
+                    }
+                  },
+                  title: "هزینه های فاکتور خرید"
+                },
+                {
+                  to: {
+                    name: "FactorExpenses",
+                    params: {
+                      factorType: "sale"
+                    }
+                  },
+                  title: "هزینه های فاکتور فروش"
+                },
+                {
+                  to: {
+                    name: "ExportVerifiers"
+                  },
+                  title: "تایید کنندگان خروجی"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "عملیات های روزانه",
+          children: [
+            {
+              to: {
+                name: "SanadForm"
+              },
+              title: "ثبت سند"
+            },
+            {
+              title: "فاکتور",
+              children: [
+                {
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      factorType: "buy"
+                    }
+                  },
+                  title: "ثبت فاکتور خرید"
+                },
+                {
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      factorType: "backFromBuy"
+                    }
+                  },
+                  title: "ثبت فاکتور برگشت از خرید"
+                },
+                {
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      factorType: "sale"
+                    }
+                  },
+                  title: "ثبت فاکتور فروش"
+                },
+                {
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      factorType: "backFromSale"
+                    }
+                  },
+                  title: "ثبت فاکتور برگشت از فروش"
+                }
+              ]
+            },
+            {
+              to: {
+                name: "TransferForm"
+              },
+              title: "ثبت انتقال"
+            },
+            {
+              to: {
+                name: "TransactionForm",
+                params: {
+                  transactionType: "receive"
+                }
+              },
+              title: "ثبت دریافت"
+            },
+            {
+              to: {
+                name: "TransactionForm",
+                params: {
+                  transactionType: "payment"
+                }
+              },
+              title: "ثبت پرداخت"
+            },
+            {
+              title: "دفتر چک",
+              children: [
+                {
+                  to: {
+                    name: "ChequebookForm"
+                  },
+                  title: "ثبت دفتر چک"
+                },
+                {
+                  to: {
+                    name: "ChequeForm",
+                    params: {
+                      receivedOrPaid: "p"
+                    }
+                  },
+                  title: "ثبت چک پرداختی"
+                },
+                {
+                  to: {
+                    name: "ChequeForm",
+                    params: {
+                      receivedOrPaid: "r"
+                    }
+                  },
+                  title: "ثبت چک دریافتی"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "فهرست فرم ها",
+          children: [
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "sanad"
+                }
+              },
+              title: "اسناد"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "sanadUnbalanced"
+                }
+              },
+              title: "اسناد نامتوازن"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "sanadEmpty"
+                }
+              },
+              title: "اسناد خالی"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "factor",
+                  type: "buy"
+                }
+              },
+              title: "فاکتور خرید"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "factor",
+                  type: "backFromBuy"
+                }
+              },
+              title: "فاکتور برگشت از خرید"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "factor",
+                  type: "sale"
+                }
+              },
+              title: "فاکتور فروش"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "factor",
+                  type: "backFromSale"
+                }
+              },
+              title: "فاکتور برگشت از فروش"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "transaction",
+                  type: "receive"
+                }
+              },
+              title: "دریافت"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "transaction",
+                  type: "payment"
+                }
+              },
+              title: "پرداخت"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "chequebook"
+                }
+              },
+              title: "دسته چک ها"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "cheque",
+                  type: "received"
+                }
+              },
+              title: "چک های دریافتی"
+            },
+            {
+              to: {
+                name: "List",
+                params: {
+                  form: "cheque",
+                  type: "paid"
+                }
+              },
+              title: "چک های پرداختی"
+            }
+          ]
+        },
+        {
+          title: "گزارش",
+          children: [
+            {
+              to: {
+                name: "LedgerReport"
+              },
+              title: "دفتر کل، معین، تفضیلی"
+            },
+            {
+              to: {
+                name: "BillReport"
+              },
+              title: "صورت حساب تفصیلی"
+            },
+            {
+              to: {
+                name: "AccountsBalanceReport"
+              },
+              title: "تراز"
+            },
+            {
+              to: {
+                name: "FloatAccountsBalanceReportByGroup"
+              },
+              title: "تراز شناور بر اساس گروه"
+            },
+            {
+              to: {
+                name: "FloatAccountsBalanceReport"
+              },
+              title: "تراز شناور"
+            },
+            {
+              to: {
+                name: "FloatAccountsBalanceReportByGroup",
+                params: {
+                  is_cost_center: true
+                }
+              },
+              title: "تراز مرکز هزینه بر اساس گروه"
+            },
+            {
+              to: {
+                name: "FloatAccountsBalanceReport",
+                params: {
+                  is_cost_center: true
+                }
+              },
+              title: "تراز مرکز هزینه"
+            },
+            {
+              to: {
+                name: "JournalReport"
+              },
+              title: "دفتر روزنامه"
+            },
+            {
+              to: {
+                name: "IncomeStatementReport"
+              },
+              title: "سود و زیان"
+            },
+            {
+              to: {
+                name: "IncomeStatementReport",
+                params: {
+                  detailed: "detailed"
+                }
+              },
+              title: "سود و زیان تفصیلی"
+            },
+            {
+              to: {
+                name: "BalanceSheetReport"
+              },
+              title: "ترازنامه"
+            },
+            {
+              to: {
+                name: "DetailedWareInventoryReport"
+              },
+              title: "کاردکس کالا"
+            },
+            {
+              to: {
+                name: "AllWaresInventoryReport"
+              },
+              title: "کاردکس همه کالا ها"
+            },
+            {
+              to: {
+                name: "DetailedWarehouseInventoryReport"
+              },
+              title: "کاردکس انبار"
+            },
+            {
+              to: {
+                name: "AllWarehousesInventoryReport"
+              },
+              title: "کاردکس انبار همه کالا ها"
+            },
+            {
+              to: {
+                name: "BuySaleReport",
+                params: {
+                  type: "buy"
+                }
+              },
+              title: "گزارش خرید"
+            },
+            {
+              to: {
+                name: "BuySaleReport",
+                params: {
+                  type: "sale"
+                }
+              },
+              title: "گزارش فروش"
+            }
+          ]
+        },
+        {
+          to: {
+            name: "Closing"
+          },
+          title: "عملیات بستن و انتقال"
+        }
+      ]
+    };
   },
   methods: {
-    logout() {
-      this.setToken("");
-      this.$router.push({ name: "Login" });
-    }
   },
   computed: {
     username() {
@@ -354,60 +613,15 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.logo {
-  max-width: 40px;
-  padding: -10px;
-}
-
-nav {
-  margin-bottom: 15px;
-}
-
-.dropdown-submenu {
-  position: relative;
-}
-
-.dropdown-submenu > .dropdown-menu {
-  top: 0;
-  right: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  -webkit-border-radius: 6px 0px 6px 6px;
-  -moz-border-radius: 6px 0px 6px 6px;
-  border-radius: 6px 0px 6px 6px;
-  width: auto;
-}
-
-.dropdown-submenu:hover > .dropdown-menu {
-  display: block;
-  min-width: 200px;
-}
-
-.dropdown-submenu > a:after {
-  display: block;
-  content: " ";
-  float: left;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 5px 5px 0px;
-  border-right-color: #c9c9c9;
-  margin-top: 5px;
-  margin-left: -10px;
-}
-
-.dropdown-submenu:hover > a:after {
-  border-right-color: #212121;
-}
-
-.exit-btn {
-  border-radius: 7px;
-}
-
-a.dropdown-item {
-  width: 100%;
-  display: block;
+<style lang="scss">
+.navbar-list {
+  .list-item-title {
+    // color: white;
+    font-weight: 300 !important;
+    font-size: .9rem !important;
+  }
+  .v-icon {
+    // color: rgba(white, 0.8) !important;
+  }
 }
 </style>

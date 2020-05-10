@@ -1,5 +1,19 @@
 <template>
-  <input dir="ltr" type="text" name value @input="change()" :id="inputId">
+  <v-text-field
+    dir="ltr"
+    @input="change"
+    outlined
+    background-color="white"
+    dense
+    hide-details
+    :disabled="disabled"
+    v-model="formattedAmount"
+    class="currency-input"
+  >
+    <template #append>
+      <!-- <span class="py-1">ریال</span> -->
+    </template>
+  </v-text-field>
 </template>
 
 <script>
@@ -8,14 +22,16 @@ export default {
   name: "CleaveMoney",
   props: {
     value: {},
-    id: {},
     decimalScale: {
       default: 0
+    },
+    disabled: {
+      default: false
     }
   },
   data() {
     return {
-      inputId: "",
+      formattedAmount: "",
       options: {
         numeral: true,
         numeralThousandsGroupStyle: "thousand",
@@ -23,36 +39,38 @@ export default {
       }
     };
   },
-  created() {
-    if (this.id) {
-      this.inputId = this.id;
-    } else {
-      this.inputId = "cleave" + (Math.random() * 100000).toFixed(0);
-    }
-  },
   mounted() {
-    this.cleave = new Cleave("#" + this.inputId, this.options);
-    let value = Number(this.value);
-    this.cleave.setRawValue(value);
+    this.setAmount(this.value);
   },
   watch: {
     value() {
-      let value = Number(this.value);
-      this.cleave.setRawValue(value);
+      if (this.value != this.getAmount()) this.setAmount(this.value);
     }
   },
   methods: {
-    change() {
-      let value = Number(this.cleave.getRawValue());
-      this.$emit("input", value);
+    setAmount(value) {
+      value = value || "";
+      value = value.split(",").join("");
+      this.formattedAmount = value
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    getAmount() {
+      return this.formattedAmount.split(",").join("");
+    },
+    change(newValue) {
+      this.setAmount(newValue);
+      this.$emit("input", this.getAmount());
     }
   }
 };
 </script>
 
-<style lang="css" scoped>
-input {
-  direction: ltr;
-  text-align: left;
+<style lang="scss">
+.currency-input {
+  input {
+    direction: ltr;
+    text-align: center !important;
+  }
 }
 </style>

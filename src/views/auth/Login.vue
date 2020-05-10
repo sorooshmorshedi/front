@@ -1,55 +1,44 @@
 <template>
-  <div class="row rtl align-items-center justify-content-center" id="login">
-    <div class="col-sm-4">
-      <div class="card">
-        <img class="card-img-top" src="/img/SobhanAccountingLogo.png" alt="Card image cap">
-        <div class="card-body">
-          <h4 class="card-title">حسابداری آنلاین سبحان</h4>
-          <form>
-            <div class="form-group">
-              <label for="username">نام کاربری</label>
-              <input
-                type="text"
-                class="form-control"
-                name="username"
-                id="username"
-                aria-describedby="helpIdusername"
-                placeholder="نام کاربری"
-                v-model="username"
-              >
-            </div>
-            <div class="form-group">
-              <label for="password">رمز عبور</label>
-              <input
-                type="password"
-                class="form-control"
-                name="password"
-                id="password"
-                aria-describedby="helpIdpassword"
-                placeholder="رمز عبور"
-                v-model="password"
-              >
-            </div>
-            <button
-              @click.prevent="login()"
-              type="submit"
-              name="submit-btn"
-              id="submit-btn"
-              class="btn btn-primary"
-              style="min-width:100px;"
-            >ورود</button>
-            <a
-              name
-              id
-              class="secondary d-block d-sm-inline"
-              href="#"
-              role="button"
-            >رمز عبور خود را فراموش کرده اید؟</a>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-row class="d-flex justify-center mt-md-8">
+    <v-col cols="12" sm="12" md="4">
+      <v-card>
+        <v-img
+          class="white--text align-end"
+          height="200px"
+          contain
+          src="/img/SobhanAccountingLogo.png"
+        ></v-img>
+
+        <v-card-text class="text--primary">
+          <v-card-title class="d-block text-center">حسابداری آنلاین سبحان</v-card-title>
+
+          <v-text-field
+            class="mt-4 ltr"
+            dense
+            outlined
+            hide-details
+            label="نام کاربری"
+            v-model="username"
+          />
+          <v-text-field
+            dense
+            type="password"
+            class="mt-3 ltr"
+            outlined
+            hide-details
+            label="رمز عبور"
+            v-model="password"
+          />
+        </v-card-text>
+
+        <v-card-actions class="pb-3 flex-column flex-md-row">
+          <v-btn @click="login()" class="blue white--text mr-2 w-100px">ورود</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn text @click="login()" color="grey darken-3">رمز عبور خود را فراموش کرده اید؟</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

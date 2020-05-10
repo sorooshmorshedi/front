@@ -3,8 +3,9 @@ export default {
   methods: {
 
     endpoint(url) {
-      if (this.isDev)
+      if (this.isDev) {
         return "http://localhost:8001/" + url;
+      }
       // else return "http://api.sh.mmdmst.ir/" + url;
       else return "http://api." + window.location.hostname + "/" + url;
     },

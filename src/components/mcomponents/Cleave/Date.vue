@@ -1,5 +1,16 @@
 <template>
-  <input type="text" name value @input="change()" :id="inputId" dir="ltr" />
+  <v-text-field
+    type="text"
+    @input="change()"
+    :id="inputId"
+    dir="ltr"
+    :label="label"
+    outlined
+    :disabled="disabled"
+    dense
+    hide-details
+    background-color="white"
+  />
 </template>
 
 <script>
@@ -7,7 +18,7 @@ import Cleave from "cleave.js";
 import moment from "moment-jalaali";
 export default {
   name: "CleaveDate",
-  props: ["value", "id", "default"],
+  props: ["value", "id", "default", "label", "disabled"],
   data() {
     return {
       inputId: "",

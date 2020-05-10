@@ -7,7 +7,7 @@ import moment from "moment-jalaali";
 
 export default new Vuex.Store({
   state: {
-    user: {},
+    user: null,
     OGR: 0, //on going requests
     now: null,
     timeInterval: null,
