@@ -34,21 +34,16 @@ export default {
               title: "نقش ها"
             },
             {
-              title: "شرکت",
-              children: [
-                {
-                  to: {
-                    name: "CompaniesList"
-                  },
-                  title: "لیست شرکت ها"
-                },
-                {
-                  to: {
-                    name: "CreateCompany"
-                  },
-                  title: "تعریف شرکت"
-                }
-              ]
+              title: "شرکت ها",
+              to: {
+                name: "Companies"
+              }
+            },
+            {
+              title: "سال های مالی",
+              to: {
+                name: "FinancialYears"
+              }
             },
             {
               title: "حساب",
@@ -602,8 +597,7 @@ export default {
       ]
     };
   },
-  methods: {
-  },
+  methods: {},
   computed: {
     username() {
       if (this.user.username.includes("manager")) return "manager";
@@ -618,7 +612,7 @@ export default {
   .list-item-title {
     // color: white;
     font-weight: 300 !important;
-    font-size: .9rem !important;
+    font-size: 0.9rem !important;
   }
   .v-icon {
     // color: rgba(white, 0.8) !important;

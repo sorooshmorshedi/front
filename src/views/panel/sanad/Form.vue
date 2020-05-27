@@ -43,26 +43,11 @@
               <v-text-field
                 required
                 label="شماره سند"
-                outlined
-                disabled
-                hide-details
-                dense
                 v-model="sanad.code"
                 v-if="sanad.id"
                 background-color="white"
               ></v-text-field>
-              <v-text-field
-                small
-                required
-                label="شماره سند"
-                outlined
-                hide-details
-                dense
-                disabled
-                :value="sanadCode"
-                v-else
-                background-color="white"
-              ></v-text-field>
+              <v-text-field required label="شماره سند" disabled :value="sanadCode" v-else></v-text-field>
             </v-col>
             <v-col cols="12" lg="6">
               <date
@@ -74,14 +59,7 @@
               />
             </v-col>
             <v-col cols="12" lg="12">
-              <v-text-field
-                label="صادر کننده سند"
-                disabled
-                outlined
-                hide-details
-                dense
-                background-color="white"
-              ></v-text-field>
+              <v-text-field label="صادر کننده سند" disabled></v-text-field>
             </v-col>
           </v-row>
         </v-col>
@@ -89,14 +67,10 @@
           <v-row>
             <v-col cols="12" lg="12">
               <v-textarea
-                label="توضیحات سند"
+                label="شرح سند"
                 v-model="sanad.explanation"
                 :disabled="!editable"
-                outlined
-                hide-details
-                dense
                 height="105"
-                background-color="white"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -108,7 +82,7 @@
               <tr>
                 <th>#</th>
                 <th class="required">شماره - نام حساب</th>
-                <th>توضیحات</th>
+                <th>توضیحات ردیف</th>
                 <th class="required">تفضیلی شناور</th>
                 <th>مرکز هزینه</th>
                 <th>بدهکار</th>
@@ -126,69 +100,50 @@
                 <td v-tooltip="accountParentsName(row.account).join(' > ')">
                   <v-autocomplete
                     :items="accountsSelectValues.levels[3]"
-                    search
-                    outlined
-                    dense
                     v-model="rows[i].account"
                     :title="rows[i].account"
-                    item-value="id"
-                    item-text="title"
                     :disabled="!editable"
-                    hide-details
                     height="40"
-                    background-color="white"
-                    return-object
-                  ></v-autocomplete>
+                  >
+                    <template v-slot:selection="slotProps">
+                      <span>{{ slotProps.item.title }}</span>
+                    </template>
+                  </v-autocomplete>
                 </td>
                 <td>
-                  <v-text-field
+                  <v-textarea
+                    style="width: 300px"
                     v-model="rows[i].explanation"
                     :disabled="!editable"
-                    outlined
-                    background-color="white"
-                    dense
-                    hide-details
-                  />
+                    rows="1"
+                    auto-grow
+                  ></v-textarea>
                 </td>
                 <td
                   v-tooltip="getFloatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
                 >
                   <v-autocomplete
                     v-if="getFloatAccounts(rows[i]).length"
-                    search
-                    outlined
-                    dense
                     :items="getFloatAccounts(rows[i])"
                     v-model="rows[i].floatAccount"
-                    item-value="id"
                     item-text="name"
-                    return-object
                     :disabled="!editable"
-                    hide-details
                     height="40"
-                    background-color="white"
                   ></v-autocomplete>
                   <span v-else>-</span>
                 </td>
                 <td v-tooltip="getCostCenters(rows[i]).length?row.account.costCenterGroup.name:''">
                   <v-autocomplete
                     v-if="getCostCenters(rows[i]).length"
-                    search
-                    outlined
-                    dense
                     :items="getCostCenters(rows[i])"
                     v-model="rows[i].costCenter"
-                    item-value="id"
                     item-text="name"
-                    return-object
                     :disabled="!editable"
-                    hide-details
                     height="40"
-                    background-color="white"
                   ></v-autocomplete>
                   <span v-else>-</span>
                 </td>
-                <td>
+                <td style="width: 150px">
                   <money
                     :disabled="!editable || rows[i].bes != 0"
                     class="form-control"
@@ -200,7 +155,7 @@
                     <i class="fas fa-exchange-alt"></i>
                   </a>
                 </td>
-                <td>
+                <td style="width: 150px">
                   <money
                     :disabled="!editable || rows[i].bed != 0"
                     class="form-control"

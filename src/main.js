@@ -18,6 +18,9 @@ Vue.component('WareSelect', WareSelect);
 import money from "@/components/mcomponents/cleave/Money";
 Vue.component('money', money);
 
+import date from "@/components/mcomponents/cleave/Date";
+Vue.component('date', date);
+
 import ContextMenu from "@/components/mcomponents/ContextMenu";
 Vue.component('ContextMenu', ContextMenu);
 

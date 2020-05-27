@@ -3,8 +3,10 @@
 </template>
 
 <script>
+import GetUserApi from "@/views/panel/user/getUserApi.js"
 export default {
   name: "Panel",
+  mixins: [GetUserApi],
   data() {
     return {};
   },
@@ -12,17 +14,6 @@ export default {
     this.getUser();
   },
   methods: {
-    getUser() {
-      this.request({
-        url: this.endpoint("users/currentUser/"),
-        method: "get",
-        success: data => {
-          this.$store.commit("setUser", data);
-
-          if(!this.financialYear) this.$router.push({name: 'CompaniesList'})
-        }
-      });
-    }
   }
 };
 </script>

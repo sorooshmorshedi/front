@@ -2,10 +2,6 @@
   <v-text-field
     dir="ltr"
     @input="change"
-    outlined
-    background-color="white"
-    dense
-    hide-details
     :disabled="disabled"
     v-model="formattedAmount"
     class="currency-input"

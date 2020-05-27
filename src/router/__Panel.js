@@ -2,6 +2,9 @@ import Panel from '@/views/panel/Panel.vue';
 
 import Home from '@/views/panel/Home.vue';
 
+import Companies from '@/views/panel/company/Companies.vue';
+import FinancialYears from '@/views/panel/company/FinancialYears.vue';
+
 import Company from '@/views/panel/company/Company.vue';
 import CreateCompany from '@/views/panel/company/Create.vue';
 import UpdateCompany from '@/views/panel/company/Update.vue';
@@ -62,11 +65,22 @@ export default [{
       name: 'Users',
       path: 'users',
       component: Users,
-    },{
+    }, {
       name: 'Roles',
       path: 'roles',
       component: Roles,
-    }, {
+    },
+    {
+      name: 'Companies',
+      path: 'companies',
+      component: Companies,
+    },
+    {
+      name: 'FinancialYears',
+      path: 'financialYears',
+      component: FinancialYears,
+    },
+    {
       name: 'Company',
       path: 'company',
       component: Company,

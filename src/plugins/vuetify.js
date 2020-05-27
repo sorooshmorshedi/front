@@ -6,12 +6,34 @@ import fa from 'vuetify/es5/locale/fa';
 
 Vue.use(Vuetify);
 
+import {
+  VTextField,
+  VAutocomplete,
+  VBtn,
+  VCard
+} from 'vuetify/lib'
+
+VTextField.options.props.outlined.default = true
+VTextField.options.props.hideDetails.default = true
+VTextField.options.props.dense.default = true
+VTextField.options.props.backgroundColor.default = 'white'
+
+VAutocomplete.options.props.itemValue.default = 'id'
+VAutocomplete.options.props.itemText.default = 'title'
+VAutocomplete.options.props.returnObject.default = true
+
+VBtn.options.props.small.default = true
+
+VCard.options.props.outlined.default = true
+
+
+
 export default new Vuetify({
   rtl: true,
   theme: {
-      options: {
-        customProperties: true,
-      },
+    options: {
+      customProperties: true,
+    },
     themes: {
       light: {
         primary: '#ee44aa',
@@ -24,10 +46,12 @@ export default new Vuetify({
       },
     },
   },
-    lang: {
-      locales: { fa },
-      current: 'fa',
+  lang: {
+    locales: {
+      fa
     },
+    current: 'fa',
+  },
   icons: {
     iconfont: 'md',
   },

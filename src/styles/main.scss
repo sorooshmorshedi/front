@@ -10,6 +10,10 @@ html {
   font-size: 16px !important;
 }
 
+.v-input {
+  font-size: .7vw !important;
+}
+
 // @mixin header() {
 //   font-size: 1.6rem;
 //   border-right: 8px solid $primary;
@@ -221,6 +225,6 @@ a {
 //  }
 
 .app-background-color {
-    background-color: #fafafa !important;
-    // background-color: #fafafa !important;
+  background-color: #fafafa !important;
+  // background-color: #fafafa !important;
 }

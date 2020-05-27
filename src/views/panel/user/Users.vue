@@ -14,67 +14,51 @@
       <template #default>
         <div class="row">
           <div class="form-group col-12">
-            <label class="required">نام</label>
-            <input type="text" class="form-control" v-model="item.first_name" />
+            <v-text-field label="نام" v-model="item.first_name" />
           </div>
           <div class="form-group col-12">
-            <label class="required">نام خانوادگی</label>
-            <input type="text" class="form-control" v-model="item.last_name" />
+            <v-text-field label="نام خانوادگی" v-model="item.last_name" />
           </div>
           <div class="form-group col-12">
-            <label>نام کاربری</label>
-            <input type="text" class="form-control" v-model="item.username" />
+            <label></label>
+            <v-text-field label="نام کاربری" v-model="item.username" />
           </div>
           <div class="form-group col-12" v-if="!item.id">
-            <label>کلمه عبور</label>
-            <input type="text" class="form-control" v-model="item.password" />
+            <v-text-field label="کلمه عبور" v-model="item.password" />
           </div>
 
           <div class="form-group col-12">
-            <label>نقش ها</label>
-            <multiselect
-              dir="rtl"
-              :options="roles"
+            <v-autocomplete
+              label="نقش ها"
+              :items="roles"
               v-model="item.roles"
-              track-by="id"
-              label="name"
-              :multiple="true"
-            />
+              item-text="name"
+              multiple
+            ></v-autocomplete>
           </div>
         </div>
       </template>
       <template #actions>
-        <button
+        <v-btn
           v-if="item.id"
-          @click="modal('#change-password', 'show')"
-          type="button"
-          class="btn btn-info ml-1"
-        >تغیر کلمه عبور</button>
+          @click=" showChangePasswordDialog = true "
+          class="blue white--text"
+        >تغیر کلمه عبور</v-btn>
       </template>
     </list-modal-form>
 
-    <div class="modal fade" id="change-password">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">تغیر کلمه عبور</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group col-12">
-              <label>کلمه عبور جدید</label>
-              <input type="text" class="form-control" v-model="newPassword" />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button @click="changePassword" type="button" class="btn btn-primary w-100px">ثبت</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <v-dialog v-model="showChangePasswordDialog" max-width="500px">
+      <v-card>
+        <v-card-title>تغیر کلمه عبور</v-card-title>
+        <v-card-text>
+          <v-text-field label="کلمه عبور جدید" v-model="newPassword" />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="changePassword"  class="w-100px green white--text">ثبت</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -90,8 +74,9 @@ export default {
       items: [],
       roles: [],
       newPassword: "",
+      showChangePasswordDialog: false,
       itemTemplate: {
-        roles: [] 
+        roles: []
       },
       cols: [
         {
@@ -154,12 +139,12 @@ export default {
         success: data => {
           this.newPassword = "";
           this.successNotify();
-          this.modal("#change-password", "hide");
+          this.showChangePasswordDialog = false;
         }
       });
     },
     getSerialized() {
-      let user = { ...this.item }
+      let user = { ...this.item };
       user.roles = this.item.roles.map(o => o.id);
       return user;
     }

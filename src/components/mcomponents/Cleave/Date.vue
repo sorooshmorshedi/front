@@ -5,11 +5,7 @@
     :id="inputId"
     dir="ltr"
     :label="label"
-    outlined
     :disabled="disabled"
-    dense
-    hide-details
-    background-color="white"
   />
 </template>
 

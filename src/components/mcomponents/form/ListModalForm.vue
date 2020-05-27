@@ -1,43 +1,36 @@
 <template>
-  <div class="row">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <div class="title" v-if="showTitle">
+  <v-row class>
+    <v-col cols="12" md="6">
+      <v-card>
+        <v-card-title class="title" v-if="showTitle">
+          {{ title }}
+          <v-spacer></v-spacer>
+          <v-btn class="light-blue white--text mr-1" @click="emitClearForm">
+            تعریف
             {{ title }}
-            <button class="btn btn-info" @click="emitClearForm">
-              تعریف
-              {{ title }}
-              جدید
-            </button>
-            <slot name="header-buttons"></slot>
-          </div>
-          <div class="row">
-            <div class="col-12" :class="{'col-md-6': showList, 'col-md-12': !showList}">
-              <slot name="default"></slot>
-
-              <hr>
-
-              <div class="text-left">
-                <slot name="actions"></slot>
-                <button
-                  v-if="deletable"
-                  @click="emitDelete"
-                  type="button"
-                  class="btn btn-danger"
-                >حذف</button>
-                <button @click="emitSubmit" type="button" class="btn btn-primary w-100px mr-1">ثبت</button>
-              </div>
-            </div>
-
-            <div class="table-pointer col-12 col-md-6" v-if="showList">
-              <datatable :cols="cols" :data="items" @rowClick="rowClick"/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+            جدید
+          </v-btn>
+          <slot name="header-buttons"></slot>
+        </v-card-title>
+        <v-card-text>
+          <slot name="default"></slot>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <slot name="actions"></slot>
+          <v-btn v-if="deletable" @click="emitDelete" color="red" outlined>حذف</v-btn>
+          <v-btn @click="emitSubmit" class="green white--text">ثبت</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+    <v-col cols="12" md="6">
+      <v-card>
+        <v-card-text>
+          <datatable :cols="cols" :data="items" @rowClick="rowClick" />
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import datatable from "@/components/mcomponents/datatable/Client";
