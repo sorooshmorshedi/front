@@ -1,6 +1,7 @@
 <template>
   <v-text-field
     dir="ltr"
+    :label="label"
     @input="change"
     :disabled="disabled"
     v-model="formattedAmount"
@@ -21,6 +22,7 @@ export default {
     decimalScale: {
       default: 0
     },
+    label: {},
     disabled: {
       default: false
     }

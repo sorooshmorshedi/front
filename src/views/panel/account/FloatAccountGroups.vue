@@ -11,16 +11,14 @@
       @delete="deleteItem"
       ref="listModelForm"
     >
-      <div class="form-group col-12">
-        <label class="required">نام</label>
-        <input type="text" class="form-control" v-model="item.name">
-      </div>
-      <div class="r">
-        <div class="form-group col-12">
-          <label>توضیحات</label>
-          <textarea class="form-control" rows="5" v-model="item.explanation"></textarea>
-        </div>
-      </div>
+      <v-row>
+        <v-col cols="12">
+          <v-text-field label="نام" v-model="item.name" />
+        </v-col>
+        <v-col cols="12">
+          <v-textarea label="توضیحات" v-model="item.explanation" />
+        </v-col>
+      </v-row>
     </list-modal-form>
   </div>
 </template>

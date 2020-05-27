@@ -11,28 +11,24 @@
       @delete="deleteItem"
       ref="listModelForm"
     >
-      <div class="form-group col-12">
-        <label class="required">نام</label>
-        <input type="text" class="form-control" v-model="item.name">
-      </div>
-      <div class="r">
-        <div class="form-group col-12">
-          <label>توضیحات</label>
-          <textarea class="form-control" rows="5" v-model="item.explanation"></textarea>
-        </div>
-
-        <div class="form-group col-12">
-          <label class="required">گروه</label>
-          <multiselect
-            dir="rtl"
-            :options="groupOptions"
+      <v-row>
+        <v-col cols="12">
+          <v-text-field required lang="نام" v-model="item.name" />
+        </v-col>
+        <v-col cols="12">
+          <v-textarea label="توضیحات" v-model="item.explanation" />
+        </v-col>
+        <v-col cols="12">
+          <label class="required"></label>
+          <account-select
+            label="گروه"
+            :itemsType="groupType"
             v-model="item.floatAccountGroups"
-            track-by="id"
-            label="name"
+            item-text="name"
             :multiple="true"
           />
-        </div>
-      </div>
+        </v-col>
+      </v-row>
     </list-modal-form>
   </div>
 </template>
@@ -86,6 +82,10 @@ export default {
     },
     isCostCenter() {
       return ["true", true].includes(this.is_cost_center);
+    },
+    groupType() {
+      if (this.isCostCenter) return "costCenterGroups";
+      else return "floatAccountGroups";
     }
   },
   methods: {

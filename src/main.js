@@ -15,6 +15,9 @@ Vue.component('multiselect', Multiselect);
 import WareSelect from '@/components/selects/WareSelect.vue';
 Vue.component('WareSelect', WareSelect);
 
+import AccountSelect from '@/components/selects/AccountSelect.vue';
+Vue.component('AccountSelect', AccountSelect);
+
 import money from "@/components/mcomponents/cleave/Money";
 Vue.component('money', money);
 
