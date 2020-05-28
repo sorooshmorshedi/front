@@ -1,6 +1,6 @@
 <template>
-  <v-row class>
-    <v-col cols="12" md="6">
+  <v-row >
+    <v-col cols="12" :md="showList?6:12">
       <v-card>
         <v-card-title class="title" v-if="showTitle">
           {{ title }}
@@ -23,7 +23,7 @@
         </v-card-actions>
       </v-card>
     </v-col>
-    <v-col cols="12" md="6">
+    <v-col cols="12" md="6" v-if="showList">
       <v-card>
         <v-card-text>
           <datatable :cols="cols" :data="items" @rowClick="rowClick" />

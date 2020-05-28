@@ -1,10 +1,6 @@
 <template>
   <div v-show="show" class="context-menu" :style="contextMenuStyle" ref="menu">
-    <div class="row">
-      <div class="col-12">
-        <slot>No Content!</slot>
-      </div>
-    </div>
+    <slot>No Content!</slot>
   </div>
 </template>
 
@@ -49,8 +45,6 @@ export default {
 .context-menu {
   position: fixed;
   background-color: #fafafa;
-  border: 1px solid #808080;
-  box-shadow: 1px 4px -4px 8px black;
   z-index: 1000;
 }
 </style>

@@ -1,10 +1,7 @@
 <template>
   <div>
-    <div class="form-group">
-      <label for="tree-search">جستوجو</label>
-      <input type="text" class="form-control" id="tree-search" v-model="searchValue">
-    </div>
-    <TreeUl v-bind="childBind" class="rtl p-0 m-0"/>
+    <v-text-field label="جستوجو" class="my-2" id="tree-search" v-model="searchValue" />
+    <TreeUl v-bind="childBind" class="rtl p-0 m-0" />
   </div>
 </template>
 <script>
@@ -441,6 +438,4 @@ export default {
 .search-result {
   background-color: #ffeb3b;
 }
-
-
 </style>

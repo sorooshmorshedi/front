@@ -1,34 +1,55 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12 col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <div class="title">نمودار درختی حساب ها</div>
+  <v-row>
+    <v-col cols="12" md="6">
+      <v-card>
+        <v-card-title>نمودار درختی حساب ها</v-card-title>
+        <v-card-text>
           <tree-component :data="root" @node-click="setAccount" @node-context-menu="contextMenu"></tree-component>
-
           <context-menu ref="menu" class="context-menu">
             <template v-if="account">
-              <ul>
-                <li @click="createChildAccount(account)" v-if="account.level != 3">
-                  <i class="fas fa-plus text-success"/>
-                  <span>افزودن حساب {{ getTitle(account.level+1) }}</span>
-                </li>
-                <li @click="openLedger(account)">
-                  <i class="fas fa-book-open text-danger"/>
-                  دفتر این حساب
-                </li>
-              </ul>
+              <v-card>
+                <v-list dense>
+                  <v-list-item @click="createChildAccount(account)" v-if="account.level != 3">
+                    <v-list-item-icon>
+                      <v-icon class="pt-1">fas fa-plus</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <span>افزودن حساب {{ getTitle(account.level+1) }}</span>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+
+                  <v-list-item @click="openLedger(account)">
+                    <v-list-item-icon>
+                      <v-icon class="pt-1">fas fa-book-open</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <span>دفتر این حساب</span>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card>
             </template>
           </context-menu>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6">
+        </v-card-text>
+      </v-card>
+    </v-col>
+
+    <v-col cols="12" md="6">
       <template v-if="account && account.level != undefined">
-        <accounts usage="tree" :level="account.level" :type="account.type" :item-object="account"/>
+        <accounts
+          usage="tree"
+          :level="account.level"
+          :type="account.type"
+          :item-object="account"
+          class="mt-n3"
+        />
       </template>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -63,8 +84,7 @@ export default {
   },
   methods: {
     setAccount(node) {
-      if (!node.id) return;
-      this.account = node;
+      this.account = {...node};
     },
     contextMenu(node, index, parent, e) {
       if (!node.id) return;
