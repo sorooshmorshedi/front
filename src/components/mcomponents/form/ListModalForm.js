@@ -13,6 +13,7 @@ export default {
     return {
       item: {},
       itemTemplate: {},
+      leadingSlash: false,
 
       // must be set
       // cols: [],
@@ -21,10 +22,10 @@ export default {
   },
   computed: {
     createUrl() {
-      return this.baseUrl
+      return this.baseUrl + (this.leadingSlash ? "/" : "")
     },
     updateUrl() {
-      return this.item.id && `${this.baseUrl}/${this.item.id}`
+      return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.leadingSlash ? "/" : "")
     },
     deleteUrl() {
       return this.item.id && `${this.baseUrl}/${this.item.id}`
