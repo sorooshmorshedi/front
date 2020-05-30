@@ -47,7 +47,9 @@ export default {
   },
   methods: {
     setAmount(value) {
-      value = value || "";
+      if(!value) value = ""
+      else value = String(value);
+
       value = value.split(",").join("");
       this.formattedAmount = value
         .toString()
