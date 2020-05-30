@@ -28,7 +28,7 @@ export default {
       return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.leadingSlash ? "/" : "")
     },
     deleteUrl() {
-      return this.item.id && `${this.baseUrl}/${this.item.id}`
+      return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.leadingSlash ? "/" : "")
     },
   },
   watch: {
