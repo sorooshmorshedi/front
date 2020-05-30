@@ -1,13 +1,35 @@
 <template>
-  <v-autocomplete
-    :items="items"
-    v-model="item"
-    :label="label"
-    :item-text="itemText"
-    :disabled="disabled"
-    :multiple="multiple"
-    height="40"
-  ></v-autocomplete>
+  <div>
+    <v-autocomplete
+      :items="items"
+      v-model="item"
+      :label="label"
+      :item-text="itemText"
+      :disabled="disabled"
+      :multiple="multiple"
+      height="40"
+    ></v-autocomplete>
+    <template v-if="itemsType == 'level3' && item">
+      <account-select
+        class="mt-3"
+        v-if="item.floatAccountGroup"
+        :child-of="item.floatAccountGroup.id"
+        v-model="localFloatAccount"
+        label="حساب شناور"
+        items-type="floatAccounts"
+        item-text="name"
+      />
+      <account-select
+        class="mt-3"
+        v-if="item.costCenterGroup"
+        :child-of="item.costCenterGroup.id"
+        v-model="localCostCenter"
+        label="مرکز هزینه"
+        items-type="floatAccounts"
+        item-text="name"
+      />
+    </template>
+  </div>
 </template>
 
 <script>
@@ -16,6 +38,8 @@ export default {
   mixins: [accountApiMixin],
   props: {
     value: {},
+    floatAccount: {},
+    costCenter: {},
     label: {
       default: "حساب"
     },
@@ -26,7 +50,7 @@ export default {
       default: "title"
     },
     multiple: {
-      default: false,
+      default: false
     },
     itemsType: {
       default: "all",
@@ -49,11 +73,16 @@ export default {
           "costCenterGroups"
         ].includes(value);
       }
+    },
+    childOf: {
+      default: null
     }
   },
   data() {
     return {
-      item: null
+      item: null,
+      localFloatAccount: undefined,
+      localCostCenter: undefined 
     };
   },
   computed: {
@@ -114,24 +143,60 @@ export default {
           }
         });
 
+      if (this.childOf) {
+        items = items.filter(o => {
+          if (["floatAccounts", "costCenters"]) {
+            return (
+              o.floatAccountGroups.filter(o => o.id == this.childOf).length == 1
+            );
+          } else {
+            return o.parent == this.childOf;
+          }
+        });
+      }
+
       return items;
     }
   },
   created() {
     this.getAccounts();
+    this.getFloatAccounts();
+
     this.setItem();
   },
   methods: {
-    setItem(value) {
+    setItem() {
       if (this.value != this.item) this.item = this.value;
+
+      if (this.floatAccount != this.localFloaAccount)
+        this.localFloatAccount = this.floatAccount;
+      if (this.costCenter != this.localCostCenter)
+        this.localCostCenter = this.costCenter;
     }
   },
   watch: {
     value() {
-      this.setItem(this.value);
+      this.setItem();
+    },
+    item() {
+      this.setItem();
+    },
+    floatAccount() {
+      this.setItem();
+    },
+    costCenter() {
+      this.setItem();
     },
     item() {
       this.$emit("input", this.item);
+      this.$emit("update:floatAccount", null);
+      this.$emit("update:costCenter", null);
+    },
+    localFloatAccount() {
+      this.$emit("update:floatAccount", this.localFloatAccount);
+    },
+    localCostCenter() {
+      this.$emit("update:costCenter", this.localCostCenter);
     }
   }
 };
@@ -139,3 +204,12 @@ export default {
 
 <style lang="scss" >
 </style>
+
+// --- Document
+// The itemsType item uses v-model, but floatAccount & costCenters must hanle like this:
+// 
+//   :floatAccount="item.floatAccount"
+//   @update:floatAccount="v => item.floatAccount = v"
+// 
+//   :costCenter="item.costCenter"
+//   @update:costCenter="v => item.costCenter = v"
