@@ -181,36 +181,40 @@ export default {
               title: "پیشفرض ها",
               children: [
                 {
-                  title: "حساب های پیشفرض",
-                  children: [
-                    {
-                      to: {
-                        name: "DefaultAccounts",
-                        params: {
-                          usage: "transaction"
-                        }
-                      },
-                      title: "دریافت و پرداخت"
-                    },
-                    {
-                      to: {
-                        name: "DefaultAccounts",
-                        params: {
-                          usage: "factor"
-                        }
-                      },
-                      title: "فاکتور"
-                    },
-                    {
-                      to: {
-                        name: "DefaultAccounts",
-                        params: {
-                          usage: "closeAccounts"
-                        }
-                      },
-                      title: "بستن حساب ها"
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "receive"
                     }
-                  ]
+                  },
+                  title: "حساب های دریافت"
+                },
+                {
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "payment"
+                    }
+                  },
+                  title: "حساب های پرداخت"
+                },
+                {
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "factor"
+                    }
+                  },
+                  title: "حساب های فاکتور"
+                },
+                {
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "closeAccounts"
+                    }
+                  },
+                  title: "حساب های بستن"
                 },
                 {
                   to: {
