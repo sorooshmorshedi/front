@@ -6,29 +6,29 @@ export default {
   data() {
     return {
       pricingTypes: [{
-          id: 0,
+          id: 'f',
           name: 'فایفو'
         },
         {
-          id: 1,
+          id: 'wm',
           name: 'میانگین موزون'
         },
       ]
     }
   },
   methods: {
-    getWareLevels(force = false, init = false) {
+
+    getWareLevels(force = false) {
       if (!force && this.wareLevels.length) return;
       return this.request({
-        url: this.endpoint('wares/wareLevels'),
-        method: 'get',
+        url: this.endpoint("wares/wareLevels"),
+        method: "get",
         success: data => {
-          this.$store.commit('setWares', {
+          this.$store.commit("setWares", {
             wareLevels: data
           });
-          init && this.init();
         }
-      })
+      });
     },
     getWares(force = false, init = false) {
       if (!force && this.wares.length) return;
@@ -36,15 +36,8 @@ export default {
         url: this.endpoint('wares/wares'),
         method: 'get',
         success: data => {
-          let wares = [];
-          data.forEach(w => {
-            wares.push({
-              ...w,
-              pricingType: this.pricingTypes[w.pricingType],
-            })
-          })
           this.$store.commit('setWares', {
-            wares: wares
+            wares: data
           });
           init && this.init();
         }

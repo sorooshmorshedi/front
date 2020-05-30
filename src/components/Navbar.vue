@@ -147,15 +147,36 @@ export default {
               children: [
                 {
                   to: {
-                    name: "CreateWare"
+                    name: "WareLevels",
+                    params: {
+                      level: 0
+                    }
                   },
-                  title: "تعریف کالا"
+                  title: "ماهیت"
                 },
                 {
                   to: {
-                    name: "EditWare"
+                    name: "WareLevels",
+                    params: {
+                      level: 1
+                    }
                   },
-                  title: "ویرایش کالا"
+                  title: "گروه"
+                },
+                {
+                  to: {
+                    name: "WareLevels",
+                    params: {
+                      level: 2
+                    }
+                  },
+                  title: "دسته بندی"
+                },
+                {
+                  to: {
+                    name: "Wares"
+                  },
+                  title: "کالا"
                 },
                 {
                   to: {

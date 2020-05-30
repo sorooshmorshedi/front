@@ -20,9 +20,9 @@ import AccountTree from '@/views/panel/account/Tree.vue';
 
 import DefaultAccounts from '@/views/panel/defaultAccounts/DefaultAccounts.vue';
 
-import Ware from '@/views/panel/ware/Ware.vue';
-import CreateWare from '@/views/panel/ware/Create.vue';
-import EditWare from '@/views/panel/ware/Edit.vue';
+import WareLevels from '@/views/panel/ware/WareLevels.vue';
+import Wares from '@/views/panel/ware/Wares.vue';
+
 import Warehouse from '@/views/panel/ware/WareHouse.vue';
 import Unit from '@/views/panel/ware/Unit.vue';
 
@@ -126,26 +126,24 @@ export default [{
       component: AccountTree,
     },
     {
-      name: 'Ware',
-      path: 'ware',
-      component: Ware,
-      children: [{
-        name: 'CreateWare',
-        path: 'create',
-        component: CreateWare
-      }, {
-        name: 'EditWare',
-        path: 'edit',
-        component: EditWare
-      }, {
-        name: 'Warehouse',
-        path: 'warehouse',
-        component: Warehouse
-      }, {
-        name: 'Unit',
-        path: 'unit',
-        component: Unit
-      }]
+      name: 'WareLevels',
+      path: 'wareLevels/:level',
+      component: WareLevels,
+      props: true
+    },
+    {
+      name: 'Wares',
+      path: 'wares',
+      component: Wares,
+    },
+    {
+      name: 'Warehouse',
+      path: 'warehouse',
+      component: Warehouse
+    }, {
+      name: 'Unit',
+      path: 'unit',
+      component: Unit
     },
     {
       name: 'DefaultAccounts',
