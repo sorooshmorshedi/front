@@ -82,7 +82,7 @@ export default {
     return {
       item: null,
       localFloatAccount: undefined,
-      localCostCenter: undefined 
+      localCostCenter: undefined
     };
   },
   computed: {
@@ -189,8 +189,10 @@ export default {
     },
     item() {
       this.$emit("input", this.item);
-      this.$emit("update:floatAccount", null);
-      this.$emit("update:costCenter", null);
+      if (this.item) {
+        if (!this.item.floatAccountGroup) this.$emit("update:floatAccount", null);
+        if (!this.item.costCenterGroup) this.$emit("update:costCenter", null);
+      }
     },
     localFloatAccount() {
       this.$emit("update:floatAccount", this.localFloatAccount);
