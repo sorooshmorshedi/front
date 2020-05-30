@@ -1,221 +1,127 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12 col-lg-12">
-      <div class="title">هزینه های پیشفرض فاکتور {{ type.label }}</div>
-      <button @click="createExpense()" type="button" class="btn btn-info">افزودن</button>
-      <br>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>نام</th>
-            <th>حساب</th>
-            <th>توضیحات</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(e, i) in factorExpenses.filter(o => o.type == type.name)" :key="i">
-            <td>{{ i+1 }}</td>
-            <td>{{ e.name }}</td>
-            <td>{{ e.account.title }}</td>
-            <td>{{ e.explanation }}</td>
-            <td>
-              <i class="fas fa-pencil-alt text-warning" @click="editExpense(e)"/>
-            </td>
-            <td>
-              <i class="fas fa-trash-alt text-danger" @click="deleteExpense(e)"/>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="modal fade" id="factor-expense-modal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">هزینه پیشفرض فاکتور {{ type.label }}</h4>
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <div class="form-goup col-12">
-                  <label for>نام</label>
-                  <input type="text" class="form-control" v-model="expense.name">
-                </div>
-                <div class="form-group col-12">
-                  <label>حساب</label>
-                  <multiselect
-                    dir="rtl"
-                    :options="this.accountsSelectValues.levels[3]"
-                    v-model="expense.account"
-                    track-by="id"
-                    label="title"
-                  />
-                </div>
-                <div
-                  class="form-group col-12"
-                  v-if="expense.account && expense.account.floatAccountGroup"
-                >
-                  <label>حساب شناور</label>
-                  <multiselect
-                    dir="rtl"
-                    :options="expense.account.floatAccountGroup.floatAccounts"
-                    v-model="expense.floatAccount"
-                    track-by="id"
-                    label="name"
-                  />
-                </div>
-                <div
-                  class="form-group col-12"
-                  v-if="expense.account && expense.account.costCenterGroup"
-                >
-                  <label>مرکز هزینه</label>
-                  <multiselect
-                    dir="rtl"
-                    :options="expense.account.costCenterGroup.floatAccounts"
-                    v-model="expense.costCenter"
-                    track-by="id"
-                    label="name"
-                  />
-                </div>
-                <div class="form-group col-12">
-                  <label>توضیحات</label>
-                  <textarea class="form-control" rows="3" v-model="expense.explanation"></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button
-              v-if="!expense.id"
-              @click="storeExpense()"
-              type="button"
-              class="btn btn-primary"
-            >ثبت</button>
-            <button v-else @click="updateExpense()" type="button" class="btn btn-primary">ثبت</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <list-modal-form
+    :title="title"
+    :items="items"
+    :cols="cols"
+    :deletable="item.id"
+    @rowClick="setItem"
+    @clearForm="clearForm"
+    @submit="submit"
+    @delete="deleteItem"
+    ref="listModelForm"
+  >
+    <template #default>
+      <v-row>
+        <template v-if="hasParent">
+          <v-col cols="12">
+            <v-text-field label="نام" v-model="item.name" />
+          </v-col>
+          <v-col cols="12">
+            <account-select
+              label="حساب"
+              itemsType="level3"
+              v-model="item.account"
+              :floatAccount="item.floatAccount"
+              @update:floatAccount="v => item.floatAccount = v"
+              :costCenter="item.costCenter"
+              @update:costCenter="v => item.costCenter = v"
+            />
+          </v-col>
+        </template>
+        <v-col cols="12">
+          <v-textarea label="توضیحات" v-model="item.explanation" />
+        </v-col>
+      </v-row>
+    </template>
+  </list-modal-form>
 </template>
-
 <script>
-import accountApiMixin from "@/mixin/accountMixin";
-import factorApiMixin from "@/mixin/factorApi";
+import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";
+import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import FactorApiMixin from "@/mixin/factorApi";
 
 export default {
-  mixins: [accountApiMixin, factorApiMixin],
-  name: "Expenses",
-  props: ["factorType"],
-  data() {
-    return {
-      expense: {},
-      type: {
-        label: "",
-        name: ""
-      }
-    };
-  },
-  created() {
-    this.getFactorExpenses();
-    this.getAccounts();
-    this.init();
-  },
-  methods: {
-    init() {
-      if (this.factorType == "buy") {
-        this.type.label = "خرید";
-        this.type.name = "buy";
-        this.expense.type = "buy";
-      } else if (this.factorType == "sale") {
-        this.type.label = "فروش";
-        this.type.name = "sale";
-        this.expense.type = "sale";
-      } else {
-        console.error("404");
-      }
-    },
-    editExpense(expense) {
-      this.expense = this.copy(expense);
-      $("#factor-expense-modal").modal("show");
-    },
-    getSerialized() {
-      let data = {
-        ...this.extractIds(this.expense),
-        account: this.expense.account.id,
-        type: this.type.name
-      };
-      return data;
-    },
-    updateExpense() {
-      this.request({
-        url: this.endpoint("factors/expenses/" + this.expense.id + "/"),
-        method: "put",
-        data: this.getSerialized(),
-        success: data => {
-          this.successNotify();
-          this.getFactorExpenses(true);
-          $("#factor-expense-modal").modal("hide");
-          this.expense = {};
-        }
-      });
-    },
-    createExpense() {
-      this.expense = {};
-      $("#factor-expense-modal").modal("show");
-    },
-    storeExpense() {
-      this.request({
-        url: this.endpoint("factors/expenses/"),
-        method: "post",
-        data: this.getSerialized(),
-        success: data => {
-          this.successNotify();
-          this.getFactorExpenses(true);
-          $("#factor-expense-modal").modal("hide");
-          this.expense = {};
-        }
-      });
-    },
-    deleteExpense(expense) {
-      this.request({
-        url: this.endpoint("factors/expenses/" + expense.id),
-        method: "delete",
-        success: data => {
-          this.successNotify();
-          this.getFactorExpenses(true);
-        }
-      });
+  mixins: [ListModalFormMixin, FactorApiMixin],
+  props: {
+    factorType: {
+      requried: true
     }
   },
-  watch: {
-    factorType() {
-      this.init();
+  data() {
+    return {
+      item: {},
+      itemTemplate: {
+        level: this.level,
+        type: this.factorType,
+      },
+      baseUrl: "factors/expenses",
+      leadingSlash: true,
+      cols: [
+        {
+          th: "نام",
+          td: "name",
+          type: "text",
+          filters: ["name"]
+        },
+        {
+          th: "حساب",
+          td: "account.title",
+          type: "text",
+          filters: ["account__title__icontains"]
+        }
+      ]
+    };
+  },
+  computed: {
+    title() {
+      let title = "هزینه های پیشفرض فاکتور ";
+      if (this.factorType == "sale") return title + "خرید";
+      else return title + "فروش";
+    },
+    parentTitle() {
+      return this.getWareLevelTitle(+this.level - 1);
+    },
+    hasParent() {
+      return this.level != 0;
+    },
+    items() {
+      return this.factorExpenses.filter(o => o.type == this.factorType);
+    }
+  },
+  methods: {
+    getData() {
+      this.getFactorExpenses(true);
+    },
+    getWareLevelTitle(level) {
+      switch (Number(level)) {
+        case 0:
+          return "ماهیت";
+        case 1:
+          return "گروه";
+        case 2:
+          return "دسته بندی";
+      }
+    },
+    getWareLevels(force = false) {
+      if (!force && this.wareLevels.length) return;
+      return this.request({
+        url: this.endpoint("wares/wareLevels"),
+        method: "get",
+        success: data => {
+          this.$store.commit("setWares", {
+            wareLevels: data
+          });
+        }
+      });
+    },
+    setItem(item) {
+      this.item = item;
+    },
+    getSerialized() {
+      let item = this.extractIds(this.item);
+      item.type = this.factorType;
+      return item;
     }
   }
 };
 </script>
-
-<style scoped lang="scss">
-i {
-  margin: 0px;
-  cursor: pointer !important;
-  padding: 5px;
-  border-radius: 3px;
-  &:hover {
-    background-color: #eee;
-  }
-}
-button {
-  margin-bottom: 8px;
-}
-</style>
-
