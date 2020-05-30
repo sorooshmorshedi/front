@@ -1,190 +1,113 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12 col-lg-12">
-      <div class="title">تایید کنندگان خروجی</div>
-      <div class="row">
-        <div class="form-group col-md-4">
-          <label>انتخاب فرم</label>
-          <multiselect dir="rtl" :options="forms" v-model="form" track-by="value" label="name"/>
-        </div>
-      </div>
-      <template v-if="form">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>نام</th>
-              <th>سمت</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(ev, i) in exportVerifiers" :key="i">
-              <td>{{ i+1 }}</td>
-              <td>{{ ev.name }}</td>
-              <td>{{ ev.post }}</td>
-              <td>
-                <i class="fas fa-pencil-alt text-warning" @click="editVerifier(ev)"/>
-              </td>
-              <td>
-                <i class="fas fa-trash-alt text-danger" @click="deleteVerifier(ev)"/>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button @click="createVerifier()" type="button" class="btn btn-info">افزودن</button>
-      </template>
-    </div>
-
-    <div class="modal fade" id="factor-expense-modal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">تایید کنندگان {{ formName }}</h4>
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="form-group col-12">
-                <label for>نام</label>
-                <input type="text" class="form-control" v-model="exportVerifier.name">
-              </div>
-              <div class="form-group col-12">
-                <label>سمت</label>
-                <input type="text" class="form-control" v-model="exportVerifier.post">
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-            <button
-              v-if="!exportVerifier.id"
-              @click="storeVerifier()"
-              type="button"
-              class="btn btn-primary"
-            >ثبت</button>
-            <button v-else @click="updateVerifier()" type="button" class="btn btn-primary">ثبت</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <list-modal-form
+    title="تایید کنندگان خروجی"
+    :items="items"
+    :cols="cols"
+    :deletable="item.id"
+    @rowClick="setItem"
+    @clearForm="clearForm"
+    @submit="submit"
+    @delete="deleteItem"
+    ref="listModelForm"
+  >
+    <template #default>
+      <v-row>
+        <template v-if="hasParent">
+          <v-col cols="12">
+            <v-autocomplete
+              label="فرم"
+              :items="forms"
+              v-model="item.form"
+              item-text="label"
+              item-value="value"
+              :return-object="false"
+            ></v-autocomplete>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field label="نام" v-model="item.name" />
+          </v-col>
+          <v-col cols="12">
+            <v-text-field label="سمت" v-model="item.post" />
+          </v-col>
+        </template>
+      </v-row>
+    </template>
+  </list-modal-form>
 </template>
-
 <script>
+import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+
 export default {
+  mixins: [ListModalFormMixin],
   data() {
+    let forms = [
+        { label: "سند", value: "S" },
+        { label: "فاکتور خرید", value: "FB" },
+        { label: "فاکتور فروش", value: "FS" },
+        { label: "فاکتور برگشت از خرید", value: "FBFB" },
+        { label: "فاکتور برگشت از فروش", value: "FBFS" },
+        { label: "رسید", value: "RT" },
+        { label: "حواله", value: "RC" },
+        { label: "دریافت", value: "TR" },
+        { label: "پرداخت", value: "TP" }
+
+    ]
     return {
-      allExportVerifiers: {},
-      form: null,
-      exportVerifier: {},
-      form: null,
-      forms: [
-        { name: "سند", value: "S" },
-        { name: "فاکتور خرید", value: "FB" },
-        { name: "فاکتور فروش", value: "FS" },
-        { name: "فاکتور برگشت از خرید", value: "FBFB" },
-        { name: "فاکتور برگشت از فروش", value: "FBFS" },
-        { name: "رسید", value: "RT" },
-        { name: "حواله", value: "RC" },
-        { name: "دریافت", value: "TR" },
-        { name: "پرداخت", value: "TP" }
+      item: {},
+      items: [],
+      itemTemplate: {},
+      baseUrl: "reports/exportVerifiers",
+      leadingSlash: true,
+      forms: forms,
+      cols: [
+        {
+          th: "فرم",
+          td: "form",
+          type: "select",
+          filters: ["select"],
+          options: forms
+        },
+        {
+          th: "نام",
+          td: "name",
+          type: "text",
+          filters: ["name"]
+        },
+        {
+          th: "حساب",
+          td: "account.title",
+          type: "text",
+          filters: ["account__title__icontains"]
+        }
       ]
     };
   },
-  created() {
-    this.getVerifiers();
-  },
   computed: {
-    formName() {
-      if (this.form) return this.form.name;
-      return "";
+    hasParent() {
+      return this.level != 0;
     },
-    exportVerifiers() {
-      if (!this.form) return [];
-      return this.allExportVerifiers.filter(o => o.form == this.form.value);
-    }
   },
   methods: {
+    getData() {
+      this.getVerifiers(true);
+    },
     getVerifiers() {
       this.request({
         url: this.endpoint("reports/exportVerifiers/"),
         method: "get",
         success: data => {
-          this.allExportVerifiers = data;
+          this.items = data;
         }
       });
     },
-    editVerifier(exportVerifier) {
-      this.exportVerifier = this.copy(exportVerifier);
-      $("#factor-expense-modal").modal("show");
+    setItem(item) {
+      this.item = item;
     },
-    updateVerifier() {
-      let data = this.exportVerifier;
-      this.request({
-        url: this.endpoint(
-          "reports/exportVerifiers/" + this.exportVerifier.id + "/"
-        ),
-        method: "put",
-        data: data,
-        success: data => {
-          this.successNotify();
-          this.replaceNode(this.allExportVerifiers, data);
-          $("#factor-expense-modal").modal("hide");
-          this.exportVerifier = {};
-        }
-      });
-    },
-    createVerifier() {
-      this.exportVerifier = {};
-      $("#factor-expense-modal").modal("show");
-    },
-    storeVerifier() {
-      let data = {
-        ...this.exportVerifier,
-        form: this.form.value
-      };
-      this.request({
-        url: this.endpoint("reports/exportVerifiers/"),
-        method: "post",
-        data: data,
-        success: data => {
-          this.successNotify();
-          this.allExportVerifiers.push(data);
-          $("#factor-expense-modal").modal("hide");
-          this.exportVerifier = {};
-        }
-      });
-    },
-    deleteVerifier(exportVerifier) {
-      this.request({
-        url: this.endpoint("reports/exportVerifiers/" + exportVerifier.id + "/"),
-        method: "delete",
-        success: data => {
-          this.successNotify();
-          this.removeNode(this.allExportVerifiers, data);
-        }
-      });
+    getSerialized() {
+      let item = this.extractIds(this.item);
+      item.type = this.factorType;
+      return item;
     }
   }
 };
 </script>
-
-<style scoped lang="scss">
-i {
-  margin: 0px;
-  cursor: pointer !important;
-  padding: 5px;
-  border-radius: 3px;
-  &:hover {
-    background-color: #eee;
-  }
-}
-button {
-  margin-bottom: 8px;
-}
-</style>
-
