@@ -12,22 +12,20 @@
   >
     <template #default>
       <v-row>
-        <template v-if="hasParent">
-          <v-col cols="12">
-            <v-text-field label="نام" v-model="item.name" />
-          </v-col>
-          <v-col cols="12">
-            <account-select
-              label="حساب"
-              itemsType="level3"
-              v-model="item.account"
-              :floatAccount="item.floatAccount"
-              @update:floatAccount="v => item.floatAccount = v"
-              :costCenter="item.costCenter"
-              @update:costCenter="v => item.costCenter = v"
-            />
-          </v-col>
-        </template>
+        <v-col cols="12">
+          <v-text-field label="نام" v-model="item.name" />
+        </v-col>
+        <v-col cols="12">
+          <account-select
+            label="حساب"
+            itemsType="level3"
+            v-model="item.account"
+            :floatAccount="item.floatAccount"
+            @update:floatAccount="v => item.floatAccount = v"
+            :costCenter="item.costCenter"
+            @update:costCenter="v => item.costCenter = v"
+          />
+        </v-col>
         <v-col cols="12">
           <v-textarea label="توضیحات" v-model="item.explanation" />
         </v-col>
@@ -52,7 +50,7 @@ export default {
       item: {},
       itemTemplate: {
         level: this.level,
-        type: this.factorType,
+        type: this.factorType
       },
       baseUrl: "factors/expenses",
       leadingSlash: true,
@@ -78,12 +76,6 @@ export default {
       if (this.factorType == "sale") return title + "خرید";
       else return title + "فروش";
     },
-    parentTitle() {
-      return this.getWareLevelTitle(+this.level - 1);
-    },
-    hasParent() {
-      return this.level != 0;
-    },
     items() {
       return this.factorExpenses.filter(o => o.type == this.factorType);
     }
@@ -91,28 +83,6 @@ export default {
   methods: {
     getData() {
       this.getFactorExpenses(true);
-    },
-    getWareLevelTitle(level) {
-      switch (Number(level)) {
-        case 0:
-          return "ماهیت";
-        case 1:
-          return "گروه";
-        case 2:
-          return "دسته بندی";
-      }
-    },
-    getWareLevels(force = false) {
-      if (!force && this.wareLevels.length) return;
-      return this.request({
-        url: this.endpoint("wares/wareLevels"),
-        method: "get",
-        success: data => {
-          this.$store.commit("setWares", {
-            wareLevels: data
-          });
-        }
-      });
     },
     setItem(item) {
       this.item = item;
