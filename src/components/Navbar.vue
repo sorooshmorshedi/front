@@ -180,7 +180,7 @@ export default {
                 },
                 {
                   to: {
-                    name: "Warehouse"
+                    name: "Warehouses"
                   },
                   title: "انبار"
                 },
