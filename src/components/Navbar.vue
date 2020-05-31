@@ -186,7 +186,7 @@ export default {
                 },
                 {
                   to: {
-                    name: "Unit"
+                    name: "Units"
                   },
                   title: "واحد"
                 },

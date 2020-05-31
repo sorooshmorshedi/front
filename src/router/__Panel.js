@@ -23,8 +23,8 @@ import DefaultAccounts from '@/views/panel/defaultAccounts/DefaultAccounts.vue';
 import WareLevels from '@/views/panel/ware/WareLevels.vue';
 import Wares from '@/views/panel/ware/Wares.vue';
 
-import Warehouse from '@/views/panel/ware/WareHouse.vue';
-import Unit from '@/views/panel/ware/Unit.vue';
+import Warehouses from '@/views/panel/ware/Warehouses.vue';
+import Units from '@/views/panel/ware/Units.vue';
 
 import Sanad from '@/views/panel/sanad/Sanad.vue';
 import SanadForm from '@/views/panel/sanad/Form.vue';
@@ -137,13 +137,13 @@ export default [{
       component: Wares,
     },
     {
-      name: 'Warehouse',
-      path: 'warehouse',
-      component: Warehouse
+      name: 'Warehouses',
+      path: 'warehouses',
+      component: Warehouses
     }, {
-      name: 'Unit',
-      path: 'unit',
-      component: Unit
+      name: 'Units',
+      path: 'units',
+      component: Units
     },
     {
       name: 'DefaultAccounts',
