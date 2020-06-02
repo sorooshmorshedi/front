@@ -164,14 +164,14 @@ export default {
       if (!this.rowTax(row)) return this.rowSumAfterDiscount(row);
       return this.rowSumAfterDiscount(row) + this.rowTax(row);
     },
-    factorExpensesModal() {
+    openFactorExpensesDialog() {
       if (this.factor.expenses.length) {
         this.factorExpensesCopy = [];
         this.factor.expenses.forEach(e => {
           this.factorExpensesCopy.push(this.copy(e));
         });
       }
-      $("#factor-expenses-modal").modal("show");
+      this.factorExpensesDialog = true;
     },
     addExpenses() {
       let isValid = true;
@@ -204,8 +204,7 @@ export default {
 
       if (!isValid) return;
 
-      $("#factor-expenses-modal").modal("hide");
-
+      this.factorExpensesDialog = false;
       this.factor.expenses = this.copy(this.factorExpensesCopy);
       this.factor.expenses.pop();
       this.factorExpensesCopy = [{}];
