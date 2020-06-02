@@ -1,223 +1,213 @@
 <template>
-  <div class="card right">
-    <div class="card-body">
-      <daily-form
-        title="سند حسابداری"
-        formName="سند"
-        :ListRouteParams="{form: 'sanad'}"
-        :exportParams="{id: this.id}"
-        @clearForm="clearSanad()"
-        :hasFirst="hasFirst"
-        :hasLast="hasLast"
-        :hasPrev="hasPrev"
-        :hasNext="hasNext"
-        :canSubmit="canSubmit"
-        :editable="editable"
-        :deletable="deletable"
-        @goToForm="goToForm"
-        @validate="validate"
-        @edit="makeFormEditable()"
-        @delete="deleteSanad"
+  <daily-form
+    title="سند حسابداری"
+    formName="سند"
+    :ListRouteParams="{form: 'sanad'}"
+    :exportParams="{id: this.id}"
+    @clearForm="clearSanad()"
+    :hasFirst="hasFirst"
+    :hasLast="hasLast"
+    :hasPrev="hasPrev"
+    :hasNext="hasNext"
+    :canSubmit="canSubmit"
+    :editable="editable"
+    :deletable="deletable"
+    @goToForm="goToForm"
+    @validate="validate"
+    @edit="makeFormEditable()"
+    @delete="deleteSanad"
+  >
+    <template #header-btns>
+      <v-btn
+        small
+        v-if="sanad.factor"
+        class="blue white--text mr-1"
+        :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}"
+      >مشاهده فاکتور این سند</v-btn>
+      <v-btn
+        small
+        v-if="sanad.transaction"
+        class="blue white--text mr-1"
+        :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}"
       >
-        <template #header-btns>
-          <v-btn
-            small
-            v-if="sanad.factor"
-            class="blue white--text mr-1"
-            :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}"
-          >مشاهده فاکتور این سند</v-btn>
-          <v-btn
-            small
-            v-if="sanad.transaction"
-            class="blue white--text mr-1"
-            :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}"
-          >
-            <span>مشاهده دریافت/پرداخت</span>
-          </v-btn>
+        <span>مشاهده دریافت/پرداخت</span>
+      </v-btn>
 
-          <v-btn
-            small
-            @click.prevent="copySanadToNewSanad()"
-            class="blue white--text mr-1"
-          >کپی سند به سند جدید</v-btn>
+      <v-btn
+        small
+        @click.prevent="copySanadToNewSanad()"
+        class="blue white--text mr-1"
+      >کپی سند به سند جدید</v-btn>
 
-          <v-btn
-            small
-            @click="reorderSanads"
-            class="blue white--text mr-1"
-          >مرتب کردن کد اسناد بر اساس تاریخ</v-btn>
-        </template>
+      <v-btn
+        small
+        @click="reorderSanads"
+        class="blue white--text mr-1"
+      >مرتب کردن کد اسناد بر اساس تاریخ</v-btn>
+    </template>
 
-        <template #inputs>
+    <template #inputs>
+      <v-row>
+        <v-col cols="12" lg="6">
           <v-row>
             <v-col cols="12" lg="6">
-              <v-row>
-                <v-col cols="12" lg="6">
-                  <v-text-field
-                    required
-                    label="شماره سند"
-                    v-model="sanad.code"
-                    v-if="sanad.id"
-                    background-color="white"
-                  ></v-text-field>
-                  <v-text-field required label="شماره سند" disabled :value="sanadCode" v-else></v-text-field>
-                </v-col>
-                <v-col cols="12" lg="6">
-                  <date
-                    class="form-control"
-                    v-model="sanad.date"
-                    label="تاریخ سند"
-                    :default="true"
-                    :disabled="!editable"
-                  />
-                </v-col>
-                <v-col cols="12" lg="12">
-                  <v-text-field label="صادر کننده سند" disabled></v-text-field>
-                </v-col>
-              </v-row>
+              <v-text-field
+                required
+                label="شماره سند"
+                v-model="sanad.code"
+                v-if="sanad.id"
+                background-color="white"
+              ></v-text-field>
+              <v-text-field required label="شماره سند" disabled :value="sanadCode" v-else></v-text-field>
             </v-col>
             <v-col cols="12" lg="6">
-              <v-row>
-                <v-col cols="12" lg="12">
-                  <v-textarea
-                    label="شرح سند"
-                    v-model="sanad.explanation"
-                    :disabled="!editable"
-                    height="105"
-                  ></v-textarea>
-                </v-col>
-              </v-row>
+              <date
+                class="form-control"
+                v-model="sanad.date"
+                label="تاریخ سند"
+                :default="true"
+                :disabled="!editable"
+              />
             </v-col>
-
-            <v-col cols="12">
-              <v-simple-table class="app-background-color form-items">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th class="required">شماره - نام حساب</th>
-                    <th>توضیحات ردیف</th>
-                    <th class="required">تفضیلی شناور</th>
-                    <th>مرکز هزینه</th>
-                    <th>بدهکار</th>
-                    <th class="d-print-none">
-                      <a @click.prevent="exchangeValue()" href>
-                        <i class="fas fa-exchange-alt"></i>
-                      </a>
-                    </th>
-                    <th>بستانکار</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="(row,i) in rows"
-                    :key="i"
-                    :class="{'d-print-none': i == rows.length-1}"
-                  >
-                    <td>{{ i+1 }}</td>
-                    <td v-tooltip="accountParentsName(row.account).join(' > ')">
-                      <v-autocomplete
-                        :items="accountsSelectValues.levels[3]"
-                        v-model="rows[i].account"
-                        :title="rows[i].account"
-                        :disabled="!editable"
-                        height="40"
-                      >
-                        <template v-slot:selection="slotProps">
-                          <span>{{ slotProps.item.title }}</span>
-                        </template>
-                      </v-autocomplete>
-                    </td>
-                    <td>
-                      <v-textarea
-                        style="width: 300px"
-                        v-model="rows[i].explanation"
-                        :disabled="!editable"
-                        rows="1"
-                        auto-grow
-                      ></v-textarea>
-                    </td>
-                    <td
-                      v-tooltip="getFloatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
-                    >
-                      <v-autocomplete
-                        v-if="getFloatAccounts(rows[i]).length"
-                        :items="getFloatAccounts(rows[i])"
-                        v-model="rows[i].floatAccount"
-                        item-text="name"
-                        :disabled="!editable"
-                        height="40"
-                      ></v-autocomplete>
-                      <span v-else>-</span>
-                    </td>
-                    <td
-                      v-tooltip="getCostCenters(rows[i]).length?row.account.costCenterGroup.name:''"
-                    >
-                      <v-autocomplete
-                        v-if="getCostCenters(rows[i]).length"
-                        :items="getCostCenters(rows[i])"
-                        v-model="rows[i].costCenter"
-                        item-text="name"
-                        :disabled="!editable"
-                        height="40"
-                      ></v-autocomplete>
-                      <span v-else>-</span>
-                    </td>
-                    <td style="width: 150px">
-                      <money
-                        :disabled="!editable || rows[i].bes != 0"
-                        class="form-control"
-                        v-model="rows[i].bed"
-                      />
-                    </td>
-                    <td class="d-print-none">
-                      <a @click.prevent="exchangeValue(rows[i])" href v-if="i != rows.length-1">
-                        <i class="fas fa-exchange-alt"></i>
-                      </a>
-                    </td>
-                    <td style="width: 150px">
-                      <money
-                        :disabled="!editable || rows[i].bed != 0"
-                        class="form-control"
-                        v-model="rows[i].bes"
-                      />
-                    </td>
-                    <td class="d-print-none">
-                      <v-btn
-                        v-if="i != rows.length-1"
-                        @click="deleteRow(i)"
-                        class="red--text"
-                        icon
-                        :disabled="!editable"
-                      >
-                        <v-icon>delete</v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
-                  <tr class="grey lighten-3 text-white">
-                    <td colspan="2">
-                      <span
-                        v-if="bedSum != besSum"
-                      >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}</span>
-                    </td>
-                    <td colspan="2"></td>
-                    <td class="text-left">مجموع:</td>
-                    <td class>{{ bedSum | toMoney }}</td>
-                    <td class="d-print-none"></td>
-                    <td class>{{ besSum | toMoney }}</td>
-                    <td class="d-print-none">
-                      <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!editable">
-                        <v-icon>delete_sweep</v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
-                </tbody>
-              </v-simple-table>
+            <v-col cols="12" lg="12">
+              <v-text-field label="صادر کننده سند" disabled></v-text-field>
             </v-col>
           </v-row>
-        </template>
-      </daily-form>
-    </div>
-  </div>
+        </v-col>
+        <v-col cols="12" lg="6">
+          <v-row>
+            <v-col cols="12" lg="12">
+              <v-textarea
+                label="شرح سند"
+                v-model="sanad.explanation"
+                :disabled="!editable"
+                height="105"
+              ></v-textarea>
+            </v-col>
+          </v-row>
+        </v-col>
+
+        <v-col cols="12">
+          <v-simple-table class="app-background-color form-items">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th class="required">شماره - نام حساب</th>
+                <th>توضیحات ردیف</th>
+                <th class="required">تفضیلی شناور</th>
+                <th>مرکز هزینه</th>
+                <th>بدهکار</th>
+                <th class="d-print-none">
+                  <a @click.prevent="exchangeValue()" href>
+                    <i class="fas fa-exchange-alt"></i>
+                  </a>
+                </th>
+                <th>بستانکار</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
+                <td>{{ i+1 }}</td>
+                <td v-tooltip="accountParentsName(row.account).join(' > ')">
+                  <v-autocomplete
+                    :items="accountsSelectValues.levels[3]"
+                    v-model="rows[i].account"
+                    :title="rows[i].account"
+                    :disabled="!editable"
+                    height="40"
+                  >
+                    <template v-slot:selection="slotProps">
+                      <span>{{ slotProps.item.title }}</span>
+                    </template>
+                  </v-autocomplete>
+                </td>
+                <td>
+                  <v-textarea
+                    style="width: 300px"
+                    v-model="rows[i].explanation"
+                    :disabled="!editable"
+                    rows="1"
+                    auto-grow
+                  ></v-textarea>
+                </td>
+                <td
+                  v-tooltip="getFloatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
+                >
+                  <v-autocomplete
+                    v-if="getFloatAccounts(rows[i]).length"
+                    :items="getFloatAccounts(rows[i])"
+                    v-model="rows[i].floatAccount"
+                    item-text="name"
+                    :disabled="!editable"
+                    height="40"
+                  ></v-autocomplete>
+                  <span v-else>-</span>
+                </td>
+                <td v-tooltip="getCostCenters(rows[i]).length?row.account.costCenterGroup.name:''">
+                  <v-autocomplete
+                    v-if="getCostCenters(rows[i]).length"
+                    :items="getCostCenters(rows[i])"
+                    v-model="rows[i].costCenter"
+                    item-text="name"
+                    :disabled="!editable"
+                    height="40"
+                  ></v-autocomplete>
+                  <span v-else>-</span>
+                </td>
+                <td style="width: 150px">
+                  <money
+                    :disabled="!editable || rows[i].bes != 0"
+                    class="form-control"
+                    v-model="rows[i].bed"
+                  />
+                </td>
+                <td class="d-print-none">
+                  <a @click.prevent="exchangeValue(rows[i])" href v-if="i != rows.length-1">
+                    <i class="fas fa-exchange-alt"></i>
+                  </a>
+                </td>
+                <td style="width: 150px">
+                  <money
+                    :disabled="!editable || rows[i].bed != 0"
+                    class="form-control"
+                    v-model="rows[i].bes"
+                  />
+                </td>
+                <td class="d-print-none">
+                  <v-btn
+                    v-if="i != rows.length-1"
+                    @click="deleteRow(i)"
+                    class="red--text"
+                    icon
+                    :disabled="!editable"
+                  >
+                    <v-icon>delete</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+              <tr class="grey lighten-3 text-white">
+                <td colspan="2">
+                  <span
+                    v-if="bedSum != besSum"
+                  >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}</span>
+                </td>
+                <td colspan="2"></td>
+                <td class="text-left">مجموع:</td>
+                <td class>{{ bedSum | toMoney }}</td>
+                <td class="d-print-none"></td>
+                <td class>{{ besSum | toMoney }}</td>
+                <td class="d-print-none">
+                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!editable">
+                    <v-icon>delete_sweep</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-col>
+      </v-row>
+    </template>
+  </daily-form>
 </template>
 
 <script>
