@@ -1,5 +1,5 @@
 <template>
-  <input type="text" name="" value="" @input="change()" :id="inputId" dir="ltr">
+  <v-text-field :label="label" @input="change()" ref="inputRef" dir="ltr"></v-text-field>
 </template>
 
 <script>
@@ -7,10 +7,10 @@ import Cleave from "cleave.js";
 import moment from "moment-jalaali";
 export default {
   name: "CleaveTime",
-  props: ["value", "id", "default"],
+  props: ["value", "default", "label"],
   data() {
     return {
-      inputId: "",
+      el: null,
       formattedChangeLimit: 3,
       options: {
         time: true,
@@ -18,15 +18,9 @@ export default {
       }
     };
   },
-  created() {
-    if (this.id) {
-      this.inputId = this.id;
-    } else {
-      this.inputId = "cleave" + (Math.random() * 100000).toFixed(0);
-    }
-  },
   mounted() {
-    this.cleave = new Cleave("#" + this.inputId, this.options);
+    this.el = this.$refs.inputRef.$el.querySelector("input");
+    this.cleave = new Cleave(this.el, this.options);
     if (this.default) {
       this.setDefaultValue();
     } else {
@@ -47,11 +41,11 @@ export default {
   methods: {
     change() {
       setTimeout(() => {
-        let value = $("#" + this.inputId).val();
+        let value = this.el.value;
         this.$emit("input", value);
       }, 100);
     },
-    setDefaultValue(){
+    setDefaultValue() {
       let now = this.now.format("HHmm");
       this.cleave.setRawValue(now);
       this.change();
