@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="" style="min-width: 200px">
     <v-autocomplete
       :items="items"
       v-model="item"
