@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="">
     <v-autocomplete
       :items="items"
       v-model="item"
@@ -7,24 +7,24 @@
       :item-text="itemText"
       :disabled="disabled"
       :multiple="multiple"
-      height="40"
+      :placeholder="placeholder"
     ></v-autocomplete>
     <template v-if="itemsType == 'level3' && item">
       <account-select
-        class="mt-3"
+        class="mt-1"
         v-if="item.floatAccountGroup"
         :child-of="item.floatAccountGroup.id"
         v-model="localFloatAccount"
-        label="حساب شناور"
+        placeholder="حساب شناور"
         items-type="floatAccounts"
         item-text="name"
       />
       <account-select
-        class="mt-3"
+        class="mt-1"
         v-if="item.costCenterGroup"
         :child-of="item.costCenterGroup.id"
         v-model="localCostCenter"
-        label="مرکز هزینه"
+        placeholder="مرکز هزینه"
         items-type="floatAccounts"
         item-text="name"
       />
@@ -41,7 +41,10 @@ export default {
     floatAccount: {},
     costCenter: {},
     label: {
-      default: "حساب"
+      default: null
+    },
+    placeholder: {
+      default: null
     },
     disabled: {
       default: false
@@ -118,7 +121,7 @@ export default {
             }
           }
 
-          if (this.itemsType == "person") {
+          if (this.itemsType == "persons") {
             if (item.account_type == "p") {
               items.push(item);
             }
