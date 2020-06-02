@@ -1,209 +1,117 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <form-header
-            formName="انتقال"
-            title="انتقال بین انبار ها"
-            @clearForm="clearForm(true)"
-            :ListRouteParams="{form: 'transfer'}"
-            :exportParams="{id: this.id}"
-          ></form-header>
+  <daily-form
+    formName="انتقال"
+    title="انتقال بین انبار ها"
+    @clearForm="clearForm(true)"
+    :ListRouteParams="{form: 'transfer'}"
+    :exportParams="{id: this.id}"
+    :hasFirst="true"
+    :hasLast="true"
+    :hasPrev="true"
+    :hasNext="true"
+    :editable="editable"
+    :deletable="this.id"
+    @goToForm="goToForm"
+    @validate="validate"
+    @edit="makeFormEditable()"
+    @delete="deleteTransfer()"
+  >
+    <template #inputs>
+      <v-row>
+        <v-col cols="12" md="2">
+          <v-text-field label="شماره انتقال" disabled v-model="transfer.code" />
+        </v-col>
+        <v-col cols="12" md="2">
+          <date label="تاریخ" v-model="transfer.date" :default="true" :disabled="!editable" />
+        </v-col>
+        <v-col cols="12" md="8">
+          <v-textarea
+            label="توضیحات"
+            class="form-control"
+            rows="5"
+            v-model="transfer.explanation"
+            :disabled="!editable"
+          />
+        </v-col>
+      </v-row>
 
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="row">
-                <div class="form-group col-lg-4 col-sm-2">
-                  <label>شماره انتقال</label>
-                  <input type="text" class="form-control" disabled v-model="transfer.code">
-                </div>
-                <div class="form-group col-lg-8 col-sm-12">
-                  <label>تاریخ</label>
-                  <date
-                    class="form-control"
-                    v-model="transfer.date"
-                    :default="true"
+      <v-row>
+        <v-col cols="12">
+          <v-simple-table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>نام/کد کالا</th>
+                <th>از انبار</th>
+                <th>تعداد</th>
+                <th>واحد</th>
+                <th>به انبار</th>
+                <th>توضیحات</th>
+                <th class="d-print-none"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row,i) in rows" :key="i">
+                <td>{{ i+1 }}</td>
+                <td>
+                  <ware-select v-model="rows[i].ware" :disabled="!editable" />
+                </td>
+                <td>
+                  <v-autocomplete
+                    v-if="rows[i].ware"
+                    :items="waresSelectValues.warehouses"
+                    v-model="rows[i].output_warehouse"
+                    item-text="name"
                     :disabled="!editable"
                   />
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-lg-6">
-              <label>توضیحات</label>
-              <textarea
-                class="form-control"
-                rows="5"
-                v-model="transfer.explanation"
-                :disabled="!editable"
-              ></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="table-responsive-lg">
-                <table class="table table-striped table-bordered">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>نام/کد کالا</th>
-                      <th>موجودی انبار ها</th>
-                      <th>از انبار</th>
-                      <th>تعداد</th>
-                      <th>واحد</th>
-                      <th>به انبار</th>
-                      <th>توضیحات</th>
-                      <th class="d-print-none"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(row,i) in rows" :key="i">
-                      <td>{{ i+1 }}</td>
-                      <td>
-                        <multiselect
-                          :option-height="104"
-                          dir="rtl"
-                          :options="waresSelectValues.wares"
-                          v-model="rows[i].ware"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable"
-                        />
-                      </td>
-                      <td class="d-print-none">
-                        <button
-                          v-if="row.ware"
-                          @click="showInventory(row.ware)"
-                          type="button"
-                          class="btn btn-sm btn-info"
-                        >مشاهده مانده</button>
-                      </td>
-                      <td>
-                        <multiselect
-                          v-if="rows[i].ware"
-                          dir="rtl"
-                          :allow-empty="false"
-                          :options="waresSelectValues.warehouses"
-                          v-model="rows[i].output_warehouse"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable"
-                        />
-                        <span v-else>-</span>
-                      </td>
-                      <td>
-                        <money
-                          class="form-control form-control"
-                          v-model="rows[i].count"
-                          :disabled="!editable"
-                        />
-                      </td>
-                      <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
-                      <td>
-                        <multiselect
-                          v-if="rows[i].ware"
-                          dir="rtl"
-                          :allow-empty="false"
-                          :options="waresSelectValues.warehouses"
-                          v-model="rows[i].input_warehouse"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable"
-                        />
-                        <span v-else>-</span>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          class="form-control form-control"
-                          v-model="rows[i].explanation"
-                          :disabled="!editable"
-                        >
-                      </td>
-                      <td class="d-print-none">
-                        <button
-                          v-if="i != rows.length-1"
-                          @click="deleteItemRow(i)"
-                          type="button"
-                          class="btn btn-sm btn-warning"
-                          :disabled="!editable"
-                        >حذف ردیف</button>
-                      </td>
-                    </tr>
-                    <tr class="bg-info text-white">
-                      <td :colspan="3"></td>
-                      <td>جمع</td>
-                      <td>{{ sum | toMoney }}</td>
-                      <td :colspan="3"></td>
-                      <td>
-                        <button
-                          @click="deleteItemRow(-1)"
-                          type="button"
-                          class="btn btn-danger d-print-none"
-                          :disabled="!editable"
-                        >حذف همه ردیف ها</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <hr class="d-print-none">
-
-          <form-footer
-            formName="انتقال"
-            :hasFirst="true"
-            :hasLast="true"
-            :hasPrev="true"
-            :hasNext="true"
-            :editable="editable"
-            :deletable="this.id"
-            @goToForm="goToForm"
-            @validate="validate"
-            @edit="makeFormEditable()"
-            @delete="deleteTransfer()"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="inventory-modal" v-if="inventory.ware">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">موجودی انبار ها برای {{ inventory.ware.name }}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>انبار</th>
-                    <th>مانده</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(warehouse, i) in inventory.warehouses" :key="warehouse.id">
-                    <td>{{ i }}</td>
-                    <td>{{ warehouse.name }}</td>
-                    <td>{{ warehouse.remain_count }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+                  <span v-else>-</span>
+                </td>
+                <td>
+                  <money v-model="rows[i].count" :disabled="!editable" />
+                </td>
+                <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
+                <td>
+                  <v-autocomplete
+                    v-if="rows[i].ware"
+                    :items="waresSelectValues.warehouses"
+                    v-model="rows[i].input_warehouse"
+                    item-text="name"
+                    :disabled="!editable"
+                  />
+                  <span v-else>-</span>
+                </td>
+                <td>
+                  <v-text-field v-model="rows[i].explanation" :disabled="!editable" />
+                </td>
+                <td class="d-print-none">
+                  <v-btn
+                    v-if="i != rows.length-1"
+                    @click="deleteItemRow(i)"
+                    class="red--text"
+                    icon
+                    :disabled="!editable"
+                  >
+                    <v-icon>delete</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+              <tr class="bg-info text-white">
+                <td :colspan="2"></td>
+                <td>جمع</td>
+                <td>{{ sum | toMoney }}</td>
+                <td :colspan="3"></td>
+                <td>
+                  <v-btn @click="deleteItemRow(-1)" icon class="red--text" :disabled="!editable">
+                    <v-icon>delete_sweep</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-col>
+      </v-row>
+    </template>
+  </daily-form>
 </template>
 
 <script>
@@ -428,24 +336,5 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.finals {
-  td {
-    text-align: left;
-  }
-}
-
-.table-responsive-lg {
-  // overflow: visible;
-  th,
-  td,
-  input {
-    text-align: center;
-  }
-}
-.custom-checkbox {
-  padding-left: 0px;
-  margin-left: 0px;
-}
-</style>
+<style scoped lang="scss"></style>
 

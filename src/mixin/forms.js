@@ -1,10 +1,12 @@
 import FormFooter from "@/components/form/FormFooter";
 import FormHeader from "@/components/form/FormHeader";
+import DailyForm from "@/components/form/DailyForm";
 
 export default {
   components: {
     FormFooter,
-    FormHeader
+    FormHeader,
+    DailyForm
   },
   data() {
     return {
