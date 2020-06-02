@@ -222,9 +222,8 @@ export default {
     }
 
     th,
-    td,
-    input {
-      text-align: center;
+    td {
+      text-align: center !important;
     }
 
     th {
@@ -233,11 +232,58 @@ export default {
 
     td {
       padding: 2px !important;
-    }
-  }
+      height: 32px !important;
+      // vertical-align: top;
 
-  .v-data-table th {
-    text-align: center;
+      &:last-child {
+        vertical-align: middle;
+      }
+    }
+
+    .v-data-table th {
+      text-align: center;
+    }
+
+    .v-text-field input {
+      padding: 4px 0px !important;
+    }
+
+    .v-text-field--filled.v-input--dense.v-text-field--single-line
+      > .v-input__control
+      > .v-input__slot,
+    .v-text-field--filled.v-input--dense.v-text-field--outlined
+      > .v-input__control
+      > .v-input__slot,
+    .v-text-field--full-width.v-input--dense.v-text-field--single-line
+      > .v-input__control
+      > .v-input__slot,
+    .v-text-field--full-width.v-input--dense.v-text-field--outlined
+      > .v-input__control
+      > .v-input__slot,
+    .v-text-field--outlined.v-input--dense.v-text-field--single-line
+      > .v-input__control
+      > .v-input__slot,
+    .v-text-field--outlined.v-input--dense.v-text-field--outlined
+      > .v-input__control
+      > .v-input__slot {
+      min-height: 30px !important;
+    }
+
+    .v-text-field.v-text-field--enclosed .v-text-field__details,
+    .v-text-field.v-text-field--enclosed > .v-input__control > .v-input__slot {
+      padding: 0px 4px !important;
+    }
+
+    .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
+      .v-input__prepend-outer,
+    .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
+      .v-input__prepend-inner,
+    .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
+      .v-input__append-inner,
+    .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
+      .v-input__append-outer {
+      margin-top: 3px !important;
+    }
   }
 }
 </style>
