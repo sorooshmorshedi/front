@@ -1,35 +1,24 @@
 <template>
-  <div>
-    <div class="select-container">
-      <multiselect
-        dir="rtl"
-        :options="waresSelectValues.wares"
-        v-model="ware"
-        track-by="id"
-        label="name"
-        :disabled="disabled"
-        :hasAddonBtn="true"
-      >
-        <button
-          slot="addonBtn"
-          :disabled="!ware"
-          @click="showInventory(ware)"
-          type="button"
-          class="btn btn-info"
-        >
-          <i class="fas fa-boxes"></i>
-        </button>
-      </multiselect>
-    </div>
+  <div class="d-flex">
+    <v-btn :disabled="!ware" @click="showInventory(ware)" height="30px" depressed class="mr-1 pa-0" >
+      <v-icon>fas fa-boxes</v-icon>
+    </v-btn>
+    <v-autocomplete
+      :label="label"
+      :items="waresSelectValues.wares"
+      v-model="ware"
+      item-text="name"
+      :disabled="disabled"
+    ></v-autocomplete>
 
-    <div class="modal fade" :id="modalId" v-if="ware">
+    <div class="modal fade d-none" :id="modalId" v-if="ware">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">موجودی انبار ها برای {{ ware.name }}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <v-btn type="v-btn" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
-            </button>
+            </v-btn>
           </div>
           <div class="modal-body">
             <div class="container">
@@ -52,7 +41,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+            <v-btn type="v-btn" class="btn btn-secondary" data-dismiss="modal">بستن</v-btn>
           </div>
         </div>
       </div>
@@ -64,7 +53,7 @@
 import wareApiMixin from "@/mixin/wareApi";
 export default {
   mixins: [wareApiMixin],
-  props: ["value", "disabled"],
+  props: ["value", "disabled", "label"],
   data() {
     return {
       ware: null,
