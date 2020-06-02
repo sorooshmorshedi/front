@@ -1,397 +1,298 @@
 <template>
   <div class="row rtl">
     <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <form-header
-            :formName="type.label"
-            :title="'ثبت ' + type.label"
-            :ListRouteParams="{form: 'transaction', type: type.name}"
-            :exportParams="{id: this.id}"
-            @clearForm="clearTransaction"
-          >
-              <button
-                data-toggle="modal"
-                data-target="#factors-modal"
-                type="button"
-                class="btn btn-info"
-              >پرداخت شده برای فاکتور های</button>
-          </form-header>
+      <daily-form
+        :formName="type.label"
+        :title="'ثبت ' + type.label"
+        :ListRouteParams="{form: 'transaction', type: type.name}"
+        :exportParams="{id: this.id}"
+        @clearForm="clearTransaction"
+        :hasFirst="hasFirst"
+        :hasLast="hasLast"
+        :hasPrev="hasPrev"
+        :hasNext="hasNext"
+        :editable="editable"
+        :deletable="true"
+        @goToForm="goToForm"
+        @validate="validate"
+        @edit="makeFormEditable()"
+        @delete="deleteTransaction()"
+      >
+        <template #header-btns>
+          <v-btn
+            @click="factorsDialog = true"
+            class="blue white--text mr-1"
+          >پرداخت شده برای فاکتور های</v-btn>
 
-          <div class="row">
-            <div class="col-lg-8">
-              <div class="row">
-                <div class="form-group col-lg-3 col-sm-2">
-                  <label>شماره {{ type.label }}</label>
-                  <input
-                    v-if="transaction.id"
-                    type="text"
-                    class="form-control"
-                    disabled
-                    v-model="transaction.code"
-                  >
-                  <input v-else type="text" class="form-control" disabled :value="transactionCode">
-                </div>
-                <div class="form-group col-lg-3 col-sm-2">
-                  <label class="required">تاریخ</label>
+          <v-btn
+            v-if="transaction.id"
+            @click="openSanad(transaction.sanad)"
+            class="blue white--text mr-1"
+          >
+            مشاهده سند
+            <v-chip class="app-background-color mr-2" x-small>{{ transaction.sanad }}</v-chip>
+          </v-btn>
+        </template>
+
+        <template #inputs>
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-row>
+                <v-col cols="12" md="4">
+                  <v-text-field :label="'شماره ' + type.label" disabled v-model="transaction.code" />
+                </v-col>
+                <v-col cols="12" md="4">
                   <date
-                    class="form-control"
+                    label="تاریخ"
                     v-model="transaction.date"
-                    default="1"
+                    :default="true"
                     :disabled="!editable"
                   />
-                </div>
-                <div class="form-group col-lg-3 col-sm-2">
-                  <label>تاریخ راس</label>
-                  <date class="form-control" disabled/>
-                </div>
-                <div class="form-group col-lg-3">
-                  <label>شماره سند</label>
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      v-model="transaction.sanad_code"
-                      :disabled="transaction.id"
-                    >
-                    <div class="input-group-prepend">
-                      <button
-                        @click="openSanad(transaction.sanad)"
-                        :disabled="!transaction.sanad"
-                        class="btn btn-outline-info"
-                        type="button"
-                        id="button-addon1"
-                      >مشاهده سند</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group col-lg-6 col-sm-3">
-                  <div class="row">
-                    <div class="col-lg-8">
-                      <label class="required">کد - نام مشتری</label>
-                      <multiselect
-                        dir="rtl"
-                        :options="transactionAccounts"
-                        v-model="transaction.account"
-                        track-by="id"
-                        label="title"
-                        :disabled="!editable"
+                </v-col>
+                <v-col cols="12" md="4">
+                  <date label="تاریخ راس" disabled />
+                </v-col>
+                <v-col cols="12" md="12">
+                  <account-select
+                    label="کد - نام مشتری"
+                    itemsType="level3"
+                    v-model="transaction.account"
+                    :disabled="!editable"
+                    required
+                    :floatAccount="transaction.floatAccount"
+                    @update:floatAccount="v => transaction.floatAccount = v"
+                    :costCenter="transaction.costCenter"
+                    @update:costCenter="v => transaction.costCenter = v"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-row>
+                <v-col cols="12">
+                  <v-textarea
+                    label="توضیحات"
+                    rows="5"
+                    v-model="transaction.explanation"
+                    :disabled="!editable"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="12">
+              <v-simple-table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th class="required" style="width: 200px">نوع {{ type.label }}</th>
+                    <th>نام حساب</th>
+                    <th class="required">مبلغ</th>
+                    <th>شماره مستند</th>
+                    <th class="required">تاریخ {{ type.label }}</th>
+                    <th>سررسید</th>
+                    <th>نام بانک</th>
+                    <th>توضیح</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="(row,i) in rows"
+                    :key="i"
+                    :class="{'d-print-none': i == rows.length-1}"
+                  >
+                    <td>{{ i+1 }}</td>
+                    <td>
+                      <v-autocomplete
+                        :disabled="!editable || hasCheque(row)"
+                        :items="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))"
+                        v-model="rows[i].type"
+                        item-text="name"
                       />
-                    </div>
-                    <div class="col-lg-4">
-                      <button
-                        type="button"
-                        class="btn btn-info btn-block label-margin"
-                        :disabled="!transaction.account"
-                        @click="openLedger(transaction.account)"
-                      >مشاهده دفتر</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group col-lg-3 col-sm-3">
-                  <template v-if="transaction.account && transaction.account.floatAccountGroup">
-                    <label class="required">حساب شناور</label>
-                    <multiselect
-                      dir="rtl"
-                      :options="transactionFloatAccounts"
-                      v-model="transaction.floatAccount"
-                      track-by="id"
-                      label="name"
-                      :disabled="!editable"
-                    />
-                  </template>
-                </div>
-                <div class="form-group col-lg-3 col-sm-3">
-                  <template v-if="transaction.account && transaction.account.costCenterGroup">
-                    <label class="required">مرکز هزینه</label>
-                    <multiselect
-                      dir="rtl"
-                      :options="transactionCostCenters"
-                      v-model="transaction.costCenter"
-                      track-by="id"
-                      label="name"
-                      :disabled="!editable"
-                    />
-                  </template>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-lg-4">
-              <label>توضیحات {{ type.label }}</label>
-              <textarea
-                class="form-control"
-                rows="5"
-                v-model="transaction.explanation"
-                :disabled="!editable"
-              ></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th class="required" style="width: 200px">نوع {{ type.label }}</th>
-                      <th>نام حساب</th>
-                      <th class="required">حساب شناور</th>
-                      <th class="required">مرکز هزینه</th>
-                      <th class="required">مبلغ</th>
-                      <th>شماره مستند</th>
-                      <th class="required">تاریخ {{ type.label }}</th>
-                      <th>سررسید</th>
-                      <th>نام بانک</th>
-                      <th>توضیح</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="(row,i) in rows"
-                      :key="i"
-                      :class="{'d-print-none': i == rows.length-1}"
-                    >
-                      <td>{{ i+1 }}</td>
-                      <td>
-                        <multiselect
-                          :disabled="!editable || hasCheque(row)"
-                          dir="rtl"
-                          :options="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))"
-                          v-model="rows[i].type"
-                          track-by="id"
-                          label="name"
-                        />
-                        <button
-                          v-if="isChequeType(row) && !hasCheque(row)"
-                          @click="openSubmitChequeModal(row, i)"
-                          type="button"
-                          class="submit-tcheque btn btn-secondary btn-sm btn-block"
-                          :disabled="!editable"
-                        >ثبت چک</button>
-                      </td>
-                      <td>
-                        <span v-if="rows[i].type">{{ rows[i].type.account.title }}</span>
-                      </td>
-                      <td>
-                        <multiselect
-                          dir="rtl"
-                          v-if="rows[i].type && rows[i].type.account.floatAccountGroup"
-                          :options="rows[i].type.account.floatAccountGroup.floatAccounts"
-                          v-model="rows[i].floatAccount"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable"
-                        />
-                      </td>
-                      <td>
-                        <multiselect
-                          dir="rtl"
-                          v-if="rows[i].type && rows[i].type.account.costCenterGroup"
-                          :options="rows[i].type.account.costCenterGroup.floatAccounts"
-                          v-model="rows[i].costCenter"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable"
-                        />
-                      </td>
-                      <td>
-                        <money
-                          :disabled="!editable || isChequeType(row)"
-                          class="form-control"
-                          v-model="rows[i].value"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          :disabled="!editable || isChequeType(row)"
-                          type="text"
-                          class="form-control"
-                          v-model="rows[i].documentNumber"
-                        >
-                      </td>
-                      <td>
-                        <date
-                          :disabled="!editable || isChequeType(row)"
-                          default="1"
-                          class="form-control"
-                          v-model="rows[i].date"
-                        />
-                      </td>
-                      <td>
-                        <date class="form-control" disabled v-model="rows[i].due"/>
-                      </td>
-                      <td>
-                        <input
-                          :disabled="!editable || !hasBank(row)"
-                          type="text"
-                          class="form-control form-control"
-                          v-model="rows[i].bankName"
-                        >
-                      </td>
-                      <td>
-                        <input
-                          :disabled="!editable || isChequeType(row)"
-                          type="text"
-                          class="form-control form-control"
-                          v-model="rows[i].explanation"
-                        >
-                      </td>
-                      <td class="d-print-none">
-                        <button
-                          v-if="i != rows.length-1 && !hasCheque(row)"
-                          :disabled="!editable"
-                          @click="deleteRow(i)"
-                          type="button"
-                          class="btn btn-sm btn-warning"
-                        >حذف ردیف</button>
-                        <router-link
-                          v-if="hasCheque(row) && row.cheque.id"
-                          class="btn btn-sm btn-info"
-                          :to="{name:'ChequeDetail', params:{id: row.cheque.id}}"
-                          target="_blank"
-                        >مشاهده جزئیات چک</router-link>
-                      </td>
-                    </tr>
-                    <tr></tr>
-                    <tr class="bg-info text-white">
-                      <td colspan="3"></td>
-                      <td class="text-left">مجموع:</td>
-                      <td class>{{ sum | toMoney }}</td>
-                      <td colspan="6"></td>
-                      <td class="d-print-none">
-                        <button
-                          @click="deleteRow(0)"
-                          type="button"
-                          class="btn btn-sm btn-danger"
-                          :disabled="!editable"
-                        >حذف همه ردیف ها</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+                      <v-btn
+                        v-if="isChequeType(row) && !hasCheque(row)"
+                        @click="openSubmitChequeModal(row, i)"
+                        class="blue white--text mt-1"
+                        block
+                        :disabled="!editable"
+                      >ثبت چک</v-btn>
+                    </td>
+                    <td>
+                      <account-select
+                        v-if="rows[i].type"
+                        items-type="level3"
+                        v-model="rows[i].type.account"
+                        :disabled="true"
+                      />
+                    </td>
+                    <td>
+                      <money
+                        :disabled="!editable || isChequeType(row)"
+                        class="form-control"
+                        v-model="rows[i].value"
+                      />
+                    </td>
+                    <td>
+                      <v-text-field
+                        :disabled="!editable || isChequeType(row)"
+                        type="text"
+                        class="form-control"
+                        v-model="rows[i].documentNumber"
+                      />
+                    </td>
+                    <td>
+                      <date
+                        :disabled="!editable || isChequeType(row)"
+                        default="1"
+                        class="form-control"
+                        v-model="rows[i].date"
+                      />
+                    </td>
+                    <td>
+                      <date class="form-control" disabled v-model="rows[i].due" />
+                    </td>
+                    <td>
+                      <v-text-field
+                        :disabled="!editable || !hasBank(row)"
+                        type="text"
+                        class="form-control form-control"
+                        v-model="rows[i].bankName"
+                      />
+                    </td>
+                    <td>
+                      <v-text-field
+                        :disabled="!editable || isChequeType(row)"
+                        type="text"
+                        class="form-control form-control"
+                        v-model="rows[i].explanation"
+                      />
+                    </td>
+                    <td class="d-print-none">
+                      <v-btn
+                        v-if="i != rows.length-1 && !hasCheque(row)"
+                        :disabled="!editable"
+                        @click="deleteRow(i)"
+                        class="red--text"
+                        icon
+                      >
+                        <v-icon>delete</v-icon>
+                      </v-btn>
+                      <router-link
+                        v-if="hasCheque(row) && row.cheque.id"
+                        class="btn btn-sm btn-info"
+                        :to="{name:'ChequeDetail', params:{id: row.cheque.id}}"
+                        target="_blank"
+                      >مشاهده جزئیات چک</router-link>
+                    </td>
+                  </tr>
+                  <tr></tr>
+                  <tr class="grey lighten-3 text-white">
+                    <td colspan="2"></td>
+                    <td class="text-left">مجموع:</td>
+                    <td class>{{ sum | toMoney }}</td>
+                    <td colspan="6"></td>
+                    <td class="d-print-none">
+                      <v-btn @click="deleteRow(0)" icon class="red--text" :disabled="!editable">
+                        <v-icon>delete_sweep</v-icon>
+                      </v-btn>
+                    </td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </v-col>
+          </v-row>
+        </template>
+      </daily-form>
+    </div>
 
-          <form-footer
-            :hasFirst="hasFirst"
-            :hasLast="hasLast"
-            :hasPrev="hasPrev"
-            :hasNext="hasNext"
-            :formName="type.label"
-            :editable="editable"
-            :deletable="true"
-            @goToForm="goToForm"
-            @validate="validate"
-            @edit="makeFormEditable()"
-            @delete="deleteTransaction()"
+    <v-dialog v-model="factorsDialog" scrollable max-width="1200px">
+      <v-card>
+        <v-card-title>فاکتور های پرداخت نشده</v-card-title>
+        <v-card-text>
+          <v-simple-table>
+            <thead>
+              <tr>
+                <th>شماره فاکتور</th>
+                <th>نوع فاکتور</th>
+                <th>توضیحات</th>
+                <th>تاریخ</th>
+                <th>جمع فاکتور</th>
+                <th>پرداختی قبلی</th>
+                <th v-if="!editable">پرداختی فعلی</th>
+                <th>مانده</th>
+                <th v-if="editable">پرداختی فعلی</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(f,i) in factors" :key="i">
+                <td>{{ f.code }}</td>
+                <td>{{ factorTypes[f.type] }}</td>
+                <td>{{ f.explanation }}</td>
+                <td>{{ f.date }}</td>
+                <td>{{ f.sum | toMoney }}</td>
+                <td>{{ f.prevPaidValue | toMoney }}</td>
+                <td v-if="!editable">{{ f.payment.value | toMoney }}</td>
+                <td>{{ f.remain | toMoney }}</td>
+                <td v-if="editable">
+                  <money
+                    v-model="f.payment.value"
+                    @input="validatePaidValue(f)"
+                    :disabled="!editable"
+                  />
+                </td>
+                <td>
+                  <v-btn @click="openFactor(f)" class="blue white--text">
+                    مشاهده فاکتور
+                    <v-chip class="app-background-color mr-2" x-small>{{ f.code }}</v-chip>
+                  </v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            @click="splitValue(true)"
+            :disabled="!editable"
+            class="blue white--text"
+          >سرشکن کردن از پایین</v-btn>
+          <v-btn
+            @click="splitValue()"
+            :disabled="!editable"
+            class="blue white--text"
+          >سرشکن کردن از بالا</v-btn>
+          <v-btn
+            :disabled="!editable || !isPaymentsValid"
+            @click="factorsDialog = false"
+            class="green white--text w-100px"
+          >تایید</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="submitChequeDialog" scrollable max-width="1200px">
+      <v-card>
+        <v-card-title>
+          ثبت چک
+          <span v-if="this.transactionType == 'payment'">پرداختی</span>
+          <span v-else>دریافتی</span>
+        </v-card-title>
+        <v-card-text>
+          <cheque-form
+            :receivedOrPaid="transactionType[0]"
+            :modalMode="true"
+            :account="transaction.account"
+            :floatAccount="transaction.floatAccount"
+            :costCenter="transaction.costCenter"
+            @submit="addCheque"
           />
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="factors-modal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">فاکتور های پرداخت نشده</h4>
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12">
-                <div class="table-responsive">
-                  <table class="table table-striped table-hover">
-                    <thead>
-                      <tr>
-                        <th>شماره فاکتور</th>
-                        <th>نوع فاکتور</th>
-                        <th>توضیحات</th>
-                        <th>تاریخ</th>
-                        <th>جمع فاکتور</th>
-                        <th>پرداختی قبلی</th>
-                        <th v-if="!editable">پرداختی فعلی</th>
-                        <th>مانده</th>
-                        <th v-if="editable">پرداختی فعلی</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(f,i) in factors" :key="i">
-                        <td>{{ f.code }}</td>
-                        <td>{{ factorTypes[f.type] }}</td>
-                        <td>{{ f.explanation }}</td>
-                        <td>{{ f.date }}</td>
-                        <td>{{ f.sum | toMoney }}</td>
-                        <td>{{ f.prevPaidValue | toMoney }}</td>
-                        <td v-if="!editable">{{ f.payment.value | toMoney }}</td>
-                        <td>{{ f.remain | toMoney }}</td>
-                        <td v-if="editable">
-                          <money
-                            class="form-control"
-                            type="text"
-                            v-model="f.payment.value"
-                            @input="validatePaidValue(f)"
-                            :disabled="!editable"
-                          />
-                        </td>
-                        <td>
-                          <button
-                            @click="openFactor(f)"
-                            class="btn btn-outline-info"
-                            type="button"
-                            id="button-addon1"
-                          >مشاهده فاکتور</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button @click="splitValue(true)" type="button" class="btn btn-info">سرشکن کردن از پایین</button>
-            <button @click="splitValue()" type="button" class="btn btn-info">سرشکن کردن از بالا</button>
-            <button
-              :disabled="!isPaymentsValid"
-              type="button"
-              class="btn btn-info w-100px"
-              data-dismiss="modal"
-            >تایید</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="submit-cheque-modal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">
-              ثبت چک
-              <span v-if="this.transactionType == 'payment'">پرداختی</span>
-              <span v-else>دریافتی</span>
-            </h4>
-            <button type="button" class="close" data-dismiss="modal">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <cheque-form
-              :receivedOrPaid="transactionType[0]"
-              :modalMode="true"
-              :account="transaction.account"
-              :floatAccount="transaction.floatAccount"
-              :costCenter="transaction.costCenter"
-              @submit="addCheque"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -412,6 +313,8 @@ export default {
   props: ["transactionType", "id", "accountId", "factorId"],
   data() {
     return {
+      factorsDialog: false,
+      submitChequeDialog: false,
       transaction: {},
       rows: [],
       type: {
@@ -853,7 +756,7 @@ export default {
         return;
       }
       this.chequeRowIndex = i;
-      $("#submit-cheque-modal").modal("show");
+      this.submitChequeDialog = true;
     },
     addCheque(cheque) {
       console.log(cheque);
@@ -878,7 +781,7 @@ export default {
       row.bankName = cheque.bankName;
       row.value = cheque.value;
       row.explanation = cheque.explanation;
-      $("#submit-cheque-modal").modal("hide");
+      this.submitChequeDialog = false;
     },
     clearTransaction() {
       this.log("Clear Transaction");
@@ -931,7 +834,7 @@ export default {
   overflow: visible;
   th,
   td,
-  input {
+  v-text-field {
     text-align: center;
   }
 }
