@@ -47,7 +47,7 @@
 
           <v-btn @click="openSanad(factor.sanad.id)" class="blue white--text mr-1">
             مشاهده سند
-            <v-chip class="app-background-color mr-2" x-small >{{ factor.sanad.code }}</v-chip>
+            <v-chip class="app-background-color mr-2" x-small>{{ factor.sanad.code }}</v-chip>
           </v-btn>
 
           <v-btn @click="exportsDialog = true" class="export-btn mr-1">خروجی</v-btn>
@@ -535,6 +535,7 @@
                     <th>کد دریافت/پرداخت</th>
                     <th>تاریخ</th>
                     <th>توضیحات</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -546,16 +547,20 @@
                       <td>{{ p.transaction.date }}</td>
                       <td>{{ p.transaction.explanation }}</td>
                       <td>
-                        <a @click.prevent="openTransaction(p.transaction)" href="#/">مشاهده جزئیات</a>
+                        <v-btn @click="openTransaction(p.transaction)" class="blue white--text">
+                          مشاهده {{ transactionType.label }}
+                          <v-chip class="app-background-color mr-2" x-small>{{ p.transaction.code }}</v-chip>
+                        </v-btn>
                       </td>
                     </tr>
-                    <tr>
+                    <tr class="grey lighten-3">
                       <td>جمع:</td>
                       <td>{{ paymentsSum | toMoney }}</td>
+                      <td colspan="4"></td>
                     </tr>
                   </template>
                   <tr v-else>
-                    <td colspan="5" class="text-center">موردی برای نمایش وجود ندارد</td>
+                    <td colspan="4" class="text-center">موردی برای نمایش وجود ندارد</td>
                   </tr>
                 </tbody>
               </v-simple-table>
