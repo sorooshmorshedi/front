@@ -538,7 +538,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <template v-if="factor.payments.length">
+                  <template v-if="factor.payments && factor.payments.length">
                     <tr v-for="(p,i) in factor.payments" :key="i">
                       <td>{{ i+1 }}</td>
                       <td>{{ p.value | toMoney }}</td>
