@@ -1,204 +1,134 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <form-header
-            formName="موجودی اول دوره"
-            title="موجودی اول دوره"
-            :hasClear="false"
-            :ListRouteName="false"
-          ></form-header>
-
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="row">
-                <div class="form-group col-lg-6 col-sm-12">
-                  <label>تاریخ</label>
-                  <date
-                    class="form-control"
-                    v-model="factor.date"
-                    :default="true"
-                    :disabled="!editable"
-                  />
-                </div>
-                <div class="form-group col-lg-6 col-sm-12">
-                  <label>ساعت</label>
-                  <mtime
-                    class="form-control"
-                    v-model="factor.time"
-                    :default="true"
-                    :disabled="!editable"
-                  />
-                </div>
-                <div class="col-lg-6 col-sm-12" v-if="factor.sanad">
-                  <label>شماره سند</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" disabled :value="factor.sanad.code">
-                    <div class="input-group-prepend d-print-none">
-                      <button
-                        @click="openSanad(factor.sanad)"
-                        class="btn btn-outline-info"
-                        type="button"
-                        id="button-addon1"
-                      >مشاهده سند</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-lg-6">
-              <label>توضیحات</label>
-              <textarea
-                class="form-control"
-                rows="5"
-                v-model="factor.explanation"
-                :disabled="!editable"
-              ></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="table-responsive-lg">
-                <table class="table table-striped table-bordered">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>شرح</th>
-                      <th>انبار</th>
-                      <th>تعداد</th>
-                      <th>واحد</th>
-                      <th>قیمت واحد</th>
-                      <th>جمع</th>
-                      <th>توضیحات</th>
-                      <th class="d-print-none"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="(row,i) in filteredRows"
-                      :key="i"
-                      :class="{'d-print-none': i == rows.length-1}"
-                    >
-                      <td>{{ i+1 }}</td>
-                      <td>
-                        <multiselect
-                          :option-height="104"
-                          dir="rtl"
-                          :options="waresSelectValues.wares"
-                          v-model="rows[i].ware"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable"
-                          @select="setDefaultValue"
-                        />
-                      </td>
-                      <td>
-                        <multiselect
-                          v-if="rows[i].ware"
-                          dir="rtl"
-                          :allow-empty="false"
-                          :options="waresSelectValues.warehouses"
-                          v-model="rows[i].ware.warehouse"
-                          track-by="id"
-                          label="name"
-                          :disabled="!editable"
-                        />
-                        <span v-else>-</span>
-                      </td>
-                      <td>
-                        <money
-                          class="form-control form-control"
-                          v-model="rows[i].count"
-                          :disabled="!editable"
-                          decimalScale="6"
-                        />
-                      </td>
-                      <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
-                      <td>
-                        <money
-                          class="form-control form-control"
-                          v-model="rows[i].fee"
-                          :disabled="!editable"
-                        />
-                      </td>
-                      <td dir="ltr">
-                        <money
-                          class="form-control form-control"
-                          :value="rowSum(rows[i])"
-                          disabled
-                          decimalScale="6"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          class="form-control form-control"
-                          v-model="rows[i].explanation"
-                          :disabled="!editable"
-                        >
-                      </td>
-                      <td class="d-print-none">
-                        <button
-                          v-if="i != rows.length-1"
-                          @click="deleteItemRow(i)"
-                          type="button"
-                          class="btn btn-sm btn-warning"
-                          :disabled="!editable"
-                        >حذف ردیف</button>
-                      </td>
-                    </tr>
-                    <tr class="bg-info text-white">
-                      <td :colspan="8"></td>
-                      <td>
-                        <button
-                          @click="deleteItemRow(-1)"
-                          type="button"
-                          class="btn btn-danger d-print-none"
-                          :disabled="!editable"
-                        >حذف همه ردیف ها</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-6 col-sm-6"></div>
-            <div class="col-lg-6 col-sm-6">
-              <div class="row">
-                <div class="col-lg-12">
-                  <table class="table table-bordered finals">
-                    <tbody>
-                      <tr>
-                        <th>جمع:</th>
-                        <td colspan="2">{{ sum | toMoney }} ریال</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <hr class="d-print-none">
-
-          <form-footer
-            formName="موجودی اول دوره"
-            :showNavigationButtons="false"
-            :hasFirst="false"
-            :hasLast="false"
-            :hasPrev="false"
-            :hasNext="false"
-            :editable="editable"
-            :showSubmitAndClearForm="false"
-            @validate="validate"
-            @edit="makeFormEditable()"
+  <daily-form
+    formName="موجودی اول دوره"
+    title="موجودی اول دوره"
+    :hasClear="false"
+    :ListRouteName="false"
+    :showNavigationButtons="false"
+    :hasFirst="false"
+    :hasLast="false"
+    :hasPrev="false"
+    :hasNext="false"
+    :editable="editable"
+    :showSubmitAndClearForm="false"
+    @validate="validate"
+    @edit="makeFormEditable()"
+  >
+    <template #inputs>
+      <v-row>
+        <v-col cols="12" md="2">
+          <date
+            label="تاریخ فاکتور"
+            required
+            v-model="factor.date"
+            :default="true"
+            :disabled="!editable"
           />
-        </div>
-      </div>
-    </div>
-  </div>
+        </v-col>
+        <v-col cols="12" md="2">
+          <mtime
+            label="ساعت فاکتور"
+            required
+            v-model="factor.time"
+            :default="true"
+            :disabled="!editable"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-textarea
+            label="شرح"
+            v-model="factor.explanation"
+            :disabled="!editable"
+            @keyup.enter.stop
+          ></v-textarea>
+        </v-col>
+      </v-row>
+
+      <v-simple-table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>شرح</th>
+            <th>انبار</th>
+            <th>تعداد</th>
+            <th>واحد</th>
+            <th>قیمت واحد</th>
+            <th>جمع</th>
+            <th>توضیحات</th>
+            <th class="d-print-none"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(row,i) in filteredRows"
+            :key="i"
+            :class="{'d-print-none': i == rows.length-1}"
+          >
+            <td>{{ i+1 }}</td>
+            <td>
+              <ware-select v-model="rows[i].ware" :disabled="!editable" style="width: 200px;" />
+            </td>
+            <td>
+              <v-autocomplete
+                v-if="rows[i].ware && !rows[i].ware.isService"
+                v-model="rows[i].warehouse"
+                :disabled="!editable"
+                :items="waresSelectValues.warehouses"
+                item-text="name"
+                style="width: 150px;"
+              ></v-autocomplete>
+              <span v-else>-</span>
+            </td>
+            <td>
+              <money
+                class="form-control form-control"
+                v-model="rows[i].count"
+                :disabled="!editable"
+                decimalScale="6"
+              />
+            </td>
+            <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
+            <td>
+              <money class="form-control form-control" v-model="rows[i].fee" :disabled="!editable" />
+            </td>
+            <td dir="ltr">
+              <money
+                class="form-control form-control"
+                :value="rowSum(rows[i])"
+                disabled
+                decimalScale="6"
+              />
+            </td>
+            <td>
+              <v-text-field v-model="rows[i].explanation" :disabled="!editable" />
+            </td>
+            <td class="d-print-none">
+              <v-btn
+                v-if="i != rows.length-1"
+                @click="deleteItemRow(i)"
+                class="red--text"
+                icon
+                :disabled="!editable"
+              >
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </td>
+          </tr>
+          <tr class="grey lighten-3">
+            <td :colspan="5"></td>
+            <td>جمع:</td>
+            <td>{{ sum | toMoney }} ریال</td>
+            <td></td>
+            <td>
+              <v-btn @click="deleteItemRow(-1)" icon class="red--text" :disabled="!editable">
+                <v-icon>delete_sweep</v-icon>
+              </v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </v-simple-table>
+    </template>
+  </daily-form>
 </template>
 
 <script>
@@ -241,9 +171,6 @@ export default {
           if (!data.message) {
             this.factor = data;
             this.rows = data.items;
-            this.rows.forEach(o => {
-              o.ware.warehouse = o.warehouse;
-            });
             this.rows.push(this.copy(this.rowTemplate));
           }
         }
@@ -280,16 +207,20 @@ export default {
       this.storeFirstPeriodInventory();
     },
     storeFirstPeriodInventory() {
-      let items = this.rows.slice(0, this.rows.length - 1);
-      items.forEach(item => (item.warehouse = item.ware.warehouse));
-      items = items.map(this.extractIds);
+      let raw_items = this.rows.slice(0, this.rows.length - 1);
+      let items = [];
+      items.forEach(item => {
+        items.push(this.extractIds(o));
+      });
       this.request({
         url: this.endpoint("factors/firstPeriodInventory"),
         method: "post",
         data: {
           factor: this.factor,
-          factor_items: items,
-          ids_to_delete: this.idsToDelete
+          factor_items: {
+            items: items,
+            ids_to_delete: this.idsToDelete
+          }
         },
         success: data => {
           this.successNotify();
@@ -368,7 +299,7 @@ export default {
   // overflow: visible;
   th,
   td,
-  input {
+  v-text-field {
     text-align: center;
   }
 }
