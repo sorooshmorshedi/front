@@ -1,96 +1,57 @@
 <template>
-  <div class="modal fade" id="change-cheque-status-modal" tabindex="-1" v-if="cheque">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">
-            تغییر وضعیت چک
-            {{ chequeLabel }}
-          </h4>
-          <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-4">
-                <label class="required">تغییر وضعیت به</label>
-                <multiselect
-                  dir="rtl"
-                  label="label"
-                  track-by="name"
-                  :options="statuses"
-                  v-model="newStatus"
-                  @change="clearForm"
+  <v-dialog v-model="dialog" scrollable max-width="400px">
+    <v-card>
+      <v-card-title>
+        تغییر وضعیت چک
+        {{ chequeLabel }}
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="12">
+            <v-autocomplete
+              label="تغییر وضعیت به"
+              item-text="label"
+              item-value="name"
+              :items="statuses"
+              v-model="newStatus"
+              @change="clearForm"
+            />
+          </v-col>
+          <template v-if="newStatus">
+            <v-col cols="12">
+              <v-text-field label="شماره سند" v-model="statusChange.sanad_code" />
+            </v-col>
+            <template v-if="newStatus.hasAccount">
+              <v-col cols="12">
+                <account-select
+                  required
+                  :label=" accountLabel(newStatus) "
+                  :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
+                  label="name"
+                  track-by="id"
+                  :itemsType="newStatusAccountsType"
+                  v-model="statusChange.account"
+                  :floatAccount="statusChange.floatAccount"
+                  @update:floatAccount="v => statusChange.floatAccount = v"
+                  :costCenter="statusChange.costCenter"
+                  @update:costCenter="v => statusChange.costCenter = v"
                 />
-              </div>
-              <template v-if="newStatus">
-                <div class="form-group col-md-8">
-                  <label>شماره سند</label>
-                  <input type="text" class="form-control" v-model="statusChange.sanad_code">
-                </div>
-                <template v-if="newStatus.hasAccount">
-                  <div class="form-group col-12 col-md-12">
-                    <label class="required">{{ accountLabel(newStatus) }}</label>
-                    <multiselect
-                      :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
-                      dir="rtl"
-                      label="name"
-                      track-by="id"
-                      :options="newStatusAccounts"
-                      v-model="statusChange.account"
-                    />
-                  </div>
-                  <div
-                    class="form-group col-12 col-md-12"
-                    v-if="statusChange.account && statusChange.account.floatAccountGroup"
-                  >
-                    <label class="required">حساب شناور</label>
-                    <multiselect
-                      :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
-                      dir="rtl"
-                      label="name"
-                      track-by="id"
-                      :options="statusChange.account.floatAccountGroup.floatAccounts"
-                      v-model="statusChange.floatAccount"
-                    />
-                  </div>
-                  <div
-                    class="form-group col-12 col-md-12"
-                    v-if="statusChange.account && statusChange.account.costCenterGroup"
-                  >
-                    <label class="required">مرکز هزینه</label>
-                    <multiselect
-                      :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
-                      dir="rtl"
-                      label="name"
-                      track-by="id"
-                      :options="statusChange.account.costCenterGroup.floatAccounts"
-                      v-model="statusChange.costCenter"
-                    />
-                  </div>
-                </template>
-                <div class="w-100"></div>
-                <div class="form-group col-12 col-md-4">
-                  <label class="required">تاریخ</label>
-                  <date class="form-control" v-model="statusChange.date" :default="true"/>
-                </div>
-                <div class="form-group col-12 col-md-8">
-                  <label>توضیحات</label>
-                  <textarea class="form-control" rows="4" v-model="statusChange.explanation"></textarea>
-                </div>
-              </template>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">انصراف</button>
-          <button @click="submitCheque()" type="button" class="btn btn-primary">ثبت</button>
-        </div>
-      </div>
-    </div>
-  </div>
+              </v-col>
+            </template>
+            <v-col cols="12">
+              <date required label="تاریخ" v-model="statusChange.date" :default="true" />
+            </v-col>
+            <v-col cols="12">
+              <v-textarea label="توضیحات" v-model="statusChange.explanation" />
+            </v-col>
+          </template>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="submitCheque()" class="green white--text w-100px">ثبت</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -110,6 +71,7 @@ export default {
   mixins: [accountApiMixin, getChequeApiMixin, sanadApiMixin],
   data() {
     return {
+      dialog: false,
       statusChange: {},
       newStatus: null
     };
@@ -118,12 +80,12 @@ export default {
     isPaidCheque() {
       return this.cheque.received_or_paid == "p";
     },
-    newStatusAccounts() {
+    newStatusAccountsType() {
       let name = this.newStatus.name;
       if (name == "passed") {
-        return this.accountsSelectValues.banks;
+        return "banks";
       }
-      return this.accountsSelectValues.levels[3];
+      return "level3";
     },
     statuses() {
       let statuses = [
@@ -234,7 +196,7 @@ export default {
         data: payload,
         method: "post",
         success: data => {
-          $("#change-cheque-status-modal").modal("hide");
+          this.dialog = false;
           this.$emit("statusChange");
           this.successNotify();
           this.clearStatusChange();
@@ -252,7 +214,7 @@ export default {
           explanation: this.statusChange.explanation
         },
         success: data => {
-          $("#change-cheque-status-modal").modal("hide");
+          this.dialog = false;
           this.successNotify();
         }
       });

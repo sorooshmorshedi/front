@@ -1,180 +1,106 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body" @keyup.enter="validate(true)">
-          <form-header
-            v-if="!modalMode"
-            formName="چک"
-            :title="title"
-            :ListRouteParams="{form: 'cheque', type: this.receivedOrPaid == 'p'?'paid':'received'}"
-            @clearForm="clearCheque(true)"
-          >
-            <router-link
-              v-if="id"
-              class="btn btn-info"
-              :to="{ name: 'ChequeDetail', id: id, }"
-            >مشاهده جزئیات چک</router-link>
-          </form-header>
+  <daily-form
+    v-if="!modalMode"
+    formName="چک"
+    :title="title"
+    :ListRouteParams="{form: 'cheque', type: this.receivedOrPaid == 'p'?'paid':'received'}"
+    @clearForm="clearCheque(true)"
+    :formName="title"
+    :showNavigationButtons="!modalMode"
+    :showSubmitAndClearForm="!modalMode"
+    :hasFirst="true"
+    :hasLast="true"
+    :hasPrev="true"
+    :hasNext="true"
+    :editable="true"
+    :deletable="this.id"
+    :canDelete="canDeleteCheque"
+    :canSubmit="!id || canEditCheque"
+    @goToForm="getChequeByPosition"
+    @validate="validate"
+    @delete="deleteCheque"
+  >
+    <template #header-btns>
+      <v-btn
+        v-if="id"
+        class="blue white--text mr-1"
+        :to="{ name: 'ChequeDetail', id: id, }"
+      >مشاهده جزئیات چک</v-btn>
+    </template>
 
-          <div class="row">
-            <div v-if="!id && isPaidCheque" class="form-group col-12 col-md-6">
-              <label class="required">چک</label>
-              <multiselect
-                dir="rtl"
-                label="title"
-                track-by="id"
-                :options="paidCheques"
-                :internalSearch="false"
-                @search-change="getPaidCheques"
-                v-model="cheque"
-              />
-            </div>
-            <div v-else class="form-group col-md-6">
-              <label class="required">سریال چک</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="cheque.serial"
-                :disabled="isPaidCheque"
-              >
-            </div>
-            <div class="form-group col-12 col-md-6">
-              <label class="required" v-if="isPaidCheque">دریافت کننده</label>
-              <label class="required" v-else>پرداخت کننده</label>
-              <multiselect
-                dir="rtl"
-                label="name"
-                track-by="id"
-                :options="accountsSelectValues.levels[3]"
-                v-model="cheque.account"
-                :disabled="modalMode"
-              />
-            </div>
-            <div
-              class="form-group col-12 col-md-6 offset-md-6"
-              v-if="cheque.account && cheque.account.floatAccountGroup"
-            >
-              <label class="required" for>حساب شناور</label>
-              <multiselect
-                dir="rtl"
-                label="name"
-                track-by="id"
-                :options="cheque.account.floatAccountGroup.floatAccounts"
-                v-model="cheque.floatAccount"
-                :disabled="modalMode"
-              />
-            </div>
-            <div
-              class="form-group col-12 col-md-6 offset-md-6"
-              v-if="cheque.account && cheque.account.costCenterGroup"
-            >
-              <label class="required" for>مرکز هزینه</label>
-              <multiselect
-                dir="rtl"
-                label="name"
-                track-by="id"
-                :options="cheque.account.costCenterGroup.floatAccounts"
-                v-model="cheque.costCenter"
-                :disabled="modalMode"
-              />
-            </div>
-            <div class="form-group col-12 col-md-6">
-              <label class="required" for>مبلغ</label>
-              <money class="form-control" v-model="cheque.value"/>
-            </div>
-            <div class="form-group col-12 col-md-3">
-              <label class="required" for>تاریخ سررسید</label>
-              <date class="form-control" v-model="cheque.due" :default="true"/>
-            </div>
-            <div class="form-group col-12 col-md-3">
-              <label class="required" v-if="isPaidCheque">تاریخ پرداخت</label>
-              <label class="required" v-else>تاریخ دریافت</label>
-              <date class="form-control" v-model="cheque.date" :default="true"/>
-            </div>
-            <div class="col-12 col-md-6">
-              <div class="row">
-                <div class="form-group col-12" v-if="!isPaidCheque">
-                  <label for>نوع چک</label>
-                  <select class="custom-select" v-model="cheque.type">
-                    <option
-                      v-for="type in chequeTypes"
-                      :key="type.value"
-                      :value="type.value"
-                    >{{ type.label }}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label>شماره سند</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="cheque.sanad_code"
-                :disabled="!canSetSanadCode"
-              >
-            </div>
-            <div class="form-group col-12 col-md-6">
-              <label>شرح چک</label>
-              <textarea class="form-control" v-model="cheque.explanation" style="height:126px;"></textarea>
-            </div>
-            <div class="col-12">
-              <div class="row">
-                <div class="form-group col-12 col-md-4">
-                  <label for>نام بانک</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="cheque.bankName"
-                    :disabled="isPaidCheque"
-                  >
-                </div>
-                <div class="form-group col-12 col-md-4">
-                  <label for>نام شعبه</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="cheque.branchName"
-                    :disabled="isPaidCheque"
-                  >
-                </div>
-                <div class="form-group col-12 col-md-4">
-                  <label for>شماره حساب چک</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    v-model="cheque.accountNumber"
-                    :disabled="isPaidCheque"
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <hr>
-
-          <form-footer
-            :formName="title"
-            :showNavigationButtons="!modalMode"
-            :showSubmitAndClearForm="!modalMode"
-            :hasFirst="true"
-            :hasLast="true"
-            :hasPrev="true"
-            :hasNext="true"
-            :editable="true"
-            :deletable="this.id"
-            :canDelete="canDeleteCheque"
-            :canSubmit="!id || canEditCheque"
-            @goToForm="getChequeByPosition"
-            @validate="validate"
-            @delete="deleteCheque"
-          ></form-footer>
-        </div>
-      </div>
-    </div>
-  </div>
+    <template #inputs>
+      <v-row>
+        <v-col cols="12" md="6" v-if="!id && isPaidCheque">
+          <label class="required"></label>
+          <v-autocomplete
+            required
+            label="چک"
+            :items="paidCheques"
+            :is-loading="isLoading"
+            :search-input.sync="searchPaidCheque"
+            v-model="cheque"
+          />
+        </v-col>
+        <v-col cols="12" md="6" v-else>
+          <v-text-field required label="سریال چک" v-model="cheque.serial" :disabled="isPaidCheque" />
+        </v-col>
+        <v-col cols="12" md="6">
+          <account-select
+            :label="isPaidCheque?'دریافت کننده':'پرداخت کننده'"
+            items-type="level3"
+            v-model="cheque.account"
+            :disabled="modalMode"
+            :floatAccount="cheque.floatAccount"
+            @update:floatAccount="v => cheque.floatAccount = v"
+            :costCenter="cheque.costCenter"
+            @update:costCenter="v => cheque.costCenter = v"
+          />
+        </v-col>
+        <v-col cols="12" md="2">
+          <money label="مبلغ" v-model="cheque.value" />
+        </v-col>
+        <v-col cols="12" md="2">
+          <date label="تاریخ سررسید" v-model="cheque.due" :default="true" />
+        </v-col>
+        <v-col cols="12" md="2">
+          <date
+            :label="isPaidCheque?'تاریخ پرداخت':'تاریخ دریافت'"
+            v-model="cheque.date"
+            :default="true"
+          />
+        </v-col>
+        <v-col cols="12" md="6" v-if="canSetSanadCode">
+          <v-text-field label="شماره سند" v-model="cheque.sanad_code" />
+        </v-col>
+        <v-col cols="12">
+          <v-textarea label="شرح چک" v-model="cheque.explanation"></v-textarea>
+        </v-col>
+        <v-col cols="12" md="12" v-if="!isPaidCheque">
+          <v-select
+            label="نوع چک"
+            :items="chequeTypes"
+            item-text="label"
+            item-value="value"
+            :return-object="false"
+            v-model="cheque.type"
+          ></v-select>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field label="نام بانک" v-model="cheque.bankName" :disabled="isPaidCheque" />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field label="نام شعبه" v-model="cheque.branchName" :disabled="isPaidCheque" />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field
+            label="شماره حساب چک"
+            v-model="cheque.accountNumber"
+            :disabled="isPaidCheque"
+          />
+        </v-col>
+      </v-row>
+    </template>
+  </daily-form>
 </template>
 
 <script>
@@ -210,6 +136,8 @@ export default {
   mixins: [getChequeApiMixin, accountApiMixin, formsMixin],
   data() {
     return {
+      searchPaidCheque: "",
+      isLoading: false,
       cheque: {
         received_or_paid: this.receivedOrPaid,
         account: this.account
@@ -295,6 +223,13 @@ export default {
     cheque() {
       if (this.modalMode) {
         this.setAccounts();
+      }
+    },
+    searchPaidCheque() {
+      if (this.cheque.title != this.searchPaidCheque) {
+        this.getPaidCheques(this.searchPaidCheque);
+      } else {
+        this.cheque.account = null;
       }
     }
   },
@@ -406,6 +341,10 @@ export default {
     },
     getPaidCheques(value) {
       this.paidCheques = [];
+
+      if (this.isLoading) return;
+
+      this.isLoading = true;
       this.request({
         url: this.endpoint("reports/lists/cheques"),
         method: "get",
@@ -421,6 +360,7 @@ export default {
           received_or_paid: "p"
         },
         success: data => {
+          this.isLoading = false;
           this.paidCheques = data.results;
         }
       });

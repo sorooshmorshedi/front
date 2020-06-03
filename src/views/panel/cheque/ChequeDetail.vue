@@ -1,159 +1,163 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12" v-if="cheque">
-      <div class="card right">
-        <div class="card-body">
-          <div class="title">
-            جزئیات چک
-            <span>
-              <router-link
-                v-if="isPaidCheque"
-                class="btn btn-info"
-                :to="{name: 'ChequebookForm', params: {id: cheque.chequebook.id}}"
-              >مشاهده دسته چک</router-link>
-            </span>
-          </div>
+  <v-card v-if="cheque">
+    <v-card-title>
+      جزئیات چک
+      <v-spacer></v-spacer>
+      <v-btn
+        v-if="isPaidCheque"
+        class="blue white--text"
+        :to="{name: 'ChequebookForm', params: {id: cheque.chequebook.id}}"
+      >مشاهده دسته چک</v-btn>
+    </v-card-title>
 
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="row jumbotron">
-                <template v-if="isPaidCheque">
-                  <div class="col-md-6">
-                    <label>حساب چک:</label>
-                    {{ cheque.chequebook.account.title }}
-                  </div>
-                  <div class="col-md-6">
-                    <label>توضیحات:</label>
-                    {{ cheque.chequebook.explanation }}
-                  </div>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12" md="4">
+          <v-simple-table dense class="detail-table">
+            <tbody>
+              <tr>
+                <th>سریال چک:</th>
+                <td>{{ cheque.serial }}</td>
+              </tr>
+              <tr v-if="isPaidCheque">
+                <th>حساب چک:</th>
+                <td>{{ cheque.chequebook.account.title }}</td>
+              </tr>
+              <tr v-if="isPaidCheque">
+                <th>توضیحات:</th>
+                <td>{{ cheque.chequebook.explanation }}</td>
+              </tr>
+              <tr>
+                <th>وضعیت:</th>
+                <td>{{ cheque.status | chequeStatuses }}</td>
+              </tr>
+              <tr>
+                <th>دریافت کننده:</th>
+                <td>{{ cheque.account && cheque.account.title }}</td>
+              </tr>
+              <tr v-if="cheque.floatAccount">
+                <th>حساب شناور:</th>
+                <td>{{ cheque.floatAccount.name }}</td>
+              </tr>
+              <tr>
+                <th>مبلغ:</th>
+                <td>{{ cheque.value | toMoney }}</td>
+              </tr>
+              <tr>
+                <th>تاریخ سررسید:</th>
+                <td>{{ cheque.due }}</td>
+              </tr>
+              <tr>
+                <th v-if="isPaidCheque">تاریخ پرداخت:</th>
+                <th v-else>تاریخ دریافت:</th>
+                <td>{{ cheque.date }}</td>
+              </tr>
+              <tr v-if="!isPaidCheque">
+                <th>نوع چک:</th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>شرح چک:</th>
+                <td>{{ cheque.explanation }}</td>
+              </tr>
+              <tr>
+                <th>نام بانک:</th>
+                <td>{{ cheque.bankName }}</td>
+              </tr>
+              <tr>
+                <th>نام شعبه:</th>
+                <td>{{ cheque.branchName }}</td>
+              </tr>
+              <tr>
+                <th>شماره حساب چک:</th>
+                <td>{{ cheque.accountNumber }}</td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+          <v-row></v-row>
+        </v-col>
+        <v-col cols="12" md="8">
+          <v-simple-table class="status-changes-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>تغییر از وضعیت</th>
+                <th>به وضعیت</th>
+                <th>تاریخ</th>
+                <th>حساب بدهکار</th>
+                <th>حساب بستانکار</th>
+                <th>توضیحات</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(sc, i) in statusChanges" :key="i">
+                <td>{{ i+1 }}</td>
+                <td>{{ sc.fromStatus | chequeStatuses }}</td>
+                <td>{{ sc.toStatus | chequeStatuses }}</td>
+                <td>{{ sc.date }}</td>
+                <template v-if="sc.sanad && sc.sanad.items.length">
+                  <td>{{ sc.sanad.items[0].account.name }}</td>
+                  <td>{{ sc.sanad.items[1].account.name }}</td>
                 </template>
-                <div class="col-md-6">
-                  <label>سریال چک:</label>
-                  {{ cheque.serial }}
-                </div>
-                <div class="col-md-6">
-                  <label>وضعیت:</label>
-                  <span class="status-box">{{ cheque.status | chequeStatuses }}</span>
-                </div>
-                <div class="col-md-6">
-                  <label>دریافت کننده:</label>
-                  {{ cheque.account && cheque.account.title }}
-                </div>
-                <div class="col-md-6" v-if="cheque.floatAccount">
-                  <label>حساب شناور:</label>
-                  {{ cheque.floatAccount.name }}
-                </div>
-                <div class="col-md-6">
-                  <label>مبلغ:</label>
-                  {{ cheque.value | toMoney }}
-                </div>
-                <div class="col-md-6">
-                  <label>تاریخ سررسید:</label>
-                  {{ cheque.due }}
-                </div>
-                <div class="col-md-6">
-                  <label v-if="isPaidCheque">تاریخ پرداخت:</label>
-                  <label v-else>تاریخ دریافت:</label>
-                  {{ cheque.date }}
-                </div>
-                <div class="col-md-6" v-if="!isPaidCheque">
-                  <label>نوع چک:</label>
-                </div>
-                <div class="col-md-6">
-                  <label>شرح چک:</label>
-                  {{ cheque.explanation }}
-                </div>
-                <div class="col-md-6">
-                  <label>نام بانک:</label>
-                  {{ cheque.bankName }}
-                </div>
-                <div class="col-md-6">
-                  <label>نام شعبه:</label>
-                  {{ cheque.branchName }}
-                </div>
-                <div class="col-md-6">
-                  <label>شماره حساب چک:</label>
-                  {{ cheque.accountNumber }}
-                </div>
-              </div>
-            </div>
+                <template v-else>
+                  <td>-</td>
+                  <td>-</td>
+                </template>
+                <td>{{ sc.explanation }}</td>
+                <td>
+                  <v-btn
+                    v-if="sc.sanad"
+                    :to="{name: 'SanadForm',params:{id: sc.sanad.id }}"
+                    class
+                    outlined
+                  >
+                    مشاهده سند
+                    <v-chip class="app-background-color mr-2" x-small>{{ sc.sanad.code }}</v-chip>
+                  </v-btn>
+                </td>
+                <td>
+                  <v-btn
+                    v-if="i == statusChanges.length-1 && (isPaidCheque || i != 0) && !financialYear.is_closed"
+                    @click.prevent="deleteStatusChange(sc)"
+                    class="red--text"
+                    icon
+                  >
+                    <v-icon>delete</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-col>
+      </v-row>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn
+        v-if="canSubmitCheque"
+        class="green white--text w-100px"
+        :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
+      >ثبت</v-btn>
+      <v-btn
+        v-else-if="canEditCheque"
+        class="amber w-100px"
+        :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
+      >ویرایش</v-btn>
+      <v-btn
+        @click="showChangeChequeStatusDialog()"
+        :disabled="!canChangeStatus"
+        class="blue white--text mr-1"
+      >تغییر وضعیت چک</v-btn>
+    </v-card-actions>
 
-            <div class="col-12 col-md-6">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>تغییر از وضعیت</th>
-                      <th>به وضعیت</th>
-                      <th>تاریخ</th>
-                      <th>حساب بدهکار</th>
-                      <th>حساب بستانکار</th>
-                      <th>توضیحات</th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(sc, i) in statusChanges" :key="i">
-                      <td>{{ i+1 }}</td>
-                      <td>{{ sc.fromStatus | chequeStatuses }}</td>
-                      <td>{{ sc.toStatus | chequeStatuses }}</td>
-                      <td>{{ sc.date }}</td>
-                      <template v-if="sc.sanad && sc.sanad.items.length">
-                        <td>{{ sc.sanad.items[0].account.name }}</td>
-                        <td>{{ sc.sanad.items[1].account.name }}</td>
-                      </template>
-                      <template v-else>
-                        <td>-</td>
-                        <td>-</td>
-                      </template>
-                      <td>{{ sc.explanation }}</td>
-                      <td>
-                        <router-link
-                          v-if="sc.sanad"
-                          :to="{name: 'SanadForm',params:{id: sc.sanad.id }}"
-                          target="_blank"
-                        >مشاهده سند</router-link>
-                      </td>
-                      <td>
-                        <i
-                          v-if="i == statusChanges.length-1 && (isPaidCheque || i != 0) && !this.financialYear.is_closed"
-                          @click.prevent="deleteStatusChange(sc)"
-                          class="fas fa-trash-alt text-danger"
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="col-12 text-left">
-              <router-link
-                v-if="canSubmitCheque"
-                class="btn btn btn-info w-100px"
-                :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
-              >ثبت</router-link>
-              <router-link
-                v-else-if="canEditCheque"
-                class="btn btn btn-info w-100px"
-                :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
-              >ویرایش</router-link>
-              <button
-                @click="changeChequeStatusModal()"
-                :disabled="!canChangeStatus"
-                type="button"
-                class="btn btn btn-info"
-              >تغییر وضعیت چک</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <change-cheque-status :cheque="cheque" @statusChange="getCheque(id)"/>
-  </div>
+    <change-cheque-status
+      :cheque="cheque"
+      @statusChange="getCheque(id)"
+      ref="changeChequeStatusComponent"
+    />
+  </v-card>
 </template>
 
 <script>
@@ -201,8 +205,8 @@ export default {
     this.getCheque(this.id);
   },
   methods: {
-    changeChequeStatusModal() {
-      $("#change-cheque-status-modal").modal("show");
+    showChangeChequeStatusDialog() {
+      this.$refs.changeChequeStatusComponent.dialog = true;
     },
     payer(cheque) {
       let res = cheque.account.title;
@@ -262,6 +266,22 @@ export default {
   background-color: white;
   padding: 4px 8px;
   border-radius: 5px;
+}
+.detail-table {
+  th,
+  td {
+    padding: 0px 8px;
+  }
+  tr {
+    th {
+      min-width: 110px;
+    }
+  }
+}
+.status-changes-table {
+  th {
+    background-color: #eeeeee !important;
+  }
 }
 </style>
 

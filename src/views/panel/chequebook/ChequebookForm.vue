@@ -1,122 +1,68 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body" @keyup.enter="validate(true)">
-          <form-header
-            formName="دسته چک"
-            title="دسته چک"
-            :ListRouteParams="{form: 'chequebook'}"
-            @clearForm="clearChequebook(true)"
-          >
-            <router-link
-              v-if="id"
-              class="btn btn-info"
-              :to="{name: 'List', params: {form: 'cheque'}, query: {filters: JSON.stringify({chequebook__id: id})}}"
-            >مشاهده چک ها</router-link>
-          </form-header>
-
-          <div class="row">
-            <div class="form-group col-12 col-md-3">
-              <label for>سری دسته چک</label>
-              <input
-                v-if="chequebook.id"
-                type="text"
-                class="form-control"
-                disabled
-                v-model="chequebook.code"
-              >
-              <input v-else type="text" class="form-control" disabled>
-            </div>
-            <div class="form-group col-12 col-md-9">
-              <label for>حساب بانک</label>
-              <multiselect
-                :disabled="!editable"
-                dir="rtl"
-                label="name"
-                track-by="id"
-                :options="accountsSelectValues.banks"
-                v-model="chequebook.account"
-              />
-            </div>
-            <div
-              class="form-group col-12 col-md-9 offset-md-3"
-              v-if="chequebook.account && chequebook.account.floatAccountGroup"
-            >
-              <label for>حساب شناور</label>
-              <multiselect
-                :disabled="!editable"
-                dir="rtl"
-                label="name"
-                track-by="id"
-                :options="chequebook.account.floatAccountGroup.floatAccounts"
-                v-model="chequebook.floatAccount"
-              />
-            </div>
-            <div
-              class="form-group col-12 col-md-9 offset-md-3"
-              v-if="chequebook.account && chequebook.account.costCenterGroup"
-            >
-              <label for>مرکز هزینه</label>
-              <multiselect
-                :disabled="!editable"
-                dir="rtl"
-                label="name"
-                track-by="id"
-                :options="chequebook.account.costCenterGroup.floatAccounts"
-                v-model="chequebook.costCenter"
-              />
-            </div>
-            <div class="form-group col-12">
-              <label for>از شماره سریال</label>
-              <input
-                type="number"
-                class="form-control"
-                v-model="chequebook.serial_from"
-                :disabled="!editable"
-              >
-            </div>
-            <div class="form-group col-12">
-              <label for>تا شماره سریال</label>
-              <input
-                type="number"
-                class="form-control"
-                v-model="chequebook.serial_to"
-                :disabled="!editable"
-              >
-            </div>
-            <div class="form-group col-12">
-              <label>توضیحات</label>
-              <textarea
-                class="form-control"
-                rows="3"
-                v-model="chequebook.explanation"
-                :disabled="!editable"
-              ></textarea>
-            </div>
-          </div>
-
-          <hr>
-
-          <form-footer
-            formName="دسته چک"
-            :hasFirst="true"
-            :hasLast="true"
-            :hasPrev="true"
-            :hasNext="true"
-            :editable="editable"
-            :deletable="this.id"
-            :canDelete="true"
-            :canSubmit="true"
-            @edit="makeFormEditable()"
-            @goToForm="getChequebookByPosition"
-            @validate="validate"
-            @delete="deleteChequebook"
-          ></form-footer>
-        </div>
-      </div>
-    </div>
-  </div>
+  <daily-form
+    formName="دسته چک"
+    title="دسته چک"
+    :ListRouteParams="{form: 'chequebook'}"
+    @clearForm="clearChequebook(true)"
+    :hasFirst="true"
+    :hasLast="true"
+    :hasPrev="true"
+    :hasNext="true"
+    :editable="editable"
+    :deletable="this.id"
+    :canDelete="true"
+    :canSubmit="true"
+    @edit="makeFormEditable()"
+    @goToForm="getChequebookByPosition"
+    @validate="validate"
+    @delete="deleteChequebook"
+  >
+    <template #header-btns>
+      <v-btn
+        v-if="id"
+        class="blue white--text mr-1"
+        :to="{name: 'List', params: {form: 'cheque'}, query: {filters: JSON.stringify({chequebook__id: id})}}"
+      >مشاهده چک ها</v-btn>
+    </template>
+    <template #inputs>
+      <v-row>
+        <v-col cols="12" md="2">
+          <v-text-field label="سری دسته چک" disabled v-model="chequebook.code" />
+        </v-col>
+        <v-col cols="12" md="10">
+          <account-select
+            items-type="banks"
+            label="حساب بانک"
+            v-model="chequebook.account"
+            :disabled="!editable"
+            :floatAccount="chequebook.floatAccount"
+            @update:floatAccount="v => chequebook.floatAccount = v"
+            :costCenter="chequebook.costCenter"
+            @update:costCenter="v => chequebook.costCenter = v"
+          />
+        </v-col>
+        <v-col cols="12" md="2">
+          <v-text-field
+            label="از شماره سریال"
+            type="number"
+            v-model="chequebook.serial_from"
+            :disabled="!editable"
+          />
+        </v-col>
+        <v-col cols="12" md="2">
+          <v-text-field
+            type="number"
+            label="تا شماره سریال"
+            v-model="chequebook.serial_to"
+            :disabled="!editable"
+          />
+        </v-col>
+        <v-col cols="12" md="8">
+          <v-textarea label="توضیحات" v-model="chequebook.explanation" :disabled="!editable"></v-textarea>
+        </v-col>
+      </v-row>
+    </template>
+  </daily-form>
 </template>
 
 <script>

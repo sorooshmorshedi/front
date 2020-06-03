@@ -41,7 +41,6 @@ import TransferForm from '@/views/panel/transfer/Form.vue';
 
 import FirstPeriodInventory from '@/views/panel/firstPeriodInventory/FirstPeriodInventory.vue';
 
-import Chequebook from '../views/panel/chequebook/Chequebook.vue';
 import ChequebookForm from '../views/panel/chequebook/ChequebookForm.vue';
 
 import Cheque from '@/views/panel/cheque/Cheque.vue';
@@ -233,17 +232,10 @@ export default [{
       ]
     },
     {
-      name: 'Chequebook',
-      path: 'chequebook',
-      component: Chequebook,
-      children: [{
-          name: 'ChequebookForm',
-          path: 'form/:id?',
-          component: ChequebookForm,
-          props: true,
-        },
-
-      ]
+      name: 'ChequebookForm',
+      path: 'chequebooks/:id?',
+      component: ChequebookForm,
+      props: true,
     },
 
     {

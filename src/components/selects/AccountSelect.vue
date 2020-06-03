@@ -139,7 +139,7 @@ export default {
             }
           }
 
-          if (this.itemsType == "bank") {
+          if (this.itemsType == "banks") {
             if (item.account_type == "b") {
               items.push(item);
             }
