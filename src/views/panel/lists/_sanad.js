@@ -4,7 +4,7 @@ export default {
       th: "شماره",
       td: "code",
       type: "number",
-      filters: ["serial__icontains"]
+      filters: ["code"]
     },
     {
       th: "بدهکار",

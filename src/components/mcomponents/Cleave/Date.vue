@@ -5,6 +5,7 @@
     :id="inputId"
     dir="ltr"
     :label="label"
+    :placeholder="placeholder"
     :disabled="disabled"
   />
 </template>
@@ -14,7 +15,7 @@ import Cleave from "cleave.js";
 import moment from "moment-jalaali";
 export default {
   name: "CleaveDate",
-  props: ["value", "id", "default", "label", "disabled"],
+  props: ["value", "id", "default", "label", "disabled", "placeholder"],
   data() {
     return {
       inputId: "",

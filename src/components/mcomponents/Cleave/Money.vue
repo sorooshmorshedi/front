@@ -2,6 +2,7 @@
   <v-text-field
     dir="ltr"
     :label="label"
+    :placeholder="placeholder"
     @input="change"
     :disabled="disabled"
     v-model="formattedAmount"
@@ -23,6 +24,9 @@ export default {
       default: 0
     },
     label: {},
+    placeholder: {
+      default: null
+    },
     disabled: {
       default: false
     }
@@ -47,7 +51,7 @@ export default {
   },
   methods: {
     setAmount(value) {
-      if(!value) value = ""
+      if (!value) value = "";
       else value = String(value);
 
       value = value.split(",").join("");

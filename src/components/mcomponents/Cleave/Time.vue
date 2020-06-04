@@ -1,5 +1,5 @@
 <template>
-  <v-text-field :label="label" @input="change()" ref="inputRef" dir="ltr"></v-text-field>
+  <v-text-field :label="label" @input="change()" ref="inputRef" dir="ltr" :placeholder="placeholder"></v-text-field>
 </template>
 
 <script>
@@ -7,7 +7,7 @@ import Cleave from "cleave.js";
 import moment from "moment-jalaali";
 export default {
   name: "CleaveTime",
-  props: ["value", "default", "label"],
+  props: ["value", "default", "label", "placeholder"],
   data() {
     return {
       el: null,

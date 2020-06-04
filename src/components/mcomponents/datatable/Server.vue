@@ -2,151 +2,134 @@
   <div>
     <div class="fixed-head">
       <table class="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <button @click="clearFilters()" class="btn btn-block btn-info">
-              خالی کردن
-              <br>فیلتر ها
-            </button>
-            <th v-for="(col, i) in filterFields" :key="i">
-              <template v-for="(filter, j) in col.filters">
-                <input
-                  v-if="col.type == 'number'"
-                  :key="j"
-                  class="form-control text-center"
-                  type="number"
-                  :placeholder="filter.label"
-                  v-model="filters[filter.model]"
-                >
+        <v-simple-table fixed-header>
+          <thead>
+            <tr class>
+              <th>
+                <v-btn @click="clearFilters()" icon class="red--text">
+                  <v-icon>delete_sweep</v-icon>
+                </v-btn>
+              </th>
+              <th v-for="(col, i) in filterFields" :key="i" class="py-2">
+                <template v-for="(filter, j) in col.filters">
+                  <v-text-field
+                    v-if="col.type == 'number'"
+                    :key="j"
+                    class="form-control text-center"
+                    type="number"
+                    :placeholder="filter.label"
+                    v-model="filters[filter.model]"
+                  />
 
-                <input
-                  v-if="col.type == 'text'"
-                  :key="j"
-                  class="form-control text-center"
-                  type="text"
-                  :placeholder="filter.label"
-                  v-model="filters[filter.model]"
-                >
+                  <v-text-field
+                    v-if="col.type == 'text'"
+                    :key="j"
+                    class="form-control text-center"
+                    type="text"
+                    :placeholder="filter.label"
+                    v-model="filters[filter.model]"
+                  />
 
-                <select
-                  v-if="col.type == 'select'"
-                  :key="j"
-                  class="custom-select"
-                  v-model="filters[filter.model]"
-                >
-                  <option selected value="undefined">همه</option>
-                  <option
-                    v-for="(o,i) in col.original.options"
-                    :key="i"
-                    :value="o.value"
-                  >{{ o.label }}</option>
-                </select>
+                  <select
+                    v-if="col.type == 'select'"
+                    :key="j"
+                    class="custom-select"
+                    v-model="filters[filter.model]"
+                  >
+                    <option selected value="undefined">همه</option>
+                    <option
+                      v-for="(o,i) in col.original.options"
+                      :key="i"
+                      :value="o.value"
+                    >{{ o.label }}</option>
+                  </select>
 
-                <date
-                  v-if="col.type == 'date'"
-                  :key="j"
-                  class="form-control text-center"
-                  :placeholder="filter.label"
-                  v-model="filters[filter.model]"
-                />
+                  <date
+                    v-if="col.type == 'date'"
+                    :key="j"
+                    class="form-control text-center"
+                    :placeholder="filter.label"
+                    v-model="filters[filter.model]"
+                  />
 
-                <money
-                  v-if="col.type == 'money'"
-                  :key="j"
-                  class="form-control text-center"
-                  :placeholder="filter.label"
-                  v-model="filters[filter.model]"
-                />
+                  <money
+                    v-if="col.type == 'money'"
+                    :key="j"
+                    class="form-control text-center"
+                    :placeholder="filter.label"
+                    v-model="filters[filter.model]"
+                  />
 
-                <mtime
-                  v-if="col.type == 'time'"
+                  <mtime
+                    v-if="col.type == 'time'"
+                    :key="j"
+                    class="form-control text-center"
+                    :placeholder="filter.label"
+                    v-model="filters[filter.model]"
+                  />
+                </template>
+              </th>
+            </tr>
+
+            <!-- Header of headers -->
+            <tr v-if="colHeaders">
+              <th
+                v-for="(header, i) in colHeaders"
+                :key="i"
+                :colspan="header.colspan"
+                class="text-center"
+              >{{ header.title }}</th>
+            </tr>
+
+            <tr>
+              <th>#</th>
+
+              <th v-for="(col, i) in cols" :key="i" @click="orderBy(col)">
+                <span style="margin-left: 5px;" v-if="col.sortable == undefined || col.sortable">
+                  <i class="fas" :class="orderClass(col)"></i>
+                </span>
+                {{ col.th }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, i) in items" :key="i" :class="itemRowClasses(item, i, items)">
+              <td v-if="hasSum && !hasNextPage && i == items.length-1">جمع</td>
+              <td v-else>{{ offset+i+1 }}</td>
+              <template v-for="(col, j) in cols">
+                <td v-if="col.type == 'select'" :key="j">{{ getSelectLabel(item, col)}}</td>
+                <td
+                  v-else-if="col.type == 'money' "
                   :key="j"
-                  class="form-control text-center"
-                  :placeholder="filter.label"
-                  v-model="filters[filter.model]"
-                />
+                  class="ltr"
+                >{{ get(item, col) | toMoney }}</td>
+                <td v-else :key="j">{{ get(item, col) }}</td>
               </template>
-            </th>
-          </tr>
-
-          <!-- Header of headers -->
-          <tr v-if="colHeaders">
-            <th
-              v-for="(header, i) in colHeaders"
-              :key="i"
-              :colspan="header.colspan"
-              class="text-center"
-            >{{ header.title }}</th>
-          </tr>
-
-          <tr>
-            <th>#</th>
-
-            <th v-for="(col, i) in cols" :key="i" @click="orderBy(col)">
-              <span style="margin-left: 5px;" v-if="col.sortable == undefined || col.sortable">
-                <i class="fas" :class="orderClass(col)"></i>
-              </span>
-              {{ col.th }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, i) in items" :key="i" :class="itemRowClasses(item, i, items)">
-            <td v-if="hasSum && !hasNextPage && i == items.length-1">جمع</td>
-            <td v-else>{{ offset+i+1 }}</td>
-            <template v-for="(col, j) in cols">
-              <td v-if="col.type == 'select'" :key="j">{{ getSelectLabel(item, col)}}</td>
-              <td
-                v-else-if="col.type == 'money' "
-                :key="j"
-                class="ltr"
-              >{{ get(item, col) | toMoney }}</td>
-              <td v-else :key="j">{{ get(item, col) }}</td>
-            </template>
-            <td v-if="routerName">
-              <router-link :to="routerParam(item)">مشاهده جزئیات</router-link>
-            </td>
-          </tr>
-        </tbody>
+              <td v-if="routerName">
+                <router-link :to="routerParam(item)">مشاهده جزئیات</router-link>
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
       </table>
     </div>
     <nav>
       <div class="row">
         <div class="col-md-6 col-12">
-          <ul class="pagination justify-content-left">
-            <li class="page-item" :class="{disabled: offset == 0}">
-              <a @click.prevent="previousPage()" class="page-link" href="#">
-                <i class="fas fa-angle-double-right"></i>
-              </a>
-            </li>
-            <li
-              class="page-item"
-              v-for="(page, i) in pages.pages"
-              :key="i"
-              :class="{active: page == pages.currentPage}"
-            >
-              <a v-if="page == -1" @click.prevent class="page-link" href="#">...</a>
-              <a v-else @click.prevent="goToPage(page)" class="page-link" href="#">{{ page+1 }}</a>
-            </li>
-            <li class="page-item" :class="{disabled: offset + limit >= count}">
-              <a class="page-link" href="#" @click.prevent="nextPage()">
-                <i class="fas fa-angle-double-left"></i>
-              </a>
-            </li>
-          </ul>
+          <v-pagination
+            :value="pages.currentPage"
+            @input="goToPage"
+            @next="nextPage"
+            @previus="previousPage"
+            :length="+Math.ceil(count / limit)"
+          ></v-pagination>
         </div>
         <div class="col-md-6 col-12 justify-content-left">
           <div class>
             <div class="row">
               <label class="text-left col-md-10 col-12">تعداد رکورد نمایشی</label>
               <div class="col-md-2">
-                <select class="text-center custom-select col-12" v-model="limit">
-                  <option value="10">10</option>
-                  <option value="20" selected>20</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                  <option value="500">500</option>
-                </select>
+                <v-select v-model="limit" :items="[10, 20, 50, 100, 500]"></v-select>
               </div>
             </div>
           </div>
