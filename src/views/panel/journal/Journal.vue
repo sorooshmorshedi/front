@@ -1,38 +1,25 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right ">
-        <div class="card-body">
-          <div class="title">
-            دفتر روزنامه
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card right ">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="form-group col-lg-2">
-                      <label>سطح حساب</label>
-                      <select class="custom-select " v-model="accountLevel">
-                        <option value="0">گروه</option>
-                        <option value="1">کل</option>
-                        <option value="2">معین</option>
-                        <option value="3">تفضیلی</option>
-                      </select>
-                    </div>
-                    <div class="col-lg-12">
-                      <datatable :cols="datatableCols.cols" :url="datatableCols.url" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <v-card>
+    <v-card-title>دفتر روزنامه</v-card-title>
 
-  </div>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12" md="4">
+          <v-select
+            label="سطح حساب"
+            v-model="accountLevel"
+            item-text="text"
+            item-value="value"
+            :items="accountLevels"
+            :return-object="false"
+          />
+        </v-col>
+        <v-col cols="12">
+          <datatable :cols="datatableCols.cols" :url="datatableCols.url" />
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -48,7 +35,13 @@ export default {
   data() {
     return {
       datatableCols,
-      accountLevel: 0
+      accountLevel: 0,
+      accountLevels: [
+        { value: 0, text: "گروه" },
+        { value: 1, text: "کل" },
+        { value: 2, text: "معین" },
+        { value: 3, text: "تفضیلی" }
+      ]
     };
   },
   created() {
@@ -66,7 +59,7 @@ export default {
         return;
       }
       for (const id of this.journalAccountIds) {
-        let acc = this.findAccount('id', id);
+        let acc = this.findAccount("id", id);
         this.journals.push({
           level: acc.level,
           account: acc
