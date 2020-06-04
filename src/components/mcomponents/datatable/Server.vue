@@ -28,19 +28,16 @@
                 v-model="filters[filter.model]"
               />
 
-              <select
+              <v-select
                 v-if="col.type == 'select'"
                 :key="j"
-                class="custom-select"
                 v-model="filters[filter.model]"
+                :items="col.original.options"
+                item-text="label"
+                item-value="value"
+                clearable
               >
-                <option selected value="undefined">همه</option>
-                <option
-                  v-for="(o,i) in col.original.options"
-                  :key="i"
-                  :value="o.value"
-                >{{ o.label }}</option>
-              </select>
+              </v-select>
 
               <date
                 v-if="col.type == 'date'"

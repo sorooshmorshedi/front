@@ -1,48 +1,26 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <div class="title">کاردکس کالا</div>
+  <v-card>
+    <v-card-title>کاردکس کالا</v-card-title>
 
-          <div class="row inventory">
-            <div class="col-lg-12">
-              <div class="card right">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="form-group col-12 col-lg-6">
-                      <label>کالا</label>
-                      <multiselect
-                        :option-height="104"
-                        dir="rtl"
-                        :allow-empty="false"
-                        :options="waresSelectValues.wares"
-                        v-model="ware"
-                        track-by="id"
-                        label="title"
-                      />
-                    </div>
-                    <div class="col-lg-4"></div>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12">
+          <ware-select label="کالا" v-model="ware" />
+        </v-col>
 
-                    <div class="col-lg-12">
-                      <datatable
-                        v-if="ware"
-                        :url="url"
-                        :cols="datatableCols.cols"
-                        :colHeaders="datatableCols.colHeaders"
-                        :defaultFilters="defaultFilters"
-                        hasSum=1
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        <v-col cols="12">
+          <datatable
+            v-if="ware"
+            :url="url"
+            :cols="datatableCols.cols"
+            :colHeaders="datatableCols.colHeaders"
+            :defaultFilters="defaultFilters"
+            hasSum="1"
+          />
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -61,7 +39,7 @@ export default {
       ware: null,
       defaultFilters: {
         ware: null
-      },
+      }
     };
   },
   created() {
@@ -75,7 +53,7 @@ export default {
     },
     getInventoryReport() {
       if (!this.ware) return;
-      this.defaultFilters.ware = this.ware.id
+      this.defaultFilters.ware = this.ware.id;
     },
     init() {
       if (this.wareId) {
@@ -93,8 +71,7 @@ export default {
       deep: true
     }
   },
-  computed: {
-  }
+  computed: {}
 };
 </script>
 

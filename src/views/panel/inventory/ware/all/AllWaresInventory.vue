@@ -1,31 +1,15 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <div class="title">کاردکس همه کالا ها</div>
+  <v-card>
+    <v-card-title>کاردکس همه کالا ها</v-card-title>
 
-          <div class="row inventory">
-            <div class="col-lg-12">
-              <div class="card right">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-lg-12">
-                      <datatable
-                        :url="url"
-                        :cols="datatableCols.cols"
-                        :colHeaders="datatableCols.colHeaders"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12">
+          <datatable :url="url" :cols="datatableCols.cols" :colHeaders="datatableCols.colHeaders" />
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -37,15 +21,13 @@ export default {
   data() {
     return {
       url: "reports/inventory/ware/all",
-      datatableCols,
+      datatableCols
     };
   },
-  created() {
-  },
+  created() {},
   methods: {},
   watch: {},
-  computed: {
-  }
+  computed: {}
 };
 </script>
 

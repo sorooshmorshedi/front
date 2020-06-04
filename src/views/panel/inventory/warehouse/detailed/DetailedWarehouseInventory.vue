@@ -1,57 +1,27 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <div class="title">کاردکس انبار</div>
+  <v-card>
+    <v-card-title>کاردکس انبار</v-card-title>
 
-          <div class="row inventory">
-            <div class="col-lg-12">
-              <div class="card right">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="form-group col-12 col-lg-6">
-                      <label>کالا</label>
-                      <multiselect
-                        :option-height="104"
-                        dir="rtl"
-                        :options="waresSelectValues.wares"
-                        v-model="ware"
-                        track-by="id"
-                        label="title"
-                      />
-                    </div>
-                    <div class="form-group col-12 col-lg-6">
-                      <label>انبار</label>
-                      <multiselect
-                        :option-height="104"
-                        dir="rtl"
-                        :options="waresSelectValues.warehouses"
-                        v-model="warehouse"
-                        track-by="id"
-                        label="title"
-                      />
-                    </div>
-                    <div class="col-lg-4"></div>
-
-                    <div class="col-lg-12">
-                      <datatable
-                        v-if="this.ware"
-                        :url="url"
-                        :cols="datatableCols.cols"
-                        :defaultFilters="defaultFilters"
-                        hasSum=1
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12" md="8">
+          <ware-select label="کالا" v-model="ware" />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-autocomplete label="انبار" :items="waresSelectValues.warehouses" v-model="warehouse" />
+        </v-col>
+        <v-col cols="12">
+          <datatable
+            v-if="this.ware"
+            :url="url"
+            :cols="datatableCols.cols"
+            :defaultFilters="defaultFilters"
+            hasSum="1"
+          />
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -68,7 +38,7 @@ export default {
       url: "reports/inventory/warehouse",
       datatableCols,
       ware: null,
-      warehouse: null,
+      warehouse: null
     };
   },
   created() {
@@ -90,12 +60,12 @@ export default {
   },
   computed: {
     defaultFilters() {
-      let res = {}
-      if(this.ware) res.ware = this.ware.id
-      else res.ware = null
-      if(this.warehouse) res.warehouse = this.warehouse.id
-      else res.warehouse = null
-      return res
+      let res = {};
+      if (this.ware) res.ware = this.ware.id;
+      else res.ware = null;
+      if (this.warehouse) res.warehouse = this.warehouse.id;
+      else res.warehouse = null;
+      return res;
     }
   }
 };
