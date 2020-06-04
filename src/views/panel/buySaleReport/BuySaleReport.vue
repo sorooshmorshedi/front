@@ -1,42 +1,31 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <div class="title">گزارش {{ layout.title }}</div>
+  <v-card>
+    <v-card-title>گزارش {{ layout.title }}</v-card-title>
 
-          <div class="row">
-            <div class="form-group col-12 col-lg-6">
-              <label>کالا</label>
-              <multiselect
-                :option-height="104"
-                dir="rtl"
-                :allow-empty="false"
-                :options="waresSelectValues.wares"
-                v-model="ware"
-                track-by="id"
-                label="title"
-              />
-            </div>
-            <div class="col-12 col-lg-2 label-margin" v-if="ware && ware.pricingType">
-              نحوه محاسبه:
-              <span>{{ ware.pricingType.name }}</span>
-            </div>
-            <datatable
-              v-if="ware"
-              :cols="options.cols"
-              :url="options.url"
-              :default-filters="defaultFilters"
-              hasSum="1"
-              sumColSpan="7"
-              ref="datatable"
-              class="col-12 mt-4"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12" md="8">
+          <ware-select label="کالا" v-model="ware" />
+        </v-col>
+        <v-col cols="12" md="4" v-if="ware && ware.pricingType">
+          نحوه محاسبه:
+          <span>{{ ware.pricingType.name }}</span>
+        </v-col>
+        <v-col cols="12">
+          <datatable
+            v-if="ware"
+            :cols="options.cols"
+            :url="options.url"
+            :default-filters="defaultFilters"
+            hasSum="1"
+            sumColSpan="7"
+            ref="datatable"
+            class="col-12 mt-4"
+          />
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
