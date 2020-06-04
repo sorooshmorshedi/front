@@ -10,7 +10,8 @@ import {
   VTextField,
   VAutocomplete,
   VBtn,
-  VCard
+  VCard,
+  VSelect,
 } from 'vuetify/lib'
 
 VTextField.options.props.outlined.default = true
@@ -25,6 +26,8 @@ VAutocomplete.options.props.returnObject.default = true
 VBtn.options.props.small.default = true
 
 VCard.options.props.outlined.default = true
+
+VSelect.options.props.outlined.default = true
 
 
 

@@ -5,122 +5,120 @@
     </div>
     <div class="fixed-head">
       <v-simple-table>
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <!-- Filters -->
-            <tr class="d-print-none">
-              <th>
-                <v-btn :small="false" @click="clearFilters()" color="red" icon>
-                  <v-icon>delete_sweep</v-icon>
-                </v-btn>
-                <v-btn v-if="printable" @click="printTable()" class="btn btn-block btn-info">چاپ</v-btn>
-              </th>
-              <th v-for="(col, i) in filterFields" :key="i">
-                <template v-for="(filter, j) in col.filters">
-                  <v-text-field
-                    v-if="col.type == 'number'"
-                    :key="j"
-                    class="form-control text-center"
-                    type="number"
-                    :placeholder="filter.label"
-                    v-model="filters[filter.model]"
-                  />
+        <thead class="grey lighten-3">
+          <!-- Filters -->
+          <tr class="d-print-none">
+            <th>
+              <v-btn :small="false" @click="clearFilters()" color="red" icon>
+                <v-icon>delete_sweep</v-icon>
+              </v-btn>
+              <v-btn v-if="printable" @click="printTable()" class="btn btn-block btn-info">چاپ</v-btn>
+            </th>
+            <th v-for="(col, i) in filterFields" :key="i" class="py-3 px-1">
+              <template v-for="(filter, j) in col.filters">
+                <v-text-field
+                  v-if="col.type == 'number'"
+                  :key="j"
+                  class="form-control text-center"
+                  type="number"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                />
 
-                  <v-text-field
-                    v-if="col.type == 'text'"
-                    :key="j"
-                    class="form-control text-center"
-                    type="text"
-                    :placeholder="filter.label"
-                    v-model="filters[filter.model]"
-                  />
+                <v-text-field
+                  v-if="col.type == 'text'"
+                  :key="j"
+                  class="form-control text-center"
+                  type="text"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                />
 
-                  <select
-                    v-if="col.type == 'select'"
-                    :key="j"
-                    class="custom-select"
-                    v-model="filters[filter.model]"
-                  >
-                    <option selected value>همه</option>
-                    <option
-                      v-for="(o,i) in col.original.options"
-                      :key="i"
-                      :value="o.value"
-                    >{{ o.label }}</option>
-                  </select>
+                <select
+                  v-if="col.type == 'select'"
+                  :key="j"
+                  class="custom-select"
+                  v-model="filters[filter.model]"
+                >
+                  <option selected value>همه</option>
+                  <option
+                    v-for="(o,i) in col.original.options"
+                    :key="i"
+                    :value="o.value"
+                  >{{ o.label }}</option>
+                </select>
 
-                  <date
-                    v-if="col.type == 'date'"
-                    :key="j"
-                    class="form-control text-center"
-                    :placeholder="filter.label"
-                    v-model="filters[filter.model]"
-                  />
+                <date
+                  v-if="col.type == 'date'"
+                  :key="j"
+                  class="form-control text-center"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                />
 
-                  <money
-                    v-if="col.type == 'money'"
-                    :key="j"
-                    class="form-control text-center"
-                    :placeholder="filter.label"
-                    v-model="filters[filter.model]"
-                  />
+                <money
+                  v-if="col.type == 'money'"
+                  :key="j"
+                  class="form-control text-center"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                />
 
-                  <mtime
-                    v-if="col.type == 'time'"
-                    :key="j"
-                    class="form-control text-center"
-                    :placeholder="filter.label"
-                    v-model="filters[filter.model]"
-                  />
-                </template>
-              </th>
-              <!-- <th></th> -->
-            </tr>
-            <!-- Header of headers -->
-            <tr v-if="colHeaders">
-              <th
-                v-for="(header, i) in colHeaders"
-                :key="i"
-                :colspan="header.colspan"
-                class="text-center"
-              >{{ header.title }}</th>
-            </tr>
-            <!-- Headers (th) -->
-            <tr>
-              <th>#</th>
-              <th v-for="(col, i) in notHiddenCols" :key="i" @click="orderBy(col)">
-                <span style="margin-left: 5px;">
-                  <i class="fas" :class="orderClass(col)"></i>
-                </span>
-                {{ col.th }}
-              </th>
-
-              <!-- <th></th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Rows -->
-            <tr
-              v-for="(item, i) in items"
+                <mtime
+                  v-if="col.type == 'time'"
+                  :key="j"
+                  class="form-control text-center"
+                  :placeholder="filter.label"
+                  v-model="filters[filter.model]"
+                />
+              </template>
+            </th>
+            <!-- <th></th> -->
+          </tr>
+          <!-- Header of headers -->
+          <tr v-if="colHeaders">
+            <th
+              v-for="(header, i) in colHeaders"
               :key="i"
-              :class="item.classes"
-              @click="rowClick(item)"
-              @contextmenu="rowContextMenu($event, item)"
-            >
-              <td>{{ offset+i+1 }}</td>
-              <td v-for="(col, j) in notHiddenCols" :key="j">
-                <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
-                <template v-else-if="col.type == 'money' ">
-                  <span dir="ltr">{{ get(item, col.td) | toMoney }}</span>
-                </template>
-                <template v-else>{{ get(item, col.td) }}</template>
-              </td>
-              <td v-if="routerName">
-                <router-link :to="routerParam(item)">مشاهده جزئیات</router-link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              :colspan="header.colspan"
+              class="text-center"
+            >{{ header.title }}</th>
+          </tr>
+          <!-- Headers (th) -->
+          <tr>
+            <th>#</th>
+            <th v-for="(col, i) in notHiddenCols" :key="i" @click="orderBy(col)">
+              <span style="margin-left: 5px;">
+                <i class="fas" :class="orderClass(col)"></i>
+              </span>
+              {{ col.th }}
+            </th>
+
+            <!-- <th></th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows -->
+          <tr
+            v-for="(item, i) in items"
+            :key="i"
+            :class="item.classes"
+            @click="rowClick(item)"
+            @contextmenu="rowContextMenu($event, item)"
+          >
+            <td>{{ offset+i+1 }}</td>
+            <td v-for="(col, j) in notHiddenCols" :key="j">
+              <template v-if="col.type == 'select'">{{ getSelectLabel(item, col)}}</template>
+              <template v-else-if="col.type == 'money' ">
+                <span dir="ltr">{{ get(item, col.td) | toMoney }}</span>
+              </template>
+              <template v-else>{{ get(item, col.td) }}</template>
+            </td>
+            <td v-if="routerName">
+              <router-link :to="routerParam(item)">مشاهده جزئیات</router-link>
+            </td>
+          </tr>
+        </tbody>
       </v-simple-table>
     </div>
     <nav aria-label="Page navigation rtl " style="display:none">

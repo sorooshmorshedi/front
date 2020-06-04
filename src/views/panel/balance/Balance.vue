@@ -1,125 +1,79 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <div class="title">{{ title }}</div>
-          <div class="row">
-            <div class="col-lg-3">
-              <div class="card right">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="form-group col-12">
-                      <label>تعداد ستون ها</label>
-                      <select class="custom-select" v-model="colsCount">
-                        <option selected value="2">2</option>
-                        <option value="4">4</option>
-                      </select>
-                    </div>
+  <v-card>
+    <v-card-title>{{ title }}</v-card-title>
 
-                    <template v-if="showAccountFilters">
-                      <div class="form-group col-12">
-                        <label>سطح حساب</label>
-                        <select class="custom-select" v-model="accountFilters.level">
-                          <option selected value="all">همه</option>
-                          <option value="0">گروه</option>
-                          <option value="1">کل</option>
-                          <option value="2">معین</option>
-                          <option value="3">تفضیلی</option>
-                        </select>
-                      </div>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-row>
+            <v-col cols="12" md="4">
+              <v-select label="تعداد ستون ها" v-model="colsCount" :items="[2, 4]"></v-select>
+            </v-col>
 
-                      <div class="form-group col-12">
-                        <label>حساب های خاص</label>
-                        <select class="custom-select" v-model="accountFilters.special">
-                          <option selected value="all">همه</option>
-                          <option value="bank">بانک</option>
-                          <option value="buyer">خریدار</option>
-                          <option value="seller">فروشنده</option>
-                        </select>
-                      </div>
+            <template v-if="showAccountFilters">
+              <v-col cols="12" md="4">
+                <v-select
+                  label="سطح حساب"
+                  v-model="accountFilters.level"
+                  item-text="text"
+                  item-value="value"
+                  :items="accountLevels"
+                  :return-object="false"
+                />
+              </v-col>
 
-                      <div class="form-group col-12">
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input
-                              type="checkbox"
-                              class="form-check-input"
-                              v-model="accountFilters.showFloatAccounts"
-                            >
-                            نمایش حساب های تفضیلی شناور
-                          </label>
-                        </div>
-                      </div>
+              <v-col cols="12" md="4">
+                <v-select
+                  label="حساب های خاص"
+                  v-model="accountFilters.special"
+                  :items="specialAccounts"
+                  item-text="text"
+                  item-value="value"
+                  :return-object="false"
+                />
+              </v-col>
+            </template>
+            <v-col v-else cols="0" md="4"></v-col>
 
-                      <div class="form-group col-12">
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input
-                              type="checkbox"
-                              class="form-check-input"
-                              v-model="accountFilters.showCostCenters"
-                            >
-                            نمایش مرکز هزینه
-                          </label>
-                        </div>
-                      </div>
-                    </template>
+            <v-col cols="12" md="6">
+              <date label="از تاریخ" v-model="sanadFilters.from_date" />
+            </v-col>
+            <v-col cols="12" md="6">
+              <date label="تا تاریخ" v-model="sanadFilters.to_date" />
+            </v-col>
 
-                    <div class="form-group col-12">
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input
-                            type="checkbox"
-                            class="form-check-input"
-                            v-model="accountFilters.showDifferences"
-                          >
-                          نمایش مغایرت حساب ها
-                        </label>
-                      </div>
-                    </div>
+            <v-col cols="12" md="6">
+              <v-text-field label="از شماره سند" type="number" v-model="sanadFilters.from_code" />
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field label="تا شماره سند" type="number" v-model="sanadFilters.to_code" />
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-col cols="12">
+            <v-switch label="نمایش مغایرت حساب ها" v-model="accountFilters.showDifferences" />
+          </v-col>
+          <template v-if="showAccountFilters">
+            <v-col cols="12">
+              <v-switch
+                label="نمایش حساب های تفضیلی شناور"
+                v-model="accountFilters.showFloatAccounts"
+              />
+            </v-col>
 
-                    <div class="form-group col-6">
-                      <label>از تاریخ</label>
-                      <date class="form-control" v-model="sanadFilters.from_date"/>
-                    </div>
-                    <div class="form-group col-6">
-                      <label>تا تاریخ</label>
-                      <date class="form-control" v-model="sanadFilters.to_date"/>
-                    </div>
+            <v-col cols="12">
+              <v-switch label="نمایش مرکز هزینه" v-model="accountFilters.showCostCenters" />
+            </v-col>
+          </template>
+        </v-col>
 
-                    <div class="form-group col-6">
-                      <label>از شماره سند</label>
-                      <input type="number" class="form-control" v-model="sanadFilters.from_code">
-                    </div>
-                    <div class="form-group col-6">
-                      <label>تا شماره سند</label>
-                      <input type="number" class="form-control" v-model="sanadFilters.to_code">
-                    </div>
-
-                    <div class="form-group col-12">
-                      <label>وضعیت حساب ها</label>
-                      <select class="custom-select" v-model="accountFilters.status">
-                        <option selected value="all">همه</option>
-                        <option value="withRemain">حساب های دارای مانده</option>
-                        <option value="bedRemain">مانده بدهکار</option>
-                        <option value="besRemain">مانده بستانکار</option>
-                        <option value="withoutRemain">بدون مانده</option>
-                        <option value="withTransaction">حساب های دارای گردش</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-9">
-              <datatable :cols="datatableCols" :data="accounts" :hidden-cols="hiddenCols"/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        <v-col cols="12">
+          <datatable :cols="datatableCols" :data="accounts" :hidden-cols="hiddenCols" />
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -154,7 +108,29 @@ export default {
       debouncedGetData: null,
       debouncedFilterAccounts: null,
 
-      colsCount: 2
+      colsCount: 2,
+
+      accountLevels: [
+        { value: "all", text: "همه" },
+        { value: 0, text: "گروه" },
+        { value: 1, text: "کل" },
+        { value: 2, text: "معین" },
+        { value: 3, text: "تفضیلی" }
+      ],
+      specialAccounts: [
+        { value: "all", text: "همه" },
+        { value: "bank", text: "بانک" },
+        { value: "buyer", text: "خریدار" },
+        { value: "seller", text: "فروشنده" }
+      ],
+      accountStatuses: [
+        { value: "all", text: "همه" },
+        { value: "withRemain", text: "حساب های دارای مانده" },
+        { value: "bedRemain", text: "مانده بدهکار" },
+        { value: "besRemain", text: "مانده بستانکار" },
+        { value: "withoutRemain", text: "بدون مانده" },
+        { value: "withTransaction", text: "حساب های دارای گردش" }
+      ]
     };
   },
   computed: {
