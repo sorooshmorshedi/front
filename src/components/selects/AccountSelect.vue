@@ -1,5 +1,5 @@
 <template>
-  <div class="" style="min-width: 200px">
+  <div class style="min-width: 200px">
     <v-autocomplete
       :items="items"
       v-model="item"
@@ -9,7 +9,7 @@
       :multiple="multiple"
       :placeholder="placeholder"
     ></v-autocomplete>
-    <template v-if="itemsType == 'level3' && item">
+    <template v-if=" itemsType == 'level3' && item && deppSelect">
       <account-select
         class="mt-1"
         v-if="item.floatAccountGroup"
@@ -79,6 +79,9 @@ export default {
     },
     childOf: {
       default: null
+    },
+    deepSelect: {
+      default: true
     }
   },
   data() {
@@ -193,7 +196,8 @@ export default {
     item() {
       this.$emit("input", this.item);
       if (this.item) {
-        if (!this.item.floatAccountGroup) this.$emit("update:floatAccount", null);
+        if (!this.item.floatAccountGroup)
+          this.$emit("update:floatAccount", null);
         if (!this.item.costCenterGroup) this.$emit("update:costCenter", null);
       }
     },

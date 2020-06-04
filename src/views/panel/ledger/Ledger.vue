@@ -1,65 +1,68 @@
 <template>
-  <div class="row rtl">
-    <div class="col-12">
-      <div class="card right">
-        <div class="card-body">
-          <div class="title">دفتر کل، معین، تفضیلی
-            <!-- <router-link :to="{name:'LedgerReport', query:{accs:[1,5]}}">asoidfj</router-link> -->
-          </div>
-          <transition-group name="list">
-            <div class="row ledger" v-for="(ledger, i) in ledgers" :key="ledger.id">
-              <div class="col-lg-12">
-                <div class="card right">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="form-group col-lg-2">
-                        <label>سطح حساب</label>
-                        <select class="custom-select" v-model="ledger.level">
-                          <option value="0">گروه</option>
-                          <option value="1">کل</option>
-                          <option value="2">معین</option>
-                          <option value="3">تفضیلی</option>
-                        </select>
-                      </div>
-                      <div class="col-lg-4">
-                        <label>حساب</label>
-                        <multiselect
-                          :disabled="ledger.level == undefined"
-                          dir="rtl"
-                          :options="ledger.level == undefined?[]:accountsSelectValues.levels[ledger.level]"
-                          v-model="ledger.account"
-                          track-by="id"
-                          label="title"
-                        />
-                      </div>
-                      <div class="col-lg-4"></div>
-                      <div class="col-lg-2" v-if="i != ledgers.length-1">
-                        <label class="text-center d-block">بستن گزارش این حساب</label>
-                        <button
-                          @click="deleteLedger(ledger)"
-                          type="button"
-                          class="btn btn-warning btn-block"
-                        >بستن</button>
-                      </div>
+  <v-row>
+    <v-col cols="12">
+      <v-card>
+        <v-card-title>دفتر کل، معین، تفضیلی</v-card-title>
+      </v-card>
+    </v-col>
+    <v-col cols="12" class="ledger" v-for="(ledger, i) in ledgers" :key="ledger.id">
+      <v-card>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12" md="4">
+              <v-select
+                v-model="ledger.level"
+                label="سطح حساب"
+                :items="accountLevels"
+                item-text="text"
+                item-value="value"
+                :return-object="false"
+              />
+            </v-col>
+            <v-col cols="12" md="6">
+              <account-select
+                label="حساب"
+                v-if="ledger.level"
+                :deep-select="false"
+                :items-type="'level' + ledger.level"
+                v-model="ledger.account"
+              />
+            </v-col>
+            <v-col cols="12" md="2" v-if="i != ledgers.length-1" class="text-left">
+              <v-btn
+                label="بستن گزارش این حساب"
+                @click="deleteLedger(ledger)"
+                icon
+                class="red--text"
+              >
+              <v-icon>fa-times</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col cols="12">
+              <div class="card right">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="form-group col-lg-2"></div>
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-4"></div>
 
-                      <div class="col-lg-12">
-                        <datatable
-                          v-if="ledger.account"
-                          :cols="datatableCols.cols"
-                          :url="datatableCols.url"
-                          :default-filters="{ account__code__startswith:ledger.account.code }"
-                        />
-                      </div>
+                    <div class="col-lg-12">
+                      <datatable
+                        v-if="ledger.account"
+                        :cols="datatableCols.cols"
+                        :url="datatableCols.url"
+                        :default-filters="{ account__code__startswith:ledger.account.code }"
+                      />
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </transition-group>
-        </div>
-      </div>
-    </div>
-  </div>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -75,7 +78,13 @@ export default {
   data() {
     return {
       datatableCols,
-      ledgers: []
+      ledgers: [],
+      accountLevels: [
+        { value: 0, text: "گروه" },
+        { value: 1, text: "کل" },
+        { value: 2, text: "معین" },
+        { value: 3, text: "تفضیلی" }
+      ]
     };
   },
   created() {
