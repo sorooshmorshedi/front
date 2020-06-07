@@ -12,22 +12,31 @@
       ref="listModelForm"
     >
       <template #default>
-        <div class="row">
-          <div class="form-group col-12">
-            <v-text-field label="نام" v-model="item.first_name" />
-          </div>
-          <div class="form-group col-12">
-            <v-text-field label="نام خانوادگی" v-model="item.last_name" />
-          </div>
-          <div class="form-group col-12">
-            <label></label>
-            <v-text-field label="نام کاربری" v-model="item.username" />
-          </div>
-          <div class="form-group col-12" v-if="!item.id">
-            <v-text-field label="کلمه عبور" v-model="item.password" />
-          </div>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field label="نام" v-model="item.first_name" required />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field label="نام خانوادگی" v-model="item.last_name" required />
+          </v-col>
 
-          <div class="form-group col-12">
+          <v-col cols="12" md="6">
+            <v-text-field
+              class="ltr"
+              type="number"
+              label="شماره موبایل"
+              v-model="item.phone"
+              required
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <label></label>
+            <v-text-field label="نام کاربری" v-model="item.username" required />
+          </v-col>
+          <v-col cols="12" md="12" v-if="!item.id">
+            <v-text-field label="کلمه عبور" v-model="item.password" required />
+          </v-col>
+          <v-col cols="12">
             <v-autocomplete
               label="نقش ها"
               :items="roles"
@@ -35,8 +44,11 @@
               item-text="name"
               multiple
             ></v-autocomplete>
-          </div>
-        </div>
+          </v-col>
+          <v-col cols="12">
+            <v-switch label="فعال" v-model="item.is_active"></v-switch>
+          </v-col>
+        </v-row>
       </template>
       <template #actions>
         <v-btn
@@ -55,7 +67,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="changePassword"  class="w-100px green white--text">ثبت</v-btn>
+          <v-btn @click="changePassword" class="w-100px green white--text">ثبت</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -76,7 +88,8 @@ export default {
       newPassword: "",
       showChangePasswordDialog: false,
       itemTemplate: {
-        roles: []
+        roles: [],
+        is_active: true
       },
       cols: [
         {
