@@ -57,7 +57,7 @@ export default {
     },
     init() {
       if (this.wareId) {
-        this.ware = this.waresSelectValues.wares.filter(
+        this.ware = this.wares.filter(
           o => o.id == this.wareId
         )[0];
       }

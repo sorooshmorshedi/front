@@ -59,7 +59,7 @@
                 <td>
                   <v-autocomplete
                     v-if="rows[i].ware"
-                    :items="waresSelectValues.warehouses"
+                    :items="warehouses"
                     v-model="rows[i].output_warehouse"
                     item-text="name"
                     :disabled="!editable"
@@ -73,7 +73,7 @@
                 <td>
                   <v-autocomplete
                     v-if="rows[i].ware"
-                    :items="waresSelectValues.warehouses"
+                    :items="warehouses"
                     v-model="rows[i].input_warehouse"
                     item-text="name"
                     :disabled="!editable"

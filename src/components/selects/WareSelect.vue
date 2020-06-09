@@ -5,7 +5,7 @@
     </v-btn>
     <v-autocomplete
       :label="label"
-      :items="waresSelectValues.wares"
+      :items="wares"
       v-model="ware"
       item-text="name"
       :disabled="disabled"

@@ -8,7 +8,7 @@
           <ware-select label="کالا" v-model="ware" />
         </v-col>
         <v-col cols="12" md="4">
-          <v-autocomplete label="انبار" :items="waresSelectValues.warehouses" v-model="warehouse" />
+          <v-autocomplete label="انبار" :items="warehouses" v-model="warehouse" />
         </v-col>
         <v-col cols="12">
           <datatable
@@ -52,7 +52,7 @@ export default {
     },
     init() {
       if (this.wareId) {
-        this.ware = this.waresSelectValues.wares.filter(
+        this.ware = this.wares.filter(
           o => o.id == this.wareId
         )[0];
       }

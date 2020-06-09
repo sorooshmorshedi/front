@@ -73,7 +73,7 @@
                 v-if="rows[i].ware && !rows[i].ware.isService"
                 v-model="rows[i].warehouse"
                 :disabled="!editable"
-                :items="waresSelectValues.warehouses"
+                :items="warehouses"
                 item-text="name"
                 style="width: 150px;"
               ></v-autocomplete>

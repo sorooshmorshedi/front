@@ -30,7 +30,6 @@
               v-model="item.parent"
               item-text="name"
             ></v-autocomplete>
-            
           </v-col>
         </template>
         <v-col cols="12">
@@ -50,6 +49,11 @@ import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
 
 export default {
   mixins: [ListModalFormMixin, WareApiMixin],
+  props: {
+    level: {
+      required: true
+    }
+  },
   data() {
     return {
       item: {},
@@ -94,8 +98,8 @@ export default {
     hasParent() {
       return this.level != 0;
     },
-    parentItems(){
-      return this.wareLevels.filter(o => o.level == this.level-1)
+    parentItems() {
+      return this.wareLevels.filter(o => o.level == this.level - 1);
     },
     items() {
       return this.wareLevels.filter(o => o.level == this.level);
@@ -105,7 +109,7 @@ export default {
     getData() {
       this.getWareLevels(true);
     },
-    getWareLevelTitle(level){
+    getWareLevelTitle(level) {
       switch (Number(level)) {
         case 0:
           return "ماهیت";
@@ -114,19 +118,18 @@ export default {
         case 2:
           return "دسته بندی";
       }
-
     },
     getWareLevels(force = false) {
       if (!force && this.wareLevels.length) return;
       return this.request({
-        url: this.endpoint('wares/wareLevels'),
-        method: 'get',
+        url: this.endpoint("wares/wareLevels"),
+        method: "get",
         success: data => {
-          this.$store.commit('setWares', {
+          this.$store.commit("setWares", {
             wareLevels: data
           });
         }
-      })
+      });
     },
     setItem(item) {
       if (typeof item.parent == typeof 72) {

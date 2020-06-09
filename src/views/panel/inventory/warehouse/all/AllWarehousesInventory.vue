@@ -5,7 +5,7 @@
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <v-autocomplete label="انبار" :items="waresSelectValues.warehouses" v-model="warehouse" />
+          <v-autocomplete label="انبار" :items="warehouses" v-model="warehouse" />
         </v-col>
         <v-col cols="12">
           <datatable :url="url" :cols="datatableCols.cols" :defaultFilters="defaultFilters" />
@@ -42,7 +42,7 @@ export default {
     },
     init() {
       if (this.warehouseId) {
-        this.warehouse = this.waresSelectValues.warehouses.filter(
+        this.warehouse = this.warehouses.filter(
           o => o.id == this.warehouseId
         )[0];
       }
