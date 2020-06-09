@@ -46,6 +46,7 @@ export default {
             else if (statusCode == 403) this.handle_403(error);
             else if (statusCode == 400) this.handle_400(error);
             else if (statusCode == 406) this.handle_406(error, options);
+            else if (statusCode == 429) this.handle_429(error, options);
             options.error && options.error(error);
           } else {
             this.handle_noResponse(error, options);
@@ -90,11 +91,13 @@ export default {
       }
       this.request(options);
     },
+    handle_429(error, options) {
+      this.notify('تعداد درخواست های شما بیش از حد مجاز است', 'danger');
+    },
     handle_noResponse(error, options) {
       console.warn('NO RESPONSE FROM SERVER: ', options.url);
       this.notify('خطا در برقراری ارتباط با سرور', 'danger');
       return;
-
     }
 
   }

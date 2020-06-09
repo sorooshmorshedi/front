@@ -34,7 +34,7 @@ Vue.mixin({
   created() {
 
     this.token = localStorage.getItem('token');
-    if (!this.token) {
+    if (!this.token && this.$route && !['Login', 'ForgetPassword'].includes(this.$route.name)) {
       this.$router.push({
         name: 'Login'
       });

@@ -5,6 +5,7 @@ import VueRouter, { RouterOptions } from 'vue-router'
 import PanelRoutes from './__Panel';
 import ReportsRoutes from './__Reports';
 import Login from '@/views/auth/Login.vue'
+import ForgetPassword from '@/views/auth/ForgetPassword.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,11 @@ const routes = [
     name: 'Login',
     component: Login,
     props: true,
+  },
+  {
+    path: '/forgetPassword',
+    name: 'ForgetPassword',
+    component: ForgetPassword
   },
   ...PanelRoutes,
   ...ReportsRoutes

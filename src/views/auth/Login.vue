@@ -32,9 +32,9 @@
         </v-card-text>
 
         <v-card-actions class="pb-3 flex-column flex-md-row">
-          <v-btn @click="login()" class="blue white--text mr-2 w-100px">ورود</v-btn>
+          <v-btn text :to="{name: 'ForgetPassword'}">رمز عبور خود را فراموش کرده اید؟</v-btn>
           <v-spacer></v-spacer>
-          <v-btn text @click="login()" color="grey darken-3">رمز عبور خود را فراموش کرده اید؟</v-btn>
+          <v-btn @click="login()" class="blue white--text mr-2 w-100px">ورود</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
