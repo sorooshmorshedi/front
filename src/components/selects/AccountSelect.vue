@@ -9,7 +9,7 @@
       :multiple="multiple"
       :placeholder="placeholder"
     ></v-autocomplete>
-    <template v-if=" itemsType == 'level3' && item && deppSelect">
+    <template v-if=" itemsType == 'level3' && item && deepSelect">
       <account-select
         class="mt-1"
         v-if="item.floatAccountGroup"

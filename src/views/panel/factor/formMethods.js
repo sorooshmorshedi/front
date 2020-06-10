@@ -28,6 +28,176 @@ export default {
       this.setFactorLabel(this.factorType);
       this.getData();
     },
+
+    getFactor(factorId) {
+      this.log('Get Factor By Id : ' + factorId);
+      return this.request({
+        url: this.endpoint('factors/factors/' + factorId + '/'),
+        method: 'get',
+        success: data => {
+          this.selectFactor(data);
+        }
+      })
+    },
+    getFactorByPosition(pos) {
+      this.log('Get Factor By Position : ', pos);
+      return this.request({
+        url: this.endpoint('factors/getFactorByPosition'),
+        method: 'get',
+        params: {
+          type: this.factorType,
+          id: this.factor.id,
+          position: pos
+        },
+        success: data => {
+          this.selectFactor(data, true)
+        },
+        error: error => {
+          if (error.response.status == 404) {
+            this.notify('فاکتور وجود ندارد', 'warning')
+          }
+        }
+      })
+    },
+    clearFactor(redirect = false) {
+      if (redirect) {
+        this.$router.push({
+          name: "FactorForm",
+          params: {
+            factorType: this.factorType,
+          }
+        });
+      }
+      this.factor = {
+        taxPercent: "",
+        taxValue: "",
+        discountPercent: "",
+        discountValue: "",
+        expenses: []
+      }
+      this.rows = [this.copy(this.rowTemplate)];
+    },
+    getFactorCodes() {
+      this.request({
+        url: this.endpoint("factors/factors/newCodes"),
+        method: "get",
+        success: data => {
+          this.factorCodes = data;
+        }
+      });
+    },
+    openTransaction(transaction) {
+      let routeData = this.$router.resolve({
+        name: "TransactionForm",
+        params: {
+          transactionType: transaction.type,
+          id: transaction.id
+        }
+      });
+      window.open(routeData.href, "_blank");
+    },
+    reverseType(factorType) {
+      let factorReverseTypes = {
+        sale: "backFromSale",
+        buy: "backFromBuy"
+      }
+      return factorReverseTypes[factorType]
+    },
+    getFactorPayload() {
+      let factor = this.copy(this.factor);
+      factor = this.extractIds(factor);
+
+      let items = [];
+      this.rows.forEach((row, i) => {
+        if (i == this.rows.length - 1) return;
+        let item = this.copy(row);
+        item = this.extractIds(item);
+        ["discountPercent", "discountValue"].forEach(
+          k => {
+            if (item[k] == "") item[k] = 0;
+          }
+        );
+        items.push(item);
+      });
+
+
+      let expenses = [];
+      this.factor.expenses.forEach((row, i) => {
+        // Should I put this?
+        // if (i == this.rows.length - 1) return;
+        let item = this.copy(row);
+        item = this.extractIds(item);
+        expenses.push(item)
+      });
+
+      return {
+        factor: factor,
+        factor_items: {
+          items: items,
+          ids_to_delete: this.itemsToDelete
+        },
+        factor_expenses: {
+          items: expenses,
+          ids_to_delete: this.expensesToDelete
+        }
+      }
+    },
+    storeFactor(clearFactor) {
+      let data = this.getFactorPayload()
+      this.request({
+        url: this.endpoint('factors/factors/'),
+        method: 'post',
+        data: data,
+        success: data => {
+          this.successNotify();
+          if (clearFactor) {
+            this.clearFactor(true);
+          } else {
+            this.selectFactor(data, true);
+          }
+        }
+      })
+    },
+    updateFactor(clearFactor) {
+      let data = this.getFactorPayload()
+      this.request({
+        url: this.endpoint('factors/factors/' + this.factor.id + '/'),
+        method: 'put',
+        data: data,
+        success: data => {
+          this.successNotify();
+          if (clearFactor) {
+            this.clearFactor(true);
+          } else {
+            this.selectFactor(data, true);
+          }
+        }
+      })
+
+    },
+    definiteFactor(clearFactor) {
+      this.request({
+        url: this.endpoint('factors/factors/definite/' + this.factor.id),
+        method: 'post',
+        success: data => {
+          this.selectFactor(data, true);
+          this.successNotify();
+        }
+      })
+
+    },
+    deleteFactor() {
+      let data = this.copy(this.factor);
+      this.request({
+        url: this.endpoint('factors/factors/' + data.id + '/'),
+        method: 'delete',
+        success: data => {
+          this.successNotify()
+          this.clearFactor(true);
+        }
+      })
+
+    },
     setDefaultValues() {
       let items = this.rows.filter(o => o.ware);
       items.forEach(item => {

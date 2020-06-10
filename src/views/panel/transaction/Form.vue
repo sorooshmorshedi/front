@@ -125,6 +125,10 @@
                         items-type="level3"
                         v-model="rows[i].type.account"
                         :disabled="true"
+                        :floatAccount="rows[i].floatAccount"
+                        @update:floatAccount="v => rows[i].floatAccount = v"
+                        :costCenter="rows[i].costCenter"
+                        @update:costCenter="v => rows[i].costCenter = v"
                       />
                     </td>
                     <td>
@@ -298,7 +302,6 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
-import sanadApiMixin from "@/mixin/sanadApi";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
@@ -309,10 +312,12 @@ import ChequeForm from "../cheque/ChequeForm.vue";
 export default {
   name: "Form",
   components: { ChequeForm, money, date },
-  mixins: [formsMixin, accountApiMixin, sanadApiMixin],
+  mixins: [formsMixin, accountApiMixin],
   props: ["transactionType", "id", "accountId", "factorId"],
   data() {
     return {
+      receiveCode: null,
+      paymentCode: null,
       factorsDialog: false,
       submitChequeDialog: false,
       transaction: {},
@@ -371,9 +376,6 @@ export default {
     transactionCode() {
       if (this.type.name == "receive") return this.receiveCode;
       else return this.paymentCode;
-    },
-    transactionsList() {
-      return this.transactions.filter(o => o.type == this.type.name);
     },
     transactionAccounts() {
       return this.accountsSelectValues.levels[3];
@@ -443,6 +445,16 @@ export default {
         console.error("404");
       }
       this.getData();
+    },
+    getTransactionCodes() {
+      this.request({
+        url: this.endpoint("transactions/newCodes"),
+        method: "get",
+        success: data => {
+          this.receiveCode = data["receive"];
+          this.paymentCode = data["payment"];
+        }
+      });
     },
     validatePaidValue(factor) {
       let paymentValue = +factor.payment.value;

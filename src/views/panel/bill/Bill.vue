@@ -6,7 +6,7 @@
         <v-col cols="12">
           <account-select
             label="حساب"
-            :depp-select="false"
+            :deep-select="false"
             items-type="level3"
             v-model="account"
             @input="getBill"

@@ -94,8 +94,6 @@
                 <th>#</th>
                 <th class="required">شماره - نام حساب</th>
                 <th>توضیحات ردیف</th>
-                <th class="required">تفضیلی شناور</th>
-                <th>مرکز هزینه</th>
                 <th>بدهکار</th>
                 <th class="d-print-none">
                   <a @click.prevent="exchangeValue()" href>
@@ -109,17 +107,15 @@
               <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                 <td>{{ i+1 }}</td>
                 <td v-tooltip="accountParentsName(row.account).join(' > ')">
-                  <v-autocomplete
-                    :items="accountsSelectValues.levels[3]"
+                  <account-select
+                    items-type="level3"
                     v-model="rows[i].account"
-                    :title="rows[i].account"
                     :disabled="!editable"
-                    height="40"
-                  >
-                    <template v-slot:selection="slotProps">
-                      <span>{{ slotProps.item.title }}</span>
-                    </template>
-                  </v-autocomplete>
+                    :floatAccount="sanad.floatAccount"
+                    @update:floatAccount="v => sanad.floatAccount = v"
+                    :costCenter="sanad.costCenter"
+                    @update:costCenter="v => sanad.costCenter = v"
+                  />
                 </td>
                 <td>
                   <v-textarea
@@ -129,30 +125,6 @@
                     rows="1"
                     auto-grow
                   ></v-textarea>
-                </td>
-                <td
-                  v-tooltip="getFloatAccounts(rows[i]).length?row.account.floatAccountGroup.name:''"
-                >
-                  <v-autocomplete
-                    v-if="getFloatAccounts(rows[i]).length"
-                    :items="getFloatAccounts(rows[i])"
-                    v-model="rows[i].floatAccount"
-                    item-text="name"
-                    :disabled="!editable"
-                    height="40"
-                  ></v-autocomplete>
-                  <span v-else>-</span>
-                </td>
-                <td v-tooltip="getCostCenters(rows[i]).length?row.account.costCenterGroup.name:''">
-                  <v-autocomplete
-                    v-if="getCostCenters(rows[i]).length"
-                    :items="getCostCenters(rows[i])"
-                    v-model="rows[i].costCenter"
-                    item-text="name"
-                    :disabled="!editable"
-                    height="40"
-                  ></v-autocomplete>
-                  <span v-else>-</span>
                 </td>
                 <td style="width: 150px">
                   <money
@@ -212,7 +184,6 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
-import sanadApiMixin from "@/mixin/sanadApi";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
@@ -222,10 +193,11 @@ import DailyForm from "@/components/form/DailyForm";
 export default {
   name: "Form",
   components: { money, date, DailyForm },
-  mixins: [formsMixin, accountApiMixin, sanadApiMixin],
+  mixins: [formsMixin, accountApiMixin ],
   props: ["id"],
   data() {
     return {
+      sanadCode: null,
       sanad: {
         type: "temporary"
       },
@@ -300,6 +272,52 @@ export default {
       this.getSanadCode();
 
       if (this.id) this.getSanad(this.id);
+    },
+
+    getSanad(sanadId) {
+      return this.request({
+        url: this.endpoint("sanads/" + sanadId),
+        method: "get",
+        success: data => {
+          this.selectSanad(data);
+        }
+      });
+    },
+    getSanadByCode(code) {
+      this.log("Get sanad by code: ", code);
+      return this.request({
+        url: this.endpoint("sanads/getSanadByCode"),
+        method: "get",
+        params: {
+          code
+        },
+        success: data => {
+          this.selectSanad(data);
+        }
+      });
+    },
+    clearSanad() {
+      this.$router.push({
+        name: "SanadForm"
+      });
+      this.sanad = {
+        type: "temporary"
+      };
+      this.rows = [
+        {
+          bed: "",
+          bes: ""
+        }
+      ];
+    },
+    getSanadCode() {
+      return this.request({
+        url: this.endpoint("sanads/newCode"),
+        method: "get",
+        success: data => {
+          this.sanadCode = data;
+        }
+      });
     },
     canSubmit() {
       if (!this.sanad.createType) return true;

@@ -36,10 +36,10 @@
 <script>
 import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
-import FactorApiMixin from "@/mixin/factorApi";
+import GetFactorExpenseApi from "./getFactorExpensesApi";
 
 export default {
-  mixins: [ListModalFormMixin, FactorApiMixin],
+  mixins: [ListModalFormMixin, GetFactorExpenseApi],
   props: {
     factorType: {
       requried: true

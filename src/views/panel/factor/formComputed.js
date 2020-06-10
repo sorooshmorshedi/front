@@ -1,5 +1,10 @@
 export default {
   computed: {
+    factorCode() {
+      let code = this.factorCodes[this.factorType];
+      if (code) return code;
+      else return {}
+    },
     paymentsSum() {
       let sum = 0;
       if (this.factor.payments) {

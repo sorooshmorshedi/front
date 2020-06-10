@@ -397,11 +397,7 @@
                   <tr v-for="(e,i) in factorExpensesCopy" :key="i">
                     <td>{{ i+1 }}</td>
                     <td>
-                      <v-autocomplete
-                        :items="factorsSelectValues.factorExpenses"
-                        v-model="e.expense"
-                        item-text="name"
-                      ></v-autocomplete>
+                      <v-autocomplete :items="factorExpenses" v-model="e.expense" item-text="name"></v-autocomplete>
                     </td>
                     <td>
                       <money v-model="e.value" />
@@ -583,7 +579,7 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
-import factorApiMixin from "@/mixin/factorApi";
+import getFactorExpensesApi from "./getFactorExpensesApi";
 import wareApiMixin from "@/mixin/wareApi";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
@@ -613,12 +609,18 @@ export default {
     formsMixin,
     accountApiMixin,
     wareApiMixin,
-    factorApiMixin,
+    getFactorExpensesApi,
     formComputed,
     formMethods
   ],
   data() {
     return {
+      factorCodes: {
+        buy: null,
+        backFromBuy: null,
+        sale: null,
+        backFromSale: null
+      },
       transactionsDialog: false,
       exportsDialog: false,
       factorExpensesDialog: false,

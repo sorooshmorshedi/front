@@ -57,7 +57,6 @@
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
 import getChequeApiMixin from "./getChequeApi.js";
-import sanadApiMixin from "@/mixin/sanadApi";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 export default {
@@ -68,7 +67,7 @@ export default {
     }
   },
   components: { money, date },
-  mixins: [accountApiMixin, getChequeApiMixin, sanadApiMixin],
+  mixins: [accountApiMixin, getChequeApiMixin],
   data() {
     return {
       dialog: false,
