@@ -4,10 +4,10 @@
     :items="items"
     :cols="cols"
     :deletable="item.id"
+    :clearable="clearable"
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
-    @delete="deleteItem"
     ref="listModelForm"
     :showList="usage != 'tree'"
   >
@@ -16,12 +16,18 @@
         <v-btn class="blue white--text mr-1" @click="openLedger(item)">دفتر این حساب</v-btn>
       </template>
 
-      <template v-for="i in 4">
+      <template v-for="i in 4" v-if="!isBank && !isPerson">
         <v-btn
           :key="i"
           v-if="i-1 != level"
           class="blue white--text mr-1"
           :to="`/panel/accounts/${i-1}`"
+        >تعریف {{ getTitle(i-1) }}</v-btn>
+        <v-btn
+          :key="i"
+          v-else
+          class="blue white--text mr-1"
+          @click="clearForm"
         >تعریف {{ getTitle(i-1) }}</v-btn>
       </template>
     </template>
@@ -38,7 +44,7 @@
           </v-col>
         </template>
         <v-col cols="12">
-          <v-text-field label="کد" v-model="item.code" disabled />
+          <v-text-field v-if="item.id" label="کد" v-model="item.code" />
         </v-col>
         <v-col cols="12">
           <v-text-field label="نام" required v-model="item.name" />
@@ -63,7 +69,7 @@
         </v-col>
 
         <template v-if="hasDetail">
-          <v-col cols="12">
+          <v-col cols="12" md="6">
             <account-select
               label="گروه حساب تفضیلی شناور"
               itemsType="floatAccountGroups"
@@ -71,7 +77,7 @@
               item-text="name"
             />
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" md="6">
             <template v-if="hasCostCenter">
               <account-select
                 label="گروه مرکز هزینه"
@@ -81,14 +87,14 @@
               />
             </template>
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" md="6">
             <money label="سقف بدهکاری" class="form-control" v-model="item.max_bed" />
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" md="6">
             <money label="سقف بستانکاری" class="form-control" v-model="item.max_bes" />
           </v-col>
           <v-col cols="12">
-            <v-textarea label="توضیحات" rows="3" v-model="item.explanation" />
+            <v-textarea rows="2" label="توضیحات" v-model="item.explanation" />
           </v-col>
         </template>
 
@@ -171,10 +177,10 @@
             <v-text-field label="کد پستی" v-model="item.postal_code" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-textarea label="آدرس 1" v-model="item.address_1" />
+            <v-textarea rows="2" label="آدرس 1" v-model="item.address_1" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-textarea label="آدرس 2" v-model="item.address_2" />
+            <v-textarea rows="2" label="آدرس 2" v-model="item.address_2" />
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field label="شماره حساب 1" v-model="item.account_number_1" />
@@ -287,6 +293,9 @@ export default {
     },
     parentItems() {
       return this.accountsSelectValues.levels[this.level - 1];
+    },
+    clearable(){
+      return this.isPerson || this.isBank;
     }
   },
   methods: {
