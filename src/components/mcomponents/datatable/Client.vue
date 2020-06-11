@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div >
     <div class="d-none">
       <v-btn @click="download()" class="btn btn-block btn-info">دانلود اکسل</v-btn>
     </div>
     <div class="fixed-head">
-      <v-simple-table>
+      <v-simple-table height="77vh">
         <thead class="grey lighten-3">
           <!-- Filters -->
           <tr class="d-print-none">
