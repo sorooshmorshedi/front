@@ -230,3 +230,11 @@ a {
   margin-top: 0px !important;
 
 }
+
+.v-text-field input {
+  font-size: 15px !important;
+  padding: 4px 0px;
+}
+.v-application--is-rtl .v-list-item__action:first-child, .v-application--is-rtl .v-list-item__icon:first-child {
+  margin-left: 16px;
+}
