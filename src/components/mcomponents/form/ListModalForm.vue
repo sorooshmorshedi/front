@@ -1,11 +1,11 @@
 <template>
-  <v-row >
+  <v-row>
     <v-col cols="12" :md="showList?6:12">
       <v-card>
         <v-card-title class="title" v-if="showTitle">
           {{ title }}
           <v-spacer></v-spacer>
-          <v-btn class="light-blue white--text mr-1" @click="emitClearForm">
+          <v-btn class="light-blue white--text mr-1" @click="emitClearForm" v-if="clearable">
             تعریف
             {{ title }}
             جدید
@@ -23,7 +23,7 @@
         </v-card-actions>
       </v-card>
     </v-col>
-    <v-col cols="12" md="6" v-if="showList">
+    <v-col cols="12" md="6" v-if="showList" class="items-list">
       <v-card>
         <v-card-text>
           <datatable :cols="cols" :data="items" @rowClick="rowClick" />
@@ -54,6 +54,9 @@ export default {
       default: true
     },
     showTitle: {
+      default: true
+    },
+    clearable: {
       default: true
     }
   },
@@ -87,6 +90,11 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+.items-list {
+  tr:hover {
+    cursor: pointer !important;
+  }
+}
 </style>
 
