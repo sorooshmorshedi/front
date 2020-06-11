@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6e0db5c72fa99ea0220a",
-    "url": "/css/app.20e9f455.css"
+    "revision": "67a967fd90b8abafd81e",
+    "url": "/css/app.e31ed285.css"
   },
   {
-    "revision": "15ad9787050d48725eb6",
-    "url": "/css/chunk-vendors.ce3dcc6d.css"
+    "revision": "5901aff93ba67070f9b5",
+    "url": "/css/chunk-vendors.84fe644e.css"
   },
   {
     "revision": "0f580b5df1aa5f67c75ba4b1b74f788a",
@@ -224,15 +224,15 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/SobhanAccountingLogo.png"
   },
   {
-    "revision": "e553abef17c987b58b4a7d6cf0a19396",
+    "revision": "9bac622ca096cc414c2466e2e4feee13",
     "url": "/index.html"
   },
   {
-    "revision": "6e0db5c72fa99ea0220a",
-    "url": "/js/app.10b8a95d.js"
+    "revision": "67a967fd90b8abafd81e",
+    "url": "/js/app.fcdf0660.js"
   },
   {
-    "revision": "15ad9787050d48725eb6",
+    "revision": "5901aff93ba67070f9b5",
     "url": "/js/chunk-vendors.99f80b74.js"
   },
   {
