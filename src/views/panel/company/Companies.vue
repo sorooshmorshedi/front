@@ -62,9 +62,10 @@
 </template>
 <script>
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import GetUserApi from "@/views/panel/user/getUserApi";
 
 export default {
-  mixins: [ListModalFormMixin],
+  mixins: [ListModalFormMixin, GetUserApi],
   props: {},
   data() {
     return {
@@ -94,6 +95,7 @@ export default {
   methods: {
     getData() {
       this.getCompanies();
+      this.getUser();
     },
     getCompanies() {
       this.request({
@@ -113,7 +115,7 @@ export default {
         },
         success: data => {
           this.successNotify();
-          this.getCompanies();
+          this.getUser();
         }
       });
     }

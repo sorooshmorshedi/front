@@ -18,8 +18,18 @@
       <v-app-bar app clipped-right class="indigo darken-1" v-if="user">
         <v-app-bar-nav-icon @click="showDrawer = !showDrawer" class="white--text" />
 
-        <v-btn v-if="company" depressed class="white mr-4">{{ company.name }}</v-btn>
-        <v-btn v-if="financialYear" depressed class="text-right white mr-1">
+        <v-btn
+          v-if="company"
+          :to="{name: 'Companies'}"
+          depressed
+          class="white mr-4"
+        >{{ company.name }}</v-btn>
+        <v-btn
+          v-if="financialYear"
+          :to="{name: 'FinancialYears'}"
+          depressed
+          class="text-right white mr-1"
+        >
           <span class="pl-1">سال مالی</span>
           {{ financialYear.name }}
         </v-btn>
