@@ -45,7 +45,11 @@
             class="blue white--text mr-1"
           >مشاهده {{ transactionType.label }} ها</v-btn>
 
-          <v-btn @click="openSanad(factor.sanad.id)" class="blue white--text mr-1">
+          <v-btn
+            v-if="factor.sanad"
+            @click="openSanad(factor.sanad.id)"
+            class="blue white--text mr-1"
+          >
             مشاهده سند
             <v-chip class="app-background-color mr-2" x-small>{{ factor.sanad.code }}</v-chip>
           </v-btn>
@@ -233,6 +237,7 @@
                   </td>
                   <td v-if="isBuy">
                     <money
+                      style="width: 80px"
                       v-if="rows[i].ware"
                       :disabled="!editable"
                       class="form-control form-control"
