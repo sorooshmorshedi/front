@@ -76,6 +76,19 @@
       <v-footer class="indigo lighten-5">
         <m-footer />
       </v-footer>
+
+      <v-snackbar
+        :value="snackbar.show"
+        @input="$store.commit('setSnackbar', {show:false})"
+        :color="snackbar.color"
+        right
+      >
+        {{ snackbar.text }}
+        <!-- <v-btn color="white" outlined @click="$store.commit('setSnackbar', {show:false})">بستن</v-btn> -->
+        <v-btn color="white" icon @click="$store.commit('setSnackbar', {show:false})">
+          <v-icon>fa-times</v-icon>
+        </v-btn>
+      </v-snackbar>
     </template>
   </v-app>
 </template>
@@ -87,6 +100,8 @@ import mSystemBar from "@/components/SystemBar";
 import Loader from "@/components/Loader";
 
 import moment from "moment-jalaali";
+
+import { mapState } from "vuex";
 
 export default {
   name: "App",
@@ -101,6 +116,11 @@ export default {
       isAppReady: false,
       showDrawer: false
     };
+  },
+  computed: {
+    ...mapState({
+      snackbar: state => state.snackbar
+    })
   },
   watch: {
     $route() {

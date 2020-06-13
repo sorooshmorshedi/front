@@ -10,6 +10,11 @@ export default new Vuex.Store({
     user: null,
     OGR: 0, //on going requests
     now: null,
+    snackbar: {
+      show: false,
+      text: '',
+      color: ''
+    },
     timeInterval: null,
     accounts: [],
     floatAccountGroups: [],
@@ -38,6 +43,9 @@ export default new Vuex.Store({
     },
     decrementOGR(state) {
       state.OGR--;
+    },
+    setSnackbar(state, snackbar) {
+      state.snackbar = snackbar;
     },
     setTime(state, time) {
       state.now = time;

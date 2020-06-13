@@ -77,26 +77,16 @@ Vue.mixin({
       this.notify('عملیات با موفقیت انجام شد', 'success')
     },
     notify(msg, type) {
-      $.notify({
-        message: msg,
-      }, {
-        delay: 1000,
-        type: type,
-        z_index: 2000,
-        allow_dismiss: true,
-        placement: {
-          from: "bottom",
-          align: "right"
-        },
-        offset: 50,
-        spacing: 10,
-        mouse_over: 'pause',
-        animate: {
-          enter: 'animated fadeInDown',
-          exit: 'animated fadeOutUp'
-        },
-
-      })
+      let colors = {
+        'danger': 'red',
+        'warning': 'orange',
+        'success': 'green'
+      }
+      this.$store.commit('setSnackbar', {
+        show: true,
+        color: colors[type],
+        text: msg
+      });
     },
     hasPermission(permission) {
       return this.permissions && this.permissions.includes(permission);
