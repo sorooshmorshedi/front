@@ -19,11 +19,11 @@
           <v-col cols="12">
             <v-text-field label="نام" v-model="item.name" />
           </v-col>
-          <v-col cols="12">
-            <v-textarea label="آدرس 1" v-model="item.address1" />
+          <v-col cols="12" md="6">
+            <v-textarea rows="3" label="آدرس 1" v-model="item.address1" />
           </v-col>
-          <v-col cols="12">
-            <v-textarea label="آدرس 2" v-model="item.address2" />
+          <v-col cols="12" md="6">
+            <v-textarea rows="3" label="آدرس 2" v-model="item.address2" />
           </v-col>
           <v-col cols="12" md="6">
             <v-text-field label="کشور" v-model="item.country" />
@@ -44,7 +44,7 @@
             <v-text-field label="ایمیل" v-model="item.email" type="email" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="کد پستی" v-model="item.postal_code" />
+            <v-text-field label="کد پستی" v-model="item.postal_code" type="number" />
           </v-col>
           <v-col cols="12" md="6">
             <v-text-field label="وبسایت" v-model="item.website" />
@@ -54,6 +54,9 @@
           </v-col>
           <v-col cols="12" md="6">
             <v-text-field label="شناسه ملی / کد ملی" v-model="item.shenase" />
+          </v-col>
+          <v-col cols="12">
+            <v-textarea rows="3" label="توضیحات" v-model="item.explanation" />
           </v-col>
         </v-row>
       </template>
