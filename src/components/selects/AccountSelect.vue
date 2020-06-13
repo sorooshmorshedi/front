@@ -9,7 +9,7 @@
       :multiple="multiple"
       :placeholder="placeholder"
     ></v-autocomplete>
-    <template v-if=" itemsType == 'level3' && item && deepSelect">
+    <template v-if="hasDeepSelect && item && deepSelect">
       <account-select
         class="mt-1"
         v-if="item.floatAccountGroup"
@@ -162,6 +162,11 @@ export default {
       }
 
       return items;
+    },
+    hasDeepSelect() {
+      return ["level3", "persons", "buyers", "sellers"].includes(
+        this.itemsType
+      );
     }
   },
   created() {

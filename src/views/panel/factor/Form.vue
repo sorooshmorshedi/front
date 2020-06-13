@@ -88,7 +88,7 @@
           </v-col>
           <v-col cols="12" md="6">
             <account-select
-              :label="accountName "
+              :label="accountName"
               itemsType="persons"
               v-model="factor.account"
               :disabled="!editable"
