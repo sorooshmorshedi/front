@@ -24,8 +24,29 @@
           {{ financialYear.name }}
         </v-btn>
 
+        <v-btn class="blue white--text mr-3" :to="{name: 'SanadForm' }">سند</v-btn>
+        <v-btn
+          class="blue white--text mr-1"
+          :to="{name: 'FactorForm', params: { factorType: 'sale' } }"
+        >فاکتور فروش</v-btn>
+        <v-btn
+          class="blue white--text mr-1"
+          :to="{name: 'FactorForm', params: { factorType: 'buy' } }"
+        >فاکتور خرید</v-btn>
+        <v-btn class="blue white--text mr-1" :to="{name: 'AccountTree' }">نمودار درختی</v-btn>
+        <v-btn class="blue white--text mr-1" :to="{name: 'AccountsBalanceReport' }">تراز حساب ها</v-btn>
+        <v-btn
+          class="blue white--text mr-1"
+          :to="{ name: 'TransactionForm', params: { transactionType: 'receive' } }"
+        >دریافت</v-btn>
+        <v-btn
+          class="blue white--text mr-1"
+          :to="{ name: 'TransactionForm', params: { transactionType: 'payment' } }"
+        >پرداخت</v-btn>
+
         <v-spacer></v-spacer>
-        <span class="white--text">
+
+        <span class="white--text mr-3">
           <span>{{ user.name }}</span>
         </span>
         <span class="ml-3">
@@ -78,7 +99,7 @@ export default {
   data() {
     return {
       isAppReady: false,
-      showDrawer: true
+      showDrawer: false
     };
   },
   watch: {

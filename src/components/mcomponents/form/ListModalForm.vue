@@ -15,7 +15,7 @@
         <v-card-text>
           <slot name="default"></slot>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions v-if="showActions">
           <v-spacer></v-spacer>
           <slot name="actions"></slot>
           <v-btn v-if="deletable" @click="emitDelete" color="red" outlined>حذف</v-btn>
@@ -57,6 +57,9 @@ export default {
       default: true
     },
     clearable: {
+      default: true
+    },
+    showActions: {
       default: true
     }
   },

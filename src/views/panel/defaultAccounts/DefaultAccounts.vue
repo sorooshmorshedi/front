@@ -4,6 +4,8 @@
     :items="items"
     :cols="cols"
     :deletable="item.id"
+    :clearable="clearable"
+    :showActions="showActions"
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
@@ -77,12 +79,18 @@ export default {
     },
     items() {
       return this.defaultAccounts.filter(o => o.usage == this.usage);
+    },
+    clearable() {
+      return ["factor", "closingAccounts"].includes(this.user);
+    },
+    showActions() {
+      return this.item.id != undefined;
     }
   },
   methods: {
     getData() {
-    this.getDefaultAccounts(true);
-    this.getAccounts();
+      this.getDefaultAccounts(true);
+      this.getAccounts();
     },
     setItem(item) {
       this.item = item;

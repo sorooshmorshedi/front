@@ -1,6 +1,6 @@
 <template>
   <v-list nav dense class="navbar-list">
-    <navbar-list-item v-for="(route, i) in routes" :key="i" :route="route" />
+    <navbar-list-item v-for="(route, i) in routes" :key="i" :route="route" :level="1" />
   </v-list>
 </template>
 

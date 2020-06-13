@@ -1,14 +1,14 @@
 <template>
   <v-list-item v-if="!hasChild" :to="route.to" link>
     <v-list-item-content>
-      <v-list-item-title class="list-item-title">{{ route.title }}</v-list-item-title>
+      <v-list-item-title class="list-item-title" :class="'level-' + level">{{ route.title }}</v-list-item-title>
     </v-list-item-content>
   </v-list-item>
 
   <v-list-group v-else no-action :sub-group="subGroup">
     <template #activator>
       <v-list-item-content>
-        <v-list-item-title class="list-item-title">{{ route.title }}</v-list-item-title>
+        <v-list-item-title class="list-item-title">{{level }} - {{ route.title }}</v-list-item-title>
       </v-list-item-content>
     </template>
 
@@ -17,6 +17,7 @@
       :key="i"
       :route="child"
       :sub-group="true"
+      :level="level+1"
     />
   </v-list-group>
 </template>
@@ -24,7 +25,7 @@
 <script>
 export default {
   name: "NavbarListItem",
-  props: ["route", "subGroup"],
+  props: ["route", "subGroup", "level"],
   data() {
     return {};
   },

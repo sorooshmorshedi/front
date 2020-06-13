@@ -160,7 +160,6 @@ export default {
       window.open(
         routeData.href,
         "_blank",
-        "location=yes,height=600,width=1200,scrollbars=yes,status=yes"
       );
     },
     splitCode(code) {

@@ -231,9 +231,15 @@ a {
 
 }
 
-.v-text-field input {
-  font-size: 15px !important;
-  padding: 4px 0px;
+.v-text-field {
+  input {
+    font-size: 15px !important;
+    padding: 4px 0px;
+  }
+
+  textarea {
+    font-size: 15px !important;
+  }
 }
 
 .v-application--is-rtl .v-list-item__action:first-child,
@@ -244,10 +250,22 @@ a {
 
 .v-input--is-disabled {
   fieldset {
-    border: none !important;
+    background-color: #fafafa;
   }
 
   input[disabled] {
     color: #424242 !important;
   }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
