@@ -20,19 +20,19 @@
             item-text="name"
           ></v-autocomplete>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" v-if="item.id">
           <v-text-field label="کد" v-model="item.code" disabled />
         </v-col>
-        <v-col cols="12" md=8>
+        <v-col cols="12" md="8">
           <v-text-field label="نام" required v-model="item.name" />
         </v-col>
-        <v-col cols="12" md=4>
+        <v-col cols="12" md="4">
           <v-autocomplete label="واحد" :items="units" v-model="item.unit" item-text="name"></v-autocomplete>
         </v-col>
-        <v-col cols="12" md=6>
+        <v-col cols="12" md="6">
           <money label="قیمت" v-model="item.price" />
         </v-col>
-        <v-col cols="12" md=6>
+        <v-col cols="12" md="6">
           <v-select
             label="نوع قیمت گذاری"
             :items="pricingTypes"
@@ -41,7 +41,7 @@
             :return-object="true"
           ></v-select>
         </v-col>
-        <v-col cols="12" md=6>
+        <v-col cols="12" md="6">
           <v-autocomplete
             label="انبار پیشفرض"
             :items="warehouses"
@@ -50,19 +50,19 @@
             :return-object="false"
           ></v-autocomplete>
         </v-col>
-        <v-col cols="12" md=6>
+        <v-col cols="12" md="6">
           <v-text-field label="بارکد" required v-model="item.barcode" />
         </v-col>
-        <v-col cols="12" md=6>
+        <v-col cols="12" md="6">
           <money label="حداقل فروش" v-model="item.minSale" />
         </v-col>
-        <v-col cols="12" md=6>
+        <v-col cols="12" md="6">
           <money label="حداکثر فروش" v-model="item.maxSale" />
         </v-col>
-        <v-col cols="12" md=6>
+        <v-col cols="12" md="6">
           <money label="حداقل موجودی" v-model="item.minInventory" />
         </v-col>
-        <v-col cols="12" md=6>
+        <v-col cols="12" md="6">
           <money label="حداکثر موجودی" v-model="item.maxInventory" />
         </v-col>
         <v-col cols="12">

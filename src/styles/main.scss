@@ -235,6 +235,19 @@ a {
   font-size: 15px !important;
   padding: 4px 0px;
 }
-.v-application--is-rtl .v-list-item__action:first-child, .v-application--is-rtl .v-list-item__icon:first-child {
+
+.v-application--is-rtl .v-list-item__action:first-child,
+.v-application--is-rtl .v-list-item__icon:first-child {
   margin-left: 16px;
+}
+
+
+.v-input--is-disabled {
+  fieldset {
+    border: none !important;
+  }
+
+  input[disabled] {
+    color: #424242 !important;
+  }
 }

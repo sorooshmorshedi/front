@@ -22,28 +22,33 @@ export default {
           title: "اطلاعات پایه",
           children: [
             {
-              to: {
-                name: "Users"
-              },
-              title: "کاربران"
-            },
-            {
-              to: {
-                name: "Roles"
-              },
-              title: "نقش ها"
-            },
-            {
-              title: "شرکت ها",
-              to: {
-                name: "Companies"
-              }
-            },
-            {
-              title: "سال های مالی",
-              to: {
-                name: "FinancialYears"
-              }
+              title: "تعاریف",
+              children: [
+                {
+                  to: {
+                    name: "Users"
+                  },
+                  title: "کاربران"
+                },
+                {
+                  to: {
+                    name: "Roles"
+                  },
+                  title: "نقش ها"
+                },
+                {
+                  title: "شرکت ها",
+                  to: {
+                    name: "Companies"
+                  }
+                },
+                {
+                  title: "سال های مالی",
+                  to: {
+                    name: "FinancialYears"
+                  }
+                }
+              ]
             },
             {
               title: "حساب",

@@ -14,14 +14,11 @@
       <template #default>
         <div class="row">
           <div class="form-group col-12">
-            <label class="required">نام</label>
-            <input type="text" class="form-control" v-model="item.name" />
+            <v-text-field required label="نام" v-model="item.name" />
           </div>
           <div class="col-12">
             <div class="row" v-for="(model, i) in Object.keys(allPermissions)" :key="i">
-              <div class="col-12 text-bold">
-                {{ model }}
-              </div>
+              <div class="col-12 text-bold">{{ model }}</div>
               <div
                 class="form-check col-12 col-md-6"
                 v-for="(permission, i) in allPermissions[model]"
@@ -61,7 +58,7 @@ export default {
           th: "نام",
           td: "name",
           type: "text",
-          filters: ["name__icontains"]
+          filters: ["name"]
         }
       ],
       itemTemplate: {

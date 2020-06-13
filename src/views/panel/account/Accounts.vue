@@ -43,8 +43,8 @@
             />
           </v-col>
         </template>
-        <v-col cols="12">
-          <v-text-field v-if="item.id" label="کد" v-model="item.code" />
+        <v-col cols="12" v-if="item.id">
+          <v-text-field label="کد" v-model="item.code" />
         </v-col>
         <v-col cols="12">
           <v-text-field label="نام" required v-model="item.name" />
@@ -294,7 +294,7 @@ export default {
     parentItems() {
       return this.accountsSelectValues.levels[this.level - 1];
     },
-    clearable(){
+    clearable() {
       return this.isPerson || this.isBank;
     }
   },

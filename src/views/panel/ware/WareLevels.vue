@@ -4,6 +4,7 @@
     :items="items"
     :cols="cols"
     :deletable="item.id"
+    :clearable="false"
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
@@ -18,7 +19,14 @@
           class="blue white--text mr-1"
           :to="`/panel/wareLevels/${i-1}`"
         >تعریف {{ getWareLevelTitle(i-1) }}</v-btn>
+        <v-btn
+          :key="i"
+          v-else
+          class="blue white--text mr-1"
+          @click="clearForm"
+        >تعریف {{ getWareLevelTitle(i-1) }}</v-btn>
       </template>
+      <v-btn :key="i" class="blue white--text mr-1" :to="{name:'Wares'}">تعریف کالا</v-btn>
     </template>
     <template #default>
       <v-row>
@@ -32,7 +40,7 @@
             ></v-autocomplete>
           </v-col>
         </template>
-        <v-col cols="12">
+        <v-col cols="12" v-if="item.id">
           <v-text-field label="کد" v-model="item.code" disabled />
         </v-col>
         <v-col cols="12">
@@ -57,9 +65,6 @@ export default {
   data() {
     return {
       item: {},
-      itemTemplate: {
-        level: this.level
-      },
       baseUrl: "wares/wareLevels",
       cols: [
         {
@@ -139,6 +144,7 @@ export default {
     },
     getSerialized() {
       let item = this.extractIds(this.item);
+      item.level = this.level;
       return item;
     }
   }

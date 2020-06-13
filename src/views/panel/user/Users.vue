@@ -96,19 +96,19 @@ export default {
           th: "نام",
           td: "first_name",
           type: "text",
-          filters: ["first_name__icontains"]
+          filters: ["first_name"]
         },
         {
           th: "نام خانوادگی",
           td: "last_name",
           type: "text",
-          filters: ["last_name__icontains"]
+          filters: ["last_name"]
         },
         {
           th: "نام کاربری",
           td: "username",
           type: "text",
-          filters: ["username__icontains"]
+          filters: ["username"]
         }
       ]
     };
