@@ -270,51 +270,56 @@
         </v-row>
 
         <v-row>
-          <v-col cols="12" md="8">
-            <div class="d-flex">
-              <h3>هزینه های فاکتور</h3>
-              <v-spacer></v-spacer>
-              <v-btn
-                @click="openFactorExpensesDialog"
-                class="blue white--text"
-                :disabled="!editable"
-              >افزودن / ویرایش</v-btn>
-            </div>
-            <v-simple-table class="mt-3">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>نام هزینه ثابت</th>
-                  <th>مبلغ</th>
-                  <th>پرداخت کننده</th>
+          <v-col cols="12" md="8" class>
+            <div class="pa-3 ml-5" style="border: 1px dashed #9e9e9e">
+              <div class="d-flex">
+                <h3>هزینه های فاکتور</h3>
+                <v-spacer></v-spacer>
+              </div>
+              <v-simple-table class="mt-3">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>نام هزینه ثابت</th>
+                    <th>مبلغ</th>
+                    <th>پرداخت کننده</th>
 
-                  <th>حساب شناور</th>
-                  <th>مرکز هزینه</th>
-                  <th>توضیحات</th>
-                </tr>
-              </thead>
-              <tbody v-if="factor.expenses.length">
-                <tr v-for="(e,i) in factor.expenses" :key="i">
-                  <td>{{ i+1 }}</td>
-                  <td>{{ e.expense.name }}</td>
-                  <td>{{ e.value | toMoney }}</td>
-                  <td>{{ e.account.title }}</td>
-                  <td>{{ e.floatAccount?e.floatAccount.name:' - ' }}</td>
-                  <td>{{ e.costCenter?e.costCenter.name:' - ' }}</td>
-                  <td>{{ e.explanation }}</td>
-                </tr>
-                <tr class="grey lighten-3">
-                  <td colspan="2">جمع هزینه های فاکتور:</td>
-                  <td>{{ sum.expenses | toMoney }}</td>
-                  <td colspan="4"></td>
-                </tr>
-              </tbody>
-              <tbody v-else>
-                <tr>
-                  <td colspan="7">هزینه ای ثبت نشده است</td>
-                </tr>
-              </tbody>
-            </v-simple-table>
+                    <th>حساب شناور</th>
+                    <th>مرکز هزینه</th>
+                    <th>توضیحات</th>
+                  </tr>
+                </thead>
+                <tbody v-if="factor.expenses.length">
+                  <tr v-for="(e,i) in factor.expenses" :key="i">
+                    <td>{{ i+1 }}</td>
+                    <td>{{ e.expense.name }}</td>
+                    <td>{{ e.value | toMoney }}</td>
+                    <td>{{ e.account.title }}</td>
+                    <td>{{ e.floatAccount?e.floatAccount.name:' - ' }}</td>
+                    <td>{{ e.costCenter?e.costCenter.name:' - ' }}</td>
+                    <td>{{ e.explanation }}</td>
+                  </tr>
+                  <tr class="grey lighten-3">
+                    <td colspan="2">جمع هزینه های فاکتور:</td>
+                    <td>{{ sum.expenses | toMoney }}</td>
+                    <td colspan="4"></td>
+                  </tr>
+                </tbody>
+                <tbody v-else>
+                  <tr>
+                    <td colspan="7">هزینه ای ثبت نشده است</td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+              <div class="d-flex mt-2">
+                <v-spacer></v-spacer>
+                <v-btn
+                  @click="openFactorExpensesDialog"
+                  class="blue white--text"
+                  :disabled="!editable"
+                >افزودن / ویرایش</v-btn>
+              </div>
+            </div>
           </v-col>
           <v-col cols="12" md="4">
             <v-simple-table bordered>
@@ -354,11 +359,11 @@
                     <td>مالیات</td>
                     <td>
                       <money
-                        :disabled="!editable || hasValue(factor.taxPercent)"
-                        class="form-control"
+                        v-if="!(!editable || hasValue(factor.taxPercent))"
                         v-model="factor.taxValue"
-                        placeholder="مبلغ"
+                        :value="sum.tax"
                       />
+                      <money v-else :disabled="true" :value="sum.tax" />
                     </td>
                     <td>
                       <v-text-field
@@ -370,7 +375,6 @@
                         v-model="factor.taxPercent"
                         placeholder="درصد"
                       />
-                      <span v-if="factor.taxPercent">{{ sum.tax | toMoney }} ریال</span>
                     </td>
                   </tr>
                   <tr>
