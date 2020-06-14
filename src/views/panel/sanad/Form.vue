@@ -110,6 +110,7 @@
                   <account-select
                     items-type="level3"
                     v-model="rows[i].account"
+                    :horizontal="true"
                     :disabled="!editable"
                     :floatAccount="sanad.floatAccount"
                     @update:floatAccount="v => sanad.floatAccount = v"
@@ -193,7 +194,7 @@ import DailyForm from "@/components/form/DailyForm";
 export default {
   name: "Form",
   components: { money, date, DailyForm },
-  mixins: [formsMixin, accountApiMixin ],
+  mixins: [formsMixin, accountApiMixin],
   props: ["id"],
   data() {
     return {
@@ -411,6 +412,8 @@ export default {
 
         let item = this.copy(row);
         item = this.extractIds(item);
+        item.bed = +item.bed;
+        item.bes = +item.bes;
 
         data.items.items.push(item);
       });
