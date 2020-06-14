@@ -111,10 +111,10 @@
                     items-type="level3"
                     v-model="rows[i].account"
                     :disabled="!editable"
-                    :floatAccount="sanad.floatAccount"
-                    @update:floatAccount="v => sanad.floatAccount = v"
-                    :costCenter="sanad.costCenter"
-                    @update:costCenter="v => sanad.costCenter = v"
+                    :floatAccount="rows[i].floatAccount"
+                    @update:floatAccount="v => rows[i].floatAccount = v"
+                    :costCenter="rows[i].costCenter"
+                    @update:costCenter="v => rows[i].costCenter = v"
                   />
                 </td>
                 <td>
