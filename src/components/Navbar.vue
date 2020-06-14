@@ -317,32 +317,37 @@ export default {
                     }
                   },
                   title: "ثبت فاکتور برگشت از فروش"
+                },
+                {
+                  to: {
+                    name: "TransferForm"
+                  },
+                  title: "ثبت انتقال"
                 }
               ]
             },
             {
-              to: {
-                name: "TransferForm"
-              },
-              title: "ثبت انتقال"
-            },
-            {
-              to: {
-                name: "TransactionForm",
-                params: {
-                  transactionType: "receive"
+              title: "دریافت و پرداخت",
+              children: [
+                {
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      transactionType: "receive"
+                    }
+                  },
+                  title: "ثبت دریافت"
+                },
+                {
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      transactionType: "payment"
+                    }
+                  },
+                  title: "ثبت پرداخت"
                 }
-              },
-              title: "ثبت دریافت"
-            },
-            {
-              to: {
-                name: "TransactionForm",
-                params: {
-                  transactionType: "payment"
-                }
-              },
-              title: "ثبت پرداخت"
+              ]
             },
             {
               title: "دفتر چک",
