@@ -88,7 +88,7 @@
         </v-col>
 
         <v-col cols="12">
-          <v-simple-table class="app-background-color form-items">
+          <v-simple-table class="form-items">
             <thead>
               <tr>
                 <th>#</th>
@@ -105,7 +105,7 @@
             </thead>
             <tbody>
               <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
-                <td>{{ i+1 }}</td>
+                <td style="width: 10px">{{ i+1 }}</td>
                 <td v-tooltip="accountParentsName(row.account).join(' > ')">
                   <account-select
                     items-type="level3"
@@ -163,7 +163,6 @@
                     v-if="bedSum != besSum"
                   >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}</span>
                 </td>
-                <td colspan="2"></td>
                 <td class="text-left">مجموع:</td>
                 <td class>{{ bedSum | toMoney }}</td>
                 <td class="d-print-none"></td>

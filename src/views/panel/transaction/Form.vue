@@ -280,11 +280,7 @@
 
     <v-dialog v-model="submitChequeDialog" scrollable max-width="1200px">
       <v-card>
-        <v-card-title>
-          ثبت چک
-          <span v-if="this.transactionType == 'payment'">پرداختی</span>
-          <span v-else>دریافتی</span>
-        </v-card-title>
+        <v-card-title></v-card-title>
         <v-card-text>
           <cheque-form
             :receivedOrPaid="transactionType[0]"

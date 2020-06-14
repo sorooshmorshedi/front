@@ -1,5 +1,5 @@
 <template>
-  <div class style="min-width: 200px">
+  <div class="account-select-container">
     <v-autocomplete
       :items="items"
       v-model="item"
@@ -11,19 +11,21 @@
     ></v-autocomplete>
     <template v-if="hasDeepSelect && item && deepSelect">
       <account-select
-        class="mt-1"
+        class="child"
         v-if="item.floatAccountGroup"
         :child-of="item.floatAccountGroup.id"
         v-model="localFloatAccount"
+        :disabled="disabled"
         placeholder="حساب شناور"
         items-type="floatAccounts"
         item-text="name"
       />
       <account-select
-        class="mt-1"
+        class="child"
         v-if="item.costCenterGroup"
         :child-of="item.costCenterGroup.id"
         v-model="localCostCenter"
+        :disabled="disabled"
         placeholder="مرکز هزینه"
         items-type="floatAccounts"
         item-text="name"
@@ -167,6 +169,12 @@ export default {
       return ["level3", "persons", "buyers", "sellers"].includes(
         this.itemsType
       );
+    },
+    containerStyles(){
+
+    },
+    childStyles(){
+
     }
   },
   created() {
@@ -216,8 +224,7 @@ export default {
 };
 </script>
 
-<style lang="scss" >
-</style>
+<style lang="scss" scoped></style>
 
 // --- Document
 // The itemsType item uses v-model, but floatAccount & costCenters must hanle like this:

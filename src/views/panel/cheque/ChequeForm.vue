@@ -1,6 +1,5 @@
 <template>
   <daily-form
-    v-if="!modalMode"
     formName="چک"
     :title="title"
     :ListRouteParams="{form: 'cheque', type: this.receivedOrPaid == 'p'?'paid':'received'}"

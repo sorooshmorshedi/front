@@ -228,7 +228,7 @@
                   </td>
                   <td>
                     <v-textarea
-                      style="width: 200px"
+                      style="width: 150px"
                       v-model="rows[i].explanation"
                       :disabled="!editable"
                       rows="1"
