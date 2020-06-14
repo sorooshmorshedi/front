@@ -178,7 +178,6 @@ export default {
       for (const code of codes) {
         let acc = this.findAccount("code", code);
         if (!acc) {
-          console.log("no account for", code);
           continue;
         }
         res.push(acc.name);

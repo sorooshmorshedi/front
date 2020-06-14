@@ -42,10 +42,10 @@
               :disabled="item.id != undefined"
             />
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" v-if="hasParent">
             <v-breadcrumbs :items="parents">
               <template v-slot:divider>
-                <v-icon>mdi-chevron-right</v-icon>
+                <v-icon>fa-chevron-left</v-icon>
               </template>
             </v-breadcrumbs>
           </v-col>
@@ -305,36 +305,13 @@ export default {
       return this.isPerson || this.isBank;
     },
     parents() {
-      let getParent = account => {
-        let parent = account.parent;
-        if (typeof parent == typeof 72) {
-          parent = this.getAccount(parent);
-        }
-        return parent;
-      };
-
       if (!this.hasParent || !this.item.parent) return [];
-
       let parents = [];
-
-      let parent = getParent(this.item);
-      parent &&
+      this.accountParentsName(this.item.parent).forEach(parent => {
         parents.push({
-          text: parent.code
+          text: parent
         });
-
-      parent = getParent(parent);
-      parent &&
-        parents.push({
-          text: parent.code
-        });
-
-      parent = getParent(parent);
-      parent &&
-        parents.push({
-          text: parent.code
-        });
-
+      });
       return parents;
     }
   },
