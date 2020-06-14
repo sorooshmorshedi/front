@@ -42,6 +42,13 @@
               :disabled="item.id != undefined"
             />
           </v-col>
+          <v-col cols="12">
+            <v-breadcrumbs :items="parents">
+              <template v-slot:divider>
+                <v-icon>mdi-chevron-right</v-icon>
+              </template>
+            </v-breadcrumbs>
+          </v-col>
         </template>
         <v-col cols="12" v-if="item.id">
           <v-text-field label="کد" v-model="item.code" />
@@ -296,12 +303,43 @@ export default {
     },
     clearable() {
       return this.isPerson || this.isBank;
+    },
+    parents() {
+      if (!this.hasParent || !this.item.parent) return [];
+
+      let parents = [];
+
+      let parent = this.item.parent;
+
+      console.log("first parent: ", parent);
+      let i = 0;
+      while (true && i < 10) {
+        i++;
+        if (typeof parent == typeof 72) {
+          parent = this.getAccount(parent);
+        }
+
+        console.log(i, parent.id, parent.code, parent.parent);
+
+        parents.push({
+          text: parent.code
+        });
+
+        parent = parent.parent;
+
+        if (!parent) break;
+      }
+
+      return parents;
     }
   },
   methods: {
     getData() {
       this.getAccounts(true);
       this.getFloatAccountGroups(true);
+    },
+    getAccount(id) {
+      return this.accounts.filter(o => (o.id = id))[0];
     },
     setItem(item) {
       if (typeof item.parent == typeof 72) {
