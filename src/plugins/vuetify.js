@@ -12,6 +12,7 @@ import {
   VBtn,
   VCard,
   VSelect,
+  VTextarea
 } from 'vuetify/lib'
 
 VTextField.options.props.outlined.default = true
@@ -28,6 +29,8 @@ VBtn.options.props.small.default = true
 VCard.options.props.outlined.default = true
 
 VSelect.options.props.outlined.default = true
+
+VTextarea.options.props.rows.default = 1
 
 
 
