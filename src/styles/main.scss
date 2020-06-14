@@ -250,7 +250,7 @@ a {
 
 .v-input--is-disabled {
   fieldset {
-    background-color: #fafafa;
+    background-color: #fafafa !important;
   }
 
   input[disabled] {

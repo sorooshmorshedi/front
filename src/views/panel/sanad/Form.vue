@@ -110,7 +110,6 @@
                   <account-select
                     items-type="level3"
                     v-model="rows[i].account"
-                    :horizontal="true"
                     :disabled="!editable"
                     :floatAccount="sanad.floatAccount"
                     @update:floatAccount="v => sanad.floatAccount = v"

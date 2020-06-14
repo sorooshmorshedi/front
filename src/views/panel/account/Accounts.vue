@@ -305,30 +305,35 @@ export default {
       return this.isPerson || this.isBank;
     },
     parents() {
+      let getParent = account => {
+        let parent = account.parent;
+        if (typeof parent == typeof 72) {
+          parent = this.getAccount(parent);
+        }
+        return parent;
+      };
+
       if (!this.hasParent || !this.item.parent) return [];
 
       let parents = [];
 
-      let parent = this.item.parent;
-
-      console.log("first parent: ", parent);
-      let i = 0;
-      while (true && i < 10) {
-        i++;
-        if (typeof parent == typeof 72) {
-          parent = this.getAccount(parent);
-        }
-
-        console.log(i, parent.id, parent.code, parent.parent);
-
+      let parent = getParent(this.item);
+      parent &&
         parents.push({
           text: parent.code
         });
 
-        parent = parent.parent;
+      parent = getParent(parent);
+      parent &&
+        parents.push({
+          text: parent.code
+        });
 
-        if (!parent) break;
-      }
+      parent = getParent(parent);
+      parent &&
+        parents.push({
+          text: parent.code
+        });
 
       return parents;
     }
