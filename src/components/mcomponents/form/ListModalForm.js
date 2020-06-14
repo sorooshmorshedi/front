@@ -37,6 +37,9 @@ export default {
     },
     itemObject() {
       if (this.itemObject) this.setItem(this.itemObject);
+    },
+    $route() {
+      this.clearForm();
     }
   },
   created() {
