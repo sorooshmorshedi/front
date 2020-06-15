@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>لیست {{ options.label }}</v-card-title>
-    <v-card-text>
+    <v-card-text class="mt-2">
       <datatable
         v-if="showTable"
         :cols="options.cols"

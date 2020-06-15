@@ -1,14 +1,13 @@
 <template>
   <div class="d-flex">
-    <v-btn :disabled="!ware" @click="showInventory(ware)" height="30px" depressed class="mr-1 pa-0" >
-      <v-icon>fas fa-boxes</v-icon>
-    </v-btn>
     <v-autocomplete
       :label="label"
       :items="wares"
       v-model="ware"
       item-text="name"
       :disabled="disabled"
+      prepend-icon="fa-boxes"
+      @click:prepend="ware && showInventory(ware)"
     ></v-autocomplete>
 
     <div class="modal fade d-none" :id="modalId" v-if="ware">

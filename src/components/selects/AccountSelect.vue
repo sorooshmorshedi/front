@@ -8,6 +8,8 @@
       :disabled="disabled"
       :multiple="multiple"
       :placeholder="placeholder"
+      :prepend-icon="showLedgerBtn?'fa-book-open':''"
+      @click:prepend="item && openLedger(item)"
     ></v-autocomplete>
     <template v-if="hasDeepSelect && item && deepSelect">
       <account-select
@@ -19,6 +21,8 @@
         placeholder="حساب شناور"
         items-type="floatAccounts"
         item-text="name"
+        :showLedgerBtn="false"
+        :class="{'mr-10': showLedgerBtn}"
       />
       <account-select
         class="child"
@@ -29,6 +33,8 @@
         placeholder="مرکز هزینه"
         items-type="floatAccounts"
         item-text="name"
+        :showLedgerBtn="false"
+        :class="{'mr-10': showLedgerBtn}"
       />
     </template>
   </div>
@@ -83,6 +89,9 @@ export default {
       default: null
     },
     deepSelect: {
+      default: true
+    },
+    showLedgerBtn: {
       default: true
     }
   },
@@ -170,12 +179,8 @@ export default {
         this.itemsType
       );
     },
-    containerStyles(){
-
-    },
-    childStyles(){
-
-    }
+    containerStyles() {},
+    childStyles() {}
   },
   created() {
     this.getAccounts();
