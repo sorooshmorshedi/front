@@ -31,6 +31,7 @@ VCard.options.props.outlined.default = true
 VSelect.options.props.outlined.default = true
 
 VTextarea.options.props.rows.default = 1
+VTextarea.options.props.autoGrow.default = true
 
 
 
