@@ -36,8 +36,7 @@
                 item-text="label"
                 item-value="value"
                 clearable
-              >
-              </v-select>
+              ></v-select>
 
               <date
                 v-if="col.type == 'date'"
@@ -97,7 +96,9 @@
             <td v-else :key="j">{{ get(item, col) }}</td>
           </template>
           <td v-if="routerName">
-            <router-link :to="routerParam(item)">مشاهده جزئیات</router-link>
+            <v-btn icon :to="routerParam(item)" target="_blank" color="blue">
+              <v-icon>fa-external-link-alt</v-icon>
+            </v-btn>
           </td>
         </tr>
       </tbody>
