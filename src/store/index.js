@@ -27,6 +27,7 @@ export default new Vuex.Store({
       warehouses: [],
       units: [],
     },
+    chequebooks: [],
     sanads: {
       sanads: [],
       transactions: []
@@ -69,6 +70,9 @@ export default new Vuex.Store({
     },
     setDefaultAccounts(state, data) {
       state.defaultAccounts = data;
+    },
+    setChequebooks(state, data) {
+      state.chequebooks = data;
     },
     setWares(state, wares) {
       wares.wareLevels && (state.wares.wareLevels = wares.wareLevels);
