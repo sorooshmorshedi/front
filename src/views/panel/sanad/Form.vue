@@ -108,6 +108,7 @@
                 <td style="width: 10px">{{ i+1 }}</td>
                 <td v-tooltip="accountParentsName(row.account).join(' > ')">
                   <account-select
+                    :horizontal="true"
                     items-type="level3"
                     v-model="rows[i].account"
                     :disabled="!editable"

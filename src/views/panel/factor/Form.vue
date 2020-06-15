@@ -257,7 +257,7 @@
                   </td>
                 </tr>
                 <tr class="bg-info text-white">
-                  <td :colspan="hasTax?14:12"></td>
+                  <td :colspan="hasTax?13:11"></td>
                   <td>
                     <v-btn @click="deleteItemRow(-1)" icon class="red--text" :disabled="!editable">
                       <v-icon>delete_sweep</v-icon>
@@ -413,6 +413,7 @@
                     </td>
                     <td>
                       <account-select
+                        :horizontal="true"
                         itemsType="level3"
                         label
                         v-model="e.account"

@@ -121,6 +121,7 @@
                     </td>
                     <td>
                       <account-select
+                        :horizontal="true"
                         v-if="rows[i].type"
                         items-type="level3"
                         v-model="rows[i].type.account"

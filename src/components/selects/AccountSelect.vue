@@ -1,43 +1,47 @@
 <template>
-  <div class="account-select-container">
-    <v-autocomplete
-      :items="items"
-      v-model="item"
-      :label="label"
-      :item-text="itemText"
-      :disabled="disabled"
-      :multiple="multiple"
-      :placeholder="placeholder"
-      :prepend-icon="showLedgerBtn?'fa-book-open':''"
-      @click:prepend="item && openLedger(item)"
-    ></v-autocomplete>
+  <v-row no-gutters :class="{'flex-row': horizontal, 'flex-column': !horizontal}">
+    <v-col :cols="horizontal?6:12">
+      <v-autocomplete
+        :items="items"
+        v-model="item"
+        :label="label"
+        :item-text="itemText"
+        :disabled="disabled"
+        :multiple="multiple"
+        :placeholder="placeholder"
+        :prepend-icon="showLedgerBtn?'fa-book-open':''"
+        @click:prepend="item && openLedger(item)"
+      ></v-autocomplete>
+    </v-col>
     <template v-if="hasDeepSelect && item && deepSelect">
-      <account-select
-        class="child"
-        v-if="item.floatAccountGroup"
-        :child-of="item.floatAccountGroup.id"
-        v-model="localFloatAccount"
-        :disabled="disabled"
-        placeholder="حساب شناور"
-        items-type="floatAccounts"
-        item-text="name"
-        :showLedgerBtn="false"
-        :class="{'mr-10': showLedgerBtn}"
-      />
-      <account-select
-        class="child"
-        v-if="item.costCenterGroup"
-        :child-of="item.costCenterGroup.id"
-        v-model="localCostCenter"
-        :disabled="disabled"
-        placeholder="مرکز هزینه"
-        items-type="floatAccounts"
-        item-text="name"
-        :showLedgerBtn="false"
-        :class="{'mr-10': showLedgerBtn}"
-      />
+      <v-col>
+        <account-select
+          v-if="item.floatAccountGroup"
+          :child-of="item.floatAccountGroup.id"
+          v-model="localFloatAccount"
+          :disabled="disabled"
+          placeholder="حساب شناور"
+          items-type="floatAccounts"
+          item-text="name"
+          :showLedgerBtn="false"
+          :class="{'mr-10': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+        />
+      </v-col>
+      <v-col>
+        <account-select
+          v-if="item.costCenterGroup"
+          :child-of="item.costCenterGroup.id"
+          v-model="localCostCenter"
+          :disabled="disabled"
+          placeholder="مرکز هزینه"
+          items-type="floatAccounts"
+          item-text="name"
+          :showLedgerBtn="false"
+          :class="{'mr-10': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+        />
+      </v-col>
     </template>
-  </div>
+  </v-row>
 </template>
 
 <script>
@@ -93,6 +97,9 @@ export default {
     },
     showLedgerBtn: {
       default: true
+    },
+    horizontal: {
+      default: false
     }
   },
   data() {
@@ -178,9 +185,7 @@ export default {
       return ["level3", "persons", "buyers", "sellers"].includes(
         this.itemsType
       );
-    },
-    containerStyles() {},
-    childStyles() {}
+    }
   },
   created() {
     this.getAccounts();
@@ -229,7 +234,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.account-select-container {
+  &.horizontal {
+    display: flex;
+    min-width: 200px;
+  }
+}
+</style>
 
 // --- Document
 // The itemsType item uses v-model, but floatAccount & costCenters must hanle like this:
