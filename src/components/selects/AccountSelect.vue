@@ -1,19 +1,19 @@
 <template>
   <v-row no-gutters :class="{'flex-row': horizontal, 'flex-column': !horizontal}">
-    <v-col :cols="horizontal?6:12">
+    <v-col :cols="horizontal && hasDeepSelect?6:12">
       <v-autocomplete
         :items="items"
         v-model="item"
         :label="label"
         :item-text="itemText"
-        :disabled="disabled"
+        :disabled="disabled || accountDisabled"
         :multiple="multiple"
         :placeholder="placeholder"
         :prepend-icon="showLedgerBtn?'fa-book-open':''"
         @click:prepend="item && openLedger(item)"
       ></v-autocomplete>
     </v-col>
-    <template v-if="hasDeepSelect && item && deepSelect">
+    <template v-if="hasDeepSelect">
       <v-col>
         <account-select
           v-if="item.floatAccountGroup"
@@ -61,8 +61,12 @@ export default {
     disabled: {
       default: false
     },
+    accountDisabled: {
+      // only disables account (not float and cost center)
+      default: false
+    },
     itemText: {
-      default: "title"
+      default: "name"
     },
     multiple: {
       default: false
@@ -182,8 +186,11 @@ export default {
       return items;
     },
     hasDeepSelect() {
-      return ["level3", "persons", "buyers", "sellers"].includes(
-        this.itemsType
+      return (
+        this.item &&
+        (this.item.floatAccountGroup || this.item.costCenterGroup) &&
+        this.deepSelect &&
+        ["level3", "persons", "buyers", "sellers"].includes(this.itemsType)
       );
     }
   },

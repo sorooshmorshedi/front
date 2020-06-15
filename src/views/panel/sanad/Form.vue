@@ -105,7 +105,7 @@
             </thead>
             <tbody>
               <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
-                <td style="width: 10px">{{ i+1 }}</td>
+                <td class="tr-counter">{{ i+1 }}</td>
                 <td v-tooltip="accountParentsName(row.account).join(' > ')">
                   <account-select
                     :horizontal="true"

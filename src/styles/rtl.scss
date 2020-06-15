@@ -25,3 +25,14 @@
 .v-application--is-rtl .v-list--dense.v-list--nav .v-list-group--no-action.v-list-group--sub-group>.v-list-group__items>div>.v-list-item {
   padding-right: 80px !important;
 }
+
+
+.v-application--is-rtl .v-list-item__action:first-child,
+.v-application--is-rtl .v-list-item__icon:first-child {
+  margin-left: 16px;
+}
+
+.v-application--is-rtl .v-text-field--enclosed .v-input__prepend-outer {
+  margin-left: 4px !important;
+  margin-right: 4px !important;
+}

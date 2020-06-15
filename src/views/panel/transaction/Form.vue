@@ -86,15 +86,15 @@
               <v-simple-table>
                 <thead>
                   <tr>
-                    <th>#</th>
-                    <th class="required" style="width: 200px">نوع {{ type.label }}</th>
+                    <th class="tr-counter">#</th>
+                    <th class="required">نوع {{ type.label }}</th>
                     <th>نام حساب</th>
                     <th class="required">مبلغ</th>
                     <th>شماره مستند</th>
                     <th class="required">تاریخ {{ type.label }}</th>
                     <th>سررسید</th>
                     <th>نام بانک</th>
-                    <th>توضیح</th>
+                    <th>توضیحات</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -104,7 +104,7 @@
                     :class="{'d-print-none': i == rows.length-1}"
                   >
                     <td>{{ i+1 }}</td>
-                    <td>
+                    <td style="width: 150px">
                       <v-autocomplete
                         :disabled="!editable || hasCheque(row)"
                         :items="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))"
@@ -119,13 +119,14 @@
                         :disabled="!editable"
                       >ثبت چک</v-btn>
                     </td>
-                    <td>
+                    <td class="tr-account">
                       <account-select
                         :horizontal="true"
                         v-if="rows[i].type"
                         items-type="level3"
                         v-model="rows[i].type.account"
-                        :disabled="true"
+                        :disabled="!editable"
+                        :account-disabled="true"
                         :floatAccount="rows[i].floatAccount"
                         @update:floatAccount="v => rows[i].floatAccount = v"
                         :costCenter="rows[i].costCenter"
@@ -139,7 +140,7 @@
                         v-model="rows[i].value"
                       />
                     </td>
-                    <td>
+                    <td style="width: 50px">
                       <v-text-field
                         :disabled="!editable || isChequeType(row)"
                         type="text"
@@ -197,7 +198,7 @@
                     <td colspan="2"></td>
                     <td class="text-left">مجموع:</td>
                     <td class>{{ sum | toMoney }}</td>
-                    <td colspan="6"></td>
+                    <td colspan="5"></td>
                     <td class="d-print-none">
                       <v-btn @click="deleteRow(0)" icon class="red--text" :disabled="!editable">
                         <v-icon>delete_sweep</v-icon>

@@ -142,22 +142,17 @@
               </thead>
               <tbody>
                 <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
-                  <td>{{ i+1 }}</td>
-                  <td>
-                    <ware-select
-                      v-model="rows[i].ware"
-                      :disabled="!editable"
-                      style="width: 200px;"
-                    />
+                  <td class="tr-counter">{{ i+1 }}</td>
+                  <td class="tr-ware">
+                    <ware-select v-model="rows[i].ware" :disabled="!editable" />
                   </td>
-                  <td>
+                  <td class="tr-warehouse">
                     <v-autocomplete
                       v-if="rows[i].ware && !rows[i].ware.isService"
                       v-model="rows[i].warehouse"
                       :disabled="!editable"
                       :items="warehouses"
                       item-text="name"
-                      style="width: 150px;"
                     ></v-autocomplete>
                     <span v-else>-</span>
                   </td>
@@ -388,7 +383,7 @@
         </v-row>
 
         <v-dialog v-model="factorExpensesDialog" scrollable max-width="1200px">
-          <v-card>
+          <v-card class="form-fields">
             <v-card-title>هزینه های ثابت فاکتور</v-card-title>
             <v-card-text>
               <v-simple-table>

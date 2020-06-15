@@ -7,6 +7,7 @@
     :label="label"
     :placeholder="placeholder"
     :disabled="disabled"
+    style="min-width: 80px"
   />
 </template>
 

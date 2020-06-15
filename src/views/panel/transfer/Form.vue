@@ -52,11 +52,11 @@
             </thead>
             <tbody>
               <tr v-for="(row,i) in rows" :key="i">
-                <td>{{ i+1 }}</td>
-                <td>
+                <td class="tr-counter">{{ i+1 }}</td>
+                <td class="tr-ware">
                   <ware-select v-model="rows[i].ware" :disabled="!editable" />
                 </td>
-                <td>
+                <td class="tr-warehouse">
                   <v-autocomplete
                     v-if="rows[i].ware"
                     :items="warehouses"
@@ -70,7 +70,7 @@
                   <money v-model="rows[i].count" :disabled="!editable" />
                 </td>
                 <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
-                <td>
+                <td class="tr-warehouse">
                   <v-autocomplete
                     v-if="rows[i].ware"
                     :items="warehouses"

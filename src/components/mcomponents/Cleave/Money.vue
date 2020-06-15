@@ -7,6 +7,8 @@
     :disabled="disabled"
     v-model="formattedAmount"
     class="currency-input"
+    :smaller-font="formattedAmount.length > 14"
+    style="min-width: 90px;"
   >
     <template #append>
       <!-- <span class="py-1">ریال</span> -->
@@ -75,6 +77,10 @@ export default {
   input {
     direction: ltr;
     text-align: center !important;
+
+    &[smaller-font] {
+      font-size: 10px !important;
+    }
   }
 }
 </style>
