@@ -12,7 +12,7 @@
     :showList="usage != 'tree'"
   >
     <template #header-buttons>
-      <template v-if="item.id">
+      <template v-if="item.id != undefined">
         <v-btn class="blue white--text mr-1" @click="openLedger(item)">دفتر این حساب</v-btn>
       </template>
 
@@ -50,13 +50,13 @@
             </v-breadcrumbs>
           </v-col>
         </template>
-        <v-col cols="12" v-if="item.id">
+        <v-col cols="12" v-if="item.id != undefined">
           <v-text-field label="کد" v-model="item.code" />
         </v-col>
         <v-col cols="12">
           <v-text-field label="نام" required v-model="item.name" />
         </v-col>
-        <v-col cols="12" class="mt-3" v-if="item.id">
+        <v-col cols="12" class="mt-3" v-if="item.id != undefined">
           <v-simple-table>
             <thead>
               <tr>
@@ -148,7 +148,7 @@
               item-text="text"
               item-value="value"
               :return-object="false"
-              :disabled="item.id"
+              :disabled="item.id != undefined"
               label="نوع شخص"
               required
             ></v-select>
