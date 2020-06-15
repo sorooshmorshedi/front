@@ -267,6 +267,64 @@ export default {
                   title: "تایید کنندگان خروجی"
                 }
               ]
+            },
+
+            {
+              to: {
+                name: "ChequebookForm"
+              },
+              title: "ثبت دسته چک"
+            }
+          ]
+        },
+        {
+          title: "خزانه داری",
+          children: [
+            {
+              title: "دریافت و پرداخت",
+              children: [
+                {
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      transactionType: "receive"
+                    }
+                  },
+                  title: "ثبت دریافت"
+                },
+                {
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      transactionType: "payment"
+                    }
+                  },
+                  title: "ثبت پرداخت"
+                }
+              ]
+            },
+            {
+              title: "دفتر چک",
+              children: [
+                {
+                  to: {
+                    name: "ChequeForm",
+                    params: {
+                      receivedOrPaid: "p"
+                    }
+                  },
+                  title: "ثبت چک پرداختی"
+                },
+                {
+                  to: {
+                    name: "ChequeForm",
+                    params: {
+                      receivedOrPaid: "r"
+                    }
+                  },
+                  title: "ثبت چک دریافتی"
+                }
+              ]
             }
           ]
         },
@@ -325,185 +383,143 @@ export default {
                   title: "ثبت انتقال"
                 }
               ]
-            },
-            {
-              title: "دریافت و پرداخت",
-              children: [
-                {
-                  to: {
-                    name: "TransactionForm",
-                    params: {
-                      transactionType: "receive"
-                    }
-                  },
-                  title: "ثبت دریافت"
-                },
-                {
-                  to: {
-                    name: "TransactionForm",
-                    params: {
-                      transactionType: "payment"
-                    }
-                  },
-                  title: "ثبت پرداخت"
-                }
-              ]
-            },
-            {
-              title: "دفتر چک",
-              children: [
-                {
-                  to: {
-                    name: "ChequebookForm"
-                  },
-                  title: "ثبت دفتر چک"
-                },
-                {
-                  to: {
-                    name: "ChequeForm",
-                    params: {
-                      receivedOrPaid: "p"
-                    }
-                  },
-                  title: "ثبت چک پرداختی"
-                },
-                {
-                  to: {
-                    name: "ChequeForm",
-                    params: {
-                      receivedOrPaid: "r"
-                    }
-                  },
-                  title: "ثبت چک دریافتی"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          title: "فهرست فرم ها",
-          children: [
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "sanad"
-                }
-              },
-              title: "اسناد"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "sanadUnbalanced"
-                }
-              },
-              title: "اسناد نامتوازن"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "sanadEmpty"
-                }
-              },
-              title: "اسناد خالی"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "factor",
-                  type: "buy"
-                }
-              },
-              title: "فاکتور خرید"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "factor",
-                  type: "backFromBuy"
-                }
-              },
-              title: "فاکتور برگشت از خرید"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "factor",
-                  type: "sale"
-                }
-              },
-              title: "فاکتور فروش"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "factor",
-                  type: "backFromSale"
-                }
-              },
-              title: "فاکتور برگشت از فروش"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "transaction",
-                  type: "receive"
-                }
-              },
-              title: "دریافت"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "transaction",
-                  type: "payment"
-                }
-              },
-              title: "پرداخت"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "chequebook"
-                }
-              },
-              title: "دسته چک ها"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "cheque",
-                  type: "received"
-                }
-              },
-              title: "چک های دریافتی"
-            },
-            {
-              to: {
-                name: "List",
-                params: {
-                  form: "cheque",
-                  type: "paid"
-                }
-              },
-              title: "چک های پرداختی"
             }
           ]
         },
         {
           title: "گزارش",
           children: [
+            {
+              title: "گزارش اسناد",
+              children: [
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "sanad"
+                    }
+                  },
+                  title: "اسناد"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "sanadUnbalanced"
+                    }
+                  },
+                  title: "اسناد نامتوازن"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "sanadEmpty"
+                    }
+                  },
+                  title: "اسناد خالی"
+                }
+              ]
+            },
+            {
+              title: "گزارش فاکتور ها",
+              children: [
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "factor",
+                      type: "buy"
+                    }
+                  },
+                  title: "فاکتور خرید"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "factor",
+                      type: "backFromBuy"
+                    }
+                  },
+                  title: "فاکتور برگشت از خرید"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "factor",
+                      type: "sale"
+                    }
+                  },
+                  title: "فاکتور فروش"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "factor",
+                      type: "backFromSale"
+                    }
+                  },
+                  title: "فاکتور برگشت از فروش"
+                }
+              ]
+            },
+            {
+              title: "گزارشات خزانه داری",
+              children: [
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "transaction",
+                      type: "receive"
+                    }
+                  },
+                  title: "دریافت"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "transaction",
+                      type: "payment"
+                    }
+                  },
+                  title: "پرداخت"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "chequebook"
+                    }
+                  },
+                  title: "دسته چک ها"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "cheque",
+                      type: "received"
+                    }
+                  },
+                  title: "چک های دریافتی"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "cheque",
+                      type: "paid"
+                    }
+                  },
+                  title: "چک های پرداختی"
+                }
+              ]
+            },
             {
               to: {
                 name: "LedgerReport"

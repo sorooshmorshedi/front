@@ -1,15 +1,17 @@
 <template>
-  <v-list-item v-if="!hasChild" :to="route.to" link>
+  <v-list-item v-if="!hasChild" :to="route.to" link :class="'level-' + level" flat>
     <v-list-item-content>
-      <v-list-item-title class="list-item-title" :class="'level-' + level">{{ route.title }}</v-list-item-title>
+      <v-list-item-title :class="'level-' + level">{{ route.title }}</v-list-item-title>
     </v-list-item-content>
   </v-list-item>
 
   <v-list-group v-else no-action :sub-group="subGroup">
     <template #activator>
-      <v-list-item-content>
-        <v-list-item-title class="list-item-title">{{level }} - {{ route.title }}</v-list-item-title>
-      </v-list-item-content>
+      <v-list-item flat>
+        <v-list-item-content>
+          <v-list-item-title class :class="'level-' + level">{{ route.title }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </template>
 
     <navbar-list-item
@@ -41,4 +43,13 @@ export default {
 </script>
 
 <style lang="scss" >
+.level-1 {
+  font-weight: 700 !important;
+}
+.level-2 {
+  font-weight: 500 !important;
+}
+.level-3 {
+  font-weight: 300 !important;
+}
 </style>
