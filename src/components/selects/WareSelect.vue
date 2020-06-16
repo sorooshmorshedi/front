@@ -7,36 +7,48 @@
       item-text="name"
       :disabled="disabled"
       prepend-icon="fa-boxes"
-      @click:prepend="ware && showInventory(ware)"
+      @click:prepend="ware && showInventory()"
     ></v-autocomplete>
+
+    <v-dialog v-if="ware" v-model="dialog" scrollable max-width="500px">
+      <v-card>
+        <v-card-title>موجودی انبار ها برای {{ ware.name }}</v-card-title>
+
+        <v-card-text>
+          <v-simple-table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>انبار</th>
+                <th>مانده</th>
+                <th>فی خرید</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(inventory, i) in ware.inventory" :key="inventory.id">
+                <td>{{ i + 1 }}</td>
+                <td>{{ inventory.warehouse.name }}</td>
+                <td>{{ inventory.count }}</td>
+                <td>{{ inventory.fee }}</td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <div class="modal fade d-none" :id="modalId" v-if="ware">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">موجودی انبار ها برای {{ ware.name }}</h5>
+            <h5 class="modal-title"></h5>
             <v-btn type="v-btn" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </v-btn>
           </div>
           <div class="modal-body">
             <div class="container">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>انبار</th>
-                    <th>مانده</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(warehouse, i) in warehousesInventory" :key="warehouse.id">
-                    <td>{{ i }}</td>
-                    <td>{{ warehouse.name }}</td>
-                    <td>{{ warehouse.remain_count }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <table class="table table-striped"></table>
             </div>
           </div>
           <div class="modal-footer">
@@ -56,27 +68,16 @@ export default {
   data() {
     return {
       ware: null,
-      warehousesInventory: [],
-      modalId: ""
+      dialog: false
     };
   },
   created() {
-    this.modalId = this.getRandomId();
     this.getWares();
     this.setWare();
   },
   methods: {
-    showInventory(ware) {
-      this.request({
-        url: this.endpoint(`wares/inventory/forWare`),
-        method: "get",
-        params: {
-          ware: ware.id
-        },
-        success: data => {
-          this.warehousesInventory = data;
-        }
-      });
+    showInventory() {
+      this.dialog = true;
     },
     setWare(value) {
       if (this.value != this.ware) this.ware = this.value;

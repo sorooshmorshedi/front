@@ -172,22 +172,6 @@ export default {
         });
       }
     },
-    showInventory(ware) {
-      this.inventory.ware = ware;
-      this.getInventory(ware);
-    },
-    getInventory(ware) {
-      this.request({
-        url: this.endpoint(`wares/inventory/forWare`),
-        method: "get",
-        params: {
-          ware: ware.id
-        },
-        success: data => {
-          this.inventory.warehouses = data;
-        }
-      });
-    },
     initForm() {
       this.log("Init Form");
       this.clearForm();
