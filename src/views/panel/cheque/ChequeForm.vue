@@ -30,25 +30,37 @@
 
       <template #inputs>
         <v-row>
-          <v-col cols="12" md="6" v-if="!id && isPaidCheque">
-            <label class="required"></label>
-            <v-autocomplete
-              required
-              label="چک"
-              :items="paidCheques"
-              :is-loading="isLoading"
-              :search-input.sync="searchPaidCheque"
-              v-model="cheque"
-            />
-          </v-col>
-          <v-col cols="12" md="6" v-else>
-            <v-text-field
-              required
-              label="سریال چک"
-              v-model="cheque.serial"
-              :disabled="isPaidCheque"
-            />
-          </v-col>
+          <template v-if="isPaidCheque">
+            <v-col cols="12" md="3">
+              <v-autocomplete
+                required
+                label="دسته چک"
+                :items="chequebooks"
+                item-text="account.name"
+                v-model="cheque.chequebook"
+                :disabled="id != null"
+              />
+            </v-col>
+            <v-col v-if="!id" cols="12" md="3">
+              <v-autocomplete
+                required
+                :disabled="!chequebook"
+                label="چک"
+                :items="paidCheques"
+                :is-loading="isLoading"
+                :search-input.sync="searchPaidCheque"
+                v-model="cheque"
+              />
+            </v-col>
+            <v-col cols="12" md="3" v-else>
+              <v-text-field
+                required
+                label="سریال چک"
+                v-model="cheque.serial"
+                :disabled="isPaidCheque"
+              />
+            </v-col>
+          </template>
           <v-col cols="12" md="6">
             <account-select
               :label="isPaidCheque?'دریافت کننده':'پرداخت کننده'"
@@ -61,23 +73,23 @@
               @update:costCenter="v => cheque.costCenter = v"
             />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="3">
             <money label="مبلغ" v-model="cheque.value" />
           </v-col>
-          <v-col cols="12" md="2">
-            <date placeholder="تاریخ سررسید" v-model="cheque.due" :default="true" />
+          <v-col cols="12" md="3">
+            <date label="تاریخ سررسید" v-model="cheque.due" :default="true" />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="3">
             <date
               :label="isPaidCheque?'تاریخ پرداخت':'تاریخ دریافت'"
               v-model="cheque.date"
               :default="true"
             />
           </v-col>
-          <v-col cols="12" md="6" v-if="canSetSanadCode">
+          <v-col cols="12" md="3" v-if="canSetSanadCode">
             <v-text-field label="شماره سند" v-model="cheque.sanad_code" />
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" md="12">
             <v-textarea label="شرح چک" v-model="cheque.explanation"></v-textarea>
           </v-col>
           <v-col cols="12" md="12" v-if="!isPaidCheque">
@@ -122,8 +134,8 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import getChequeApiMixin from "./getChequeApi.js";
 import FormList from "@/views/panel/lists/List";
-
 import formsMixin from "@/mixin/forms";
+import GetChequebooksApi from "@/views/panel/chequebook/getChequebooksApi";
 export default {
   name: "ChequeForm",
   props: {
@@ -147,11 +159,12 @@ export default {
     }
   },
   components: { money, date, FormList },
-  mixins: [getChequeApiMixin, accountApiMixin, formsMixin],
+  mixins: [getChequeApiMixin, accountApiMixin, formsMixin, GetChequebooksApi],
   data() {
     return {
       searchPaidCheque: "",
       isLoading: false,
+      chequebook: {},
       cheque: {
         received_or_paid: this.receivedOrPaid,
         account: this.account
@@ -254,6 +267,7 @@ export default {
     }
 
     if (this.isPaidCheque) {
+      this.getChequebooks();
       this.getPaidCheques("");
     }
   },
@@ -368,8 +382,7 @@ export default {
           offset: 0,
           serial__icontains: value,
           account__icontains: value,
-          chequebook__explanation__icontains: value,
-          chequebook__account__name__icontains: value,
+          chequebook__id: this.chequebook.id,
           status: "blank",
           received_or_paid: "p"
         },

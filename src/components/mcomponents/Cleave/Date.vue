@@ -3,6 +3,7 @@
     v-model="localValue"
     @input="change"
     dir="ltr"
+    :label="label"
     :placeholder="placeholder"
     :disabled="disabled"
     append-icon="fa-calendar-day"
@@ -19,7 +20,7 @@ import IMask from "imask";
 
 export default {
   name: "Date",
-  props: ["value", "id", "default", "disabled", "placeholder"],
+  props: ["value", "id", "default", "disabled", "placeholder", "label"],
   data() {
     return {
       localValue: null,
@@ -68,12 +69,12 @@ export default {
         this.$nextTick(() => {
           this.localValue = this.mask.value;
         });
-        this.$emit("input", this.mask.value);
       }
     },
     setToday() {
       this.localValue = this.now.format("jYYYY-jMM-jDD");
       this.change();
+      this.$emit("input", this.mask.value);
     }
   }
 };

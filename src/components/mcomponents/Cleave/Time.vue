@@ -71,6 +71,7 @@ export default {
     setToday() {
       this.localValue = this.now.format("HH:mm");
       this.change();
+      this.$emit("input", this.mask.value);
     }
   }
 };
