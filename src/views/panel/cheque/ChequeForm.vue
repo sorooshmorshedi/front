@@ -65,7 +65,7 @@
             <money label="مبلغ" v-model="cheque.value" />
           </v-col>
           <v-col cols="12" md="2">
-            <date label="تاریخ سررسید" v-model="cheque.due" :default="true" />
+            <date placeholder="تاریخ سررسید" v-model="cheque.due" :default="true" />
           </v-col>
           <v-col cols="12" md="2">
             <date

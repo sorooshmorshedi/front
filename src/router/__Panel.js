@@ -5,11 +5,6 @@ import Home from '@/views/panel/Home.vue';
 import Companies from '@/views/panel/company/Companies.vue';
 import FinancialYears from '@/views/panel/company/FinancialYears.vue';
 
-import Company from '@/views/panel/company/Company.vue';
-import CreateCompany from '@/views/panel/company/Create.vue';
-import UpdateCompany from '@/views/panel/company/Update.vue';
-import CompaniesList from '@/views/panel/company/List.vue';
-
 import Users from '@/views/panel/user/Users';
 import Roles from '@/views/panel/role/Roles';
 
@@ -78,28 +73,6 @@ export default [{
       name: 'FinancialYears',
       path: 'financialYears',
       component: FinancialYears,
-    },
-    {
-      name: 'Company',
-      path: 'company',
-      component: Company,
-      children: [{
-          name: 'CreateCompany',
-          path: 'create',
-          component: CreateCompany,
-        },
-        {
-          name: 'CompaniesList',
-          path: 'list',
-          component: CompaniesList,
-        },
-        {
-          name: 'UpdateCompany',
-          path: 'update/:id',
-          component: UpdateCompany,
-          props: true,
-        }
-      ]
     },
     {
       name: 'Accounts',

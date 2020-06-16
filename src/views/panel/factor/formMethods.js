@@ -106,6 +106,7 @@ export default {
     getFactorPayload() {
       let factor = this.copy(this.factor);
       factor = this.extractIds(factor);
+      console.log('t', factor.time);
 
       let items = [];
       this.rows.forEach((row, i) => {
@@ -260,6 +261,7 @@ export default {
       else this.storeFactor(clearFactor);
     },
     selectFactor(factor, changeRoute = false) {
+      console.log('t', factor.time);
       this.log("Selecting Factor : ", factor);
       this.factor = factor;
       this.itemsToDelete = [];

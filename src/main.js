@@ -4,13 +4,10 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 
-require('bootstrap-v4-rtl');
 require('./mixin');
+require('@fortawesome/fontawesome-free/css/all.css')
 
 import 'cleave.js'
-
-import Multiselect from '@/components/mcomponents/Multiselect.vue';
-Vue.component('multiselect', Multiselect);
 
 import WareSelect from '@/components/selects/WareSelect.vue';
 Vue.component('WareSelect', WareSelect);
@@ -37,10 +34,6 @@ window.$ = $;
 
 import VTooltip from 'v-tooltip'
 Vue.use(VTooltip)
-
-import '@/assets/js/bootstrap-notify.min.js'
-import VueFormGenerator from "vue-form-generator";
-Vue.use(VueFormGenerator);
 
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker';
 import vuetify from './plugins/vuetify';

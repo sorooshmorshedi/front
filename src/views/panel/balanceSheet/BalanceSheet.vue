@@ -5,10 +5,10 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="2">
-          <date label="از تاریخ" v-model="filters.from_date" placeholder="xxxx-xx-xx" />
+          <date placeholder="از تاریخ" v-model="filters.from_date"  />
         </v-col>
         <v-col cols="12" md="2">
-          <date label="تا تاریخ" v-model="filters.to_date" placeholder="xxxx-xx-xx" />
+          <date placeholder="تا تاریخ" v-model="filters.to_date"  />
         </v-col>
         <v-col cols="12" md="3">
           <v-switch label="در نظر نگرفتن سند بستن" v-model="filters.skipClosingSanad"></v-switch>

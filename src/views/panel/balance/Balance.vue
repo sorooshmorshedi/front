@@ -36,10 +36,10 @@
             <v-col v-else cols="0" md="4"></v-col>
 
             <v-col cols="12" md="6">
-              <date label="از تاریخ" v-model="sanadFilters.from_date" />
+              <date placeholder="از تاریخ" v-model="sanadFilters.from_date" />
             </v-col>
             <v-col cols="12" md="6">
-              <date label="تا تاریخ" v-model="sanadFilters.to_date" />
+              <date placeholder="تا تاریخ" v-model="sanadFilters.to_date" />
             </v-col>
 
             <v-col cols="12" md="6">

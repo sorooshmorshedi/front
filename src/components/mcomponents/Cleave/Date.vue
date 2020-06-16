@@ -1,72 +1,78 @@
 <template>
   <v-text-field
-    type="text"
-    @input="change()"
-    :id="inputId"
+    v-model="localValue"
+    @input="change"
     dir="ltr"
-    :label="label"
     :placeholder="placeholder"
     :disabled="disabled"
-    style="min-width: 80px"
+    append-icon="fa-calendar-day"
+    @click:append="setToday"
+    clearable
+    style="min-width: 90px"
   />
 </template>
 
 <script>
 import Cleave from "cleave.js";
 import moment from "moment-jalaali";
+import IMask from "imask";
+
 export default {
-  name: "CleaveDate",
-  props: ["value", "id", "default", "label", "disabled", "placeholder"],
+  name: "Date",
+  props: ["value", "id", "default", "disabled", "placeholder"],
   data() {
     return {
-      inputId: "",
-      formattedChangeLimit: 3,
-      options: {
-        date: true,
-        datePattern: ["Y", "m", "d"],
-        delimiter: "-"
-      }
+      localValue: null,
+      mask: null,
+      isDirty: false
     };
-  },
-  created() {
-    if (this.id) {
-      this.inputId = this.id;
-    } else {
-      this.inputId = "cleave" + (Math.random() * 100000).toFixed(0);
-    }
-  },
-  mounted() {
-    this.cleave = new Cleave("#" + this.inputId, this.options);
-    if (this.default) {
-      this.setDefaultValue();
-    } else {
-      this.cleave.setRawValue(this.value);
-    }
   },
   watch: {
     value() {
-      if (!this.value && this.default) {
-        this.setDefaultValue();
-        return;
+      this.localValue = this.value;
+    }
+  },
+  created() {
+    this.mask = IMask.createMask({
+      mask: "YYYY-MM-DD",
+      lazy: true,
+      blocks: {
+        YYYY: {
+          mask: "0000"
+        },
+        MM: {
+          mask: IMask.MaskedRange,
+          from: 1,
+          to: 12
+        },
+        DD: {
+          mask: IMask.MaskedRange,
+          from: 1,
+          to: 31
+        }
       }
-      if (this.cleave.getRawValue() != this.value) {
-        this.cleave.setRawValue(this.value);
-      }
+    });
+  },
+  mounted() {
+    if (this.default) {
+      this.setToday();
+    } else {
+      this.localValue = this.value;
     }
   },
   methods: {
     change() {
-      setTimeout(() => {
-        let value = $("#" + this.inputId).val();
-        this.$emit("input", value);
-      }, 100);
+      this.isDirty = true;
+      if (this.localValue != this.mask.value) {
+        this.mask.resolve(String(this.localValue));
+        this.$nextTick(() => {
+          this.localValue = this.mask.value;
+        });
+        this.$emit("input", this.mask.value);
+      }
     },
-    setDefaultValue() {
-      let now = this.now
-        .format("jYYYY-jMM-jDD")
-        .split("-")
-        .join("");
-      this.cleave.setRawValue(now);
+    setToday() {
+      this.localValue = this.now.format("jYYYY-jMM-jDD");
       this.change();
     }
   }

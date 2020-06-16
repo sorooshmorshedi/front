@@ -7,10 +7,11 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "axios": "^0.19.2",
-    "bootstrap-v4-rtl": "^4.1.1-1",
     "cleave.js": "^1.5.10",
     "core-js": "^3.6.5",
+    "imask": "^6.0.5",
     "jquery": "^3.5.0",
     "lodash": "^4.17.15",
     "material-design-icons-iconfont": "^5.0.1",
@@ -20,8 +21,7 @@
     "roboto-fontface": "*",
     "v-tooltip": "^2.0.3",
     "vue": "^2.6.11",
-    "vue-form-generator": "^2.3.4",
-    "vue-multiselect": "^2.1.6",
+    "vue-imask": "^6.0.5",
     "vue-persian-datetime-picker": "^2.1.5",
     "vue-router": "^3.1.5",
     "vuetify": "^2.1.0",

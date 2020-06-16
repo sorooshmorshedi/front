@@ -67,6 +67,7 @@
                 label="تاریخ سند"
                 :default="true"
                 :disabled="!editable"
+                ref="date"
               />
             </v-col>
             <v-col cols="12" lg="12">
@@ -303,6 +304,7 @@ export default {
       this.sanad = {
         type: "temporary"
       };
+      this.$refs.date.isDirty = false;
       this.rows = [
         {
           bed: "",
@@ -355,7 +357,6 @@ export default {
         this.rows.push(row);
       });
       this.rows.push({ bed: 0, bes: 0 });
-      $("#sanad-selection-modal").modal("hide");
     },
     copySanadToNewSanad() {
       let rows = this.copy(this.rows);

@@ -39,7 +39,7 @@
               </v-col>
             </template>
             <v-col cols="12">
-              <date required label="تاریخ" v-model="statusChange.date" :default="true" />
+              <date required placeholder="تاریخ" v-model="statusChange.date" :default="true" />
             </v-col>
             <v-col cols="12">
               <v-textarea label="توضیحات" v-model="statusChange.explanation" />

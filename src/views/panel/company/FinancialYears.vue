@@ -24,10 +24,10 @@
             <v-text-field label="نام" v-model="item.name" />
           </v-col>
           <v-col cols="12" md="6">
-            <date label="شروع" v-model="item.start" />
+            <date placeholder="شروع" v-model="item.start" />
           </v-col>
           <v-col cols="12" md="6">
-            <date label="پایان" v-model="item.end" />
+            <date placeholder="پایان" v-model="item.end" />
           </v-col>
           <v-col cols="12">
             <v-textarea label="توضیحات" v-model="item.explanation" />
@@ -99,7 +99,6 @@ export default {
         success: data => {
           this.successNotify();
           this.$store.commit("setUser", data);
-          $("#financial-years").modal("hide");
         }
       });
     }

@@ -50,7 +50,7 @@
                   />
                 </v-col>
                 <v-col cols="12" md="4">
-                  <date label="تاریخ راس" disabled />
+                  <date placeholder="تاریخ راس" disabled />
                 </v-col>
                 <v-col cols="12" md="12">
                   <account-select
@@ -113,7 +113,7 @@
                       />
                       <v-btn
                         v-if="isChequeType(row) && !hasCheque(row)"
-                        @click="openSubmitChequeModal(row, i)"
+                        @click="openSubmitChequeDialog(row, i)"
                         class="blue white--text mt-1"
                         block
                         :disabled="!editable"
@@ -751,7 +751,7 @@ export default {
     hasCheque(row) {
       return row.cheque;
     },
-    openSubmitChequeModal(row, i) {
+    openSubmitChequeDialog(row, i) {
       let account = this.transaction.account;
       if (!account) {
         this.notify(`ابتدا حساب را انتخاب کنید`, "danger");

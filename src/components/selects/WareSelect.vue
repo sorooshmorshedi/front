@@ -75,7 +75,6 @@ export default {
         },
         success: data => {
           this.warehousesInventory = data;
-          $(`#${this.modalId}`).modal("show");
         }
       });
     },

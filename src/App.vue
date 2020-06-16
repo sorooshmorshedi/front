@@ -132,11 +132,6 @@ export default {
       snackbar: state => state.snackbar
     })
   },
-  watch: {
-    $route() {
-      this.modal(".modal", "hide");
-    }
-  },
   created() {
     this.getDateTime();
   },
@@ -167,5 +162,4 @@ export default {
 <style lang="scss">
 @import "./styles/main";
 </style>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 

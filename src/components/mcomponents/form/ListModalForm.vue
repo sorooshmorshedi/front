@@ -87,7 +87,6 @@ export default {
     },
     rowClick(item) {
       this.$emit("rowClick", item);
-      this.modal("#form");
     }
   }
 };

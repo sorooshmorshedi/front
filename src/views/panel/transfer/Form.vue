@@ -22,7 +22,7 @@
           <v-text-field label="شماره انتقال" disabled v-model="transfer.code" />
         </v-col>
         <v-col cols="12" md="2">
-          <date label="تاریخ" v-model="transfer.date" :default="true" :disabled="!editable" />
+          <date placeholder="تاریخ" v-model="transfer.date" :default="true" :disabled="!editable" />
         </v-col>
         <v-col cols="12" md="8">
           <v-textarea
@@ -185,7 +185,6 @@ export default {
         },
         success: data => {
           this.inventory.warehouses = data;
-          $("#inventory-modal").modal("show");
         }
       });
     },

@@ -1,53 +1,75 @@
 <template>
-  <v-text-field :label="label" @input="change()" ref="inputRef" dir="ltr" :placeholder="placeholder"></v-text-field>
+  <v-text-field
+    v-model="localValue"
+    @input="change"
+    dir="ltr"
+    :placeholder="placeholder"
+    :disabled="disabled"
+    append-icon="fa-clock"
+    @click:append="setToday"
+    clearable
+    style="min-width: 90px"
+  />
 </template>
 
 <script>
 import Cleave from "cleave.js";
 import moment from "moment-jalaali";
+import IMask from "imask";
+
 export default {
-  name: "CleaveTime",
-  props: ["value", "default", "label", "placeholder"],
+  name: "Date",
+  props: ["value", "id", "default", "disabled", "placeholder"],
   data() {
     return {
-      el: null,
-      formattedChangeLimit: 3,
-      options: {
-        time: true,
-        timePattern: ["h", "m"]
-      }
+      localValue: null,
+      mask: null,
+      isDirty: false
     };
-  },
-  mounted() {
-    this.el = this.$refs.inputRef.$el.querySelector("input");
-    this.cleave = new Cleave(this.el, this.options);
-    if (this.default) {
-      this.setDefaultValue();
-    } else {
-      this.cleave.setRawValue(this.value);
-    }
   },
   watch: {
     value() {
-      if (!this.value && this.default) {
-        this.setDefaultValue();
-        return;
+      this.localValue = this.value;
+      this.change();
+    }
+  },
+  created() {
+    this.mask = IMask.createMask({
+      mask: "HH:MM",
+      blocks: {
+        HH: {
+          mask: IMask.MaskedRange,
+          from: 0,
+          to: 23
+        },
+        MM: {
+          mask: IMask.MaskedRange,
+          from: 0,
+          to: 59
+        }
       }
-      if (this.value && this.cleave.getRawValue() != this.value) {
-        this.cleave.setRawValue(this.value);
-      }
+    });
+  },
+  mounted() {
+    if (this.default) {
+      this.setToday();
+    } else {
+      this.localValue = this.value;
     }
   },
   methods: {
     change() {
-      setTimeout(() => {
-        let value = this.el.value;
-        this.$emit("input", value);
-      }, 100);
+      this.isDirty = true;
+      if (this.localValue != this.mask.value) {
+        this.mask.resolve(String(this.localValue));
+        this.$nextTick(() => {
+          this.localValue = this.mask.value;
+        });
+        this.$emit("input", this.mask.value);
+      }
     },
-    setDefaultValue() {
-      let now = this.now.format("HHmm");
-      this.cleave.setRawValue(now);
+    setToday() {
+      this.localValue = this.now.format("HH:mm");
       this.change();
     }
   }

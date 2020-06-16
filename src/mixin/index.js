@@ -102,9 +102,6 @@ Vue.mixin({
       localStorage.setItem('token', token);
       this.token = token;
     },
-    modal(selector, func) {
-      $(selector).modal(func);
-    },
     copy(obj) {
       let res = null;
       if (Array.isArray(obj)) {
