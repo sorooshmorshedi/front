@@ -138,15 +138,7 @@
               </template>
               <td>{{ sc.explanation }}</td>
               <td>
-                <v-btn
-                  v-if="sc.sanad"
-                  :to="{name: 'SanadForm',params:{id: sc.sanad.id }}"
-                  class
-                  outlined
-                >
-                  مشاهده سند
-                  <v-chip class="app-background-color mr-2" x-small>{{ sc.sanad.code }}</v-chip>
-                </v-btn>
+                <open-sanad-btn v-if="sc.sanad" :sanad="sc.sanad" :table-style="true" />
               </td>
               <td>
                 <v-btn
@@ -185,8 +177,9 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import changeChequeStatus from "./ChangeChequeStatus";
 import getChequeApiMixin from "./getChequeApi.js";
+import OpenSanadBtn from "@/components/form/OpenSanadBtn";
 export default {
-  components: { money, date, changeChequeStatus },
+  components: { money, date, changeChequeStatus, OpenSanadBtn },
   mixins: [getChequeApiMixin],
   props: {
     id: {

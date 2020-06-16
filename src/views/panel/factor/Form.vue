@@ -45,14 +45,7 @@
             class="blue white--text mr-1"
           >مشاهده {{ transactionType.label }} ها</v-btn>
 
-          <v-btn
-            v-if="factor.sanad"
-            @click="openSanad(factor.sanad.id)"
-            class="blue white--text mr-1"
-          >
-            مشاهده سند
-            <v-chip class="app-background-color mr-2" x-small>{{ factor.sanad.code }}</v-chip>
-          </v-btn>
+          <open-sanad-btn v-if="factor.sanad" :sanad="factor.sanad" />
 
           <v-btn @click="exportsDialog = true" class="export-btn mr-1">خروجی</v-btn>
         </template>

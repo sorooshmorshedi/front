@@ -24,14 +24,7 @@
             class="blue white--text mr-1"
           >پرداخت شده برای فاکتور های</v-btn>
 
-          <v-btn
-            v-if="transaction.id"
-            @click="openSanad(transaction.sanad)"
-            class="blue white--text mr-1"
-          >
-            مشاهده سند
-            <v-chip class="app-background-color mr-2" x-small>{{ transaction.sanad }}</v-chip>
-          </v-btn>
+          <open-sanad-btn v-if="transaction.sanad" :sanad="transaction.sanad" />
         </template>
 
         <template #inputs>

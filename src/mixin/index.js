@@ -114,15 +114,6 @@ Vue.mixin({
     log(t) {
       console.log(moment().format('HH:mm:ss:SS'), t);
     },
-    openSanad(sanadId) {
-      let routeData = this.$router.resolve({
-        name: "SanadForm",
-        params: {
-          id: sanadId
-        }
-      });
-      window.open(routeData.href, "_blank");
-    },
     openFactor(factor) {
       let routeData = this.$router.resolve({
         name: "FactorForm",
