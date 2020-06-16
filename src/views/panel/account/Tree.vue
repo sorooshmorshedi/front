@@ -67,6 +67,7 @@ export default {
         {
           title: "سرفصل حساب ها",
           expanded: true,
+          show: true,
           children: []
         }
       ],
@@ -84,7 +85,7 @@ export default {
   },
   methods: {
     setAccount(node) {
-      this.account = {...node};
+      this.account = { ...node };
     },
     contextMenu(node, index, parent, e) {
       if (!node.id) return;
@@ -103,6 +104,7 @@ export default {
         if (account.parent) {
           tree[account.parent].children.push(account);
         } else {
+          account.show = true;
           this.root[0].children.push(account);
         }
 

@@ -76,9 +76,9 @@ export default {
           .length;
         if (
           searchValue &&
-          (hasExpandedChild || node.title.includes(searchValue))
+          (hasExpandedChild || node.originalTitle.includes(searchValue))
         ) {
-          title = node.title.replace(
+          title = node.originalTitle.replace(
             searchValue,
             `<span class='search-result'>${searchValue}</span>`
           );
@@ -90,6 +90,12 @@ export default {
 
         this.$set(node, "title", title);
         this.$set(node, "expanded", expand);
+
+        if (searchValue == "") {
+          this.$set(node, "show", true);
+        } else {
+          this.$set(node, "show", expand);
+        }
 
         expand && this.$set(node, "hasExpanded", true);
 
@@ -194,7 +200,7 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 .halo-tree li span:hover {
   background-color: transparent;
   /* padding: 6px 0; */
@@ -227,6 +233,11 @@ export default {
     0.3s padding-bottom ease-in-out;
   transition: 0.3s height ease-in-out, 0.3s padding-top ease-in-out,
     0.3s padding-bottom ease-in-out;
+  padding-left: 0px !important;
+
+  li {
+    padding-left: 0px !important;
+  }
 }
 .halo-tree ul {
   box-sizing: border-box;
@@ -344,7 +355,7 @@ export default {
   padding-left: 0;
 }
 .halo-tree ul {
-  padding-left: 17px;
+  padding-left: 0px;
   padding-top: 10px;
 }
 .halo-tree .tree-expand {
@@ -377,7 +388,7 @@ export default {
   z-index: 3;
 }
 .halo-tree li.leaf {
-  padding-left: 15px;
+  padding-left: 0px;
 }
 .halo-tree li.leaf:after {
   content: "";
@@ -437,5 +448,9 @@ export default {
 
 .search-result {
   background-color: #ffeb3b;
+}
+
+.tree-expand {
+  cursor: pointer;
 }
 </style>

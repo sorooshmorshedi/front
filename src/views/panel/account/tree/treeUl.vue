@@ -2,6 +2,7 @@
   <ul class="halo-tree">
     <treeLi
       v-for="(item, index) in data"
+      v-if="item.show"
       :key="item.id ? item.id : index"
       :item="item"
       :index="index"

@@ -114,6 +114,17 @@ export default {
       const expanded = !node.expanded;
       this.$set(node, "expanded", expanded);
       this.$set(node, "hasExpanded", true);
+
+      let closeChilds = node => {
+        this.$set(node, "expanded", false);
+        node.children.forEach(child => {
+          closeChilds(child);
+        });
+      };
+
+      if (!expanded) {
+        closeChilds(node);
+      }
     },
     nodeMouseOver(node, index, parent) {
       this.emitEventToTree("node-mouse-over", node, index, parent);
