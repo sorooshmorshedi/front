@@ -9,7 +9,7 @@
         :disabled="disabled || accountDisabled"
         :multiple="multiple"
         :placeholder="placeholder"
-        :prepend-icon="showLedgerBtn?'fa-book-open':''"
+        :prepend-icon="showLedgerBtn && itemsType =='level3'?'fa-book-open':''"
         @click:prepend="item && openLedger(item)"
       ></v-autocomplete>
     </v-col>

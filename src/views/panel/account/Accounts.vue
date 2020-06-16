@@ -224,6 +224,9 @@ export default {
   data() {
     return {
       item: {},
+      itemTemplate: {
+        is_real: true
+      },
       baseUrl: "accounts/accounts",
       cols: [
         {
