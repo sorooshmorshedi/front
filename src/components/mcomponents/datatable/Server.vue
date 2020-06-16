@@ -107,11 +107,11 @@
       <div class="row">
         <div class="col-md-6 col-12">
           <v-pagination
-            :value="pages.currentPage"
+            :value="pages.currentPage + 1"
             @input="goToPage"
             @next="nextPage"
             @previus="previousPage"
-            :length="+Math.ceil(count / limit)"
+            :length="+Math.ceil(count / limit) -1"
           ></v-pagination>
         </div>
         <div class="col-md-6 col-12 justify-content-left">
@@ -175,6 +175,7 @@ export default {
       deep: true
     },
     limit() {
+      this.offset = 0;
       this.debouncedGetData();
     },
     order() {
@@ -329,7 +330,7 @@ export default {
       this.getData();
     },
     goToPage(n) {
-      this.offset = this.limit * n;
+      this.offset = this.limit * (n - 1);
       this.getData();
     },
     get(item, col) {
