@@ -12,31 +12,43 @@
       ref="listModelForm"
     >
       <template #default>
-        <div class="row">
-          <div class="form-group col-12">
+        <v-row>
+          <v-col cols="12">
             <v-text-field required label="نام" v-model="item.name" />
-          </div>
-          <div class="col-12">
-            <div class="row" v-for="(model, i) in Object.keys(allPermissions)" :key="i">
-              <div class="col-12 text-bold">{{ model }}</div>
-              <div
-                class="form-check col-12 col-md-6"
-                v-for="(permission, i) in allPermissions[model]"
-                :key="i"
-              >
-                <label class="form-check-label mt-1">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    @change="togglePermission(permission)"
-                    v-model="permissionsModel[String(permission.id)]"
-                  />
-                  {{ permission.name }}
-                </label>
-              </div>
+          </v-col>
+          <v-col cols="12">
+            <v-subheader>دسترسی ها</v-subheader>
+            <div class="d-flex">
+              <v-text-field class="mr-2" placeholder="جستوجو" v-model="modelSearch" />
+              <v-spacer></v-spacer>
+              <v-btn @click="deselectAll" small depressed color="cyan white--text">عدم انتخاب همه</v-btn>
+              <v-btn
+                @click="selectAll"
+                small
+                depressed
+                color="cyan white--text"
+                class="mr-1"
+              >انتخاب همه</v-btn>
             </div>
-          </div>
-        </div>
+            <v-expansion-panels multiple class="mt-3">
+              <v-expansion-panel v-for="(model, i) in models" :key="i">
+                <v-expansion-panel-header>{{ model.label }}</v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row v-if="Object.keys(item.permissions).length == permissions.length">
+                    <v-col
+                      cols="12"
+                      md="6"
+                      v-for="(permission, i) in modelPermissions[model.name]"
+                      :key="i"
+                    >
+                      <v-switch :label="permission.name" v-model="item.permissions[permission.id]"></v-switch>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-col>
+        </v-row>
       </template>
     </list-modal-form>
   </div>
@@ -52,7 +64,8 @@ export default {
     return {
       baseUrl: "users/roles/list",
       items: [],
-      allPermissions: [],
+      modelSearch: "",
+      permissionsData: [],
       cols: [
         {
           th: "نام",
@@ -63,9 +76,8 @@ export default {
       ],
       itemTemplate: {
         name: "",
-        permissions: []
-      },
-      permissionsModel: {}
+        permissions: {}
+      }
     };
   },
   computed: {
@@ -77,28 +89,66 @@ export default {
     },
     deleteUrl() {
       return this.item.id && `users/roles/delete/${this.item.id}`;
+    },
+    modelPermissions() {
+      return this.permissionsData;
+      let models = this.models.filter(o => o.label.includes(this.modelSearch));
+      let result = {};
+      for (let model of models) {
+        result[model.name] = this.permissionsData[model.name];
+      }
+      return result;
+    },
+    models() {
+      return [
+        { name: "role", label: "نقش ها" },
+        { name: "user", label: "کاربران" },
+        { name: "company", label: "شرکت ها" },
+        { name: "financialyear", label: "سال های مالی" },
+        { name: "floataccountgroup", label: "گروه حساب شناور" },
+        { name: "floataccount", label: "حساب شناور" },
+        { name: "account", label: "حساب ها" },
+        { name: "defaultaccount", label: "حساب های پیشفرض" },
+        { name: "unit", label: "واحد ها" },
+        { name: "warehouse", label: "انبار ها" },
+        { name: "warelevel", label: "سطوح کالا" },
+        { name: "ware", label: "کالا ها" },
+        { name: "sanad", label: "اسناد" },
+        { name: "transaction", label: "دریافت و پرداخت" },
+        { name: "chequebook", label: "دسته چک" },
+        { name: "cheque", label: "چک" },
+        { name: "statuschange", label: "تغییر وضعیت چک" },
+        { name: "expense", label: "هزینه های فاکتور" },
+        { name: "factor", label: "فاکتور" },
+        { name: "transfer", label: "انتقال" },
+        { name: "report", label: "گزارش ها" },
+        { name: "exportverifier", label: "تایید کنندگان خروجی" }
+      ].filter(o => o.label.includes(this.modelSearch));
+    },
+    permissions() {
+      let permissions = [];
+      for (let modelPermission of Object.values(this.modelPermissions)) {
+        if (modelPermission) {
+          permissions.push(...modelPermission);
+        }
+      }
+      return permissions;
     }
   },
   methods: {
     clearForm() {
-      this.item = { ...this.itemTemplate };
-      this.permissionsModel = {};
+      this.item = this.copy(this.itemTemplate);
     },
     setItem(item) {
-      this.item = item;
-      this.permissionsModel = {};
-      for (const permission of item.permissions) {
-        this.permissionsModel[String(permission)] = true;
+      this.item = { ...item };
+      let permissions = {};
+      for (const permission of this.permissions) {
+        permissions[permission.id] = false;
       }
-    },
-    togglePermission(permission) {
-      if (this.isCheckedPermission(permission)) {
-        this.item.permissions = this.item.permissions.filter(
-          id => id != permission.id
-        );
-      } else {
-        this.item.permissions.push(permission.id);
+      for (const permissionId of item.permissions) {
+        permissions[permissionId] = true;
       }
+      this.item.permissions = permissions;
     },
     isCheckedPermission(permission) {
       return this.item.permissions.filter(id => id == permission.id).length;
@@ -115,11 +165,34 @@ export default {
         url: this.endpoint(`users/permissions/list`),
         method: "get",
         success: data => {
-          this.allPermissions = data;
+          this.permissionsData = data;
+          for (let permission of this.permissions) {
+            this.itemTemplate.permissions[permission.id] = false;
+          }
+          this.clearForm();
         }
       });
+    },
+    selectAll() {
+      for (let permission of this.permissions) {
+        this.item.permissions[permission.id] = true;
+      }
+    },
+    deselectAll() {
+      for (let permission of this.permissions) {
+        this.item.permissions[permission.id] = false;
+      }
+    },
+    getSerialized() {
+      let item = this.item;
+      let permissions = [];
+      Object.keys(item.permissions).forEach(permissionId => {
+        if (item.permissions[permissionId]) permissions.push(permissionId);
+      });
+      item.permissions = permissions;
+      return item;
     }
-    // getSerialized() {}
-  }
+  },
+  filters: {}
 };
 </script>
