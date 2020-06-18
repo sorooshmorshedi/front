@@ -32,7 +32,20 @@
             </div>
             <v-expansion-panels multiple class="mt-3">
               <v-expansion-panel v-for="(model, i) in models" :key="i">
-                <v-expansion-panel-header>{{ model.label }}</v-expansion-panel-header>
+                <v-expansion-panel-header>
+                  <v-row no-gutters>
+                    <v-col>{{ model.label }}</v-col>
+                    <v-spacer></v-spacer>
+                    <v-col class="text-left pl-6">
+                      <v-btn @click.stop="deselectAll({model: model.name})" icon>
+                        <v-icon>fa-times</v-icon>
+                      </v-btn>
+                      <v-btn @click.stop="selectAll({model: model.name})" icon class="mr-1">
+                        <v-icon>fa-check-double</v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row v-if="Object.keys(item.permissions).length == permissions.length">
                     <v-col
@@ -138,6 +151,14 @@ export default {
   methods: {
     clearForm() {
       this.item = this.copy(this.itemTemplate);
+      this.item.permissions = this.getPermissionsTemplate();
+    },
+    getPermissionsTemplate() {
+      let permissions = {};
+      for (const permission of this.permissions) {
+        permissions[permission.id] = false;
+      }
+      return permissions;
     },
     setItem(item) {
       this.item = { ...item };
@@ -173,14 +194,18 @@ export default {
         }
       });
     },
-    selectAll() {
+    selectAll({ model = null }) {
       for (let permission of this.permissions) {
-        this.item.permissions[permission.id] = true;
+        if (!model || permission.contentType.model == model) {
+          this.item.permissions[permission.id] = true;
+        }
       }
     },
-    deselectAll() {
+    deselectAll({ model = null }) {
       for (let permission of this.permissions) {
-        this.item.permissions[permission.id] = false;
+        if (!model || permission.contentType.model == model) {
+          this.item.permissions[permission.id] = false;
+        }
       }
     },
     getSerialized() {
