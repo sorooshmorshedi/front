@@ -22,7 +22,7 @@
           <v-text-field label="شماره انتقال" disabled v-model="transfer.code" />
         </v-col>
         <v-col cols="12" md="2">
-          <date placeholder="تاریخ" v-model="transfer.date" :default="true" :disabled="!editable" />
+          <date label=" * تاریخ" v-model="transfer.date" :default="true" :disabled="!editable" />
         </v-col>
         <v-col cols="12" md="8">
           <v-textarea
@@ -41,11 +41,11 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>نام/کد کالا</th>
-                <th>از انبار</th>
-                <th>تعداد</th>
+                <th> * نام/کد کالا</th>
+                <th> * از انبار</th>
+                <th> * تعداد</th>
                 <th>واحد</th>
-                <th>به انبار</th>
+                <th> * به انبار</th>
                 <th>توضیحات</th>
                 <th class="d-print-none"></th>
               </tr>

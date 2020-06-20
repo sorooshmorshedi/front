@@ -14,7 +14,7 @@
       <v-row>
         <v-col cols="12">
           <v-autocomplete
-            lable="سال مالی جدید"
+            label=" * سال مالی جدید"
             :items="financialYears"
             v-model="targetFinancialYear"
             item-text="name"

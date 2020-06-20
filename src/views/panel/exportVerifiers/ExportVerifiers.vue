@@ -15,7 +15,7 @@
         <template v-if="hasParent">
           <v-col cols="12">
             <v-autocomplete
-              label="فرم"
+              label=" * فرم"
               :items="forms"
               v-model="item.form"
               item-text="label"
@@ -27,7 +27,7 @@
             <v-text-field label="نام" v-model="item.name" />
           </v-col>
           <v-col cols="12">
-            <v-text-field label="سمت" v-model="item.post" />
+            <v-text-field label=" * سمت" v-model="item.post" />
           </v-col>
         </template>
       </v-row>

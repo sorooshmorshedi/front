@@ -13,11 +13,11 @@
     <template #default>
       <v-row>
         <v-col cols="12">
-          <v-text-field label="نام" v-model="item.name" />
+          <v-text-field label=" * نام" v-model="item.name" />
         </v-col>
         <v-col cols="12">
           <account-select
-            label="حساب"
+            label=" * حساب"
             itemsType="level3"
             v-model="item.account"
             :floatAccount="item.floatAccount"

@@ -58,13 +58,13 @@
                 v-if="sanad.id"
                 background-color="white"
               ></v-text-field>
-              <v-text-field required label="شماره سند" disabled :value="sanadCode" v-else></v-text-field>
+              <v-text-field label="شماره سند" disabled :value="sanadCode" v-else></v-text-field>
             </v-col>
             <v-col cols="12" lg="6">
               <date
                 class="form-control"
                 v-model="sanad.date"
-                label="تاریخ سند"
+                label=" * تاریخ سند"
                 :default="true"
                 :disabled="!editable"
                 ref="date"
@@ -93,7 +93,7 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th class="required">شماره - نام حساب</th>
+                <th> * شماره - نام حساب</th>
                 <th>توضیحات ردیف</th>
                 <th>بدهکار</th>
                 <th class="d-print-none">

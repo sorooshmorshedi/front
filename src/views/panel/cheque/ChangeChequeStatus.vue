@@ -9,7 +9,7 @@
         <v-row>
           <v-col cols="12">
             <v-autocomplete
-              label="تغییر وضعیت به"
+              label=" * تغییر وضعیت به"
               item-text="label"
               item-value="name"
               :items="statuses"
@@ -25,7 +25,7 @@
               <v-col cols="12">
                 <account-select
                   required
-                  :label=" accountLabel(newStatus) "
+                  :label="' * ' + accountLabel(newStatus) "
                   :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
                   label="name"
                   track-by="id"
@@ -39,7 +39,7 @@
               </v-col>
             </template>
             <v-col cols="12">
-              <date required placeholder="تاریخ" v-model="statusChange.date" :default="true" />
+              <date placeholder=" * تاریخ" v-model="statusChange.date" :default="true" />
             </v-col>
             <v-col cols="12">
               <v-textarea label="توضیحات" v-model="statusChange.explanation" />
@@ -165,11 +165,11 @@ export default {
       let acc = null;
       if (name == "inFlow") {
         acc = this.defaultAccounts.filter(
-          o => o.programingName == "inFlowDocuments"
+          o => o.nickname == "inFlowDocuments"
         )[0];
       }
       if (name == "cashed") {
-        acc = this.defaultAccounts.filter(o => o.programingName == "cash")[0];
+        acc = this.defaultAccounts.filter(o => o.nickname == "cash")[0];
       }
       if (name == "passed" && this.chequebook) {
         acc = { account: this.chequebook.account };

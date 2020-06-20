@@ -14,7 +14,7 @@
       <template #default>
         <v-row>
           <v-col cols="12">
-            <v-text-field required label="نام" v-model="item.name" />
+            <v-text-field label=" * نام" v-model="item.name" />
           </v-col>
           <v-col cols="12">
             <v-subheader>دسترسی ها</v-subheader>

@@ -9,7 +9,7 @@
     append-icon="fa-calendar-day"
     @click:append="setToday"
     clearable
-    style="min-width: 90px"
+    style="min-width: 140px"
   />
 </template>
 

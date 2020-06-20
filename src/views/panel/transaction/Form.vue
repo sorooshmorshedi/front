@@ -36,7 +36,7 @@
                 </v-col>
                 <v-col cols="12" md="4">
                   <date
-                    label="تاریخ"
+                    label=" * تاریخ"
                     v-model="transaction.date"
                     :default="true"
                     :disabled="!editable"
@@ -47,7 +47,7 @@
                 </v-col>
                 <v-col cols="12" md="12">
                   <account-select
-                    label="کد - نام مشتری"
+                    label=" * کد - نام مشتری"
                     itemsType="level3"
                     v-model="transaction.account"
                     :disabled="!editable"
@@ -80,11 +80,11 @@
                 <thead>
                   <tr>
                     <th class="tr-counter">#</th>
-                    <th class="required">نوع {{ type.label }}</th>
-                    <th>نام حساب</th>
-                    <th class="required">مبلغ</th>
+                    <th> * نوع {{ type.label }}</th>
+                    <th> * نام حساب</th>
+                    <th> * مبلغ</th>
                     <th>شماره مستند</th>
-                    <th class="required">تاریخ {{ type.label }}</th>
+                    <th> * تاریخ {{ type.label }}</th>
                     <th>سررسید</th>
                     <th>نام بانک</th>
                     <th>توضیحات</th>
@@ -97,7 +97,7 @@
                     :class="{'d-print-none': i == rows.length-1}"
                   >
                     <td>{{ i+1 }}</td>
-                    <td style="width: 150px">
+                    <td style="min-width: 150px">
                       <v-autocomplete
                         :disabled="!editable || hasCheque(row)"
                         :items="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))"
@@ -731,14 +731,12 @@ export default {
     },
     hasBank(row) {
       if (this.isChequeType(row)) return false;
-      if (row.type && row.type.programingName == "cash") return false;
+      if (row.type && row.type.nickname == "cash") return false;
       return true;
     },
     isChequeType(row) {
       return (
-        row.type &&
-        row.type.programingName &&
-        row.type.programingName.includes("Cheque")
+        row.type && row.type.nickname && row.type.nickname.includes("Cheque")
       );
     },
     hasCheque(row) {

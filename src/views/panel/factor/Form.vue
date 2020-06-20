@@ -61,7 +61,7 @@
           </v-col>
           <v-col cols="12" md="2">
             <date
-              label="تاریخ فاکتور"
+              label=" * تاریخ فاکتور"
               required
               v-model="factor.date"
               :default="true"
@@ -70,7 +70,7 @@
           </v-col>
           <v-col cols="12" md="2">
             <mtime
-              label="ساعت فاکتور"
+              label=" * ساعت فاکتور"
               required
               v-model="factor.time"
               :default="true"
@@ -85,7 +85,7 @@
           </v-col>
           <v-col cols="12" md="6">
             <account-select
-              :label="accountName"
+              :label="' * ' + accountName"
               itemsType="persons"
               v-model="factor.account"
               :disabled="!editable"
@@ -116,9 +116,9 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th class="required">شرح</th>
-                  <th>انبار</th>
-                  <th class="required">تعداد</th>
+                  <th> * شرح</th>
+                  <th> * انبار</th>
+                  <th> * تعداد</th>
                   <th>واحد</th>
                   <th class="required">قیمت واحد</th>
                   <th>جمع</th>
@@ -383,9 +383,9 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th class="required">نام هزینه ثابت</th>
-                    <th class="required">مبلغ</th>
-                    <th class="required">پرداخت کننده</th>
+                    <th> * نام هزینه ثابت</th>
+                    <th> * مبلغ</th>
+                    <th> * پرداخت کننده</th>
                     <th>توضیحات</th>
                     <th></th>
                   </tr>

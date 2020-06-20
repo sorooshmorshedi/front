@@ -34,7 +34,7 @@
             <v-col cols="12" md="3">
               <v-autocomplete
                 required
-                label="دسته چک"
+                label=" * دسته چک"
                 :items="chequebooks"
                 item-text="account.name"
                 v-model="cheque.chequebook"
@@ -45,7 +45,7 @@
               <v-autocomplete
                 required
                 :disabled="!chequebook"
-                label="چک"
+                label=" * چک"
                 :items="paidCheques"
                 :is-loading="isLoading"
                 :search-input.sync="searchPaidCheque"
@@ -55,7 +55,7 @@
             <v-col cols="12" md="3" v-else>
               <v-text-field
                 required
-                label="سریال چک"
+                label=" * سریال چک"
                 v-model="cheque.serial"
                 :disabled="isPaidCheque"
               />
@@ -63,7 +63,7 @@
           </template>
           <v-col cols="12" md="6">
             <account-select
-              :label="isPaidCheque?'دریافت کننده':'پرداخت کننده'"
+              :label="' * ' + (isPaidCheque?'دریافت کننده':'پرداخت کننده')"
               items-type="level3"
               v-model="cheque.account"
               :disabled="modalMode"
@@ -74,14 +74,14 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <money label="مبلغ" v-model="cheque.value" />
+            <money label=" * مبلغ" v-model="cheque.value" />
           </v-col>
           <v-col cols="12" md="3">
-            <date label="تاریخ سررسید" v-model="cheque.due" :default="true" />
+            <date label=" * تاریخ سررسید" v-model="cheque.due" :default="true" />
           </v-col>
           <v-col cols="12" md="3">
             <date
-              :label="isPaidCheque?'تاریخ پرداخت':'تاریخ دریافت'"
+              :label="' * ' + (isPaidCheque?'تاریخ پرداخت':'تاریخ دریافت')"
               v-model="cheque.date"
               :default="true"
             />
@@ -94,7 +94,7 @@
           </v-col>
           <v-col cols="12" md="12" v-if="!isPaidCheque">
             <v-select
-              label="نوع چک"
+              label=" * نوع چک"
               :items="chequeTypes"
               item-text="label"
               item-value="value"

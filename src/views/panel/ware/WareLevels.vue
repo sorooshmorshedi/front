@@ -33,7 +33,7 @@
         <template v-if="hasParent">
           <v-col cols="12">
             <v-autocomplete
-              :label="getWareLevelTitle(level - 1)"
+              :label="' * ' + getWareLevelTitle(level - 1)"
               :items="parentItems"
               v-model="item.parent"
               item-text="name"
@@ -44,7 +44,7 @@
           <v-text-field label="کد" v-model="item.code" disabled />
         </v-col>
         <v-col cols="12">
-          <v-text-field label="نام" required v-model="item.name" />
+          <v-text-field label=" * نام" v-model="item.name" />
         </v-col>
       </v-row>
     </template>

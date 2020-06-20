@@ -17,7 +17,7 @@
       <template #default>
         <v-row>
           <v-col cols="12">
-            <v-text-field label="نام" v-model="item.name" />
+            <v-text-field label=" * نام" v-model="item.name" />
           </v-col>
           <v-col cols="12" md="6">
             <v-textarea rows="3" label="آدرس 1" v-model="item.address1" />

@@ -14,10 +14,10 @@
       <template #default>
         <v-row>
           <v-col cols="12" md="6">
-            <v-text-field label="نام" v-model="item.first_name" required />
+            <v-text-field label=" * نام" v-model="item.first_name" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="نام خانوادگی" v-model="item.last_name" required />
+            <v-text-field label="نام خانوادگی" v-model="item.last_name" />
           </v-col>
 
           <v-col cols="12" md="6">
@@ -31,10 +31,10 @@
           </v-col>
           <v-col cols="12" md="6">
             <label></label>
-            <v-text-field label="نام کاربری" v-model="item.username" required />
+            <v-text-field label=" * نام کاربری" v-model="item.username" />
           </v-col>
           <v-col cols="12" md="12" v-if="!item.id">
-            <v-text-field label="کلمه عبور" v-model="item.password" required />
+            <v-text-field label=" * کلمه عبور" v-model="item.password" />
           </v-col>
           <v-col cols="12">
             <v-autocomplete

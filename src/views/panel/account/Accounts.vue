@@ -36,7 +36,7 @@
         <template v-if="hasParent">
           <v-col cols="12">
             <account-select
-              :label="parentTitle"
+              :label="' * ' + parentTitle"
               :itemsType="itemsType"
               v-model="item.parent"
               :disabled="item.id != undefined"
@@ -54,7 +54,7 @@
           <v-text-field label="کد" v-model="item.code" />
         </v-col>
         <v-col cols="12">
-          <v-text-field label="نام" required v-model="item.name" />
+          <v-text-field label=" * نام" v-model="item.name" />
         </v-col>
         <v-col cols="12" class="mt-3" v-if="item.id != undefined">
           <v-simple-table>
@@ -137,7 +137,7 @@
               item-text="text"
               item-value="value"
               :return-object="false"
-              label="حساب شخص"
+              label=" * حساب شخص"
               required
             ></v-select>
           </v-col>
@@ -149,7 +149,7 @@
               item-value="value"
               :return-object="false"
               :disabled="item.id != undefined"
-              label="نوع شخص"
+              label=" * نوع شخص"
               required
             ></v-select>
           </v-col>

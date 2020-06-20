@@ -75,9 +75,15 @@ export default {
     },
     handle_400(error) {
       let errors = error.response.data;
-      Object.keys(errors).forEach(err => {
-        this.notify(err + ': ' + errors[err], 'danger');
-      });
+      for (const error of errors) {
+        let message = ""
+        if (error.field == 'non_field_errors') {
+          message = error.messages[0]
+        } else {
+          message = error.field + ' : ' + error.messages, 'danger'
+        }
+        this.notify(message, 'danger');
+      }
     },
     handle_406(error, options) {
       let confirmations = error.response.data;

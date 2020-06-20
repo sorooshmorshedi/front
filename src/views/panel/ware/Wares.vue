@@ -14,7 +14,7 @@
       <v-row>
         <v-col cols="12">
           <v-autocomplete
-            label="دسته بندی"
+            label=" * دسته بندی"
             :items="parentItems"
             v-model="item.category"
             item-text="name"
@@ -24,17 +24,17 @@
           <v-text-field label="کد" v-model="item.code" disabled />
         </v-col>
         <v-col cols="12" md="8">
-          <v-text-field label="نام" required v-model="item.name" />
+          <v-text-field label=" * نام" v-model="item.name" />
         </v-col>
         <v-col cols="12" md="4">
-          <v-autocomplete label="واحد" :items="units" v-model="item.unit" item-text="name"></v-autocomplete>
+          <v-autocomplete label=" * واحد" :items="units" v-model="item.unit" item-text="name"></v-autocomplete>
         </v-col>
         <v-col cols="12" md="6">
-          <money label="قیمت" v-model="item.price" />
+          <money label=" * قیمت" v-model="item.price" />
         </v-col>
         <v-col cols="12" md="6">
           <v-select
-            label="نوع قیمت گذاری"
+            label=" * نوع قیمت گذاری"
             :items="pricingTypes"
             v-model="item.pricingType"
             item-text="name"
@@ -51,7 +51,7 @@
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="بارکد" required v-model="item.barcode" />
+          <v-text-field label="بارکد" v-model="item.barcode" />
         </v-col>
         <v-col cols="12" md="6">
           <money label="حداقل فروش" v-model="item.minSale" />

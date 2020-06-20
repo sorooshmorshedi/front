@@ -1,17 +1,23 @@
 <template>
   <v-row no-gutters :class="{'flex-row': horizontal, 'flex-column': !horizontal}">
     <v-col :cols="horizontal && hasDeepSelect?6:12">
-      <v-autocomplete
-        :items="items"
-        v-model="item"
-        :label="label"
-        :item-text="itemText"
-        :disabled="disabled || accountDisabled"
-        :multiple="multiple"
-        :placeholder="placeholder"
-        :prepend-icon="showLedgerBtn && itemsType =='level3'?'fa-book-open':''"
-        @click:prepend="item && openLedger(item)"
-      ></v-autocomplete>
+      <div class="d-flex">
+        <v-icon
+          @click="item && openLedger(item)"
+          color="cyan"
+          class="pl-2"
+          v-if="showLedgerBtn && hasLedger"
+        >fa-book-open</v-icon>
+        <v-autocomplete
+          :items="items"
+          v-model="item"
+          :label="label"
+          :item-text="itemText"
+          :disabled="disabled || accountDisabled"
+          :multiple="multiple"
+          :placeholder="placeholder"
+        ></v-autocomplete>
+      </div>
     </v-col>
     <template v-if="hasDeepSelect">
       <v-col>
@@ -20,11 +26,11 @@
           :child-of="item.floatAccountGroup.id"
           v-model="localFloatAccount"
           :disabled="disabled"
-          placeholder="حساب شناور"
+          placeholder=" * حساب شناور"
           items-type="floatAccounts"
           item-text="name"
           :showLedgerBtn="false"
-          :class="{'mr-10': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
         />
       </v-col>
       <v-col>
@@ -33,11 +39,11 @@
           :child-of="item.costCenterGroup.id"
           v-model="localCostCenter"
           :disabled="disabled"
-          placeholder="مرکز هزینه"
+          placeholder=" * مرکز هزینه"
           items-type="floatAccounts"
           item-text="name"
           :showLedgerBtn="false"
-          :class="{'mr-10': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
         />
       </v-col>
     </template>
@@ -191,6 +197,11 @@ export default {
         (this.item.floatAccountGroup || this.item.costCenterGroup) &&
         this.deepSelect &&
         ["level3", "persons", "buyers", "sellers"].includes(this.itemsType)
+      );
+    },
+    hasLedger() {
+      return ["level3", "persons", "buyers", "sellers"].includes(
+        this.itemsType
       );
     }
   },

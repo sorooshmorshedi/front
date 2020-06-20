@@ -25,7 +25,7 @@
         <v-col cols="12">
           <account-select
             items-type="banks"
-            label="حساب بانک"
+            label=" * حساب بانک"
             v-model="item.account"
             :disabled="!editable"
             :floatAccount="item.floatAccount"
@@ -36,7 +36,7 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
-            label="از شماره سریال"
+            label=" * از شماره سریال"
             type="number"
             v-model="item.serial_from"
             :disabled="!editable"
@@ -45,7 +45,7 @@
         <v-col cols="12" md="6">
           <v-text-field
             type="number"
-            label="تا شماره سریال"
+            label=" * تا شماره سریال"
             v-model="item.serial_to"
             :disabled="!editable"
           />
