@@ -36,27 +36,6 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
-    <div class="modal fade d-none" :id="modalId" v-if="ware">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title"></h5>
-            <v-btn type="v-btn" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </v-btn>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <table class="table table-striped"></table>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <v-btn type="v-btn" class="btn btn-secondary" data-dismiss="modal">بستن</v-btn>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 

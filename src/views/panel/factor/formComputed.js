@@ -1,5 +1,59 @@
 export default {
   computed: {
+    rowTemplate() {
+      let explanation = "";
+      if(this.isFpi){
+        explanation = "ثبت موجودی اول دوره"
+      }
+      return {
+        discountValue: "",
+        discountPercent: "",
+        fee: "",
+        ware: null,
+        warehouse: null,
+        explanation: explanation
+      }
+    },
+    listRouteParams() {
+      return {
+        form: 'factor',
+        type: this.factorType
+      }
+    },
+    isFpi() {
+      return this.factorType == 'fpi';
+    },
+    formTitle() {
+      switch (this.factorType) {
+        case "sale":
+          return "فاکتور فروش";
+          break;
+        case "backFromSale":
+          return "فاکتور برگشت از فروش";
+          break;
+        case "buy":
+          return "فاکتور خرید";
+          break;
+        case "backFromBuy":
+          return "فاکتور برگشت از خرید";
+        case "fpi":
+          return "موجودی اول دوره";
+          break;
+      }
+
+    },
+    hasDiscount() {
+      return !this.isFpi;
+    },
+    reverseLabel() {
+      switch (this.factorType) {
+        case "sale":
+          return "فاکتور برگشت از فروش";
+        case "buy":
+          return "فاکتور برگشت از خرید";
+      }
+
+    },
     factorCode() {
       let code = this.factorCodes[this.factorType];
       if (code) return code;
@@ -158,7 +212,7 @@ export default {
       return this.factorType == 'sale'
     },
     isBack() {
-      return this.factorType.includes('back')
+      return ['backFromBuy', 'backFromSale'].includes(this.factorType);
     },
     isBackFromBuy() {
       return this.factorType == 'backFromBuy'

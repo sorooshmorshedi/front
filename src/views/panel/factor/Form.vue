@@ -1,10 +1,14 @@
 <template>
   <div>
     <daily-form
-      formName="فاکتور"
-      :title="'فاکتور ' + factorLabel"
-      :ListRouteParams="{form: 'factor', type: factorType}"
+      :formName="formTitle"
+      :title="formTitle"
+      :ListRouteParams="listRouteParams"
       @clearForm="clearFactor(true)"
+      :hasClear="!isFpi"
+      :hasList="!isFpi"
+      :showNavigationButtons="!isFpi"
+      :showSubmitAndClearForm="!isFpi"
       :hasFirst="hasFirst"
       :hasLast="hasLast"
       :hasPrev="hasPrev"
@@ -20,21 +24,22 @@
     >
       <template #header-btns>
         <v-btn
-          v-if="id && !isBack"
+          v-if="id && !isBack && !isFpi"
           class="blue white--text mr-1"
           :to="{
               name: 'FactorForm',
               params: { factorType:reverseType(factorType)},
               query: {fromId: id}}"
         >
-          ثبت فاکتور برگشت از
-          <span v-html="factorLabel"></span>
+          ثبت
+          <span v-html="reverseLabel"></span>
         </v-btn>
         <v-btn
+          v-if="!isFpi"
           class="blue white--text mr-1"
           :to="{name: 'Accounts', params: {level: 3, account_type: 'p'}, query: {showForm: true}}"
         >تعریف حساب اشخاص</v-btn>
-        <template v-if="id">
+        <template v-if="id && !isFpi">
           <v-btn
             v-if="canSubmitTransaction"
             class="blue white--text mr-1"
@@ -44,19 +49,17 @@
             @click="transactionsDialog = true"
             class="blue white--text mr-1"
           >مشاهده {{ transactionType.label }} ها</v-btn>
-
-          <open-sanad-btn v-if="factor.sanad" :sanad="factor.sanad" />
-
-          <v-btn @click="exportsDialog = true" class="export-btn mr-1">خروجی</v-btn>
         </template>
+        <open-sanad-btn v-if="factor.sanad" :sanad="factor.sanad" />
+        <v-btn @click="exportsDialog = true" class="export-btn mr-1">خروجی</v-btn>
       </template>
 
       <template #inputs>
         <v-row>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="2" v-if="!isFpi">
             <v-text-field label="شماره فاکتور" disabled v-model="factor.code" />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="2" v-if="!isFpi">
             <v-text-field label="عطف" disabled :value="factor.id" />
           </v-col>
           <v-col cols="12" md="2">
@@ -77,13 +80,13 @@
               :disabled="!editable"
             />
           </v-col>
-          <v-col cols="12" md="2" v-if="hasBijak">
+          <v-col cols="12" md="2" v-if="hasBijak && !isFpi">
             <v-text-field label="بیجک" v-model="factor.bijak" :disabled="!editable" />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="2" v-if="!isFpi">
             <v-text-field label="نوع فاکتور" disabled :value="factor.is_definite?'قطعی':'موقت'" />
           </v-col>
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="6" v-if="!isFpi">
             <account-select
               :label="' * ' + accountName"
               itemsType="persons"
@@ -105,7 +108,7 @@
             ></v-textarea>
           </v-col>
 
-          <v-col cols="12">
+          <v-col cols="12" v-if="!isFpi">
             <v-switch label="فاکتور مالیات دارد" v-model="hasTax" :disabled="!editable"></v-switch>
           </v-col>
         </v-row>
@@ -116,15 +119,15 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th> * شرح</th>
-                  <th> * انبار</th>
-                  <th> * تعداد</th>
+                  <th>* شرح</th>
+                  <th>* انبار</th>
+                  <th>* تعداد</th>
                   <th>واحد</th>
-                  <th class="required">قیمت واحد</th>
+                  <th>* قیمت واحد</th>
                   <th>جمع</th>
-                  <th>تخفیف (مبلغ)</th>
-                  <th>تخفیف (درصد)</th>
-                  <th>جمع کل پس از تخفیف</th>
+                  <th v-if="hasDiscount">تخفیف (مبلغ)</th>
+                  <th v-if="hasDiscount">تخفیف (درصد)</th>
+                  <th v-if="hasDiscount">جمع کل پس از تخفیف</th>
 
                   <th v-if="hasTax">مالیات</th>
                   <th v-if="hasTax">جمع مبلغ کل و مالیات</th>
@@ -173,14 +176,14 @@
                       decimalScale="6"
                     />
                   </td>
-                  <td>
+                  <td v-if="hasDiscount">
                     <money
                       :disabled="!editable || hasValue(rows[i].discountPercent)"
                       class="form-control form-control"
                       v-model="rows[i].discountValue"
                     />
                   </td>
-                  <td>
+                  <td v-if="hasDiscount">
                     <v-text-field
                       :disabled="!editable || (hasValue(rows[i].discountValue) && !hasValue(rows[i].discountPercent))"
                       type="number"
@@ -190,7 +193,7 @@
                       v-model="rows[i].discountPercent"
                     />
                   </td>
-                  <td dir="ltr">
+                  <td v-if="hasDiscount">
                     <money
                       class="form-control form-control"
                       :value="rowSumAfterDiscount(row)"
@@ -245,7 +248,9 @@
                   </td>
                 </tr>
                 <tr class="bg-info text-white">
-                  <td :colspan="hasTax?13:11"></td>
+                  <td colspan="8"></td>
+                  <td v-if="hasDiscount" colspan="4"></td>
+                  <td v-if="hasTax" colspan="2"></td>
                   <td>
                     <v-btn @click="deleteItemRow(-1)" icon class="red--text" :disabled="!editable">
                       <v-icon>delete_sweep</v-icon>
@@ -257,7 +262,7 @@
           </v-col>
         </v-row>
 
-        <v-row>
+        <v-row v-if="!isFpi">
           <v-col cols="12" md="8" class>
             <div class="pa-3 ml-5" style="border: 1px dashed #9e9e9e">
               <div class="d-flex">
@@ -383,9 +388,9 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th> * نام هزینه ثابت</th>
-                    <th> * مبلغ</th>
-                    <th> * پرداخت کننده</th>
+                    <th>* نام هزینه ثابت</th>
+                    <th>* مبلغ</th>
+                    <th>* پرداخت کننده</th>
                     <th>توضیحات</th>
                     <th></th>
                   </tr>
@@ -565,7 +570,7 @@
 
       <template slot="always">
         <v-btn
-          v-if="id"
+          v-if="id && !isFpi"
           @click="definiteFactor"
           :disabled="factor.is_definite"
           class="blue white--text"
@@ -633,16 +638,8 @@ export default {
       factorExpensesCopy: [{}],
       rows: [],
       hasTax: false,
-      rowTemplate: {
-        discountValue: "",
-        discountPercent: "",
-        fee: "",
-        ware: null,
-        warehouse: null
-      },
       itemsToDelete: [],
       expensesToDelete: [],
-      factorLabel: "",
       exportOptions: {
         summarized: false,
         hide_expenses: false,

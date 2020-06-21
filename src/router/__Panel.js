@@ -34,8 +34,6 @@ import FactorExpenses from '@/views/panel/factor/Expenses.vue';
 
 import TransferForm from '@/views/panel/transfer/Form.vue';
 
-import FirstPeriodInventory from '@/views/panel/firstPeriodInventory/FirstPeriodInventory.vue';
-
 import ChequebookForm from '../views/panel/chequebook/ChequebookForm.vue';
 
 import Cheque from '@/views/panel/cheque/Cheque.vue';
@@ -180,11 +178,6 @@ export default [{
       path: 'transfer/form/:id?',
       component: TransferForm,
       props: true,
-    },
-    {
-      name: 'FirstPeriodInventory',
-      path: 'firstPeriodInventory',
-      component: FirstPeriodInventory
     },
     {
       name: 'Cheque',

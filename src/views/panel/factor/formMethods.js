@@ -6,11 +6,24 @@ export default {
       this.getWarehouses();
       this.getWares();
       this.getFactorExpenses();
-      if (this.id) {
+      if (this.isFpi) {
+        this.getFirstPeriodInventory();
+      } else if (this.id) {
         this.getFactor(this.id);
       } else if (this.fromId) {
         this.getFactor(this.fromId);
       }
+    },
+    getFirstPeriodInventory() {
+      this.request({
+        url: this.endpoint("factors/firstPeriodInventory"),
+        method: "get",
+        success: data => {
+          if (!data.message) {
+            this.selectFactor(data, true);
+          }
+        }
+      });
     },
     initForm() {
       this.log("Init Form");
@@ -25,7 +38,6 @@ export default {
         this.rows = [];
         this.rows.push(this.copy(this.rowTemplate));
       }
-      this.setFactorLabel(this.factorType);
       this.getData();
     },
 
@@ -145,8 +157,14 @@ export default {
     },
     storeFactor(clearFactor) {
       let data = this.getFactorPayload()
+      let url;
+      if (this.isFpi) {
+        url = "factors/firstPeriodInventory"
+      } else {
+        url = 'factors/factors/'
+      }
       this.request({
-        url: this.endpoint('factors/factors/'),
+        url: this.endpoint(url),
         method: 'post',
         data: data,
         success: data => {
@@ -207,30 +225,10 @@ export default {
         item.sale_price = item.ware.price;
       });
     },
-    setFactorLabel(factorType) {
-      switch (factorType) {
-        case "sale":
-          this.factorLabel = "فروش";
-          break;
-        case "backFromSale":
-          this.factorLabel = "برگشت از فروش";
-          break;
-        case "buy":
-          this.factorLabel = "خرید";
-          break;
-        case "backFromBuy":
-          this.factorLabel = "برگشت از خرید";
-          break;
-      }
-    },
     validate(clearFactor = false) {
       let isValid = true;
       if (this.rows.length == 1) {
         this.notify(`لطفا حداقل یک ردیف وارد کنید`, "danger");
-        isValid = false;
-      }
-      if (!this.factor.account) {
-        this.notify(`لطفا حساب را انتخاب کنید`, "danger");
         isValid = false;
       }
       this.rows.forEach((r, i) => {
@@ -257,8 +255,14 @@ export default {
       );
 
       this.factor.type = this.factorType;
-      if (this.factor.id) this.updateFactor(clearFactor);
-      else this.storeFactor(clearFactor);
+
+      if (this.isFpi) {
+        this.storeFactor(clearFactor);
+      } else if (this.factor.id) {
+        this.updateFactor(clearFactor);
+      } else {
+        this.storeFactor(clearFactor);
+      }
     },
     selectFactor(factor, changeRoute = false) {
       console.log('t', factor.time);
@@ -277,7 +281,6 @@ export default {
           if (expense.id) delete expense.id;
         });
       } else {
-        this.setFactorLabel(factor.type);
         if (changeRoute) {
           this.makeFormUneditable();
           this.$router.push({

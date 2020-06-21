@@ -89,6 +89,9 @@ export default {
     formName: {
       required: true
     },
+    hasList: {
+      default: true
+    },
     ListRouteName: {
       default: "List"
     },
@@ -149,9 +152,6 @@ export default {
       )
         return true;
       return false;
-    },
-    hasList() {
-      return this.ListRouteName;
     },
     printUrl() {
       if (!this.hasExport) return "";
