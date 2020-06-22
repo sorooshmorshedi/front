@@ -16,6 +16,7 @@ export default new Vuex.Store({
       color: ''
     },
     timeInterval: null,
+    cities: [],
     accounts: [],
     floatAccountGroups: [],
     floatAccounts: [],
@@ -55,6 +56,9 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user;
+    },
+    setCities(state, data) {
+      state.cities = data;
     },
     setAccounts(state, data) {
       state.accounts = data;

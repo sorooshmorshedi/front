@@ -7,6 +7,7 @@ import FinancialYears from '@/views/panel/company/FinancialYears.vue';
 
 import Users from '@/views/panel/user/Users';
 import Roles from '@/views/panel/role/Roles';
+import Cities from '@/views/panel/city/Cities';
 
 import Accounts from '../views/panel/account/Accounts.vue';
 import FloatAccounts from '../views/panel/account/FloatAccounts.vue';
@@ -63,6 +64,10 @@ export default [{
       component: Roles,
     },
     {
+      name: 'Cities',
+      path: 'cities',
+      component: Cities,
+    }, {
       name: 'Companies',
       path: 'companies',
       component: Companies,

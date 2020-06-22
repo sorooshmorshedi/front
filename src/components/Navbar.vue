@@ -47,7 +47,13 @@ export default {
                   to: {
                     name: "FinancialYears"
                   }
-                }
+                },
+                {
+                  to: {
+                    name: "Cities"
+                  },
+                  title: "شهر ها"
+                },
               ]
             },
             {
