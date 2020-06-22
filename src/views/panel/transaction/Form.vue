@@ -19,12 +19,11 @@
         @delete="deleteTransaction()"
       >
         <template #header-btns>
+          <open-sanad-btn v-if="transaction.sanad" :sanad="transaction.sanad" />
           <v-btn
             @click="factorsDialog = true"
-            class="blue white--text mr-1"
+            class="teal white--text mr-1"
           >پرداخت شده برای فاکتور های</v-btn>
-
-          <open-sanad-btn v-if="transaction.sanad" :sanad="transaction.sanad" />
         </template>
 
         <template #inputs>
@@ -80,11 +79,11 @@
                 <thead>
                   <tr>
                     <th class="tr-counter">#</th>
-                    <th> * نوع {{ type.label }}</th>
-                    <th> * نام حساب</th>
-                    <th> * مبلغ</th>
+                    <th>* نوع {{ type.label }}</th>
+                    <th>* نام حساب</th>
+                    <th>* مبلغ</th>
                     <th>شماره مستند</th>
-                    <th> * تاریخ {{ type.label }}</th>
+                    <th>* تاریخ {{ type.label }}</th>
                     <th>سررسید</th>
                     <th>نام بانک</th>
                     <th>توضیحات</th>

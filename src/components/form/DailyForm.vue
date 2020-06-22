@@ -8,14 +8,15 @@
         v-if="hasClear"
         @click.prevent="emit('clearForm')"
         href="#/"
-        class="light-blue white--text mr-1"
+        outlined
+        class="teal--text mr-1"
       >جدید</v-btn>
       <v-btn
         small
         v-if="hasList"
         class="light-blue white--text mr-1"
         :to="{name: ListRouteName, params: ListRouteParams}"
-      >انتخاب {{ formName }}</v-btn>
+      >لیست </v-btn>
       <slot name="header-btns"></slot>
       <template v-if="hasExport">
         <v-btn

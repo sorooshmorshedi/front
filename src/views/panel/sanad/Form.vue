@@ -21,13 +21,13 @@
       <v-btn
         small
         v-if="sanad.factor"
-        class="blue white--text mr-1"
+        class="light-blue white--text mr-1"
         :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}"
       >مشاهده فاکتور این سند</v-btn>
       <v-btn
         small
         v-if="sanad.transaction"
-        class="blue white--text mr-1"
+        class="light-blue white--text mr-1"
         :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}"
       >
         <span>مشاهده دریافت/پرداخت</span>
@@ -36,13 +36,13 @@
       <v-btn
         small
         @click.prevent="copySanadToNewSanad()"
-        class="blue white--text mr-1"
+        class="teal white--text mr-1"
       >کپی سند به سند جدید</v-btn>
 
       <v-btn
         small
         @click="reorderSanads"
-        class="blue white--text mr-1"
+        class="teal white--text mr-1"
       >مرتب کردن کد اسناد بر اساس تاریخ</v-btn>
     </template>
 

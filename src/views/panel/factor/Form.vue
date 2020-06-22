@@ -23,9 +23,20 @@
       @delete="deleteFactor()"
     >
       <template #header-btns>
+        <open-sanad-btn v-if="factor.sanad" :sanad="factor.sanad" />
+        <v-btn
+          v-if="id && !isFpi"
+          @click="transactionsDialog = true"
+          class="light-blue white--text mr-1"
+        >مشاهده {{ transactionType.label }} ها</v-btn>
+        <v-btn
+          v-if="id && !isFpi && canSubmitTransaction"
+          class="teal white--text mr-1"
+          :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{accountId: factor.account.id, factorId: id}}"
+        >ثبت {{ transactionType.label }}</v-btn>
         <v-btn
           v-if="id && !isBack && !isFpi"
-          class="blue white--text mr-1"
+          class="teal white--text mr-1"
           :to="{
               name: 'FactorForm',
               params: { factorType:reverseType(factorType)},
@@ -36,21 +47,9 @@
         </v-btn>
         <v-btn
           v-if="!isFpi"
-          class="blue white--text mr-1"
+          class="teal lue white--text mr-1"
           :to="{name: 'Accounts', params: {level: 3, account_type: 'p'}, query: {showForm: true}}"
         >تعریف حساب اشخاص</v-btn>
-        <template v-if="id && !isFpi">
-          <v-btn
-            v-if="canSubmitTransaction"
-            class="blue white--text mr-1"
-            :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{accountId: factor.account.id, factorId: id}}"
-          >ثبت {{ transactionType.label }}</v-btn>
-          <v-btn
-            @click="transactionsDialog = true"
-            class="blue white--text mr-1"
-          >مشاهده {{ transactionType.label }} ها</v-btn>
-        </template>
-        <open-sanad-btn v-if="factor.sanad" :sanad="factor.sanad" />
         <v-btn @click="exportsDialog = true" class="export-btn mr-1">خروجی</v-btn>
       </template>
 
