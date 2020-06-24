@@ -45,11 +45,16 @@ import ExportVerifiers from '@/views/panel/exportVerifiers/ExportVerifiers.vue';
 
 import Closing from '../views/panel/closing/Closing.vue';
 
+import DashtbashiRoutes from '@/modules/dashtbashi/Router';
+
 export default [{
   name: 'Panel',
   path: '/panel',
   component: Panel,
-  children: [{
+  children: [
+    ...DashtbashiRoutes,
+
+    {
       name: 'Home',
       path: 'home',
       component: Home,

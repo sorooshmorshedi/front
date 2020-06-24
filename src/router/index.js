@@ -1,16 +1,17 @@
 import Vue from 'vue'
-import VueRouter, { RouterOptions } from 'vue-router'
+import VueRouter, {
+  RouterOptions
+} from 'vue-router'
 
 
-import PanelRoutes from './__Panel';
-import ReportsRoutes from './__Reports';
+import PanelRoutes from './Panel';
+import ReportsRoutes from './Reports';
 import Login from '@/views/auth/Login.vue'
 import ForgetPassword from '@/views/auth/ForgetPassword.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'Login',
     component: Login,
@@ -22,7 +23,7 @@ const routes = [
     component: ForgetPassword
   },
   ...PanelRoutes,
-  ...ReportsRoutes
+  ...ReportsRoutes,
 
   // {
   //   path: '/about',

@@ -53,7 +53,7 @@ export default {
                     name: "Cities"
                   },
                   title: "شهر ها"
-                },
+                }
               ]
             },
             {
@@ -653,6 +653,35 @@ export default {
             name: "Closing"
           },
           title: "عملیات بستن و انتقال"
+        },
+        {
+          title: "حمل و نقل",
+          children: [
+            {
+              title: "ماشین ها",
+              to: {
+                name: "Cars"
+              }
+            },
+            {
+              title: "راننده ها",
+              to: {
+                name: "Drivers"
+              }
+            },
+            {
+              title: "انتصاب راننده به ماشین",
+              to: {
+                name: "Drivings"
+              }
+            },
+            {
+              title: "کمیسیون های انجمن",
+              to: {
+                name: "AssociationCommissions"
+              }
+            },
+          ]
         }
       ]
     };

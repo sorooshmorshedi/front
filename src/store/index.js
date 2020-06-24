@@ -3,10 +3,11 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
-import moment from "moment-jalaali";
+import DashbashiStore from '@/modules/dashtbashi/Store'
 
 export default new Vuex.Store({
   state: {
+    ...DashbashiStore.state,
     user: null,
     OGR: 0, //on going requests
     now: null,
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    ...DashbashiStore.mutations,
     incrementOGR(state) {
       state.OGR++;
     },
@@ -94,9 +96,5 @@ export default new Vuex.Store({
       factors.receipts && (state.factors.receipts = factors.receipts);
     }
 
-  },
-  getters: {
-    accounts: state => state.accounts,
-    // accountTypes: state => state.accountTypes,
-  },
+  }
 })
