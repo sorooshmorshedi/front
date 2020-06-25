@@ -7,17 +7,22 @@ export default {
   props: {
     itemObject: {
       default: null
+    },
+    id: {
+      default: null
     }
   },
   data() {
     return {
       item: {},
-      itemTemplate: {},
-      leadingSlash: false,
 
       // must be set
       // cols: [],
       // baseUrl: ''
+
+      // options
+      leadingSlash: false,
+      hasList: true,
     };
   },
   computed: {
@@ -30,6 +35,9 @@ export default {
     deleteUrl() {
       return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.leadingSlash ? "/" : "")
     },
+    itemTemplate() {
+      return {}
+    },
   },
   watch: {
     query() {
@@ -39,27 +47,22 @@ export default {
       if (this.itemObject) this.setItem(this.itemObject);
     },
     $route() {
-      this.clearForm();
+      // we had problems with id prop
+      // this.clearForm();
     }
   },
   created() {
-    this.getData();
     this.clearForm();
+    this.getData();
+    if (this.id) {
+      this.getItem();
+    }
   },
   mounted() {
     this.queryChanged();
     if (this.itemObject) this.setItem(this.itemObject);
   },
   methods: {
-    beforeRouteUpdate(to, from, next) {
-      console.log(to, from, next);
-      // called when the route that renders this component has changed,
-      // but this component is reused in the new route.
-      // For example, for a route with dynamic params `/foo/:id`, when we
-      // navigate between `/foo/1` and `/foo/2`, the same `Foo` component instance
-      // will be reused, and this hook will be called when that happens.
-      // has access to `this` component instance.
-    },
     /*
       Set default fields with data query.item
     */
@@ -73,45 +76,68 @@ export default {
       // must be implemented
       console.error("getData method must be implemented")
     },
+    getItem() {
+      // must be implemented, but by default
+      if (this.hasList) {
+        // this.setItem(this.items.filter(o => o.id == this.id)[0])
+      } else {
+        this.request({
+          url: this.endpoint(this.updateUrl),
+          method: "get",
+          success: data => {
+            this.setItem(data);
+          }
+        });
+      }
+    },
     setItem(item) {
       // must be implemented, but by default
       this.item = item;
+      if (!this.hasList && this.id != item.id) {
+        this.changeRouteTo(item.id);
+      }
+    },
+    changeRouteTo(id) {
+      this.$router.push({
+        name: this.$route.name,
+        params: {
+          ...this.$route.params,
+          id: id
+        }
+      })
     },
     clearForm() {
       // must be implemented, but by default
-      this.item = {
-        ...this.itemTemplate
-      };
+      this.item = this.itemTemplate;
+      if (!this.hasList) {
+        this.changeRouteTo(null);
+      }
     },
     getSerialized() {
       // must be implemented, but by default
-      return this.item;
+      return this.extractIds(this.item);
     },
-    submit() {
-      if (this.item.id) this.updateItem();
-      else this.storeItem();
+    submit(clearForm = true) {
+      if (this.item.id) this.updateItem(clearForm);
+      else this.storeItem(clearForm);
     },
-    storeItem() {
+    storeItem(clearForm) {
       this.request({
         url: this.endpoint(this.createUrl),
         method: "post",
         data: this.getSerialized(),
         success: data => {
-          this.clearForm();
-          this.getData();
-          this.successNotify();
+          this.successResponse(data, clearForm)
         }
       });
     },
-    updateItem() {
+    updateItem(clearForm) {
       this.request({
         url: this.endpoint(this.updateUrl),
         method: "put",
         data: this.getSerialized(),
         success: data => {
-          this.clearForm();
-          this.getData();
-          this.successNotify();
+          this.successResponse(data, clearForm)
         }
       });
     },
@@ -120,11 +146,20 @@ export default {
         url: this.endpoint(this.deleteUrl),
         method: "delete",
         success: data => {
-          this.clearForm();
-          this.getData();
-          this.successNotify();
+          this.successResponse(data, true)
         }
       });
+    },
+    successResponse(data, clearForm) {
+      if (clearForm) {
+        this.clearForm();
+      } else {
+        this.setItem(data);
+      }
+      if (this.hasList) {
+        this.getData();
+      }
+      this.successNotify();
     }
   }
 

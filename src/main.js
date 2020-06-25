@@ -15,6 +15,9 @@ Vue.component('WareSelect', WareSelect);
 import AccountSelect from '@/components/selects/AccountSelect.vue';
 Vue.component('AccountSelect', AccountSelect);
 
+import CitySelect from '@/components/selects/CitySelect.vue';
+Vue.component('CitySelect', CitySelect);
+
 import money from "@/components/mcomponents/cleave/Money";
 Vue.component('money', money);
 

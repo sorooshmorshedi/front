@@ -87,10 +87,6 @@ export default {
       roles: [],
       newPassword: "",
       showChangePasswordDialog: false,
-      itemTemplate: {
-        roles: [],
-        is_active: true
-      },
       cols: [
         {
           th: "نام",
@@ -122,6 +118,14 @@ export default {
     },
     deleteUrl() {
       return this.item.id && `users/delete/${this.item.id}`;
+    },
+    itemTemplate() {
+      return {
+        itemTemplate: {
+          roles: [],
+          is_active: true
+        }
+      };
     }
   },
   methods: {

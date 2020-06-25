@@ -3,25 +3,34 @@ import Drivers from './Drivers';
 import Drivings from './Drivings';
 import AssociationCommissions from "./AssociationCommissions"
 
+import Remittance from "./Remittance"
+
 export default [{
     name: 'Cars',
-    path: '/cars',
+    path: 'cars',
     component: Cars,
   },
   {
     name: 'Drivers',
-    path: '/drivers',
+    path: 'drivers',
     component: Drivers,
   },
   {
     name: 'Drivings',
-    path: '/drivings',
+    path: 'drivings',
     component: Drivings,
   },
   {
     name: 'AssociationCommissions',
-    path: '/associationCommissions',
+    path: 'associationCommissions',
     component: AssociationCommissions,
-  }
+  },
+
+  {
+    name: 'Remittance',
+    path: 'remittance/:id?',
+    component: Remittance,
+    props: true,
+  },
 
 ]

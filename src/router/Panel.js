@@ -45,7 +45,7 @@ import ExportVerifiers from '@/views/panel/exportVerifiers/ExportVerifiers.vue';
 
 import Closing from '../views/panel/closing/Closing.vue';
 
-import DashtbashiRoutes from '@/modules/dashtbashi/Router';
+import DashtbashiRoutes from '@/modules/dashtbashi/Routes';
 
 export default [{
   name: 'Panel',
@@ -53,7 +53,6 @@ export default [{
   component: Panel,
   children: [
     ...DashtbashiRoutes,
-
     {
       name: 'Home',
       path: 'home',
@@ -61,8 +60,9 @@ export default [{
     },
     {
       name: 'Users',
-      path: 'users',
+      path: 'users/:id?',
       component: Users,
+      props: true
     }, {
       name: 'Roles',
       path: 'roles',
