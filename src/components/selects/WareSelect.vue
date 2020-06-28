@@ -7,6 +7,7 @@
       item-text="name"
       :disabled="disabled"
       prepend-icon="fa-boxes"
+      :suffix="ware && ware.unit?ware.unit.name:''"
       @click:prepend="ware && showInventory()"
     ></v-autocomplete>
 

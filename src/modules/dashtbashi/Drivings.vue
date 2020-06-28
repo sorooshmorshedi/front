@@ -17,7 +17,7 @@
             label="ماشین"
             v-model="item.car"
             :items="$store.state.cars"
-            item-text="car_number"
+            item-text="car_number_str"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -35,16 +35,13 @@
           <v-text-field label="حقوق ثابت" v-model="item.fixed_salary" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="کمیسیون" v-model="item.commission" />
+          <v-text-field type="number" label="درصد پورسانت" v-model="item.commission" />
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field label="پاداش" v-model="item.reward" />
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field label="عائله" v-model="item.family" />
-        </v-col>
-        <v-col cols="12" md="6">
-          <account-select label="حساب" v-model="item.account" />
         </v-col>
         <v-col cols="12">
           <v-textarea label="توضیحات" v-model="item.explanation" />

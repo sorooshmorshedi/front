@@ -20,7 +20,10 @@
     <template #inputs>
       <v-row>
         <v-col cols="12" md="3">
-          <v-text-field disabled label="شماره حواله" v-model="item.code" />
+          <v-text-field disabled label="عطف" v-model="item.id" />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-text-field label="شماره حواله" v-model="item.code" :disabled="!editable" />
         </v-col>
         <v-col cols="12" md="3">
           <date v-model="item.issue_date" label="تاریخ صدور" :default="true" :disabled="!editable" />
@@ -104,34 +107,20 @@
 <script>
 import formsMixin from "@/mixin/forms";
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
+import GetApi from "./GetApi";
 export default {
   props: {
     id: {
       default: null
     }
   },
-  mixins: [formsMixin, ListModalFormMixin],
+  mixins: [formsMixin, ListModalFormMixin, GetApi],
   data() {
     return {
       item: {},
       baseUrl: "dashtbashi/remittances",
       leadingSlash: true,
       hasList: false,
-      tipPayers: [
-        {
-          title: "شرکت",
-          id: "cmp"
-        },
-        {
-          title: "پیمانکار",
-          id: "cnt"
-        }
-      ],
-      remittancePaymentMethods: [
-        { title: "کمیسیون و کرایه به شرکت", id: "tc" },
-        { title: "کمیسیون به شرکت و کرایه به راننده", id: "tcd" },
-        { title: "کمیسیون و کرایه با شرکت", id: "cp" }
-      ]
     };
   },
   methods: {

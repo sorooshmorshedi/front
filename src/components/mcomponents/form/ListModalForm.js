@@ -154,7 +154,7 @@ export default {
       if (clearForm) {
         this.clearForm();
       } else {
-        this.setItem(data);
+        this.getItem(data);
       }
       if (this.hasList) {
         this.getData();

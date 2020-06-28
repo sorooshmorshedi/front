@@ -1,4 +1,43 @@
 export default {
+  data() {
+    return {
+      tipPayers: [{
+          title: "شرکت",
+          id: "cmp"
+        },
+        {
+          title: "پیمانکار",
+          id: "cnt"
+        }
+      ],
+      remittancePaymentMethods: [{
+          title: "کمیسیون و کرایه به شرکت",
+          id: "tc"
+        },
+        {
+          title: "کمیسیون به شرکت و کرایه به راننده",
+          id: "tcd"
+        },
+        {
+          title: "کمیسیون و کرایه با شرکت",
+          id: "cp"
+        }
+      ],
+      receiveTypes: [{
+          title: "نسیه",
+          id: "cr"
+        },
+        {
+          title: "نقدی",
+          id: "cs"
+        },
+        {
+          title: "کارت خوان",
+          id: "p"
+        },
+      ]
+    }
+  },
   methods: {
     getDrivers(force) {
       if (!force && this.$store.state.drivers.length) return;
@@ -31,7 +70,7 @@ export default {
       });
     },
     getAssociationCommissions(force) {
-      if (!force && this.$store.state.AssociationCommissions.length) return;
+      if (!force && this.$store.state.associationCommissions.length) return;
       return this.request({
         url: this.endpoint("dashtbashi/associationCommissions/"),
         method: "get",

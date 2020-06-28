@@ -681,6 +681,18 @@ export default {
                 name: "AssociationCommissions"
               }
             },
+            {
+              title: "حواله",
+              to: {
+                name: "Remittance"
+              }
+            },
+            {
+              title: "بارگیری",
+              to: {
+                name: "Lading"
+              }
+            },
           ]
         }
       ]
