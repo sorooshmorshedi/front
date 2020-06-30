@@ -1,8 +1,10 @@
 import Cars from './Cars';
 import Drivers from './Drivers';
 import Drivings from './Drivings';
-import AssociationCommissions from "./AssociationCommissions"
+import Associations from "./Associations"
 
+import LadingBillSeries from "./LadingBillSeries"
+import RevokeLadingBillNumber from "./RevokeLadingBillNumber"
 import Remittance from "./Remittance"
 import Lading from "./Lading"
 
@@ -22,17 +24,26 @@ export default [{
     component: Drivings,
   },
   {
-    name: 'AssociationCommissions',
-    path: 'associationCommissions',
-    component: AssociationCommissions,
+    name: 'Associations',
+    path: 'associations',
+    component: Associations,
   },
 
   {
+    name: 'RevokeLadingBillNumber',
+    path: 'revokeLadingBillNumber',
+    component: RevokeLadingBillNumber,
+  }, {
+    name: 'LadingBillSeries',
+    path: 'ladingBillSeries/:id?',
+    component: LadingBillSeries,
+    props: true,
+  }, {
     name: 'Remittance',
     path: 'remittance/:id?',
     component: Remittance,
     props: true,
-  },{
+  }, {
     name: 'Lading',
     path: 'Lading/:id?',
     component: Lading,

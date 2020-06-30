@@ -3,7 +3,7 @@ export default {
     cars: [],
     drivers: [],
     drivings: [],
-    associationCommissions: [],
+    associations: [],
   },
   mutations: {
     setCars(state, data) {
@@ -15,8 +15,8 @@ export default {
     setDrivings(state, data) {
       state.drivings = data;
     },
-    setAssociationCommissions(state, data) {
-      state.associationCommissions = data;
+    setAssociations(state, data) {
+      state.associations = data;
     },
   }
 }

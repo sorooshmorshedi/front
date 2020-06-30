@@ -1,6 +1,6 @@
 <template>
   <list-modal-form
-    title="کمیسیون انجمن"
+    title="انجمن"
     :items="items"
     :cols="cols"
     :deletable="item.id"
@@ -35,7 +35,7 @@ export default {
     return {
       item: {},
       itemTemplate: {},
-      baseUrl: "dashtbashi/associationCommissions",
+      baseUrl: "dashtbashi/associations",
       leadingSlash: true,
       cols: [
         {
@@ -55,12 +55,12 @@ export default {
   },
   computed: {
     items() {
-      return this.$store.state.associationCommissions;
+      return this.$store.state.associations;
     }
   },
   methods: {
     getData() {
-      this.getAssociationCommissions(true);
+      this.getAssociations(true);
     }
   }
 };

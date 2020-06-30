@@ -49,19 +49,6 @@
           </v-col>
 
           <v-col cols="12" md="3">
-            <money label="انعام" v-model="item.tip_price" :disabled="!editable" />
-          </v-col>
-
-          <v-col cols="12" md="3">
-            <v-autocomplete
-              label="پرداخت کننده انعام"
-              v-model="item.tip_payer"
-              :items="tipPayers"
-              :disabled="!editable"
-            />
-          </v-col>
-
-          <v-col cols="12" md="3">
             <money
               label="مبلغ اختلاف بارنامه"
               v-model="item.lading_bill_difference"
@@ -133,7 +120,7 @@
       </template>
       <v-row>
         <v-col cols="12">
-          <v-card-title class="py-0">بارنامه</v-card-title>
+          <v-card-title class="py-0">بارنامه دولتی</v-card-title>
         </v-col>
         <v-col cols="12" md="2">
           <v-text-field label="عطف" v-model="item.id" :disabled="true" />
@@ -148,17 +135,52 @@
           />
         </v-col>
 
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="3">
+          <money label="انعام" v-model="item.tip_price" :disabled="!editable" />
+        </v-col>
+
+        <v-col cols="12" md="3">
           <v-autocomplete
-            label="کمیسیون انجمن"
-            v-model="item.associationCommission"
-            :items="$store.state.associationCommissions"
-            item-text="name"
+            label="پرداخت کننده انعام"
+            v-model="item.tip_payer"
+            :items="tipPayers"
             :disabled="!editable"
           />
         </v-col>
+
+        <v-col cols="12" md="4">
+          <v-autocomplete
+            label="انجمن"
+            v-model="item.association"
+            :items="$store.state.associations"
+            item-text="name"
+            :disabled="!editable"
+            @change="item.association_price = item.association.price"
+          />
+        </v-col>
+        <v-col cols="12" md="3">
+          <money label="مبلغ انجمن" v-model="item.association_price" :disabled="!editable" />
+        </v-col>
+
         <v-col cols="12" md="2">
-          <v-text-field label="شماره بارنامه" v-model="item.bill_number" :disabled="!editable" />
+          <v-autocomplete
+            label="سری بارنامه"
+            :items="ladingBillSeriesItems"
+            v-model="ladingBillSeries"
+            item-text="serial"
+            no-filter
+            :search-input.sync="ladingBillSearchInput"
+            :disabled="!editable"
+          ></v-autocomplete>
+        </v-col>
+        <v-col cols="12" md="2">
+          <v-autocomplete
+            label="شماره بارنامه"
+            :items="ladingBillSeries?ladingBillSeries.numbers.filter(o => !o.is_revoked):[]"
+            v-model="item.billNumber"
+            item-text="number"
+            :disabled="!editable"
+          ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="2">
           <date
@@ -180,7 +202,7 @@
             :disabled="!editable"
           />
         </v-col>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="2">
           <v-file-input label="فایل"></v-file-input>
         </v-col>
 
@@ -238,19 +260,28 @@ export default {
       baseUrl: "dashtbashi/ladings",
       leadingSlash: true,
       hasList: false,
-      hasRemittance: true
+      hasRemittance: true,
+      ladingBillSeries: null,
+      ladingBillSeriesItems: [],
+      ladingBillSearchInput: ""
     };
   },
   computed: {
     billTotalPrice() {
-      return +this.item.associationCommission.price + +this.item.bill_price;
+      return (
+        +this.item.association.price +
+        +this.item.bill_price +
+        +this.item.tip_price
+      );
     },
     itemTemplate() {
       return {
         remittance: {
+          id: null,
           code: null
         },
-        associationCommission: {
+        association: {
+          id: null,
           price: null
         },
         lading_ware: null,
@@ -259,12 +290,38 @@ export default {
       };
     }
   },
+  watch: {
+    ladingBillSearchInput() {
+      this.getLadingBillSeries(this.ladingBillSearchInput);
+    }
+  },
   methods: {
     getData() {
       this.getDrivings();
-      this.getAssociationCommissions();
+      this.getAssociations();
       if (this.id) {
         this.getItem(this.id);
+      }
+    },
+    getLadingBillSeries(search) {
+      this.request({
+        loading: false,
+        url: this.endpoint("dashtbashi/ladingBillSeries/?limit=10&offset=0"),
+        method: "get",
+        params: {
+          serial__icontains: search
+        },
+        success: data => {
+          this.ladingBillSeriesItems = data["results"];
+        }
+      });
+    },
+    setItem(item) {
+      // must be implemented, but by default
+      this.item = item;
+      this.ladingBillSeries = item.billNumber ? item.billNumber.series : null;
+      if (!this.hasList && this.id != item.id) {
+        this.changeRouteTo(item.id);
       }
     },
     validate(clearForm) {

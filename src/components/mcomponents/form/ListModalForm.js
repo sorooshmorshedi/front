@@ -30,7 +30,8 @@ export default {
       return this.baseUrl + (this.leadingSlash ? "/" : "")
     },
     updateUrl() {
-      return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.leadingSlash ? "/" : "")
+      let id = this.item.id || this.id || null;
+      return id && `${this.baseUrl}/${id}` + (this.leadingSlash ? "/" : "")
     },
     deleteUrl() {
       return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.leadingSlash ? "/" : "")
@@ -52,7 +53,7 @@ export default {
     }
   },
   created() {
-    this.clearForm();
+    this.item = this.itemTemplate;
     this.getData();
     if (this.id) {
       this.getItem();
@@ -154,6 +155,7 @@ export default {
       if (clearForm) {
         this.clearForm();
       } else {
+        this.item = data;
         this.getItem(data);
       }
       if (this.hasList) {

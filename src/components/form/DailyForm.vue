@@ -105,16 +105,16 @@ export default {
       default: true
     },
     hasFirst: {
-      required: true
+      default: true
     },
     hasPrev: {
-      required: true
+      default: true
     },
     hasNext: {
-      required: true
+      default: true
     },
     hasLast: {
-      required: true
+      default: true
     },
     canSubmit: {
       default: true

@@ -69,13 +69,13 @@ export default {
         }
       });
     },
-    getAssociationCommissions(force) {
-      if (!force && this.$store.state.associationCommissions.length) return;
+    getAssociations(force) {
+      if (!force && this.$store.state.associations.length) return;
       return this.request({
-        url: this.endpoint("dashtbashi/associationCommissions/"),
+        url: this.endpoint("dashtbashi/associations/"),
         method: "get",
         success: data => {
-          this.$store.commit("setAssociationCommissions", data);
+          this.$store.commit("setAssociations", data);
         }
       });
     },

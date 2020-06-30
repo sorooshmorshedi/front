@@ -676,9 +676,21 @@ export default {
               }
             },
             {
-              title: "کمیسیون های انجمن",
+              title: "انجمن",
               to: {
-                name: "AssociationCommissions"
+                name: "Associations"
+              }
+            },
+            {
+              title: "سری بارنامه",
+              to: {
+                name: "LadingBillSeries"
+              }
+            },
+            {
+              title: "ابطال شماره بارنامه",
+              to: {
+                name: "RevokeLadingBillNumber"
               }
             },
             {
