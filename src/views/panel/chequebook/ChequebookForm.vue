@@ -19,9 +19,6 @@
     </template>
     <template #default>
       <v-row>
-        <v-col cols="12" v-if="item.id">
-          <v-text-field label="سری دسته چک" disabled v-model="item.code" />
-        </v-col>
         <v-col cols="12">
           <account-select
             items-type="banks"
@@ -32,6 +29,13 @@
             @update:floatAccount="v => item.floatAccount = v"
             :costCenter="item.costCenter"
             @update:costCenter="v => item.costCenter = v"
+          />
+        </v-col>
+        <v-col cols="12" md="12">
+          <v-text-field
+            label="* سری"
+            v-model="item.serial"
+            :disabled="!editable"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -84,8 +88,8 @@ export default {
         },
         {
           th: "سری",
-          td: "code",
-          type: "number",
+          td: "serial",
+          type: "text",
           filters: ["serial__icontains"]
         },
         {

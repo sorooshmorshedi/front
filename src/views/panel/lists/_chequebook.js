@@ -9,8 +9,8 @@ export default {
     },
     {
       th: "سری",
-      td: "code",
-      type: "number",
+      td: "serial",
+      type: "text",
       filters: ["serial__icontains"]
     },
     {
