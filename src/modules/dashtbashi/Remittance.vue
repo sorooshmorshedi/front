@@ -67,13 +67,13 @@
         </v-col>
 
         <v-col cols="12" md="3">
-          <money label="انعام" v-model="item.tip_price" :disabled="!editable" />
+          <money label="انعام" v-model="item.driver_tip_price" :disabled="!editable" />
         </v-col>
 
         <v-col cols="12" md="3">
           <v-autocomplete
             label="پرداخت کننده انعام"
-            v-model="item.tip_payer"
+            v-model="item.driver_tip_payer"
             :items="tipPayers"
             :disabled="!editable"
           />
@@ -96,7 +96,7 @@
           />
         </v-col>
 
-        <v-col cols="12">
+        <v-col cols="12" md="9">
           <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!editable" />
         </v-col>
       </v-row>
@@ -120,7 +120,7 @@ export default {
       item: {},
       baseUrl: "dashtbashi/remittances",
       leadingSlash: true,
-      hasList: false,
+      hasList: false
     };
   },
   methods: {

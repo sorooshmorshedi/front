@@ -48,10 +48,6 @@ export default {
   data() {
     return {
       item: {},
-      itemTemplate: {
-        level: this.level,
-        type: this.factorType
-      },
       baseUrl: "factors/expenses",
       leadingSlash: true,
       cols: [
@@ -81,6 +77,12 @@ export default {
     }
   },
   methods: {
+    getItemTemplate() {
+      return {
+        level: this.level,
+        type: this.factorType
+      };
+    },
     getData() {
       this.getFactorExpenses(true);
     },

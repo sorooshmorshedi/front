@@ -31,7 +31,6 @@ export default {
   data() {
     return {
       item: {},
-      itemTemplate: {},
       baseUrl: "wares/units",
       cols: [
         {

@@ -1,25 +1,22 @@
 <template>
   <list-modal-form
-    title="انجمن"
+    :title="title"
     :items="items"
     :cols="cols"
-    :deletable="item.id"
+    :deletable="false"
+    :clearable="false"
+    :showActions="item.id != undefined"
     @rowClick="setItem"
-    @clearForm="clearForm"
     @submit="submit"
-    @delete="deleteItem"
     ref="listModelForm"
   >
     <template #default>
       <v-row>
-        <v-col cols="12" md="12">
-          <v-text-field label="نام" v-model="item.name" />
-        </v-col>
-        <v-col cols="12" md="12">
-          <money label="مبلغ" v-model="item.price" />
+        <v-col cols="12">
+          <v-text-field label="نام" v-model="item.name" disabled />
         </v-col>
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" />
+          <v-text-field label="مقدار" v-model="item.value" />
         </v-col>
       </v-row>
     </template>
@@ -27,15 +24,14 @@
 </template>
 <script>
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
-import GetApi from "./GetApi";
+import GetOptionsApi from "@/views/panel/options/getOptionsApi"
 
 export default {
-  mixins: [ListModalFormMixin, GetApi],
+  mixins: [ListModalFormMixin],
   data() {
     return {
       item: {},
-      baseUrl: "dashtbashi/associations",
-      leadingSlash: true,
+      baseUrl: "home/options",
       cols: [
         {
           th: "نام",
@@ -44,23 +40,26 @@ export default {
           filters: ["name"]
         },
         {
-          th: "مبلغ",
-          td: "price",
+          th: "مقدار",
+          td: "value",
           type: "text",
-          filters: ["price"]
+          filters: ["value"]
         }
       ]
     };
   },
   computed: {
+    title() {
+      return "تنظیمات";
+    },
     items() {
-      return this.$store.state.associations;
+      return this.systemOptions;
     }
   },
   methods: {
     getData() {
-      this.getAssociations(true);
-    }
+      this.getOptions(true);
+    },
   }
 };
 </script>

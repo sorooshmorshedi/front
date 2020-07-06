@@ -118,17 +118,15 @@ export default {
     },
     deleteUrl() {
       return this.item.id && `users/delete/${this.item.id}`;
-    },
-    itemTemplate() {
-      return {
-        itemTemplate: {
-          roles: [],
-          is_active: true
-        }
-      };
     }
   },
   methods: {
+    getItemTemplate() {
+      return {
+        roles: [],
+        is_active: true
+      };
+    },
     getData() {
       this.getUsers();
       this.getRoles(this.setRoles);

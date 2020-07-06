@@ -1,3 +1,4 @@
+import Options from './Options';
 import Cars from './Cars';
 import Drivers from './Drivers';
 import Drivings from './Drivings';
@@ -7,8 +8,13 @@ import LadingBillSeries from "./LadingBillSeries"
 import RevokeLadingBillNumber from "./RevokeLadingBillNumber"
 import Remittance from "./Remittance"
 import Lading from "./Lading"
+import OilCompanyLading from "./OilCompanyLading"
 
 export default [{
+    name: 'Options',
+    path: 'options',
+    component: Options,
+  }, {
     name: 'Cars',
     path: 'cars',
     component: Cars,
@@ -47,6 +53,11 @@ export default [{
     name: 'Lading',
     path: 'Lading/:id?',
     component: Lading,
+    props: true,
+  }, {
+    name: 'OilCompanyLading',
+    path: 'OilCompanyLading/:id?',
+    component: OilCompanyLading,
     props: true,
   },
 

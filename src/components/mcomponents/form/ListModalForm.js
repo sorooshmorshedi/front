@@ -36,9 +36,6 @@ export default {
     deleteUrl() {
       return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.leadingSlash ? "/" : "")
     },
-    itemTemplate() {
-      return {}
-    },
   },
   watch: {
     query() {
@@ -53,7 +50,7 @@ export default {
     }
   },
   created() {
-    this.item = this.itemTemplate;
+    this.item = this.getItemTemplate();
     this.getData();
     if (this.id) {
       this.getItem();
@@ -64,6 +61,9 @@ export default {
     if (this.itemObject) this.setItem(this.itemObject);
   },
   methods: {
+    getItemTemplate() {
+      return {}
+    },
     /*
       Set default fields with data query.item
     */
@@ -109,7 +109,7 @@ export default {
     },
     clearForm() {
       // must be implemented, but by default
-      this.item = this.itemTemplate;
+      this.item = this.getItemTemplate();
       if (!this.hasList) {
         this.changeRouteTo(null);
       }

@@ -224,9 +224,6 @@ export default {
   data() {
     return {
       item: {},
-      itemTemplate: {
-        is_real: true
-      },
       baseUrl: "accounts/accounts",
       cols: [
         {
@@ -319,6 +316,11 @@ export default {
     }
   },
   methods: {
+    getItemTemplate() {
+      return {
+        is_real: true
+      };
+    },
     getData() {
       this.getAccounts(true);
       this.getFloatAccountGroups(true);

@@ -86,11 +86,7 @@ export default {
           type: "text",
           filters: ["name"]
         }
-      ],
-      itemTemplate: {
-        name: "",
-        permissions: {}
-      }
+      ]
     };
   },
   computed: {
@@ -149,8 +145,14 @@ export default {
     }
   },
   methods: {
+    getItemTemplate() {
+      return {
+        name: "",
+        permissions: {}
+      };
+    },
     clearForm() {
-      this.item = this.copy(this.itemTemplate);
+      this.item = this.copy(this.getItemTemplate());
       this.item.permissions = this.getPermissionsTemplate();
     },
     getPermissionsTemplate() {

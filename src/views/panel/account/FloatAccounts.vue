@@ -46,9 +46,6 @@ export default {
   data() {
     return {
       baseUrl: "accounts/floatAccounts",
-      itemTemplate: {
-        is_cost_center: this.is_cost_center
-      },
       cols: [
         {
           th: "نام حساب",
@@ -89,6 +86,11 @@ export default {
     }
   },
   methods: {
+    getItemTempate(){
+      return {
+        is_cost_center: this.is_cost_center
+      }
+    },
     getData() {
       this.getFloatAccounts(true);
       this.getFloatAccountGroups(true);

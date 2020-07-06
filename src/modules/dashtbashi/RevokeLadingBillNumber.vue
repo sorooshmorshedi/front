@@ -20,6 +20,7 @@
             item-text="serial"
             no-filter
             :search-input.sync="ladingBillSearchInput"
+            clearable
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="4">
@@ -27,7 +28,7 @@
             label="شماره بارنامه"
             :items="ladingBillSeries?ladingBillSeries.numbers:[]"
             v-model="billNumber"
-            item-text="number"
+            :item-text="(o) => o.number + ' : ' + (o.is_revoked?'باطل شده':'باطل نشده')"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="4" class="mt-2" v-if="billNumber">
@@ -87,8 +88,7 @@ export default {
         },
         success: data => {
           this.successNotify();
-          this.billNumber = null;
-          this.ladingBillSeries = null;
+          this.billNumber.is_revoked = !this.billNumber.is_revoked;
           this.getLadingBillSeries(this.ladingBillSearchInput);
         }
       });

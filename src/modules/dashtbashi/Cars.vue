@@ -156,24 +156,24 @@ export default {
       leadingSlash: true,
       owners: [
         {
-          text: "شرکت",
+          text: "حاج رحمان",
+          id: "rn"
+        },
+        {
+          text: "حاج رحیم",
+          id: "rm"
+        },
+        {
+          text: "حاج ابراهیم",
+          id: "e"
+        },
+        {
+          text: "شراکتی",
           id: "c"
         },
         {
           text: "دیگر",
           id: "o"
-        },
-        {
-          text: "رحمان",
-          id: "rn"
-        },
-        {
-          text: "رحیم",
-          id: "rm"
-        },
-        {
-          text: "ابراهیم",
-          id: "e"
         }
       ],
       cols: [
@@ -190,11 +190,6 @@ export default {
     items() {
       return this.$store.state.cars;
     },
-    itemTemplate() {
-      return {
-        car_number: [null, null, null, null]
-      };
-    }
   },
   mounted() {
     IMask(document.getElementById("car-number-1"), {
@@ -211,6 +206,11 @@ export default {
     });
   },
   methods: {
+    getItemTemplate() {
+      return {
+        car_number: [null, null, null, null]
+      };
+    },
     getData() {
       this.getCars(true);
     },

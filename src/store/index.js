@@ -16,6 +16,7 @@ export default new Vuex.Store({
       text: '',
       color: ''
     },
+    options: null,
     timeInterval: null,
     cities: [],
     accounts: [],
@@ -55,6 +56,9 @@ export default new Vuex.Store({
       state.now = time;
       if (state.timeInterval) window.clearInterval(state.timeInterval)
       state.timeInterval = window.setInterval(() => state.now.add(1, 'second'), 1000)
+    },
+    setOptions(state, data) {
+      state.options = data;
     },
     setUser(state, user) {
       state.user = user;

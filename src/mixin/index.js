@@ -21,6 +21,7 @@ Vue.mixin({
       financialYear: state => state.user ? state.user.active_financial_year || null : null,
       company: state => state.user ? state.user.active_company || null : null,
       permissions: state => state.user.permissions,
+      systemOptions: state => state.options,
       OGR: state => state.OGR,
       now: state => state.now
     }),
@@ -42,6 +43,9 @@ Vue.mixin({
   },
   mounted() {},
   methods: {
+    getOptionValue(codename) {
+      return this.systemOptions.filter(o => o.codename == codename)[0].value;
+    },
 
     askConfirmations(confirmations) {
       /*

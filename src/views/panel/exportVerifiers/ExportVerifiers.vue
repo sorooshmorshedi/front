@@ -55,7 +55,6 @@ export default {
     return {
       item: {},
       items: [],
-      itemTemplate: {},
       baseUrl: "reports/exportVerifiers",
       leadingSlash: true,
       forms: forms,

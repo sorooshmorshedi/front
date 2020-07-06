@@ -49,9 +49,6 @@ export default {
   data() {
     return {
       item: {},
-      itemTemplate: {
-        usage: this.usage
-      },
       baseUrl: "accounts/defaultAccounts",
       cols: [
         {
@@ -88,6 +85,11 @@ export default {
     }
   },
   methods: {
+    getItemTemplate() {
+      return {
+        usage: this.usage
+      };
+    },
     getData() {
       this.getDefaultAccounts(true);
       this.getAccounts();

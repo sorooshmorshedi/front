@@ -87,7 +87,6 @@ export default {
   data() {
     return {
       item: {},
-      itemTemplate: {},
       baseUrl: "wares/wares",
       cols: [
         {

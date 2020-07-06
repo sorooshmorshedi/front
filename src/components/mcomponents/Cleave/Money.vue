@@ -35,12 +35,7 @@ export default {
   },
   data() {
     return {
-      formattedAmount: "",
-      options: {
-        numeral: true,
-        numeralThousandsGroupStyle: "thousand",
-        numeralDecimalScale: this.decimalScale
-      }
+      formattedAmount: ""
     };
   },
   mounted() {
@@ -54,7 +49,11 @@ export default {
   methods: {
     setAmount(value) {
       if (!value) value = "";
-      else value = String(value);
+      else {
+        let numeric_value = Number(value);
+        if (!isNaN(numeric_value)) value = String(numeric_value);
+        else value = String(value);
+      }
 
       value = value.split(",").join("");
       this.formattedAmount = value

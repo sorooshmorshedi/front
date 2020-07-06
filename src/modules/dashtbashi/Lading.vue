@@ -23,15 +23,17 @@
           <v-switch label="بارگیری سیستمی" v-model="hasRemittance"></v-switch>
         </v-col>
       </v-row>
-      <template v-if="hasRemittance && item.remittance">
+      <template v-if="hasRemittance">
         <v-row>
           <v-col cols="12" md="3">
-            <v-text-field
+            <v-autocomplete
               label="شماره حواله"
-              v-model="item.remittance.code"
+              v-model="remittance"
               :disabled="!editable"
-              append-icon="fa-search"
-              @click:append="getRemittanceByCode"
+              :items="remittances"
+              :search-input.sync="remittanceSearch"
+              item-text="code"
+              clearable
             />
           </v-col>
           <v-col cols="12" md="3">
@@ -76,15 +78,23 @@
             <city-select label="مقصد" v-model="item.destination" :disabled="!editable" />
           </v-col>
 
-          <v-col cols="12">
-            <v-divider></v-divider>
+          <v-col cols="12" md="3">
+            <money label="انعام راننده" v-model="item.driver_tip_price" :disabled="!editable" />
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="2">
+
+          <v-col cols="12" md="3">
+            <v-autocomplete
+              label="پرداخت کننده انعام"
+              v-model="item.driver_tip_payer"
+              :items="tipPayers"
+              :disabled="!editable"
+            />
+          </v-col>
+
+          <v-col cols="12" md="3">
             <v-text-field label="شماره بارگیری" v-model="item.lading_number" :disabled="!editable" />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="3">
             <date
               label="تاریخ بارگیری"
               v-model="item.lading_date"
@@ -92,17 +102,23 @@
               :disabled="!editable"
             />
           </v-col>
-          <v-col cols="12" md="2">
-            <money label="مقدار بارنامه مبدا" v-model="item.original_amount" :disabled="!editable" />
+          <v-col cols="12" md="3">
+            <money
+              label="مقدار بارنامه مبدا"
+              v-model="item.original_amount"
+              :disabled="!editable"
+              @input="!is_destination_amount_dirty?item.destination_amount = item.original_amount:''"
+            />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="3">
             <money
               label="مقدار بارنامه مقصد"
               v-model="item.destination_amount"
               :disabled="!editable"
+              @input="is_destination_amount_dirty = true"
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-file-input label="فایل" />
           </v-col>
           <v-col cols="12">
@@ -113,8 +129,32 @@
             />
           </v-col>
 
+          <template v-if="item.driving">
+            <v-col cols="3">
+              <money
+                label="مبلغ کل"
+                :value="item.destination_amount * item.contractor_price"
+                disabled
+              />
+            </v-col>
+            <v-col cols="3">
+              <money
+                :label="'درآمد کمسیون ' + (item.driving.car.owner == 'o'?'متفرقه': 'شرکت')"
+                :value="item.destination_amount * (item.contractor_price - item.fare_price)"
+                disabled
+              />
+            </v-col>
+            <v-col cols="3">
+              <money
+                :label="item.driving.car.owner == 'o'?'حساب پرداختنی راننده متفرقه':'درآمد ماشین'"
+                :value="item.destination_amount * item.fare_price"
+                disabled
+              />
+            </v-col>
+          </template>
+
           <v-col cols="12">
-            <v-divider></v-divider>
+            <v-divider color="indigo" style="border-width: 2px;"></v-divider>
           </v-col>
         </v-row>
       </template>
@@ -122,7 +162,7 @@
         <v-col cols="12">
           <v-card-title class="py-0">بارنامه دولتی</v-card-title>
         </v-col>
-        <v-col cols="12" md="2">
+        <v-col cols="12" md="3">
           <v-text-field label="عطف" v-model="item.id" :disabled="true" />
         </v-col>
         <v-col cols="12" md="6">
@@ -136,19 +176,10 @@
         </v-col>
 
         <v-col cols="12" md="3">
-          <money label="انعام" v-model="item.tip_price" :disabled="!editable" />
+          <money label="انعام باربری" v-model="item.cargo_tip_price" :disabled="!editable" />
         </v-col>
 
         <v-col cols="12" md="3">
-          <v-autocomplete
-            label="پرداخت کننده انعام"
-            v-model="item.tip_payer"
-            :items="tipPayers"
-            :disabled="!editable"
-          />
-        </v-col>
-
-        <v-col cols="12" md="4">
           <v-autocomplete
             label="انجمن"
             v-model="item.association"
@@ -162,7 +193,7 @@
           <money label="مبلغ انجمن" v-model="item.association_price" :disabled="!editable" />
         </v-col>
 
-        <v-col cols="12" md="2">
+        <v-col cols="12" md="3">
           <v-autocomplete
             label="سری بارنامه"
             :items="ladingBillSeriesItems"
@@ -171,9 +202,11 @@
             no-filter
             :search-input.sync="ladingBillSearchInput"
             :disabled="!editable"
+            @change="ladingBillSeries && (item.billNumber = ladingBillSeries.numbers.filter(o=> !o.is_revoked)[0])"
+            clearable
           ></v-autocomplete>
         </v-col>
-        <v-col cols="12" md="2">
+        <v-col cols="12" md="3">
           <v-autocomplete
             label="شماره بارنامه"
             :items="ladingBillSeries?ladingBillSeries.numbers.filter(o => !o.is_revoked):[]"
@@ -182,7 +215,7 @@
             :disabled="!editable"
           ></v-autocomplete>
         </v-col>
-        <v-col cols="12" md="2">
+        <v-col cols="12" md="3">
           <date
             label="تاریخ بارنامه"
             v-model="item.bill_date"
@@ -190,11 +223,11 @@
             :disabled="!editable"
           />
         </v-col>
-        <v-col cols="12" md="2">
+        <v-col cols="12" md="3">
           <money label="مبلغ بارنامه" v-model="item.bill_price" :disabled="!editable" />
         </v-col>
 
-        <v-col cols="12" md="2">
+        <v-col cols="12" md="3">
           <v-autocomplete
             label="نحوه دریافت"
             v-model="item.receive_type"
@@ -202,11 +235,11 @@
             :disabled="!editable"
           />
         </v-col>
-        <v-col cols="12" md="2">
+        <v-col cols="12" md="3">
           <v-file-input label="فایل"></v-file-input>
         </v-col>
 
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="9">
           <v-textarea
             label="توضیحات بارنامه"
             v-model="item.bill_explanation"
@@ -214,30 +247,8 @@
           />
         </v-col>
 
-        <v-col cols="4">
+        <v-col cols="3">
           <money label="مبلغ کل بارنامه" :value="billTotalPrice" disabled />
-        </v-col>
-      </v-row>
-      <v-row v-if="item.driving">
-        <v-col cols="12">
-          <v-divider></v-divider>
-        </v-col>
-        <v-col cols="3">
-          <money label="مبلغ کل" :value="item.destination_amount * item.contractor_price" disabled />
-        </v-col>
-        <v-col cols="3">
-          <money
-            :label="'درآمد کمسیون ' + (item.driving.car.owner == 'o'?'متفرقه': 'شرکت')"
-            :value="item.destination_amount * (item.contractor_price - item.fare_price)"
-            disabled
-          />
-        </v-col>
-        <v-col cols="3">
-          <money
-            :label="item.driving.car.owner == 'o'?'حساب پرداختنی راننده متفرقه':'درآمد ماشین'"
-            :value="item.destination_amount * item.fare_price"
-            disabled
-          />
         </v-col>
       </v-row>
     </template>
@@ -263,23 +274,41 @@ export default {
       hasRemittance: true,
       ladingBillSeries: null,
       ladingBillSeriesItems: [],
-      ladingBillSearchInput: ""
+      ladingBillSearchInput: "",
+      is_destination_amount_dirty: false,
+      remittanceSearch: "",
+      remittances: [],
+      remittance: null
     };
   },
   computed: {
     billTotalPrice() {
       return (
-        +this.item.association.price +
+        +this.item.association_price +
         +this.item.bill_price +
-        +this.item.tip_price
+        +this.item.cargo_tip_price
       );
     },
-    itemTemplate() {
+  },
+  watch: {
+    ladingBillSearchInput() {
+      this.getLadingBillSeries(this.ladingBillSearchInput);
+    },
+    remittanceSearch() {
+      this.getRemittances(this.remittanceSearch);
+    },
+    remittance() {
+      Object.keys(this.remittance).forEach(key => {
+        if (["id"].includes(key)) return;
+        this.item[key] = null;
+        this.$set(this.item, key, this.remittance[key]);
+      });
+    }
+  },
+  methods: {
+    getItemTemplate() {
       return {
-        remittance: {
-          id: null,
-          code: null
-        },
+        remittance: {},
         association: {
           id: null,
           price: null
@@ -288,14 +317,7 @@ export default {
         lading_contractor_price: null,
         lading_contractor: null
       };
-    }
-  },
-  watch: {
-    ladingBillSearchInput() {
-      this.getLadingBillSeries(this.ladingBillSearchInput);
-    }
-  },
-  methods: {
+    },
     getData() {
       this.getDrivings();
       this.getAssociations();
@@ -345,25 +367,15 @@ export default {
         }
       });
     },
-    getRemittanceByCode() {
+    getRemittances(code) {
       this.request({
-        url: this.endpoint("dashtbashi/remittances/byCode"),
+        url: this.endpoint("dashtbashi/remittances/?limit=10&offset=0"),
         method: "get",
         params: {
-          code: this.item.remittance.code
+          code__icontains: code
         },
         success: data => {
-          this.item.remittance = data;
-          Object.keys(data).forEach(key => {
-            if (["id"].includes(key)) return;
-            this.item[key] = null;
-            this.$set(this.item, key, data[key]);
-          });
-        },
-        error: error => {
-          if (error.response.status == 404) {
-            this.notify("حواله وجود ندارد", "warning");
-          }
+          this.remittances = data["results"];
         }
       });
     }

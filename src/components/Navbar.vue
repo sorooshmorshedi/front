@@ -658,6 +658,12 @@ export default {
           title: "حمل و نقل",
           children: [
             {
+              title: "تنظیمات",
+              to: {
+                name: "Options"
+              }
+            },
+            {
               title: "ماشین ها",
               to: {
                 name: "Cars"
@@ -703,6 +709,12 @@ export default {
               title: "بارگیری",
               to: {
                 name: "Lading"
+              }
+            },
+            {
+              title: "بارگیری شرکت نفت",
+              to: {
+                name: "OilCompanyLading"
               }
             },
           ]

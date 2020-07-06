@@ -59,7 +59,6 @@ export default {
   data() {
     return {
       item: {},
-      itemTemplate: {},
       baseUrl: "dashtbashi/drivings",
       leadingSlash: true,
       cols: [
