@@ -44,12 +44,13 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>مبلغ خالص</th>
+                <th>مبلغ ناخالص</th>
+                <th>حق بیمه تامین اجتماعی</th>
                 <th>درصد مالیات بر ارزش افزوده</th>
                 <th>مبلغ مالیات بر ارزش افزوده</th>
                 <th>درصد عوارض بر ارزش افزوده</th>
                 <th>مبلغ عوارض بر ارزش افزوده</th>
-                <th>جمع</th>
+                <th>مبلغ خالص</th>
                 <th>کمیسیون شرکت</th>
                 <th>درآمد ماشین</th>
                 <th></th>
@@ -59,7 +60,10 @@
               <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td>
-                  <money v-model="row.pure_price" :disabled="!editable" />
+                  <money v-model="row.gross_price" :disabled="!editable" />
+                </td>
+                <td>
+                  <money v-model="row.insurance_price" :disabled="!editable" />
                 </td>
                 <td>
                   <v-text-field
@@ -114,7 +118,8 @@
               </tr>
               <tr class="grey lighten-3 text-white">
                 <td class="text-left">مجموع:</td>
-                <td>{{ rowsSum('pure_price') | toMoney }}</td>
+                <td>{{ rowsSum('gross_price') | toMoney }}</td>
+                <td>{{ rowsSum('insurance_price') | toMoney }}</td>
                 <td></td>
                 <td>{{ rowsTaxPrice | toMoney }}</td>
                 <td></td>
@@ -186,7 +191,7 @@ export default {
     rows: {
       handler() {
         let row = this.rows[this.rows.length - 1];
-        if (row && row.pure_price) {
+        if (row && row.gross_price) {
           this.rows.push(this.getRowTemplate());
         }
       },
@@ -210,30 +215,31 @@ export default {
       };
     },
     taxPrice(row) {
-      return +row.tax_price || (+row.tax_percent * +row.pure_price) / 100 || 0;
+      return +row.tax_price || (+row.tax_percent * +row.gross_price) / 100 || 0;
     },
     complicationPrice(row) {
       return (
         +row.complication_price ||
-        (+row.complication_percent * +row.pure_price) / 100 ||
+        (+row.complication_percent * +row.gross_price) / 100 ||
         0
       );
     },
     rowSum(row) {
       let sum =
-        (+row.pure_price || 0) +
+        (+row.gross_price || 0) +
         this.taxPrice(row) +
-        this.complicationPrice(row);
+        this.complicationPrice(row) -
+        (+row.insurance_price || 0);
       row.sum = sum;
       return sum;
     },
     companyCommission(row) {
-      let value = (+row.pure_price * +this.item.company_commission) / 100 || 0;
+      let value = (this.rowSum(row) * +this.item.company_commission) / 100 || 0;
       row.company_commission = value;
       return value;
     },
     carIncome(row) {
-      let value = +row.pure_price - this.companyCommission(row) || 0;
+      let value = this.rowSum(row) - this.companyCommission(row) || 0;
       row.car_income = value;
       return value;
     },
