@@ -45,6 +45,8 @@ import ExportVerifiers from '@/views/panel/exportVerifiers/ExportVerifiers.vue';
 
 import Closing from '../views/panel/closing/Closing.vue';
 
+import ImprestSettlement from '@/views/panel/imprestSettlement/ImprestSettlement';
+
 import DashtbashiRoutes from '@/modules/dashtbashi/Routes';
 
 export default [{
@@ -147,6 +149,12 @@ export default [{
           };
         },
       }]
+    },
+    {
+      name: 'ImprestSettlement',
+      path: 'imprestSettlement/:id?',
+      props: true,
+      component: ImprestSettlement,
     },
     {
       name: 'Sanad',

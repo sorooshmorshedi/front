@@ -38,7 +38,7 @@ export default {
           options.success(res.data);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           this.$store.commit('decrementOGR');
           if (error.response) {
             let statusCode = error.response.status

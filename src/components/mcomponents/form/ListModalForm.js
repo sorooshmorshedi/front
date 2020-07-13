@@ -162,7 +162,19 @@ export default {
         this.getData();
       }
       this.successNotify();
-    }
+    },
+
+    // Helpers
+    rowsSum(key) {
+      let sum = 0;
+      for (const row of this.rows) {
+        let value = row[key];
+        if (this.hasValue(value)) {
+          sum += +value;
+        }
+      }
+      return sum;
+    },
   }
 
 }

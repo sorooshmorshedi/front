@@ -165,11 +165,11 @@ export default {
       let acc = null;
       if (name == "inFlow") {
         acc = this.defaultAccounts.filter(
-          o => o.nickname == "inFlowDocuments"
+          o => o.codename == "inFlowDocuments"
         )[0];
       }
       if (name == "cashed") {
-        acc = this.defaultAccounts.filter(o => o.nickname == "cash")[0];
+        acc = this.defaultAccounts.filter(o => o.codename == "cash")[0];
       }
       if (name == "passed" && this.chequebook) {
         acc = { account: this.chequebook.account };

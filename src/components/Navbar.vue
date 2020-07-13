@@ -392,6 +392,35 @@ export default {
                   title: "ثبت انتقال"
                 }
               ]
+            },
+            {
+              title: "تنخواه",
+              children: [
+                {
+                  title: "حساب های پیشفرض تنخواه",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "imprest"
+                    }
+                  }
+                },
+                {
+                  title: "پرداخت تنخواه",
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      transactionType: "imprest"
+                    }
+                  }
+                },
+                {
+                  title: "تسویه تنخواه",
+                  to: {
+                    name: "ImprestSettlement"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -716,7 +745,7 @@ export default {
               to: {
                 name: "OilCompanyLading"
               }
-            },
+            }
           ]
         }
       ]

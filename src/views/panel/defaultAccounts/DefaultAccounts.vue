@@ -3,7 +3,7 @@
     :title="title"
     :items="items"
     :cols="cols"
-    :deletable="item.id"
+    :deletable="item.id != undefined"
     :clearable="clearable"
     :showActions="showActions"
     @rowClick="setItem"
@@ -20,7 +20,7 @@
         <v-col cols="12">
           <account-select
             label=" * حساب"
-            itemsType="level3"
+            :itemsType="accountLevel"
             v-model="item.account"
             :floatAccount="item.floatAccount"
             @update:floatAccount="v => item.floatAccount = v"
@@ -73,14 +73,20 @@ export default {
       if (this.usage == "payment") return title + "پرداخت";
       if (this.usage == "factor") return title + "فاکتور";
       if (this.usage == "closeAccounts") return title + "بستن";
+      if (this.usage == "imprest") return title + "تنخواه";
+    },
+    accountLevel() {
+      if (this.usage == "imprest") return "level2";
+      return "level3";
     },
     items() {
       return this.defaultAccounts.filter(o => o.usage == this.usage);
     },
     clearable() {
-      return ["factor", "closingAccounts"].includes(this.user);
+      return ["factor", "closingAccounts", "imprest"].includes(this.usage);
     },
     showActions() {
+      if (this.usage == "imprest") return true;
       return this.item.id != undefined;
     }
   },
@@ -99,6 +105,9 @@ export default {
     },
     getSerialized() {
       let item = this.extractIds(this.item);
+      let level = 3;
+      if (this.usage == "imprest") level = 2;
+      item.account_level = level;
       return item;
     }
   }

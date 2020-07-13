@@ -21,6 +21,7 @@
         <template #header-btns>
           <open-sanad-btn v-if="transaction.sanad" :sanad="transaction.sanad" />
           <v-btn
+            v-if="!isImprest"
             @click="factorsDialog = true"
             class="teal white--text mr-1"
           >پرداخت شده برای فاکتور های</v-btn>
@@ -28,48 +29,35 @@
 
         <template #inputs>
           <v-row>
-            <v-col cols="12" md="6">
-              <v-row>
-                <v-col cols="12" md="4">
-                  <v-text-field :label="'شماره ' + type.label" disabled v-model="transaction.code" />
-                </v-col>
-                <v-col cols="12" md="4">
-                  <date
-                    label=" * تاریخ"
-                    v-model="transaction.date"
-                    :default="true"
-                    :disabled="!editable"
-                  />
-                </v-col>
-                <v-col cols="12" md="4">
-                  <date placeholder="تاریخ راس" disabled />
-                </v-col>
-                <v-col cols="12" md="12">
-                  <account-select
-                    label=" * کد - نام مشتری"
-                    itemsType="level3"
-                    v-model="transaction.account"
-                    :disabled="!editable"
-                    required
-                    :floatAccount="transaction.floatAccount"
-                    @update:floatAccount="v => transaction.floatAccount = v"
-                    :costCenter="transaction.costCenter"
-                    @update:costCenter="v => transaction.costCenter = v"
-                  />
-                </v-col>
-              </v-row>
+            <v-col cols="12" md="2">
+              <v-text-field :label="'شماره ' + type.label" disabled v-model="transaction.code" />
+            </v-col>
+            <v-col cols="12" md="2">
+              <date
+                label=" * تاریخ"
+                v-model="transaction.date"
+                :default="true"
+                :disabled="!editable"
+              />
+            </v-col>
+            <v-col cols="12" md="2">
+              <date v-if="!isImprest" placeholder="تاریخ راس" disabled />
             </v-col>
             <v-col cols="12" md="6">
-              <v-row>
-                <v-col cols="12">
-                  <v-textarea
-                    label="توضیحات"
-                    rows="5"
-                    v-model="transaction.explanation"
-                    :disabled="!editable"
-                  ></v-textarea>
-                </v-col>
-              </v-row>
+              <account-select
+                :label="accountLabel"
+                itemsType="level3"
+                v-model="transaction.account"
+                :disabled="!editable"
+                required
+                :floatAccount="transaction.floatAccount"
+                @update:floatAccount="v => transaction.floatAccount = v"
+                :costCenter="transaction.costCenter"
+                @update:costCenter="v => transaction.costCenter = v"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-textarea label="توضیحات" v-model="transaction.explanation" :disabled="!editable"></v-textarea>
             </v-col>
           </v-row>
 
@@ -99,7 +87,7 @@
                     <td style="min-width: 150px">
                       <v-autocomplete
                         :disabled="!editable || hasCheque(row)"
-                        :items="accountsSelectValues.defaultAccounts.filter(o => o.usage && o.usage.toLowerCase().includes(type.name))"
+                        :items="transactionPaymentMethods"
                         v-model="rows[i].type"
                         item-text="name"
                       />
@@ -339,6 +327,19 @@ export default {
     this.initForm();
   },
   computed: {
+    isImprest() {
+      return this.transactionType == "imprest";
+    },
+    accountLabel() {
+      if (this.isImprest) return "* تنخواه گردان";
+      return " * کد - نام مشتری";
+    },
+    transactionPaymentMethods() {
+      let type = this.usage == "receive" ? "receive" : "payment";
+      return this.defaultAccounts.filter(
+        o => o.usage && o.usage.toLowerCase().includes(type)
+      );
+    },
     hasFirst() {
       if (this.transactionCode == 1) return false;
       return true;
@@ -430,6 +431,10 @@ export default {
       } else if (this.transactionType == "payment") {
         this.type.label = "پرداخت";
         this.type.name = "payment";
+        this.type.chequeType = "paid";
+      } else if (this.isImprest) {
+        this.type.label = "پرداخت تنخواه";
+        this.type.name = "imprest";
         this.type.chequeType = "paid";
       } else {
         console.error("404");
@@ -730,12 +735,12 @@ export default {
     },
     hasBank(row) {
       if (this.isChequeType(row)) return false;
-      if (row.type && row.type.nickname == "cash") return false;
+      if (row.type && row.type.codename == "cash") return false;
       return true;
     },
     isChequeType(row) {
       return (
-        row.type && row.type.nickname && row.type.nickname.includes("Cheque")
+        row.type && row.type.codename && row.type.codename.includes("Cheque")
       );
     },
     hasCheque(row) {

@@ -95,7 +95,9 @@ export default {
           "floatAccountGroups",
 
           "costCenters",
-          "costCenterGroups"
+          "costCenterGroups",
+
+          "imprests"
         ].includes(value);
       }
     },
@@ -175,6 +177,16 @@ export default {
               items.push(item);
             }
           }
+
+          if (this.itemsType == "imprests") {
+            let isImprest =
+              this.defaultAccounts.filter(
+                o => o.usage == "imprest" && o.account.id == item.parent
+              ).length != 0;
+            if (isImprest) {
+              items.push(item);
+            }
+          }
         });
 
       if (this.childOf) {
@@ -196,16 +208,19 @@ export default {
         this.item &&
         (this.item.floatAccountGroup || this.item.costCenterGroup) &&
         this.deepSelect &&
-        ["level3", "persons", "buyers", "sellers"].includes(this.itemsType)
+        ["level3", "persons", "buyers", "sellers", "imprests"].includes(
+          this.itemsType
+        )
       );
     },
     hasLedger() {
-      return ["level3", "persons", "buyers", "sellers"].includes(
+      return ["level3", "persons", "buyers", "sellers", "imprests"].includes(
         this.itemsType
       );
     }
   },
   created() {
+    this.getDefaultAccounts();
     this.getAccounts();
     this.getFloatAccounts();
 
@@ -219,6 +234,13 @@ export default {
         this.localFloatAccount = this.floatAccount;
       if (this.costCenter != this.localCostCenter)
         this.localCostCenter = this.costCenter;
+    },
+    emitChange() {
+      this.$emit("change", {
+        account: this.item,
+        floatAccount: this.localFloatAccount,
+        costCenter: this.localCostCenter
+      });
     }
   },
   watch: {
@@ -237,16 +259,22 @@ export default {
     item() {
       this.$emit("input", this.item);
       if (this.item) {
-        if (!this.item.floatAccountGroup)
+        if (!this.item.floatAccountGroup) {
           this.$emit("update:floatAccount", null);
-        if (!this.item.costCenterGroup) this.$emit("update:costCenter", null);
+        }
+        if (!this.item.costCenterGroup) {
+          this.$emit("update:costCenter", null);
+        }
       }
+      this.emitChange();
     },
     localFloatAccount() {
       this.$emit("update:floatAccount", this.localFloatAccount);
+      this.emitChange();
     },
     localCostCenter() {
       this.$emit("update:costCenter", this.localCostCenter);
+      this.emitChange();
     }
   }
 };
