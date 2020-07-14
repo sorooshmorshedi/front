@@ -66,7 +66,7 @@
           >
             <template
               #item.paidValue="{ item }"
-            >{{ item.imprestSettlement.transaction.sanad.bed | toMoney }}</template>
+            >{{ item.imprestSettlement.transaction?item.imprestSettlement.transaction.sanad.bed:0 | toMoney }}</template>
             <template
               #item.receivedValue="{ item }"
             >{{ item.imprestSettlement.settled_value | toMoney }}</template>

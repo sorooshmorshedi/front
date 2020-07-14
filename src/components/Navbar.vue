@@ -745,6 +745,12 @@ export default {
               to: {
                 name: "OilCompanyLading"
               }
+            },
+            {
+              title: "پرداخت راننده متفرقه",
+              to: {
+                name: "DriverPayment"
+              }
             }
           ]
         }
