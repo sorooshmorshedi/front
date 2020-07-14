@@ -143,6 +143,7 @@ Vue.mixin({
       if (m.includes(',')) {
         m = m.split(',');
       } else {
+        m = String(Number(m));
         m = m.split('');
       }
       let len = m.length;
@@ -191,6 +192,7 @@ Vue.mixin({
       if (m.includes(',')) {
         m = m.split(',');
       } else {
+        m = String(Number(m));
         m = m.split('');
       }
       let len = m.length;

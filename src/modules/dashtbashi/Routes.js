@@ -9,6 +9,7 @@ import RevokeLadingBillNumber from "./RevokeLadingBillNumber"
 import Remittance from "./Remittance"
 import Lading from "./Lading"
 import OilCompanyLading from "./OilCompanyLading"
+import DriverPayment from "./DriverPayment"
 
 export default [{
     name: 'Options',
@@ -56,8 +57,13 @@ export default [{
     props: true,
   }, {
     name: 'OilCompanyLading',
-    path: 'OilCompanyLading/:id?',
+    path: 'oilCompanyLading/:id?',
     component: OilCompanyLading,
+    props: true,
+  }, {
+    name: 'DriverPayment',
+    path: 'driverPayment/:id?',
+    component: DriverPayment,
     props: true,
   },
 

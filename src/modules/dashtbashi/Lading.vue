@@ -288,7 +288,7 @@ export default {
         +this.item.bill_price +
         +this.item.cargo_tip_price
       );
-    },
+    }
   },
   watch: {
     ladingBillSearchInput() {
@@ -299,9 +299,12 @@ export default {
     },
     remittance() {
       Object.keys(this.remittance).forEach(key => {
-        if (["id"].includes(key)) return;
-        this.item[key] = null;
-        this.$set(this.item, key, this.remittance[key]);
+        if (key == "id") {
+          this.item.remittance = this.remittance.id;
+        } else {
+          this.item[key] = null;
+          this.$set(this.item, key, this.remittance[key]);
+        }
       });
     }
   },
