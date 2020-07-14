@@ -11,7 +11,7 @@
     :hasPrev="true"
     :hasNext="true"
     :editable="editable"
-    :deletable="this.id"
+    :deletable="id != undefined"
     @goToForm="getItemByPosition"
     @edit="makeFormEditable()"
     @validate="submit"
@@ -42,7 +42,7 @@
                 label="نام تنخواه گردان"
                 items-type="imprests"
                 v-model="item.account"
-                :disabled="!editable"
+                :disabled="id != undefined || !editable"
                 :floatAccount="item.floatAccount"
                 @update:floatAccount="v => item.floatAccount = v"
                 :costCenter="item.costCenter"
@@ -55,7 +55,7 @@
                 v-model="imprest"
                 label="شماره پرداخت تنخواه"
                 :items="imprests"
-                :disabled="!editable"
+                :disabled="id != undefined || !editable"
                 item-text="code"
                 @change="imprest.imprestSettlement.id && setItem(imprest.imprestSettlement)"
               />
@@ -164,7 +164,11 @@ export default {
       rows: [],
       itemsToDelete: [],
       imprests: [],
-      imprest: {},
+      imprest: {
+        transaction: null,
+        code: null,
+        sum: 0
+      },
       hasList: false
     };
   },
@@ -190,18 +194,19 @@ export default {
     },
 
     getNotSettledImprests(accountData) {
+      if (this.id) return;
       this.request({
         url: this.endpoint("imprests/notSettledImprests"),
         params: this.extractIds(accountData),
         method: "get",
         success: data => {
           this.imprests = data;
-          if (this.id) {
-            let imprest = this.imprests.filter(
-              o => (o.transaction = this.item.transaction.id)
-            )[0];
-            if (imprest) this.imprest = imprest;
-          }
+          // if (this.id) {
+          //   let imprest = this.imprests.filter(
+          //     o => (o.transaction = this.item.transaction.id)
+          //   )[0];
+          //   if (imprest) this.imprest = imprest;
+          // }
         }
       });
     },
@@ -245,6 +250,14 @@ export default {
       this.item.account = item.transaction.account;
       this.item.floatAccount = item.transaction.floatAccount;
       this.item.costCenter = item.transaction.costCenter;
+
+      this.imprest.transaction = item.transaction.id;
+      this.imprest.code = item.transaction.code;
+      this.imprest.sum = item.transaction.items.reduce(
+        (v, o) => v + +o.value,
+        0
+      );
+      this.imprests.push(this.imprest);
 
       this.itemsToDelete = [];
       this.rows = [];
