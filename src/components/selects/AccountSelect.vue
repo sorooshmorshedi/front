@@ -5,7 +5,7 @@
         <v-icon
           @click="item && openLedger(item)"
           color="cyan"
-          class="pl-2"
+          class="pl-2 mr-3"
           v-if="showLedgerBtn && hasLedger"
         >fa-book-open</v-icon>
         <v-autocomplete
