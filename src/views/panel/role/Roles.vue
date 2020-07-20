@@ -190,7 +190,7 @@ export default {
         success: data => {
           this.permissionsData = data;
           for (let permission of this.permissions) {
-            this.itemTemplate.permissions[permission.id] = false;
+            this.getItemTemplate().permissions[permission.id] = false;
           }
           this.clearForm();
         }
