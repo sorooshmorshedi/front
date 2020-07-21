@@ -1,14 +1,17 @@
 <template>
-  <list-modal-form
+  <m-form
     title="ماشین ها"
     :items="items"
     :cols="cols"
-    :deletable="item.id"
+    :canSubmit="canSubmit"
+    :canDelete="canDelete"
+    :is-editing.sync="isEditing"
+    :showListBtn="false"
+    :show-navigation-btns="false"
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
-    ref="listModelForm"
   >
     <template #default>
       <v-row>
@@ -27,7 +30,12 @@
                       </legend>
                     </fieldset>
                     <div class="v-text-field__slot ltr">
-                      <input id="car-number-1" type="text" v-model="item.car_number[0]" />
+                      <input
+                        id="car-number-1"
+                        type="text"
+                        v-model="item.car_number[0]"
+                        :disabled="!isEditing"
+                      />
                     </div>
                   </div>
                 </div>
@@ -45,7 +53,12 @@
                       </legend>
                     </fieldset>
                     <div class="v-text-field__slot ltr">
-                      <input id="car-number-2" type="text" v-model="item.car_number[1]" />
+                      <input
+                        id="car-number-2"
+                        type="text"
+                        v-model="item.car_number[1]"
+                        :disabled="!isEditing"
+                      />
                     </div>
                   </div>
                 </div>
@@ -63,7 +76,12 @@
                       </legend>
                     </fieldset>
                     <div class="v-text-field__slot ltr">
-                      <input id="car-number-3" type="text" v-model="item.car_number[2]" />
+                      <input
+                        id="car-number-3"
+                        type="text"
+                        v-model="item.car_number[2]"
+                        :disabled="!isEditing"
+                      />
                     </div>
                   </div>
                 </div>
@@ -81,7 +99,12 @@
                       </legend>
                     </fieldset>
                     <div class="v-text-field__slot ltr">
-                      <input id="car-number-4" type="text" v-model="item.car_number[3]" />
+                      <input
+                        id="car-number-4"
+                        type="text"
+                        v-model="item.car_number[3]"
+                        :disabled="!isEditing"
+                      />
                       <div class="v-text-field__suffix">ایران</div>
                     </div>
                   </div>
@@ -92,57 +115,67 @@
         </v-col>
         <v-col cols="0" md="6"></v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="شماره کارت هوشمند" v-model="item.smart_card_number" />
+          <v-text-field
+            label="شماره کارت هوشمند"
+            v-model="item.smart_card_number"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-autocomplete label="مالک" v-model="item.owner" :items="owners" item-text="text" />
+          <v-autocomplete
+            label="مالک"
+            v-model="item.owner"
+            :items="owners"
+            item-text="text"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="نام مالک" v-model="item.owner_name" />
+          <v-text-field label="نام مالک" v-model="item.owner_name" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="کد ملی مالک" v-model="item.owner_melli_code" />
+          <v-text-field label="کد ملی مالک" v-model="item.owner_melli_code" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="VIN" v-model="item.vin" />
+          <v-text-field label="VIN" v-model="item.vin" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="نوع" v-model="item.type" />
+          <v-text-field label="نوع" v-model="item.type" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="سیستم" v-model="item.system" />
+          <v-text-field label="سیستم" v-model="item.system" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="تیپ" v-model="item.model" />
+          <v-text-field label="تیپ" v-model="item.model" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="ظرفیت" v-model="item.capacity" />
+          <v-text-field label="ظرفیت" v-model="item.capacity" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="سوخت" v-model="item.fue" />
+          <v-text-field label="سوخت" v-model="item.fuel" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="رنگ" v-model="item.color" />
+          <v-text-field label="رنگ" v-model="item.color" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="موتور" v-model="item.engine" />
+          <v-text-field label="موتور" v-model="item.engine" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="شاسی" v-model="item.chassis" />
+          <v-text-field label="شاسی" v-model="item.chassis" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="اتاق" v-model="item.room" />
+          <v-text-field label="اتاق" v-model="item.room" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="شماره مسلسل" v-model="item.serial_number" />
+          <v-text-field label="شماره مسلسل" v-model="item.serial_number" :disabled="!isEditing" />
         </v-col>
 
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" />
+          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>
-  </list-modal-form>
+  </m-form>
 </template>
 <script>
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
@@ -153,6 +186,7 @@ export default {
   data() {
     return {
       baseUrl: "dashtbashi/cars",
+      permissionBasename: 'car',
       leadingSlash: true,
       owners: [
         {
@@ -189,7 +223,7 @@ export default {
   computed: {
     items() {
       return this.$store.state.cars;
-    },
+    }
   },
   mounted() {
     IMask(document.getElementById("car-number-1"), {

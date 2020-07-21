@@ -1,24 +1,28 @@
 <template>
-  <list-modal-form
+  <m-form
     :title="title"
     :items="items"
     :cols="cols"
-    :deletable="item.id != undefined"
-    :clearable="clearable"
+    :canClear="canClear"
+    :canSubmit="canSubmit"
+    :canDelete="canDelete"
+    :is-editing.sync="isEditing"
+    :showListBtn="false"
+    :show-navigation-btns="false"
     :showActions="showActions"
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
-    ref="listModelForm"
   >
     <template #default>
       <v-row>
         <v-col cols="12">
-          <v-text-field label=" * نام" v-model="item.name" />
+          <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12">
           <account-select
+            :disabled="!isEditing"
             label=" * حساب"
             :itemsType="accountLevel"
             v-model="item.account"
@@ -29,11 +33,11 @@
           />
         </v-col>
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" />
+          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>
-  </list-modal-form>
+  </m-form>
 </template>
 <script>
 import AccountApiMixin from "@/mixin/accountMixin";
@@ -82,7 +86,7 @@ export default {
     items() {
       return this.defaultAccounts.filter(o => o.usage == this.usage);
     },
-    clearable() {
+    canClear() {
       return ["factor", "closingAccounts", "imprest"].includes(this.usage);
     },
     showActions() {

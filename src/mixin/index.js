@@ -20,7 +20,6 @@ Vue.mixin({
       user: state => state.user,
       financialYear: state => state.user ? state.user.active_financial_year || null : null,
       company: state => state.user ? state.user.active_company || null : null,
-      permissions: state => state.user.permissions,
       systemOptions: state => state.options,
       OGR: state => state.OGR,
       now: state => state.now
@@ -92,8 +91,22 @@ Vue.mixin({
         text: msg
       });
     },
-    hasPermission(permission) {
-      return this.permissions && this.permissions.includes(permission);
+    hasPerm(operation, basename, object = null) {
+      if (this.user.is_superuser) return true
+      let roles = this.user.roles.filter(o => o.company = this.company.id);
+      for (let role of roles) {
+        for (let permission of role.permissions) {
+          let codename = permission.codename
+          if (codename.startsWith(operation) && codename.endsWith(basename)) {
+            if (codename.includes('Own')) {
+              if (object.created_by == this.user.id) return true
+            } else {
+              return true
+            }
+          }
+        }
+      }
+      return false
     },
     goTo(selector) {
       $('body,html')

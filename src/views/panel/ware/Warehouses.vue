@@ -1,26 +1,29 @@
 <template>
-  <list-modal-form
+  <m-form
     title="انبار"
     :items="items"
     :cols="cols"
-    :deletable="item.id"
+    :canSubmit="canSubmit"
+    :canDelete="canDelete"
+    :is-editing.sync="isEditing"
+    :showListBtn="false"
+    :show-navigation-btns="false"
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
-    ref="listModelForm"
   >
     <template #default>
       <v-row>
         <v-col cols="12">
-          <v-text-field label=" * نام" v-model="item.name" />
+          <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" />
+          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>
-  </list-modal-form>
+  </m-form>
 </template>
 <script>
 import WareApiMixin from "@/mixin/wareApi";
@@ -32,6 +35,7 @@ export default {
     return {
       item: {},
       baseUrl: "wares/warehouses",
+      permissionBasename: "warehouse",
       cols: [
         {
           th: "نام",
@@ -56,7 +60,7 @@ export default {
   methods: {
     getData() {
       this.getWarehouses(true);
-    },
+    }
   }
 };
 </script>

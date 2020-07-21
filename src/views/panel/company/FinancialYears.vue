@@ -1,17 +1,20 @@
 <template>
   <div class="rtl">
-    <list-modal-form
+    <m-form
       title="سال مالی"
       :items="items"
       :cols="cols"
-      :deletable="item.id"
+      :canSubmit="canSubmit"
+      :canDelete="canDelete"
+      :is-editing.sync="isEditing"
+      :showListBtn="false"
+      :show-navigation-btns="false"
       @rowClick="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
-      ref="listModelForm"
     >
-      <template #header-buttons>
+      <template #header-btns>
         <v-btn
           v-if="item.id"
           @click="activeFinancialYear"
@@ -21,20 +24,20 @@
       <template #default>
         <v-row>
           <v-col cols="12">
-            <v-text-field label=" * نام" v-model="item.name" />
+            <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <date label=" * شروع" v-model="item.start" :default="true" />
+            <date label=" * شروع" v-model="item.start" :default="true" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <date label=" * پایان" v-model="item.end" :default="true" />
+            <date label=" * پایان" v-model="item.end" :default="true" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12">
-            <v-textarea label="توضیحات" v-model="item.explanation" />
+            <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
           </v-col>
         </v-row>
       </template>
-    </list-modal-form>
+    </m-form>
   </div>
 </template>
 <script>

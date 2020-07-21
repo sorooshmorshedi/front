@@ -27,6 +27,9 @@ Vue.component('date', date);
 import ContextMenu from "@/components/mcomponents/ContextMenu";
 Vue.component('ContextMenu', ContextMenu);
 
+import MForm from "@/components/form/MForm";
+Vue.component('MForm', MForm);
+
 
 import _ from 'lodash'
 window._ = _

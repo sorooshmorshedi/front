@@ -1,5 +1,5 @@
 <template>
-  <list-modal-form
+  <m-form
     title="انتصاب راننده به ماشین"
     :items="items"
     :cols="cols"
@@ -8,7 +8,7 @@
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
-    ref="listModelForm"
+    
   >
     <template #default>
       <v-row>
@@ -48,7 +48,7 @@
         </v-col>
       </v-row>
     </template>
-  </list-modal-form>
+  </m-form>
 </template>
 <script>
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";

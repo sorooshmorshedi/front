@@ -1,5 +1,5 @@
 <template>
-  <list-modal-form
+  <m-form
     :title="title"
     :items="items"
     :cols="cols"
@@ -9,9 +9,9 @@
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
-    ref="listModelForm"
+    
   >
-    <template #header-buttons>
+    <template #header-btns>
       <template v-for="i in 3">
         <v-btn
           :key="i"
@@ -48,7 +48,7 @@
         </v-col>
       </v-row>
     </template>
-  </list-modal-form>
+  </m-form>
 </template>
 <script>
 import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";

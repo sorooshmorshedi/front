@@ -23,6 +23,7 @@ export default {
       // options
       leadingSlash: false,
       hasList: true,
+      isEditing: true,
     };
   },
   computed: {
@@ -36,6 +37,19 @@ export default {
     deleteUrl() {
       return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.leadingSlash ? "/" : "")
     },
+    canSubmit() {
+      if (!this.permissionBasename) {
+        console.warn("Please set permissionBase")
+      }
+      if (this.item.id) {
+        return this.hasPerm('update', this.permissionBasename, this.item)
+      } else {
+        return this.hasPerm('create', this.permissionBasename, this.item)
+      }
+    },
+    canDelete() {
+      return this.item.id != undefined && this.hasPerm('delete', this.permissionBasename, this.item)
+    }
   },
   watch: {
     query() {
@@ -80,6 +94,7 @@ export default {
     getItem() {
       // must be implemented, but by default
       if (this.hasList) {
+        // This line does not work
         // this.setItem(this.items.filter(o => o.id == this.id)[0])
       } else {
         this.request({
@@ -109,6 +124,7 @@ export default {
     },
     clearForm() {
       // must be implemented, but by default
+      this.isEditing = true;
       this.item = this.getItemTemplate();
       if (!this.hasList) {
         this.changeRouteTo(null);
@@ -157,6 +173,7 @@ export default {
       } else {
         this.item = data;
         this.getItem(data);
+        this.isEditing = false;
       }
       if (this.hasList) {
         this.getData();

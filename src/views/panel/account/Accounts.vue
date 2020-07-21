@@ -1,17 +1,20 @@
 <template>
-  <list-modal-form
+  <m-form
     :title="title"
     :items="items"
     :cols="cols"
-    :deletable="item.id"
-    :clearable="clearable"
+    :canSubmit="canSubmit"
+    :canDelete="canDelete"
+    :canClear="canClear"
+    :is-editing.sync="isEditing"
+    :showListBtn="false"
+    :show-navigation-btns="false"
+    :showList="usage != 'tree'"
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
-    ref="listModelForm"
-    :showList="usage != 'tree'"
   >
-    <template #header-buttons>
+    <template #header-btns>
       <template v-if="item.id != undefined">
         <v-btn class="blue white--text mr-1" @click="openLedger(item)">دفتر این حساب</v-btn>
       </template>
@@ -39,7 +42,7 @@
               :label="' * ' + parentTitle"
               :itemsType="itemsType"
               v-model="item.parent"
-              :disabled="item.id != undefined"
+              :disabled="item.id != undefined || !isEditing"
             />
           </v-col>
           <v-col cols="12" v-if="hasParent">
@@ -51,10 +54,10 @@
           </v-col>
         </template>
         <v-col cols="12" v-if="item.id != undefined">
-          <v-text-field label="کد" v-model="item.code" />
+          <v-text-field label="کد" v-model="item.code" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12">
-          <v-text-field label=" * نام" v-model="item.name" />
+          <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" class="mt-3" v-if="item.id != undefined">
           <v-simple-table>
@@ -82,6 +85,7 @@
               itemsType="floatAccountGroups"
               v-model="item.floatAccountGroup"
               item-text="name"
+              :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="6">
@@ -91,38 +95,59 @@
                 itemsType="costCenterGroups"
                 v-model="item.costCenterGroup"
                 item-text="name"
+                :disabled="!isEditing"
               />
             </template>
           </v-col>
           <v-col cols="12" md="6">
-            <money label="سقف بدهکاری" class="form-control" v-model="item.max_bed" />
+            <money
+              label="سقف بدهکاری"
+              class="form-control"
+              v-model="item.max_bed"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="6">
-            <money label="سقف بستانکاری" class="form-control" v-model="item.max_bes" />
+            <money
+              label="سقف بستانکاری"
+              class="form-control"
+              v-model="item.max_bes"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12">
-            <v-textarea rows="2" label="توضیحات" v-model="item.explanation" />
+            <v-textarea rows="2" label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
           </v-col>
         </template>
 
         <template v-if="isBank">
           <v-col cols="12" md="4">
-            <v-text-field label="نام بانک" v-model="item.bank_name" />
+            <v-text-field label="نام بانک" v-model="item.bank_name" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="نام شعبه" v-model="item.branch_name" />
+            <v-text-field label="نام شعبه" v-model="item.branch_name" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="کد شعبه" v-model="item.branch_code" />
+            <v-text-field label="کد شعبه" v-model="item.branch_code" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="شماره حساب" class="form-control" v-model="item.account_number" />
+            <v-text-field
+              label="شماره حساب"
+              class="form-control"
+              v-model="item.account_number"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="کد شبا" v-model="item.sheba" />
+            <v-text-field label="کد شبا" v-model="item.sheba" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="شماره تماس" class="form-control" v-model="item.phone" />
+            <v-text-field
+              label="شماره تماس"
+              class="form-control"
+              v-model="item.phone"
+              :disabled="!isEditing"
+            />
           </v-col>
         </template>
 
@@ -139,6 +164,7 @@
               :return-object="false"
               label=" * حساب شخص"
               required
+              :disabled="!isEditing"
             ></v-select>
           </v-col>
           <v-col cols="12" md="4">
@@ -148,60 +174,68 @@
               item-text="text"
               item-value="value"
               :return-object="false"
-              :disabled="item.id != undefined"
+              :disabled="item.id != undefined || !isEditing"
               label=" * نوع شخص"
               required
             ></v-select>
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="موبایل" v-model="item.mobile" />
+            <v-text-field label="موبایل" v-model="item.mobile" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="شماره تماس 1" v-model="item.phone_1" />
+            <v-text-field label="شماره تماس 1" v-model="item.phone_1" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="شماره تماس 2" v-model="item.phone_2" />
+            <v-text-field label="شماره تماس 2" v-model="item.phone_2" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="شماره ملی" v-model="item.melli_code" />
+            <v-text-field label="شماره ملی" v-model="item.melli_code" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="وبسایت" v-model="item.website" />
+            <v-text-field label="وبسایت" v-model="item.website" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="فکس" v-model="item.fax" />
+            <v-text-field label="فکس" v-model="item.fax" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="ایمیل" v-model="item.email" />
+            <v-text-field label="ایمیل" v-model="item.email" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="استان" v-model="item.province" />
+            <v-text-field label="استان" v-model="item.province" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="شهر" v-model="item.city" />
+            <v-text-field label="شهر" v-model="item.city" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="کد پستی" v-model="item.postal_code" />
+            <v-text-field label="کد پستی" v-model="item.postal_code" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-textarea rows="2" label="آدرس 1" v-model="item.address_1" />
+            <v-textarea rows="2" label="آدرس 1" v-model="item.address_1" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-textarea rows="2" label="آدرس 2" v-model="item.address_2" />
+            <v-textarea rows="2" label="آدرس 2" v-model="item.address_2" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="شماره حساب 1" v-model="item.account_number_1" />
+            <v-text-field
+              label="شماره حساب 1"
+              v-model="item.account_number_1"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="شماره حساب 2" v-model="item.account_number_2" />
+            <v-text-field
+              label="شماره حساب 2"
+              v-model="item.account_number_2"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="کد اقتصادی" v-model="item.eghtesadi_code" />
+            <v-text-field label="کد اقتصادی" v-model="item.eghtesadi_code" :disabled="!isEditing" />
           </v-col>
         </template>
       </v-row>
     </template>
-  </list-modal-form>
+  </m-form>
 </template>
 <script>
 import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";
@@ -301,7 +335,7 @@ export default {
     parentItems() {
       return this.accountsSelectValues.levels[this.level - 1];
     },
-    clearable() {
+    canClear() {
       return this.isPerson || this.isBank;
     },
     parents() {

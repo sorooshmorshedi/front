@@ -1,24 +1,27 @@
 <template>
   <div class="rtl">
-    <list-modal-form
+    <m-form
       title="شهر"
       :items="items"
       :cols="cols"
-      :deletable="item.id"
+      :canSubmit="canSubmit"
+      :canDelete="canDelete"
+      :is-editing.sync="isEditing"
+      :showListBtn="false"
+      :show-navigation-btns="false"
       @rowClick="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
-      ref="listModelForm"
     >
       <template #default>
         <v-row>
           <v-col cols="12" md="12">
-            <v-text-field label=" * نام" v-model="item.name" />
+            <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
           </v-col>
         </v-row>
       </template>
-    </list-modal-form>
+    </m-form>
   </div>
 </template>
 <script>

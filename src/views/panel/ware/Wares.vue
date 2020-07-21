@@ -1,14 +1,17 @@
 <template>
-  <list-modal-form
+  <m-form
     title="کالا"
     :items="items"
     :cols="cols"
-    :deletable="item.id"
+    :canSubmit="canSubmit"
+    :canDelete="canDelete"
+    :is-editing.sync="isEditing"
+    :showListBtn="false"
+    :show-navigation-btns="false"
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
-    ref="listModelForm"
   >
     <template #default>
       <v-row>
@@ -17,20 +20,27 @@
             label=" * دسته بندی"
             :items="parentItems"
             v-model="item.category"
+            :disabled="!isEditing"
             item-text="name"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" v-if="item.id">
-          <v-text-field label="کد" v-model="item.code" disabled />
+          <v-text-field label="کد" v-model="item.code" disabled :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="8">
-          <v-text-field label=" * نام" v-model="item.name" />
+          <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="4">
-          <v-autocomplete label=" * واحد" :items="units" v-model="item.unit" item-text="name"></v-autocomplete>
+          <v-autocomplete
+            label=" * واحد"
+            :items="units"
+            v-model="item.unit"
+            item-text="name"
+            :disabled="!isEditing"
+          ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="6">
-          <money label=" * قیمت" v-model="item.price" />
+          <money label=" * قیمت" v-model="item.price" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
           <v-select
@@ -38,6 +48,7 @@
             :items="pricingTypes"
             v-model="item.pricingType"
             item-text="name"
+            :disabled="!isEditing"
             :return-object="true"
           ></v-select>
         </v-col>
@@ -46,31 +57,32 @@
             label="انبار پیشفرض"
             :items="warehouses"
             v-model="item.warehouse"
+            :disabled="!isEditing"
             item-text="name"
             :return-object="false"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="بارکد" v-model="item.barcode" />
+          <v-text-field label="بارکد" v-model="item.barcode" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <money label="حداقل فروش" v-model="item.minSale" />
+          <money label="حداقل فروش" v-model="item.minSale" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <money label="حداکثر فروش" v-model="item.maxSale" />
+          <money label="حداکثر فروش" v-model="item.maxSale" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <money label="حداقل موجودی" v-model="item.minInventory" />
+          <money label="حداقل موجودی" v-model="item.minInventory" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <money label="حداکثر موجودی" v-model="item.maxInventory" />
+          <money label="حداکثر موجودی" v-model="item.maxInventory" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" />
+          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>
-  </list-modal-form>
+  </m-form>
 </template>
 <script>
 import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";
@@ -88,6 +100,7 @@ export default {
     return {
       item: {},
       baseUrl: "wares/wares",
+      permissionBasename: "ware",
       cols: [
         {
           th: "کد",

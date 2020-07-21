@@ -1,14 +1,17 @@
 <template>
-  <list-modal-form
+  <m-form
     :title="title"
     :items="items"
     :cols="cols"
-    :deletable="false"
-    :clearable="false"
+    :canSubmit="canSubmit"
+    :canDelete="false"
+    :canClear="false"
+    :is-editing.sync="isEditing"
+    :showListBtn="false"
+    :show-navigation-btns="false"
     :showActions="item.id != undefined"
     @rowClick="setItem"
     @submit="submit"
-    ref="listModelForm"
   >
     <template #default>
       <v-row>
@@ -16,15 +19,15 @@
           <v-text-field label="نام" v-model="item.name" disabled />
         </v-col>
         <v-col cols="12">
-          <v-text-field label="مقدار" v-model="item.value" />
+          <v-text-field label="مقدار" v-model="item.value" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>
-  </list-modal-form>
+  </m-form>
 </template>
 <script>
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
-import GetOptionsApi from "@/views/panel/options/getOptionsApi"
+import GetOptionsApi from "@/views/panel/options/getOptionsApi";
 
 export default {
   mixins: [ListModalFormMixin],
@@ -59,7 +62,7 @@ export default {
   methods: {
     getData() {
       this.getOptions(true);
-    },
+    }
   }
 };
 </script>

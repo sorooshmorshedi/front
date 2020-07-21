@@ -1,16 +1,19 @@
 <template>
-  <list-modal-form
+  <m-form
     title="دسته چک"
     :items="items"
     :cols="cols"
-    :deletable="item.id"
+    :canSubmit="canSubmit"
+    :canDelete="canDelete"
+    :is-editing.sync="isEditing"
+    :showListBtn="false"
+    :show-navigation-btns="false"
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
-    ref="listModelForm"
   >
-    <template #header-buttons>
+    <template #header-btns>
       <v-btn
         v-if="item.id"
         class="blue white--text mr-1"
@@ -24,7 +27,7 @@
             items-type="banks"
             label=" * حساب بانک"
             v-model="item.account"
-            :disabled="!editable"
+            :disabled="!isEditing"
             :floatAccount="item.floatAccount"
             @update:floatAccount="v => item.floatAccount = v"
             :costCenter="item.costCenter"
@@ -32,18 +35,14 @@
           />
         </v-col>
         <v-col cols="12" md="12">
-          <v-text-field
-            label="* سری"
-            v-model="item.serial"
-            :disabled="!editable"
-          />
+          <v-text-field label="* سری" v-model="item.serial" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
             label=" * از شماره سریال"
             type="number"
             v-model="item.serial_from"
-            :disabled="!editable"
+            :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -51,15 +50,15 @@
             type="number"
             label=" * تا شماره سریال"
             v-model="item.serial_to"
-            :disabled="!editable"
+            :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!editable"></v-textarea>
+          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
         </v-col>
       </v-row>
     </template>
-  </list-modal-form>
+  </m-form>
 </template>
 
 <script>
@@ -78,6 +77,7 @@ export default {
   data() {
     return {
       baseUrl: "cheques/chequebooks",
+      permissionBasename: "chequebook",
       leadingSlash: true,
       cols: [
         {

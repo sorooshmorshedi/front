@@ -1,23 +1,26 @@
 <template>
   <div class="rtl">
-    <list-modal-form
+    <m-form
       title="کاربر"
       :items="items"
       :cols="cols"
-      :deletable="item.id"
+      :isEditing.sync="isEditing"
+      :canDelete="canDelete"
+      :canSubmit="canSubmit"
+      :show-navigation-btns="false"
+      :showListBtn="false"
       @rowClick="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
-      ref="listModelForm"
     >
       <template #default>
         <v-row>
           <v-col cols="12" md="6">
-            <v-text-field label=" * نام" v-model="item.first_name" />
+            <v-text-field label=" * نام" v-model="item.first_name" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="نام خانوادگی" v-model="item.last_name" />
+            <v-text-field label="نام خانوادگی" v-model="item.last_name" :disabled="!isEditing" />
           </v-col>
 
           <v-col cols="12" md="6">
@@ -27,37 +30,40 @@
               label="شماره موبایل"
               v-model="item.phone"
               required
+              :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="6">
             <label></label>
-            <v-text-field label=" * نام کاربری" v-model="item.username" />
+            <v-text-field label=" * نام کاربری" v-model="item.username" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="12" v-if="!item.id">
-            <v-text-field label=" * کلمه عبور" v-model="item.password" />
+            <v-text-field label=" * کلمه عبور" v-model="item.password" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12">
             <v-autocomplete
               label="نقش ها"
               :items="roles"
               v-model="item.roles"
+              :disabled="!isEditing"
               item-text="name"
               multiple
             ></v-autocomplete>
           </v-col>
           <v-col cols="12">
-            <v-switch label="فعال" v-model="item.is_active"></v-switch>
+            <v-switch label="فعال" v-model="item.is_active" :disabled="!isEditing"></v-switch>
           </v-col>
         </v-row>
       </template>
-      <template #actions>
+      <template #footer-btns>
         <v-btn
-          v-if="item.id"
+          :disabled="!isEditing"
+          v-if="item.id && hasPerm('changePassword', 'user', item)"
           @click=" showChangePasswordDialog = true "
           class="blue white--text"
         >تغیر کلمه عبور</v-btn>
       </template>
-    </list-modal-form>
+    </m-form>
 
     <v-dialog v-model="showChangePasswordDialog" max-width="500px">
       <v-card>
@@ -87,6 +93,7 @@ export default {
       roles: [],
       newPassword: "",
       showChangePasswordDialog: false,
+      permissionBasename: "user",
       cols: [
         {
           th: "نام",

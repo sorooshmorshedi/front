@@ -1,66 +1,74 @@
 <template>
   <div class="rtl">
-    <list-modal-form
+    <m-form
       title="شرکت"
       :items="items"
       :cols="cols"
-      :deletable="item.id"
+      :canSubmit="canSubmit"
+      :canDelete="canDelete"
+      :is-editing.sync="isEditing"
+      :showListBtn="false"
+      :show-navigation-btns="false"
       @rowClick="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
-      ref="listModelForm"
     >
-      <template #header-buttons>
+      <template #header-btns>
         <v-btn v-if="item.id" @click="activeCompany" class="blue white--text mr-1">فعال کردن شرکت</v-btn>
       </template>
       <template #default>
         <v-row>
           <v-col cols="12">
-            <v-text-field label=" * نام" v-model="item.name" />
+            <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-textarea rows="3" label="آدرس 1" v-model="item.address1" />
+            <v-textarea rows="3" label="آدرس 1" v-model="item.address1" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-textarea rows="3" label="آدرس 2" v-model="item.address2" />
+            <v-textarea rows="3" label="آدرس 2" v-model="item.address2" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="کشور" v-model="item.country" />
+            <v-text-field label="کشور" v-model="item.country" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="شماره ثبت" v-model="item.sabt_number" />
+            <v-text-field label="شماره ثبت" v-model="item.sabt_number" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="تلفن 1" v-model="item.phone1" />
+            <v-text-field label="تلفن 1" v-model="item.phone1" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="تلفن 2" v-model="item.phone2" />
+            <v-text-field label="تلفن 2" v-model="item.phone2" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="فکس" v-model="item.fax" />
+            <v-text-field label="فکس" v-model="item.fax" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="ایمیل" v-model="item.email" type="email" />
+            <v-text-field label="ایمیل" v-model="item.email" type="email" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="کد پستی" v-model="item.postal_code" type="number" />
+            <v-text-field
+              label="کد پستی"
+              v-model="item.postal_code"
+              type="number"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="وبسایت" v-model="item.website" />
+            <v-text-field label="وبسایت" v-model="item.website" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="کد اقتصادی" v-model="item.eghtesadi_code" />
+            <v-text-field label="کد اقتصادی" v-model="item.eghtesadi_code" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="شناسه ملی / کد ملی" v-model="item.shenase" />
+            <v-text-field label="شناسه ملی / کد ملی" v-model="item.shenase" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12">
-            <v-textarea rows="3" label="توضیحات" v-model="item.explanation" />
+            <v-textarea rows="3" label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
           </v-col>
         </v-row>
       </template>
-    </list-modal-form>
+    </m-form>
   </div>
 </template>
 <script>

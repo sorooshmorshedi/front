@@ -10,7 +10,7 @@
             {{ title }}
             جدید
           </v-btn>
-          <slot name="header-buttons"></slot>
+          <slot name="header-btns"></slot>
         </v-card-title>
         <v-card-text>
           <slot name="default"></slot>
@@ -18,8 +18,17 @@
         <v-card-actions v-if="showActions">
           <v-spacer></v-spacer>
           <slot name="actions"></slot>
-          <v-btn v-if="deletable" @click="emitDelete" color="red" outlined>حذف</v-btn>
-          <v-btn @click="emitSubmit" class="green white--text">ثبت</v-btn>
+          <v-btn
+            v-if="deletable && canDelete"
+            @click="emitDelete"
+            color="red"
+            outlined
+          >حذف</v-btn>
+          <v-btn
+            @click="emitSubmit"
+            v-if="submitable && canSubmit"
+            class="green white--text"
+          >ثبت</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -47,19 +56,30 @@ export default {
     cols: {
       required: true
     },
-    deletable: {
-      default: true
-    },
     showList: {
       default: true
     },
     showTitle: {
       default: true
     },
+    showActions: {
+      default: true
+    },
+
     clearable: {
       default: true
     },
-    showActions: {
+    submitable: {
+      default: true
+    },
+    deletable: {
+      default: true
+    },
+
+    canSubmit: {
+      default: true
+    },
+    canDelete: {
       default: true
     }
   },

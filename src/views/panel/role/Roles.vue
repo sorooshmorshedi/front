@@ -1,29 +1,44 @@
 <template>
   <div class="rtl">
-    <list-modal-form
+    <m-form
       title="نقش"
       :items="items"
       :cols="cols"
-      :deletable="item.id"
+      :canSubmit="canSubmit"
+      :canDelete="canDelete"
+      :is-editing.sync="isEditing"
+      :showListBtn="false"
+      :show-navigation-btns="false"
       @rowClick="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
-      ref="listModelForm"
     >
       <template #default>
         <v-row>
           <v-col cols="12">
-            <v-text-field label=" * نام" v-model="item.name" />
+            <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12">
             <v-subheader>دسترسی ها</v-subheader>
             <div class="d-flex">
-              <v-text-field class="mr-2" placeholder="جستوجو" v-model="modelSearch" />
+              <v-text-field
+                class="mr-2"
+                placeholder="جستوجو"
+                v-model="modelSearch"
+                :disabled="!isEditing"
+              />
               <v-spacer></v-spacer>
-              <v-btn @click="deselectAll" small depressed color="cyan white--text">عدم انتخاب همه</v-btn>
+              <v-btn
+                @click="deselectAll"
+                :disabled="!isEditing"
+                small
+                depressed
+                color="cyan white--text"
+              >عدم انتخاب همه</v-btn>
               <v-btn
                 @click="selectAll"
+                :disabled="!isEditing"
                 small
                 depressed
                 color="cyan white--text"
@@ -37,10 +52,19 @@
                     <v-col>{{ model.label }}</v-col>
                     <v-spacer></v-spacer>
                     <v-col class="text-left pl-6">
-                      <v-btn @click.stop="deselectAll({model: model.name})" icon>
+                      <v-btn
+                        @click.stop="deselectAll({model: model.name})"
+                        icon
+                        :disabled="!isEditing"
+                      >
                         <v-icon>fa-times</v-icon>
                       </v-btn>
-                      <v-btn @click.stop="selectAll({model: model.name})" icon class="mr-1">
+                      <v-btn
+                        @click.stop="selectAll({model: model.name})"
+                        icon
+                        class="mr-1"
+                        :disabled="!isEditing"
+                      >
                         <v-icon>fa-check-double</v-icon>
                       </v-btn>
                     </v-col>
@@ -54,7 +78,11 @@
                       v-for="(permission, i) in modelPermissions[model.name]"
                       :key="i"
                     >
-                      <v-switch :label="permission.name" v-model="item.permissions[permission.id]"></v-switch>
+                      <v-switch
+                        :label="permission.name"
+                        v-model="item.permissions[permission.id]"
+                        :disabled="!isEditing"
+                      ></v-switch>
                     </v-col>
                   </v-row>
                 </v-expansion-panel-content>
@@ -63,7 +91,7 @@
           </v-col>
         </v-row>
       </template>
-    </list-modal-form>
+    </m-form>
   </div>
 </template>
 <script>
@@ -76,6 +104,7 @@ export default {
   data() {
     return {
       baseUrl: "users/roles/list",
+      permissionBasename: "role",
       items: [],
       modelSearch: "",
       permissionsData: [],
