@@ -751,6 +751,12 @@ export default {
               to: {
                 name: "DriverPayment"
               }
+            },
+            {
+              title: "گزارش مبلغ قابل پرداخت رانندگان متفرقه",
+              to: {
+                name: "DriverPaymentReport"
+              }
             }
           ]
         }
