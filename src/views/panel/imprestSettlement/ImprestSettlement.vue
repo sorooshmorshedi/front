@@ -1,27 +1,20 @@
 <template>
-  <daily-form
+  <m-form
     title="تسویه تنخواه"
     formName="تسویه تنخواه"
     @clearForm="clearForm(true)"
-    :showNavigationButtons="true"
-    :showSubmitAndClearForm="true"
-    :hasList="false"
-    :hasFirst="true"
-    :hasLast="true"
-    :hasPrev="true"
-    :hasNext="true"
-    :editable="editable"
-    :deletable="id != undefined"
+    :showList="false"
+    :isEditing.sync="isEditing"
+    :canDelete="canDelete"
     @goToForm="getItemByPosition"
-    @edit="makeFormEditable()"
-    @validate="submit"
+    @submit="submit"
     @delete="deleteItem"
   >
     <template #header-btns>
       <open-item-btn v-if="item.item" :item="item.item" />
     </template>
 
-    <template #inputs>
+    <template>
       <v-row>
         <v-col cols="12">
           <v-row>
@@ -33,7 +26,7 @@
                 v-model="item.date"
                 label=" * تاریخ "
                 :default="true"
-                :disabled="!editable"
+                :disabled="!isEditing"
                 ref="date"
               />
             </v-col>
@@ -42,7 +35,7 @@
                 label="نام تنخواه گردان"
                 items-type="imprests"
                 v-model="item.account"
-                :disabled="id != undefined || !editable"
+                :disabled="id != undefined || !isEditing"
                 :floatAccount="item.floatAccount"
                 @update:floatAccount="v => item.floatAccount = v"
                 :costCenter="item.costCenter"
@@ -55,7 +48,7 @@
                 v-model="imprest"
                 label="شماره پرداخت تنخواه"
                 :items="imprests"
-                :disabled="id != undefined || !editable"
+                :disabled="id != undefined || !isEditing"
                 item-text="code"
                 @change="imprest.imprestSettlement.id && setItem(imprest.imprestSettlement)"
               />
@@ -64,7 +57,7 @@
               <money label="مبلغ" :disabled="true" :value="imprest.sum" />
             </v-col>
             <v-col cols="12" md="12">
-              <v-textarea label="شرح سند" v-model="item.explanation" :disabled="!editable"></v-textarea>
+              <v-textarea label="شرح سند" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
             </v-col>
           </v-row>
         </v-col>
@@ -85,17 +78,17 @@
               <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td style="max-width: 80px">
-                  <date v-model="rows[i].date" :disabled="!editable" />
+                  <date v-model="rows[i].date" :disabled="!isEditing" />
                 </td>
                 <td>
-                  <v-textarea v-model="rows[i].explanation" :disabled="!editable"></v-textarea>
+                  <v-textarea v-model="rows[i].explanation" :disabled="!isEditing"></v-textarea>
                 </td>
                 <td v-tooltip="accountParentsName(row.account).join(' > ')">
                   <account-select
                     :horizontal="true"
                     items-type="level3"
                     v-model="rows[i].account"
-                    :disabled="!editable"
+                    :disabled="!isEditing"
                     :floatAccount="rows[i].floatAccount"
                     @update:floatAccount="v => rows[i].floatAccount = v"
                     :costCenter="rows[i].costCenter"
@@ -103,7 +96,7 @@
                   />
                 </td>
                 <td style="width: 150px">
-                  <money :disabled="!editable" v-model="rows[i].value" />
+                  <money :disabled="!isEditing" v-model="rows[i].value" />
                 </td>
                 <td class="d-print-none">
                   <v-btn
@@ -111,7 +104,7 @@
                     @click="deleteRow(i)"
                     class="red--text"
                     icon
-                    :disabled="!editable"
+                    :disabled="!isEditing"
                   >
                     <v-icon>delete</v-icon>
                   </v-btn>
@@ -122,7 +115,7 @@
                 <td class="text-left">مجموع:</td>
                 <td class>{{ rowsSum('value') | toMoney }}</td>
                 <td class="d-print-none">
-                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!editable">
+                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
                     <v-icon>delete_sweep</v-icon>
                   </v-btn>
                 </td>
@@ -138,7 +131,7 @@
         </v-col>
       </v-row>
     </template>
-  </daily-form>
+  </m-form>
 </template>
 
 <script>
@@ -160,39 +153,18 @@ export default {
     return {
       baseUrl: "imprests/imprestSettlement",
       leadingSlash: true,
-      item: {},
-      rows: [],
-      itemsToDelete: [],
+      rowKey: "account",
+      hasList: false,
+      hasIdProp: true,
       imprests: [],
       imprest: {
         transaction: null,
         code: null,
         sum: 0
-      },
-      hasList: false
+      }
     };
   },
-  watch: {
-    rows: {
-      handler() {
-        let row = this.rows[this.rows.length - 1];
-        if (row && row.account) {
-          this.rows.push(this.getRowTemplate());
-        }
-      },
-      deep: true
-    }
-  },
   methods: {
-    getData() {
-      this.getAccounts();
-      if (this.id) {
-        this.getItem();
-      } else {
-        this.rows.push(this.getRowTemplate());
-      }
-    },
-
     getNotSettledImprests(accountData) {
       if (this.id) return;
       this.request({
@@ -239,13 +211,7 @@ export default {
       }
     },
     setItem(item) {
-      this.makeFormUneditable();
-      if (this.id != item.id) {
-        this.$router.push({
-          name: "ImprestSettlement",
-          params: { id: item.id }
-        });
-      }
+      this.changeRouteTo(item.id);
       this.item = item;
       this.item.account = item.transaction.account;
       this.item.floatAccount = item.transaction.floatAccount;

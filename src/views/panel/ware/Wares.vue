@@ -144,7 +144,6 @@ export default {
       this.getWares(true);
     },
     setItem(item) {
-      console.log(item.pricingType);
       this.item = this.copy(item);
     },
     getSerialized() {

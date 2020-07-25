@@ -2,6 +2,12 @@ import {
   mapState
 } from "vuex";
 export default {
+  data() {
+    return {
+      isGettingAccounts: false,
+      isGettingFloatAccounts: false
+    }
+  },
   computed: {
     ...mapState({
       accounts: state => state.accounts,
@@ -78,6 +84,9 @@ export default {
   methods: {
     getAccounts(force = false, init = false) {
       if (!force && this.accounts.length) return;
+      if (this.isGettingAccounts) return;
+      this.isGettingAccounts = true;
+
       return this.request({
         url: this.endpoint('accounts/accounts'),
         method: 'get',
@@ -87,11 +96,15 @@ export default {
           this.log('Commit Accounts : Done')
           init && this.init();
           this.log('Init:', init, ' : Done')
+          this.EventBus.$emit('get:accounts', data);
+          this.isGettingAccounts = false;
         }
       })
     },
     getFloatAccountGroups(force = false, init = false) {
       if (!force && this.floatAccountGroups.length) return;
+      if (this.isGettingFloatAccounts) return;
+      this.isGettingFloatAccounts = true;
 
       return this.request({
         url: this.endpoint("accounts/floatAccountGroups"),
@@ -99,6 +112,7 @@ export default {
         success: data => {
           this.$store.commit('setFloatAccountGroups', data);
           init && this.init();
+          this.isGettingFloatAccounts = false;
         }
       })
     },
@@ -138,7 +152,6 @@ export default {
     findAccount(property, value, accounts) {
       if (!accounts) accounts = this.accounts;
       for (const account of accounts) {
-        // console.log(account[property], value);
         if (account[property] == value) {
           return account;
         }

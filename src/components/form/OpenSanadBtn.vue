@@ -24,11 +24,7 @@ export default {
       }
     }
   },
-  mounted() {
-    setTimeout(() => {
-      console.log(this.$attrs);
-    }, 1000);
-  },
+  mounted() {},
   methods: {
     openSanad() {
       let routeData = this.$router.resolve({

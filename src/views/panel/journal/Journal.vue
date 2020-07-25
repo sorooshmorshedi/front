@@ -46,7 +46,6 @@ export default {
   },
   created() {
     this.getData();
-    console.log(this.journalAccountIds);
   },
   methods: {
     getData() {

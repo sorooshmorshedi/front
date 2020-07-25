@@ -5,6 +5,10 @@ import moment from 'moment-jalaali';
 import RequestMixin from "./_requestMixin.js";
 
 import {
+  EventBus
+} from "@/main"
+
+import {
   mapState
 } from 'vuex'
 
@@ -16,6 +20,9 @@ Vue.mixin({
     }
   },
   computed: {
+    EventBus() {
+      return EventBus;
+    },
     ...mapState({
       user: state => state.user,
       financialYear: state => state.user ? state.user.active_financial_year || null : null,

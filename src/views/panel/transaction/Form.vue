@@ -1,26 +1,22 @@
 <template>
   <div>
-    <daily-form
-      :formName="type.label"
-      :title="'ثبت ' + type.label"
-      :ListRouteParams="{form: 'transaction', type: type.name}"
+    <m-form
+      :title="title"
+      :showList="false"
+      :listRoute="{name:'List', params: {form: 'transaction', type: transactionType}}"
       :exportParams="{id: this.id}"
-      @clearForm="clearTransaction"
-      :hasFirst="hasFirst"
-      :hasLast="hasLast"
-      :hasPrev="hasPrev"
-      :hasNext="hasNext"
-      :editable="editable"
-      :deletable="!modalMode && id != undefined"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
-      @goToForm="goToForm"
-      @validate="validate"
-      @edit="makeFormEditable()"
-      @delete="deleteTransaction()"
+      :canDelete="canDelete"
+      :canSubmit="canSubmit"
+      :isEditing.sync="isEditing"
+      @clearForm="clearForm"
+      @goToForm="getItemByPosition"
+      @submit="validate"
+      @delete="deleteItem"
     >
       <template #header-btns>
-        <open-sanad-btn v-if="transaction.sanad" :sanad="transaction.sanad" />
+        <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
         <v-btn
           v-if="!isImprest"
           @click="factorsDialog = true"
@@ -28,18 +24,13 @@
         >پرداخت شده برای فاکتور های</v-btn>
       </template>
 
-      <template #inputs>
+      <template>
         <v-row v-if="!modalMode">
           <v-col cols="12" md="2">
-            <v-text-field :label="'شماره ' + type.label" disabled v-model="transaction.code" />
+            <v-text-field label="شماره" disabled v-model="item.code" />
           </v-col>
           <v-col cols="12" md="2">
-            <date
-              label=" * تاریخ"
-              v-model="transaction.date"
-              :default="true"
-              :disabled="!editable"
-            />
+            <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2">
             <date v-if="!isImprest" placeholder="تاریخ راس" disabled />
@@ -48,17 +39,17 @@
             <account-select
               :label="accountLabel"
               itemsType="level3"
-              v-model="transaction.account"
-              :disabled="modalMode || !editable"
+              v-model="item.account"
+              :disabled="modalMode || !isEditing"
               required
-              :floatAccount="transaction.floatAccount"
-              @update:floatAccount="v => transaction.floatAccount = v"
-              :costCenter="transaction.costCenter"
-              @update:costCenter="v => transaction.costCenter = v"
+              :floatAccount="item.floatAccount"
+              @update:floatAccount="v => item.floatAccount = v"
+              :costCenter="item.costCenter"
+              @update:costCenter="v => item.costCenter = v"
             />
           </v-col>
           <v-col cols="12">
-            <v-textarea label="توضیحات" v-model="transaction.explanation" :disabled="!editable"></v-textarea>
+            <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
           </v-col>
         </v-row>
 
@@ -68,11 +59,11 @@
               <thead>
                 <tr>
                   <th class="tr-counter">#</th>
-                  <th>* نوع {{ type.label }}</th>
+                  <th>* نوع {{ title }}</th>
                   <th>* نام حساب</th>
                   <th>* مبلغ</th>
                   <th>شماره مستند</th>
-                  <th>* تاریخ {{ type.label }}</th>
+                  <th>* تاریخ {{ title }}</th>
                   <th>سررسید</th>
                   <th>نام بانک</th>
                   <th>توضیحات</th>
@@ -83,8 +74,8 @@
                   <td>{{ i+1 }}</td>
                   <td style="min-width: 150px">
                     <v-autocomplete
-                      :disabled="!editable || hasCheque(row)"
-                      :items="transactionPaymentMethods"
+                      :disabled="!isEditing || hasCheque(row)"
+                      :items="itemPaymentMethods"
                       v-model="rows[i].type"
                       item-text="name"
                     />
@@ -93,7 +84,7 @@
                       @click="openSubmitChequeDialog(row, i)"
                       class="blue white--text mt-1"
                       block
-                      :disabled="!editable"
+                      :disabled="!isEditing"
                     >ثبت چک</v-btn>
                   </td>
                   <td class="tr-account">
@@ -102,7 +93,7 @@
                       v-if="rows[i].type"
                       items-type="level3"
                       v-model="rows[i].type.account"
-                      :disabled="!editable"
+                      :disabled="!isEditing"
                       :account-disabled="true"
                       :floatAccount="rows[i].floatAccount"
                       @update:floatAccount="v => rows[i].floatAccount = v"
@@ -112,14 +103,14 @@
                   </td>
                   <td>
                     <money
-                      :disabled="!editable || isChequeType(row)"
+                      :disabled="!isEditing || isChequeType(row)"
                       class="form-control"
                       v-model="rows[i].value"
                     />
                   </td>
                   <td style="width: 50px">
                     <v-text-field
-                      :disabled="!editable || isChequeType(row)"
+                      :disabled="!isEditing || isChequeType(row)"
                       type="text"
                       class="form-control"
                       v-model="rows[i].documentNumber"
@@ -127,7 +118,7 @@
                   </td>
                   <td>
                     <date
-                      :disabled="!editable || isChequeType(row)"
+                      :disabled="!isEditing || isChequeType(row)"
                       default="1"
                       class="form-control"
                       v-model="rows[i].date"
@@ -138,7 +129,7 @@
                   </td>
                   <td>
                     <v-text-field
-                      :disabled="!editable || !hasBank(row)"
+                      :disabled="!isEditing || !hasBank(row)"
                       type="text"
                       class="form-control form-control"
                       v-model="rows[i].bankName"
@@ -146,7 +137,7 @@
                   </td>
                   <td>
                     <v-text-field
-                      :disabled="!editable || isChequeType(row)"
+                      :disabled="!isEditing || isChequeType(row)"
                       type="text"
                       class="form-control form-control"
                       v-model="rows[i].explanation"
@@ -155,7 +146,7 @@
                   <td class="d-print-none">
                     <v-btn
                       v-if="i != rows.length-1 && !hasCheque(row)"
-                      :disabled="!editable"
+                      :disabled="!isEditing"
                       @click="deleteRow(i)"
                       class="red--text"
                       icon
@@ -174,10 +165,10 @@
                 <tr class="grey lighten-3 text-white">
                   <td colspan="2"></td>
                   <td class="text-left">مجموع:</td>
-                  <td class>{{ sum | toMoney }}</td>
+                  <td class>{{ rowsSum('value') | toMoney }}</td>
                   <td colspan="5"></td>
                   <td class="d-print-none">
-                    <v-btn @click="deleteRow(0)" icon class="red--text" :disabled="!editable">
+                    <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
                       <v-icon>delete_sweep</v-icon>
                     </v-btn>
                   </td>
@@ -187,7 +178,7 @@
           </v-col>
         </v-row>
       </template>
-    </daily-form>
+    </m-form>
 
     <v-dialog v-model="factorsDialog" scrollable max-width="1200px">
       <v-card>
@@ -202,9 +193,9 @@
                 <th>تاریخ</th>
                 <th>جمع فاکتور</th>
                 <th>پرداختی قبلی</th>
-                <th v-if="!editable">پرداختی فعلی</th>
+                <th v-if="!isEditing">پرداختی فعلی</th>
                 <th>مانده</th>
-                <th v-if="editable">پرداختی فعلی</th>
+                <th v-if="isEditing">پرداختی فعلی</th>
                 <th></th>
               </tr>
             </thead>
@@ -216,13 +207,13 @@
                 <td>{{ f.date }}</td>
                 <td>{{ f.sum | toMoney }}</td>
                 <td>{{ f.prevPaidValue | toMoney }}</td>
-                <td v-if="!editable">{{ f.payment.value | toMoney }}</td>
+                <td v-if="!isEditing">{{ f.payment.value | toMoney }}</td>
                 <td>{{ f.remain | toMoney }}</td>
-                <td v-if="editable">
+                <td v-if="isEditing">
                   <money
                     v-model="f.payment.value"
                     @input="validatePaidValue(f)"
-                    :disabled="!editable"
+                    :disabled="!isEditing"
                   />
                 </td>
                 <td>
@@ -239,16 +230,16 @@
           <v-spacer></v-spacer>
           <v-btn
             @click="splitValue(true)"
-            :disabled="!editable"
+            :disabled="!isEditing"
             class="blue white--text"
           >سرشکن کردن از پایین</v-btn>
           <v-btn
             @click="splitValue()"
-            :disabled="!editable"
+            :disabled="!isEditing"
             class="blue white--text"
           >سرشکن کردن از بالا</v-btn>
           <v-btn
-            :disabled="!editable || !isPaymentsValid"
+            :disabled="!isEditing || !isPaymentsValid"
             @click="factorsDialog = false"
             class="green white--text w-100px"
           >تایید</v-btn>
@@ -263,9 +254,9 @@
           <cheque-form
             :receivedOrPaid="transactionType[0]"
             :modalMode="true"
-            :account="transaction.account"
-            :floatAccount="transaction.floatAccount"
-            :costCenter="transaction.costCenter"
+            :account="item.account"
+            :floatAccount="item.floatAccount"
+            :costCenter="item.costCenter"
             @submit="addCheque"
           />
         </v-card-text>
@@ -276,7 +267,7 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
-import formsMixin from "@/mixin/forms";
+import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import _ from "lodash";
@@ -284,11 +275,13 @@ import _ from "lodash";
 import ChequeForm from "../cheque/ChequeForm.vue";
 
 export default {
-  name: "Form",
+  name: "TransactionForm",
   components: { ChequeForm, money, date },
-  mixins: [formsMixin, accountApiMixin],
+  mixins: [ListModalFormMixin, accountApiMixin],
   props: {
-    transactionType: {},
+    transactionType: {
+      required: true
+    },
     id: {},
     accountId: {},
     factorId: {},
@@ -298,17 +291,16 @@ export default {
   },
   data() {
     return {
-      receiveCode: null,
-      paymentCode: null,
+      baseUrl: "transactions",
+      // permissionBasename: "transaction",
+      leadingSlash: true,
+      hasList: false,
+      hasIdProp: true,
+      rowKey: 'type',
       factorsDialog: false,
       submitChequeDialog: false,
-      transaction: {},
+      item: {},
       rows: [],
-      type: {
-        label: "",
-        name: "",
-        chequeType: ""
-      },
       itemsToDelete: [],
       chequeRowIndex: null,
       factors: [],
@@ -320,17 +312,22 @@ export default {
       },
       d: {
         getNotPaidFactors: null
-      },
-      rowTemplate: {
-        value: 0
       }
     };
   },
   created() {
     this.d.getNotPaidFactors = _.debounce(this.getNotPaidFactors, 1000, {});
-    this.initForm();
   },
   computed: {
+    title() {
+      if (this.transactionType == "receive") {
+        return "دریافت";
+      } else if (this.transactionType == "payment") {
+        return "پرداخت";
+      } else if (this.isImprest) {
+        return "پرداخت تنخواه";
+      }
+    },
     isImprest() {
       return this.transactionType == "imprest";
     },
@@ -338,60 +335,18 @@ export default {
       if (this.isImprest) return "* تنخواه گردان";
       return " * کد - نام مشتری";
     },
-    transactionPaymentMethods() {
+    updateUrl() {
+      let id = this.item.id || this.id || null;
+      return id && `${this.baseUrl}/${id}`;
+    },
+    itemPaymentMethods() {
       let type = this.usage == "receive" ? "receive" : "payment";
       return this.defaultAccounts.filter(
         o => o.usage && o.usage.toLowerCase().includes(type)
       );
     },
-    hasFirst() {
-      if (this.transactionCode == 1) return false;
-      return true;
-    },
-    hasNext() {
-      if (this.transaction.code == this.transactionCode - 1) return false;
-      if (!this.id) return false;
-      return true;
-    },
-    hasPrev() {
-      if (this.transaction.code == 1) return false;
-      return true;
-    },
-    hasLast() {
-      if (this.transactionCode == 1) return false;
-      return true;
-    },
-    sum() {
-      let sum = 0;
-      this.rows.forEach(r => {
-        if (r.value) sum += +r.value;
-      });
-      return sum;
-    },
-    transactionCode() {
-      if (this.type.name == "receive") return this.receiveCode;
-      else return this.paymentCode;
-    },
-    transactionAccounts() {
+    itemAccounts() {
       return this.accountsSelectValues.levels[3];
-    },
-    transactionFloatAccounts() {
-      if (
-        this.transaction.account &&
-        this.transaction.account.floatAccountGroup
-      ) {
-        return this.transaction.account.floatAccountGroup.floatAccounts;
-      }
-      return [];
-    },
-    transactionCostCenters() {
-      if (
-        this.transaction.account &&
-        this.transaction.account.costCenterGroup
-      ) {
-        return this.transaction.account.costCenterGroup.floatAccounts;
-      }
-      return [];
     },
     isPaymentsValid() {
       let sum = 0;
@@ -402,59 +357,11 @@ export default {
     }
   },
   watch: {
-    rows: {
-      handler() {
-        if (this.rows[this.rows.length - 1].type) {
-          this.rows.push(this.copy(this.rowTemplate));
-        }
-      },
-      deep: true
-    },
-    transactionType(a, b) {
-      this.initForm();
-    },
-    id() {
-      this.getTransaction(this.id);
-    },
-    "transaction.account"() {
-      if (this.transaction.account) this.d.getNotPaidFactors();
+    "item.account"() {
+      if (this.item.account) this.d.getNotPaidFactors();
     }
   },
   methods: {
-    initForm() {
-      this.log("Init Transaction Form");
-      if (!this.id) {
-        this.rows = [this.copy(this.rowTemplate)];
-        this.transaction = this.getTransactionTemplate();
-        this.factors = [];
-      }
-      if (this.transactionType == "receive") {
-        this.type.label = "دریافت";
-        this.type.name = "receive";
-        this.type.chequeType = "received";
-      } else if (this.transactionType == "payment") {
-        this.type.label = "پرداخت";
-        this.type.name = "payment";
-        this.type.chequeType = "paid";
-      } else if (this.isImprest) {
-        this.type.label = "پرداخت تنخواه";
-        this.type.name = "imprest";
-        this.type.chequeType = "paid";
-      } else {
-        console.error("404");
-      }
-      this.getData();
-    },
-    getTransactionCodes() {
-      this.request({
-        url: this.endpoint("transactions/newCodes"),
-        method: "get",
-        success: data => {
-          this.receiveCode = data["receive"];
-          this.paymentCode = data["payment"];
-        }
-      });
-    },
     validatePaidValue(factor) {
       let paymentValue = +factor.payment.value;
       if (paymentValue < 0) {
@@ -463,47 +370,30 @@ export default {
         let remain = +factor.remain;
         let oldPayments = 0;
         factor.payments.forEach(payment => {
-          if (payment.transaction == this.transaction.id)
-            oldPayments += +payment.value;
+          if (payment.item == this.item.id) oldPayments += +payment.value;
         });
         if (paymentValue - oldPayments > remain)
           this.$nextTick(() => (factor.payment.value = remain + oldPayments));
       }
     },
-    goToForm(pos) {
-      let newCode = null;
-      switch (pos) {
-        case "next":
-          newCode = this.transaction.code + 1;
-          break;
-        case "prev":
-          newCode = this.transaction.code
-            ? this.transaction.code - 1
-            : this.transactionCode - 1;
-          break;
-        case "first":
-          newCode = 1;
-          break;
-        case "last":
-          newCode = this.transactionCode - 1;
-          break;
-      }
-      if (newCode) this.getTransactionByCode(newCode);
-    },
-    getData() {
-      Promise.all([
-        this.getAccounts(),
-        this.getDefaultAccounts(),
-        this.getTransaction(this.id),
-        this.getTransactionCodes()
-      ]).then(values => {
-        if (this.accountId) this.selectAccount(this.accountId);
+
+    getItemByPosition(position) {
+      return this.request({
+        url: this.endpoint(`${this.baseUrl}/byPosition`),
+        method: "get",
+        params: {
+          id: this.item.id,
+          position: position,
+          type: this.transactionType
+        },
+        success: data => {
+          this.setItem(data);
+        }
       });
     },
-    selectAccount(accountId) {
-      this.log("Select Account : ", accountId);
-      let account = this.transactionAccounts.filter(o => o.id == accountId)[0];
-      this.transaction.account = account;
+    setAccount(accountId) {
+      let account = this.itemAccounts.filter(o => o.id == accountId)[0];
+      this.item.account = account;
     },
     selectNotPaidFactor(factorId) {
       let factor = this.factors.filter(o => o.id == factorId);
@@ -512,22 +402,23 @@ export default {
         console.error("Factor Not Found");
         return;
       }
-      this.transaction.floatAccount = factor.floatAccount;
-      this.transaction.costCenter = factor.costCenter;
+      this.item.floatAccount = factor.floatAccount;
+      this.item.costCenter = factor.costCenter;
       let value = factor.sum - factor.paidValue;
       this.rows[0].value = value;
-      this.rows.push(this.copy(this.rowTemplate));
+      this.rows.push(this.getRowTemplate());
       factor.payment.value = value;
     },
     getNotPaidFactors() {
-      if (this.id) this.transaction.id = this.id;
+      if (this.item.account && this.item.account.id)
+        if (this.id) this.item.id = this.id;
       return this.request({
         url: this.endpoint("factors/notPaidFactors"),
         method: "get",
         params: {
-          transactionType: this.type.name,
-          transactionId: this.transaction.id,
-          accountId: this.transaction.account.id
+          transactionType: this.transactionType,
+          itemId: this.item.id,
+          accountId: this.item.account.id
         },
         success: data => {
           this.factors = [];
@@ -536,9 +427,9 @@ export default {
             factor.remain = +factor.sum - +factor.paidValue;
 
             let payment = [];
-            if (this.transaction.id) {
+            if (this.item.id) {
               payment = factor.payments.filter(p => {
-                return p.transaction == this.transaction.id;
+                return p.item == this.item.id;
               });
             }
 
@@ -558,57 +449,7 @@ export default {
         }
       });
     },
-    getTransaction(id) {
-      if (!id) return;
-      let url = "transactions/" + id;
-      return this.request({
-        url: this.endpoint(url),
-        method: "get",
-        success: data => {
-          this.selectTransaction(data);
-        }
-      });
-    },
-    getTransactionByCode(code) {
-      let url = "transactions/getTransactionByCode";
-      return this.request({
-        url: this.endpoint(url),
-        method: "get",
-        params: { type: this.transactionType, code },
-        success: data => {
-          this.selectTransaction(data, true);
-        }
-      });
-    },
-    selectTransaction(transaction, redirect = false) {
-      if (redirect) {
-        this.makeFormUneditable();
-        this.$router.push({
-          name: "TransactionForm",
-          params: { id: transaction.id, transactionType: this.transactionType }
-        });
-      }
-      this.rows = [];
-      this.transaction = transaction;
-      this.itemsToDelete = [];
-      transaction.items.forEach(item => {
-        this.rows.push(this.copy(item));
-      });
-      this.rows.push(this.copy(this.rowTemplate));
-    },
-    deleteRow(index) {
-      if (index == 0) {
-        this.rows.forEach(row => {
-          if (row.id) this.itemsToDelete.push(row.id);
-        });
-        this.rows.splice(0, this.rows.length - 1);
-      } else {
-        let row = this.rows[index];
-        if (row.id) this.itemsToDelete.push(row.id);
-        this.rows.splice(index, 1);
-      }
-    },
-    validate(clearTransaction) {
+    validate(clearForm) {
       let isValid = true;
 
       if (this.rows.length == 1) {
@@ -648,16 +489,14 @@ export default {
       if (this.modalMode) {
         this.$emit("submit", this.getSerialized());
       } else {
-        if (this.transaction.id) this.updateTransaction(clearTransaction);
-        else this.storeTransaction(clearTransaction);
+        this.submit(clearForm);
       }
     },
     getSerialized() {
       let data = {};
 
-      data.transaction = this.extractIds(this.transaction);
-      data.transaction.code = this.transactionCode;
-      data.transaction.type = this.type.name;
+      data.item = this.extractIds(this.item);
+      data.item.type = this.transactionType;
 
       data.items = {
         items: [],
@@ -689,63 +528,12 @@ export default {
 
       return data;
     },
-    setTransaction(transaction) {
-      this.makeFormUneditable();
-      this.$router.push({
-        name: "TransactionForm",
-        params: {
-          id: transaction.id,
-          transactionType: this.transactionType
-        }
-      });
-    },
-    storeTransaction(clearTransaction) {
-      this.request({
-        url: this.endpoint("transactions/"),
-        method: "post",
-        data: this.getSerialized(),
-        success: data => {
-          if (clearTransaction) {
-            this.clearTransaction();
-          } else {
-            this.setTransaction(data);
-          }
-          this.successNotify();
-        }
-      });
-    },
-    updateTransaction(clearTransaction) {
-      let data = this.getSerialized();
-      this.request({
-        url: this.endpoint("transactions/" + this.transaction.id),
-        method: "put",
-        data: data,
-        success: data => {
-          if (clearTransaction) {
-            this.clearTransaction();
-          } else {
-            this.setTransaction(data);
-          }
-          this.successNotify();
-        }
-      });
-    },
-    deleteTransaction(clearTransaction) {
-      this.request({
-        url: this.endpoint("transactions/" + this.transaction.id),
-        method: "delete",
-        success: data => {
-          this.successNotify();
-          this.getTransactionCodes();
-          this.clearTransaction();
-        }
-      });
-    },
     hasBank(row) {
       if (this.isChequeType(row)) return false;
       if (row.type && row.type.codename == "cash") return false;
       return true;
     },
+
     isChequeType(row) {
       return (
         row.type && row.type.codename && row.type.codename.includes("Cheque")
@@ -755,16 +543,16 @@ export default {
       return row.cheque;
     },
     openSubmitChequeDialog(row, i) {
-      let account = this.transaction.account;
+      let account = this.item.account;
       if (!account) {
         this.notify(`ابتدا حساب را انتخاب کنید`, "danger");
         return;
       }
-      if (account.floatAccountGroup && !this.transaction.floatAccount) {
+      if (account.floatAccountGroup && !this.item.floatAccount) {
         this.notify(`لطفا حساب شناور را انتخاب کنید`, "danger");
         return;
       }
-      if (account.costCenterGroup && !this.transaction.costCenter) {
+      if (account.costCenterGroup && !this.item.costCenter) {
         this.notify(`لطفا مرکز هزینه را انتخاب کنید`, "danger");
         return;
       }
@@ -772,7 +560,6 @@ export default {
       this.submitChequeDialog = true;
     },
     addCheque(cheque) {
-      console.log(cheque);
       if (!this.hasValue(cheque.serial)) {
         this.notify("لطفا سریال چک را وارد کنید", "danger");
         return;
@@ -796,20 +583,15 @@ export default {
       row.explanation = cheque.explanation;
       this.submitChequeDialog = false;
     },
-    clearTransaction() {
-      this.log("Clear Transaction");
-      this.$router.push({
-        name: "TransactionForm",
-        params: {
-          transactionType: this.transactionType
-        }
-      });
-      this.rows = [this.copy(this.rowTemplate)];
-      this.transaction = this.getTransactionTemplate();
+    clearForm() {
+      this.log("Clear Item");
+      this.changeRouteTo(null);
+      this.rows = [this.getRowTemplate()];
+      this.item = this.getItemTemplate();
       this.factors = [];
       this.itemsToDelete = [];
     },
-    getTransactionTemplate() {
+    getItemTemplate() {
       return {
         account: null,
         floatAccount: null,
@@ -837,6 +619,22 @@ export default {
           factor.payment.value = 0;
         }
       }
+    },
+    getRowTemplate() {
+      return {
+        value: 0
+      };
+    },
+    setItem(item) {
+      this.rows = [];
+      this.item = item;
+      this.itemsToDelete = [];
+      item.items.forEach(item => {
+        this.rows.push(this.copy(item));
+      });
+      this.rows.push(this.getRowTemplate());
+
+      this.changeRouteTo(item.id);
     }
   }
 };

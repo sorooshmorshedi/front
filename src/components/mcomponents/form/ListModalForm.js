@@ -1,13 +1,12 @@
 import ListModalForm from "./ListModalForm.vue";
+import OpenSanadBtn from "@/components/form/OpenSanadBtn";
 
 export default {
   components: {
-    ListModalForm
+    ListModalForm,
+    OpenSanadBtn
   },
   props: {
-    itemObject: {
-      default: null
-    },
     id: {
       default: null
     }
@@ -24,6 +23,9 @@ export default {
       leadingSlash: false,
       hasList: true,
       isEditing: true,
+      rowKey: null,
+      rows: [],
+      itemsToDelete: []
     };
   },
   computed: {
@@ -53,43 +55,69 @@ export default {
   },
   watch: {
     query() {
-      this.queryChanged();
+      this.setDefaults();
     },
-    itemObject() {
-      if (this.itemObject) this.setItem(this.itemObject);
+    $route(newRoute, oldRoute) {
+      if (!newRoute.params.id) {
+        this.clearForm();
+      } else {
+        this.getItem();
+      }
     },
-    $route() {
-      // we had problems with id prop
-      // this.clearForm();
-    }
+    rows: {
+      handler() {
+        if (!this.rowKey) {
+          console.error('Please set rowKey');
+          return;
+        }
+        if (this.rows[this.rows.length - 1][this.rowKey]) {
+          this.rows.push(this.getRowTemplate());
+        }
+      },
+      deep: true
+    },
   },
   created() {
     this.item = this.getItemTemplate();
+    this.rows = [this.getItemTemplate()];
     this.getData();
     if (this.id) {
       this.getItem();
     }
+    this.EventBus.$on('get:accounts', () => this.setDefaults())
   },
   mounted() {
-    this.queryChanged();
-    if (this.itemObject) this.setItem(this.itemObject);
+    this.setDefaults()
   },
   methods: {
+    getRowTemplate() {
+      return {}
+    },
     getItemTemplate() {
       return {}
     },
     /*
       Set default fields with data query.item
     */
-    queryChanged() {
-      let item = this.query.item;
-      for (let key in item) {
-        this.item[key] = item[key];
-      }
+    setDefaults() {
+      this.$nextTick(() => {
+        for (let key in this.query) {
+          let path = key.split('.')
+          let lastObject = path.slice(0, path.length - 1).reduce((o, i) => o[i], this)
+          let lastKey = path[path.length - 1];
+
+          switch (lastKey) {
+            case 'account':
+              lastObject[lastKey] = this.accounts.filter(o => o.id == this.query[key])[0];
+              break
+            default:
+              lastObject[lastKey] = this.query[key]
+          }
+        }
+      })
     },
     getData() {
       // must be implemented
-      console.error("getData method must be implemented")
     },
     getItem() {
       // must be implemented, but by default
@@ -106,27 +134,60 @@ export default {
         });
       }
     },
+    getItemByPosition(position) {
+      return this.request({
+        url: this.endpoint(`${this.baseUrl}/byPosition`),
+        method: "get",
+        params: {
+          id: this.item.id,
+          position: position
+        },
+        success: data => {
+          this.setItem(data);
+        }
+      });
+    },
     setItem(item) {
       // must be implemented, but by default
       this.item = item;
-      if (!this.hasList && this.id != item.id) {
+      if (this.hasIdProp && this.id != item.id) {
         this.changeRouteTo(item.id);
       }
     },
     changeRouteTo(id) {
-      this.$router.push({
-        name: this.$route.name,
-        params: {
-          ...this.$route.params,
-          id: id
+      let params = {
+        ...this.$route.params,
+        id: id
+      }
+
+      let isDuplicate = true;
+      Object.keys(params).forEach(key => {
+        if (params[key] != this.$route.params[key]) {
+          isDuplicate = false;
         }
       })
+
+      if (!isDuplicate) {
+        this.$router.push({
+          name: this.$route.name,
+          params: params
+        })
+      }
+
+      if (!id) {
+        this.isEditing = true;
+      } else {
+        this.isEditing = false;
+      }
+
     },
     clearForm() {
       // must be implemented, but by default
       this.isEditing = true;
       this.item = this.getItemTemplate();
-      if (!this.hasList) {
+      this.rows = [this.getRowTemplate()];
+      this.itemsToDelete = [];
+      if (this.hasIdProp) {
         this.changeRouteTo(null);
       }
     },
@@ -172,7 +233,7 @@ export default {
         this.clearForm();
       } else {
         this.item = data;
-        this.getItem(data);
+        this.getItem();
         this.isEditing = false;
       }
       if (this.hasList) {
@@ -191,6 +252,19 @@ export default {
         }
       }
       return sum;
+    },
+
+    deleteRow(index) {
+      if (index == -1) {
+        this.rows.forEach(row => {
+          if (row.id) this.itemsToDelete.push(row.id);
+        });
+        this.rows.splice(0, this.rows.length - 1);
+      } else {
+        let row = this.rows[index];
+        if (row.id) this.itemsToDelete.push(row.id);
+        this.rows.splice(index, 1);
+      }
     },
   }
 

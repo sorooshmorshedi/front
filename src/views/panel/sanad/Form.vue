@@ -1,43 +1,35 @@
 <template>
-  <daily-form
+  <m-form
     title="سند حسابداری"
-    formName="سند"
-    :ListRouteParams="{form: 'sanad'}"
+    :showList="false"
+    :listRoute="{name:'List', params:{form: 'sanad'}}"
     :exportParams="{id: this.id}"
-    @clearForm="clearSanad()"
-    :hasFirst="hasFirst"
-    :hasLast="hasLast"
-    :hasPrev="hasPrev"
-    :hasNext="hasNext"
+    :canEdit="canEdit"
+    :canDelete="canDelete"
     :canSubmit="canSubmit"
-    :editable="editable"
-    :deletable="deletable"
-    @goToForm="goToForm"
-    @validate="validate"
-    @edit="makeFormEditable()"
-    @delete="deleteSanad"
+    :isEditing.sync="isEditing"
+    @goToForm="getItemByPosition"
+    @submit="submit"
+    @delete="deleteItem"
+    @clearForm="clearForm()"
   >
     <template #header-btns>
       <v-btn
         small
-        v-if="sanad.factor"
+        v-if="item.factor"
         class="light-blue white--text mr-1"
-        :to="{name: 'FactorForm', params: {factorType: sanad.factor.type, id: sanad.factor.id }}"
+        :to="{name: 'FactorForm', params: {factorType: item.factor.type, id: item.factor.id }}"
       >مشاهده فاکتور این سند</v-btn>
       <v-btn
         small
-        v-if="sanad.transaction"
+        v-if="item.transaction"
         class="light-blue white--text mr-1"
-        :to="{name: 'TransactionForm', params: {transactionType: sanad.transaction.type, id: sanad.transaction.id }}"
+        :to="{name: 'TransactionForm', params: {transactionType: item.transaction.type, id: item.transaction.id }}"
       >
         <span>مشاهده دریافت/پرداخت</span>
       </v-btn>
 
-      <v-btn
-        small
-        @click.prevent="copySanadToNewSanad()"
-        class="teal white--text mr-1"
-      >کپی سند به سند جدید</v-btn>
+      <v-btn small @click="copySanadToNewSanad" class="teal white--text mr-1">کپی سند به سند جدید</v-btn>
 
       <v-btn
         small
@@ -46,28 +38,20 @@
       >مرتب کردن کد اسناد بر اساس تاریخ</v-btn>
     </template>
 
-    <template #inputs>
+    <template>
       <v-row>
         <v-col cols="12" lg="6">
           <v-row>
             <v-col cols="12" lg="6">
-              <v-text-field
-                required
-                label="شماره سند"
-                v-model="sanad.code"
-                v-if="sanad.id"
-                background-color="white"
-              ></v-text-field>
-              <v-text-field label="شماره سند" disabled :value="sanadCode" v-else></v-text-field>
+              <v-text-field disabled label="شماره سند" v-model="item.code" background-color="white"></v-text-field>
             </v-col>
             <v-col cols="12" lg="6">
               <date
                 class="form-control"
-                v-model="sanad.date"
+                v-model="item.date"
                 label=" * تاریخ سند"
                 :default="true"
-                :disabled="!editable"
-                ref="date"
+                :disabled="!isEditing"
               />
             </v-col>
             <v-col cols="12" lg="12">
@@ -80,8 +64,8 @@
             <v-col cols="12" lg="12">
               <v-textarea
                 label="شرح سند"
-                v-model="sanad.explanation"
-                :disabled="!editable"
+                v-model="item.explanation"
+                :disabled="!isEditing"
                 height="105"
               ></v-textarea>
             </v-col>
@@ -93,7 +77,7 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th> * شماره - نام حساب</th>
+                <th>* شماره - نام حساب</th>
                 <th>توضیحات ردیف</th>
                 <th>بدهکار</th>
                 <th class="d-print-none">
@@ -112,7 +96,7 @@
                     :horizontal="true"
                     items-type="level3"
                     v-model="rows[i].account"
-                    :disabled="!editable"
+                    :disabled="!isEditing"
                     :floatAccount="rows[i].floatAccount"
                     @update:floatAccount="v => rows[i].floatAccount = v"
                     :costCenter="rows[i].costCenter"
@@ -123,14 +107,14 @@
                   <v-textarea
                     style="width: 300px"
                     v-model="rows[i].explanation"
-                    :disabled="!editable"
+                    :disabled="!isEditing"
                     rows="1"
                     auto-grow
                   ></v-textarea>
                 </td>
                 <td style="width: 150px">
                   <money
-                    :disabled="!editable || rows[i].bes != 0"
+                    :disabled="!isEditing || rows[i].bes != 0"
                     class="form-control"
                     v-model="rows[i].bed"
                   />
@@ -142,7 +126,7 @@
                 </td>
                 <td style="width: 150px">
                   <money
-                    :disabled="!editable || rows[i].bed != 0"
+                    :disabled="!isEditing || rows[i].bed != 0"
                     class="form-control"
                     v-model="rows[i].bes"
                   />
@@ -153,7 +137,7 @@
                     @click="deleteRow(i)"
                     class="red--text"
                     icon
-                    :disabled="!editable"
+                    :disabled="!isEditing"
                   >
                     <v-icon>delete</v-icon>
                   </v-btn>
@@ -170,7 +154,7 @@
                 <td class="d-print-none"></td>
                 <td class>{{ besSum | toMoney }}</td>
                 <td class="d-print-none">
-                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!editable">
+                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
                     <v-icon>delete_sweep</v-icon>
                   </v-btn>
                 </td>
@@ -180,7 +164,7 @@
         </v-col>
       </v-row>
     </template>
-  </daily-form>
+  </m-form>
 </template>
 
 <script>
@@ -190,32 +174,27 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 
 import DailyForm from "@/components/form/DailyForm";
+import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
 
 export default {
   name: "Form",
   components: { money, date, DailyForm },
-  mixins: [formsMixin, accountApiMixin],
+  mixins: [formsMixin, accountApiMixin, ListModalFormMixin],
   props: ["id"],
   data() {
     return {
-      sanadCode: null,
-      sanad: {
-        type: "temporary"
-      },
-      rows: [
-        {
-          bed: 0,
-          bes: 0
-        }
-      ],
-      itemsToDelete: []
+      baseUrl: "sanads",
+      leadingSlash: true,
+      hasList: false,
+      hasIdProp: true,
+      rowKey: "account"
     };
   },
-  created() {
-    this.getData();
-  },
-  mounted() {},
   computed: {
+    canEdit() {
+      if (!this.item.id) return true;
+      return this.item.createType != "auto";
+    },
     bedSum() {
       let sum = 0;
       this.rows.forEach(r => {
@@ -229,60 +208,19 @@ export default {
         if (r.bes) sum += +r.bes;
       });
       return sum;
-    },
-    hasFirst() {
-      if (this.sanadCode == 1) return false;
-      return true;
-    },
-    hasNext() {
-      if (this.sanad.code == this.sanadCode - 1) return false;
-      if (!this.id) return false;
-      return true;
-    },
-    hasPrev() {
-      if (this.sanad.code == 1) return false;
-      return true;
-    },
-    hasLast() {
-      if (this.sanadCode == 1) return false;
-      return true;
-    },
-    deletable() {
-      if (!this.id) return false;
-      if (!this.hasNext) return true;
-      return false;
-    }
-  },
-  watch: {
-    rows: {
-      handler() {
-        let row = this.rows[this.rows.length - 1];
-        if (row && row.account) {
-          this.rows.push({
-            bed: 0,
-            bes: 0
-          });
-        }
-      },
-      deep: true
     }
   },
   methods: {
-    getData() {
-      this.getAccounts();
-      this.getSanadCode();
-
-      if (this.id) this.getSanad(this.id);
+    getItemTemplate() {
+      return {
+        type: "temporary"
+      };
     },
-
-    getSanad(sanadId) {
-      return this.request({
-        url: this.endpoint("sanads/" + sanadId),
-        method: "get",
-        success: data => {
-          this.selectSanad(data);
-        }
-      });
+    getRowTemplate() {
+      return {
+        bed: 0,
+        bes: 0
+      };
     },
     getSanadByCode(code) {
       this.log("Get sanad by code: ", code);
@@ -297,93 +235,30 @@ export default {
         }
       });
     },
-    clearSanad() {
-      this.$router.push({
-        name: "SanadForm"
-      });
-      this.sanad = {
-        type: "temporary"
-      };
-      this.$refs.date.isDirty = false;
-      this.rows = [
-        {
-          bed: "",
-          bes: ""
-        }
-      ];
-    },
-    getSanadCode() {
-      return this.request({
-        url: this.endpoint("sanads/newCode"),
-        method: "get",
-        success: data => {
-          this.sanadCode = data;
-        }
-      });
-    },
-    canSubmit() {
-      if (!this.sanad.createType) return true;
-      return this.sanad.createType == "auto";
-    },
-    goToForm(pos) {
-      let newCode = null;
-      switch (pos) {
-        case "next":
-          newCode = this.sanad.code + 1;
-          break;
-        case "prev":
-          newCode = this.sanad.code ? this.sanad.code - 1 : this.sanadCode - 1;
-          break;
-        case "first":
-          newCode = 1;
-          break;
-        case "last":
-          newCode = this.sanadCode - 1;
-          break;
-      }
-      if (newCode) this.getSanadByCode(newCode);
-    },
-    selectSanad(sanad) {
-      this.makeFormUneditable();
-      this.$router.push({
-        name: "SanadForm",
-        params: { id: sanad.id }
-      });
-      this.sanad = sanad;
+    setItem(item) {
+      this.item = item;
       this.itemsToDelete = [];
       this.rows = [];
-      sanad.items.forEach(item => {
+      item.items.forEach(item => {
         let row = { ...item };
         this.rows.push(row);
       });
-      this.rows.push({ bed: 0, bes: 0 });
+      this.rows.push(this.getRowTemplate());
+      this.changeRouteTo(item.id);
+      this.isEditing = false;
     },
     copySanadToNewSanad() {
       let rows = this.copy(this.rows);
-      this.clearSanad();
-      this.rows = [];
-      for (const row of rows) {
-        if (row.id) delete row.id;
-        this.rows.push({
-          ...row
-        });
-      }
-    },
-    deleteRow(index) {
-      if (index == -1) {
-        this.rows.forEach(row => {
-          if (row.id) this.itemsToDelete.push(row.id);
-        });
-        this.rows.splice(0, this.rows.length - 1);
-      } else {
-        let row = this.rows[index];
-        if (row.id) this.itemsToDelete.push(row.id);
-        this.rows.splice(index, 1);
-      }
-    },
-    validate(clearSanad = false) {
-      if (this.sanad.id) this.updateSanad(clearSanad);
-      else this.storeSanad(clearSanad);
+      this.clearForm();
+      this.$nextTick(() => {
+        this.rows = [];
+        for (const row of rows) {
+          if (row.id) delete row.id;
+          this.rows.push({
+            ...row
+          });
+        }
+      });
     },
     exchangeValue(row) {
       if (row) {
@@ -400,7 +275,7 @@ export default {
     },
     getSerialized() {
       let data = {
-        sanad: this.extractIds(this.sanad),
+        item: this.extractIds(this.item),
         items: {
           ids_to_delete: this.itemsToDelete,
           items: []
@@ -420,75 +295,11 @@ export default {
 
       return data;
     },
-    setSanad(sanad) {
-      this.makeFormUneditable();
-    },
-    deleteSanad() {
-      this.request({
-        url: this.endpoint("sanads/" + this.sanad.id),
-        method: "delete",
-        success: data => {
-          this.clearSanad();
-          this.getSanadCode();
-          this.successNotify();
-        }
-      });
-    },
-    storeSanad(clearSanad) {
-      let data = this.getSerialized();
-      this.request({
-        url: this.endpoint("sanads/"),
-        method: "post",
-        data: data,
-        success: data => {
-          if (clearSanad) {
-            this.clearSanad();
-          } else {
-            this.setSanad(data);
-          }
-          this.getSanadCode();
-          this.successNotify();
-        }
-      });
-    },
-    updateSanad(clearSanad) {
-      let data = this.getSerialized();
-      this.request({
-        url: this.endpoint("sanads/" + this.sanad.id),
-        method: "put",
-        data: data,
-        success: data => {
-          if (clearSanad) {
-            this.clearSanad();
-          } else {
-            this.setSanad(data);
-          }
-          this.getSanadCode();
-          this.successNotify();
-        }
-      });
-    },
-    getFloatAccounts(row) {
-      if (row.account && row.account.floatAccountGroup) {
-        return row.account.floatAccountGroup.floatAccounts;
-      } else {
-        return [];
-      }
-    },
-    getCostCenters(row) {
-      if (row.account && row.account.costCenterGroup) {
-        return row.account.costCenterGroup.floatAccounts;
-      } else {
-        return [];
-      }
-    },
-
     reorderSanads() {
       this.request({
         url: this.endpoint("sanads/reorder"),
         method: "post",
         success: data => {
-          this.getSanadCode();
           this.successNotify();
         }
       });

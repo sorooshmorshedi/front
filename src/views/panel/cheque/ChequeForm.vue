@@ -1,24 +1,20 @@
 <template>
   <div>
-    <daily-form
-      formName="چک"
+    <m-form
       :title="title"
-      :ListRouteParams="{form: 'cheque', type: this.receivedOrPaid == 'p'?'paid':'received'}"
-      @clearForm="clearCheque(true)"
-      :formName="title"
+      :showListBtn="false"
+      :showList="false"
+      :listRoute="{name: 'List', params:{form: 'cheque', type: this.receivedOrPaid == 'p'?'paid':'received'}}"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
-      :hasFirst="true"
-      :hasLast="true"
-      :hasPrev="true"
-      :hasNext="true"
-      :editable="true"
-      :deletable="this.id"
-      :canDelete="canDeleteCheque"
-      :canSubmit="!id || canEditCheque"
-      @goToForm="getChequeByPosition"
-      @validate="validate"
-      @delete="deleteCheque"
+      :canEdit="canEdit"
+      :canDelete="canDelete"
+      :canSubmit="canSubmit"
+      :isEditing.sync="isEditing"
+      @clearForm="clearForm"
+      @goToForm="getItemByPosition"
+      @submit="validate"
+      @delete="deleteItem"
     >
       <template #header-btns>
         <v-btn
@@ -28,7 +24,7 @@
         >مشاهده جزئیات چک</v-btn>
       </template>
 
-      <template #inputs>
+      <template>
         <v-row>
           <template v-if="isPaidCheque">
             <v-col cols="12" md="3">
@@ -37,60 +33,65 @@
                 label=" * دسته چک"
                 :items="chequebooks"
                 item-text="account.name"
-                v-model="cheque.chequebook"
-                :disabled="id != null"
+                v-model="item.chequebook"
+                :disabled="id != null || !isEditing"
+                @change="getPaidCheques"
               />
             </v-col>
-            <v-col v-if="!id" cols="12" md="3">
+            <v-col cols="12" md="3">
               <v-autocomplete
                 required
-                :disabled="!chequebook"
+                :disabled="!chequebook || !isEditing"
                 label=" * چک"
                 :items="paidCheques"
-                :is-loading="isLoading"
-                :search-input.sync="searchPaidCheque"
-                v-model="cheque"
-              />
-            </v-col>
-            <v-col cols="12" md="3" v-else>
-              <v-text-field
-                required
-                label=" * سریال چک"
-                v-model="cheque.serial"
-                :disabled="isPaidCheque"
+                v-model="item"
               />
             </v-col>
           </template>
+          <v-col cols="12" md="3" v-else>
+            <v-text-field
+              required
+              label=" * سریال چک"
+              v-model="item.serial"
+              :disabled="isPaidCheque || !isEditing"
+            />
+          </v-col>
           <v-col cols="12" md="6">
             <account-select
               :label="' * ' + (isPaidCheque?'دریافت کننده':'پرداخت کننده')"
               items-type="level3"
-              v-model="cheque.account"
-              :disabled="modalMode"
-              :floatAccount="cheque.floatAccount"
-              @update:floatAccount="v => cheque.floatAccount = v"
-              :costCenter="cheque.costCenter"
-              @update:costCenter="v => cheque.costCenter = v"
+              v-model="item.account"
+              :disabled="!isEditing"
+              :floatAccount="item.floatAccount"
+              @update:floatAccount="v => item.floatAccount = v"
+              :costCenter="item.costCenter"
+              @update:costCenter="v => item.costCenter = v"
             />
           </v-col>
           <v-col cols="12" md="3">
-            <money label=" * مبلغ" v-model="cheque.value" />
+            <money label=" * مبلغ" v-model="item.value" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="3">
-            <date label=" * تاریخ سررسید" v-model="cheque.due" :default="true" />
+            <date
+              label=" * تاریخ سررسید"
+              v-model="item.due"
+              :default="true"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="3">
             <date
               :label="' * ' + (isPaidCheque?'تاریخ پرداخت':'تاریخ دریافت')"
-              v-model="cheque.date"
+              v-model="item.date"
               :default="true"
+              :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="3" v-if="canSetSanadCode">
-            <v-text-field label="شماره سند" v-model="cheque.sanad_code" />
+            <v-text-field label="شماره سند" v-model="item.sanad_code" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="12">
-            <v-textarea label="شرح چک" v-model="cheque.explanation"></v-textarea>
+            <v-textarea label="شرح چک" v-model="item.explanation" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="12" v-if="!isPaidCheque">
             <v-select
@@ -99,32 +100,35 @@
               item-text="label"
               item-value="value"
               :return-object="false"
-              v-model="cheque.type"
+              v-model="item.type"
+              :disabled="!isEditing"
             ></v-select>
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="نام بانک" v-model="cheque.bankName" :disabled="isPaidCheque" />
+            <v-text-field
+              label="نام بانک"
+              v-model="item.bankName"
+              :disabled="isPaidCheque || !isEditing"
+            />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label="نام شعبه" v-model="cheque.branchName" :disabled="isPaidCheque" />
+            <v-text-field
+              label="نام شعبه"
+              v-model="item.branchName"
+              :disabled="isPaidCheque || !isEditing"
+            />
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field
               label="شماره حساب چک"
-              v-model="cheque.accountNumber"
-              :disabled="isPaidCheque"
+              v-model="item.accountNumber"
+              :disabled="isPaidCheque || !isEditing"
             />
           </v-col>
         </v-row>
       </template>
-    </daily-form>
-    <form-list
-      class="mt-3"
-      v-if="id"
-      form="cheque"
-      :id="id"
-      :type="isPaidCheque?'paid':'received'"
-    />
+    </m-form>
+    <form-list class="mt-3" form="cheque" :type="isPaidCheque?'paid':'received'" ref="formList" />
   </div>
 </template>
 
@@ -136,6 +140,8 @@ import getChequeApiMixin from "./getChequeApi.js";
 import FormList from "@/views/panel/lists/List";
 import formsMixin from "@/mixin/forms";
 import GetChequebooksApi from "@/views/panel/chequebook/getChequebooksApi";
+import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+
 export default {
   name: "ChequeForm",
   props: {
@@ -159,11 +165,18 @@ export default {
     }
   },
   components: { money, date, FormList },
-  mixins: [getChequeApiMixin, accountApiMixin, formsMixin, GetChequebooksApi],
+  mixins: [
+    getChequeApiMixin,
+    accountApiMixin,
+    formsMixin,
+    GetChequebooksApi,
+    ListModalFormMixin
+  ],
   data() {
     return {
-      searchPaidCheque: "",
-      isLoading: false,
+      baseUrl: "cheques/cheques",
+      hasList: false,
+      hasIdProp: true,
       chequebook: {},
       cheque: {
         received_or_paid: this.receivedOrPaid,
@@ -191,6 +204,9 @@ export default {
     };
   },
   computed: {
+    createUrl() {
+      return "cheques/cheques/submit/";
+    },
     isPaidCheque() {
       return this.receivedOrPaid == "p";
     },
@@ -201,7 +217,7 @@ export default {
       return title;
     },
     canSetSanadCode() {
-      let statusChange = this.cheque.statusChanges;
+      let statusChange = this.item.statusChanges;
       if (statusChange) {
         return statusChange.length == 0;
       } else {
@@ -209,10 +225,10 @@ export default {
       }
     },
 
-    canDeleteCheque() {
+    canDelete() {
       if (this.isPaidCheque) return false;
-      if (this.cheque.id) {
-        let statusChangesLength = this.cheque.statusChanges.length;
+      if (this.item.id) {
+        let statusChangesLength = this.item.statusChanges.length;
         if (this.isPaidCheque) {
           if (statusChangesLength == 0) return true;
         } else {
@@ -223,10 +239,10 @@ export default {
       return false;
     },
 
-    canEditCheque() {
-      if (this.cheque.id) {
-        if (!this.cheque.statusChanges) return false;
-        let statusChangesLength = this.cheque.statusChanges.length;
+    canEdit() {
+      if (this.item.id) {
+        if (!this.item.statusChanges) return false;
+        let statusChangesLength = this.item.statusChanges.length;
         if (this.isPaidCheque) {
           if (statusChangesLength == 0) return true;
         } else {
@@ -251,13 +267,6 @@ export default {
       if (this.modalMode) {
         this.setAccounts();
       }
-    },
-    searchPaidCheque() {
-      if (this.cheque.title != this.searchPaidCheque) {
-        this.getPaidCheques(this.searchPaidCheque);
-      } else {
-        this.cheque.account = null;
-      }
     }
   },
   created() {
@@ -268,77 +277,74 @@ export default {
 
     if (this.isPaidCheque) {
       this.getChequebooks();
-      this.getPaidCheques("");
     }
   },
   methods: {
-    setAccounts() {
-      this.cheque.account = this.account;
-      this.cheque.floatAccount = this.floatAccount;
-      this.cheque.costCenter = this.costCenter;
-    },
-    validate(clearForm) {
-      if (this.modalMode) {
-        this.$emit("submit", this.extractIds(this.cheque));
-      } else {
-        this.submitCheque(clearForm);
+    getData() {
+      if (this.$refs.formList) {
+        this.$refs.formList.$refs.datatable.getData();
       }
     },
-    submitCheque(clearForm) {
-      this.request({
-        url: this.endpoint("cheques/cheques/submit/"),
-        data: this.extractIds(this.cheque),
-        method: "post",
-        success: data => {
-          if (clearForm) {
-            this.clearCheque();
-          } else {
-            this.$router.push({
-              name: "ChequeDetail",
-              params: {
-                id: data.id
-              }
-            });
-          }
-          this.successNotify();
-        }
-      });
+    setAccounts() {
+      this.item.account = this.account;
+      this.item.floatAccount = this.floatAccount;
+      this.item.costCenter = this.costCenter;
     },
-    updateCheque(clearForm) {
-      this.request({
-        url: this.endpoint(`cheques/cheques/${this.cheque.id}`),
-        data: this.extractIds(this.cheque),
-        method: "put",
-        success: data => {
-          if (clearForm) {
-            this.clearCheque();
-          }
-          this.successNotify();
-        }
-      });
+
+    // changeRouteTo(id) {
+    //   if (id) {
+    //     this.$router.push({
+    //       name: "ChequeDetail",
+    //       params: {
+    //         id: id
+    //       }
+    //     });
+    //   } else {
+    //     this.$router.push({
+    //       name: "ChequeForm",
+    //       params: {
+    //         receivedOrPaid: this.receivedOrPaid
+    //       }
+    //     });
+    //   }
+    //   let params = {
+    //     ...this.$route.params,
+    //     id: id
+    //   };
+
+    //   let isDuplicate = true;
+    //   Object.keys(params).forEach(key => {
+    //     if (params[key] != this.$route.params[key]) {
+    //       isDuplicate = false;
+    //     }
+    //   });
+
+    //   if (!isDuplicate) {
+    //     this.$router.push({
+    //       name: this.$route.name,
+    //       params: params
+    //     });
+    //   }
+
+    //   if (!id) {
+    //     this.isEditing = true;
+    //   } else {
+    //     this.isEditing = false;
+    //   }
+    // },
+    validate(clearForm) {
+      if (this.modalMode) {
+        this.$emit("submit", this.extractIds(this.item));
+      } else {
+        this.submit(clearForm);
+      }
     },
-    deleteCheque() {
-      this.request({
-        url: this.endpoint(`cheques/cheques/${this.cheque.id}`),
-        method: "delete",
-        success: data => {
-          this.notify("چک با موفقیت حذف شد", "success");
-          this.clearCheque();
-        }
-      });
-    },
-    clearCheque() {
-      this.$router.push({
-        name: "ChequeForm",
-        params: {
-          receivedOrPaid: this.receivedOrPaid
-        }
-      });
-      this.cheque = {
+    getItemTemplate() {
+      return {
         received_or_paid: this.receivedOrPaid
       };
     },
-    getChequeByPosition(pos) {
+    getItemByPosition(pos) {
       return this.request({
         url: this.endpoint("cheques/getChequeByPosition"),
         method: "get",
@@ -348,7 +354,7 @@ export default {
           position: pos
         },
         success: data => {
-          this.setCheque(data);
+          this.setItem(data);
         },
         error: error => {
           if (error.response.status == 404) {
@@ -357,38 +363,19 @@ export default {
         }
       });
     },
-    setCheque(cheque) {
-      this.$router.push({
-        name: "ChequeForm",
-        params: {
-          receivedOrPaid: cheque.received_or_paid,
-          id: cheque.id
-        }
-      });
-      this.cheque = cheque;
-    },
-    getPaidCheques(value) {
+    getPaidCheques() {
       this.paidCheques = [];
 
-      if (this.isLoading) return;
-
-      this.isLoading = true;
       this.request({
         url: this.endpoint("reports/lists/cheques"),
         method: "get",
         loading: false,
         params: {
-          limit: 30,
-          offset: 0,
-          serial__icontains: value,
-          account__icontains: value,
           chequebook__id: this.chequebook.id,
-          status: "blank",
-          received_or_paid: "p"
+          status: "blank"
         },
         success: data => {
-          this.isLoading = false;
-          this.paidCheques = data.results;
+          this.paidCheques = data;
         }
       });
     }

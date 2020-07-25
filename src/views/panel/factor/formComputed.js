@@ -1,23 +1,20 @@
 export default {
   computed: {
-    rowTemplate() {
-      let explanation = "";
-      if(this.isFpi){
-        explanation = "ثبت موجودی اول دوره"
-      }
-      return {
-        discountValue: "",
-        discountPercent: "",
-        fee: "",
-        ware: null,
-        warehouse: null,
-        explanation: explanation
+
+    createUrl() {
+      if (this.isFpi) {
+        return "factors/firstPeriodInventory"
+      } else {
+        return 'factors/factors/'
       }
     },
-    listRouteParams() {
+    listRoute() {
       return {
-        form: 'factor',
-        type: this.factorType
+        name: 'List',
+        params: {
+          form: 'factor',
+          type: this.factorType
+        }
       }
     },
     isFpi() {
@@ -54,15 +51,10 @@ export default {
       }
 
     },
-    factorCode() {
-      let code = this.factorCodes[this.factorType];
-      if (code) return code;
-      else return {}
-    },
     paymentsSum() {
       let sum = 0;
-      if (this.factor.payments) {
-        this.factor.payments.forEach(payment => {
+      if (this.item.payments) {
+        this.item.payments.forEach(payment => {
           sum += +payment.value;
         });
       }
@@ -70,7 +62,7 @@ export default {
     },
     canSubmitTransaction() {
       if (!this.id) return false;
-      return this.factor.paidValue < this.sum.total;
+      return this.item.paidValue < this.sum.total;
     },
     exportLinks() {
       let url =
@@ -87,23 +79,23 @@ export default {
         url += `&${key}=${value}`;
       });
 
-      let factor = {
+      let item = {
         'html': url.replace("TEMP", "html"),
         'pdf': url.replace("TEMP", "pdf")
       }
 
       let receipt = {
-        'html': factor.html + "&hide_prices=true",
-        'pdf': factor.pdf + "&hide_prices=true"
+        'html': item.html + "&hide_prices=true",
+        'pdf': item.pdf + "&hide_prices=true"
       }
 
       let preFactor = {
-        'html': factor.html + "&pre_factor=true",
-        'pdf': factor.pdf + "&pre_factor=true"
+        'html': item.html + "&pre_factor=true",
+        'pdf': item.pdf + "&pre_factor=true"
       }
 
       return {
-        factor,
+        item,
         receipt,
         preFactor,
       };
@@ -125,27 +117,27 @@ export default {
         res.afterTax += this.rowSumAfterTax(r);
         res.total += this.rowSumAfterTax(r);
       });
-      this.factor.expenses.forEach(e => {
+      this.item.expenses.forEach(e => {
         res.expenses += +e.value;
       });
 
       let overallDiscount = 0;
-      if (this.hasValue(this.factor.discountValue)) {
-        overallDiscount = +this.factor.discountValue;
-        // res.afterDiscount -= +this.factor.discountValue;
+      if (this.hasValue(this.item.discountValue)) {
+        overallDiscount = +this.item.discountValue;
+        // res.afterDiscount -= +this.item.discountValue;
       } else {
         overallDiscount =
-          (res.afterDiscount * +this.factor.discountPercent) / 100;
-        // res.afterDiscount = (res.afterDiscount * (100 - +this.factor.discountPercent)) / 100;
+          (res.afterDiscount * +this.item.discountPercent) / 100;
+        // res.afterDiscount = (res.afterDiscount * (100 - +this.item.discountPercent)) / 100;
       }
       res.afterDiscount -= overallDiscount;
       res.afterTax -= overallDiscount;
       res.total -= overallDiscount;
 
-      if (this.hasValue(this.factor.taxValue)) {
-        res.afterTax += +this.factor.taxValue;
-        res.tax += +this.factor.taxValue;
-        res.total += +this.factor.taxValue;
+      if (this.hasValue(this.item.taxValue)) {
+        res.afterTax += +this.item.taxValue;
+        res.tax += +this.item.taxValue;
+        res.total += +this.item.taxValue;
       }
 
       return res;
@@ -160,35 +152,6 @@ export default {
 
     hasBijak() {
       return ["buy", "backFromBuy"].includes(this.factorType);
-    },
-    hasFirst() {
-      if (this.factorCode == 1) return false;
-      return true;
-    },
-    hasNext() {
-      return true;
-      if (!this.factor.code) return false;
-      if (this.factor.code == this.factorCode - 1) return false;
-      if (!this.id) return false;
-      return true;
-    },
-    hasPrev() {
-      return true;
-      if (this.factorCode == 1) return false;
-      if (this.factor.code == 1) return false;
-      return true;
-    },
-    hasLast() {
-      return true;
-      if (this.factorCode == 1) return false;
-      return true;
-    },
-    canSubmit() {
-      return true;
-    },
-    canDelete() {
-      if (!this.factor.id) return false;
-      return true;
     },
     transactionType() {
       let label;

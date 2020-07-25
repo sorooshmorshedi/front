@@ -15,7 +15,7 @@ export default {
         url: this.endpoint(`cheques/cheques/${id}`),
         method: 'get',
         success: data => {
-          this.setCheque(data);
+          this.setItem(data);
         }
       })
     },

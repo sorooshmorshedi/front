@@ -13,7 +13,6 @@ export default {
         url: this.endpoint(`cheques/chequebooks/`),
         method: 'get',
         success: data => {
-          console.log(data);
           this.$store.commit('setChequebooks', data);
         }
       })

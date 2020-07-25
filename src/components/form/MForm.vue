@@ -49,7 +49,6 @@
           <v-spacer></v-spacer>
           <div v-if="!financialYear.is_closed" class="order-first order-md-last">
             <template v-if="isEditing">
-              <slot name="footer-btns"></slot>
               <v-btn @click="emitDelete" v-if="canDelete" color="red" outlined>حذف</v-btn>
               <v-btn
                 @click="submit(false)"
@@ -61,6 +60,7 @@
                 @click="submit(true)"
                 class="mr-1 green white--text"
               >ثبت و صدور جدید</v-btn>
+              <slot name="footer-btns"></slot>
             </template>
             <v-btn v-else-if="canEdit" @click="edit()" class="submit amber w-100px">ویرایش</v-btn>
           </div>
@@ -79,8 +79,8 @@
 </template>
 
 <script>
-import formsMixin from "@/mixin/forms";
 import datatable from "@/components/mcomponents/datatable/Client";
+
 export default {
   name: "MForm",
   components: { datatable },
@@ -106,10 +106,10 @@ export default {
       default: true
     },
     items: {
-      required: true
+      default: () => []
     },
     cols: {
-      required: true
+      default: () => []
     },
 
     showActions: {

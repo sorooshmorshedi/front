@@ -236,7 +236,7 @@ export default {
         }
       });
     },
-    setCheque(cheque) {
+    setItem(cheque) {
       this.$router.push({
         name: "ChequeDetail",
         params: {

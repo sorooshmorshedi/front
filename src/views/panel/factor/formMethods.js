@@ -1,10 +1,7 @@
 export default {
   methods: {
     getData() {
-      this.getAccounts();
-      this.getFactorCodes();
       this.getWarehouses();
-      this.getWares();
       this.getFactorExpenses();
       if (this.isFpi) {
         this.getFirstPeriodInventory();
@@ -20,49 +17,57 @@ export default {
         method: "get",
         success: data => {
           if (!data.message) {
-            this.selectFactor(data, true);
+            successResponse(data)
           }
         }
       });
     },
-    initForm() {
-      this.log("Init Form");
-      if (!this.id) {
-        this.factor = {
-          taxPercent: "",
-          taxValue: "",
-          discountPercent: "",
-          discountValue: "",
-          expenses: []
-        };
-        this.rows = [];
-        this.rows.push(this.copy(this.rowTemplate));
+    getItemTemplate() {
+      return {
+        account: {},
+        taxPercent: "",
+        taxValue: "",
+        discountPercent: "",
+        discountValue: "",
+        expenses: []
       }
-      this.getData();
+    },
+    getRowTemplate() {
+      let explanation = "";
+      if (this.isFpi) {
+        explanation = "ثبت موجودی اول دوره"
+      }
+      return {
+        discountValue: "",
+        discountPercent: "",
+        fee: "",
+        ware: null,
+        warehouse: null,
+        explanation: explanation
+      }
+
     },
 
     getFactor(factorId) {
-      this.log('Get Factor By Id : ' + factorId);
       return this.request({
         url: this.endpoint('factors/factors/' + factorId + '/'),
         method: 'get',
         success: data => {
-          this.selectFactor(data);
+          this.setItem(data);
         }
       })
     },
-    getFactorByPosition(pos) {
-      this.log('Get Factor By Position : ', pos);
+    getItemByPosition(pos) {
       return this.request({
-        url: this.endpoint('factors/getFactorByPosition'),
+        url: this.endpoint('factors/factors/byPosition'),
         method: 'get',
         params: {
           type: this.factorType,
-          id: this.factor.id,
+          id: this.item.id,
           position: pos
         },
         success: data => {
-          this.selectFactor(data, true)
+          this.setItem(data, true)
         },
         error: error => {
           if (error.response.status == 404) {
@@ -70,33 +75,6 @@ export default {
           }
         }
       })
-    },
-    clearFactor(redirect = false) {
-      if (redirect) {
-        this.$router.push({
-          name: "FactorForm",
-          params: {
-            factorType: this.factorType,
-          }
-        });
-      }
-      this.factor = {
-        taxPercent: "",
-        taxValue: "",
-        discountPercent: "",
-        discountValue: "",
-        expenses: []
-      }
-      this.rows = [this.copy(this.rowTemplate)];
-    },
-    getFactorCodes() {
-      this.request({
-        url: this.endpoint("factors/factors/newCodes"),
-        method: "get",
-        success: data => {
-          this.factorCodes = data;
-        }
-      });
     },
     openTransaction(transaction) {
       let routeData = this.$router.resolve({
@@ -115,10 +93,9 @@ export default {
       }
       return factorReverseTypes[factorType]
     },
-    getFactorPayload() {
-      let factor = this.copy(this.factor);
+    getSerialized() {
+      let factor = this.copy(this.item);
       factor = this.extractIds(factor);
-      console.log('t', factor.time);
 
       let items = [];
       this.rows.forEach((row, i) => {
@@ -135,7 +112,7 @@ export default {
 
 
       let expenses = [];
-      this.factor.expenses.forEach((row, i) => {
+      this.item.expenses.forEach((row, i) => {
         // Should I put this?
         // if (i == this.rows.length - 1) return;
         let item = this.copy(row);
@@ -144,75 +121,24 @@ export default {
       });
 
       return {
-        factor: factor,
-        factor_items: {
+        item: factor,
+        items: {
           items: items,
           ids_to_delete: this.itemsToDelete
         },
-        factor_expenses: {
+        expenses: {
           items: expenses,
           ids_to_delete: this.expensesToDelete
         }
       }
     },
-    storeFactor(clearFactor) {
-      let data = this.getFactorPayload()
-      let url;
-      if (this.isFpi) {
-        url = "factors/firstPeriodInventory"
-      } else {
-        url = 'factors/factors/'
-      }
+    definiteFactor(clearForm) {
       this.request({
-        url: this.endpoint(url),
-        method: 'post',
-        data: data,
-        success: data => {
-          this.successNotify();
-          if (clearFactor) {
-            this.clearFactor(true);
-          } else {
-            this.selectFactor(data, true);
-          }
-        }
-      })
-    },
-    updateFactor(clearFactor) {
-      let data = this.getFactorPayload()
-      this.request({
-        url: this.endpoint('factors/factors/' + this.factor.id + '/'),
-        method: 'put',
-        data: data,
-        success: data => {
-          this.successNotify();
-          if (clearFactor) {
-            this.clearFactor(true);
-          } else {
-            this.selectFactor(data, true);
-          }
-        }
-      })
-
-    },
-    definiteFactor(clearFactor) {
-      this.request({
-        url: this.endpoint('factors/factors/definite/' + this.factor.id),
+        url: this.endpoint('factors/factors/definite/' + this.item.id),
         method: 'post',
         success: data => {
-          this.selectFactor(data, true);
+          this.setItem(data);
           this.successNotify();
-        }
-      })
-
-    },
-    deleteFactor() {
-      let data = this.copy(this.factor);
-      this.request({
-        url: this.endpoint('factors/factors/' + data.id + '/'),
-        method: 'delete',
-        success: data => {
-          this.successNotify()
-          this.clearFactor(true);
         }
       })
 
@@ -225,7 +151,7 @@ export default {
         item.sale_price = item.ware.price;
       });
     },
-    validate(clearFactor = false) {
+    validate(clearForm = false) {
       let isValid = true;
       if (this.rows.length == 1) {
         this.notify(`لطفا حداقل یک ردیف وارد کنید`, "danger");
@@ -250,48 +176,31 @@ export default {
 
       ["discountPercent", "discountValue", "taxPercent", "taxValue"].forEach(
         k => {
-          if (this.factor[k] == "") this.factor[k] = 0;
+          if (this.item[k] == "") this.item[k] = 0;
         }
       );
 
-      this.factor.type = this.factorType;
+      this.item.type = this.factorType;
 
-      if (this.isFpi) {
-        this.storeFactor(clearFactor);
-      } else if (this.factor.id) {
-        this.updateFactor(clearFactor);
-      } else {
-        this.storeFactor(clearFactor);
-      }
+      this.submit(clearForm);
     },
-    selectFactor(factor, changeRoute = false) {
-      console.log('t', factor.time);
-      this.log("Selecting Factor : ", factor);
-      this.factor = factor;
+    setItem(item) {
+      this.item = item;
       this.itemsToDelete = [];
-      this.rows = factor.items;
-      this.rows.push(this.copy(this.rowTemplate));
+      this.rows = item.items;
+      this.rows.push(this.getRowTemplate());
 
-      if (this.fromId && !changeRoute) {
-        delete this.factor.id;
+      if (this.fromId) {
+        delete this.item.id;
         this.rows.map(row => {
           if (row.id) delete row.id;
         });
-        this.factor.expenses.map(expense => {
+        this.item.expenses.map(expense => {
           if (expense.id) delete expense.id;
         });
-      } else {
-        if (changeRoute) {
-          this.makeFormUneditable();
-          this.$router.push({
-            name: "FactorForm",
-            params: {
-              id: factor.id,
-              factorType: factor.type
-            }
-          });
-        }
       }
+
+      this.changeRouteTo(item.id);
     },
     deleteItemRow(index) {
       if (index == -1) {
@@ -329,9 +238,9 @@ export default {
     },
     rowTax(row) {
       if (!this.rowSumAfterDiscount(row)) return 0;
-      if (!this.factor.taxPercent) return 0;
+      if (!this.item.taxPercent) return 0;
       return +(
-        (this.rowSumAfterDiscount(row) * +this.factor.taxPercent) /
+        (this.rowSumAfterDiscount(row) * +this.item.taxPercent) /
         100
       ).toFixed(2);
     },
@@ -340,9 +249,9 @@ export default {
       return this.rowSumAfterDiscount(row) + this.rowTax(row);
     },
     openFactorExpensesDialog() {
-      if (this.factor.expenses.length) {
+      if (this.item.expenses.length) {
         this.factorExpensesCopy = [];
-        this.factor.expenses.forEach(e => {
+        this.item.expenses.forEach(e => {
           this.factorExpensesCopy.push(this.copy(e));
         });
       }
@@ -380,12 +289,32 @@ export default {
       if (!isValid) return;
 
       this.factorExpensesDialog = false;
-      this.factor.expenses = this.copy(this.factorExpensesCopy);
-      this.factor.expenses.pop();
+      this.item.expenses = this.copy(this.factorExpensesCopy);
+      this.item.expenses.pop();
       this.factorExpensesCopy = [{}];
     },
-    goToForm(pos) {
-      this.getFactorByPosition(pos);
+    reverseFactor() {
+      let rows = this.copy(this.rows);
+      this.$router.push({
+        name: 'FactorForm',
+        params: {
+          factorType: this.reverseType(this.factorType)
+        },
+        query: {
+          'item.account': this.item.account.id
+        }
+      })
+      this.$nextTick(() => {
+        this.rows = [];
+        for (const row of rows) {
+          if (row.id) delete row.id;
+          this.rows.push({
+            ...row
+          });
+        }
+      });
+
+
     }
 
   }

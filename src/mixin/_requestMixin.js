@@ -21,37 +21,44 @@ export default {
         options.method = 'get';
       }
 
-      axios.request({
-          headers: headers,
-          url: options.url,
-          method: options.method,
-          data: options.data,
-          params: options.params,
-        })
-        .then((res) => {
-          this.$store.commit('decrementOGR');
-          let data = res.data;
-          if (data.token) {
-            this.setToken();
-          }
+      new Promise((resolve, reject) => {
 
-          options.success(res.data);
-        })
-        .catch((error) => {
-          console.error(error);
-          this.$store.commit('decrementOGR');
-          if (error.response) {
-            let statusCode = error.response.status
-            if (statusCode == 401) this.handle_401(error);
-            else if (statusCode == 403) this.handle_403(error);
-            else if (statusCode == 400) this.handle_400(error);
-            else if (statusCode == 406) this.handle_406(error, options);
-            else if (statusCode == 429) this.handle_429(error, options);
-            options.error && options.error(error);
-          } else {
-            this.handle_noResponse(error, options);
-          }
-        });
+        axios.request({
+            headers: headers,
+            url: options.url,
+            method: options.method,
+            data: options.data,
+            params: options.params,
+          })
+          .then((res) => {
+            this.$store.commit('decrementOGR');
+            let data = res.data;
+            if (data.token) {
+              this.setToken();
+            }
+
+            options.success(res.data);
+            // resolve()
+          })
+          .catch((error) => {
+            console.error(error);
+            this.$store.commit('decrementOGR');
+            if (error.response) {
+              let statusCode = error.response.status
+              if (statusCode == 401) this.handle_401(error);
+              else if (statusCode == 403) this.handle_403(error);
+              else if (statusCode == 400) this.handle_400(error);
+              else if (statusCode == 404) this.handle_404(error, options);
+              else if (statusCode == 406) this.handle_406(error, options);
+              else if (statusCode == 429) this.handle_429(error, options);
+              options.error && options.error(error);
+            } else {
+              this.handle_noResponse(error, options);
+            }
+            // reject();
+          });
+
+      })
     },
     appendToken(headers) {
       if (!this.token) {
@@ -72,6 +79,10 @@ export default {
           redirectUrl: this.$route.fullPath
         }
       });
+    },
+
+    handle_404(error, options) {
+      this.notify('مورد وجود ندارد', 'warning');
     },
     handle_400(error) {
       let errors = error.response.data;
