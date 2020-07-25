@@ -164,8 +164,12 @@ export default {
           value: "carIncome"
         },
         {
-          text: "جمع",
-          value: "sum"
+          text: "تاریخ بارگیری",
+          value: "lading_date"
+        },
+        {
+          text: "تاریخ بارنامه",
+          value: "bill_date"
         },
         {
           text: "بدهی باربری",
