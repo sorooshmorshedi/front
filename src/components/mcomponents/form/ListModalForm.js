@@ -79,7 +79,7 @@ export default {
   },
   created() {
     this.item = this.getItemTemplate();
-    this.rows = [this.getItemTemplate()];
+    this.rows = [this.getRowTemplate()];
     this.getData();
     if (this.id) {
       this.getItem();
