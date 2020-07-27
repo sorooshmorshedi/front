@@ -253,6 +253,15 @@ export default {
                 },
                 {
                   to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "other"
+                    }
+                  },
+                  title: "دیگر حساب ها"
+                },
+                {
+                  to: {
                     name: "FactorExpenses",
                     params: {
                       factorType: "buy"
