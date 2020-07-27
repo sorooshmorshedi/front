@@ -156,28 +156,31 @@ Vue.mixin({
         "YYYY-MM-DD"
       );
     },
-    toMoney(m) {
-      if (!m) return m;
-      let res = [];
-      m = m + '';
-      if (m.includes(',')) {
-        m = m.split(',');
-      } else {
-        m = String(Number(m));
-        m = m.split('');
-      }
-      let len = m.length;
-      m.reverse();
-      let i = 0;
-      if (m.includes('.')) i = m.find('.');
-      for (i = 0; i < len; i++) {
-        if (i && i % 3 == 0) {
-          res.push(',');
-        }
-        res.push(m[i]);
-      }
-      return res.reverse().join('');
+    toMoney(value) {
 
+      let isNegative = false;
+      if (!value) value = "";
+      else {
+        let numeric_value = Number(value);
+        if (number < 0) {
+          isNegative = true;
+          numeric_value = -numeric_value
+        }
+        if (!isNaN(numeric_value)) value = String(numeric_value);
+        else value = String(value);
+      }
+
+      value = value.split(",").join("");
+
+      let formattedValue = value
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+      if (isNegative) {
+        return `-${value}`;
+      } else {
+        return value
+      }
     },
     todayDate() {
       return moment().format('jYYYY/jMM/jDD');
@@ -205,27 +208,31 @@ Vue.mixin({
     toJalali(date) {
       return moment(date).format('jYYYY/jMM/jDD');
     },
-    toMoney(m) {
-      if (!m) return m;
-      let res = [];
-      m = m + '';
-      if (m.includes(',')) {
-        m = m.split(',');
-      } else {
-        m = String(Number(m));
-        m = m.split('');
-      }
-      let len = m.length;
-      m.reverse();
-      let i = 0;
-      // if (m.includes('.')) i = m.indexOf('.');
-      for (i = 0; i < len; i++) {
-        if (i && i % 3 == 0) {
-          res.push(',');
+    toMoney(value) {
+
+      let isNegative = false;
+      if (!value) value = "";
+      else {
+        let numeric_value = Number(value);
+        if (numeric_value < 0) {
+          isNegative = true;
+          numeric_value = -numeric_value
         }
-        res.push(m[i]);
+        if (!isNaN(numeric_value)) value = String(numeric_value);
+        else value = String(value);
       }
-      return res.reverse().join('');
+
+      value = value.split(",").join("");
+
+      let formattedValue = value
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+      if (isNegative) {
+        return `-${formattedValue}`;
+      } else {
+        return formattedValue
+      }
     },
   }
 })

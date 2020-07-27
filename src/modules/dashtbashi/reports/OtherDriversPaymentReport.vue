@@ -6,11 +6,12 @@
       <v-row>
         <v-col cols="12">
           <v-autocomplete
-            label="حواله"
+            label="شماره حواله"
             v-model="remittance"
             :items="remittances"
-            item-text="title"
-            @change="getRemittances"
+            :search-input.sync="remittanceSearch"
+            item-text="code"
+            clearable
           />
         </v-col>
 
@@ -57,7 +58,8 @@ export default {
   props: ["id"],
   data() {
     return {
-      remittances: [1, 2, 3, 4],
+      remittances: [],
+      remittanceSearch: "",
       remittance: null,
       tableHeaders: [
         {
@@ -123,22 +125,12 @@ export default {
     }
   },
   created() {},
-  watch: {},
+  watch: {
+    remittanceSearch() {
+      this.getRemittances(this.remittanceSearch);
+    },
+  },
   methods: {
-    getRemittances(search) {
-      console.log(search);
-      return;
-      this.request({
-        url: this.endpoint("dashtbashi/ladings/"),
-        method: "get",
-        params: {
-          dirving: driving.id
-        },
-        success: data => {
-          this.ladings = data;
-        }
-      });
-    }
   }
 };
 </script>

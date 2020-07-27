@@ -296,7 +296,7 @@ export default {
       leadingSlash: true,
       hasList: false,
       hasIdProp: true,
-      rowKey: 'type',
+      rowKey: "type",
       factorsDialog: false,
       submitChequeDialog: false,
       item: {},
@@ -317,6 +317,7 @@ export default {
   },
   created() {
     this.d.getNotPaidFactors = _.debounce(this.getNotPaidFactors, 1000, {});
+    this.getDefaultAccounts();
   },
   computed: {
     title() {
@@ -340,7 +341,7 @@ export default {
       return id && `${this.baseUrl}/${id}`;
     },
     itemPaymentMethods() {
-      let type = this.usage == "receive" ? "receive" : "payment";
+      let type = this.transactionType == "receive" ? "receive" : "payment";
       return this.defaultAccounts.filter(
         o => o.usage && o.usage.toLowerCase().includes(type)
       );

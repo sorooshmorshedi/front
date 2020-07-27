@@ -1,17 +1,19 @@
 <template>
-  <daily-form
+  <m-form
     title="پرداخت رانندگان متفرقه"
     formName="پرداخت رانندگان متفرقه"
-    @clearForm="clearForm()"
-    :editable="editable"
+    :isEditing.sync="isEditing"
     :deletable="true"
-    :hasList="false"
+    :showList="false"
+    :showListBtn="false"
+    :canDelete="canDelete"
+    :canSubmit="canSubmit"
     @goToForm="getItemByPosition"
-    @validate="submit"
-    @edit="makeFormEditable()"
+    @submit="openPaymentDialog"
     @delete="deleteItem"
+    @clearForm="clearForm()"
   >
-    <template #inputs>
+    <template>
       <v-row>
         <v-col cols="12" md="2">
           <v-text-field label="شماره" v-model="item.code" disabled />
@@ -23,16 +25,16 @@
             v-model="item.driving"
             :items="$store.state.drivings"
             item-text="title"
-            :disabled="!editable"
+            :disabled="!isEditing"
             @change="getDrivingData"
           />
         </v-col>
 
         <v-col cols="12" md="2">
-          <date v-model="item.date" label="تاریخ" :default="true" :disabled="!editable" />
+          <date v-model="item.date" label="تاریخ" :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!editable"></v-textarea>
+          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
         </v-col>
 
         <v-col cols="12">
@@ -60,7 +62,7 @@
             :items="imprests"
             v-model="selectedImprests"
             :show-select="true"
-            item-key="id"
+            item-key="transaction"
             :disable-pagination="true"
             :hide-default-footer="true"
           >
@@ -81,27 +83,27 @@
             <tbody>
               <tr>
                 <td>جمع انعام</td>
-                <td>{{ tipsSum | toMoney }}</td>
+                <td class="ltr">{{ tipsSum | toMoney }}</td>
               </tr>
               <tr>
                 <td>جمع درآمد ماشین</td>
-                <td>{{ carIncomesSum | toMoney }}</td>
+                <td class="ltr">{{ carIncomesSum | toMoney }}</td>
               </tr>
               <tr>
                 <td>جمع</td>
-                <td>{{ ladingsSum | toMoney }}</td>
+                <td class="ltr">{{ ladingsSum | toMoney }}</td>
               </tr>
               <tr>
                 <td>مجموع بدهی باربری</td>
-                <td>{{ cargoDebtsSum | toMoney }}</td>
+                <td class="ltr">{{ cargoDebtsSum | toMoney }}</td>
               </tr>
               <tr>
                 <td>مجموع تنخواه</td>
-                <td>{{ imprestsSum | toMoney }}</td>
+                <td class="ltr">{{ imprestsSum | toMoney }}</td>
               </tr>
               <tr>
                 <td class="text--bold">مبلغ قابل پرداخت</td>
-                <td>{{ ladingsSum - cargoDebtsSum - imprestsSum | toMoney }}</td>
+                <td class="ltr">{{ payableValue | toMoney }}</td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -111,13 +113,14 @@
           <transaction-form
             transactionType="payment"
             :modal-mode="true"
-            @submit="setTransaction"
-            accountId="632"
+            :id="payment.id"
+            @submit="validate"
+            ref="transactionForm"
           />
         </v-dialog>
       </v-row>
     </template>
-  </daily-form>
+  </m-form>
 </template>
 
 <script>
@@ -127,28 +130,38 @@ import date from "@/components/mcomponents/cleave/Date";
 
 import DailyForm from "@/components/form/DailyForm";
 import GetApi from "./GetApi";
+import LadingMixin from "./LadingMixin";
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 
 export default {
-  name: "Form",
-  mixins: [formsMixin, GetApi, ListModalFormMixin],
+  name: "DriverPaymentForm",
+  mixins: [formsMixin, GetApi, ListModalFormMixin, LadingMixin],
   components: { TransactionForm },
   props: ["id"],
   data() {
     return {
-      baseUrl: "dashtbashi/oilCompanyLadings",
+      baseUrl: "dashtbashi/otherDriverPayments",
       leadingSlash: true,
-      rows: [],
-      itemsToDelete: [],
+      permissionBasename: "otherDriverPayment",
+      hasList: false,
+      hasIdProp: true,
       paymentDialog: false,
-      transactoin: {},
-      perforClearForm: true,
+      payment: {},
+      performClearForm: true,
       ladingHeaders: [
         {
           text: "شماره حواله",
           value: "remittance.code"
+        },
+        {
+          text: "تاریخ بارگیری",
+          value: "lading_date"
+        },
+        {
+          text: "تاریخ بارنامه",
+          value: "bill_date"
         },
         {
           text: "نام پیمانکار",
@@ -162,14 +175,6 @@ export default {
         {
           text: "درآمد ماشین",
           value: "carIncome"
-        },
-        {
-          text: "تاریخ بارگیری",
-          value: "lading_date"
-        },
-        {
-          text: "تاریخ بارنامه",
-          value: "bill_date"
         },
         {
           text: "بدهی باربری",
@@ -230,38 +235,26 @@ export default {
         (v, o) => v + +o.sum - +o.imprestSettlement.settled_value,
         0
       );
+    },
+    payableValue() {
+      return this.ladingsSum - this.cargoDebtsSum - this.imprestsSum;
     }
   },
   created() {
     this.rows.push(this.getRowTemplate());
   },
-  watch: {
-    rows: {
-      handler() {
-        let row = this.rows[this.rows.length - 1];
-        if (row && row.gross_price) {
-          this.rows.push(this.getRowTemplate());
-        }
-      },
-      deep: true
-    }
-  },
   methods: {
     getData() {
       this.getDrivings();
     },
-    submit(clearForm = true) {
+    openPaymentDialog(clearForm = true) {
       this.performClearForm = clearForm;
       this.paymentDialog = true;
-    },
-    getCarIncome(item) {
-      return item.destination_amount * item.fare_price;
-    },
-    getLadingSum(item) {
-      return +item.driver_tip_price + this.getCarIncome(item);
-    },
-    getCargoDebt(item) {
-      return +item.association_price + +item.bill_price + +item.cargo_tip_price;
+      this.$nextTick(() => {
+        this.$refs.transactionForm.setDefaults({
+          "rows.0.value": this.payableValue
+        });
+      });
     },
     getDrivingData(driving) {
       this.selectedLadings = [];
@@ -269,49 +262,56 @@ export default {
       this.getDrivingLadings(driving);
       this.getDriverNotSettledImprests(driving.driver);
     },
-    getDrivingLadings(driving) {
+    getDrivingLadings(driving, callback=null) {
       this.request({
         url: this.endpoint("dashtbashi/ladings/"),
         method: "get",
         params: {
-          dirving: driving.id
+          dirving: driving.id,
+          is_paid: false,
         },
         success: data => {
           this.ladings = data;
+          callback && callback(data)
         }
       });
     },
-    setTransaction(transaction) {
-      this.transaction = transaction;
+    validate(payment) {
+      this.payment = payment;
 
-      let transaction_sum = transaction.items.items.reduce(
-        (v, o) => v + +o.value,
-        0
-      );
+      let payment_sum = payment.items.items.reduce((v, o) => v + +o.value, 0);
 
-      // if (this.item.id) this.updateItem(this.performClearForm);
-      // else this.storeItem(this.performClearForm);
+      if (payment_sum != this.payableValue) {
+        this.notify(
+          "مبلغ پرداختی باید با مبلغ قابل پرداخت برابر باشد",
+          "danger"
+        );
+      } else {
+        this.paymentDialog = false;
+      }
+
+      this.submit(this.performClearForm);
     },
 
-    getDriverNotSettledImprests(driver) {
+    getDriverNotSettledImprests(driver, callback=null) {
       this.request({
         url: this.endpoint("imprests/notSettledImprests"),
         params: {
-          account: 632
+          account: 609
           // floatAccount: '',
           // costCenter: '',
         },
         method: "get",
         success: data => {
           this.imprests = data;
+          callback && callback(data)
         }
       });
     },
     getItemTemplate() {
       return {
-        company_commission: +this.getOptionValue(
-          "companyCommissionFromOilCompanyLading"
-        )
+        ladings: [],
+        imprests: []
       };
     },
     getRowTemplate() {
@@ -321,7 +321,7 @@ export default {
     },
     getItemByPosition(position) {
       return this.request({
-        url: this.endpoint("dashtbashi/oilCompanyLadings/byPosition"),
+        url: this.endpoint("dashtbashi/otherDriverPayments/byPosition"),
         method: "get",
         params: {
           id: this.id,
@@ -333,19 +333,23 @@ export default {
       });
     },
     setItem(item) {
-      this.makeFormUneditable();
-      this.$router.push({
-        name: "OilCompanyLading",
-        params: { id: item.id }
-      });
+      this.changeRouteTo(item.id);
+      this.isEditing = false;
       this.item = item;
-      this.itemsToDelete = [];
-      this.rows = [];
-      item.items.forEach(item => {
-        let row = { ...item };
-        this.rows.push(row);
+      this.payment = item.payment
+
+      // this.getDrivingLadings(driving);
+      this.getDriverNotSettledImprests(driving.driver, (data) => {
+        for(const imprest of data) {
+          // if(item.imprests.filter(o => o.id == imprest.transaction))
+        }
       });
-      this.rows.push(this.getRowTemplate());
+
+      // this.selectedLadings = item.ladings;
+      // this.selectedImprests = item.imprests;
+
+
+
     },
     deleteRow(index) {
       if (index == -1) {
@@ -361,23 +365,12 @@ export default {
     },
     getSerialized() {
       let data = {
-        form: this.extractIds(this.item),
-        items: {
-          ids_to_delete: this.itemsToDelete,
-          items: []
-        }
+        item: this.extractIds(this.item),
+        payment: this.extractIds(this.payment)
       };
 
-      this.rows.forEach((row, i) => {
-        if (i == this.rows.length - 1) return;
-
-        let item = this.copy(row);
-        item = this.extractIds(item);
-        item.bed = +item.bed;
-        item.bes = +item.bes;
-
-        data.items.items.push(item);
-      });
+      data.item.ladings = this.selectedLadings.map(o => o.id);
+      data.item.imprests = this.selectedImprests.map(o => o.transaction);
 
       return data;
     }

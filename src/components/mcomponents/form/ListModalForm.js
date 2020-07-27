@@ -55,7 +55,7 @@ export default {
   },
   watch: {
     query() {
-      this.setDefaults();
+      this.setDefaults(this.query);
     },
     $route(newRoute, oldRoute) {
       if (!newRoute.params.id) {
@@ -66,10 +66,7 @@ export default {
     },
     rows: {
       handler() {
-        if (!this.rowKey) {
-          console.error('Please set rowKey');
-          return;
-        }
+        if (!this.rowKey) return;
         if (this.rows[this.rows.length - 1][this.rowKey]) {
           this.rows.push(this.getRowTemplate());
         }
@@ -84,10 +81,10 @@ export default {
     if (this.id) {
       this.getItem();
     }
-    this.EventBus.$on('get:accounts', () => this.setDefaults())
+    this.EventBus.$on('get:accounts', () => this.setDefaults(this.query))
   },
   mounted() {
-    this.setDefaults()
+    this.setDefaults(this.query)
   },
   methods: {
     getRowTemplate() {
@@ -99,19 +96,19 @@ export default {
     /*
       Set default fields with data query.item
     */
-    setDefaults() {
+    setDefaults(data) {
       this.$nextTick(() => {
-        for (let key in this.query) {
+        for (let key in data) {
           let path = key.split('.')
           let lastObject = path.slice(0, path.length - 1).reduce((o, i) => o[i], this)
           let lastKey = path[path.length - 1];
 
           switch (lastKey) {
             case 'account':
-              lastObject[lastKey] = this.accounts.filter(o => o.id == this.query[key])[0];
+              lastObject[lastKey] = this.accounts.filter(o => o.id == data[key])[0];
               break
             default:
-              lastObject[lastKey] = this.query[key]
+              lastObject[lastKey] = data[key]
           }
         }
       })

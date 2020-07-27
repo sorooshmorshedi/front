@@ -369,18 +369,6 @@ export default {
           }
         }
       });
-    },
-    getRemittances(code) {
-      this.request({
-        url: this.endpoint("dashtbashi/remittances/?limit=10&offset=0"),
-        method: "get",
-        params: {
-          code__icontains: code
-        },
-        success: data => {
-          this.remittances = data["results"];
-        }
-      });
     }
   }
 };
