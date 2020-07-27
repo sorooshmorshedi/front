@@ -158,25 +158,21 @@
           <v-col cols="12" md="4">
             <v-select
               :items="[{text: 'خریدار', value: 'b'}, {text: 'فروشنده', value: 's'}]"
-              v-model="item.person_type"
+              v-model="item.buyer_or_seller"
               item-text="text"
               item-value="value"
               :return-object="false"
               label=" * حساب شخص"
               required
-              :disabled="!isEditing"
+              :disabled="item.id != undefined"
             ></v-select>
           </v-col>
           <v-col cols="12" md="4">
             <v-select
-              :items="[{text: 'حقیقی', value: true}, {text: 'حقوقی', value: false}]"
-              v-model="item.is_real"
-              item-text="text"
-              item-value="value"
-              :return-object="false"
-              :disabled="item.id != undefined || !isEditing"
+              :items="personTypes"
+              v-model="item.person_type"
+              :disabled="item.id != undefined"
               label=" * نوع شخص"
-              required
             ></v-select>
           </v-col>
           <v-col cols="12" md="4">
@@ -259,6 +255,24 @@ export default {
     return {
       item: {},
       baseUrl: "accounts/accounts",
+      personTypes: [
+        {
+          title: "حقیقی",
+          id: "r"
+        },
+        {
+          title: "حقوقی",
+          id: "l"
+        },
+        {
+          title: "پیمانکاران",
+          id: "c"
+        },
+        {
+          title: "سایر",
+          id: "o"
+        }
+      ],
       cols: [
         {
           th: "کد حساب",
