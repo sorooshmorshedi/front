@@ -60,6 +60,17 @@
                 @click="submit(true)"
                 class="mr-1 green white--text"
               >ثبت و صدور جدید</v-btn>
+              <v-btn
+                v-if="canCancelConfirm"
+                outlined
+                @click="cancelConfirm()"
+                color="red"
+              >{{ cancelConfirmBtnText }}</v-btn>
+              <v-btn
+                v-if="canConfirm"
+                @click="confirm()"
+                color="blue white--text"
+              >{{ confirmBtnText }}</v-btn>
               <slot name="footer-btns"></slot>
             </template>
             <v-btn v-else-if="canEdit" @click="edit()" class="submit amber w-100px">ویرایش</v-btn>
@@ -147,6 +158,19 @@ export default {
 
     showSubmitAndClearBtn: {
       default: true
+    },
+
+    canConfirm: {
+      default: false
+    },
+    canCancelConfirm: {
+      default: false
+    },
+    confirmBtnText: {
+      default: "تایید"
+    },
+    cancelConfirmBtnText: {
+      default: "لغو تایید"
     }
   },
   data() {
@@ -195,6 +219,12 @@ export default {
     },
     edit() {
       this.$emit("update:is-editing", true);
+    },
+    confirm() {
+      this.$emit("confirm");
+    },
+    cancelConfirm() {
+      this.$emit("cancelConfirm");
     },
     goToForm(pos) {
       this.$emit("goToForm", pos);

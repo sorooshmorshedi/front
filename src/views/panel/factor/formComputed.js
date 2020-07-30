@@ -1,5 +1,8 @@
 export default {
   computed: {
+    permissionBasename() {
+      return this.factorType
+    },
 
     createUrl() {
       if (this.isFpi) {

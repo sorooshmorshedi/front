@@ -8,6 +8,12 @@
     :canDelete="canDelete"
     :canSubmit="canSubmit"
     :isEditing.sync="isEditing"
+    :confirmBtnText="confirmBtnText"
+    :cancelConfirmBtnText="cancelConfirmBtnText"
+    :canConfirm="canConfirm"
+    :canCancelConfirm="canCancelConfirm"
+    @cancelConfirm="cancelConfirm"
+    @confirm="confirm"
     @goToForm="getItemByPosition"
     @submit="submit"
     @delete="deleteItem"
@@ -55,7 +61,12 @@
               />
             </v-col>
             <v-col cols="12" lg="12">
-              <v-text-field label="صادر کننده سند" disabled></v-text-field>
+              <v-text-field
+                v-if="item.created_by"
+                label="صادر کننده سند"
+                disabled
+                v-model="item.created_by.name"
+              />
             </v-col>
           </v-row>
         </v-col>
@@ -173,12 +184,11 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 
-import DailyForm from "@/components/form/DailyForm";
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
 
 export default {
   name: "Form",
-  components: { money, date, DailyForm },
+  components: { money, date },
   mixins: [formsMixin, accountApiMixin, ListModalFormMixin],
   props: ["id"],
   data() {

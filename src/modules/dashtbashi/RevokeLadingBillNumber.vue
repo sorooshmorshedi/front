@@ -1,16 +1,15 @@
 <template>
-  <daily-form
-    formName="ابطال شماره بارنامه"
+  <m-form
     title="ابطال شماره بارنامه"
     :showNavigationButtons="false"
     :showSubmitAndClearForm="false"
-    :hasList="false"
-    :deletable="false"
-    :editable="true"
+    :showList="false"
+    :canDelete="canDelete"
+    :isEditing="true"
     :hasClear="false"
-    @validate="revokeLadingBillNumber"
+    @submit="revokeLadingBillNumber"
   >
-    <template #inputs>
+    <template>
       <v-row>
         <v-col cols="12" md="4">
           <v-autocomplete
@@ -40,17 +39,13 @@
         </v-col>
       </v-row>
     </template>
-  </daily-form>
+  </m-form>
 </template>
 
 <script>
 import GetApi from "./GetApi";
-import DailyForm from "@/components/form/DailyForm";
 export default {
   mixins: [GetApi],
-  components: {
-    DailyForm
-  },
   data() {
     return {
       ladingBillSeries: null,

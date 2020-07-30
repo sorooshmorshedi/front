@@ -6,6 +6,12 @@
     :showList="false"
     :isEditing.sync="isEditing"
     :canDelete="canDelete"
+    :confirmBtnText="confirmBtnText"
+    :cancelConfirmBtnText="cancelConfirmBtnText"
+    :canConfirm="canConfirm"
+    :canCancelConfirm="canCancelConfirm"
+    @cancelConfirm="cancelConfirm"
+    @confirm="confirm"
     @goToForm="getItemByPosition"
     @submit="submit"
     @delete="deleteItem"
@@ -140,13 +146,11 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 
-import DailyForm from "@/components/form/DailyForm";
-
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
 
 export default {
   name: "Form",
-  components: { money, date, DailyForm },
+  components: { money, date },
   mixins: [formsMixin, accountApiMixin, ListModalFormMixin],
   props: ["id"],
   data() {

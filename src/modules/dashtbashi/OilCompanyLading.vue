@@ -1,30 +1,35 @@
 <template>
-  <daily-form
+  <m-form
     title="بارگیری شرکت نفت"
-    formName="بارگیری شرکت نفت"
-    @clearForm="clearForm()"
-    :editable="editable"
-    :deletable="true"
-    :hasList="false"
+    :isEditing.sync="isEditing"
+    :showList="false"
+    :canDelete="canDelete"
+    :canSubmit="canSubmit"
+    :confirmBtnText="confirmBtnText"
+    :cancelConfirmBtnText="cancelConfirmBtnText"
+    :canConfirm="canConfirm"
+    :canCancelConfirm="canCancelConfirm"
+    @cancelConfirm="cancelConfirm"
+    @confirm="confirm"
     @goToForm="getItemByPosition"
-    @validate="submit"
-    @edit="makeFormEditable()"
+    @submit="submit"
     @delete="deleteItem"
+    @clearForm="clearForm()"
   >
-    <template #inputs>
+    <template>
       <v-row>
         <v-col cols="12" md="2">
           <v-text-field label="عطف" v-model="item.id" disabled />
         </v-col>
         <v-col cols="12" md="2">
-          <date v-model="item.date" label="تاریخ سیاهه" :default="true" :disabled="!editable" />
+          <date v-model="item.date" label="تاریخ سیاهه" :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="2">
           <date
             v-model="item.export_date"
             label="تاریخ گرفتن خروجی"
             :default="true"
-            :disabled="!editable"
+            :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -36,7 +41,7 @@
           />
         </v-col>
         <v-col cols="12" md="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!editable"></v-textarea>
+          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
         </v-col>
 
         <v-col cols="12">
@@ -60,23 +65,23 @@
               <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td>
-                  <money v-model="row.gross_price" :disabled="!editable" />
+                  <money v-model="row.gross_price" :disabled="!isEditing" />
                 </td>
                 <td>
-                  <money v-model="row.insurance_price" :disabled="!editable" />
+                  <money v-model="row.insurance_price" :disabled="!isEditing" />
                 </td>
                 <td>
                   <v-text-field
                     type="number"
                     v-model="row.tax_percent"
-                    :disabled="!editable || hasValue(row.tax_price)"
+                    :disabled="!isEditing || hasValue(row.tax_price)"
                   />
                 </td>
                 <td>
                   <money
                     v-if="!hasValue(row.tax_percent)"
                     v-model="row.tax_price"
-                    :disabled="!editable"
+                    :disabled="!isEditing"
                   />
                   <money v-else :value="taxPrice(row)" disabled />
                 </td>
@@ -84,14 +89,14 @@
                   <v-text-field
                     type="number"
                     v-model="row.complication_percent"
-                    :disabled="!editable || hasValue(row.complication_price)"
+                    :disabled="!isEditing || hasValue(row.complication_price)"
                   />
                 </td>
                 <td>
                   <money
                     v-if="!hasValue(row.complication_percent)"
                     v-model="row.complication_price"
-                    :disabled="!editable"
+                    :disabled="!isEditing"
                   />
                   <money v-else :value="complicationPrice(row)" disabled />
                 </td>
@@ -110,7 +115,7 @@
                     @click="deleteRow(i)"
                     class="red--text"
                     icon
-                    :disabled="!editable"
+                    :disabled="!isEditing"
                   >
                     <v-icon>delete</v-icon>
                   </v-btn>
@@ -128,7 +133,7 @@
                 <td>{{ rowsSum('company_commission') | toMoney }}</td>
                 <td>{{ rowsSum('car_income') | toMoney }}</td>
                 <td class="d-print-none">
-                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!editable">
+                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
                     <v-icon>delete_sweep</v-icon>
                   </v-btn>
                 </td>
@@ -138,7 +143,7 @@
         </v-col>
       </v-row>
     </template>
-  </daily-form>
+  </m-form>
 </template>
 
 <script>
@@ -146,21 +151,21 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 
-import DailyForm from "@/components/form/DailyForm";
 import GetApi from "./GetApi";
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
 
 export default {
   name: "Form",
-  components: { money, date, DailyForm },
+  components: { money, date },
   mixins: [formsMixin, GetApi, ListModalFormMixin],
   props: ["id"],
   data() {
     return {
+      hasList: false,
+      hasIdProp: true,
       baseUrl: "dashtbashi/oilCompanyLadings",
       leadingSlash: true,
-      rows: [],
-      itemsToDelete: []
+      permissionBasename: "oilCompanyLading"
     };
   },
   computed: {
@@ -267,11 +272,6 @@ export default {
       });
     },
     setItem(item) {
-      this.makeFormUneditable();
-      this.$router.push({
-        name: "OilCompanyLading",
-        params: { id: item.id }
-      });
       this.item = item;
       this.itemsToDelete = [];
       this.rows = [];
@@ -280,6 +280,7 @@ export default {
         this.rows.push(row);
       });
       this.rows.push(this.getRowTemplate());
+      this.changeRouteTo(item.id);
     },
     deleteRow(index) {
       if (index == -1) {

@@ -8,6 +8,12 @@
     :showListBtn="false"
     :canDelete="canDelete"
     :canSubmit="canSubmit"
+    :confirmBtnText="confirmBtnText"
+    :cancelConfirmBtnText="cancelConfirmBtnText"
+    :canConfirm="canConfirm"
+    :canCancelConfirm="canCancelConfirm"
+    @cancelConfirm="cancelConfirm"
+    @confirm="confirm"
     @goToForm="getItemByPosition"
     @submit="openPaymentDialog"
     @delete="deleteItem"
@@ -128,7 +134,6 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 
-import DailyForm from "@/components/form/DailyForm";
 import GetApi from "./GetApi";
 import LadingMixin from "./LadingMixin";
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";

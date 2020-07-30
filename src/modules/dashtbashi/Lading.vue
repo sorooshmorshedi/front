@@ -1,23 +1,22 @@
 <template>
-  <daily-form
-    formName="بارگیری"
+  <m-form
     title="بارگیری"
-    @clearForm="clearForm(true)"
-    :showNavigationButtons="true"
-    :showSubmitAndClearForm="true"
-    :hasList="false"
-    :hasFirst="true"
-    :hasLast="true"
-    :hasPrev="true"
-    :hasNext="true"
-    :editable="editable"
-    :deletable="this.id"
+    :showList="false"
+    :isEditing.sync="isEditing"
+    :canDelete="canDelete"
+    :canSubmit="canSubmit"
+    :confirmBtnText="confirmBtnText"
+    :cancelConfirmBtnText="cancelConfirmBtnText"
+    :canConfirm="canConfirm"
+    :canCancelConfirm="canCancelConfirm"
+    @cancelConfirm="cancelConfirm"
+    @confirm="confirm"
     @goToForm="getItemByPosition"
-    @edit="makeFormEditable()"
-    @validate="validate"
+    @submit="submit"
     @delete="deleteItem"
+    @clearForm="clearForm(true)"
   >
-    <template #inputs>
+    <template>
       <v-row v-if="!id">
         <v-col cols="12">
           <v-switch label="بارگیری سیستمی" v-model="hasRemittance"></v-switch>
@@ -29,7 +28,7 @@
             <v-autocomplete
               label="شماره حواله"
               v-model="remittance"
-              :disabled="!editable"
+              :disabled="!isEditing"
               :items="remittances"
               :search-input.sync="remittanceSearch"
               item-text="code"
@@ -37,24 +36,24 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <ware-select label="کالا" v-model="item.ware" :disabled="!editable" />
+            <ware-select label="کالا" v-model="item.ware" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="3">
             <money
               label="نرخ حواله پیمانکار"
               v-model="item.contractor_price"
-              :disabled="!editable"
+              :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="3">
-            <account-select label="پیمانکار" v-model="item.contractor" :disabled="!editable" />
+            <account-select label="پیمانکار" v-model="item.contractor" :disabled="!isEditing" />
           </v-col>
 
           <v-col cols="12" md="3">
             <money
               label="مبلغ اختلاف بارنامه"
               v-model="item.lading_bill_difference"
-              :disabled="!editable"
+              :disabled="!isEditing"
             />
           </v-col>
 
@@ -63,23 +62,23 @@
               label="روش پرداخت مبلغ حواله"
               v-model="item.remittance_payment_method"
               :items="remittancePaymentMethods"
-              :disabled="!editable"
+              :disabled="!isEditing"
             />
           </v-col>
 
           <v-col cols="12" md="3">
-            <money label="نرخ کرایه" v-model="item.fare_price" :disabled="!editable" />
+            <money label="نرخ کرایه" v-model="item.fare_price" :disabled="!isEditing" />
           </v-col>
 
           <v-col cols="12" md="3">
-            <city-select label="مبدا" v-model="item.origin" :disabled="!editable" />
+            <city-select label="مبدا" v-model="item.origin" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="3">
-            <city-select label="مقصد" v-model="item.destination" :disabled="!editable" />
+            <city-select label="مقصد" v-model="item.destination" :disabled="!isEditing" />
           </v-col>
 
           <v-col cols="12" md="3">
-            <money label="انعام راننده" v-model="item.driver_tip_price" :disabled="!editable" />
+            <money label="انعام راننده" v-model="item.driver_tip_price" :disabled="!isEditing" />
           </v-col>
 
           <v-col cols="12" md="3">
@@ -87,26 +86,30 @@
               label="پرداخت کننده انعام"
               v-model="item.driver_tip_payer"
               :items="tipPayers"
-              :disabled="!editable"
+              :disabled="!isEditing"
             />
           </v-col>
 
           <v-col cols="12" md="3">
-            <v-text-field label="شماره بارگیری" v-model="item.lading_number" :disabled="!editable" />
+            <v-text-field
+              label="شماره بارگیری"
+              v-model="item.lading_number"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="3">
             <date
               label="تاریخ بارگیری"
               v-model="item.lading_date"
               :default="true"
-              :disabled="!editable"
+              :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="3">
             <money
               label="مقدار بارنامه مبدا"
               v-model="item.original_amount"
-              :disabled="!editable"
+              :disabled="!isEditing"
               @input="!is_destination_amount_dirty?item.destination_amount = item.original_amount:''"
             />
           </v-col>
@@ -114,7 +117,7 @@
             <money
               label="مقدار بارنامه مقصد"
               v-model="item.destination_amount"
-              :disabled="!editable"
+              :disabled="!isEditing"
               @input="is_destination_amount_dirty = true"
             />
           </v-col>
@@ -125,7 +128,7 @@
             <v-textarea
               label="توضیحات بارگیری"
               v-model="item.lading_explanation"
-              :disabled="!editable"
+              :disabled="!isEditing"
             />
           </v-col>
 
@@ -171,12 +174,12 @@
             v-model="item.driving"
             :items="$store.state.drivings"
             item-text="title"
-            :disabled="!editable"
+            :disabled="!isEditing"
           />
         </v-col>
 
         <v-col cols="12" md="3">
-          <money label="انعام باربری" v-model="item.cargo_tip_price" :disabled="!editable" />
+          <money label="انعام باربری" v-model="item.cargo_tip_price" :disabled="!isEditing" />
         </v-col>
 
         <v-col cols="12" md="3">
@@ -185,12 +188,12 @@
             v-model="item.association"
             :items="$store.state.associations"
             item-text="name"
-            :disabled="!editable"
+            :disabled="!isEditing"
             @change="item.association_price = item.association.price"
           />
         </v-col>
         <v-col cols="12" md="3">
-          <money label="مبلغ انجمن" v-model="item.association_price" :disabled="!editable" />
+          <money label="مبلغ انجمن" v-model="item.association_price" :disabled="!isEditing" />
         </v-col>
 
         <v-col cols="12" md="3">
@@ -201,7 +204,7 @@
             item-text="serial"
             no-filter
             :search-input.sync="ladingBillSearchInput"
-            :disabled="!editable"
+            :disabled="!isEditing"
             @change="ladingBillSeries && (item.billNumber = ladingBillSeries.numbers.filter(o=> !o.is_revoked)[0])"
             clearable
           ></v-autocomplete>
@@ -212,7 +215,7 @@
             :items="ladingBillSeries?ladingBillSeries.numbers.filter(o => !o.is_revoked):[]"
             v-model="item.billNumber"
             item-text="number"
-            :disabled="!editable"
+            :disabled="!isEditing"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="3">
@@ -220,11 +223,11 @@
             label="تاریخ بارنامه"
             v-model="item.bill_date"
             :default="true"
-            :disabled="!editable"
+            :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" md="3">
-          <money label="مبلغ بارنامه" v-model="item.bill_price" :disabled="!editable" />
+          <money label="مبلغ بارنامه" v-model="item.bill_price" :disabled="!isEditing" />
         </v-col>
 
         <v-col cols="12" md="3">
@@ -232,7 +235,7 @@
             label="نحوه دریافت"
             v-model="item.receive_type"
             :items="receiveTypes"
-            :disabled="!editable"
+            :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" md="3">
@@ -243,7 +246,7 @@
           <v-textarea
             label="توضیحات بارنامه"
             v-model="item.bill_explanation"
-            :disabled="!editable"
+            :disabled="!isEditing"
           />
         </v-col>
 
@@ -252,7 +255,7 @@
         </v-col>
       </v-row>
     </template>
-  </daily-form>
+  </m-form>
 </template>
 
 <script>
@@ -270,7 +273,9 @@ export default {
     return {
       baseUrl: "dashtbashi/ladings",
       leadingSlash: true,
+      permissionBasename: 'lading',
       hasList: false,
+      hasIdProp: true,
       hasRemittance: true,
       ladingBillSeries: null,
       ladingBillSeriesItems: [],
@@ -348,9 +353,6 @@ export default {
       if (!this.hasList && this.id != item.id) {
         this.changeRouteTo(item.id);
       }
-    },
-    validate(clearForm) {
-      this.submit(clearForm);
     },
     getItemByPosition(pos) {
       this.request({

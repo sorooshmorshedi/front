@@ -1,39 +1,34 @@
 <template>
-  <daily-form
-    formName="سری بارنامه"
+  <m-form
     title="سری بارنامه"
-    @clearForm="clearForm(true)"
     :showNavigationButtons="true"
     :showSubmitAndClearForm="true"
-    :hasList="false"
-    :hasFirst="true"
-    :hasLast="true"
-    :hasPrev="true"
-    :hasNext="true"
-    :editable="editable"
-    :deletable="this.id"
+    :showList="false"
+    :isEditing.sync="isEditing"
+    :canDelete="canDelete"
+    :canSubmit="canSubmit"
+    @clearForm="clearForm(true)"
     @goToForm="getItemByPosition"
-    @edit="makeFormEditable()"
-    @validate="validate"
+    @submit="submit"
     @delete="deleteItem"
   >
-    <template #inputs>
+    <template>
       <v-row>
         <v-col cols="12" md="3">
           <v-text-field disabled label="عطف" v-model="item.id" />
         </v-col>
         <v-col cols="12" md="3">
-          <v-text-field label="سریال" v-model="item.serial" :disabled="!editable" />
+          <v-text-field label="سریال" v-model="item.serial" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
-          <money label="از شماره" v-model="item.from_bill_number" :disabled="!editable" />
+          <money label="از شماره" v-model="item.from_bill_number" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
-          <money label="تا شماره" v-model="item.to_bill_number" :disabled="!editable" />
+          <money label="تا شماره" v-model="item.to_bill_number" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>
-  </daily-form>
+  </m-form>
 </template>
 
 <script>
@@ -53,6 +48,7 @@ export default {
       baseUrl: "dashtbashi/ladingBillSeries",
       leadingSlash: true,
       hasList: false,
+      hasIdProp: true
     };
   },
   methods: {
@@ -60,9 +56,6 @@ export default {
       if (this.id) {
         this.getItem(this.id);
       }
-    },
-    validate(clearForm) {
-      this.submit(clearForm);
     },
     getItemByPosition(pos) {
       this.request({

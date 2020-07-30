@@ -10,6 +10,12 @@
       :canDelete="canDelete"
       :canSubmit="canSubmit"
       :isEditing.sync="isEditing"
+      :confirmBtnText="confirmBtnText"
+      :cancelConfirmBtnText="cancelConfirmBtnText"
+      :canConfirm="canConfirm"
+      :canCancelConfirm="canCancelConfirm"
+      @cancelConfirm="cancelConfirm"
+      @confirm="confirm"
       @clearForm="clearForm"
       @goToForm="getItemByPosition"
       @submit="validate"
@@ -292,7 +298,6 @@ export default {
   data() {
     return {
       baseUrl: "transactions",
-      // permissionBasename: "transaction",
       leadingSlash: true,
       hasList: false,
       hasIdProp: true,
@@ -328,6 +333,9 @@ export default {
       } else if (this.isImprest) {
         return "پرداخت تنخواه";
       }
+    },
+    permissionBasename() {
+      return `${this.transactionType}Transaction`;
     },
     isImprest() {
       return this.transactionType == "imprest";

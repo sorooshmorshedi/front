@@ -11,6 +11,12 @@
       :canDelete="canDelete"
       :canSubmit="canSubmit"
       :isEditing.sync="isEditing"
+      :confirmBtnText="confirmBtnText"
+      :cancelConfirmBtnText="cancelConfirmBtnText"
+      :canConfirm="canConfirm"
+      :canCancelConfirm="canCancelConfirm"
+      @cancelConfirm="cancelConfirm"
+      @confirm="confirm"
       @clearForm="clearForm"
       @goToForm="getItemByPosition"
       @submit="validate"
@@ -207,6 +213,13 @@ export default {
     createUrl() {
       return "cheques/cheques/submit/";
     },
+    permissionBasename(){
+      if(this.isPaidCheque) {
+        return "paidCheque"
+      } else {
+        return "receivedCheque"
+      }
+    },
     isPaidCheque() {
       return this.receivedOrPaid == "p";
     },
@@ -238,20 +251,6 @@ export default {
       }
       return false;
     },
-
-    canEdit() {
-      if (this.item.id) {
-        if (!this.item.statusChanges) return false;
-        let statusChangesLength = this.item.statusChanges.length;
-        if (this.isPaidCheque) {
-          if (statusChangesLength == 0) return true;
-        } else {
-          if (statusChangesLength == 1) return true;
-        }
-        return false;
-      }
-      return false;
-    }
   },
   watch: {
     account() {

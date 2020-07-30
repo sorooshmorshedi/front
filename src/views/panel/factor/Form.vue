@@ -12,6 +12,12 @@
       :isEditing.sync="isEditing"
       :canDelete="canDelete"
       :canSubmit="canSubmit"
+      :confirmBtnText="confirmBtnText"
+      :cancelConfirmBtnText="cancelConfirmBtnText"
+      :canConfirm="canConfirm"
+      :canCancelConfirm="canCancelConfirm"
+      @cancelConfirm="cancelConfirm"
+      @confirm="confirm"
       @clearForm="clearForm(true)"
       @goToForm="getItemByPosition"
       @submit="validate"
@@ -580,11 +586,9 @@ import formComputed from "./formComputed.js";
 import formMethods from "./formMethods.js";
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
 
-import DailyForm from "@/components/form/DailyForm";
-
 export default {
   name: "Form",
-  components: { money, date, mtime, DailyForm },
+  components: { money, date, mtime },
   mixins: [
     ListModalFormMixin,
     formsMixin,
