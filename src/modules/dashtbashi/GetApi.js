@@ -87,7 +87,10 @@ export default {
           code__icontains: code
         },
         success: data => {
-          this.remittances = data["results"];
+          this.remittances = data["results"].map(o => {
+            o.code = String(o.code)
+            return o;
+          });
         }
       });
     }

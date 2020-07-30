@@ -1,17 +1,20 @@
 <template>
   <v-card>
     <v-card-title>گزارش مبلغ قابل پرداخت به رانندگان متفرقه</v-card-title>
-
     <v-card-text>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" md="3">
           <v-autocomplete
             label="شماره حواله"
             v-model="remittance"
             :items="remittances"
             :search-input.sync="remittanceSearch"
             item-text="code"
+            item-value="id"
             clearable
+            :multiple="false"
+            :return-object="true"
+            @change="getRemittanceData"
           />
         </v-col>
 
@@ -28,7 +31,9 @@
             <template #item.imprestSum="{ item }">{{ item.imprestSum | toMoney }}</template>
             <template #item.cargoDebt="{ item }">{{ item.cargoDebt | toMoney }}</template>
             <template #item.tipPrice="{ item }">{{ item.tipPrice | toMoney }}</template>
-            <template #item.payableValue="{ item }">{{ item.payableValue | toMoney }}</template>
+            <template #item.payableValue="{ item }">
+              <span class="ltr d-inline-block">{{ item.payableValue | toMoney }}</span>
+            </template>
 
             <template #item.pay="{ item }">
               <v-btn v-if="!item.sumRow" color="blue white--text">پرداخت</v-btn>
@@ -49,10 +54,11 @@ import GetApi from "../GetApi";
 import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
 
 import TransactionForm from "@/views/panel/transaction/Form";
+import LadingMixin from "../LadingMixin";
 
 export default {
   name: "Form",
-  mixins: [formsMixin, GetApi, ListModalFormMixin],
+  mixins: [formsMixin, GetApi, LadingMixin],
   components: { TransactionForm },
   props: ["id"],
   data() {
@@ -63,7 +69,7 @@ export default {
       tableHeaders: [
         {
           text: "حمل کننده",
-          value: "driving.name"
+          value: "driving.title"
         },
         {
           text: "جمع انعام",
@@ -89,11 +95,63 @@ export default {
           text: "پرداخت",
           value: "pay"
         }
-      ]
+      ],
+      data: {
+        ladings: [],
+        imprests: []
+      }
     };
   },
   computed: {
     items() {
+      let items = [];
+      for (const lading of this.data.ladings) {
+        const driving = lading.driving;
+        let item = items.filter(o => o.driving.id == driving.id);
+        if (item.length != 0) {
+          item = item[0];
+          item.ladings = lading;
+        } else {
+          item = {
+            driving: driving,
+            ladings: [lading],
+            imprests: [],
+            tipPrice: 0,
+            carIncome: 0,
+            cargoDebt: 0,
+            ladingSum: 0,
+            imprestSum: 0,
+            payableValue: 0
+          };
+          items.push(item);
+        }
+
+        item.tipPrice += +lading.driver_tip_price;
+        item.carIncome += this.getCarIncome(lading);
+        item.cargoDebt += this.getCargoDebt(lading);
+        item.ladingSum += this.getLadingSum(lading);
+      }
+
+      for (const imprest of this.data.imprests) {
+        // push right remittance to each driver
+        items[0].imprests.push(imprest);
+
+        let paidValue = imprest.items.reduce((v, o) => v + +o.value, 0);
+        let settledValue = imprest.imprestSettlements.reduce(
+          (v, o) => v + +o.settled_value,
+          0
+        );
+        let payableValue = paidValue - settledValue;
+        items[0].imprestSum += payableValue;
+      }
+
+      for (let item of items) {
+        item.payableValue = item.ladingSum - item.cargoDebt - item.imprestSum;
+      }
+
+      console.log(items);
+      return items;
+
       return [
         {
           driving: { name: "	علی اکبری : 19 ی 332 ایران 63" },
@@ -127,9 +185,22 @@ export default {
   watch: {
     remittanceSearch() {
       this.getRemittances(this.remittanceSearch);
-    },
+    }
   },
   methods: {
+    getRemittanceData() {
+      if (!this.remittance) return;
+      this.request({
+        url: this.endpoint("dashtbashi/otherDriverPaymentsReport"),
+        params: {
+          remittance: this.remittance.id
+        },
+        method: "get",
+        success: data => {
+          this.data = data;
+        }
+      });
+    }
   }
 };
 </script>
