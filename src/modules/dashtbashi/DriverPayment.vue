@@ -7,7 +7,7 @@
     :showList="false"
     :showListBtn="false"
     :canDelete="canDelete"
-    :canSubmit="canSubmit"
+    :canSubmit="canSubmit && !this.id"
     :confirmBtnText="confirmBtnText"
     :cancelConfirmBtnText="cancelConfirmBtnText"
     :canConfirm="canConfirm"
@@ -49,7 +49,7 @@
             :headers="ladingHeaders"
             :items="ladings"
             v-model="selectedLadings"
-            :show-select="true"
+            :show-select="isEditing"
             item-key="id"
             :disable-pagination="true"
             :hide-default-footer="true"
@@ -67,20 +67,14 @@
             :headers="imprestHeaders"
             :items="imprests"
             v-model="selectedImprests"
-            :show-select="true"
-            item-key="transaction"
+            :show-select="isEditing"
+            item-key="id"
             :disable-pagination="true"
             :hide-default-footer="true"
           >
-            <template
-              #item.paidValue="{ item }"
-            >{{ item.imprestSettlement.transaction?item.imprestSettlement.transaction.sanad.bed:0 | toMoney }}</template>
-            <template
-              #item.receivedValue="{ item }"
-            >{{ item.imprestSettlement.settled_value | toMoney }}</template>
-            <template
-              #item.remain="{ item }"
-            >{{ item.sum - item.imprestSettlement.settled_value | toMoney}}</template>
+            <template #item.paidValue="{ item }">{{ item.sanad.bed | toMoney }}</template>
+            <template #item.receivedValue="{ item }">{{ getImprestSettledValue(item) | toMoney }}</template>
+            <template #item.remain="{ item }">{{ getImprestNotSettledValue(item) | toMoney}}</template>
           </v-data-table>
         </v-col>
 
@@ -195,15 +189,15 @@ export default {
         },
         {
           text: "حساب",
-          value: "imprestSettlement.transaction.account.name"
+          value: "account.name"
         },
         {
           text: "شناور",
-          value: "imprestSettlement.transaction.floatAccount.name"
+          value: "floatAccount.name"
         },
         {
           text: "تاریخ",
-          value: "imprestSettlement.transaction.date"
+          value: "transaction.date"
         },
         {
           text: "مبلغ پرداختی",
@@ -237,7 +231,7 @@ export default {
     },
     imprestsSum() {
       return this.selectedImprests.reduce(
-        (v, o) => v + +o.sum - +o.imprestSettlement.settled_value,
+        (v, o) => v + +this.getImprestNotSettledValue(o),
         0
       );
     },
@@ -249,8 +243,23 @@ export default {
     this.rows.push(this.getRowTemplate());
   },
   methods: {
+    getImprestSettledValue(imprest) {
+      return imprest.imprestSettlements.reduce(
+        (v, o) => v + +o.settled_value,
+        0
+      );
+    },
+    getImprestNotSettledValue(imprest) {
+      return imprest.sanad.bed - this.getImprestSettledValue(imprest);
+    },
     getData() {
-      this.getDrivings();
+      this.getDrivings(false, data => {
+        let drivingId = this.query["item.driving"];
+        if (drivingId) {
+          this.item.driving = data.filter(o => o.id == drivingId)[0];
+          this.getDrivingData(this.item.driving);
+        }
+      });
     },
     openPaymentDialog(clearForm = true) {
       this.performClearForm = clearForm;
@@ -267,17 +276,22 @@ export default {
       this.getDrivingLadings(driving);
       this.getDriverNotSettledImprests(driving.driver);
     },
-    getDrivingLadings(driving, callback=null) {
+    getDrivingLadings(driving, callback = null) {
       this.request({
         url: this.endpoint("dashtbashi/ladings/"),
         method: "get",
         params: {
           dirving: driving.id,
-          is_paid: false,
+          is_paid: false
         },
         success: data => {
           this.ladings = data;
-          callback && callback(data)
+          if (this.item.remittance) {
+            this.selectedLadings = this.ladings.filter(
+              o => !o.remittance || o.remittance.id == this.item.remittance
+            );
+          }
+          callback && callback(data);
         }
       });
     },
@@ -298,7 +312,7 @@ export default {
       this.submit(this.performClearForm);
     },
 
-    getDriverNotSettledImprests(driver, callback=null) {
+    getDriverNotSettledImprests(driver, callback = null) {
       this.request({
         url: this.endpoint("imprests/notSettledImprests"),
         params: {
@@ -309,7 +323,10 @@ export default {
         method: "get",
         success: data => {
           this.imprests = data;
-          callback && callback(data)
+          if (this.item.remittance) {
+            this.selectedImprests = this.imprests;
+          }
+          callback && callback(data);
         }
       });
     },
@@ -341,20 +358,13 @@ export default {
       this.changeRouteTo(item.id);
       this.isEditing = false;
       this.item = item;
-      this.payment = item.payment
+      this.payment = item.payment;
 
-      // this.getDrivingLadings(driving);
-      this.getDriverNotSettledImprests(driving.driver, (data) => {
-        for(const imprest of data) {
-          // if(item.imprests.filter(o => o.id == imprest.transaction))
-        }
-      });
+      this.ladings = item.ladings;
+      this.imprests = item.imprests;
 
-      // this.selectedLadings = item.ladings;
-      // this.selectedImprests = item.imprests;
-
-
-
+      this.selectedLadings = item.ladings;
+      this.selectedImprests = item.imprests;
     },
     deleteRow(index) {
       if (index == -1) {
@@ -375,9 +385,20 @@ export default {
       };
 
       data.item.ladings = this.selectedLadings.map(o => o.id);
-      data.item.imprests = this.selectedImprests.map(o => o.transaction);
+      data.item.imprests = this.selectedImprests.map(o => o.id);
 
       return data;
+    },
+
+    clearForm() {
+      this.isEditing = true;
+      this.item = this.getItemTemplate();
+      this.selectedLadings = [];
+      this.selectedImprests = [];
+      this.ladings = [];
+      this.imprests = [];
+      this.changeRouteTo(null);
+      this.see;
     }
   }
 };

@@ -39,13 +39,14 @@ export default {
     }
   },
   methods: {
-    getDrivers(force) {
+    getDrivers(force, callback = null) {
       if (!force && this.$store.state.drivers.length) return;
       return this.request({
         url: this.endpoint("dashtbashi/drivers/"),
         method: "get",
         success: data => {
           this.$store.commit("setDrivers", data);
+          callback && callback(data);
         }
       });
     },
@@ -59,13 +60,17 @@ export default {
         }
       })
     },
-    getDrivings(force) {
-      if (!force && this.$store.state.drivings.length) return;
+    getDrivings(force, callback = null) {
+      if (!force && this.$store.state.drivings.length) {
+        callback && callback(this.$store.state.drivings);
+        return;
+      };
       return this.request({
         url: this.endpoint("dashtbashi/drivings/"),
         method: "get",
         success: data => {
           this.$store.commit("setDrivings", data);
+          callback && callback(data);
         }
       });
     },

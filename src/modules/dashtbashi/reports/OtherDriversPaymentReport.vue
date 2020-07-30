@@ -36,7 +36,11 @@
             </template>
 
             <template #item.pay="{ item }">
-              <v-btn v-if="!item.sumRow" color="blue white--text">پرداخت</v-btn>
+              <v-btn
+                v-if="!item.sumRow"
+                :to="{name: 'DriverPayment', query: {'item.driving': item.driving.id, 'item.remittance': remittance.id}}"
+                color="blue white--text"
+              >پرداخت</v-btn>
             </template>
           </v-data-table>
         </v-col>
@@ -149,36 +153,7 @@ export default {
         item.payableValue = item.ladingSum - item.cargoDebt - item.imprestSum;
       }
 
-      console.log(items);
       return items;
-
-      return [
-        {
-          driving: { name: "	علی اکبری : 19 ی 332 ایران 63" },
-          tipPrice: 1000,
-          carIncome: 20000,
-          cargoDebt: 150,
-          imprestSum: 300,
-          payableValue: 20550
-        },
-        {
-          driving: { name: "	رضا سلطانی : 19 ی 332 ایران 63" },
-          tipPrice: 2000,
-          carIncome: 190000,
-          cargoDebt: 200,
-          imprestSum: 1300,
-          payableValue: 19500
-        },
-        {
-          driving: { name: "مجموع" },
-          sumRow: true,
-          tipPrice: 3000,
-          carIncome: 390000,
-          cargoDebt: 350,
-          imprestSum: 1600,
-          payableValue: 40050
-        }
-      ];
     }
   },
   created() {},

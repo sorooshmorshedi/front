@@ -211,7 +211,7 @@ Vue.mixin({
     toMoney(value) {
 
       let isNegative = false;
-      if (!value) value = "";
+      if (value == null || value == undefined) value = "";
       else {
         let numeric_value = Number(value);
         if (numeric_value < 0) {
