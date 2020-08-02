@@ -71,14 +71,72 @@
                   </v-row>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <v-row v-if="Object.keys(item.permissions).length == permissions.length">
-                    <v-col
-                      cols="12"
-                      md="6"
-                      v-for="(permission, i) in modelPermissions[model.name]"
-                      :key="i"
-                    >
+                  <v-row v-if="Object.keys(item.permissions).length == rawPermissions.length">
+                    <v-col cols="12">
+                      <v-row no-gutters>
+                        <v-col cols="12" class="pb-0">
+                          <v-btn-toggle
+                            v-model="item.localPerms[model.name]"
+                            @change="setCRUDPermissions(model)"
+                            background-color="white"
+                            multiple
+                            color="green"
+                            tile
+                            borderless
+                          >
+                            <v-tooltip top v-for="(btn, i) in getPermissionBtns(model)">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                  :style="(getPermissionBtns(model).length != i-1)?'border-left: 1px solid black':''"
+                                  tile
+                                  v-bind="attrs"
+                                  v-on="on"
+                                >
+                                  <v-icon>{{ btn.icon }}</v-icon>
+                                </v-btn>
+                              </template>
+                              <span>{{ btn.tootltip }}</span>
+                            </v-tooltip>
+                          </v-btn-toggle>
+                        </v-col>
+                        <v-col cols="12" class="pt-0">
+                          <v-btn-toggle
+                            v-model="item.localOwnPerms[model.name]"
+                            @change="setCRUDPermissions(model, true)"
+                            background-color="white"
+                            multiple
+                            color="lime"
+                            tile
+                            borderless
+                          >
+                            <template v-for="(btn, i) in getPermissionBtns(model)">
+                              <v-tooltip bottom v-if="btn.hasOwn">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn
+                                    :style="(getPermissionBtns(model).length != i-1)?'border-left: 1px solid black':''"
+                                    tile
+                                    v-bind="attrs"
+                                    v-on="on"
+                                  >
+                                    <v-icon>fa-user-shield</v-icon>
+                                  </v-btn>
+                                </template>
+                                <span>{{ btn.tootltip }} مواردی که خود کاربر ثبت کرده است</span>
+                              </v-tooltip>
+                              <v-btn
+                                v-else
+                                disabled
+                                style="border-left: 1px solid black;background-color: white !important"
+                              ></v-btn>
+                            </template>
+                          </v-btn-toggle>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                    <v-col cols="12">
                       <v-switch
+                        v-for="(permission, i) in getModelPermissions(model.name)"
+                        :key="i"
                         :label="permission.name"
                         v-model="item.permissions[permission.id]"
                         :disabled="!isEditing"
@@ -106,8 +164,16 @@ export default {
       baseUrl: "users/roles/list",
       permissionBasename: "role",
       items: [],
-      modelSearch: "",
-      permissionsData: [],
+      modelSearch: "فاکتور",
+      rawPermissions: [],
+      operations: [
+        "get",
+        "create",
+        "update",
+        "delete",
+        "firstConfirm",
+        "secondConfirm"
+      ],
       cols: [
         {
           th: "نام",
@@ -130,77 +196,218 @@ export default {
     },
     modelPermissions() {
       return this.permissionsData;
-      let models = this.models.filter(o => o.label.includes(this.modelSearch));
+      let models = this.models;
       let result = {};
       for (let model of models) {
         result[model.name] = this.permissionsData[model.name];
       }
       return result;
     },
+    permissions() {
+      return this.rawPermissions.filter(o => {
+        let codename = o.codename;
+        let f =
+          !codename.startsWith("get") &&
+          !codename.startsWith("create") &&
+          !codename.startsWith("update") &&
+          !codename.startsWith("firstConfirm") &&
+          !codename.startsWith("secondConfirm") &&
+          !codename.startsWith("delete");
+        return f;
+      });
+    },
     models() {
       return [
         { name: "role", label: "نقش ها" },
         { name: "user", label: "کاربران" },
         { name: "company", label: "شرکت ها" },
-        { name: "financialyear", label: "سال های مالی" },
-        { name: "floataccountgroup", label: "گروه حساب شناور" },
-        { name: "floataccount", label: "حساب شناور" },
+        { name: "financialYear", label: "سال های مالی" },
+        { name: "floatAccountGroup", label: "گروه حساب شناور و مرکز هزینه" },
+        { name: "floatAccount", label: "حساب شناور و مرکز هزینه" },
         { name: "account", label: "حساب ها" },
-        { name: "defaultaccount", label: "حساب های پیشفرض" },
+        { name: "defaultAccount", label: "حساب های پیشفرض" },
         { name: "unit", label: "واحد ها" },
         { name: "warehouse", label: "انبار ها" },
-        { name: "warelevel", label: "سطوح کالا" },
+        { name: "wareLevel", label: "سطوح کالا" },
         { name: "ware", label: "کالا ها" },
         { name: "sanad", label: "اسناد" },
-        { name: "transaction", label: "دریافت و پرداخت" },
+        { name: "receiveTransaction", label: "دریافت" },
+        { name: "paymentTransaction", label: "پرداخت" },
         { name: "chequebook", label: "دسته چک" },
         { name: "cheque", label: "چک" },
-        { name: "statuschange", label: "تغییر وضعیت چک" },
+        { name: "statusChange", label: "تغییر وضعیت چک" },
         { name: "expense", label: "هزینه های فاکتور" },
-        { name: "factor", label: "فاکتور" },
+        { name: "buyFactor", label: "فاکتور خرید" },
+        { name: "saleFactor", label: "فاکتور فروش" },
+        { name: "backFromBuyFactor", label: "فاکتور برگشت از خرید" },
+        { name: "backFromSaleFactor", label: "فاکتور برگشت از فروش" },
         { name: "transfer", label: "انتقال" },
         { name: "report", label: "گزارش ها" },
-        { name: "exportverifier", label: "تایید کنندگان خروجی" }
+        { name: "exportverifier", label: "تایید کنندگان خروجی" },
+        { name: "driver", label: "راننده" },
+        { name: "car", label: "ماشین" },
+        { name: "driving", label: "انتصاب راننده به ماشین" },
+        { name: "association", label: "انجمن" },
+        { name: "remittance", label: "حواله" },
+        { name: "ladingBillSeries", label: "سری بارگیری" },
+        { name: "ladingBillNumber", label: "کد بارگیری" },
+        { name: "lading", label: "بارگیری" },
+        { name: "oilCompanyLading", label: "بارگیری شرکت نفت" },
+        { name: "otherDriverPayment", label: "پرداخت رانندگان متفرقه" }
       ].filter(o => o.label.includes(this.modelSearch));
-    },
-    permissions() {
-      let permissions = [];
-      for (let modelPermission of Object.values(this.modelPermissions)) {
-        if (modelPermission) {
-          permissions.push(...modelPermission);
-        }
-      }
-      return permissions;
     }
   },
   methods: {
+    getPermissionBtns(model) {
+      let permissionBtns = [
+        {
+          icon: "fa-eye",
+          tootltip: "مشاهده",
+          hasOwn: true
+        },
+        {
+          icon: "fa-plus",
+          tootltip: "تعریف",
+          hasOwn: false
+        },
+        {
+          icon: "fa-edit",
+          tootltip: "ویرایش",
+          hasOwn: true
+        },
+        {
+          icon: "fa-trash-alt",
+          tootltip: "حذف",
+          hasOwn: true
+        }
+      ];
+      if (this.hasConfirmPermission(model)) {
+        permissionBtns.push(
+          { icon: "fa-check", tootltip: "تایید اول", hasOwn: true },
+          { icon: "fa-check-double", tootltip: "تایید دوم", hasOwn: true }
+        );
+      }
+
+      return permissionBtns;
+    },
+    hasConfirmPermission(model) {
+      return (
+        this.rawPermissions.filter(
+          o => o.codename == `firstConfirm.${model.name}`
+        ).length != 0
+      );
+    },
+    getPermissionByCodename(codename) {
+      let results = this.rawPermissions.filter(o => o.codename == codename);
+      if (results.length) return results[0];
+      return null;
+    },
+    setCRUDPermissions(model, isOwnChanged) {
+      let modelPermissions = this.item.localPerms[model.name];
+      let modelOwnPermissions = this.item.localOwnPerms[model.name];
+
+      for (let i = 0; i < this.operations.length; i++) {
+        let codename = `${this.operations[i]}.${model.name}`;
+        let permission = this.getPermissionByCodename(codename);
+
+        let ownCodename = `${this.operations[i]}Own.${model.name}`;
+        let ownPermission = this.getPermissionByCodename(ownCodename);
+
+        let hasPerm = modelPermissions.includes(i);
+        let hasOwnPerm = modelOwnPermissions.includes(i);
+
+        if (hasPerm) {
+          if (hasOwnPerm) {
+            this.item.permissions[permission.id] = false;
+            this.item.permissions[ownPermission.id] = true;
+          } else {
+            this.item.permissions[permission.id] = true;
+          }
+        } else {
+          if (hasOwnPerm) {
+            if (isOwnChanged) {
+              this.item.permissions[permission.id] = false;
+              this.item.permissions[ownPermission.id] = true;
+              modelPermissions.push(i);
+            } else {
+              this.item.permissions[ownPermission.id] = false;
+              modelOwnPermissions.splice(modelOwnPermissions.indexOf(i), 1);
+            }
+          } else {
+            permission && (this.item.permissions[permission.id] = false);
+            ownPermission && (this.item.permissions[ownPermission.id] = false);
+          }
+        }
+      }
+
+      for (const i of modelPermissions) {
+        let codename = `${this.operations[i]}.${model}`;
+        let permission = this.getPermissionByCodename(codename);
+      }
+    },
+    getModelPermissions(model) {
+      return this.permissions.filter(o => o.codename.includes(model));
+    },
     getItemTemplate() {
-      return {
+      let item = {
         name: "",
-        permissions: {}
+        permissions: {},
+        localPerms: {},
+        localOwnPerms: {}
       };
+
+      for (const model of this.models) {
+        item.localPerms[model.name] = [];
+        item.localOwnPerms[model.name] = [];
+      }
+
+      return item;
     },
     clearForm() {
       this.item = this.copy(this.getItemTemplate());
       this.item.permissions = this.getPermissionsTemplate();
+      this.isEditing = true;
     },
     getPermissionsTemplate() {
       let permissions = {};
-      for (const permission of this.permissions) {
+      for (const permission of this.rawPermissions) {
         permissions[permission.id] = false;
       }
       return permissions;
     },
     setItem(item) {
-      this.item = { ...item };
+      this.item = {
+        ...this.getItemTemplate(),
+        ...item
+      };
+
       let permissions = {};
-      for (const permission of this.permissions) {
+      for (const permission of this.rawPermissions) {
         permissions[permission.id] = false;
       }
       for (const permissionId of item.permissions) {
         permissions[permissionId] = true;
       }
       this.item.permissions = permissions;
+
+      for (const model of this.models) {
+        for (let i = 0; i < this.operations.length; i++) {
+          let codename = `${this.operations[i]}.${model.name}`;
+          let ownCodename = `${this.operations[i]}Own.${model.name}`;
+
+          let permission = this.getPermissionByCodename(codename);
+          let ownPermission = this.getPermissionByCodename(ownCodename);
+
+          if (permission && this.item.permissions[permission.id]) {
+            this.item.localPerms[model.name].push(i);
+          }
+
+          if (ownPermission && this.item.permissions[ownPermission.id]) {
+            this.item.localPerms[model.name].push(i);
+            this.item.localOwnPerms[model.name].push(i);
+          }
+        }
+      }
     },
     isCheckedPermission(permission) {
       return this.item.permissions.filter(id => id == permission.id).length;
@@ -217,8 +424,8 @@ export default {
         url: this.endpoint(`users/permissions/list`),
         method: "get",
         success: data => {
-          this.permissionsData = data;
-          for (let permission of this.permissions) {
+          this.rawPermissions = data;
+          for (let permission of this.rawPermissions) {
             this.getItemTemplate().permissions[permission.id] = false;
           }
           this.clearForm();
