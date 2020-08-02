@@ -643,7 +643,7 @@ export default {
       });
       this.rows.push(this.getRowTemplate());
 
-      this.changeRouteTo(item.id);
+      if (!this.modalMode) this.changeRouteTo(item.id);
     }
   }
 };

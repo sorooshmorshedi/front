@@ -239,9 +239,6 @@ export default {
       return this.ladingsSum - this.cargoDebtsSum - this.imprestsSum;
     }
   },
-  created() {
-    this.rows.push(this.getRowTemplate());
-  },
   methods: {
     getImprestSettledValue(imprest) {
       return imprest.imprestSettlements.reduce(
@@ -355,6 +352,7 @@ export default {
       });
     },
     setItem(item) {
+      console.log('set item', item);
       this.changeRouteTo(item.id);
       this.isEditing = false;
       this.item = item;
