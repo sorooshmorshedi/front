@@ -25,7 +25,12 @@
           <v-text-field label="شماره حواله" v-model="item.code" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
-          <date v-model="item.issue_date" label="تاریخ صدور" :default="true" :disabled="!isEditing" />
+          <date
+            v-model="item.issue_date"
+            label="تاریخ صدور"
+            :default="true"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="3">
           <date
@@ -95,8 +100,11 @@
           />
         </v-col>
 
-        <v-col cols="12" md="9">
+        <v-col cols="12" md="6">
           <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-switch label="اتمام بارگیری" v-model="item.is_finished" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>
@@ -120,7 +128,7 @@ export default {
       hasList: false,
       hasIdProp: true,
       baseUrl: "dashtbashi/remittances",
-      leadingSlash: true,
+      leadingSlash: true
     };
   },
   methods: {
