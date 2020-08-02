@@ -285,7 +285,7 @@ export default {
           this.ladings = data;
           if (this.item.remittance) {
             this.selectedLadings = this.ladings.filter(
-              o => !o.remittance || o.remittance.id == this.item.remittance
+              o => !o.remittance || (o.remittance.id == this.item.remittance && this.item.selectedLadings.includes(String(o.id)))
             );
           }
           callback && callback(data);

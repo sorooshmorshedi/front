@@ -68,6 +68,7 @@ export default {
         this.mask.resolve(String(this.localValue));
         this.$nextTick(() => {
           this.localValue = this.mask.value;
+          this.$emit("input", this.mask.value);
         });
       }
     },

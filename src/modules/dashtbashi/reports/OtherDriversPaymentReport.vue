@@ -17,6 +17,17 @@
             @change="getRemittanceData"
           />
         </v-col>
+        <template v-if="remittance">
+          <v-col cols="12" md="3">
+            <account-select label="پیمانکار" v-model="remittance.contractor" :disabled="true" />
+          </v-col>
+          <v-col cols="12" md="3">
+            <date v-model="filters.fromDate" label="از تاریخ" />
+          </v-col>
+          <v-col cols="12" md="3">
+            <date v-model="filters.toDate" label="تا تاریخ" />
+          </v-col>
+        </template>
 
         <v-col cols="12">
           <v-data-table
@@ -38,7 +49,7 @@
             <template #item.pay="{ item }">
               <v-btn
                 v-if="!item.sumRow"
-                :to="{name: 'DriverPayment', query: {'item.driving': item.driving.id, 'item.remittance': remittance.id}}"
+                :to="{name: 'DriverPayment', query: { 'item.driving': item.driving.id, 'item.remittance': remittance.id, 'item.selectedLadings': item.selectedLadings }}"
                 color="blue white--text"
               >پرداخت</v-btn>
             </template>
@@ -70,6 +81,7 @@ export default {
       remittances: [],
       remittanceSearch: "",
       remittance: null,
+      filters: {},
       tableHeaders: [
         {
           text: "حمل کننده",
@@ -119,6 +131,7 @@ export default {
           item = {
             driving: driving,
             ladings: [lading],
+            selectedLadings: [],
             imprests: [],
             tipPrice: 0,
             carIncome: 0,
@@ -130,10 +143,18 @@ export default {
           items.push(item);
         }
 
+        item.cargoDebt += this.getCargoDebt(lading);
+
+        if (this.filters.fromDate && lading.lading_date < this.filters.fromDate)
+          continue;
+        if (this.filters.toDate && lading.lading_date > this.filters.toDate)
+          continue;
+
         item.tipPrice += +lading.driver_tip_price;
         item.carIncome += this.getCarIncome(lading);
-        item.cargoDebt += this.getCargoDebt(lading);
         item.ladingSum += this.getLadingSum(lading);
+
+        item.selectedLadings.push(lading.id);
       }
 
       for (const imprest of this.data.imprests) {
