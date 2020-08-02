@@ -56,7 +56,7 @@
                 :items="imprests"
                 :disabled="id != undefined || !isEditing"
                 item-text="code"
-                @change="imprest.imprestSettlement.id && setItem(imprest.imprestSettlement)"
+                @change="imprest.imprestSettlements.length && setItem(imprest.imprestSettlements[0])"
               />
             </v-col>
             <v-col cols="12" md="2">
