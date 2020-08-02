@@ -18,6 +18,12 @@
   >
     <template #header-btns>
       <open-item-btn v-if="item.item" :item="item.item" />
+
+      <v-btn
+        v-if="imprest.id != undefined"
+        class="blue white--text mr-1"
+        :to="{name: 'TransactionForm', params: {id: imprest.id, transactionType: 'imprest'}}"
+      >مشاهده پرداخت</v-btn>
     </template>
 
     <template>
@@ -60,7 +66,7 @@
               />
             </v-col>
             <v-col cols="12" md="2">
-              <money label="مبلغ" :disabled="true" :value="imprest.sum" />
+              <money label="مبلغ" :disabled="true" :value="imprestSum" />
             </v-col>
             <v-col cols="12" md="12">
               <v-textarea label="شرح سند" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
@@ -129,7 +135,7 @@
               <tr class="grey lighten-3 text-white">
                 <td colspan="3"></td>
                 <td class="text-left">اختلاف:</td>
-                <td>{{ imprest.sum?imprest.sum - rowsSum('value'):0 | toMoney}}</td>
+                <td>{{ imprestSum - rowsSum('value') | toMoney}}</td>
                 <td></td>
               </tr>
             </tbody>
@@ -161,12 +167,14 @@ export default {
       hasList: false,
       hasIdProp: true,
       imprests: [],
-      imprest: {
-        transaction: null,
-        code: null,
-        sum: 0
-      }
+      imprest: {}
     };
+  },
+  computed: {
+    imprestSum() {
+      if (this.imprest && this.imprest.sanad) return this.imprest.sanad.bed;
+      return 0;
+    }
   },
   methods: {
     getNotSettledImprests(accountData) {
@@ -177,14 +185,19 @@ export default {
         method: "get",
         success: data => {
           this.imprests = data;
-          // if (this.id) {
-          //   let imprest = this.imprests.filter(
-          //     o => (o.transaction = this.item.transaction.id)
-          //   )[0];
-          //   if (imprest) this.imprest = imprest;
-          // }
+          let imprestId = this.query.imprest;
+          let imprests = data.filter(o => o.id == imprestId);
+          if (imprests.length) {
+            this.imprest = imprests[0];
+            this.isEditing = true;
+          }
         }
       });
+    },
+    getItemTemplate() {
+      return {
+        account: null
+      };
     },
     getRowTemplate() {
       return {};
@@ -221,12 +234,7 @@ export default {
       this.item.floatAccount = item.transaction.floatAccount;
       this.item.costCenter = item.transaction.costCenter;
 
-      this.imprest.transaction = item.transaction.id;
-      this.imprest.code = item.transaction.code;
-      this.imprest.sum = item.transaction.items.reduce(
-        (v, o) => v + +o.value,
-        0
-      );
+      this.imprest = item.transaction;
       this.imprests.push(this.imprest);
 
       this.itemsToDelete = [];
@@ -258,7 +266,7 @@ export default {
         }
       };
 
-      data.item.transaction = this.imprest.transaction;
+      data.item.transaction = this.imprest.id;
 
       this.rows.forEach((row, i) => {
         if (i == this.rows.length - 1) return;

@@ -24,6 +24,14 @@
       <template #header-btns>
         <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
         <v-btn
+          v-if="isImprest && id != undefined"
+          class="blue white--text mr-1"
+          :to="{name: 'ImprestSettlement', params: {id: imprestSettlementId}, query: {
+            'item.account': item.account.id,
+            'imprest': item.id,
+          }}"
+        >تسویه تنخواه</v-btn>
+        <v-btn
           v-if="!isImprest"
           @click="factorsDialog = true"
           class="teal white--text mr-1"
@@ -325,6 +333,12 @@ export default {
     this.getDefaultAccounts();
   },
   computed: {
+    imprestSettlementId() {
+      if (this.item.imprestSettlements.length) {
+        return this.item.imprestSettlements[0];
+      }
+      return null;
+    },
     title() {
       if (this.transactionType == "receive") {
         return "دریافت";
@@ -604,7 +618,8 @@ export default {
       return {
         account: null,
         floatAccount: null,
-        costCenter: null
+        costCenter: null,
+        imprestSettlements: []
       };
     },
     splitValue(reverse = false) {
