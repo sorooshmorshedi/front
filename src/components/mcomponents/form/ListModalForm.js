@@ -1,5 +1,6 @@
 import ListModalForm from "./ListModalForm.vue";
 import OpenSanadBtn from "@/components/form/OpenSanadBtn";
+import jsonToFormData from "@/mixin/_jsonToFormData";
 
 export default {
   components: {
@@ -320,6 +321,19 @@ export default {
         this.rows.splice(index, 1);
       }
     },
+
+    jsonToFormData(jsonObject, options) {
+      return jsonToFormData(jsonObject, options)
+    },
+
+    deleteAttachment(row) {
+      row.attachment = null;
+      row.delete_attachment = true;
+    },
+    hasAttachment(row) {
+      return typeof row.attachment != typeof ''
+    }
+
   }
 
 }

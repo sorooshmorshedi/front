@@ -84,6 +84,7 @@
                 <th>* نام حساب</th>
                 <th>مبلغ</th>
                 <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -110,6 +111,24 @@
                 <td style="width: 150px">
                   <money :disabled="!isEditing" v-model="rows[i].value" />
                 </td>
+                <td style="max-width: 100px">
+                  <v-file-input
+                    v-if="hasAttachment(rows[i])"
+                    clearable
+                    :show-size="true"
+                    :disabled="!isEditing"
+                    truncate-length
+                    v-model="rows[i].attachment"
+                  />
+                  <template v-else>
+                    <v-btn icon :href="rows[i].attachment" target="_blank" tag="a">
+                      <v-icon>fa-download</v-icon>
+                    </v-btn>
+                    <v-btn icon @click="deleteAttachment(rows[i])" :disabled="!isEditing">
+                      <v-icon>fa-times</v-icon>
+                    </v-btn>
+                  </template>
+                </td>
                 <td class="d-print-none">
                   <v-btn
                     v-if="i != rows.length-1"
@@ -126,6 +145,7 @@
                 <td colspan="3"></td>
                 <td class="text-left">مجموع:</td>
                 <td class>{{ rowsSum('value') | toMoney }}</td>
+                <td></td>
                 <td class="d-print-none">
                   <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
                     <v-icon>delete_sweep</v-icon>
@@ -136,7 +156,7 @@
                 <td colspan="3"></td>
                 <td class="text-left">اختلاف:</td>
                 <td>{{ imprestSum - rowsSum('value') | toMoney}}</td>
-                <td></td>
+                <td colspan="2"></td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -267,6 +287,7 @@ export default {
       };
 
       data.item.transaction = this.imprest.id;
+      delete data.item.items;
 
       this.rows.forEach((row, i) => {
         if (i == this.rows.length - 1) return;
@@ -276,7 +297,8 @@ export default {
         data.items.items.push(item);
       });
 
-      return data;
+      console.log(data, this.jsonToFormData(data));
+      return this.jsonToFormData(data);
     }
   }
 };
