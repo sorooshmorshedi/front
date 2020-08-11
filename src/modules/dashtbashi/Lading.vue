@@ -351,6 +351,8 @@ export default {
           id: null,
           price: null
         },
+        association_price: 0,
+        cargo_tip_price: 0,
         contractor_type: this.contractorTypes[0],
         lading_ware: null,
         lading_contractor_price: null,
