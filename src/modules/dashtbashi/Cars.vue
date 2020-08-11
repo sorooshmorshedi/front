@@ -33,7 +33,7 @@
                       <input
                         id="car-number-1"
                         type="text"
-                        v-model="item.car_number[0]"
+                        v-model.lazy="item.car_number[0]"
                         :disabled="!isEditing"
                       />
                     </div>
@@ -56,7 +56,7 @@
                       <input
                         id="car-number-2"
                         type="text"
-                        v-model="item.car_number[1]"
+                        v-model.lazy="item.car_number[1]"
                         :disabled="!isEditing"
                       />
                     </div>
@@ -79,7 +79,7 @@
                       <input
                         id="car-number-3"
                         type="text"
-                        v-model="item.car_number[2]"
+                        v-model.lazy="item.car_number[2]"
                         :disabled="!isEditing"
                       />
                     </div>
@@ -102,7 +102,7 @@
                       <input
                         id="car-number-4"
                         type="text"
-                        v-model="item.car_number[3]"
+                        v-model.lazy="item.car_number[3]"
                         :disabled="!isEditing"
                       />
                       <div class="v-text-field__suffix">ایران</div>
@@ -186,7 +186,7 @@ export default {
   data() {
     return {
       baseUrl: "dashtbashi/cars",
-      permissionBasename: 'car',
+      permissionBasename: "car",
       leadingSlash: true,
       owners: [
         {
