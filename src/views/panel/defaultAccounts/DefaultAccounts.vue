@@ -81,7 +81,7 @@ export default {
     },
     accountLevel() {
       if (this.usage == "imprest") return "level2";
-      return "level3";
+      return `level${this.item.account_level}`;
     },
     items() {
       return this.defaultAccounts.filter(o => o.usage == this.usage);

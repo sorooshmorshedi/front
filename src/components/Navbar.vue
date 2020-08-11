@@ -701,6 +701,16 @@ export default {
                 name: "Options"
               }
             },
+
+            {
+              to: {
+                name: "DefaultAccounts",
+                params: {
+                  usage: "dashtbashi"
+                }
+              },
+              title: "حساب های پیشفرض"
+            },
             {
               title: "ماشین ها",
               to: {

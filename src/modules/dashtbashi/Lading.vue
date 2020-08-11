@@ -16,6 +16,9 @@
     @delete="deleteItem"
     @clearForm="clearForm(true)"
   >
+    <template #header-btns>
+      <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
+    </template>
     <template>
       <v-row v-if="!id">
         <v-col cols="12">
@@ -37,6 +40,24 @@
           </v-col>
           <v-col cols="12" md="3">
             <ware-select label="کالا" v-model="item.ware" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-autocomplete
+              label="نوع پیمانکار"
+              v-model="item.contractor_type"
+              :items="contractorTypes"
+              :return-object="false"
+              :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-autocomplete
+              v-if="item.contractor_type == 'cmp'"
+              label="نوع کالا"
+              v-model="item.ware_type"
+              :items="wareTypes"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="3">
             <money
@@ -273,7 +294,7 @@ export default {
     return {
       baseUrl: "dashtbashi/ladings",
       leadingSlash: true,
-      permissionBasename: 'lading',
+      permissionBasename: "lading",
       hasList: false,
       hasIdProp: true,
       hasRemittance: true,
@@ -283,16 +304,25 @@ export default {
       is_destination_amount_dirty: false,
       remittanceSearch: "",
       remittances: [],
-      remittance: null
+      remittance: null,
+      contractorTypes: [
+        { id: "o", title: "سایر" },
+        { id: "cmp", title: "شرکت" }
+      ],
+      wareTypes: [
+        { id: "b", title: "خریداری شده" },
+        { id: "s", title: "فروش رفته" }
+      ]
     };
   },
   computed: {
     billTotalPrice() {
-      return (
+      let value =
         +this.item.association_price +
         +this.item.bill_price +
-        +this.item.cargo_tip_price
-      );
+        +this.item.cargo_tip_price;
+      this.item.lading_bill_total_value = value;
+      return value;
     }
   },
   watch: {
@@ -321,6 +351,7 @@ export default {
           id: null,
           price: null
         },
+        contractor_type: this.contractorTypes[0],
         lading_ware: null,
         lading_contractor_price: null,
         lading_contractor: null
