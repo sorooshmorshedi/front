@@ -65,7 +65,7 @@ export default {
           th: "حساب",
           td: "account.title",
           type: "text",
-          filters: ["account__title__icontains"]
+          filters: ["account.title"]
         }
       ]
     };
