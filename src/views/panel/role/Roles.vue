@@ -30,14 +30,14 @@
               />
               <v-spacer></v-spacer>
               <v-btn
-                @click="deselectAll"
+                @click="setAll({value: false})"
                 :disabled="!isEditing"
                 small
                 depressed
                 color="cyan white--text"
               >عدم انتخاب همه</v-btn>
               <v-btn
-                @click="selectAll"
+                @click="setAll({value: true})"
                 :disabled="!isEditing"
                 small
                 depressed
@@ -53,14 +53,14 @@
                     <v-spacer></v-spacer>
                     <v-col class="text-left pl-6">
                       <v-btn
-                        @click.stop="deselectAll({model: model.name})"
+                        @click.stop="setAll({model: model.name, value:false})"
                         icon
                         :disabled="!isEditing"
                       >
                         <v-icon>fa-times</v-icon>
                       </v-btn>
                       <v-btn
-                        @click.stop="selectAll({model: model.name})"
+                        @click.stop="setAll({model: model.name, value:true})"
                         icon
                         class="mr-1"
                         :disabled="!isEditing"
@@ -164,7 +164,7 @@ export default {
       baseUrl: "users/roles/list",
       permissionBasename: "role",
       items: [],
-      modelSearch: "فاکتور",
+      modelSearch: "",
       rawPermissions: [],
       operations: [
         "get",
@@ -205,6 +205,7 @@ export default {
     },
     permissions() {
       return this.rawPermissions.filter(o => {
+        return true;
         let codename = o.codename;
         let f =
           !codename.startsWith("get") &&
@@ -316,27 +317,20 @@ export default {
         let hasPerm = modelPermissions.includes(i);
         let hasOwnPerm = modelOwnPermissions.includes(i);
 
-        if (hasPerm) {
-          if (hasOwnPerm) {
-            this.item.permissions[permission.id] = false;
-            this.item.permissions[ownPermission.id] = true;
-          } else {
-            this.item.permissions[permission.id] = true;
-          }
-        } else {
-          if (hasOwnPerm) {
-            if (isOwnChanged) {
-              this.item.permissions[permission.id] = false;
-              this.item.permissions[ownPermission.id] = true;
-              modelPermissions.push(i);
-            } else {
-              this.item.permissions[ownPermission.id] = false;
-              modelOwnPermissions.splice(modelOwnPermissions.indexOf(i), 1);
-            }
-          } else {
-            permission && (this.item.permissions[permission.id] = false);
-            ownPermission && (this.item.permissions[ownPermission.id] = false);
-          }
+        if (hasPerm && !isOwnChanged) {
+          this.item.permissions[permission.id] = true;
+          ownPermission && (this.item.permissions[ownPermission.id] = false);
+          hasOwnPerm && modelOwnPermissions.splice(modelOwnPermissions.indexOf(i), 1);
+          hasOwnPerm = false;
+        }
+        if (hasOwnPerm) {
+          this.item.permissions[permission.id] = false;
+          this.item.permissions[ownPermission.id] = true;
+          hasPerm && modelPermissions.splice(modelPermissions.indexOf(i), 1);
+        }
+        if (!hasPerm && !hasOwnPerm) {
+          permission && (this.item.permissions[permission.id] = false);
+          ownPermission && (this.item.permissions[ownPermission.id] = false);
         }
       }
 
@@ -403,7 +397,6 @@ export default {
           }
 
           if (ownPermission && this.item.permissions[ownPermission.id]) {
-            this.item.localPerms[model.name].push(i);
             this.item.localOwnPerms[model.name].push(i);
           }
         }
@@ -432,18 +425,32 @@ export default {
         }
       });
     },
-    selectAll({ model = null }) {
-      for (let permission of this.permissions) {
-        if (!model || permission.contentType.model == model) {
-          this.item.permissions[permission.id] = true;
+    setAll({ model = null, value }) {
+      for (let permission of this.rawPermissions) {
+        if (
+          !model ||
+          model.toLowerCase().includes(permission.contentType.model)
+        ) {
+          this.item.permissions[permission.id] = value;
         }
       }
-    },
-    deselectAll({ model = null }) {
-      for (let permission of this.permissions) {
-        if (!model || permission.contentType.model == model) {
-          this.item.permissions[permission.id] = false;
+
+      if (model) {
+        if (value) {
+          this.item.localPerms[model] = [0, 1, 2, 3, 4, 5];
+        } else {
+          this.item.localPerms[model] = [];
         }
+        this.item.localOwnPerms[model] = [];
+      } else {
+        Object.keys(this.item.localPerms).forEach(key => {
+          if (value) {
+            this.item.localPerms[key] = [0, 1, 2, 3, 4, 5];
+          } else {
+            this.item.localPerms[key] = [];
+          }
+          this.item.localOwnPerms[key] = [];
+        });
       }
     },
     getSerialized() {
