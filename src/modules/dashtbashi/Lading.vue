@@ -155,23 +155,19 @@
 
           <template v-if="item.driving">
             <v-col cols="3">
-              <money
-                label="مبلغ کل"
-                :value="item.destination_amount * item.contractor_price"
-                disabled
-              />
+              <money label="مبلغ کل" :value="ladingTotalValue" disabled />
             </v-col>
             <v-col cols="3">
               <money
                 :label="'درآمد کمسیون ' + (item.driving.car.owner == 'o'?'متفرقه': 'شرکت')"
-                :value="item.destination_amount * (item.contractor_price - item.fare_price)"
+                :value="companyCommissionIncome"
                 disabled
               />
             </v-col>
             <v-col cols="3">
               <money
                 :label="item.driving.car.owner == 'o'?'حساب پرداختنی راننده متفرقه':'درآمد ماشین'"
-                :value="item.destination_amount * item.fare_price"
+                :value="carIncome"
                 disabled
               />
             </v-col>
@@ -322,6 +318,23 @@ export default {
         +this.item.bill_price +
         +this.item.cargo_tip_price;
       this.item.lading_bill_total_value = value;
+      return value;
+    },
+    ladingTotalValue() {
+      let value = this.item.destination_amount * this.item.contractor_price;
+      this.item.lading_total_value = value;
+      return value;
+    },
+    companyCommissionIncome() {
+      let value =
+        this.item.destination_amount *
+        (this.item.contractor_price - this.item.fare_price);
+      this.item.company_commission_income = value;
+      return value;
+    },
+    carIncome() {
+      let value = this.item.destination_amount * this.item.fare_price;
+      this.item.car_income = value;
       return value;
     }
   },
