@@ -67,6 +67,15 @@
                       >
                         <v-icon>fa-check-double</v-icon>
                       </v-btn>
+
+                      <v-btn
+                        @click.stop="setAll({model: model.name, value:true, justOwn: true})"
+                        icon
+                        class="mr-1"
+                        :disabled="!isEditing"
+                      >
+                        <v-icon>fa-user-shield</v-icon>
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-expansion-panel-header>
@@ -205,7 +214,6 @@ export default {
     },
     permissions() {
       return this.rawPermissions.filter(o => {
-        return true;
         let codename = o.codename;
         let f =
           !codename.startsWith("get") &&
@@ -320,12 +328,13 @@ export default {
         if (hasPerm && !isOwnChanged) {
           this.item.permissions[permission.id] = true;
           ownPermission && (this.item.permissions[ownPermission.id] = false);
-          hasOwnPerm && modelOwnPermissions.splice(modelOwnPermissions.indexOf(i), 1);
+          hasOwnPerm &&
+            modelOwnPermissions.splice(modelOwnPermissions.indexOf(i), 1);
           hasOwnPerm = false;
         }
         if (hasOwnPerm) {
           this.item.permissions[permission.id] = false;
-          this.item.permissions[ownPermission.id] = true;
+          ownPermission && (this.item.permissions[ownPermission.id] = true);
           hasPerm && modelPermissions.splice(modelPermissions.indexOf(i), 1);
         }
         if (!hasPerm && !hasOwnPerm) {
@@ -425,23 +434,30 @@ export default {
         }
       });
     },
-    setAll({ model = null, value }) {
+    setAll({ model = null, value, justOwn = false }) {
       for (let permission of this.rawPermissions) {
         if (
           !model ||
           model.toLowerCase().includes(permission.contentType.model)
         ) {
+          if (justOwn && !permission.codename.includes("Own")) {
+            continue;
+          }
           this.item.permissions[permission.id] = value;
         }
       }
 
       if (model) {
         if (value) {
-          this.item.localPerms[model] = [0, 1, 2, 3, 4, 5];
+          if (justOwn) {
+            this.item.localOwnPerms[model] = [0, 1, 2, 3, 4, 5];
+          } else {
+            this.item.localPerms[model] = [0, 1, 2, 3, 4, 5];
+          }
         } else {
           this.item.localPerms[model] = [];
+          this.item.localOwnPerms[model] = [];
         }
-        this.item.localOwnPerms[model] = [];
       } else {
         Object.keys(this.item.localPerms).forEach(key => {
           if (value) {
