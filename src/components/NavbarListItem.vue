@@ -1,5 +1,12 @@
 <template>
-  <v-list-item v-if="!hasChild" :to="route.to" link :class="'level-' + level" flat>
+  <v-list-item
+    v-if="!hasChild"
+    :to="route.to"
+    link
+    :class="'level-' + level"
+    flat
+    @click="routeClick(route)"
+  >
     <v-list-item-content>
       <v-list-item-title :class="'level-' + level">{{ route.title }}</v-list-item-title>
     </v-list-item-content>
@@ -38,6 +45,13 @@ export default {
   },
   beforeCreate() {
     this.$options.components.NavbarListItem = require("./NavbarListItem.vue").default;
+  },
+  methods: {
+    routeClick(route) {
+      if (this.$route.name == route.to.name) {
+        this.EventBus.$emit("sameRouteClick");
+      }
+    }
   }
 };
 </script>

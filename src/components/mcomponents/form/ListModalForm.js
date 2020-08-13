@@ -123,6 +123,7 @@ export default {
       this.getItem();
     }
     this.EventBus.$on('get:accounts', () => this.setDefaults(this.query))
+    this.EventBus.$on('sameRouteClick', () => this.clearForm())
   },
   mounted() {
     this.setDefaults(this.query)

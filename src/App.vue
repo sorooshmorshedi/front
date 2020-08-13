@@ -34,24 +34,32 @@
           {{ financialYear.name }}
         </v-btn>
 
-        <v-btn class="blue white--text mr-3" :to="{name: 'SanadForm' }">سند</v-btn>
+        <v-btn
+          class="blue white--text mr-3"
+          :to="{name: 'SanadForm' }"
+          @click="routeClick('SanadForm')"
+        >سند</v-btn>
         <v-btn
           class="blue white--text mr-1"
           :to="{name: 'FactorForm', params: { factorType: 'sale' } }"
+          @click="routeClick('FactorForm')"
         >فاکتور فروش</v-btn>
         <v-btn
           class="blue white--text mr-1"
           :to="{name: 'FactorForm', params: { factorType: 'buy' } }"
+          @click="routeClick('FactorForm')"
         >فاکتور خرید</v-btn>
         <v-btn class="blue white--text mr-1" :to="{name: 'AccountTree' }">نمودار درختی</v-btn>
         <v-btn class="blue white--text mr-1" :to="{name: 'AccountsBalanceReport' }">تراز حساب ها</v-btn>
         <v-btn
           class="blue white--text mr-1"
           :to="{ name: 'TransactionForm', params: { transactionType: 'receive' } }"
+          @click="routeClick('TransactionForm')"
         >دریافت</v-btn>
         <v-btn
           class="blue white--text mr-1"
           :to="{ name: 'TransactionForm', params: { transactionType: 'payment' } }"
+          @click="routeClick('TransactionForm')"
         >پرداخت</v-btn>
 
         <v-spacer></v-spacer>
@@ -136,6 +144,11 @@ export default {
     this.getDateTime();
   },
   methods: {
+    routeClick(routeName) {
+      if (this.$route.name == routeName) {
+        this.EventBus.$emit("sameRouteClick");
+      }
+    },
     getDateTime() {
       this.request({
         url: this.endpoint(`home/time`),
