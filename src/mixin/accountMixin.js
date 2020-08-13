@@ -16,6 +16,7 @@ export default {
       accountTypes: state => state.accountTypes,
       costCenterGroups: state => state.costCenterGroups,
       defaultAccounts: state => state.defaultAccounts,
+      isGetting: state => state.isGetting
     }),
     accountsSelectValues() {
       this.log('Generate accountsSelectValues');
@@ -84,8 +85,11 @@ export default {
   methods: {
     getAccounts(force = false, init = false) {
       if (!force && this.accounts.length) return;
-      if (this.isGettingAccounts) return;
-      this.isGettingAccounts = true;
+      console.log(this.isGetting.accounts);
+      if (this.isGetting.accounts) return;
+      this.$store.commit('updateIsGetting', {
+        accounts: true
+      })
 
       return this.request({
         url: this.endpoint('accounts/accounts'),
@@ -97,7 +101,9 @@ export default {
           init && this.init();
           this.log('Init:', init, ' : Done')
           this.EventBus.$emit('get:accounts', data);
-          this.isGettingAccounts = false;
+          this.$store.commit('updateIsGetting', {
+            'accounts': false
+          })
         }
       })
     },
@@ -140,12 +146,19 @@ export default {
     },
     getDefaultAccounts(force = false, init = false) {
       if (!force && this.defaultAccounts.length) return;
+      if (this.isGetting.defaultAccounts) return;
+      this.$store.commit('updateIsGetting', {
+        defaultAccounts: true
+      })
       return this.request({
         url: this.endpoint('accounts/defaultAccounts'),
         method: 'get',
         success: data => {
           this.$store.commit('setDefaultAccounts', data);
           init && this.init();
+          this.$store.commit('updateIsGetting', {
+            defaultAccounts: false
+          })
         }
       })
     },

@@ -10,6 +10,7 @@ export default new Vuex.Store({
     ...DashbashiStore.state,
     user: null,
     OGR: 0, //on going requests
+    isGetting: {}, // true if is getting something (account for example)
     now: null,
     snackbar: {
       show: false,
@@ -43,6 +44,12 @@ export default new Vuex.Store({
   },
   mutations: {
     ...DashbashiStore.mutations,
+    updateIsGetting(state, data) {
+      state.isGetting = {
+        ...state.isGetting,
+        ...data
+      };
+    },
     incrementOGR(state) {
       state.OGR++;
     },
