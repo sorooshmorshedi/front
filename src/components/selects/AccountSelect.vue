@@ -16,6 +16,9 @@
           :disabled="disabled || accountDisabled"
           :multiple="multiple"
           :placeholder="placeholder"
+          item-text="title"
+          item-value="id"
+          :return-object="true"
         ></v-autocomplete>
       </div>
     </v-col>

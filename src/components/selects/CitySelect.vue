@@ -5,9 +5,11 @@
       v-model="item"
       :label="label"
       item-text="name"
+      item-value="id"
       :disabled="disabled"
       :multiple="multiple"
       :placeholder="placeholder"
+      :return-object="true"
     ></v-autocomplete>
   </div>
 </template>

@@ -180,25 +180,18 @@ export default {
   },
   computed: {
     hasExport() {
-      if (
-        this.ListRouteName &&
-        this.ListRouteParams &&
-        this.ListRouteParams.form &&
-        this.exportParams &&
-        this.exportParams.id
-      )
-        return true;
+      if (this.exportParams && this.exportParams.id) return true;
       return false;
     },
     printUrl() {
       if (!this.hasExport) return "";
-      let path = this.exportBaseUrl + this.ListRouteParams.form + "s/html?";
+      let path = this.exportBaseUrl + this.listRoute.params.form + "s/html?";
       path = this.addParams(path);
       return this.endpoint(path);
     },
     pdfUrl() {
       if (!this.hasExport) return "";
-      let path = this.exportBaseUrl + this.ListRouteParams.form + "s/pdf?";
+      let path = this.exportBaseUrl + this.listRoute.params.form + "s/pdf?";
       path = this.addParams(path);
       return this.endpoint(path);
     }
@@ -208,8 +201,8 @@ export default {
       this.$emit(event);
     },
     addParams(url) {
-      Object.keys(this.ListRouteParams).forEach(k => {
-        url += k + "=" + this.ListRouteParams[k] + "&";
+      Object.keys(this.listRoute.params).forEach(k => {
+        url += k + "=" + this.listRoute.params[k] + "&";
       });
       Object.keys(this.exportParams).forEach(k => {
         url += k + "=" + this.exportParams[k] + "&";

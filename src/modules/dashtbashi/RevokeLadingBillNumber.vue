@@ -13,10 +13,12 @@
       <v-row>
         <v-col cols="12" md="4">
           <v-autocomplete
+            :return-object="true"
             label="سری بارنامه"
             :items="ladingBillSeriesItems"
             v-model="ladingBillSeries"
             item-text="serial"
+            item-value="id"
             no-filter
             :search-input.sync="ladingBillSearchInput"
             clearable
@@ -24,10 +26,13 @@
         </v-col>
         <v-col cols="12" md="4">
           <v-autocomplete
+            :return-object="true"
             label="شماره بارنامه"
             :items="ladingBillSeries?ladingBillSeries.numbers:[]"
             v-model="billNumber"
             :item-text="(o) => o.number + ' : ' + (o.is_revoked?'باطل شده':'باطل نشده')"
+            item-text="title"
+            item-value="id"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="4" class="mt-2" v-if="billNumber">

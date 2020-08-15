@@ -53,10 +53,12 @@
                 </td>
                 <td class="tr-warehouse">
                   <v-autocomplete
+                    :return-object="true"
                     v-if="rows[i].ware"
                     :items="warehouses"
                     v-model="rows[i].output_warehouse"
                     item-text="name"
+                    item-value="id"
                     :disabled="!isEditing"
                   />
                   <span v-else>-</span>
@@ -67,10 +69,12 @@
                 <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
                 <td class="tr-warehouse">
                   <v-autocomplete
+                    :return-object="true"
                     v-if="rows[i].ware"
                     :items="warehouses"
                     v-model="rows[i].input_warehouse"
                     item-text="name"
+                    item-value="id"
                     :disabled="!isEditing"
                   />
                   <span v-else>-</span>

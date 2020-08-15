@@ -127,7 +127,9 @@
             v-model="item.owner"
             :items="owners"
             item-text="text"
+            item-value="id"
             :disabled="!isEditing"
+            :return-object="true"
           />
         </v-col>
         <v-col cols="12" md="6">

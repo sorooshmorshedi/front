@@ -14,10 +14,12 @@
       <v-row>
         <v-col cols="12">
           <v-autocomplete
+            :return-object="true"
             label=" * سال مالی جدید"
             :items="financialYears"
             v-model="targetFinancialYear"
             item-text="name"
+            item-value="id"
             :multiple="false"
           />
         </v-col>

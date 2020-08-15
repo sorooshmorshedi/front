@@ -57,11 +57,13 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                :return-object="true"
                 v-model="imprest"
                 label="شماره پرداخت تنخواه"
                 :items="imprests"
                 :disabled="id != undefined || !isEditing"
                 item-text="code"
+                item-value="id"
                 @change="imprest.imprestSettlements.length && setItem(imprest.imprestSettlements[0])"
               />
             </v-col>

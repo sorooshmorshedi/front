@@ -17,11 +17,13 @@
       <v-row>
         <v-col cols="12">
           <v-autocomplete
+            :return-object="true"
             label=" * دسته بندی"
             :items="parentItems"
             v-model="item.category"
             :disabled="!isEditing"
             item-text="name"
+            item-value="id"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" v-if="item.id">
@@ -32,10 +34,12 @@
         </v-col>
         <v-col cols="12" md="4">
           <v-autocomplete
+            :return-object="true"
             label=" * واحد"
             :items="units"
             v-model="item.unit"
             item-text="name"
+            item-value="id"
             :disabled="!isEditing"
           ></v-autocomplete>
         </v-col>
@@ -54,12 +58,13 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-autocomplete
+            :return-object="false"
             label="انبار پیشفرض"
             :items="warehouses"
             v-model="item.warehouse"
             :disabled="!isEditing"
             item-text="name"
-            :return-object="false"
+            item-value="id"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="6">

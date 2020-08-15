@@ -8,19 +8,18 @@
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
-    
   >
     <template #default>
       <v-row>
         <template v-if="hasParent">
           <v-col cols="12">
             <v-autocomplete
+              :return-object="false"
               label=" * فرم"
               :items="forms"
               v-model="item.form"
               item-text="label"
               item-value="value"
-              :return-object="false"
             ></v-autocomplete>
           </v-col>
           <v-col cols="12">
@@ -41,17 +40,16 @@ export default {
   mixins: [ListModalFormMixin],
   data() {
     let forms = [
-        { label: "سند", value: "S" },
-        { label: "فاکتور خرید", value: "FB" },
-        { label: "فاکتور فروش", value: "FS" },
-        { label: "فاکتور برگشت از خرید", value: "FBFB" },
-        { label: "فاکتور برگشت از فروش", value: "FBFS" },
-        { label: "رسید", value: "RT" },
-        { label: "حواله", value: "RC" },
-        { label: "دریافت", value: "TR" },
-        { label: "پرداخت", value: "TP" }
-
-    ]
+      { label: "سند", value: "S" },
+      { label: "فاکتور خرید", value: "FB" },
+      { label: "فاکتور فروش", value: "FS" },
+      { label: "فاکتور برگشت از خرید", value: "FBFB" },
+      { label: "فاکتور برگشت از فروش", value: "FBFS" },
+      { label: "رسید", value: "RT" },
+      { label: "حواله", value: "RC" },
+      { label: "دریافت", value: "TR" },
+      { label: "پرداخت", value: "TP" }
+    ];
     return {
       item: {},
       items: [],
@@ -84,7 +82,7 @@ export default {
   computed: {
     hasParent() {
       return this.level != 0;
-    },
+    }
   },
   methods: {
     getData() {

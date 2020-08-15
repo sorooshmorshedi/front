@@ -42,11 +42,13 @@
           </v-col>
           <v-col cols="12">
             <v-autocomplete
+              :return-object="true"
               label="نقش ها"
               :items="roles"
               v-model="item.roles"
               :disabled="!isEditing"
               item-text="name"
+              item-value="id"
               multiple
             ></v-autocomplete>
           </v-col>

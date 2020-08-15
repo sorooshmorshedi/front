@@ -31,8 +31,10 @@
             v-model="item.driving"
             :items="$store.state.drivings"
             item-text="title"
+            item-value="id"
             :disabled="!isEditing"
             @change="getDrivingData"
+            :return-object="true"
           />
         </v-col>
 
@@ -285,7 +287,10 @@ export default {
           this.ladings = data;
           if (this.item.remittance) {
             this.selectedLadings = this.ladings.filter(
-              o => !o.remittance || (o.remittance.id == this.item.remittance && this.item.selectedLadings.includes(String(o.id)))
+              o =>
+                !o.remittance ||
+                (o.remittance.id == this.item.remittance &&
+                  this.item.selectedLadings.includes(String(o.id)))
             );
           }
           callback && callback(data);
@@ -352,7 +357,7 @@ export default {
       });
     },
     setItem(item) {
-      console.log('set item', item);
+      console.log("set item", item);
       this.changeRouteTo(item.id);
       this.isEditing = false;
       this.item = item;

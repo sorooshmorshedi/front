@@ -5,7 +5,14 @@
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <v-autocomplete label="انبار" :items="warehouses" v-model="warehouse" />
+          <v-autocomplete
+            :return-object="true"
+            label="انبار"
+            :items="warehouses"
+            v-model="warehouse"
+            item-text="title"
+            item-value="id"
+          />
         </v-col>
         <v-col cols="12">
           <datatable :url="url" :cols="datatableCols.cols" :defaultFilters="defaultFilters" />

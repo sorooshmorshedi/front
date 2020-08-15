@@ -9,6 +9,8 @@ import ReportsRoutes from './Reports';
 import Login from '@/views/auth/Login.vue'
 import ForgetPassword from '@/views/auth/ForgetPassword.vue'
 
+import Test from '@/Test';
+
 Vue.use(VueRouter)
 
 const routes = [{
@@ -24,6 +26,12 @@ const routes = [{
   },
   ...PanelRoutes,
   ...ReportsRoutes,
+
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test
+  },
 
   // {
   //   path: '/about',

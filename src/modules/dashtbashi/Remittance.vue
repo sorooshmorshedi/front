@@ -76,10 +76,13 @@
 
         <v-col cols="12" md="3">
           <v-autocomplete
+            :return-object="true"
             label="پرداخت کننده انعام"
             v-model="item.driver_tip_payer"
             :items="tipPayers"
             :disabled="!isEditing"
+            item-text="title"
+            item-value="id"
           />
         </v-col>
 
@@ -93,10 +96,13 @@
 
         <v-col cols="12" md="3">
           <v-autocomplete
+            :return-object="true"
             label="روش پرداخت مبلغ حواله"
             v-model="item.remittance_payment_method"
             :items="remittancePaymentMethods"
             :disabled="!isEditing"
+            item-text="title"
+            item-value="id"
           />
         </v-col>
 

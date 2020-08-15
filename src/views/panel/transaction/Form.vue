@@ -88,10 +88,12 @@
                   <td>{{ i+1 }}</td>
                   <td style="min-width: 150px">
                     <v-autocomplete
+                      :return-object="true"
                       :disabled="!isEditing || hasCheque(row)"
                       :items="itemPaymentMethods"
                       v-model="rows[i].type"
                       item-text="name"
+                      item-value="id"
                     />
                     <v-btn
                       v-if="isChequeType(row) && !hasCheque(row)"

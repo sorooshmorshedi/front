@@ -34,10 +34,12 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-autocomplete
+            :return-object="true"
             label="ماشین"
             v-model="item.car"
             :items="$store.state.cars"
             item-text="car_number_str"
+            item-value="id"
           />
         </v-col>
         <v-col cols="12" md="12">

@@ -20,10 +20,6 @@ VTextField.options.props.hideDetails.default = true
 VTextField.options.props.dense.default = true
 VTextField.options.props.backgroundColor.default = 'white'
 
-VAutocomplete.options.props.itemValue.default = 'id'
-VAutocomplete.options.props.itemText.default = 'title'
-VAutocomplete.options.props.returnObject.default = true
-
 VBtn.options.props.small.default = true
 
 VCard.options.props.outlined.default = true

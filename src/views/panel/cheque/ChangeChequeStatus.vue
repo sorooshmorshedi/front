@@ -9,6 +9,7 @@
         <v-row>
           <v-col cols="12">
             <v-autocomplete
+              :return-object="true"
               label=" * تغییر وضعیت به"
               item-text="label"
               item-value="name"

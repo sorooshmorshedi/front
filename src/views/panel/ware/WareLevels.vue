@@ -9,7 +9,6 @@
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
-    
   >
     <template #header-btns>
       <template v-for="i in 3">
@@ -33,10 +32,12 @@
         <template v-if="hasParent">
           <v-col cols="12">
             <v-autocomplete
+              :return-object="true"
               :label="' * ' + getWareLevelTitle(level - 1)"
               :items="parentItems"
               v-model="item.parent"
               item-text="name"
+              item-value="id"
             ></v-autocomplete>
           </v-col>
         </template>

@@ -29,12 +29,14 @@
         <v-row>
           <v-col cols="12" md="3">
             <v-autocomplete
+              :return-object="true"
               label="شماره حواله"
               v-model="remittance"
               :disabled="!isEditing"
               :items="remittances"
               :search-input.sync="remittanceSearch"
               item-text="code"
+              item-value="id"
               clearable
             />
           </v-col>
@@ -43,20 +45,25 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+              :return-object="false"
               label="نوع پیمانکار"
               v-model="item.contractor_type"
               :items="contractorTypes"
-              :return-object="false"
               :disabled="!isEditing"
+              item-text="title"
+              item-value="id"
             />
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+              :return-object="true"
               v-if="item.contractor_type == 'cmp'"
               label="نوع کالا"
               v-model="item.ware_type"
               :items="wareTypes"
               :disabled="!isEditing"
+              item-text="title"
+              item-value="id"
             />
           </v-col>
           <v-col cols="12" md="3">
@@ -80,10 +87,13 @@
 
           <v-col cols="12" md="3">
             <v-autocomplete
+              :return-object="true"
               label="روش پرداخت مبلغ حواله"
               v-model="item.remittance_payment_method"
               :items="remittancePaymentMethods"
               :disabled="!isEditing"
+              item-text="title"
+              item-value="id"
             />
           </v-col>
 
@@ -104,10 +114,13 @@
 
           <v-col cols="12" md="3">
             <v-autocomplete
+              :return-object="true"
               label="پرداخت کننده انعام"
               v-model="item.driver_tip_payer"
               :items="tipPayers"
               :disabled="!isEditing"
+              item-text="title"
+              item-value="id"
             />
           </v-col>
 
@@ -187,10 +200,12 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-autocomplete
+            :return-object="true"
             label="حمل کننده"
             v-model="item.driving"
             :items="$store.state.drivings"
             item-text="title"
+            item-value="id"
             :disabled="!isEditing"
           />
         </v-col>
@@ -201,10 +216,12 @@
 
         <v-col cols="12" md="3">
           <v-autocomplete
+            :return-object="true"
             label="انجمن"
             v-model="item.association"
             :items="$store.state.associations"
             item-text="name"
+            item-value="id"
             :disabled="!isEditing"
             @change="item.association_price = item.association.price"
           />
@@ -215,10 +232,12 @@
 
         <v-col cols="12" md="3">
           <v-autocomplete
+            :return-object="true"
             label="سری بارنامه"
             :items="ladingBillSeriesItems"
             v-model="ladingBillSeries"
             item-text="serial"
+            item-value="id"
             no-filter
             :search-input.sync="ladingBillSearchInput"
             :disabled="!isEditing"
@@ -228,10 +247,12 @@
         </v-col>
         <v-col cols="12" md="3">
           <v-autocomplete
+            :return-object="true"
             label="شماره بارنامه"
             :items="ladingBillSeries?ladingBillSeries.numbers.filter(o => !o.is_revoked):[]"
             v-model="item.billNumber"
             item-text="number"
+            item-value="id"
             :disabled="!isEditing"
           ></v-autocomplete>
         </v-col>
@@ -249,10 +270,13 @@
 
         <v-col cols="12" md="3">
           <v-autocomplete
+            :return-object="true"
             label="نحوه دریافت"
             v-model="item.receive_type"
             :items="receiveTypes"
             :disabled="!isEditing"
+            item-text="title"
+            item-value="id"
           />
         </v-col>
         <v-col cols="12" md="3">

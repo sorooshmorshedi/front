@@ -35,10 +35,12 @@
           <template v-if="isPaidCheque">
             <v-col cols="12" md="3">
               <v-autocomplete
+                :return-object="true"
                 required
                 label=" * دسته چک"
                 :items="chequebooks"
                 item-text="account.name"
+                item-value="id"
                 v-model="item.chequebook"
                 :disabled="id != null || !isEditing"
                 @change="getPaidCheques"
@@ -46,11 +48,14 @@
             </v-col>
             <v-col cols="12" md="3">
               <v-autocomplete
+                :return-object="true"
                 required
                 :disabled="!chequebook || !isEditing"
                 label=" * چک"
                 :items="paidCheques"
                 v-model="item"
+                item-text="title"
+                item-value="id"
               />
             </v-col>
           </template>
@@ -213,11 +218,11 @@ export default {
     createUrl() {
       return "cheques/cheques/submit/";
     },
-    permissionBasename(){
-      if(this.isPaidCheque) {
-        return "paidCheque"
+    permissionBasename() {
+      if (this.isPaidCheque) {
+        return "paidCheque";
       } else {
-        return "receivedCheque"
+        return "receivedCheque";
       }
     },
     isPaidCheque() {
@@ -250,7 +255,7 @@ export default {
         return false;
       }
       return false;
-    },
+    }
   },
   watch: {
     account() {

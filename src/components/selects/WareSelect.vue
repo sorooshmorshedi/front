@@ -5,10 +5,12 @@
       :items="wares"
       v-model="ware"
       item-text="name"
+      item-value="id"
       :disabled="disabled"
       prepend-icon="fa-boxes"
       :suffix="ware && ware.unit?ware.unit.name:''"
       @click:prepend="ware && showInventory()"
+      :return-object="true"
     ></v-autocomplete>
 
     <v-dialog v-if="ware" v-model="dialog" scrollable max-width="500px">

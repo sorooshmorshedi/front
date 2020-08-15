@@ -8,7 +8,14 @@
           <ware-select label="کالا" v-model="ware" />
         </v-col>
         <v-col cols="12" md="4">
-          <v-autocomplete label="انبار" :items="warehouses" v-model="warehouse" />
+          <v-autocomplete
+            :return-object="true"
+            label="انبار"
+            :items="warehouses"
+            v-model="warehouse"
+            item-text="title"
+            item-value="id"
+          />
         </v-col>
         <v-col cols="12">
           <datatable
@@ -52,9 +59,7 @@ export default {
     },
     init() {
       if (this.wareId) {
-        this.ware = this.wares.filter(
-          o => o.id == this.wareId
-        )[0];
+        this.ware = this.wares.filter(o => o.id == this.wareId)[0];
       }
     }
   },

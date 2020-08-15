@@ -5,6 +5,7 @@
       <v-row>
         <v-col cols="12" md="3">
           <v-autocomplete
+            :return-object="true"
             label="شماره حواله"
             v-model="remittance"
             :items="remittances"
@@ -13,7 +14,6 @@
             item-value="id"
             clearable
             :multiple="false"
-            :return-object="true"
             @change="getRemittanceData"
           />
         </v-col>

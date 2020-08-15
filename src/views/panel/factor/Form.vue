@@ -137,11 +137,13 @@
                   </td>
                   <td class="tr-warehouse">
                     <v-autocomplete
+                      :return-object="true"
                       v-if="rows[i].ware && !rows[i].ware.isService"
                       v-model="rows[i].warehouse"
                       :disabled="!isEditing"
                       :items="warehouses"
                       item-text="name"
+                      item-value="id"
                     ></v-autocomplete>
                     <span v-else>-</span>
                   </td>
@@ -392,7 +394,13 @@
                   <tr v-for="(e,i) in factorExpensesCopy" :key="i">
                     <td>{{ i+1 }}</td>
                     <td>
-                      <v-autocomplete :items="factorExpenses" v-model="e.expense" item-text="name"></v-autocomplete>
+                      <v-autocomplete
+                        :return-object="true"
+                        :items="factorExpenses"
+                        v-model="e.expense"
+                        item-text="name"
+                        item-value="id"
+                      ></v-autocomplete>
                     </td>
                     <td>
                       <money v-model="e.value" />
