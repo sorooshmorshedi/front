@@ -207,7 +207,7 @@ export default {
         method: "get",
         success: data => {
           this.imprests = data;
-          let imprestId = this.query.imprest;
+          let imprestId = this.urlQuery.imprest;
           let imprests = data.filter(o => o.id == imprestId);
           if (imprests.length) {
             this.imprest = imprests[0];

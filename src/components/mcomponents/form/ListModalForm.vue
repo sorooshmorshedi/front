@@ -87,7 +87,7 @@ export default {
     return {};
   },
   watch: {
-    query() {
+    urlQuery() {
       this.queryChanged();
     }
   },

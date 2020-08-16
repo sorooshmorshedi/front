@@ -253,7 +253,7 @@ export default {
     },
     getData() {
       this.getDrivings(false, data => {
-        let drivingId = this.query["item.driving"];
+        let drivingId = this.urlQuery["item.driving"];
         if (drivingId) {
           this.item.driving = data.filter(o => o.id == drivingId)[0];
           this.getDrivingData(this.item.driving);

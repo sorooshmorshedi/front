@@ -20,14 +20,14 @@
             <v-text-field label=" * نام" v-model="item.first_name" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
-            <v-text-field label="نام خانوادگی" v-model="item.last_name" :disabled="!isEditing" />
+            <v-text-field label="* نام خانوادگی" v-model="item.last_name" :disabled="!isEditing" />
           </v-col>
 
           <v-col cols="12" md="6">
             <v-text-field
               class="ltr"
               type="number"
-              label="شماره موبایل"
+              label="* شماره موبایل"
               v-model="item.phone"
               required
               :disabled="!isEditing"

@@ -95,8 +95,8 @@ export default {
     }
   },
   watch: {
-    query() {
-      this.setDefaults(this.query);
+    urlQuery() {
+      this.setDefaults(this.urlQuery);
     },
     $route(newRoute, oldRoute) {
       if (!newRoute.params.id) {
@@ -122,11 +122,11 @@ export default {
     if (this.id) {
       this.getItem();
     }
-    this.EventBus.$on('get:accounts', () => this.setDefaults(this.query))
+    this.EventBus.$on('get:accounts', () => this.setDefaults(this.urlQuery))
     this.EventBus.$on('sameRouteClick', () => this.clearForm())
   },
   mounted() {
-    this.setDefaults(this.query)
+    this.setDefaults(this.urlQuery)
   },
   methods: {
     getRowTemplate() {
@@ -136,7 +136,7 @@ export default {
       return {}
     },
     /*
-      Set default fields with data query.item
+      Set default fields with data urlQuery.item
     */
     setDefaults(data) {
       this.$nextTick(() => {

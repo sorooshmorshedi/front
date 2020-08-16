@@ -9,6 +9,7 @@
     class="currency-input"
     :smaller-font="formattedAmount.length > 14"
     style="min-width: 90px;"
+    v-bind="$attrs"
   >
     <template #append>
       <!-- <span class="py-1">ریال</span> -->

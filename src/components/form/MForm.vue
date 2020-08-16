@@ -47,7 +47,7 @@
             </v-btn>
           </template>
           <v-spacer></v-spacer>
-          <div v-if="financialYear && !financialYear.is_closed" class="order-first order-md-last">
+          <div v-if="hasFinancialYear" class="order-first order-md-last">
             <template v-if="isEditing">
               <v-btn @click="emitDelete" v-if="canDelete" color="red" outlined>حذف</v-btn>
               <v-btn
@@ -179,6 +179,10 @@ export default {
     };
   },
   computed: {
+    hasFinancialYear(){
+      if(['Companies', 'FinancialYears'].includes(this.$route.name)) return true;
+      return this.financialYear && !this.financialYear.is_closed
+    },
     hasExport() {
       if (this.exportParams && this.exportParams.id) return true;
       return false;

@@ -63,7 +63,7 @@ export default {
         token: false,
         success: data => {
           this.setToken(data.token);
-          let redirectUrl = this.query.redirectUrl;
+          let redirectUrl = this.urlQuery.redirectUrl;
           if (redirectUrl) {
             this.$router.push(redirectUrl);
           } else {

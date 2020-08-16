@@ -34,7 +34,7 @@ Vue.mixin({
     isDev() {
       return process.env.NODE_ENV === 'development';
     },
-    query() {
+    urlQuery() {
       return this.$route.query;
     }
   },

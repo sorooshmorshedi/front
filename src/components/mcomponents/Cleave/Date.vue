@@ -10,6 +10,7 @@
     @click:append="setToday"
     clearable
     style="min-width: 140px"
+    v-bind="$attrs"
   />
 </template>
 
