@@ -7,7 +7,6 @@
       :listRoute="{name: 'List', params:{form: 'cheque', type: this.receivedOrPaid == 'p'?'paid':'received'}}"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
-      :canEdit="canEdit"
       :canDelete="canDelete"
       :canSubmit="canSubmit"
       :isEditing.sync="isEditing"
@@ -79,10 +78,10 @@
               @update:costCenter="v => item.costCenter = v"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money label=" * مبلغ" v-model="item.value" :disabled="!isEditing" />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <date
               label=" * تاریخ سررسید"
               v-model="item.due"
@@ -90,18 +89,13 @@
               :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
-            <date
-              :label="' * ' + (isPaidCheque?'تاریخ پرداخت':'تاریخ دریافت')"
-              v-model="item.date"
-              :default="true"
-              :disabled="!isEditing"
-            />
+          <v-col cols="12" md="2">
+            <date label="* تاریخ ثبت" v-model="item.date" :default="true" :disabled="!isEditing" />
           </v-col>
-          <v-col cols="12" md="3" v-if="canSetSanadCode">
+          <v-col cols="12" md="2" v-if="canSetSanadCode">
             <v-text-field label="شماره سند" v-model="item.sanad_code" :disabled="!isEditing" />
           </v-col>
-          <v-col cols="12" md="12">
+          <v-col cols="12" md="4">
             <v-textarea label="شرح چک" v-model="item.explanation" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="12" v-if="!isPaidCheque">
@@ -294,48 +288,6 @@ export default {
       this.item.floatAccount = this.floatAccount;
       this.item.costCenter = this.costCenter;
     },
-
-    // changeRouteTo(id) {
-    //   if (id) {
-    //     this.$router.push({
-    //       name: "ChequeDetail",
-    //       params: {
-    //         id: id
-    //       }
-    //     });
-    //   } else {
-    //     this.$router.push({
-    //       name: "ChequeForm",
-    //       params: {
-    //         receivedOrPaid: this.receivedOrPaid
-    //       }
-    //     });
-    //   }
-    //   let params = {
-    //     ...this.$route.params,
-    //     id: id
-    //   };
-
-    //   let isDuplicate = true;
-    //   Object.keys(params).forEach(key => {
-    //     if (params[key] != this.$route.params[key]) {
-    //       isDuplicate = false;
-    //     }
-    //   });
-
-    //   if (!isDuplicate) {
-    //     this.$router.push({
-    //       name: this.$route.name,
-    //       params: params
-    //     });
-    //   }
-
-    //   if (!id) {
-    //     this.isEditing = true;
-    //   } else {
-    //     this.isEditing = false;
-    //   }
-    // },
     validate(clearForm) {
       if (this.modalMode) {
         this.$emit("submit", this.extractIds(this.item));
@@ -367,6 +319,14 @@ export default {
         }
       });
     },
+    setItem(item) {
+      if (this.id != item.id) {
+        this.changeRouteTo(item.id);
+      }
+      this.item = item;
+      this.getPaidCheques();
+      this.isEditing = false;
+    },
     getPaidCheques() {
       this.paidCheques = [];
 
@@ -375,8 +335,8 @@ export default {
         method: "get",
         loading: false,
         params: {
-          chequebook__id: this.chequebook.id,
-          status: "blank"
+          chequebook__id: this.chequebook.id
+          // status: "blank"
         },
         success: data => {
           this.paidCheques = data;
