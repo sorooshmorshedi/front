@@ -88,7 +88,9 @@ export default {
       let errors = error.response.data;
       for (const error of errors) {
         let message = ""
-        if (error.field == 'non_field_errors' || error.field == '') {
+        if (type(error) == type("")) {
+          message = error;
+        } else if (error.field == 'non_field_errors' || error.field == '') {
           message = error.messages[0]
         } else {
           message = error.field + ' : ' + error.messages, 'danger'
