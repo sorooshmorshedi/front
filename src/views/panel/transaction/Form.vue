@@ -265,10 +265,9 @@
 
     <v-dialog v-model="submitChequeDialog" scrollable max-width="1200px">
       <v-card>
-        <v-card-title></v-card-title>
         <v-card-text>
           <cheque-form
-            v-if="item.account"
+            ref="chequeForm"
             :receivedOrPaid="transactionType[0]"
             :modalMode="true"
             :account="item.account"
@@ -582,8 +581,15 @@ export default {
         this.notify(`لطفا مرکز هزینه را انتخاب کنید`, "danger");
         return;
       }
+
       this.chequeRowIndex = i;
       this.submitChequeDialog = true;
+
+      this.$nextTick(() => {
+        this.$refs.chequeForm.setDefaults({
+          "item.account": this.item.account.id
+        });
+      });
     },
     addCheque(cheque) {
       if (!this.hasValue(cheque.serial)) {

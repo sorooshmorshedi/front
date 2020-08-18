@@ -71,7 +71,7 @@
               :label="' * ' + (isPaidCheque?'دریافت کننده':'پرداخت کننده')"
               items-type="level3"
               v-model="item.account"
-              :disabled="!isEditing"
+              :disabled="modalMode || !isEditing"
               :floatAccount="item.floatAccount"
               @update:floatAccount="v => item.floatAccount = v"
               :costCenter="item.costCenter"
@@ -159,15 +159,6 @@ export default {
     modalMode: {
       default: false
     },
-    account: {
-      default: null
-    },
-    floatAccount: {
-      default: null
-    },
-    costCenter: {
-      default: null
-    }
   },
   components: { money, date, FormList },
   mixins: [
@@ -185,7 +176,7 @@ export default {
       chequebook: {},
       cheque: {
         received_or_paid: this.receivedOrPaid,
-        account: this.account
+        account: null
       },
       paidCheques: [],
       chequeTypes: [
@@ -251,22 +242,6 @@ export default {
       return false;
     }
   },
-  watch: {
-    account() {
-      this.setAccounts();
-    },
-    floatAccount() {
-      this.setAccounts();
-    },
-    costCenter() {
-      this.setAccounts();
-    },
-    cheque() {
-      if (this.modalMode) {
-        this.setAccounts();
-      }
-    }
-  },
   created() {
     this.getAccounts();
     if (this.id) {
@@ -283,11 +258,6 @@ export default {
         this.$refs.formList.$refs.datatable.getData();
       }
     },
-    setAccounts() {
-      this.item.account = this.account;
-      this.item.floatAccount = this.floatAccount;
-      this.item.costCenter = this.costCenter;
-    },
     validate(clearForm) {
       if (this.modalMode) {
         this.$emit("submit", this.extractIds(this.item));
@@ -297,6 +267,9 @@ export default {
     },
     getItemTemplate() {
       return {
+        account: null,
+        floatAccount: null,
+        costCenter: null,
         received_or_paid: this.receivedOrPaid
       };
     },
