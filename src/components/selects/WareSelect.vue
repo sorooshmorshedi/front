@@ -31,8 +31,8 @@
               <tr v-for="(inventory, i) in ware.inventory" :key="inventory.id">
                 <td>{{ i + 1 }}</td>
                 <td>{{ inventory.warehouse.name }}</td>
-                <td>{{ inventory.count }}</td>
-                <td>{{ inventory.fee }}</td>
+                <td>{{ inventory.count | toMoney }}</td>
+                <td>{{ inventory.fee | toMoney }}</td>
               </tr>
             </tbody>
           </v-simple-table>
