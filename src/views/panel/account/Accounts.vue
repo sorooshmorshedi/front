@@ -13,6 +13,7 @@
     @rowClick="setItem"
     @clearForm="clearForm"
     @submit="submit"
+    @delete="deleteItem"
   >
     <template #header-btns>
       <template v-if="item.id != undefined">
@@ -45,7 +46,7 @@
               :disabled="item.id != undefined || !isEditing"
             />
           </v-col>
-          <v-col cols="12" v-if="hasParent">
+          <v-col cols="12" v-if="parents.length">
             <v-breadcrumbs :items="parents">
               <template v-slot:divider>
                 <v-icon>fa-chevron-left</v-icon>
@@ -53,13 +54,23 @@
             </v-breadcrumbs>
           </v-col>
         </template>
+        <v-col cols="12" v-if="level != 0">
+          <v-autocomplete
+            label="نوع"
+            :items="accountTypes"
+            v-model="item.type"
+            :disabled="!isEditing"
+            item-text="name"
+            item-value="id"
+          />
+        </v-col>
         <v-col cols="12" v-if="item.id != undefined">
-          <v-text-field label="کد" v-model="item.code" :disabled="!isEditing" />
+          <v-text-field label="کد" v-model="item.code" disabled />
         </v-col>
         <v-col cols="12">
           <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
         </v-col>
-        <v-col cols="12" class="mt-3" v-if="item.id != undefined">
+        <v-col cols="12" class="mt-3" v-if="item.id != undefined && item.balance">
           <v-simple-table>
             <thead>
               <tr>
@@ -85,6 +96,7 @@
               itemsType="floatAccountGroups"
               v-model="item.floatAccountGroup"
               item-text="name"
+              item-value="id"
               :disabled="!isEditing"
             />
           </v-col>
@@ -355,11 +367,12 @@ export default {
     parents() {
       if (!this.hasParent || !this.item.parent) return [];
       let parents = [];
-      this.accountParentsName(this.item.parent).forEach(parent => {
+      this.accountParentsName(this.item).forEach(parent => {
         parents.push({
           text: parent
         });
       });
+      // parents.splice(parent.length - 1, 1);
       return parents;
     }
   },
@@ -371,6 +384,7 @@ export default {
     },
     getData() {
       this.getAccounts(true);
+      this.getAccountTypes();
       this.getFloatAccountGroups(true);
     },
     getAccount(id) {
