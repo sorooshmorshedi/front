@@ -21,7 +21,7 @@
       @clearForm="clearForm(true)"
       @goToForm="getItemByPosition"
       @submit="validate"
-      @delete="deleteFactor()"
+      @delete="deleteItem()"
     >
       <template #header-btns>
         <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
@@ -396,7 +396,7 @@
                     <td>
                       <v-autocomplete
                         :return-object="true"
-                        :items="factorExpenses"
+                        :items="factorExpenses.filter(o => o.type == factorExpenseType)"
                         v-model="e.expense"
                         item-text="name"
                         item-value="id"

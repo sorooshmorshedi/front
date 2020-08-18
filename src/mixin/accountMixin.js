@@ -198,7 +198,7 @@ export default {
       return res;
     },
     accountParentsName(account) {
-      if (!account) return [];
+      if (!account || !account.code) return [];
       let res = [];
       let codes = this.splitCode(account.code);
       for (const code of codes) {

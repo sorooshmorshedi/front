@@ -171,6 +171,10 @@ export default {
         name
       };
     },
+    factorExpenseType() {
+      if (this.isBuy || this.isBackFromSale) return 'buy'
+      else return 'sale'
+    },
     isBuy() {
       return this.factorType == 'buy'
     },

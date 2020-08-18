@@ -268,6 +268,7 @@
         <v-card-title></v-card-title>
         <v-card-text>
           <cheque-form
+            v-if="item.account"
             :receivedOrPaid="transactionType[0]"
             :modalMode="true"
             :account="item.account"
