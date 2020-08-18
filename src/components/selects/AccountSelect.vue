@@ -16,7 +16,6 @@
           :disabled="disabled || accountDisabled"
           :multiple="multiple"
           :placeholder="placeholder"
-          item-text="title"
           item-value="id"
           :return-object="true"
         ></v-autocomplete>
@@ -32,6 +31,7 @@
           placeholder=" * حساب شناور"
           items-type="floatAccounts"
           item-text="name"
+          item-value="id"
           :showLedgerBtn="false"
           :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
         />
@@ -45,6 +45,7 @@
           placeholder=" * مرکز هزینه"
           items-type="floatAccounts"
           item-text="name"
+          item-value="id"
           :showLedgerBtn="false"
           :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
         />
@@ -75,7 +76,7 @@ export default {
       default: false
     },
     itemText: {
-      default: "name"
+      default: "title"
     },
     multiple: {
       default: false
