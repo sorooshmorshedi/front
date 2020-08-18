@@ -28,7 +28,6 @@
                   required
                   :label="' * ' + accountLabel(newStatus) "
                   :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
-                  label="name"
                   track-by="id"
                   :itemsType="newStatusAccountsType"
                   v-model="statusChange.account"
