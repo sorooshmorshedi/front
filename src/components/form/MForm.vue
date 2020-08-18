@@ -179,9 +179,14 @@ export default {
     };
   },
   computed: {
-    hasFinancialYear(){
-      if(['Companies', 'FinancialYears'].includes(this.$route.name)) return true;
-      return this.financialYear && !this.financialYear.is_closed
+    hasFinancialYear() {
+      let financialYearSafeRoutes = [
+        "Companies",
+        "FinancialYears",
+        "Cities"
+      ];
+      if (financialYearSafeRoutes.includes(this.$route.name)) return true;
+      return this.financialYear && !this.financialYear.is_closed;
     },
     hasExport() {
       if (this.exportParams && this.exportParams.id) return true;
