@@ -10,7 +10,8 @@ export default {
   props: {
     id: {
       default: null
-    }
+    },
+    itemObject: {}
   },
   data() {
     return {
@@ -98,6 +99,9 @@ export default {
     urlQuery() {
       this.setDefaults(this.urlQuery);
     },
+    itemObject() {
+      this.setDefaults(this.urlQuery);
+    },
     $route(newRoute, oldRoute) {
       if (!newRoute.params.id) {
         this.clearForm();
@@ -140,6 +144,10 @@ export default {
     */
     setDefaults(data) {
       this.$nextTick(() => {
+
+        if (this.itemObject) {
+          this.item = this.itemObject;
+        }
         for (let key in data) {
           let path = key.split('.')
           let lastObject = path.slice(0, path.length - 1).reduce((o, i) => o[i], this)
