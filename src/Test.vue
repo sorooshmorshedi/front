@@ -5,16 +5,22 @@
         <v-col cols="12" md="4">
           <v-text-field
             v-model="search"
+            max-width="300px"
             append-icon="search"
             label="جستوجو"
             single-line
             hide-details
           />
         </v-col>
+        <v-col cols="12" md="8" class="mt-1 text-left">
+          <v-btn @click="exportTo('html')" class="export-btn">چاپ</v-btn>
+          <v-btn @click="exportTo('pdf')" class="export-btn mr-1">خروجی PDF</v-btn>
+          <v-btn @click="exportTo('xlsx')" class="export-btn mr-1">خروجی اکسل</v-btn>
+        </v-col>
       </v-row>
     </v-card-title>
     <v-data-table
-      :show-select="showSelect"
+      :show-select="true"
       :headers="headers"
       :items="items"
       :options.sync="options"
@@ -254,6 +260,22 @@ export default {
           this.loading = false;
         }
       });
+    },
+    exportTo(outputFormat) {
+      let url = this.endpoint(`reports/lists/sanads/${outputFormat}`) + "?";
+
+      Object.keys(this.filters).forEach(k => {
+        url += k + "=" + this.filters[k] + "&";
+      });
+      url += "search=" + this.search;
+      url += "&token=" + this.token;
+
+      let element = document.createElement("a");
+      element.href = url;
+      element.target = "_blank";
+      element.rel = "noopener noreferrer";
+      element.click();
+      element.delete();
     }
   }
 };
