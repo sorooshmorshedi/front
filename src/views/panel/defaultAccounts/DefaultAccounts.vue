@@ -109,9 +109,11 @@ export default {
     },
     getSerialized() {
       let item = this.extractIds(this.item);
-      let level = 3;
-      if (this.usage == "imprest") level = 2;
-      item.account_level = level;
+      if (!item.account_level) {
+        let level = 3;
+        if (this.usage == "imprest") level = 2;
+        item.account_level = level;
+      }
       return item;
     }
   }
