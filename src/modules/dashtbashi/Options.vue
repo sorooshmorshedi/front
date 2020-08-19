@@ -30,7 +30,7 @@ import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
 import GetOptionsApi from "@/views/panel/options/getOptionsApi";
 
 export default {
-  mixins: [ListModalFormMixin],
+  mixins: [ListModalFormMixin, GetOptionsApi],
   data() {
     return {
       item: {},

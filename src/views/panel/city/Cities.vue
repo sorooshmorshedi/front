@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       baseUrl: "users/cities",
+      permissionBasename: "city",
       cols: [
         {
           th: "نام",

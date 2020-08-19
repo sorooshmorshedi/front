@@ -25,7 +25,7 @@
           @click="clearForm"
         >تعریف {{ getWareLevelTitle(i-1) }}</v-btn>
       </template>
-      <v-btn :key="i" class="blue white--text mr-1" :to="{name:'Wares'}">تعریف کالا</v-btn>
+      <v-btn class="blue white--text mr-1" :to="{name:'Wares'}">تعریف کالا</v-btn>
     </template>
     <template #default>
       <v-row>

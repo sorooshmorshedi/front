@@ -322,6 +322,9 @@ export default {
     title() {
       return this.getTitle(this.level, this.account_type);
     },
+    permissionBasename() {
+      return `account${this.level}`;
+    },
     parentTitle() {
       return this.getTitle(+this.level - 1);
     },

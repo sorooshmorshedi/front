@@ -194,6 +194,7 @@ export default {
   data() {
     return {
       baseUrl: "sanads",
+      permissionBasename: "sanad",
       leadingSlash: true,
       hasList: false,
       hasIdProp: true,

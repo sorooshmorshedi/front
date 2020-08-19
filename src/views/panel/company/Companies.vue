@@ -81,6 +81,7 @@ export default {
   data() {
     return {
       baseUrl: "companies",
+      permissionBasename: "company",
       items: [],
       cols: [
         {

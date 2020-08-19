@@ -68,8 +68,10 @@ export default {
       if (this.localValue != this.mask.value) {
         this.mask.resolve(String(this.localValue));
         this.$nextTick(() => {
-          this.localValue = this.mask.value;
-          this.$emit("input", this.mask.value);
+          let maskedValue = this.mask.value
+          if (maskedValue == '') maskedValue = null;
+          this.localValue = maskedValue;
+          this.$emit("input", maskedValue);
         });
       }
     },

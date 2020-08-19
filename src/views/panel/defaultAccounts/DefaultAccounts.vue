@@ -54,6 +54,7 @@ export default {
     return {
       item: {},
       baseUrl: "accounts/defaultAccounts",
+      permissionBasename: "defaultAccount",
       cols: [
         {
           th: "نام",
@@ -81,7 +82,7 @@ export default {
     },
     accountLevel() {
       if (this.usage == "imprest") return "level2";
-      return `level${this.item.account_level}`;
+      return `level${this.item.account_level || 3}`;
     },
     items() {
       return this.defaultAccounts.filter(o => o.usage == this.usage);

@@ -6,7 +6,6 @@
       :cols="cols"
       :canSubmit="canSubmit"
       :canDelete="canDelete"
-      :canClear="canClear"
       :is-editing.sync="isEditing"
       :showListBtn="false"
       :show-navigation-btns="false"
@@ -40,6 +39,7 @@ export default {
   data() {
     return {
       baseUrl: "accounts/floatAccountGroups",
+      permissionBasename: "floatAccountGroup",
       cols: [
         {
           th: "نام گروه",

@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       baseUrl: "companies/financialYears",
+      permissionBasename: "financialYear",
       items: [],
       cols: [
         {
