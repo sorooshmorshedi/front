@@ -57,6 +57,7 @@
                 <th>مبلغ مالیات بر ارزش افزوده</th>
                 <th>درصد عوارض بر ارزش افزوده</th>
                 <th>مبلغ عوارض بر ارزش افزوده</th>
+                <th>مبلغ کل با ارزش افزوده</th>
                 <th>مبلغ خالص</th>
                 <th>کمیسیون شرکت</th>
                 <th>درآمد ماشین</th>
@@ -104,6 +105,9 @@
                 </td>
                 <td>
                   <money :value="rowSum(row)" :disabled="true" />
+                </td>
+                <td>
+                  <money :value="netPrice(row)" :disabled="true" />
                 </td>
                 <td>
                   <money :value="companyCommission(row)" :disabled="true" />
@@ -218,7 +222,8 @@ export default {
     },
     getRowTemplate() {
       return {
-        tax_percent: this.getOptionValue("taxPercent")
+        tax_percent: this.getOptionValue("taxPercent"),
+        complication_percent: this.getOptionValue("addedValuePercentOfOilCompanyLading")
       };
     },
     taxPrice(row) {
@@ -240,13 +245,18 @@ export default {
       row.sum = sum;
       return sum;
     },
+    netPrice(row){
+      let value = +row.gross_price - +row.insurance_price;
+      row.net_price = value;
+      return value;
+    },
     companyCommission(row) {
-      let value = (this.rowSum(row) * +this.item.company_commission) / 100 || 0;
+      let value = (this.netPrice(row) * +this.item.company_commission) / 100 || 0;
       row.company_commission = value;
       return value;
     },
     carIncome(row) {
-      let value = this.rowSum(row) - this.companyCommission(row) || 0;
+      let value = (this.netPrice(row) - this.companyCommission(row)) || 0;
       row.car_income = value;
       return value;
     },
