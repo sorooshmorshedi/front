@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <template v-if="isAppReady">
-      <v-system-bar app class="indigo lighten-5">
+      <v-system-bar app class="indigo lighten-5" v-show="!isPrinting">
         <m-system-bar />
       </v-system-bar>
       <v-navigation-drawer

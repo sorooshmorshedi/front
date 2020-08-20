@@ -1,20 +1,20 @@
 export default {
   url: "reports/lists/transactions",
   cols: [{
-      th: "شماره",
-      td: "code",
+      text: "شماره",
+      value: "code",
       type: "number",
       filters: ["code__icontains"]
     },
     {
-      th: "نام حساب",
-      td: "account.name",
+      text: "نام حساب",
+      value: "account.name",
       type: "text",
       filters: ["account__name__icontains"]
     },
     {
-      th: "تاریخ",
-      td: "date",
+      text: "تاریخ",
+      value: "date",
       type: "date",
       filters: [{
           label: "xxxx-xx-xx از تاریخ ",
@@ -27,14 +27,14 @@ export default {
       ]
     },
     {
-      th: "توضیحات",
-      td: "explanation",
+      text: "توضیحات",
+      value: "explanation",
       type: "text",
       filters: ["account__icontains"]
     },
     {
-      th: "مبلغ مجموع",
-      td: "sanad.bed",
+      text: "مبلغ مجموع",
+      value: "sanad.bed",
       type: "money",
       filters: ["sanad__bed__icontains"]
     }

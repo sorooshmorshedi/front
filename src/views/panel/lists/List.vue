@@ -2,10 +2,10 @@
   <v-card>
     <v-card-title>لیست {{ options.label }}</v-card-title>
     <v-card-text class="mt-2">
-      <datatable
+      <m-datatable
         v-if="showTable"
-        :cols="options.cols"
-        :url="options.url"
+        :headers="options.cols"
+        :apiUrl="options.url"
         :default-filters="defaultFilters"
         :router-name="options.routerName"
         :router-default-params="options.defaultParams"
@@ -16,10 +16,11 @@
 </template>
 
 <script>
-import datatable from "@/components/mcomponents/datatable/Server";
+import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import formOptions from "./formOptions";
 export default {
   name: "List",
+  components: { MDatatable },
   props: {
     form: { required: true },
     type: {},
@@ -27,9 +28,8 @@ export default {
       default() {
         return JSON.stringify({});
       }
-    }
+    },
   },
-  components: { datatable },
   data() {
     return {
       formOptions: formOptions,
@@ -57,12 +57,12 @@ export default {
       switch (this.type) {
         case "receive":
           this.options.label = "دریافت ها";
-          this.defaults = { transactionType: this.type };
+          this.defaults = { type: this.type };
           this.options.defaultParams = this.defaults;
           break;
         case "payment":
           this.options.label = "پرداخت ها";
-          this.defaults = { transactionType: this.type };
+          this.defaults = { type: this.type };
           this.options.defaultParams = this.defaults;
           break;
         case "received":

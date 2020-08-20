@@ -11,6 +11,7 @@ export default new Vuex.Store({
     user: null,
     OGR: 0, //on going requests
     isGetting: {}, // true if is getting something (account for example)
+    isPrinting: false,
     now: null,
     snackbar: {
       show: false,
@@ -49,6 +50,9 @@ export default new Vuex.Store({
         ...state.isGetting,
         ...data
       };
+    },
+    setIsPrinting(state, flag) {
+      state.isPrinting = flag;
     },
     incrementOGR(state) {
       state.OGR++;

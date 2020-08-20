@@ -2,99 +2,69 @@ export default {
   url: "reports/lists/cheques",
   routerName: 'ChequeDetail',
   cols: [{
-      th: "شماره",
-      td: "serial",
-      type: "text",
-      filters: ["serial__icontains"]
+      text: "شماره",
+      value: "serial",
     },
     {
-      th: "شرح",
-      td: "explanation",
-      type: "text",
-      filters: ["account__icontains"]
+      text: "شرح",
+      value: "explanation",
     },
     {
-      th: "تاریخ",
-      td: "date",
-      type: "date",
-      filters: [{
-          label: "xxxx-xx-xx از تاریخ ",
-          model: "date__gte"
-        },
-        {
-          label: "xxxx-xx-xx تا تاریخ",
-          model: "date__lte"
-        }
-      ]
+      text: "تاریخ",
+      value: "date",
     },
     {
-      th: "تاریخ سررسید",
-      td: "due",
-      type: "date",
-      filters: [{
-          label: "از تاریخ",
-          model: "due__gte"
-        },
-        {
-          label: "تا تاریخ",
-          model: "due__lte"
-        }
-      ]
+      text: "تاریخ سررسید",
+      value: "due",
     },
     {
-      th: "مبلغ",
-      td: "value",
-      type: "money",
-      filters: ["value"]
+      text: "مبلغ",
+      value: "value",
     },
     {
-      th: "نام حساب",
-      td: "account.name",
-      type: "text",
-      filters: ["account__name__icontains"]
+      text: "نام حساب",
+      value: "account.name",
     },
     {
-      th: "وضعیت",
-      td: "status",
-      type: "select",
-      options: [{
-          label: 'سفید',
+      text: "وضعیت",
+      value: "status",
+      items: [{
+          text: 'سفید',
           value: 'blank'
         },
         {
-          label: 'پاس نشده',
+          text: 'پاس نشده',
           value: 'notPassed'
         },
         {
-          label: 'در جریان',
+          text: 'در جریان',
           value: 'inFlow'
         },
         {
-          label: 'پاس شده',
+          text: 'پاس شده',
           value: 'passed'
         },
         {
-          label: 'برگشتی',
+          text: 'برگشتی',
           value: 'bounced'
         },
         {
-          label: 'نقدی',
+          text: 'نقدی',
           value: 'cashed'
         },
         {
-          label: 'باطل شده',
+          text: 'باطل شده',
           value: 'revoked'
         },
         {
-          label: 'انتقالی',
+          text: 'انتقالی',
           value: 'transferred',
         }
       ],
-      filters: ["status"]
     },
     {
-      th: "نام بانک",
-      td: "bankName",
+      text: "نام بانک",
+      value: "bankName",
       type: "text",
       filters: ["bankName__icontains"]
     }

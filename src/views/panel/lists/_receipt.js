@@ -2,14 +2,14 @@ export default {
   url: "reports/lists/receipts",
   routerName: 'ReceiptAndRemittance',
   cols: [{
-      th: "شماره",
-      td: "code",
+      text: "شماره",
+      value: "code",
       type: "number",
       filters: ["code__icontains"]
     },
     {
-      th: "تاریخ",
-      td: "date",
+      text: "تاریخ",
+      value: "date",
       type: "date",
       filters: [{
           label: "xxxx-xx-xx از تاریخ ",
@@ -22,8 +22,8 @@ export default {
       ]
     },
     {
-      th: "ساعت",
-      td: "time",
+      text: "ساعت",
+      value: "time",
       type: "time",
       filters: [{
           label: "از ساعت",
@@ -36,8 +36,8 @@ export default {
       ]
     },
     {
-      th: "توضیحات",
-      td: "explanation",
+      text: "توضیحات",
+      value: "explanation",
       type: "text",
       filters: ["explanation__icontains"]
     },

@@ -29,7 +29,8 @@ Vue.mixin({
       company: state => state.user ? state.user.active_company || null : null,
       systemOptions: state => state.options,
       OGR: state => state.OGR,
-      now: state => state.now
+      now: state => state.now,
+      isPrinting: state => state.isPrinting
     }),
     isDev() {
       return process.env.NODE_ENV === 'development';

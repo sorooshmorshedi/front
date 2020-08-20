@@ -21,8 +21,8 @@
     </v-card-title>
     <v-data-table
       id="datatable"
-      :show-select="false"
-      :headers="headers"
+      :show-select="!isPrinting"
+      :headers="headersWithFilter"
       :items="items"
       :options.sync="options"
       :server-items-length="totalItems"
@@ -34,7 +34,7 @@
       :hide-default-footer="isPrinting"
     >
       <!-- Add Filter btn and menu to headers -->
-      <template v-for="header in headers" v-slot:[getHeaderSlot(header.value)]="{header}">
+      <template v-for="header in headersWithFilter" v-slot:[getHeaderSlot(header.value)]="{header}">
         <template v-if="header.filterable != false && !isPrinting">
           <v-menu
             left
@@ -62,7 +62,7 @@
                 {{ header.text }}
               </v-card-title>
               <v-card-text class="pt-0">
-                <v-row>
+                <v-row v-if="!header.items">
                   <v-col cols="12">
                     <component
                       :is="getFilterField(header)"
@@ -98,6 +98,14 @@
                     </v-col>
                   </template>
                 </v-row>
+                <v-row v-else>
+                  <v-autocomplete
+                    :label="header.text"
+                    :items="header.items"
+                    clearable
+                    v-model="filters[`${header.value}`]"
+                  />
+                </v-row>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -114,10 +122,18 @@
         {{ header.text }}
       </template>
 
-      <!-- Filter numeric data -->
+      <!-- Mask Data -->
       <template v-for="header in headers" v-slot:[getItemSlot(header.value)]="{ item }">
-        <template v-if="isNumber(header)">{{ item[header.value] | toMoney}}</template>
-        <template v-else>{{ item[header.value] }}</template>
+        <!-- numeric -->
+        <template v-if="isNumber(header)">{{ item[header.value] | toMoney }}</template>
+
+        <!-- select -->
+        <template
+          v-else-if="isSelect(header)"
+        >{{ header.items.filter(o => o.value == getItemValue(item, header.value))[0].text }}</template>
+
+        <!-- other-->
+        <template v-else>{{ getItemValue(item, header.value) }}</template>
       </template>
 
       <!-- Add row number field -->
@@ -136,19 +152,27 @@ export default {
     apiUrl: {
       // default: null
       default: "reports/lists/sanads"
+    },
+    headers: {
+      required: true
+    },
+    defaultFilters: {
+      default: {}
     }
   },
   data() {
     return {
       filterMenus: {},
       search: "",
-      filters: {},
+      filters: this.defaultFilters,
       totalItems: 0,
       items: [],
       selectedItems: [],
       loading: true,
       showSelect: false,
-      options: {}
+      options: {},
+
+      numericValues: ["bed", "bes", "value", "fee", "price", "count"]
     };
   },
   computed: {
@@ -174,7 +198,7 @@ export default {
       }
       return filterTypes;
     },
-    headers() {
+    headersWithFilter() {
       let filter = propertyName => {
         return value => {
           if (!this.filters[propertyName]) return true;
@@ -185,23 +209,14 @@ export default {
       let headers = [
         {
           text: "#",
-          filterable: false,
-          sortable: false,
           value: "rowNumber"
         },
-        {
-          text: "شماره",
-          value: "code"
-        },
-        { text: "بدهکار", value: "bed" },
-        { text: "بستانکار", value: "bes" },
-        { text: "تاریخ", value: "date" },
-        { text: "توضیحات", value: "explanation" }
+        ...this.headers
       ];
 
       for (let header of headers) {
         this.$set(this.filters, header.value, "");
-        // header.filter = filter(header.value);
+        header.filter = filter(header.value);
       }
 
       return headers;
@@ -211,6 +226,10 @@ export default {
     }
   },
   watch: {
+    apiUrl() {
+      this.filters = { ...this.defaultFilters };
+      this.getDataFromApi();
+    },
     options: {
       handler() {
         this.getDataFromApi();
@@ -222,6 +241,9 @@ export default {
         this.getDataFromApi();
       },
       deep: true
+    },
+    defaultFilters() {
+      this.filters = { ...this.defaultFilters };
     },
     search() {
       if (this.serverProcessing) this.getDataFromApi();
@@ -251,10 +273,11 @@ export default {
     isDate(header) {
       return header.value.includes("date");
     },
+    isSelect(header) {
+      return header.items != undefined;
+    },
     isNumber(header) {
-      return ["bed", "bes", "value", "fee", "price", "count"].includes(
-        header.value
-      );
+      return this.numericValues.includes(header.value);
     },
     getItemSlot(value) {
       return `item.${value}`;
@@ -271,15 +294,23 @@ export default {
         ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0]}`;
       }
 
+      let limit = itemsPerPage;
+      let offset = itemsPerPage * (page - 1);
+
+      if (limit == -1) {
+        limit = 5000;
+        offset = 0;
+      }
+
       this.request({
         url: this.endpoint(this.apiUrl),
         method: "get",
         params: {
-          limit: itemsPerPage,
-          offset: itemsPerPage * (page - 1),
+          limit: limit,
+          offset: offset,
           ordering: ordering,
           search: this.search,
-          ...this.filters
+          ...this.getFilters()
         },
         success: data => {
           if (this.serverProcessing) {
@@ -292,14 +323,25 @@ export default {
         }
       });
     },
+    getFilters() {
+      let filters = {};
+      for (let filterKey of Object.keys(this.filters)) {
+        filters[filterKey.replace(".", "__")] = this.filters[filterKey];
+      }
+      return filters;
+    },
     exportTo(outputFormat) {
       if (this.serverProcessing) {
         let url = this.endpoint(`${this.apiUrl}/${outputFormat}`) + "?";
 
-        Object.keys(this.filters).forEach(k => {
-          url += k + "=" + this.filters[k] + "&";
-        });
-        url += "search=" + this.search;
+        if (this.selectedItems.length) {
+          url += "id__in=" + this.selectedItems.map(o => o.id).join(",");
+        } else {
+          Object.keys(this.filters).forEach(k => {
+            url += k + "=" + this.filters[k] + "&";
+          });
+          url += "search=" + this.search;
+        }
         url += "&token=" + this.token;
 
         let element = document.createElement("a");
@@ -307,7 +349,7 @@ export default {
         element.target = "_blank";
         element.rel = "noopener noreferrer";
         element.click();
-        element.delete();
+        element.remove();
       } else {
         if (outputFormat == "html") {
           this.print();
@@ -334,6 +376,12 @@ export default {
           XLSX.writeFile(workbook, "export.xlsx");
         }
       }
+    },
+    getItemValue(item, dotNotationString) {
+      return dotNotationString.split(".").reduce((o, i) => {
+        if (o) return o[i];
+        return null;
+      }, item);
     }
   }
 };

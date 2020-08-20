@@ -2,14 +2,14 @@ export default {
   url: "reports/lists/factors",
   routerName: 'FactorForm',
   cols: [{
-      th: "شماره",
-      td: "code",
+      text: "شماره",
+      value: "code",
       type: "number",
       filters: ["code__icontains"]
     },
     {
-      th: "تاریخ",
-      td: "date",
+      text: "تاریخ",
+      value: "date",
       type: "date",
       filters: [{
           label: "xxxx-xx-xx از تاریخ ",
@@ -22,8 +22,8 @@ export default {
       ]
     },
     {
-      th: "ساعت",
-      td: "time",
+      text: "ساعت",
+      value: "time",
       type: "time",
       filters: [{
           label: "از ساعت",
@@ -36,20 +36,20 @@ export default {
       ]
     },
     {
-      th: "حساب",
-      td: "account.name",
+      text: "حساب",
+      value: "account.name",
       type: "text",
       filters: ["account__name__icontains"]
     },
     {
-      th: "توضیحات",
-      td: "explanation",
+      text: "توضیحات",
+      value: "explanation",
       type: "text",
       filters: ["explanation__icontains"]
     },
     {
-      th: "مبلغ کل فاکتور",
-      td: "total_sum",
+      text: "مبلغ کل فاکتور",
+      value: "total_sum",
       type: "money",
       filters: [],
       sortable: false,
