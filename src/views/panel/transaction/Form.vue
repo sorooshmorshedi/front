@@ -47,7 +47,7 @@
             <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2">
-            <date v-if="!isImprest" placeholder="تاریخ راس" disabled />
+            <date v-if="transactionType == 'payment'" placeholder="تاریخ راس" disabled />
           </v-col>
           <v-col cols="12" md="6">
             <account-select
@@ -359,10 +359,6 @@ export default {
     accountLabel() {
       if (this.isImprest) return "* تنخواه گردان";
       return " * کد - نام مشتری";
-    },
-    updateUrl() {
-      let id = this.item.id || this.id || null;
-      return id && `${this.baseUrl}/${id}`;
     },
     itemPaymentMethods() {
       let type = this.transactionType == "receive" ? "receive" : "payment";

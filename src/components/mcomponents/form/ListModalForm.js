@@ -36,7 +36,7 @@ export default {
     },
     updateUrl() {
       let id = this.item.id || this.id || null;
-      return id && `${this.baseUrl}/${id}` + (this.leadingSlash ? "/" : "")
+      return id && `${this.baseUrl}/${id}${this.leadingSlash ? "/" : ""}`;
     },
     confirmUrl() {
       let id = this.item.id || this.id || null;

@@ -4,13 +4,21 @@
     <v-card-text class="mt-2">
       <m-datatable
         v-if="showTable"
-        :headers="options.cols"
+        :headers="[...options.cols, ...detailCol]"
         :apiUrl="options.url"
-        :default-filters="defaultFilters"
+        :filters.sync="filters"
         :router-name="options.routerName"
         :router-default-params="options.defaultParams"
         ref="datatable"
-      />
+      >
+        <template #item.detail="{ item }">
+          <v-btn
+            color="light-blue white--text"
+            :to="{name:options.routerName, params: {id: item.id, ...options.defaultParams}}"
+            target="_blank"
+          >جزئیات</v-btn>
+        </template>
+      </m-datatable>
     </v-card-text>
   </v-card>
 </template>
@@ -23,28 +31,21 @@ export default {
   components: { MDatatable },
   props: {
     form: { required: true },
-    type: {},
-    filters: {
-      default() {
-        return JSON.stringify({});
-      }
-    },
+    type: {}
   },
   data() {
     return {
       formOptions: formOptions,
       options: {},
       showTable: false,
-      defaults: {}
+      filters: {},
+      detailCol: {
+        text: "",
+        value: "detail",
+        sortable: false,
+        filterable: false
+      }
     };
-  },
-  computed: {
-    defaultFilters() {
-      return {
-        ...JSON.parse(this.filters),
-        ...this.defaults
-      };
-    }
   },
   created() {
     this.init();
@@ -57,23 +58,23 @@ export default {
       switch (this.type) {
         case "receive":
           this.options.label = "دریافت ها";
-          this.defaults = { type: this.type };
-          this.options.defaultParams = this.defaults;
+          this.filters= { transactionType: this.type };
+          this.options.defaultParams = this.filters;
           break;
         case "payment":
           this.options.label = "پرداخت ها";
-          this.defaults = { type: this.type };
-          this.options.defaultParams = this.defaults;
+          this.filters= { transactioknType: this.type };
+          this.options.defaultParams = this.filters;
           break;
         case "received":
           this.options.label = "چک های دریافتی";
-          this.defaults = {
+          this.filters= {
             received_or_paid: "r"
           };
           break;
         case "paid":
           this.options.label = "چک های پرداختی";
-          this.defaults = {
+          this.filters= {
             received_or_paid: "p"
           };
           break;
@@ -81,7 +82,7 @@ export default {
           break;
       }
       if (this.form == "factor") {
-        this.defaults = { type: this.type };
+        this.filters= { factorType: this.type };
         this.options.defaultParams = { factorType: this.type };
 
         switch (this.type) {
@@ -100,9 +101,9 @@ export default {
         }
       }
       if (this.form == "receipt") {
-        defaults = { receiptType: this.type };
-        this.defaults = defaults;
-        this.options.defaultParams = defaults;
+        filters= { receiptType: this.type };
+        this.filters= filters;
+        this.options.defaultParams = filters;
         switch (this.type) {
           case "receipt":
             this.options.label = "رسید ها";

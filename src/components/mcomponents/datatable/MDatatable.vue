@@ -33,6 +33,11 @@
       :disable-sort="isPrinting"
       :hide-default-footer="isPrinting"
     >
+      <!-- Add row number field -->
+      <template
+        #item.rowNumber="{ item }"
+      >{{ (options.page - 1) * options.itemsPerPage + items.indexOf(item) + 1}}</template>
+
       <!-- Add Filter btn and menu to headers -->
       <template v-for="header in headersWithFilter" v-slot:[getHeaderSlot(header.value)]="{header}">
         <template v-if="header.filterable != false && !isPrinting">
@@ -51,7 +56,7 @@
                 v-bind="attrs"
                 v-on="on"
                 @click.stop
-                :color="filters[header.value]?'indigo':''"
+                :color="tableFilters[header.value]?'indigo':''"
               >
                 <v-icon x-small>fa fa-filter</v-icon>
               </v-btn>
@@ -67,7 +72,7 @@
                     <component
                       :is="getFilterField(header)"
                       label="جستوجو"
-                      v-model="filters[`${header.value}__icontains`]"
+                      v-model="tableFilters[`${header.value}__icontains`]"
                       clearable
                     />
                   </v-col>
@@ -75,7 +80,7 @@
                     <component
                       :is="getFilterField(header)"
                       label="جستوجوی دقیق"
-                      v-model="filters[`${header.value}`]"
+                      v-model="tableFilters[`${header.value}`]"
                       clearable
                     />
                   </v-col>
@@ -84,7 +89,7 @@
                       <component
                         :is="getFilterField(header)"
                         label="از"
-                        v-model.lazy="filters[`${header.value}__gte`]"
+                        v-model.lazy="tableFilters[`${header.value}__gte`]"
                         clearable
                       />
                     </v-col>
@@ -92,7 +97,7 @@
                       <component
                         :is="getFilterField(header)"
                         label="تا"
-                        v-model.lazy="filters[`${header.value}__lte`]"
+                        v-model.lazy="tableFilters[`${header.value}__lte`]"
                         clearable
                       />
                     </v-col>
@@ -103,7 +108,7 @@
                     :label="header.text"
                     :items="header.items"
                     clearable
-                    v-model="filters[`${header.value}`]"
+                    v-model="tableFilters[`${header.value}`]"
                   />
                 </v-row>
               </v-card-text>
@@ -136,10 +141,13 @@
         <template v-else>{{ getItemValue(item, header.value) }}</template>
       </template>
 
-      <!-- Add row number field -->
-      <template
-        #item.rowNumber="{ item }"
-      >{{ (options.page - 1) * options.itemsPerPage + items.indexOf(item) + 1}}</template>
+      <!-- Pass user templates to vuetify data table -->
+      <template v-for="(index, name) in $slots" v-slot:[name]>
+        <slot :name="name" />
+      </template>
+      <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
+        <slot :name="name" v-bind="data"></slot>
+      </template>
     </v-data-table>
   </v-card>
 </template>
@@ -156,15 +164,15 @@ export default {
     headers: {
       required: true
     },
-    defaultFilters: {
-      default: {}
+    filters: {
+      default: () => {}
     }
   },
   data() {
     return {
       filterMenus: {},
       search: "",
-      filters: this.defaultFilters,
+      tableFilters: {},
       totalItems: 0,
       items: [],
       selectedItems: [],
@@ -201,21 +209,23 @@ export default {
     headersWithFilter() {
       let filter = propertyName => {
         return value => {
-          if (!this.filters[propertyName]) return true;
-          return String(value).includes(this.filters[propertyName]);
+          if (!this.tableFilters[propertyName]) return true;
+          return String(value).includes(this.tableFilters[propertyName]);
         };
       };
 
       let headers = [
         {
           text: "#",
-          value: "rowNumber"
+          value: "rowNumber",
+          sortable: false,
+          filterable: false
         },
         ...this.headers
       ];
 
       for (let header of headers) {
-        this.$set(this.filters, header.value, "");
+        this.$set(this.tableFilters, header.value, "");
         header.filter = filter(header.value);
       }
 
@@ -227,7 +237,6 @@ export default {
   },
   watch: {
     apiUrl() {
-      this.filters = { ...this.defaultFilters };
       this.getDataFromApi();
     },
     options: {
@@ -236,14 +245,12 @@ export default {
       },
       deep: true
     },
-    filters: {
+    tableFilters: {
       handler() {
         this.getDataFromApi();
+        this.$emit('update:filters', this.tableFilters);
       },
       deep: true
-    },
-    defaultFilters() {
-      this.filters = { ...this.defaultFilters };
     },
     search() {
       if (this.serverProcessing) this.getDataFromApi();
@@ -262,7 +269,7 @@ export default {
     },
     clearFilters(header) {
       for (const filterType of this.filterTypes) {
-        this.filters[filterType.getKey(header.value)] = "";
+        this.tableFilters[filterType.getKey(header.value)] = "";
       }
     },
     getFilterField(header) {
@@ -325,8 +332,8 @@ export default {
     },
     getFilters() {
       let filters = {};
-      for (let filterKey of Object.keys(this.filters)) {
-        filters[filterKey.replace(".", "__")] = this.filters[filterKey];
+      for (let filterKey of Object.keys(this.tableFilters)) {
+        filters[filterKey.replace(".", "__")] = this.tableFilters[filterKey];
       }
       return filters;
     },
@@ -337,8 +344,8 @@ export default {
         if (this.selectedItems.length) {
           url += "id__in=" + this.selectedItems.map(o => o.id).join(",");
         } else {
-          Object.keys(this.filters).forEach(k => {
-            url += k + "=" + this.filters[k] + "&";
+          Object.keys(this.tableFilters).forEach(k => {
+            url += k + "=" + this.tableFilters[k] + "&";
           });
           url += "search=" + this.search;
         }
