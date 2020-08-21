@@ -173,7 +173,7 @@ export default [{
       component: Factor,
       children: [{
           name: 'FactorForm',
-          path: 'form/:factorType/:id?',
+          path: 'form/:type/:id?',
           component: FactorForm,
           props: (route) => {
             return {

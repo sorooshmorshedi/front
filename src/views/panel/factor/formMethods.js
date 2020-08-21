@@ -62,7 +62,7 @@ export default {
         url: this.endpoint('factors/factors/byPosition'),
         method: 'get',
         params: {
-          type: this.factorType,
+          type: this.type,
           id: this.item.id,
           position: pos
         },
@@ -86,12 +86,12 @@ export default {
       });
       window.open(routeData.href, "_blank");
     },
-    reverseType(factorType) {
+    reverseType(type) {
       let factorReverseTypes = {
         sale: "backFromSale",
         buy: "backFromBuy"
       }
-      return factorReverseTypes[factorType]
+      return factorReverseTypes[type]
     },
     getSerialized() {
       let factor = this.copy(this.item);
@@ -180,7 +180,7 @@ export default {
         }
       );
 
-      this.item.type = this.factorType;
+      this.item.type = this.type;
 
       this.submit(clearForm);
     },
@@ -298,7 +298,7 @@ export default {
       this.$router.push({
         name: 'FactorForm',
         params: {
-          factorType: this.reverseType(this.factorType)
+          type: this.reverseType(this.type)
         },
         query: {
           'item.account': this.item.account.id

@@ -21,6 +21,7 @@
           <v-icon>fa-external-link-alt</v-icon>
           </v-btn>
         </template>
+
       </m-datatable>
     </v-card-text>
   </v-card>
@@ -85,8 +86,8 @@ export default {
           break;
       }
       if (this.form == "factor") {
-        this.filters= { factorType: this.type };
-        this.options.defaultParams = { factorType: this.type };
+        this.filters= { type: this.type };
+        this.options.defaultParams = { type: this.type };
 
         switch (this.type) {
           case "buy":

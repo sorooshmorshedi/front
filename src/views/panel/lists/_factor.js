@@ -53,7 +53,17 @@ export default {
       type: "money",
       filters: [],
       sortable: false,
-      
+
     },
+    {
+      text: "فاکتور قطعی",
+      value: "is_definite",
+      type: 'boolean',
+    },
+    {
+      text: "مالیات دارد",
+      value: 'has_tax',
+      type: 'boolean',
+    }
   ],
 }

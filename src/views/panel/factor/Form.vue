@@ -607,7 +607,7 @@ export default {
     formMethods
   ],
   props: {
-    factorType: {
+    type: {
       required: true
     },
     id: {

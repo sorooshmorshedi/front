@@ -56,7 +56,7 @@
                 v-bind="attrs"
                 v-on="on"
                 @click.stop
-                :color="tableFilters[header.value]?'indigo':''"
+                :color="filters[header.value]?'indigo':''"
               >
                 <v-icon x-small>fa fa-filter</v-icon>
               </v-btn>
@@ -72,7 +72,8 @@
                     <component
                       :is="getFilterField(header)"
                       label="جستوجو"
-                      v-model="tableFilters[`${header.value}__icontains`]"
+                      :value="filters[`${header.value}__icontains`]"
+                      @input="emitFilter(`${header.value}__icontains`, $event)"
                       clearable
                     />
                   </v-col>
@@ -80,7 +81,8 @@
                     <component
                       :is="getFilterField(header)"
                       label="جستوجوی دقیق"
-                      v-model="tableFilters[`${header.value}`]"
+                      :value="filters[`${header.value}`]"
+                      @input="emitFilter(`${header.value}`, $event)"
                       clearable
                     />
                   </v-col>
@@ -89,7 +91,8 @@
                       <component
                         :is="getFilterField(header)"
                         label="از"
-                        v-model.lazy="tableFilters[`${header.value}__gte`]"
+                        :value="filters[`${header.value}__gte`]"
+                        @input.lazy="emitFilter(`${header.value}__gte`, $event)"
                         clearable
                       />
                     </v-col>
@@ -97,7 +100,8 @@
                       <component
                         :is="getFilterField(header)"
                         label="تا"
-                        v-model.lazy="tableFilters[`${header.value}__lte`]"
+                        :value="filters[`${header.value}__lte`]"
+                        @input.lazy="emitFilter(`${header.value}__lte`, $event)"
                         clearable
                       />
                     </v-col>
@@ -108,7 +112,8 @@
                     :label="header.text"
                     :items="header.items"
                     clearable
-                    v-model="tableFilters[`${header.value}`]"
+                    :value="filters[`${header.value}`]"
+                    @input="emitFilter(`${header.value}`, $event)"
                   />
                 </v-row>
               </v-card-text>
@@ -178,7 +183,6 @@ export default {
     return {
       filterMenus: {},
       search: "",
-      tableFilters: {},
       totalItems: 0,
       items: [],
       selectedItems: [],
@@ -216,8 +220,8 @@ export default {
     headersWithFilter() {
       let filter = propertyName => {
         return value => {
-          if (!this.tableFilters[propertyName]) return true;
-          return String(value).includes(this.tableFilters[propertyName]);
+          if (!this.filters[propertyName]) return true;
+          return String(value).includes(this.filters[propertyName]);
         };
       };
 
@@ -232,7 +236,7 @@ export default {
       ];
 
       for (let header of headers) {
-        this.$set(this.tableFilters, header.value, "");
+        this.$set(this.filters, header.value, "");
         header.filter = filter(header.value);
       }
 
@@ -252,19 +256,9 @@ export default {
       },
       deep: true
     },
-    // filters: {
-    //   handler() {
-    //     this.tableFilters = {
-    //       ...this.tableFilters,
-    //       ...this.filters
-    //     };
-    //   },
-    //   deep: true
-    // },
-    tableFilters: {
+    filters: {
       handler() {
         this.getDataFromApi();
-        this.$emit("update:filters", this.tableFilters);
       },
       deep: true
     },
@@ -276,6 +270,11 @@ export default {
     this.getDataFromApi();
   },
   methods: {
+    emitFilter(key, value) {
+      let newFilters = { ...this.filters };
+      newFilters[key] = value;
+      this.$emit("update:filters", newFilters);
+    },
     print() {
       this.$store.commit("setIsPrinting", true);
       this.$nextTick(() => {
@@ -284,9 +283,11 @@ export default {
       });
     },
     clearFilters(header) {
+      let newFilters = { ...this.filters };
       for (const filterType of this.filterTypes) {
-        this.tableFilters[filterType.getKey(header.value)] = "";
+        newFilters[filterType.getKey(header.value)] = "";
       }
+      this.$emit("update:filters", newFilters);
     },
     getFilterField(header) {
       if (this.isDate(header)) return "date";
@@ -300,9 +301,11 @@ export default {
       return header.items != undefined;
     },
     isNumber(header) {
+      if (header.type == "numeric") return true;
       return this.numericValues.includes(header.value);
     },
     isBoolean(header) {
+      if (header.type == "boolean") return true;
       return this.booleanValues.includes(header.value);
     },
     getItemSlot(value) {
@@ -351,8 +354,8 @@ export default {
     },
     getFilters() {
       let filters = {};
-      for (let filterKey of Object.keys(this.tableFilters)) {
-        filters[filterKey.replace(".", "__")] = this.tableFilters[filterKey];
+      for (let filterKey of Object.keys(this.filters)) {
+        filters[filterKey.replace(".", "__")] = this.filters[filterKey];
       }
       return filters;
     },
@@ -363,8 +366,8 @@ export default {
         if (this.selectedItems.length) {
           url += "id__in=" + this.selectedItems.map(o => o.id).join(",");
         } else {
-          Object.keys(this.tableFilters).forEach(k => {
-            url += k + "=" + this.tableFilters[k] + "&";
+          Object.keys(this.filters).forEach(k => {
+            url += k + "=" + this.filters[k] + "&";
           });
           url += "search=" + this.search;
         }

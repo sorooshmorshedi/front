@@ -1,7 +1,7 @@
 export default {
   computed: {
     permissionBasename() {
-      return this.factorType
+      return this.type
     },
 
     createUrl() {
@@ -16,15 +16,15 @@ export default {
         name: 'List',
         params: {
           form: 'factor',
-          type: this.factorType
+          type: this.type
         }
       }
     },
     isFpi() {
-      return this.factorType == 'fpi';
+      return this.type == 'fpi';
     },
     formTitle() {
-      switch (this.factorType) {
+      switch (this.type) {
         case "sale":
           return "فاکتور فروش";
           break;
@@ -46,7 +46,7 @@ export default {
       return !this.isFpi;
     },
     reverseLabel() {
-      switch (this.factorType) {
+      switch (this.type) {
         case "sale":
           return "فاکتور برگشت از فروش";
         case "buy":
@@ -70,7 +70,7 @@ export default {
     exportLinks() {
       let url =
         "reports/lists/factors/TEMP?form=factor&type=" +
-        this.factorType +
+        this.type +
         "&id=" +
         this.id +
         "&token=" +
@@ -146,7 +146,7 @@ export default {
       return res;
     },
     accountName() {
-      if (["buy", "backFromSale"].includes(this.factorType)) {
+      if (["buy", "backFromSale"].includes(this.type)) {
         return "فروشنده";
       } else {
         return "مشتری";
@@ -154,12 +154,12 @@ export default {
     },
 
     hasBijak() {
-      return ["buy", "backFromBuy"].includes(this.factorType);
+      return ["buy", "backFromBuy"].includes(this.type);
     },
     transactionType() {
       let label;
       let name;
-      if (["buy", "backFromSale"].includes(this.factorType)) {
+      if (["buy", "backFromSale"].includes(this.type)) {
         name = "payment";
         label = "پرداخت ";
       } else {
@@ -176,19 +176,19 @@ export default {
       else return 'sale'
     },
     isBuy() {
-      return this.factorType == 'buy'
+      return this.type == 'buy'
     },
     isSale() {
-      return this.factorType == 'sale'
+      return this.type == 'sale'
     },
     isBack() {
-      return ['backFromBuy', 'backFromSale'].includes(this.factorType);
+      return ['backFromBuy', 'backFromSale'].includes(this.type);
     },
     isBackFromBuy() {
-      return this.factorType == 'backFromBuy'
+      return this.type == 'backFromBuy'
     },
     isBackFromSale() {
-      return this.factorType == 'backFromSale'
+      return this.type == 'backFromSale'
     },
     receiptLabel() {
       if (this.isSale || this.isBackFromBuy) return 'حواله'
