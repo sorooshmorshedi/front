@@ -137,6 +137,12 @@
           v-else-if="isSelect(header)"
         >{{ header.items.filter(o => o.value == getItemValue(item, header.value))[0].text }}</template>
 
+        <!-- boolean -->
+        <template v-else-if="isBoolean(header)">
+          <v-icon v-if="item[header.value]">fa-check</v-icon>
+          <v-icon v-else>fa-times</v-icon>
+        </template>
+
         <!-- other-->
         <template v-else>{{ getItemValue(item, header.value) }}</template>
       </template>
@@ -180,7 +186,8 @@ export default {
       showSelect: false,
       options: {},
 
-      numericValues: ["bed", "bes", "value", "fee", "price", "count"]
+      numericValues: ["code", "bed", "bes", "value", "fee", "price", "count"],
+      booleanValues: ["is_auto_created"]
     };
   },
   computed: {
@@ -245,10 +252,19 @@ export default {
       },
       deep: true
     },
+    // filters: {
+    //   handler() {
+    //     this.tableFilters = {
+    //       ...this.tableFilters,
+    //       ...this.filters
+    //     };
+    //   },
+    //   deep: true
+    // },
     tableFilters: {
       handler() {
         this.getDataFromApi();
-        this.$emit('update:filters', this.tableFilters);
+        this.$emit("update:filters", this.tableFilters);
       },
       deep: true
     },
@@ -285,6 +301,9 @@ export default {
     },
     isNumber(header) {
       return this.numericValues.includes(header.value);
+    },
+    isBoolean(header) {
+      return this.booleanValues.includes(header.value);
     },
     getItemSlot(value) {
       return `item.${value}`;

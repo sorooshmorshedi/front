@@ -16,7 +16,10 @@
             color="light-blue white--text"
             :to="{name:options.routerName, params: {id: item.id, ...options.defaultParams}}"
             target="_blank"
-          >جزئیات</v-btn>
+           icon 
+          >
+          <v-icon>fa-external-link-alt</v-icon>
+          </v-btn>
         </template>
       </m-datatable>
     </v-card-text>

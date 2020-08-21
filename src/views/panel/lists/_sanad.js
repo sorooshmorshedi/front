@@ -17,6 +17,10 @@ export default {
       value: "date",
     },
     {
+      text: "سند سیستمی",
+      value: "is_auto_created",
+    },
+    {
       text: "توضیحات",
       value: "explanation",
     },
