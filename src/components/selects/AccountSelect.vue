@@ -12,7 +12,7 @@
           :items="items"
           v-model="item"
           :label="label"
-          :item-text="itemText"
+          :item-text="mainSelectItemText"
           :disabled="disabled || accountDisabled"
           :multiple="multiple"
           :placeholder="placeholder"
@@ -49,6 +49,18 @@
           :showLedgerBtn="false"
           :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
         />
+        <account-select
+          v-if="item.floatAccounts"
+          :child-of="item.id"
+          v-model="localFloatAccount"
+          :disabled="disabled"
+          placeholder=" * حساب شناور"
+          items-type="floatAccounts"
+          item-text="name"
+          item-value="id"
+          :showLedgerBtn="false"
+          :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+        />
       </v-col>
     </template>
   </v-row>
@@ -76,7 +88,7 @@ export default {
       default: false
     },
     itemText: {
-      default: "title"
+      default: null
     },
     multiple: {
       default: false
@@ -126,6 +138,11 @@ export default {
     };
   },
   computed: {
+    mainSelectItemText() {
+      if (this.itemText) return this.itemText;
+      if (this.itemsType.includes("level")) return "title";
+      return "name";
+    },
     items() {
       let items = [];
 
@@ -210,11 +227,19 @@ export default {
     hasDeepSelect() {
       return (
         this.item &&
-        (this.item.floatAccountGroup || this.item.costCenterGroup) &&
+        (this.item.floatAccountGroup ||
+          this.item.costCenterGroup ||
+          this.item.floatAccounts) &&
         this.deepSelect &&
-        ["level3", "persons", "buyers", "sellers", "imprests"].includes(
-          this.itemsType
-        )
+        [
+          "level3",
+          "persons",
+          "buyers",
+          "sellers",
+          "imprests",
+          "floatAccountGroups",
+          "costCenters"
+        ].includes(this.itemsType)
       );
     },
     hasLedger() {
@@ -227,6 +252,7 @@ export default {
     this.getDefaultAccounts();
     this.getAccounts();
     this.getFloatAccounts();
+    this.getFloatAccountGroups();
 
     this.setItem();
   },
