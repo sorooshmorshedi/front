@@ -1,75 +1,61 @@
 <template>
-  <v-card>
-    <v-card-title>صورت حساب</v-card-title>
-    <v-card-text>
-      <v-row>
-        <v-col cols="12">
-          <account-select
-            label="حساب"
-            :deep-select="false"
-            items-type="level3"
-            v-model="account"
-            @input="getBill"
-          />
-        </v-col>
-        <v-col cols="12">
-          <datatable v-if="account" :cols="datatableCols.cols" :data="rows" />
-        </v-col>
-      </v-row>
-    </v-card-text>
-  </v-card>
+  <v-row>
+    <v-col cols="12" class="ledger">
+      <v-card>
+        <v-card-title>صورت حساب تفصیلی</v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12">
+              <account-select
+                label="حساب"
+                :deep-select="false"
+                items-type="level3"
+                @input="(v) => filters.account = v.id"
+              />
+            </v-col>
+            <v-col cols="12" v-if="filters.account">
+              <sanad-item-list-report
+                :filters.sync="filters"
+                :showAccountInTable="false"
+                :sortable="true"
+                :filterable="true"
+                :showRemain="true"
+                :showPreviousRemain="false"
+                :considerFinancialYear="false"
+              />
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import datatable from "@/components/mcomponents/datatable/Client";
+import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import accountApiMixin from "@/mixin/accountMixin";
-import datatableCols from "./_datatableCols";
-import _ from "lodash";
+import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
 export default {
-  components: { datatable },
+  name: "Ledger",
+  components: { MDatatable, SanadItemListReport },
   mixins: [accountApiMixin],
-  props: ["accountId"],
+  props: {
+    ledgerAccountIds: {
+      default: () => []
+    }
+  },
   data() {
     return {
-      account: null,
-      rows: [],
-      datatableCols
+      filters: {
+        // account: null
+        account: 591
+      }
     };
   },
-  created() {
-    this.getData();
-    this.init();
-  },
-  methods: {
-    getData() {
-      this.getAccounts();
-    },
-    getBill(account) {
-      this.request({
-        url: this.endpoint("reports/bill"),
-        params: {
-          account_id: account.id
-        },
-        success: data => {
-          this.rows = data;
-        }
-      });
-    },
-    init() {}
-  }
+  methods: {},
+  watch: {}
 };
 </script>
 
 <style scoped lang="scss">
-#acc-select {
-  margin-bottom: 30px;
-}
-.print-header {
-  margin-top: 30px;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  h2 {
-    text-align: center;
-  }
-}
 </style>

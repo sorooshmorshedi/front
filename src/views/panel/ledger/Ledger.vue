@@ -56,6 +56,7 @@
                   :filterable="false"
                   :showRemain="true"
                   :showPreviousRemain="true"
+                  :considerFinancialYear="true"
                 />
               </v-col>
             </template>
@@ -114,6 +115,7 @@ export default {
   methods: {
     getFiltersTemplate() {
       return {
+        financial_year: this.financialYear.id,
         account__code__startswith: "",
         order_sanads_by: "code",
         floatAccount: null,
