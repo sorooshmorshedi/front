@@ -143,7 +143,7 @@ Vue.mixin({
       let routeData = this.$router.resolve({
         name: "FactorForm",
         params: {
-          factorType: factor.type,
+          type: factor.type,
           id: factor.id
         }
       });

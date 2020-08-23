@@ -50,18 +50,17 @@ export default {
     {
       text: "مبلغ کل فاکتور",
       value: "total_sum",
-      type: "money",
-      filters: [],
+      type: "numeric",
       sortable: false,
 
     },
     {
-      text: "فاکتور قطعی",
+      text: "قطعی",
       value: "is_definite",
       type: 'boolean',
     },
     {
-      text: "مالیات دارد",
+      text: "مالیات ",
       value: 'has_tax',
       type: 'boolean',
     }

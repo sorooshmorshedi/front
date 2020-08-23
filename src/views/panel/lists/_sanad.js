@@ -17,7 +17,7 @@ export default {
       value: "date",
     },
     {
-      text: "سند سیستمی",
+      text: "سیستمی",
       value: "is_auto_created",
     },
     {

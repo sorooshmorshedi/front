@@ -4,6 +4,7 @@
       <v-row>
         <v-col cols="12" md="4">
           <v-text-field
+            v-if="searchable"
             v-model="search"
             max-width="300px"
             append-icon="search"
@@ -86,13 +87,13 @@
                       clearable
                     />
                   </v-col>
-                  <template v-if="isNumber(header) || isDate(header)">
+                  <template v-if="hasRangeFilter(header)">
                     <v-col cols="12" md="6">
                       <component
                         :is="getFilterField(header)"
                         label="از"
                         :value="filters[`${header.value}__gte`]"
-                        @input.lazy="emitFilter(`${header.value}__gte`, $event)"
+                        @input="emitFilter(`${header.value}__gte`, $event)"
                         clearable
                       />
                     </v-col>
@@ -101,7 +102,7 @@
                         :is="getFilterField(header)"
                         label="تا"
                         :value="filters[`${header.value}__lte`]"
-                        @input.lazy="emitFilter(`${header.value}__lte`, $event)"
+                        @input="emitFilter(`${header.value}__lte`, $event)"
                         clearable
                       />
                     </v-col>
@@ -135,7 +136,7 @@
       <!-- Mask Data -->
       <template v-for="header in headers" v-slot:[getItemSlot(header.value)]="{ item }">
         <!-- numeric -->
-        <template v-if="isNumber(header)">{{ item[header.value] | toMoney }}</template>
+        <template v-if="isNumber(header)">{{ getItemValue(item, header.value) | toMoney }}</template>
 
         <!-- select -->
         <template
@@ -177,6 +178,15 @@ export default {
     },
     filters: {
       default: () => {}
+    },
+    searchable: {
+      default: true
+    },
+    previousApiData: {
+      default: null
+    },
+    currentApiData: {
+      default: null
     }
   },
   data() {
@@ -236,7 +246,6 @@ export default {
       ];
 
       for (let header of headers) {
-        this.$set(this.filters, header.value, "");
         header.filter = filter(header.value);
       }
 
@@ -270,7 +279,13 @@ export default {
     this.getDataFromApi();
   },
   methods: {
+    hasRangeFilter(header) {
+      return (
+        header.showRangeFilter || this.isNumber(header) || this.isDate(header)
+      );
+    },
     emitFilter(key, value) {
+      console.log(this.filters, key, value);
       let newFilters = { ...this.filters };
       newFilters[key] = value;
       this.$emit("update:filters", newFilters);
@@ -301,12 +316,18 @@ export default {
       return header.items != undefined;
     },
     isNumber(header) {
-      if (header.type == "numeric") return true;
-      return this.numericValues.includes(header.value);
+      let flag;
+      if (header.type == "numeric") flag = true;
+      else flag = this.numericValues.includes(header.value);
+      if (flag) header.align = "center";
+      return flag;
     },
     isBoolean(header) {
-      if (header.type == "boolean") return true;
-      return this.booleanValues.includes(header.value);
+      let flag = false;
+      if (header.type == "boolean") flag = true;
+      else flag = this.booleanValues.includes(header.value);
+      if (flag) header.align = "center";
+      return flag;
     },
     getItemSlot(value) {
       return `item.${value}`;
@@ -342,6 +363,9 @@ export default {
           ...this.getFilters()
         },
         success: data => {
+          this.$emit("update:previousApiData", this.currentApiData);
+          this.$emit("update:currentApiData", data);
+
           if (this.serverProcessing) {
             this.totalItems = data.count;
           } else {

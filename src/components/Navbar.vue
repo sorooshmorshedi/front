@@ -205,7 +205,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
-                      factorType: "fpi"
+                      type: "fpi"
                     }
                   },
                   title: "ثبت موجودی اول دوره"
@@ -264,7 +264,7 @@ export default {
                   to: {
                     name: "FactorExpenses",
                     params: {
-                      factorType: "buy"
+                      type: "buy"
                     }
                   },
                   title: "هزینه های فاکتور خرید"
@@ -273,7 +273,7 @@ export default {
                   to: {
                     name: "FactorExpenses",
                     params: {
-                      factorType: "sale"
+                      type: "sale"
                     }
                   },
                   title: "هزینه های فاکتور فروش"
@@ -362,7 +362,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
-                      factorType: "buy"
+                      type: "buy"
                     }
                   },
                   title: "ثبت فاکتور خرید"
@@ -371,7 +371,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
-                      factorType: "backFromBuy"
+                      type: "backFromBuy"
                     }
                   },
                   title: "ثبت فاکتور برگشت از خرید"
@@ -380,7 +380,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
-                      factorType: "sale"
+                      type: "sale"
                     }
                   },
                   title: "ثبت فاکتور فروش"
@@ -389,7 +389,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
-                      factorType: "backFromSale"
+                      type: "backFromSale"
                     }
                   },
                   title: "ثبت فاکتور برگشت از فروش"

@@ -33,7 +33,6 @@ export default {
     return {
       account: null,
       rows: [],
-      company: {},
       datatableCols
     };
   },
@@ -44,16 +43,6 @@ export default {
   methods: {
     getData() {
       this.getAccounts();
-      this.getCompany();
-    },
-    getCompany() {
-      this.request({
-        url: this.endpoint("companies/1/"),
-        method: "get",
-        success: data => {
-          this.company = data;
-        }
-      });
     },
     getBill(account) {
       this.request({

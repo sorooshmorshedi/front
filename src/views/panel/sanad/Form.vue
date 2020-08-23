@@ -24,7 +24,7 @@
         small
         v-if="item.factor"
         class="light-blue white--text mr-1"
-        :to="{name: 'FactorForm', params: {factorType: item.factor.type, id: item.factor.id }}"
+        :to="{name: 'FactorForm', params: {type: item.factor.type, id: item.factor.id }}"
       >مشاهده فاکتور این سند</v-btn>
       <v-btn
         small
@@ -204,7 +204,7 @@ export default {
   computed: {
     canEdit() {
       if (!this.item.id) return true;
-      return this.item.createType != "auto";
+      return !this.item.is_auto_created;
     },
     bedSum() {
       let sum = 0;

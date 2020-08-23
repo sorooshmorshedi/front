@@ -1,82 +1,63 @@
 export default {
   url: "reports/ledger",
   cols: [{
-      th: "تاریخ",
-      td: "sanad.date",
+      text: "تاریخ",
+      value: "sanad.date",
       type: "date",
-      filters: [{
-          label: "xxxx-xx-xx از تاریخ ",
-          model: "date__gte"
-        },
-        {
-          label: "xxxx-xx-xx تا تاریخ",
-          model: "date__lte"
-        }
-      ]
+      sortable: false,
+      filterable: false,
     },
     {
-      th: "شماره سند",
-      td: "sanad.code",
-      type: "number",
-      filters: ["code__icontains"]
+      text: "شماره سند",
+      value: "sanad.code",
+      type: "numeric",
+      sortable: false,
+      filterable: false,
     },
     {
-      th: "شرح",
-      td: "explanation",
-      type: "text",
-      filters: ["explanation__icontains"]
+      text: "شرح",
+      value: "explanation",
+      sortable: false,
+      filterable: false,
     },
     {
-      th: "کد حساب",
-      td: "account.code",
-      type: "number",
-      filters: [{
-        label: 'از کد حساب',
-        model: "account__code__gte"
-      }, {
-        label: 'تا کد حساب',
-        model: "account__code__lte"
-      }]
+      text: "کد حساب",
+      value: "account.code",
+      showRangeFilter: true,
+      sortable: false,
     },
     {
-      th: "نام حساب",
-      td: "account.name",
-      type: "text",
-      filters: ["account__name__icontains"]
+      text: "نام حساب",
+      value: "account.name",
+      sortable: false,
     },
     {
-      th: "بدهکار",
-      td: "bed",
+      text: "بدهکار",
+      value: "bed",
       type: "money",
       sortable: false,
+      filterable: false,
     },
     {
-      th: "بستانکار",
-      td: "bes",
+      text: "بستانکار",
+      value: "bes",
       type: "money",
       sortable: false,
+      filterable: false,
     },
     {
-      th: "مانده",
-      td: "remain",
-      type: "money",
+      text: "مانده",
+      value: "remain",
       sortable: false,
-      render(item, items, oldItems) {
-        return item.bed - item.bes;
-      },
+      filterable: false,
+      align: 'center'
     },
     {
-      th: "تشخیص",
-      td: "remainType",
-      type: "string",
+      text: "تشخیص",
+      value: "remain_type",
       sortable: false,
-      render(item) {
-        let diff = item.bed > item.bes;
-        if (diff == 0) return '';
-        if (diff > 0) return 'بدهکار';
-        if (diff < 0) return 'بستانکار';
-        return 'error';
-      }
+      filterable: false,
+      align: 'center'
     },
   ],
 }

@@ -41,12 +41,12 @@
         >سند</v-btn>
         <v-btn
           class="blue white--text mr-1"
-          :to="{name: 'FactorForm', params: { factorType: 'sale' } }"
+          :to="{name: 'FactorForm', params: { type: 'sale' } }"
           @click="routeClick('FactorForm')"
         >فاکتور فروش</v-btn>
         <v-btn
           class="blue white--text mr-1"
-          :to="{name: 'FactorForm', params: { factorType: 'buy' } }"
+          :to="{name: 'FactorForm', params: { type: 'buy' } }"
           @click="routeClick('FactorForm')"
         >فاکتور خرید</v-btn>
         <v-btn class="blue white--text mr-1" :to="{name: 'AccountTree' }">نمودار درختی</v-btn>

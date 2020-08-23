@@ -102,7 +102,7 @@
           </v-col>
 
           <v-col cols="12" v-if="!isFpi">
-            <v-switch label="فاکتور مالیات دارد" v-model="hasTax" :disabled="!isEditing"></v-switch>
+            <v-switch label="فاکتور مالیات دارد" v-model="item.has_tax" :disabled="!isEditing"></v-switch>
           </v-col>
         </v-row>
 
@@ -122,8 +122,8 @@
                   <th v-if="hasDiscount">تخفیف (درصد)</th>
                   <th v-if="hasDiscount">جمع کل پس از تخفیف</th>
 
-                  <th v-if="hasTax">مالیات</th>
-                  <th v-if="hasTax">جمع مبلغ کل و مالیات</th>
+                  <th v-if="item.has_tax">مالیات</th>
+                  <th v-if="item.has_tax">جمع مبلغ کل و مالیات</th>
                   <th>توضیحات</th>
                   <th v-if="isBuy">قیمت فروش</th>
                   <th class="d-print-none"></th>
@@ -196,7 +196,7 @@
                       disabled
                     />
                   </td>
-                  <td v-if="hasTax">
+                  <td v-if="item.has_tax">
                     <money
                       class="form-control form-control"
                       :value="rowTax(row)"
@@ -204,7 +204,7 @@
                       decimalScale="6"
                     />
                   </td>
-                  <td v-if="hasTax">
+                  <td v-if="item.has_tax">
                     <money
                       decimalScale="6"
                       class="form-control form-control"
@@ -245,7 +245,7 @@
                 <tr class="bg-info text-white">
                   <td colspan="8"></td>
                   <td v-if="hasDiscount" colspan="4"></td>
-                  <td v-if="hasTax" colspan="2"></td>
+                  <td v-if="item.has_tax" colspan="2"></td>
                   <td>
                     <v-btn @click="deleteItemRow(-1)" icon class="red--text" :disabled="!isEditing">
                       <v-icon>delete_sweep</v-icon>
@@ -343,7 +343,7 @@
                     <td>مبلغ فاکتور پس از تخفیف:</td>
                     <td colspan="2">{{ sum.afterDiscount | toMoney }} ریال</td>
                   </tr>
-                  <tr v-if="hasTax">
+                  <tr v-if="item.has_tax">
                     <td>مالیات</td>
                     <td>
                       <money
@@ -628,7 +628,6 @@ export default {
       exportsDialog: false,
       factorExpensesDialog: false,
       factorExpensesCopy: [{}],
-      hasTax: false,
       expensesToDelete: [],
       exportOptions: {
         summarized: false,
@@ -655,8 +654,8 @@ export default {
       },
       deep: true
     },
-    hasTax() {
-      if (this.hasTax == false) {
+    'item.has_tax'() {
+      if (this.item.has_tax == false) {
         this.item.taxPercent = 0;
         this.item.taxValue = 0;
       }

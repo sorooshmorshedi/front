@@ -25,6 +25,7 @@ export default {
     getItemTemplate() {
       return {
         account: {},
+        hax_tax: false,
         taxPercent: "",
         taxValue: "",
         discountPercent: "",
