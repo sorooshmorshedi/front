@@ -19,9 +19,13 @@
               <account-select
                 label="حساب"
                 v-if="ledger.level != undefined"
-                :deep-select="false"
-                :items-type="'level' + ledger.level"
+                :items-type="ledger.level"
                 v-model="ledger.account"
+                :floatAccount="ledger.floatAccount"
+                @update:floatAccount="v => ledger.floatAccount = v"
+                :costCenter="ledger.costCenter"
+                @update:costCenter="v => ledger.costCenter = v"
+                :showLedgerBtn="false"
               />
             </v-col>
             <template v-if="ledger.account">
@@ -38,66 +42,21 @@
                 <money label="تا شماره" v-model="filters.sanad__code__lte" clearable />
               </v-col>
               <v-col cols="12" md="4">
-                <v-radio-group v-model="filters.ordering" row>
+                <v-radio-group v-model="filters.order_sanads_by" row>
                   <template #label>مرتب سازی بر اساس:</template>
                   <v-radio label="تاریخ سند" value="date" />
                   <v-radio label="شماره سند" value="code" />
                 </v-radio-group>
               </v-col>
               <v-col cols="12">
-                <m-datatable
-                  :headers="headers"
-                  api-url="reports/ledger"
+                <sanad-item-list-report
                   :filters.sync="filters"
-                  :searchable="false"
-                  @update:api-data="setApiData"
-                  :previousApiData.sync="previousApiData"
-                  :currentApiData.sync="apiData"
-                >
-                  <template v-if="apiData.previous" v-slot:body.prepend="{ headers }">
-                    <tr class="text-center">
-                      <td colspan="4"></td>
-                      <td>منقول از صفحه قبل</td>
-                      <td v-if="showAccountInTable" colspan="2"></td>
-                      <td>{{ previousLastItem.comulative_bed | toMoney }}</td>
-                      <td>{{ previousLastItem.comulative_bes | toMoney }}</td>
-                      <td>{{ previousLastItem.remain | toMoney }}</td>
-                      <td>{{ previousLastItem.remain_type }}</td>
-                    </tr>
-                  </template>
-                  <template v-else-if="lastItem" v-slot:body.prepend="{ headers }">
-                    <tr class="text-center">
-                      <td colspan="4"></td>
-                      <td>مانده از قبل</td>
-                      <td v-if="showAccountInTable" colspan="2"></td>
-                      <td>{{ lastItem.previous_bed | toMoney }}</td>
-                      <td>{{ lastItem.previous_bes | toMoney }}</td>
-                      <td>{{ lastItem.previous_remain | toMoney }}</td>
-                      <td>{{ lastItem.previous_remain_type }}</td>
-                    </tr>
-                  </template>
-
-                  <template v-if="apiData.results.length" v-slot:body.append="{ headers }">
-                    <tr class="text-center">
-                      <td colspan="4"></td>
-                      <td>جمع این صفحه</td>
-                      <td v-if="showAccountInTable" colspan="2"></td>
-                      <td>{{ pageSum['bed'] | toMoney }}</td>
-                      <td>{{ pageSum['bes'] | toMoney }}</td>
-                      <td>{{ lastItem.remain | toMoney }}</td>
-                      <td>{{ lastItem.remain_type | toMoney }}</td>
-                    </tr>
-                    <tr v-if="apiData.previous" class="text-center">
-                      <td colspan="4"></td>
-                      <td>جمع تا این صفحه</td>
-                      <td v-if="showAccountInTable" colspan="2"></td>
-                      <td>{{ lastItem.comulative_bed | toMoney }}</td>
-                      <td>{{ lastItem.comulative_bes | toMoney }}</td>
-                      <td>{{ lastItem.remain | toMoney }}</td>
-                      <td>{{ lastItem.remain_type | toMoney }}</td>
-                    </tr>
-                  </template>
-                </m-datatable>
+                  :showAccountInTable="showAccountInTable"
+                  :sortable="false"
+                  :filterable="false"
+                  :showRemain="true"
+                  :showPreviousRemain="true"
+                />
               </v-col>
             </template>
           </v-row>
@@ -110,11 +69,11 @@
 <script>
 import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import accountApiMixin from "@/mixin/accountMixin";
-import datatableCols from "./_datatableCols";
 import _ from "lodash";
+import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
 export default {
   name: "Ledger",
-  components: { MDatatable },
+  components: { MDatatable, SanadItemListReport },
   mixins: [accountApiMixin],
   props: {
     ledgerAccountIds: {
@@ -123,147 +82,46 @@ export default {
   },
   data() {
     return {
-      datatableCols,
       apiData: {
         results: []
       },
-      previousApiData: null,
       ledger: {
-        // account: null,
-        account: 1,
-        level: null
+        level: null,
+        account: null,
+        floatAccount: null,
+        costCenter: null
       },
-      filters: {
-        account__code__startswith: ""
-      },
+      filters: {},
       accountLevels: [
-        { value: 0, text: "گروه" },
-        { value: 1, text: "کل" },
-        { value: 2, text: "معین" },
-        { value: 3, text: "تفضیلی" }
+        { value: "level0", text: "گروه" },
+        { value: "level1", text: "کل" },
+        { value: "level2", text: "معین" },
+        { value: "level3", text: "تفضیلی" },
+        { value: "floatAccountGroups", text: "گروه شناور" },
+        { value: "costCenterGroups", text: "مرکز هزینه" }
       ]
     };
   },
   computed: {
     showAccountInTable() {
       return this.ledger.level != 3;
-    },
-    headers() {
-      let headers = [
-        {
-          text: "تاریخ",
-          value: "sanad.date",
-          type: "date",
-          sortable: false,
-          filterable: false
-        },
-        {
-          text: "شماره سند",
-          value: "sanad.code",
-          type: "numeric",
-          sortable: false,
-          filterable: false
-        },
-        {
-          text: "شرح",
-          value: "explanation",
-          sortable: false,
-          filterable: false
-        }
-      ];
-      if (this.showAccountInTable) {
-        headers = headers.concat([
-          {
-            text: "کد حساب",
-            value: "account.code",
-            showRangeFilter: true,
-            sortable: false
-          },
-          {
-            text: "نام حساب",
-            value: "account.name",
-            sortable: false
-          }
-        ]);
-      }
-      headers = headers.concat([
-        {
-          text: "بدهکار",
-          value: "bed",
-          type: "money",
-          sortable: false,
-          filterable: false
-        },
-        {
-          text: "بستانکار",
-          value: "bes",
-          type: "money",
-          sortable: false,
-          filterable: false
-        },
-        {
-          text: "مانده",
-          value: "remain",
-          sortable: false,
-          filterable: false,
-          align: "center"
-        },
-        {
-          text: "تشخیص",
-          value: "remain_type",
-          sortable: false,
-          filterable: false,
-          align: "center"
-        }
-      ]);
-
-      return headers;
-    },
-    lastItem() {
-      return this.apiData.results[this.apiData.results.length - 1];
-    },
-    previousLastItem() {
-      if (this.previousApiData) {
-        return this.previousApiData.results[
-          this.previousApiData.results.length - 1
-        ];
-      } else {
-        return null;
-      }
-    },
-    previousRemain() {
-      if (this.apiData.results.length) {
-        let item = this.apiData.results[0];
-        return Math.abs(
-          item.comulative_bed - +item.bed - (item.comulative_bes - +item.bes)
-        );
-      }
-      return 0;
-    },
-    previousRemainType() {
-      if (this.apiData.results.length) {
-        let item = this.apiData.results[0];
-        let bed_remain =
-          item.comulative_bed - +item.bed - (item.comulative_bes - +item.bes);
-        if (bed_remain > 0) return "بد";
-        if (bed_remain < 0) return "بس";
-      }
-      return " - ";
-    },
-    pageSum() {
-      let bed = 0;
-      let bes = 0;
-      this.apiData.results.forEach(item => {
-        bed += +item.bed;
-        bes += +item.bes;
-      });
-      return { bed, bes };
     }
   },
   created() {
+    this.filters = this.getFiltersTemplate();
     this.init();
   },
   methods: {
+    getFiltersTemplate() {
+      return {
+        account__code__startswith: "",
+        order_sanads_by: "code",
+        floatAccount: null,
+        costCenter: null,
+        floatAccount__floatAccountGroups: null,
+        costCenter__floatAccountGroups: null
+      };
+    },
     init() {
       if (typeof this.ledgerAccountIds == "string") {
         let acc = this.findAccount("id", +this.ledgerAccountIds);
@@ -279,8 +137,37 @@ export default {
     }
   },
   watch: {
+    "ledger.level"() {
+      this.filters = this.getFiltersTemplate();
+      this.ledger.account = this.ledger.floatAccount = this.ledger.costCenter = null;
+    },
     "ledger.account"() {
-      this.filters.account__code__startswith = this.ledger.account.code;
+      if (this.ledger.level.includes("level")) {
+        this.filters.account__code__startswith = this.ledger.account
+          ? this.ledger.account.code
+          : null;
+      } else {
+        this.filters.account__code__startswith = null;
+        if (this.ledger.level == "floatAccountGroups") {
+          this.filters["floatAccount__floatAccountGroups"] = this.ledger.account
+            ? this.ledger.account.id
+            : null;
+        } else {
+          this.filters["costCenter__floatAccountGroups"] = this.ledger.account
+            ? this.ledger.account.id
+            : null;
+        }
+      }
+    },
+    "ledger.floatAccount"() {
+      this.filters["floatAccount"] = this.ledger.floatAccount
+        ? this.ledger.floatAccount.id
+        : null;
+    },
+    "ledger.costCenter"() {
+      this.filters["costCenter"] = this.ledger.costCenter
+        ? this.ledger.costCenter.id
+        : null;
     }
   }
 };
