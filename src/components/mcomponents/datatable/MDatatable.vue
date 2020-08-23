@@ -267,6 +267,7 @@ export default {
     },
     filters: {
       handler() {
+        this.options.page = 1;
         this.getDataFromApi();
       },
       deep: true
