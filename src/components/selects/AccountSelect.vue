@@ -35,6 +35,18 @@
           :showLedgerBtn="false"
           :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
         />
+        <account-select
+          v-if="item.floatAccounts && !item.is_cost_center"
+          :child-of="item.id"
+          v-model="localFloatAccount"
+          :disabled="disabled"
+          placeholder="حساب شناور"
+          items-type="floatAccounts"
+          item-text="name"
+          item-value="id"
+          :showLedgerBtn="false"
+          :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+        />
       </v-col>
       <v-col>
         <account-select
@@ -50,11 +62,11 @@
           :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
         />
         <account-select
-          v-if="item.floatAccounts"
+          v-if="item.floatAccounts && item.is_cost_center"
           :child-of="item.id"
-          v-model="localFloatAccount"
+          v-model="localCostCenter"
           :disabled="disabled"
-          placeholder=" * حساب شناور"
+          placeholder="مرکز هزینه"
           items-type="floatAccounts"
           item-text="name"
           item-value="id"
@@ -238,7 +250,7 @@ export default {
           "sellers",
           "imprests",
           "floatAccountGroups",
-          "costCenters"
+          "costCenterGroups"
         ].includes(this.itemsType)
       );
     },
