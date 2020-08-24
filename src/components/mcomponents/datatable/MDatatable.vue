@@ -22,9 +22,11 @@
     </v-card-title>
     <v-data-table
       id="datatable"
+      ref="datatable"
+      v-bind="$attrs"
       :show-select="!isPrinting"
       :headers="headersWithFilter"
-      :items="items"
+      :items="tableItems"
       :options.sync="options"
       :server-items-length="totalItems"
       :loading="loading"
@@ -35,9 +37,7 @@
       :hide-default-footer="isPrinting"
     >
       <!-- Add row number field -->
-      <template
-        #item.rowNumber="{ item }"
-      >{{ (options.page - 1) * options.itemsPerPage + items.indexOf(item) + 1}}</template>
+      <template #item.rowNumber="{ item }">{{ getRowNumber(item) }}</template>
 
       <!-- Add Filter btn and menu to headers -->
       <template v-for="header in headersWithFilter" v-slot:[getHeaderSlot(header.value)]="{header}">
@@ -72,40 +72,43 @@
                   <v-col cols="12">
                     <component
                       :is="getFilterField(header)"
-                      label="جستوجو"
-                      :value="filters[`${header.value}__icontains`]"
-                      @input="emitFilter(`${header.value}__icontains`, $event)"
-                      clearable
-                    />
-                  </v-col>
-                  <v-col cols="12">
-                    <component
-                      :is="getFilterField(header)"
-                      label="جستوجوی دقیق"
+                      :label="`جستوجو${serverProcessing?'ی دقیق':''}`"
                       :value="filters[`${header.value}`]"
                       @input="emitFilter(`${header.value}`, $event)"
                       clearable
                     />
                   </v-col>
-                  <template v-if="hasRangeFilter(header)">
-                    <v-col cols="12" md="6">
+
+                  <template v-if="serverProcessing">
+                    <v-col cols="12">
                       <component
                         :is="getFilterField(header)"
-                        label="از"
-                        :value="filters[`${header.value}__gte`]"
-                        @input="emitFilter(`${header.value}__gte`, $event)"
+                        label="جستوجو"
+                        :value="filters[`${header.value}__icontains`]"
+                        @input="emitFilter(`${header.value}__icontains`, $event)"
                         clearable
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
-                      <component
-                        :is="getFilterField(header)"
-                        label="تا"
-                        :value="filters[`${header.value}__lte`]"
-                        @input="emitFilter(`${header.value}__lte`, $event)"
-                        clearable
-                      />
-                    </v-col>
+                    <template v-if="hasRangeFilter(header)">
+                      <v-col cols="12" md="6">
+                        <component
+                          :is="getFilterField(header)"
+                          label="از"
+                          :value="filters[`${header.value}__gte`]"
+                          @input="emitFilter(`${header.value}__gte`, $event)"
+                          clearable
+                        />
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <component
+                          :is="getFilterField(header)"
+                          label="تا"
+                          :value="filters[`${header.value}__lte`]"
+                          @input="emitFilter(`${header.value}__lte`, $event)"
+                          clearable
+                        />
+                      </v-col>
+                    </template>
                   </template>
                 </v-row>
                 <v-row v-else>
@@ -170,8 +173,7 @@ import { jsPDF } from "jspdf";
 export default {
   props: {
     apiUrl: {
-      // default: null
-      default: "reports/lists/sanads"
+      default: null
     },
     headers: {
       required: true
@@ -187,20 +189,23 @@ export default {
     },
     currentApiData: {
       default: null
+    },
+    items: {
+      default: () => []
     }
   },
   data() {
     return {
       filterMenus: {},
       search: "",
-      totalItems: 0,
-      items: [],
+      totalItems: -1,
+      tableItems: this.items,
       selectedItems: [],
-      loading: true,
+      loading: false,
       showSelect: false,
       options: {},
 
-      numericValues: ["code", "bed", "bes", "value", "fee", "price", "count"],
+      numericValues: ["bed", "bes", "value", "fee", "price", "count"],
       booleanValues: ["is_auto_created"]
     };
   },
@@ -256,19 +261,22 @@ export default {
     }
   },
   watch: {
+    items() {
+      this.tableItems = this.items;
+    },
     apiUrl() {
-      this.getDataFromApi();
+      if (this.serverProcessing) this.getDataFromApi();
     },
     options: {
       handler() {
-        this.getDataFromApi();
+        if (this.serverProcessing) this.getDataFromApi();
       },
       deep: true
     },
     filters: {
       handler() {
         this.options.page = 1;
-        this.getDataFromApi();
+        if (this.serverProcessing) this.getDataFromApi();
       },
       deep: true
     },
@@ -277,16 +285,26 @@ export default {
     }
   },
   mounted() {
-    this.getDataFromApi();
+    if (this.serverProcessing) this.getDataFromApi();
   },
   methods: {
+    getRowNumber(item) {
+      let datatable = this.$refs.datatable;
+      if (datatable) {
+        let prev_page = (this.options.page - 1) * this.options.itemsPerPage;
+        return (
+          datatable.$children[0].computedItems.indexOf(item) + 1 + prev_page
+        );
+      } else {
+        return "";
+      }
+    },
     hasRangeFilter(header) {
       return (
         header.showRangeFilter || this.isNumber(header) || this.isDate(header)
       );
     },
     emitFilter(key, value) {
-      console.log(this.filters, key, value);
       let newFilters = { ...this.filters };
       newFilters[key] = value;
       this.$emit("update:filters", newFilters);
@@ -342,7 +360,7 @@ export default {
 
       let ordering;
       if (sortBy.length === 1 && sortDesc.length === 1) {
-        ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replace('.', '__')}`;
+        ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replace(".", "__")}`;
       }
 
       let limit = itemsPerPage;
@@ -372,7 +390,7 @@ export default {
           } else {
             this.totalItems = undefined;
           }
-          this.items = data.results;
+          this.tableItems = data.results;
           this.loading = false;
         }
       });

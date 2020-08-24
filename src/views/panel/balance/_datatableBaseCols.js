@@ -1,27 +1,23 @@
 export default {
   cols: [{
-      th: "جمع بدهکار",
-      td: "bed_sum",
-      type: "money",
-      filters: ["bed_sum"]
+      text: "گردش بدهکار",
+      value: "bed_sum",
+      type: "numeric",
     },
     {
-      th: "جمع بستانکار",
-      td: "bes_sum",
-      type: "money",
-      filters: ["bes_sum"]
+      text: "گردش بستانکار",
+      value: "bes_sum",
+      type: "numeric",
     },
     {
-      th: "مانده بدهکار",
-      td: "bed_remain",
-      type: "money",
-      filters: ["bed_remain"]
+      text: "مانده بدهکار",
+      value: "bed_remain",
+      type: "numeric",
     },
     {
-      th: "مانده بستانکار",
-      td: "bes_remain",
-      type: "money",
-      filters: ["bes_remain"]
+      text: "مانده بستانکار",
+      value: "bes_remain",
+      type: "numeric",
     },
   ],
 }

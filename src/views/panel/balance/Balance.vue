@@ -69,7 +69,71 @@
         </v-col>
 
         <v-col cols="12">
-          <datatable :cols="datatableCols" :data="accounts" :hidden-cols="hiddenCols" />
+          <m-datatable
+            ref="datatable"
+            :headers="headers"
+            :items="accounts"
+            :hidden-cols="hiddenCols"
+            :filters.sync="filters"
+            show-expand
+            :expanded.sync="accounts"
+          >
+            <template #item.data-table-expand></template>
+
+            <template
+              v-if="accountFilters.showFloatAccounts || accountFilters.showCostCenters"
+              v-slot:expanded-item="{ headers, item }"
+            >
+              <template v-if="hasSubAccount(item)">
+                <td colspan="4"></td>
+                <td class>
+                  <div
+                    class="py-1"
+                    v-for="(subAccount, i ) in getSubAccounts(item)"
+                  >{{ subAccount.name }}</div>
+                </td>
+                <td class="text-center">
+                  <div
+                    class="py-1"
+                    v-for="(subAccount, i ) in getSubAccounts(item)"
+                  >{{ subAccount.bed_sum | toMoney }}</div>
+                </td>
+                <td class="text-center">
+                  <div
+                    class="py-1"
+                    v-for="(subAccount, i ) in getSubAccounts(item)"
+                  >{{ subAccount.bes_sum | toMoney }}</div>
+                </td>
+                <template v-if="hiddenCols.length == 0">
+                  <td class="text-center">
+                    <div
+                      class="py-1"
+                      v-for="(subAccount, i ) in getSubAccounts(item)"
+                    >{{ subAccount.bed_remain | toMoney }}</div>
+                  </td>
+                  <td class="text-center">
+                    <div
+                      class="py-1"
+                      v-for="(subAccount, i ) in getSubAccounts(item)"
+                    >{{ subAccount.bes_remain | toMoney }}</div>
+                  </td>
+                </template>
+              </template>
+            </template>
+
+            <template v-slot:body.append="{ headers }" v-if="canShowSum()">
+              <tr class="text-center">
+                <td :colspan="2 + cols.cols.length"></td>
+                <td>جمع کل</td>
+                <td>{{ sum['bed'] | toMoney }}</td>
+                <td>{{ sum['bes'] | toMoney }}</td>
+                <template v-if="hiddenCols.length == 0">
+                  <td>{{ sum['bedRemain'] | toMoney }}</td>
+                  <td>{{ sum['besRemain'] | toMoney }}</td>
+                </template>
+              </tr>
+            </template>
+          </m-datatable>
         </v-col>
       </v-row>
     </v-card-text>
@@ -78,12 +142,12 @@
 
 <script>
 import date from "@/components/mcomponents/cleave/Date";
-import datatable from "@/components/mcomponents/datatable/Client";
+import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import datatableBaseCols from "./_datatableBaseCols";
 import _ from "lodash";
 export default {
   name: "Balance",
-  components: { date, datatable },
+  components: { date, MDatatable },
   props: {
     title: {
       required: true
@@ -102,6 +166,8 @@ export default {
     return {
       sanadFilters: {},
       accountFilters: {},
+
+      filters: {},
 
       allAccounts: [],
       accounts: [],
@@ -134,12 +200,35 @@ export default {
     };
   },
   computed: {
+    sum() {
+      let bed = 0,
+        bes = 0;
+      for (const account of this.accounts) {
+        if (this.accountFilters.level == "all" && account.level != undefined) {
+          if (account.level == 0) {
+            bed += +account.bed_sum;
+            bes += account.bes_sum;
+          }
+        } else {
+          bed += +account.bed_sum;
+          bes += +account.bes_sum;
+        }
+      }
+
+      return {
+        bed: bed,
+        bes: bes,
+        bedRemain: Math.max(bed - bes),
+        besRemain: Math.max(bes - bed)
+      };
+    },
     hiddenCols() {
       if (this.colsCount == 4) return [];
       return ["bed_sum", "bes_sum"];
     },
-    datatableCols() {
+    headers() {
       let cols = [...this.cols.cols, ...datatableBaseCols.cols];
+      cols = cols.filter(o => !this.hiddenCols.includes(o.value));
       return cols;
     }
   },
@@ -168,6 +257,28 @@ export default {
     }
   },
   methods: {
+    canShowSum() {
+      let datatable = this.$refs.datatable;
+      if (datatable) {
+        return (
+          datatable.$refs.datatable.$children[0].pageStop ==
+          this.accounts.length
+        );
+      }
+      return false;
+    },
+    hasSubAccount(item) {
+      return (
+        (item._floatAccounts && item._floatAccounts.length) ||
+        (item._costCenters && item._costCenters.length)
+      );
+    },
+    getSubAccounts(item) {
+      return [
+        ...(this.accountFilters.showFloatAccounts ? item._floatAccounts : []),
+        ...(this.accountFilters.showCostCenters ? item._costCenters : [])
+      ];
+    },
     getData() {
       let filters = {};
       Object.keys(this.sanadFilters).forEach(k => {
@@ -252,38 +363,14 @@ export default {
         return true;
       });
 
-      let res = [];
-      for (const acc of accounts) {
-        res.push(acc);
-        if (filters.showFloatAccounts) {
-          for (const floatAccount of acc._floatAccounts) {
-            res.push({
-              code: "حساب شناور",
-              name: floatAccount.name,
-              bes_sum: floatAccount.bes_sum,
-              bed_sum: floatAccount.bed_sum,
-              bes_remain: floatAccount.bes_remain,
-              bed_remain: floatAccount.bed_remain,
-              classes: "float-account-row"
-            });
-          }
-        }
-        if (filters.showCostCenters) {
-          for (const floatAccount of acc._costCenters) {
-            res.push({
-              code: "مرکز هزینه",
-              name: floatAccount.name,
-              bes_sum: floatAccount.bes_sum,
-              bed_sum: floatAccount.bed_sum,
-              bes_remain: floatAccount.bes_remain,
-              bed_remain: floatAccount.bed_remain,
-              classes: "float-account-row"
-            });
-          }
-        }
-      }
+      // if (accounts.length) {
+      //   accounts.sort((a, b) => a.level - b.level);
+      //   for (let i = 0; i < accounts[0].code.length; i++) {
+      //     accounts.sort((a, b) => a.code.substr(0, i) - b.code.substr(0, i));
+      //   }
+      // }
 
-      this.accounts = res;
+      this.accounts = accounts;
     },
     clearFilters() {
       this.accountFilters = {
@@ -300,31 +387,8 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.fixed-head {
-  overflow-y: auto;
-  max-height: calc(100vh - 200px);
-}
-
-.fixed-head thead tr {
-  th {
-    box-shadow: 0px 4px 8px -2px rgba(0, 0, 0, 0.2);
-    position: sticky;
-    top: 0;
-    background-color: #eee;
-  }
-}
-
-.fa-sort {
-  color: rgba(0, 0, 0, 0.3);
-}
-</style>
-
 <style lang="scss">
-.float-account-row {
-  background-color: #fafafa !important;
-  td:nth-child(3) {
-    // padding-right: 30px;
-  }
+.v-data-table tbody tr.v-data-table__expanded__content {
+  box-shadow: none !important;
 }
 </style>
