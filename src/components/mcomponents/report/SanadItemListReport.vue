@@ -14,8 +14,10 @@
         <td v-if="showAccountInTable" colspan="2"></td>
         <td>{{ previousLastItem.comulative_bed | toMoney }}</td>
         <td>{{ previousLastItem.comulative_bes | toMoney }}</td>
-        <td>{{ previousLastItem.remain | toMoney }}</td>
-        <td>{{ previousLastItem.remain_type }}</td>
+        <template v-if="showRemain">
+          <td>{{ previousLastItem.remain | toMoney }}</td>
+          <td>{{ previousLastItem.remain_type }}</td>
+        </template>
       </tr>
     </template>
     <template v-else-if="showPreviousRemain && lastItem" v-slot:body.prepend="{ headers }">
@@ -25,8 +27,10 @@
         <td v-if="showAccountInTable" colspan="2"></td>
         <td>{{ lastItem.previous_bed | toMoney }}</td>
         <td>{{ lastItem.previous_bes | toMoney }}</td>
-        <td>{{ lastItem.previous_remain | toMoney }}</td>
-        <td>{{ lastItem.previous_remain_type }}</td>
+        <template v-if="showRemain">
+          <td>{{ lastItem.previous_remain | toMoney }}</td>
+          <td>{{ lastItem.previous_remain_type }}</td>
+        </template>
       </tr>
     </template>
 
@@ -37,8 +41,10 @@
         <td v-if="showAccountInTable" colspan="2"></td>
         <td>{{ pageSum['bed'] | toMoney }}</td>
         <td>{{ pageSum['bes'] | toMoney }}</td>
-        <td>{{ lastItem.remain | toMoney }}</td>
-        <td>{{ lastItem.remain_type | toMoney }}</td>
+        <template v-if="showRemain">
+          <td>{{ lastItem.remain | toMoney }}</td>
+          <td>{{ lastItem.remain_type | toMoney }}</td>
+        </template>
       </tr>
       <tr v-if="apiData.previous" class="text-center">
         <td colspan="4"></td>
@@ -46,9 +52,18 @@
         <td v-if="showAccountInTable" colspan="2"></td>
         <td>{{ lastItem.comulative_bed | toMoney }}</td>
         <td>{{ lastItem.comulative_bes | toMoney }}</td>
-        <td>{{ lastItem.remain | toMoney }}</td>
-        <td>{{ lastItem.remain_type | toMoney }}</td>
+        <template v-if="showRemain">
+          <td>{{ lastItem.remain | toMoney }}</td>
+          <td>{{ lastItem.remain_type | toMoney }}</td>
+        </template>
       </tr>
+    </template>
+
+    <template v-for="(index, name) in $slots" v-slot:[name]>
+      <slot :name="name" />
+    </template>
+    <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
+      <slot :name="name" v-bind="data"></slot>
     </template>
   </m-datatable>
 </template>

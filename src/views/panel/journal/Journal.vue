@@ -1,106 +1,72 @@
 <template>
-  <v-card>
-    <v-card-title>دفتر روزنامه</v-card-title>
-
-    <v-card-text>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-select
-            label="سطح حساب"
-            v-model="accountLevel"
-            item-text="text"
-            item-value="value"
-            :items="accountLevels"
-            :return-object="false"
-          />
-        </v-col>
-        <v-col cols="12">
-          <datatable :cols="datatableCols.cols" :url="datatableCols.url" />
-        </v-col>
-      </v-row>
-    </v-card-text>
-  </v-card>
+  <v-row>
+    <v-col cols="12" class="journal">
+      <v-card>
+        <v-card-title>دفتر روزنامه</v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12" md="4">
+              <v-select
+                v-model="journal.level"
+                label="سطح حساب"
+                :items="accountLevels"
+                item-text="text"
+                item-value="value"
+                :return-object="false"
+              />
+            </v-col>
+            <template v-if="journal.level">
+              <v-col cols="12">
+                <sanad-item-list-report
+                  :filters.sync="filters"
+                  :showAccountInTable="true"
+                  :sortable="true"
+                  :filterable="true"
+                  :showRemain="false"
+                  :showPreviousRemain="false"
+                >
+                  <template
+                    #item.account.name="{ item }"
+                  >{{ item.account[journal.level + '_name'] }}</template>
+                  <template
+                    #item.account.code="{ item }"
+                  >{{ item.account[journal.level + '_code'] }}</template>
+                </sanad-item-list-report>
+              </v-col>
+            </template>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import datatable from "@/components/mcomponents/datatable/Server";
-import accountApiMixin from "@/mixin/accountMixin";
-import datatableCols from "./_datatableCols";
-import _ from "lodash";
+import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
 export default {
   name: "Journal",
-  components: { datatable },
-  mixins: [accountApiMixin],
-  props: ["journalAccountIds"],
+  components: { SanadItemListReport },
   data() {
     return {
-      datatableCols,
-      accountLevel: 0,
+      journal: {
+        level: ""
+      },
+      filters: {
+        financial_year: null
+      },
       accountLevels: [
-        { value: 0, text: "گروه" },
-        { value: 1, text: "کل" },
-        { value: 2, text: "معین" },
-        { value: 3, text: "تفضیلی" }
+        { value: "level0", text: "گروه" },
+        { value: "level1", text: "کل" },
+        { value: "level2", text: "معین" },
+        { value: "level3", text: "تفضیلی" }
       ]
     };
   },
   created() {
-    this.getData();
-  },
-  methods: {
-    getData() {
-      this.getAccounts();
-      this.init();
-    },
-    init() {
-      if (!this.journalAccountIds) {
-        this.journals = [{}];
-        return;
-      }
-      for (const id of this.journalAccountIds) {
-        let acc = this.findAccount("id", id);
-        this.journals.push({
-          level: acc.level,
-          account: acc
-        });
-      }
-    },
-    deleteJournal(journal) {
-      this.journals.splice(this.journals.indexOf(journal), 1);
-    }
-  },
-  watch: {
-    journals: {
-      handler() {
-        if (this.journals[this.journals.length - 1].level)
-          this.journals.push({});
-      },
-      deep: true
-    }
+    this.filters.financial_year = this.financialYear.id;
   }
 };
 </script>
 
 <style scoped lang="scss">
-.journal {
-  margin-bottom: 15px;
-}
-
-.list-item {
-  // display: inline-block;
-  // margin-right: 10px;
-  transition: all 1s;
-}
-.list-enter-active,
-.list-leave-active {
-  transition: all 1s;
-}
-.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.list-move {
-  transition: transform 1s;
-}
 </style>

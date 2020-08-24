@@ -342,7 +342,7 @@ export default {
 
       let ordering;
       if (sortBy.length === 1 && sortDesc.length === 1) {
-        ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0]}`;
+        ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replace('.', '__')}`;
       }
 
       let limit = itemsPerPage;

@@ -36,7 +36,7 @@ import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import accountApiMixin from "@/mixin/accountMixin";
 import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
 export default {
-  name: "Ledger",
+  name: "Bill",
   components: { MDatatable, SanadItemListReport },
   mixins: [accountApiMixin],
   props: {

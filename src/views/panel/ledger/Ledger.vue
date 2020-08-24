@@ -56,7 +56,6 @@
                   :filterable="false"
                   :showRemain="true"
                   :showPreviousRemain="true"
-                  :considerFinancialYear="true"
                 />
               </v-col>
             </template>
@@ -68,14 +67,10 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
-import accountApiMixin from "@/mixin/accountMixin";
-import _ from "lodash";
 import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
 export default {
   name: "Ledger",
-  components: { MDatatable, SanadItemListReport },
-  mixins: [accountApiMixin],
+  components: { SanadItemListReport },
   props: {
     ledgerAccountIds: {
       default: () => []
