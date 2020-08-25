@@ -46,7 +46,14 @@
 import wareApiMixin from "@/mixin/wareApi";
 export default {
   mixins: [wareApiMixin],
-  props: ["value", "disabled", "label"],
+  props: {
+    value: {},
+    disabled: {},
+    label: {},
+    returnObject: {
+      default: true
+    }
+  },
   data() {
     return {
       ware: null,
@@ -70,7 +77,9 @@ export default {
       this.setWare(this.value);
     },
     ware() {
-      this.$emit("input", this.ware);
+      let ware = this.ware;
+      if (ware.id && !this.returnObject) ware = ware.id;
+      this.$emit("input", ware);
     }
   }
 };

@@ -13,10 +13,10 @@ import IncomeStatement from '@/views/panel/incomeStatement/IncomeStatement.vue';
 import BalanceSheet from '@/views/panel/balanceSheet/BalanceSheet.vue';
 import BuySaleReport from '@/views/panel/buySaleReport/BuySaleReport.vue';
 
-import DetailedWareInventory from '@/views/panel/inventory/ware/detailed/DetailedWareInventory.vue';
-import AllWaresInventory from '@/views/panel/inventory/ware/all/AllWaresInventory.vue';
-import DetailedWarehouseInventory from '@/views/panel/inventory/warehouse/detailed/DetailedWarehouseInventory.vue';
-import AllWarehousesInventory from '@/views/panel/inventory/warehouse/all/AllWarehousesInventory.vue';
+import DetailedWareInventory from '@/views/panel/inventory/ware/DetailedWareInventory.vue';
+import AllWaresInventory from '@/views/panel/inventory/ware/AllWaresInventory.vue';
+import DetailedWarehouseInventory from '@/views/panel/inventory/warehouse/DetailedWarehouseInventory.vue';
+import AllWarehousesInventory from '@/views/panel/inventory/warehouse/AllWarehousesInventory.vue';
 
 export default [{
   name: 'Reports',

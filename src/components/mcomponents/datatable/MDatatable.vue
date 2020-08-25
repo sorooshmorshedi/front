@@ -142,9 +142,7 @@
         <template v-if="isNumber(header)">{{ getItemValue(item, header.value) | toMoney }}</template>
 
         <!-- select -->
-        <template
-          v-else-if="isSelect(header)"
-        >{{ header.items.filter(o => o.value == getItemValue(item, header.value))[0].text }}</template>
+        <template v-else-if="isSelect(header)">{{ getSelectItemValue(header, item) }}</template>
 
         <!-- boolean -->
         <template v-else-if="isBoolean(header)">
@@ -288,6 +286,13 @@ export default {
     if (this.serverProcessing) this.getDataFromApi();
   },
   methods: {
+    getSelectItemValue(header, item) {
+      let value = header.items.filter(
+        o => o.value == this.getItemValue(item, header.value)
+      );
+      if (value.length) return value[0].text;
+      return "";
+    },
     getRowNumber(item) {
       let datatable = this.$refs.datatable;
       if (datatable) {
