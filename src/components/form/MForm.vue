@@ -83,7 +83,15 @@
     <v-col cols="12" md="6" v-if="showList" class="items-list">
       <v-card>
         <v-card-text>
-          <datatable :cols="cols" :data="items" @rowClick="rowClick" />
+          <m-datatable :headers="cols" :items="items" @click:row="rowClick" v-on="listeners">
+            <!-- Pass user templates to m-data-table -->
+            <template v-for="(index, name) in $slots" v-slot:[name]>
+              <slot :name="name" />
+            </template>
+            <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
+              <slot :name="name" v-bind="data"></slot>
+            </template>
+          </m-datatable>
         </v-card-text>
       </v-card>
     </v-col>
@@ -91,11 +99,11 @@
 </template>
 
 <script>
-import datatable from "@/components/mcomponents/datatable/Client";
+import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 
 export default {
   name: "MForm",
-  components: { datatable },
+  components: { MDatatable },
   props: {
     showHeader: {
       default: true
@@ -180,6 +188,11 @@ export default {
     };
   },
   computed: {
+    listeners() {
+      let listeners = this.$listeners;
+      listeners["click:row"] = this.rowClick;
+      return listeners;
+    },
     hasFinancialYear() {
       let financialYearSafeRoutes = ["Companies", "FinancialYears", "Cities"];
       if (financialYearSafeRoutes.includes(this.$route.name)) return true;
@@ -236,7 +249,7 @@ export default {
     },
     rowClick(item) {
       this.$emit("update:is-editing", false);
-      this.$emit("rowClick", item);
+      this.$emit("click:row", item);
     }
   }
 };

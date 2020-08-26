@@ -9,7 +9,7 @@
       :is-editing.sync="isEditing"
       :showListBtn="false"
       :show-navigation-btns="false"
-      @rowClick="setItem"
+      @click:row="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
@@ -185,8 +185,8 @@ export default {
       ],
       cols: [
         {
-          th: "نام",
-          td: "name",
+          text: "نام",
+          value: "name",
           type: "text",
           filters: ["name"]
         }

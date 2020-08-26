@@ -10,7 +10,7 @@
     :showListBtn="false"
     :show-navigation-btns="false"
     :showActions="showActions"
-    @rowClick="setItem"
+    @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
@@ -57,14 +57,14 @@ export default {
       permissionBasename: "defaultAccount",
       cols: [
         {
-          th: "نام",
-          td: "name",
+          text: "نام",
+          value: "name",
           type: "text",
           filters: ["name"]
         },
         {
-          th: "حساب",
-          td: "account.title",
+          text: "حساب",
+          value: "account.title",
           type: "text",
           filters: ["account.title"]
         }

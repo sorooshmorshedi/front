@@ -10,7 +10,7 @@
     :showListBtn="false"
     :show-navigation-btns="false"
     :showActions="item.id != undefined"
-    @rowClick="setItem"
+    @click:row="setItem"
     @submit="submit"
   >
     <template #default>
@@ -37,14 +37,14 @@ export default {
       baseUrl: "home/options",
       cols: [
         {
-          th: "نام",
-          td: "name",
+          text: "نام",
+          value: "name",
           type: "text",
           filters: ["name"]
         },
         {
-          th: "مقدار",
-          td: "value",
+          text: "مقدار",
+          value: "value",
           type: "text",
           filters: ["value"]
         }

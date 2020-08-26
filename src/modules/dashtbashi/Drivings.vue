@@ -8,7 +8,7 @@
     :is-editing.sync="isEditing"
     :showListBtn="false"
     :show-navigation-btns="false"
-    @rowClick="setItem"
+    @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
@@ -77,8 +77,8 @@ export default {
       leadingSlash: true,
       cols: [
         {
-          th: "عنوان",
-          td: "title",
+          text: "عنوان",
+          value: "title",
           type: "text",
           filters: ["title"]
         }

@@ -8,7 +8,7 @@
     :is-editing.sync="isEditing"
     :showListBtn="false"
     :show-navigation-btns="false"
-    @rowClick="setItem"
+    @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
@@ -108,8 +108,8 @@ export default {
       permissionBasename: "ware",
       cols: [
         {
-          th: "کد",
-          td: "code",
+          text: "کد",
+          value: "code",
           type: "number",
           filters: [
             {
@@ -125,8 +125,8 @@ export default {
           ]
         },
         {
-          th: "نام",
-          td: "name",
+          text: "نام",
+          value: "name",
           type: "text",
           filters: ["name"]
         }

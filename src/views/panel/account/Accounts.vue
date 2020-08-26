@@ -10,7 +10,7 @@
     :showListBtn="false"
     :show-navigation-btns="false"
     :showList="usage != 'tree'"
-    @rowClick="setItem"
+    @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
@@ -287,8 +287,8 @@ export default {
       ],
       cols: [
         {
-          th: "کد حساب",
-          td: "code",
+          text: "کد حساب",
+          value: "code",
           type: "number",
           filters: [
             {
@@ -304,14 +304,14 @@ export default {
           ]
         },
         {
-          th: "نام حساب",
-          td: "name",
+          text: "نام حساب",
+          value: "name",
           type: "text",
           filters: ["name"]
         },
         {
-          th: "نوع",
-          td: "type.name",
+          text: "نوع",
+          value: "type.name",
           type: "text",
           filters: ["type.name"]
         }

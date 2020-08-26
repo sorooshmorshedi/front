@@ -35,7 +35,7 @@
     <v-col cols="12" md="6" v-if="showList" class="items-list">
       <v-card>
         <v-card-text>
-          <datatable :cols="cols" :data="items" @rowClick="rowClick" />
+          <datatable :cols="cols" :data="items" @click:row="rowClick" />
         </v-card-text>
       </v-card>
     </v-col>

@@ -4,7 +4,7 @@
     :items="items"
     :cols="cols"
     :deletable="item.id"
-    @rowClick="setItem"
+    @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
@@ -58,21 +58,21 @@ export default {
       forms: forms,
       cols: [
         {
-          th: "فرم",
-          td: "form",
+          text: "فرم",
+          value: "form",
           type: "select",
           filters: ["select"],
           options: forms
         },
         {
-          th: "نام",
-          td: "name",
+          text: "نام",
+          value: "name",
           type: "text",
           filters: ["name"]
         },
         {
-          th: "حساب",
-          td: "account.title",
+          text: "حساب",
+          value: "account.title",
           type: "text",
           filters: ["account__title__icontains"]
         }

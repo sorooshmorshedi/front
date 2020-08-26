@@ -9,18 +9,12 @@
       :is-editing.sync="isEditing"
       :showListBtn="false"
       :show-navigation-btns="false"
-      @rowClick="setItem"
+      @click:row="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
     >
-      <template #header-btns>
-        <v-btn
-          v-if="item.id"
-          @click="activeFinancialYear"
-          class="blue white--text mr-1"
-        >فعال کردن سال مالی</v-btn>
-      </template>
+      <template #header-btns></template>
       <template #default>
         <v-row>
           <v-col cols="12">
@@ -36,6 +30,14 @@
             <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
           </v-col>
         </v-row>
+      </template>
+
+      <template #item.activate="{ item }">
+        <v-btn
+          :disabled="financialYear.id == item.id"
+          @click="activeFinancialYear(item)"
+          class="blue white--text mr-1"
+        >فعال کردن سال مالی</v-btn>
       </template>
     </m-form>
   </div>
@@ -54,22 +56,22 @@ export default {
       items: [],
       cols: [
         {
-          th: "نام",
-          td: "name",
-          type: "text",
-          filters: ["name__icontains"]
+          text: "نام",
+          value: "name"
         },
         {
-          th: "شروع",
-          td: "start",
-          type: "text",
-          filters: ["start__icontains"]
+          text: "شروع",
+          value: "start"
         },
         {
-          th: "پایان",
-          td: "end",
-          type: "text",
-          filters: ["end__icontains"]
+          text: "پایان",
+          value: "end"
+        },
+        {
+          text: "",
+          value: "activate",
+          sortable: false,
+          filterable: false
         }
       ]
     };
@@ -93,12 +95,12 @@ export default {
       this.item.company = this.company.id;
       return this.item;
     },
-    activeFinancialYear() {
+    activeFinancialYear(item) {
       this.request({
         url: this.endpoint("users/setActiveFinancialYear"),
         method: "post",
         data: {
-          financial_year: this.item.id
+          financial_year: item.id
         },
         success: data => {
           this.successNotify();

@@ -8,7 +8,7 @@
     :is-editing.sync="isEditing"
     :showListBtn="false"
     :show-navigation-btns="false"
-    @rowClick="setItem"
+    @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
@@ -38,14 +38,14 @@ export default {
       permissionBasename: "warehouse",
       cols: [
         {
-          th: "نام",
-          td: "name",
+          text: "نام",
+          value: "name",
           type: "text",
           filters: ["name"]
         },
         {
-          th: "توضیحات",
-          td: "explanation",
+          text: "توضیحات",
+          value: "explanation",
           type: "text",
           filters: ["explanation"]
         }

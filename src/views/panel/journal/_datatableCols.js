@@ -1,14 +1,14 @@
 export default {
   url: "reports/journal",
   cols: [{
-      th: "شماره",
-      td: "sanad.code",
+      text: "شماره",
+      value: "sanad.code",
       type: "number",
       filters: ["code__icontains"]
     },
     {
-      th: "تاریخ",
-      td: "sanad.date",
+      text: "تاریخ",
+      value: "sanad.date",
       type: "date",
       filters: [{
           label: "xxxx-xx-xx از تاریخ ",
@@ -22,8 +22,8 @@ export default {
 
     },
     {
-      th: "کد حساب",
-      td: "account.code",
+      text: "کد حساب",
+      value: "account.code",
       type: "number",
       filters: [{
         label: 'از کد حساب',
@@ -34,25 +34,25 @@ export default {
       }]
     },
     {
-      th: "نام حساب",
-      td: "account.name",
+      text: "نام حساب",
+      value: "account.name",
       type: "text",
       filters: ["account__name__icontains"]
     },
     {
-      th: "شرح",
-      td: "explanation",
+      text: "شرح",
+      value: "explanation",
       type: "text",
       filters: ["explanation__icontains"]
     },
     {
-      th: "بدهکار",
-      td: "bed",
+      text: "بدهکار",
+      value: "bed",
       type: "money",
     },
     {
-      th: "بستانکار",
-      td: "bes",
+      text: "بستانکار",
+      value: "bes",
       type: "money",
     },
   ],

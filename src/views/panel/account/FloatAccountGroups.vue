@@ -9,7 +9,7 @@
       :is-editing.sync="isEditing"
       :showListBtn="false"
       :show-navigation-btns="false"
-      @rowClick="setItem"
+      @click:row="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
@@ -42,14 +42,14 @@ export default {
       permissionBasename: "floatAccountGroup",
       cols: [
         {
-          th: "نام گروه",
-          td: "name",
+          text: "نام گروه",
+          value: "name",
           type: "text",
           filters: ["name"]
         },
         {
-          th: "توضیحات",
-          td: "explanation",
+          text: "توضیحات",
+          value: "explanation",
           type: "text",
           filters: ["expalantion"]
         }

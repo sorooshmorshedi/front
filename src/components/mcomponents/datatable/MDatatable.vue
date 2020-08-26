@@ -36,6 +36,7 @@
       :disable-sort="isPrinting"
       :hide-default-footer="isPrinting"
       :footer-props="{ showFirstLastPage: true }"
+      v-on="$listeners"
     >
       <!-- Add row number field -->
       <template #item.rowNumber="{ item }">{{ getRowNumber(item) }}</template>
@@ -178,7 +179,9 @@ export default {
       required: true
     },
     filters: {
-      default: () => {}
+      default() {
+        return {};
+      }
     },
     searchable: {
       default: true
@@ -190,8 +193,10 @@ export default {
       default: null
     },
     items: {
-      default: () => []
-    }
+      default() {
+        return [];
+      }
+    },
   },
   data() {
     return {
@@ -287,6 +292,9 @@ export default {
     if (this.serverProcessing) this.getDataFromApi();
   },
   methods: {
+    on() {
+      console.log(arguments);
+    },
     getSelectItemValue(header, item) {
       let value = header.items.filter(
         o => o.value == this.getItemValue(item, header.value)

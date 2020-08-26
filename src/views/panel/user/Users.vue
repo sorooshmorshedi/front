@@ -9,7 +9,7 @@
       :canSubmit="canSubmit"
       :show-navigation-btns="false"
       :showListBtn="false"
-      @rowClick="setItem"
+      @click:row="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
@@ -98,20 +98,20 @@ export default {
       permissionBasename: "user",
       cols: [
         {
-          th: "نام",
-          td: "first_name",
+          text: "نام",
+          value: "first_name",
           type: "text",
           filters: ["first_name"]
         },
         {
-          th: "نام خانوادگی",
-          td: "last_name",
+          text: "نام خانوادگی",
+          value: "last_name",
           type: "text",
           filters: ["last_name"]
         },
         {
-          th: "نام کاربری",
-          td: "username",
+          text: "نام کاربری",
+          value: "username",
           type: "text",
           filters: ["username"]
         }

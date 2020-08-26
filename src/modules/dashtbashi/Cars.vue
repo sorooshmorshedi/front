@@ -8,7 +8,7 @@
     :is-editing.sync="isEditing"
     :showListBtn="false"
     :show-navigation-btns="false"
-    @rowClick="setItem"
+    @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
@@ -214,8 +214,8 @@ export default {
       ],
       cols: [
         {
-          th: "شماره",
-          td: "car_number_str",
+          text: "شماره",
+          value: "car_number_str",
           type: "text",
           filters: ["car_number_str"]
         }

@@ -9,14 +9,11 @@
       :is-editing.sync="isEditing"
       :showListBtn="false"
       :show-navigation-btns="false"
-      @rowClick="setItem"
+      @click:row="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
     >
-      <template #header-btns>
-        <v-btn v-if="item.id" @click="activeCompany" class="blue white--text mr-1">فعال کردن شرکت</v-btn>
-      </template>
       <template #default>
         <v-row>
           <v-col cols="12">
@@ -68,6 +65,14 @@
           </v-col>
         </v-row>
       </template>
+
+      <template #item.activate="{ item }">
+        <v-btn
+          :disabled="company.id == item.id"
+          @click="activeCompany(item)"
+          class="blue white--text mr-1"
+        >فعال کردن شرکت</v-btn>
+      </template>
     </m-form>
   </div>
 </template>
@@ -85,10 +90,14 @@ export default {
       items: [],
       cols: [
         {
-          th: "نام",
-          td: "name",
-          type: "text",
-          filters: ["name__icontains"]
+          text: "نام",
+          value: "name"
+        },
+        {
+          text: "",
+          value: "activate",
+          sortable: false,
+          filterable: false
         }
       ]
     };
@@ -118,12 +127,12 @@ export default {
         }
       });
     },
-    activeCompany() {
+    activeCompany(item) {
       this.request({
         url: this.endpoint("users/setActiveCompany"),
         method: "post",
         data: {
-          company: this.item.id
+          company: item.id
         },
         success: data => {
           this.successNotify();

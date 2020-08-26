@@ -8,15 +8,15 @@ export default {
       filters: [],
     },
     {
-      th: "شماره سند",
-      td: "sanad",
+      text: "شماره سند",
+      value: "sanad",
       type: "number",
       sortable: false,
       filters: []
     },
     {
-      th: "تاریخ",
-      td: "date",
+      text: "تاریخ",
+      value: "date",
       type: "date",
       sortable: false,
       filters: [{
@@ -31,36 +31,36 @@ export default {
 
     },
     {
-      th: "شرح",
-      td: "explanation",
+      text: "شرح",
+      value: "explanation",
       type: "text",
       sortable: false,
       filters: ["explanation"]
     },
     {
-      th: "بدهکار",
-      td: "bed",
+      text: "بدهکار",
+      value: "bed",
       type: "money",
       sortable: false,
       filters: []
     },
     {
-      th: "بستانکار",
-      td: "bes",
+      text: "بستانکار",
+      value: "bes",
       type: "money",
       sortable: false,
       filters: []
     },
     {
-      th: "مانده",
-      td: "remain",
+      text: "مانده",
+      value: "remain",
       type: "money",
       sortable: false,
       filters: []
     },
     {
-      th: "تشخیص",
-      td: "remain_type",
+      text: "تشخیص",
+      value: "remain_type",
       type: "string",
       sortable: false,
       filters: []

@@ -8,7 +8,7 @@
     :is-editing.sync="isEditing"
     :showListBtn="false"
     :show-navigation-btns="false"
-    @rowClick="setItem"
+    @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
     @delete="deleteItem"
@@ -81,32 +81,32 @@ export default {
       leadingSlash: true,
       cols: [
         {
-          th: "حساب",
-          td: "account.name",
+          text: "حساب",
+          value: "account.name",
           type: "text",
           filters: ["account__name__icontains"]
         },
         {
-          th: "سری",
-          td: "serial",
+          text: "سری",
+          value: "serial",
           type: "text",
           filters: ["serial__icontains"]
         },
         {
-          th: "از سریال",
-          td: "serial_from",
+          text: "از سریال",
+          value: "serial_from",
           type: "number",
           filters: ["serial__icontains"]
         },
         {
-          th: "تا سریال",
-          td: "serial_to",
+          text: "تا سریال",
+          value: "serial_to",
           type: "number",
           filters: ["serial__icontains"]
         },
         {
-          th: "توضیحات",
-          td: "explanation",
+          text: "توضیحات",
+          value: "explanation",
           type: "text",
           filters: ["account__icontains"]
         }
