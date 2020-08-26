@@ -12,15 +12,13 @@
           <span>{{ ware.pricingType.name }}</span>
         </v-col>
         <v-col cols="12">
-          <datatable
-            v-if="ware"
-            :cols="options.cols"
-            :url="options.url"
-            :default-filters="defaultFilters"
-            hasSum="1"
-            sumColSpan="7"
+          <m-datatable
+            v-if="filters.ware"
+            :headers="headers"
+            :api-url="url"
+            :filters.sync="filters"
+            :searchable="false"
             ref="datatable"
-            class="col-12 mt-4"
           />
         </v-col>
       </v-row>
@@ -30,8 +28,7 @@
 
 <script>
 import wareApiMixin from "@/mixin/wareApi";
-import datatable from "@/components/mcomponents/datatable/Server";
-import datatableOptions from "./datatableOptions";
+import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 export default {
   props: {
     wareId: {},
@@ -40,19 +37,109 @@ export default {
     }
   },
   mixins: [wareApiMixin],
-  components: { datatable },
+  components: { MDatatable },
   data() {
     return {
-      options: datatableOptions,
-      showTable: false,
-      defaultFilters: {
+      url: "reports/buySale",
+      ware: null,
+      filters: {
         factor__type__in: "",
         ware: ""
       },
       layout: {
         title: ""
       },
-      ware: null
+      headers: [
+        {
+          text: "نوع فاکتور",
+          value: "factor.type",
+          items: [
+            {
+              text: "موجودی اول دوره",
+              value: "fpi"
+            },
+            {
+              text: "فروش",
+              value: "sale"
+            },
+            {
+              text: "برگشت از فروش",
+              value: "backFromSale"
+            },
+            {
+              text: "خرید",
+              value: "buy"
+            },
+            {
+              text: "برگشت از خرید",
+              value: "backFromBuy"
+            }
+          ]
+        },
+        {
+          text: "تاریخ",
+          value: "factor.date",
+          type: "date"
+        },
+        {
+          text: "شماره عطف",
+          value: "factor.id"
+        },
+        {
+          text: "شماره فاکتور",
+          value: "factor.code"
+        },
+        {
+          text: "خریدار/فروشنده",
+          value: "factor.account.name",
+          type: "text"
+        },
+        {
+          text: "انبار",
+          value: "warehouse.name",
+          type: "text"
+        },
+        {
+          text: "تعداد",
+          value: "count",
+          type: "numeric",
+          sortable: false
+        },
+        {
+          text: "فی",
+          value: "fee",
+          type: "numeric",
+          sortable: false
+        },
+        {
+          text: "مبلغ",
+          value: "value",
+          type: "numeric",
+          sortable: false
+        },
+        {
+          text: "تخفیف",
+          value: "discount",
+          type: "numeric",
+          sortable: false
+        },
+        {
+          text: "مبلغ کل",
+          value: "total_value",
+          type: "numeric",
+          sortable: false
+        },
+        {
+          text: "شرح فاکتور",
+          value: "factor__explanation",
+          type: "text"
+        },
+        {
+          text: "توضیحات",
+          value: "explanation",
+          type: "text"
+        }
+      ]
     };
   },
   created() {
@@ -70,9 +157,7 @@ export default {
       this.setDefaultFilters();
 
       if (this.wareId) {
-        this.ware = this.wares.filter(
-          o => o.id == this.wareId
-        )[0];
+        this.ware = this.wares.filter(o => o.id == this.wareId)[0];
       }
     },
     setLayout() {
@@ -81,17 +166,17 @@ export default {
     },
     setDefaultFilters() {
       if (this.type == "sale") {
-        this.defaultFilters["factor__type__in"] = ["sale", "backFromSale"].join(
+        this.filters["factor__type__in"] = ["sale", "backFromSale"].join(
           ","
         );
       } else {
-        this.defaultFilters["factor__type__in"] = ["buy", "backFromBuy"].join(
+        this.filters["factor__type__in"] = ["buy", "backFromBuy"].join(
           ","
         );
       }
     },
     selectWare() {
-      this.defaultFilters["ware"] = this.ware.id;
+      this.filters.ware = this.ware.id;
     }
   },
   watch: {
