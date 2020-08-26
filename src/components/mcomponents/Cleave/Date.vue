@@ -32,6 +32,10 @@ export default {
   watch: {
     value() {
       this.localValue = this.value;
+
+      if (this.localValue == undefined) {
+        this.setToday();
+      }
     }
   },
   created() {
@@ -68,8 +72,8 @@ export default {
       if (this.localValue != this.mask.value) {
         this.mask.resolve(String(this.localValue));
         this.$nextTick(() => {
-          let maskedValue = this.mask.value
-          if (maskedValue == '') maskedValue = null;
+          let maskedValue = this.mask.value;
+          if (maskedValue == "") maskedValue = null;
           this.localValue = maskedValue;
           this.$emit("input", maskedValue);
         });

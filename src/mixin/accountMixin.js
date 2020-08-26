@@ -85,7 +85,6 @@ export default {
   methods: {
     getAccounts(force = false, init = false) {
       if (!force && this.accounts.length) return;
-      console.log(this.isGetting.accounts);
       if (this.isGetting.accounts) return;
       this.$store.commit('updateIsGetting', {
         accounts: true

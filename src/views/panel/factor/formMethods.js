@@ -5,8 +5,6 @@ export default {
       this.getFactorExpenses();
       if (this.isFpi) {
         this.getFirstPeriodInventory();
-      } else if (this.id) {
-        this.getFactor(this.id);
       } else if (this.fromId) {
         this.getFactor(this.fromId);
       }

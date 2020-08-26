@@ -74,6 +74,7 @@
               <slot name="footer-btns"></slot>
             </template>
             <v-btn v-else-if="canEdit" @click="edit()" class="submit amber w-100px">ویرایش</v-btn>
+            <slot name="footer-outside-btns"></slot>
           </div>
         </v-card-actions>
       </v-card>
@@ -180,11 +181,7 @@ export default {
   },
   computed: {
     hasFinancialYear() {
-      let financialYearSafeRoutes = [
-        "Companies",
-        "FinancialYears",
-        "Cities"
-      ];
+      let financialYearSafeRoutes = ["Companies", "FinancialYears", "Cities"];
       if (financialYearSafeRoutes.includes(this.$route.name)) return true;
       return this.financialYear && !this.financialYear.is_closed;
     },

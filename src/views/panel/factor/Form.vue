@@ -569,7 +569,7 @@
         </v-dialog>
       </template>
 
-      <template #footer-btns>
+      <template #footer-outside-btns>
         <v-btn
           v-if="id && !isFpi"
           @click="definiteFactor"

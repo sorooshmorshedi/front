@@ -31,6 +31,13 @@ export default {
     },
     getWares(force = false, init = false) {
       if (!force && this.wares.length) return;
+
+      if (this.isGetting.wares) return;
+      this.$store.commit('updateIsGetting', {
+        wares: true
+      })
+
+
       return this.request({
         url: this.endpoint('wares/wares'),
         method: 'get',
@@ -39,6 +46,10 @@ export default {
             wares: data
           });
           init && this.init();
+
+          this.$store.commit('updateIsGetting', {
+            'wares': false
+          })
         }
       })
     },
@@ -75,6 +86,7 @@ export default {
       wares: state => state.wares.wares,
       warehouses: state => state.wares.warehouses,
       units: state => state.wares.units,
+      isGetting: state => state.isGetting
     }),
   }
 }

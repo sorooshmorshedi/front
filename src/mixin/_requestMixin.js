@@ -102,7 +102,7 @@ export default {
       let confirmations = error.response.data;
 
       for (const text of confirmations) {
-        if (!confirm(text)) return;
+        if (!confirm(text.messages[0])) return;
       }
       if (options.data) options.data._confirmed = true;
       else options.data = {

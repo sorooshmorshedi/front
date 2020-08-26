@@ -18,7 +18,7 @@ import moment from "moment-jalaali";
 import IMask from "imask";
 
 export default {
-  name: "Date",
+  name: "Time",
   props: ["value", "id", "default", "disabled", "placeholder"],
   data() {
     return {
@@ -30,6 +30,9 @@ export default {
   watch: {
     value() {
       this.localValue = this.value;
+      if (this.localValue == undefined) {
+        this.setToday();
+      }
       this.change();
     }
   },
