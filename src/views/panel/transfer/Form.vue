@@ -3,6 +3,7 @@
     title="انتقال بین انبار ها"
     :ListRouteParams="{form: 'transfer'}"
     :showList="false"
+    :listRoute="{name:'List', params:{form: 'transfer'}}"
     :exportParams="{id: this.id}"
     :isEditing.sync="isEditing"
     :canDelete="canDelete"
@@ -10,6 +11,7 @@
     @clearForm="clearForm(true)"
     @goToForm="getItemByPosition"
     @submit="validate"
+    @delete="deleteItem"
   >
     <template>
       <v-row>
@@ -85,7 +87,7 @@
                 <td class="d-print-none">
                   <v-btn
                     v-if="i != rows.length-1"
-                    @click="deleteItemRow(i)"
+                    @click="deleteRow(i)"
                     class="red--text"
                     icon
                     :disabled="!isEditing"
@@ -100,7 +102,7 @@
                 <td>{{ sum | toMoney }}</td>
                 <td :colspan="3"></td>
                 <td>
-                  <v-btn @click="deleteItemRow(-1)" icon class="red--text" :disabled="!isEditing">
+                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
                     <v-icon>delete_sweep</v-icon>
                   </v-btn>
                 </td>
@@ -132,6 +134,7 @@ export default {
   data() {
     return {
       baseUrl: "factors/transfers",
+      permissionBasename: "transfer",
       leadingSlash: true,
       rowKey: "ware",
       hasList: false,
