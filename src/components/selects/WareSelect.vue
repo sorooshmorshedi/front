@@ -78,7 +78,7 @@ export default {
     },
     ware() {
       let ware = this.ware;
-      if (ware.id && !this.returnObject) ware = ware.id;
+      if (ware && ware.id && !this.returnObject) ware = ware.id;
       this.$emit("input", ware);
     }
   }

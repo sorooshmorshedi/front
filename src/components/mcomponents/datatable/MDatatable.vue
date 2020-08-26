@@ -35,6 +35,7 @@
       :disable-pagination="isPrinting"
       :disable-sort="isPrinting"
       :hide-default-footer="isPrinting"
+      :footer-props="{ showFirstLastPage: true }"
     >
       <!-- Add row number field -->
       <template #item.rowNumber="{ item }">{{ getRowNumber(item) }}</template>
