@@ -77,6 +77,7 @@
             :filters.sync="filters"
             show-expand
             :expanded.sync="accounts"
+            :searchable="false"
           >
             <template #item.data-table-expand></template>
 
@@ -363,14 +364,30 @@ export default {
         return true;
       });
 
-      // if (accounts.length) {
-      //   accounts.sort((a, b) => a.level - b.level);
-      //   for (let i = 0; i < accounts[0].code.length; i++) {
-      //     accounts.sort((a, b) => a.code.substr(0, i) - b.code.substr(0, i));
-      //   }
-      // }
+      accounts.sort((a, b) => b.id - a.id);
 
-      this.accounts = accounts;
+      accounts.sort((a, b) => a.code - b.code);
+
+      let getChildren = account => {
+        return accounts.filter(
+          o => o.code.startsWith(account.code) && o.level == account.level + 1
+        );
+      };
+
+      let sortedAccounts = accounts.filter(o => o.level == 0);
+
+      for (let i = 0; i < 3; i++) {
+        for (let account of accounts.filter(o => o.level == i)) {
+          sortedAccounts.splice(
+            sortedAccounts.indexOf(account),
+            // sortedAccounts.indexOf(account) + 1, // for sorting from kol to tafsili
+            0,
+            ...getChildren(account)
+          );
+        }
+      }
+
+      this.accounts = sortedAccounts;
     },
     clearFilters() {
       this.accountFilters = {

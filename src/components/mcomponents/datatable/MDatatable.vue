@@ -70,7 +70,18 @@
                 {{ header.text }}
               </v-card-title>
               <v-card-text class="pt-0">
-                <v-row v-if="!header.items">
+                <v-row v-if="isBoolean(header)">
+                  <v-col cols="12">
+                    <v-autocomplete
+                      :label="header.text"
+                      :items="getBooleanFilterItems(header)"
+                      clearable
+                      :value="filters[`${header.value}`]"
+                      @input="emitFilter(`${header.value}`, $event)"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row v-else-if="!header.items">
                   <v-col cols="12">
                     <component
                       :is="getFilterField(header)"
@@ -114,13 +125,15 @@
                   </template>
                 </v-row>
                 <v-row v-else>
-                  <v-autocomplete
-                    :label="header.text"
-                    :items="header.items"
-                    clearable
-                    :value="filters[`${header.value}`]"
-                    @input="emitFilter(`${header.value}`, $event)"
-                  />
+                  <v-col cols="12">
+                    <v-autocomplete
+                      :label="header.text"
+                      :items="header.items"
+                      clearable
+                      :value="filters[`${header.value}`]"
+                      @input="emitFilter(`${header.value}`, $event)"
+                    />
+                  </v-col>
                 </v-row>
               </v-card-text>
               <v-card-actions>
@@ -196,7 +209,7 @@ export default {
       default() {
         return [];
       }
-    },
+    }
   },
   data() {
     return {
@@ -292,8 +305,17 @@ export default {
     if (this.serverProcessing) this.getDataFromApi();
   },
   methods: {
-    on() {
-      console.log(arguments);
+    getBooleanFilterItems(header) {
+      return [
+        {
+          text: header.text,
+          value: true
+        },
+        {
+          text: "غیر " + header.text,
+          value: false
+        }
+      ];
     },
     getSelectItemValue(header, item) {
       let value = header.items.filter(

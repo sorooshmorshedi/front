@@ -19,6 +19,7 @@ export default {
     {
       text: "سیستمی",
       value: "is_auto_created",
+      type: 'boolean',
     },
     {
       text: "توضیحات",
