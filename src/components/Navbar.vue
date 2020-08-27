@@ -115,6 +115,18 @@ export default {
                   },
                   title: "بانک"
                 },
+
+                {
+                  to: {
+                    name: "AccountTree"
+                  },
+                  title: "نمودار درختی حساب ها"
+                }
+              ]
+            },
+            {
+              title: "شناور و مراکز",
+              children: [
                 {
                   to: {
                     name: "FloatAccountGroups"
@@ -144,12 +156,6 @@ export default {
                     }
                   },
                   title: "مرکز هزینه و درآمد"
-                },
-                {
-                  to: {
-                    name: "AccountTree"
-                  },
-                  title: "نمودار درختی حساب ها"
                 }
               ]
             },
@@ -244,6 +250,24 @@ export default {
                 },
                 {
                   to: {
+                    name: "FactorExpenses",
+                    params: {
+                      factorType: "buy"
+                    }
+                  },
+                  title: "هزینه های فاکتور خرید"
+                },
+                {
+                  to: {
+                    name: "FactorExpenses",
+                    params: {
+                      factorType: "sale"
+                    }
+                  },
+                  title: "هزینه های فاکتور فروش"
+                },
+                {
+                  to: {
                     name: "DefaultAccounts",
                     params: {
                       usage: "closeAccounts"
@@ -260,24 +284,7 @@ export default {
                   },
                   title: "دیگر حساب ها"
                 },
-                {
-                  to: {
-                    name: "FactorExpenses",
-                    params: {
-                      type: "buy"
-                    }
-                  },
-                  title: "هزینه های فاکتور خرید"
-                },
-                {
-                  to: {
-                    name: "FactorExpenses",
-                    params: {
-                      type: "sale"
-                    }
-                  },
-                  title: "هزینه های فاکتور فروش"
-                },
+
                 {
                   to: {
                     name: "ExportVerifiers"
@@ -285,69 +292,11 @@ export default {
                   title: "تایید کنندگان خروجی"
                 }
               ]
-            },
-
-            {
-              to: {
-                name: "ChequebookForm"
-              },
-              title: "ثبت دسته چک"
             }
           ]
         },
         {
-          title: "خزانه داری",
-          children: [
-            {
-              title: "دریافت و پرداخت",
-              children: [
-                {
-                  to: {
-                    name: "TransactionForm",
-                    params: {
-                      transactionType: "receive"
-                    }
-                  },
-                  title: "ثبت دریافت"
-                },
-                {
-                  to: {
-                    name: "TransactionForm",
-                    params: {
-                      transactionType: "payment"
-                    }
-                  },
-                  title: "ثبت پرداخت"
-                }
-              ]
-            },
-            {
-              title: "دفتر چک",
-              children: [
-                {
-                  to: {
-                    name: "ChequeForm",
-                    params: {
-                      receivedOrPaid: "p"
-                    }
-                  },
-                  title: "ثبت چک پرداختی"
-                },
-                {
-                  to: {
-                    name: "ChequeForm",
-                    params: {
-                      receivedOrPaid: "r"
-                    }
-                  },
-                  title: "ثبت چک دریافتی"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          title: "عملیات های روزانه",
+          title: "حسابداری",
           children: [
             {
               to: {
@@ -356,88 +305,7 @@ export default {
               title: "ثبت سند"
             },
             {
-              title: "فاکتور",
-              children: [
-                {
-                  to: {
-                    name: "FactorForm",
-                    params: {
-                      type: "buy"
-                    }
-                  },
-                  title: "ثبت فاکتور خرید"
-                },
-                {
-                  to: {
-                    name: "FactorForm",
-                    params: {
-                      type: "backFromBuy"
-                    }
-                  },
-                  title: "ثبت فاکتور برگشت از خرید"
-                },
-                {
-                  to: {
-                    name: "FactorForm",
-                    params: {
-                      type: "sale"
-                    }
-                  },
-                  title: "ثبت فاکتور فروش"
-                },
-                {
-                  to: {
-                    name: "FactorForm",
-                    params: {
-                      type: "backFromSale"
-                    }
-                  },
-                  title: "ثبت فاکتور برگشت از فروش"
-                },
-                {
-                  to: {
-                    name: "TransferForm"
-                  },
-                  title: "ثبت انتقال"
-                }
-              ]
-            },
-            {
-              title: "تنخواه",
-              children: [
-                {
-                  title: "حساب های پیشفرض تنخواه",
-                  to: {
-                    name: "DefaultAccounts",
-                    params: {
-                      usage: "imprest"
-                    }
-                  }
-                },
-                {
-                  title: "پرداخت تنخواه",
-                  to: {
-                    name: "TransactionForm",
-                    params: {
-                      transactionType: "imprest"
-                    }
-                  }
-                },
-                {
-                  title: "تسویه تنخواه",
-                  to: {
-                    name: "ImprestSettlement"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          title: "گزارش",
-          children: [
-            {
-              title: "گزارش اسناد",
+              title: "لیست اسناد",
               children: [
                 {
                   to: {
@@ -446,7 +314,7 @@ export default {
                       form: "sanad"
                     }
                   },
-                  title: "اسناد"
+                  title: "همه"
                 },
                 {
                   to: {
@@ -468,54 +336,30 @@ export default {
                 }
               ]
             },
+
             {
-              title: "گزارش فاکتور ها",
+              to: {
+                name: "Closing"
+              },
+              title: "عملیات بستن و انتقال"
+            }
+          ]
+        },
+        {
+          title: "خزانه داری",
+          children: [
+            {
+              title: "دریافت",
               children: [
                 {
                   to: {
-                    name: "List",
+                    name: "TransactionForm",
                     params: {
-                      form: "factor",
-                      type: "buy"
+                      transactionType: "receive"
                     }
                   },
-                  title: "فاکتور خرید"
+                  title: "ثبت دریافت"
                 },
-                {
-                  to: {
-                    name: "List",
-                    params: {
-                      form: "factor",
-                      type: "backFromBuy"
-                    }
-                  },
-                  title: "فاکتور برگشت از خرید"
-                },
-                {
-                  to: {
-                    name: "List",
-                    params: {
-                      form: "factor",
-                      type: "sale"
-                    }
-                  },
-                  title: "فاکتور فروش"
-                },
-                {
-                  to: {
-                    name: "List",
-                    params: {
-                      form: "factor",
-                      type: "backFromSale"
-                    }
-                  },
-                  title: "فاکتور برگشت از فروش"
-                }
-              ]
-            },
-            {
-              title: "گزارشات خزانه داری",
-              children: [
                 {
                   to: {
                     name: "List",
@@ -524,26 +368,16 @@ export default {
                       type: "receive"
                     }
                   },
-                  title: "دریافت"
+                  title: "لیست دریافت ها"
                 },
                 {
                   to: {
-                    name: "List",
+                    name: "ChequeForm",
                     params: {
-                      form: "transaction",
-                      type: "payment"
+                      receivedOrPaid: "r"
                     }
                   },
-                  title: "پرداخت"
-                },
-                {
-                  to: {
-                    name: "List",
-                    params: {
-                      form: "chequebook"
-                    }
-                  },
-                  title: "دسته چک ها"
+                  title: "ثبت چک دریافتنی"
                 },
                 {
                   to: {
@@ -553,7 +387,40 @@ export default {
                       type: "received"
                     }
                   },
-                  title: "چک های دریافتی"
+                  title: "لیست چک های دریافتی"
+                }
+              ]
+            },
+            {
+              title: "پرداخت",
+              children: [
+                {
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      transactionType: "payment"
+                    }
+                  },
+                  title: "ثبت پرداخت"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "transaction",
+                      type: "payment"
+                    }
+                  },
+                  title: "لیست پرداخت ها"
+                },
+                {
+                  to: {
+                    name: "ChequeForm",
+                    params: {
+                      receivedOrPaid: "p"
+                    }
+                  },
+                  title: "ثبت چک پرداختنی"
                 },
                 {
                   to: {
@@ -563,15 +430,208 @@ export default {
                       type: "paid"
                     }
                   },
-                  title: "چک های پرداختی"
+                  title: "لیست چک های پرداختنی"
+                },
+                {
+                  to: {
+                    name: "ChequebookForm"
+                  },
+                  title: "ثبت دسته چک"
                 }
               ]
             },
             {
-              to: {
-                name: "LedgerReport"
-              },
-              title: "دفتر کل، معین، تفضیلی"
+              title: "تنخواه",
+              children: [
+                {
+                  title: "پرداخت تنخواه",
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      transactionType: "imprest"
+                    }
+                  }
+                },
+                {
+                  title: "تسویه تنخواه",
+                  to: {
+                    name: "ImprestSettlement"
+                  }
+                },
+                {
+                  title: "حساب های پیشفرض تنخواه",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "imprest"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "بازرگانی",
+          children: [
+            {
+              title: "فاکتور خرید",
+              children: [
+                {
+                  title: "ثبت فاکتور خرید",
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      type: "buy"
+                    }
+                  }
+                },
+
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "factor",
+                      type: "buy"
+                    }
+                  },
+                  title: "لیست خرید"
+                }
+              ]
+            },
+            {
+              title: "فاکتور فروش",
+              children: [
+                {
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      type: "sale"
+                    }
+                  },
+                  title: "ثبت فاکتور فروش"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "factor",
+                      type: "sale"
+                    }
+                  },
+                  title: "لیست فروش"
+                }
+              ]
+            },
+            {
+              title: "برگشت از خرید",
+              children: [
+                {
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      type: "backFromBuy"
+                    }
+                  },
+                  title: "ثبت برگشت از خرید"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "factor",
+                      type: "backFromBuy"
+                    }
+                  },
+                  title: "لیست برگشت از خرید"
+                }
+              ]
+            },
+            {
+              title: "برگشت از فروش",
+              children: [
+                {
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      type: "backFromSale"
+                    }
+                  },
+                  title: "ثبت برگشت از فروش"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "factor",
+                      type: "backFromSale"
+                    }
+                  },
+                  title: "لیست برگشت از فروش"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "انبار",
+          children: [
+            {
+              title: "انتقال",
+              children: [
+                {
+                  to: {
+                    name: "TransferForm"
+                  },
+                  title: "ثبت انتقال"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          title: "گزارش",
+          children: [
+            {
+              title: "دفاتر حسابداری",
+              children: [
+                {
+                  title: "گروه حساب",
+                  to: {
+                    name: "LedgerReport"
+                  }
+                },
+                {
+                  title: "کل",
+                  to: {
+                    name: "LedgerReport"
+                  }
+                },
+                {
+                  title: "معین",
+                  to: {
+                    name: "LedgerReport"
+                  }
+                },
+                {
+                  title: "تفصیلی",
+                  to: {
+                    name: "LedgerReport"
+                  }
+                },
+                {
+                  title: "گروه شناور",
+                  to: {
+                    name: "LedgerReport"
+                  }
+                },
+                {
+                  title: "گروه مرکز هزینه و درآمد",
+                  to: {
+                    name: "LedgerReport"
+                  }
+                }
+              ]
             },
             {
               to: {
@@ -580,40 +640,97 @@ export default {
               title: "صورت حساب تفصیلی"
             },
             {
-              to: {
-                name: "AccountsBalanceReport"
-              },
-              title: "تراز"
-            },
-            {
-              to: {
-                name: "FloatAccountsBalanceReportByGroup"
-              },
-              title: "تراز شناور بر اساس گروه"
-            },
-            {
-              to: {
-                name: "FloatAccountsBalanceReport"
-              },
-              title: "تراز شناور"
-            },
-            {
-              to: {
-                name: "FloatAccountsBalanceReportByGroup",
-                params: {
-                  is_cost_center: true
+              title: "تراز حساب ها",
+              children: [
+                {
+                  to: {
+                    name: "AccountsBalanceReport"
+                  },
+                  title: "تراز سطوح حساب ها"
+                },
+                {
+                  to: {
+                    name: "FloatAccountsBalanceReportByGroup"
+                  },
+                  title: "تراز گروه و حساب شناور"
+                },
+                {
+                  to: {
+                    name: "FloatAccountsBalanceReport"
+                  },
+                  title: "تراز حساب شناور"
+                },
+                {
+                  to: {
+                    name: "FloatAccountsBalanceReportByGroup",
+                    params: {
+                      is_cost_center: true
+                    }
+                  },
+                  title: "تراز گروه و مرکز هزینه و درآمد"
+                },
+                {
+                  to: {
+                    name: "FloatAccountsBalanceReport",
+                    params: {
+                      is_cost_center: true
+                    }
+                  },
+                  title: "تراز مرکز هزینه و درآمد"
                 }
-              },
-              title: "تراز مرکز هزینه و درآمد بر اساس گروه"
+              ]
             },
             {
-              to: {
-                name: "FloatAccountsBalanceReport",
-                params: {
-                  is_cost_center: true
+              title: "گزارش کالا",
+              children: [
+                {
+                  to: {
+                    name: "DetailedWareInventoryReport"
+                  },
+                  title: "کاردکس کالا"
+                },
+                {
+                  to: {
+                    name: "AllWaresInventoryReport"
+                  },
+                  title: "کاردکس همه کالا ها"
+                },
+                {
+                  to: {
+                    name: "BuySaleReport",
+                    params: {
+                      type: "buy"
+                    }
+                  },
+                  title: "گزارش خرید"
+                },
+                {
+                  to: {
+                    name: "BuySaleReport",
+                    params: {
+                      type: "sale"
+                    }
+                  },
+                  title: "گزارش فروش"
                 }
-              },
-              title: "تراز مرکز هزینه و درآمد"
+              ]
+            },
+            {
+              title: "گزارش انبار",
+              children: [
+                {
+                  to: {
+                    name: "DetailedWarehouseInventoryReport"
+                  },
+                  title: "کاردکس انبار"
+                },
+                {
+                  to: {
+                    name: "AllWarehousesInventoryReport"
+                  },
+                  title: "کاردکس انبار همه کالا ها"
+                }
+              ]
             },
             {
               to: {
@@ -622,130 +739,97 @@ export default {
               title: "دفتر روزنامه"
             },
             {
-              to: {
-                name: "IncomeStatementReport"
-              },
-              title: "سود و زیان"
-            },
-            {
-              to: {
-                name: "IncomeStatementReport",
-                params: {
-                  detailed: "detailed"
+              title: "سود و زیان",
+              children: [
+                {
+                  to: {
+                    name: "IncomeStatementReport"
+                  },
+                  title: "کلی"
+                },
+                {
+                  to: {
+                    name: "IncomeStatementReport",
+                    params: {
+                      detailed: "detailed"
+                    }
+                  },
+                  title: "جامع"
                 }
-              },
-              title: "سود و زیان تفصیلی"
+              ]
             },
             {
               to: {
                 name: "BalanceSheetReport"
               },
               title: "ترازنامه"
-            },
-            {
-              to: {
-                name: "DetailedWareInventoryReport"
-              },
-              title: "کاردکس کالا"
-            },
-            {
-              to: {
-                name: "AllWaresInventoryReport"
-              },
-              title: "کاردکس همه کالا ها"
-            },
-            {
-              to: {
-                name: "DetailedWarehouseInventoryReport"
-              },
-              title: "کاردکس انبار"
-            },
-            {
-              to: {
-                name: "AllWarehousesInventoryReport"
-              },
-              title: "کاردکس انبار همه کالا ها"
-            },
-            {
-              to: {
-                name: "BuySaleReport",
-                params: {
-                  type: "buy"
-                }
-              },
-              title: "گزارش خرید"
-            },
-            {
-              to: {
-                name: "BuySaleReport",
-                params: {
-                  type: "sale"
-                }
-              },
-              title: "گزارش فروش"
             }
           ]
-        },
-        {
-          to: {
-            name: "Closing"
-          },
-          title: "عملیات بستن و انتقال"
         },
         {
           title: "حمل و نقل",
           children: [
             {
-              title: "تنظیمات",
-              to: {
-                name: "Options"
-              }
-            },
+              title: "اطلاعات پایه",
+              children: [
+                {
+                  title: "تنظیمات",
+                  to: {
+                    name: "Options"
+                  }
+                },
 
-            {
-              to: {
-                name: "DefaultAccounts",
-                params: {
-                  usage: "dashtbashi"
+                {
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "dashtbashi"
+                    }
+                  },
+                  title: "حساب های پیشفرض"
+                },
+                {
+                  title: "ماشین ها",
+                  to: {
+                    name: "Cars"
+                  }
+                },
+                {
+                  title: "راننده ها",
+                  to: {
+                    name: "Drivers"
+                  }
+                },
+                {
+                  title: "انتصاب راننده به ماشین",
+                  to: {
+                    name: "Drivings"
+                  }
+                },
+                {
+                  title: "انجمن",
+                  to: {
+                    name: "Associations"
+                  }
                 }
-              },
-              title: "حساب های پیشفرض"
+              ]
             },
             {
-              title: "ماشین ها",
-              to: {
-                name: "Cars"
-              }
-            },
-            {
-              title: "راننده ها",
-              to: {
-                name: "Drivers"
-              }
-            },
-            {
-              title: "انتصاب راننده به ماشین",
-              to: {
-                name: "Drivings"
-              }
-            },
-            {
-              title: "انجمن",
-              to: {
-                name: "Associations"
-              }
-            },
-            {
-              title: "سری بارنامه",
-              to: {
-                name: "LadingBillSeries"
-              }
-            },
-            {
-              title: "ابطال شماره بارنامه",
-              to: {
-                name: "RevokeLadingBillNumber"
-              }
+              title: "بارنامه",
+              children: [
+                {
+                  title: "سری بارنامه",
+                  to: {
+                    name: "LadingBillSeries"
+                  }
+                },
+                {
+                  title: "ابطال شماره بارنامه",
+                  to: {
+                    name: "RevokeLadingBillNumber"
+                  }
+                }
+              ]
             },
             {
               title: "حواله",
@@ -755,27 +839,37 @@ export default {
             },
             {
               title: "بارگیری",
-              to: {
-                name: "Lading"
-              }
+              children: [
+                {
+                  title: "بارگیری حمل و نقل",
+                  to: {
+                    name: "Lading"
+                  }
+                },
+                {
+                  title: "بارگیری شرکت نفت",
+                  to: {
+                    name: "OilCompanyLading"
+                  }
+                }
+              ]
             },
             {
-              title: "بارگیری شرکت نفت",
-              to: {
-                name: "OilCompanyLading"
-              }
-            },
-            {
-              title: "پرداخت راننده متفرقه",
-              to: {
-                name: "DriverPayment"
-              }
-            },
-            {
-              title: "گزارش مبلغ قابل پرداخت رانندگان متفرقه",
-              to: {
-                name: "DriverPaymentReport"
-              }
+              title: "پرداخت",
+              children: [
+                {
+                  title: "پرداخت راننده متفرقه",
+                  to: {
+                    name: "DriverPayment"
+                  }
+                },
+                {
+                  title: "گزارش مبلغ قابل پرداخت رانندگان متفرقه",
+                  to: {
+                    name: "DriverPaymentReport"
+                  }
+                }
+              ]
             }
           ]
         }
