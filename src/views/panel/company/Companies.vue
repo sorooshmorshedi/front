@@ -68,7 +68,7 @@
 
       <template #item.activate="{ item }">
         <v-btn
-          :disabled="company.id == item.id"
+          :disabled="company && company.id == item.id"
           @click="activeCompany(item)"
           class="blue white--text mr-1"
         >فعال کردن شرکت</v-btn>

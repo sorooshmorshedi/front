@@ -196,6 +196,7 @@ export default {
     },
     setItem(item) {
       // must be implemented, but by default
+      console.log('haaa');
       this.item = item;
       if (this.hasIdProp && this.id != item.id) {
         this.changeRouteTo(item.id);

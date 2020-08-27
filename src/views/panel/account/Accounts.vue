@@ -357,8 +357,8 @@ export default {
       return this.account_type == "p";
     },
     items() {
-      return this.accountsSelectValues.levels[this.level].filter(
-        o => o.account_type == this.account_type
+      return this.accounts.filter(
+        o => o.level == this.level && o.account_type == this.account_type
       );
     },
     parentItems() {
@@ -380,6 +380,20 @@ export default {
     }
   },
   methods: {
+    setItem(item) {
+      let url = `accounts/accounts/${item.id}`
+      this.request({
+        url: this.endpoint(url),
+        method: "get",
+        success: data => {
+          item = data;
+          if (typeof item.parent == typeof 72) {
+            item.parent = this.parentItems.filter(o => o.id == item.parent)[0];
+          }
+          this.item = item;
+        }
+      });
+    },
     getItemTemplate() {
       return {
         is_real: true
@@ -392,12 +406,6 @@ export default {
     },
     getAccount(id) {
       return this.accounts.filter(o => (o.id = id))[0];
-    },
-    setItem(item) {
-      if (typeof item.parent == typeof 72) {
-        item.parent = this.parentItems.filter(o => o.id == item.parent)[0];
-      }
-      this.item = item;
     },
     getSerialized() {
       let item = this.copy(this.item);
