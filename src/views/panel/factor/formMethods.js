@@ -280,7 +280,7 @@ export default {
           isValid = false;
         }
         if (e.account && e.account.costCenterGroup && !e.costCenter) {
-          this.notify(`لطفا مرکز هزینه ردیف ${i + 1} را وارد کنید`, "danger");
+          this.notify(`لطفا مرکز هزینه و درآمد ردیف ${i + 1} را وارد کنید`, "danger");
           isValid = false;
         }
       });

@@ -63,7 +63,7 @@
             </v-col>
 
             <v-col cols="12">
-              <v-switch label="نمایش مرکز هزینه" v-model="accountFilters.showCostCenters" />
+              <v-switch label="نمایش مرکز هزینه و درآمد" v-model="accountFilters.showCostCenters" />
             </v-col>
           </template>
         </v-col>

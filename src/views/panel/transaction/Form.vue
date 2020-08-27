@@ -574,7 +574,7 @@ export default {
         return;
       }
       if (account.costCenterGroup && !this.item.costCenter) {
-        this.notify(`لطفا مرکز هزینه را انتخاب کنید`, "danger");
+        this.notify(`لطفا مرکز هزینه و درآمد را انتخاب کنید`, "danger");
         return;
       }
 

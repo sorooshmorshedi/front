@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     title() {
-      if (this.isCostCenter) return "گروه مرکز هزینه";
+      if (this.isCostCenter) return "گروه مرکز هزینه و درآمد";
       else return "گروه حساب شناور";
     },
     items() {

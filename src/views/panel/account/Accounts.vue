@@ -103,7 +103,7 @@
           <v-col cols="12" md="6">
             <template v-if="hasCostCenter">
               <account-select
-                label="گروه مرکز هزینه"
+                label="گروه مرکز هزینه و درآمد"
                 itemsType="costCenterGroups"
                 v-model="item.costCenterGroup"
                 item-text="name"

@@ -69,7 +69,7 @@ export default {
   },
   computed: {
     title() {
-      if (this.isCostCenter) return "مرکز هزینه";
+      if (this.isCostCenter) return "مرکز هزینه و درآمد";
       else return "حساب شناور";
     },
     items() {

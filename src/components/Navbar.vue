@@ -134,7 +134,7 @@ export default {
                       is_cost_center: true
                     }
                   },
-                  title: "گروه مرکز هزینه"
+                  title: "گروه مرکز هزینه و درآمد"
                 },
                 {
                   to: {
@@ -143,7 +143,7 @@ export default {
                       is_cost_center: true
                     }
                   },
-                  title: "مرکز هزینه"
+                  title: "مرکز هزینه و درآمد"
                 },
                 {
                   to: {
@@ -604,7 +604,7 @@ export default {
                   is_cost_center: true
                 }
               },
-              title: "تراز مرکز هزینه بر اساس گروه"
+              title: "تراز مرکز هزینه و درآمد بر اساس گروه"
             },
             {
               to: {
@@ -613,7 +613,7 @@ export default {
                   is_cost_center: true
                 }
               },
-              title: "تراز مرکز هزینه"
+              title: "تراز مرکز هزینه و درآمد"
             },
             {
               to: {

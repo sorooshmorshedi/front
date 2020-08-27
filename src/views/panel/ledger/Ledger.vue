@@ -94,7 +94,7 @@ export default {
         { value: "level2", text: "معین" },
         { value: "level3", text: "تفضیلی" },
         { value: "floatAccountGroups", text: "گروه شناور" },
-        { value: "costCenterGroups", text: "مرکز هزینه" }
+        { value: "costCenterGroups", text: "مرکز هزینه و درآمد" }
       ]
     };
   },
