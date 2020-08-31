@@ -586,6 +586,29 @@ export default {
                   title: "ثبت انتقال"
                 }
               ]
+            },
+            {
+              title: "تعدیل",
+              children: [
+                {
+                  title: "حواله تعدیل انبار",
+                  to: {
+                    name: "AdjustmentForm",
+                    params: {
+                      type: "ia"
+                    }
+                  }
+                },
+                {
+                  title: "رسید تعدیل انبار",
+                  to: {
+                    name: "AdjustmentForm",
+                    params: {
+                      type: "oa"
+                    }
+                  }
+                }
+              ]
             }
           ]
         },

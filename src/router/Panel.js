@@ -35,6 +35,8 @@ import FactorExpenses from '@/views/panel/factor/Expenses.vue';
 
 import TransferForm from '@/views/panel/transfer/Form.vue';
 
+import AdjustmentForm from '@/views/panel/adjustment/Form.vue';
+
 import ChequebookForm from '../views/panel/chequebook/ChequebookForm.vue';
 
 import Cheque from '@/views/panel/cheque/Cheque.vue';
@@ -195,6 +197,12 @@ export default [{
       name: 'TransferForm',
       path: 'transfer/form/:id?',
       component: TransferForm,
+      props: true,
+    },
+    {
+      name: 'AdjustmentForm',
+      path: 'adjustment/form/:type/:id?',
+      component: AdjustmentForm,
       props: true,
     },
     {
