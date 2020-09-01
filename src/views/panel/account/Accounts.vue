@@ -54,7 +54,7 @@
             </v-breadcrumbs>
           </v-col>
         </template>
-        <v-col cols="12" v-if="level != 0">
+        <v-col cols="12">
           <v-autocomplete
             label="نوع"
             :items="accountTypes"
@@ -381,7 +381,7 @@ export default {
   },
   methods: {
     setItem(item) {
-      let url = `accounts/accounts/${item.id}`
+      let url = `accounts/accounts/${item.id}`;
       this.request({
         url: this.endpoint(url),
         method: "get",
