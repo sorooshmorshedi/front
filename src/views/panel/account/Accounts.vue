@@ -185,6 +185,8 @@
               v-model="item.person_type"
               :disabled="item.id != undefined"
               label=" * نوع شخص"
+              item-text="title"
+              item-value="id"
             ></v-select>
           </v-col>
           <v-col cols="12" md="4">
