@@ -13,6 +13,9 @@
     @submit="validate"
     @delete="deleteItem"
   >
+    <template #header-btns>
+      <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
+    </template>
     <template>
       <v-row>
         <v-col cols="12" md="2">
