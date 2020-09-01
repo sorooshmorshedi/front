@@ -94,14 +94,14 @@ export default {
         {
           text: "مقدار وارده",
           value: "input.count",
-          type: "number",
+          type: "numeric",
           sortable: false,
           filterable: false
         },
         {
           text: "فی وارده",
           value: "input.fee",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filters: [],
           filterable: false
@@ -109,7 +109,7 @@ export default {
         {
           text: "مبلغ وارده",
           value: "input.value",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
           filters: []
@@ -125,7 +125,7 @@ export default {
         {
           text: "فی صادره",
           value: "output.fee",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
           filters: []
@@ -133,7 +133,7 @@ export default {
         {
           text: "مبلغ صادره",
           value: "output.value",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
           filters: []
@@ -141,7 +141,7 @@ export default {
         {
           text: "مقدار مانده",
           value: "remain.count",
-          type: "number",
+          type: "numeric",
           sortable: false,
           filterable: false,
           filters: []
@@ -149,7 +149,7 @@ export default {
         {
           text: "فی مانده",
           value: "remain.fee",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
           filters: []
@@ -157,7 +157,7 @@ export default {
         {
           text: "مبلغ مانده",
           value: "remain.value",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
           filters: []

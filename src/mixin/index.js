@@ -101,7 +101,7 @@ Vue.mixin({
     },
     hasPerm(operation, basename, object = null) {
       if (this.user.is_superuser) return true
-      let roles = this.user.roles.filter(o => o.company = this.company.id);
+      let roles = this.user.roles.filter(o => this.company && o.company == this.company.id);
       for (let role of roles) {
         for (let permission of role.permissions) {
           let codename = permission.codename

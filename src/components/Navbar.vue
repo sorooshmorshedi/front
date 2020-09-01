@@ -591,7 +591,7 @@ export default {
               title: "تعدیل",
               children: [
                 {
-                  title: "حواله تعدیل انبار",
+                  title: "رسید تعدیل انبار",
                   to: {
                     name: "AdjustmentForm",
                     params: {
@@ -600,7 +600,7 @@ export default {
                   }
                 },
                 {
-                  title: "رسید تعدیل انبار",
+                  title: "حواله تعدیل انبار",
                   to: {
                     name: "AdjustmentForm",
                     params: {
