@@ -54,7 +54,7 @@
             </v-breadcrumbs>
           </v-col>
         </template>
-        <v-col cols="12">
+        <v-col cols="12" v-if="!isPerson && !isBank">
           <v-autocomplete
             label="نوع"
             :items="accountTypes"
