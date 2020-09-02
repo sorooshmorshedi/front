@@ -3,7 +3,7 @@
     :title="title"
     :ListRouteParams="{form: 'adjustment'}"
     :showList="false"
-    :listRoute="{name:'List', params:{form: 'adjustment'}}"
+    :listRoute="{name:'List', params:{form: 'adjustment', type: type}}"
     :exportParams="{id: this.id}"
     :isEditing.sync="isEditing"
     :canDelete="canDelete"

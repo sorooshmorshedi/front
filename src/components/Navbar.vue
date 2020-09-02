@@ -619,6 +619,16 @@ export default {
                   }
                 },
                 {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "adjustment",
+                      type: "ia"
+                    }
+                  },
+                  title: "لیست رسید های تعدیل انبار"
+                },
+                {
                   title: "حواله تعدیل انبار",
                   to: {
                     name: "AdjustmentForm",
@@ -626,6 +636,16 @@ export default {
                       type: "oa"
                     }
                   }
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "adjustment",
+                      type: "oa"
+                    }
+                  },
+                  title: "لیست حواله های تعدیل انبار"
                 }
               ]
             }

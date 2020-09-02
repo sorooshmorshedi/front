@@ -59,6 +59,16 @@ export default {
       this.showTable = false;
       this.options = this.formOptions[this.form];
       switch (this.type) {
+        case "ia":
+          this.options.label = "رسید های تعدیل انبار";
+          this.filters = { type : this.type };
+          this.options.defaultParams = this.filters;
+          break;
+        case "oa":
+          this.options.label = "حواله های تعدیل انبار";
+          this.filters = { type : this.type };
+          this.options.defaultParams = this.filters;
+          break;
         case "receive":
           this.options.label = "دریافت ها";
           this.filters = { transactionType: this.type };
