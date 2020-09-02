@@ -453,6 +453,16 @@ export default {
                   }
                 },
                 {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "transaction",
+                      type: "imprest"
+                    }
+                  },
+                  title: "لیست پرداخت های تنخواه"
+                },
+                {
                   title: "تسویه تنخواه",
                   to: {
                     name: "ImprestSettlement"

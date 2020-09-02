@@ -16,12 +16,11 @@
             color="light-blue white--text"
             :to="{name:options.routerName, params: {id: item.id, ...options.defaultParams}}"
             target="_blank"
-           icon 
+            icon
           >
-          <v-icon>fa-external-link-alt</v-icon>
+            <v-icon>fa-external-link-alt</v-icon>
           </v-btn>
         </template>
-
       </m-datatable>
     </v-card-text>
   </v-card>
@@ -62,23 +61,28 @@ export default {
       switch (this.type) {
         case "receive":
           this.options.label = "دریافت ها";
-          this.filters= { transactionType: this.type };
+          this.filters = { transactionType: this.type };
           this.options.defaultParams = this.filters;
           break;
         case "payment":
           this.options.label = "پرداخت ها";
-          this.filters= { transactioknType: this.type };
+          this.filters = { transactionType: this.type };
+          this.options.defaultParams = this.filters;
+          break;
+        case "imprest":
+          this.options.label = "پرداخت های تنخواه";
+          this.filters = { transactionType: this.type };
           this.options.defaultParams = this.filters;
           break;
         case "received":
           this.options.label = "چک های دریافتی";
-          this.filters= {
+          this.filters = {
             received_or_paid: "r"
           };
           break;
         case "paid":
           this.options.label = "چک های پرداختی";
-          this.filters= {
+          this.filters = {
             received_or_paid: "p"
           };
           break;
@@ -86,7 +90,7 @@ export default {
           break;
       }
       if (this.form == "factor") {
-        this.filters= { type: this.type };
+        this.filters = { type: this.type };
         this.options.defaultParams = { type: this.type };
 
         switch (this.type) {
@@ -105,8 +109,8 @@ export default {
         }
       }
       if (this.form == "receipt") {
-        filters= { receiptType: this.type };
-        this.filters= filters;
+        filters = { receiptType: this.type };
+        this.filters = filters;
         this.options.defaultParams = filters;
         switch (this.type) {
           case "receipt":
