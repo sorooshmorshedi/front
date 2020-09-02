@@ -23,6 +23,7 @@
 
     <navbar-list-item
       v-for="(child, i) in route.children"
+      v-if="child.show"
       :key="i"
       :route="child"
       :sub-group="true"

@@ -1,6 +1,12 @@
 <template>
   <v-list nav dense class="navbar-list">
-    <navbar-list-item v-for="(route, i) in routes" :key="i" :route="route" :level="1" />
+    <navbar-list-item
+      v-for="(route, i) in routes"
+      :key="i"
+      :route="route"
+      :level="1"
+      v-if="route.show"
+    />
   </v-list>
 </template>
 
@@ -10,8 +16,11 @@ export default {
   name: "NavBar",
   components: { NavbarListItem },
   data() {
-    return {
-      routes: [
+    return {};
+  },
+  computed: {
+    routes() {
+      let routes = [
         {
           to: {
             name: "Home"
@@ -28,31 +37,36 @@ export default {
                   to: {
                     name: "Users"
                   },
-                  title: "کاربران"
+                  title: "کاربران",
+                  perm: "user"
                 },
                 {
                   to: {
                     name: "Roles"
                   },
-                  title: "نقش ها"
+                  title: "نقش ها",
+                  perm: "role"
                 },
                 {
                   title: "شرکت ها",
                   to: {
                     name: "Companies"
-                  }
+                  },
+                  perm: "company"
                 },
                 {
                   title: "سال های مالی",
                   to: {
                     name: "FinancialYears"
-                  }
+                  },
+                  perm: "financialYear"
                 },
                 {
                   to: {
                     name: "Cities"
                   },
-                  title: "شهر ها"
+                  title: "شهر ها",
+                  perm: "city"
                 }
               ]
             },
@@ -66,9 +80,11 @@ export default {
                       level: 0
                     }
                   },
-                  title: "گروه حساب"
+                  title: "گروه حساب",
+                  perm: "account0"
                 },
                 {
+                  perm: "account1",
                   to: {
                     name: "Accounts",
                     params: {
@@ -78,6 +94,7 @@ export default {
                   title: "حساب کل"
                 },
                 {
+                  perm: "account2",
                   to: {
                     name: "Accounts",
                     params: {
@@ -87,6 +104,7 @@ export default {
                   title: "حساب معین"
                 },
                 {
+                  perm: "account3",
                   to: {
                     name: "Accounts",
                     params: {
@@ -96,6 +114,7 @@ export default {
                   title: "حساب تفضیلی"
                 },
                 {
+                  perm: "account3",
                   to: {
                     name: "Accounts",
                     params: {
@@ -106,6 +125,7 @@ export default {
                   title: "اشخاص"
                 },
                 {
+                  perm: "account3",
                   to: {
                     name: "Accounts",
                     params: {
@@ -115,8 +135,8 @@ export default {
                   },
                   title: "بانک"
                 },
-
                 {
+                  perm: "account",
                   to: {
                     name: "AccountTree"
                   },
@@ -128,18 +148,21 @@ export default {
               title: "شناور و مراکز",
               children: [
                 {
+                  perm: "floatAccountGroup",
                   to: {
                     name: "FloatAccountGroups"
                   },
                   title: "گروه حساب شناور"
                 },
                 {
+                  perm: "floatAccount",
                   to: {
                     name: "FloatAccounts"
                   },
                   title: "حساب شناور"
                 },
                 {
+                  perm: "floatAccountGroup",
                   to: {
                     name: "FloatAccountGroups",
                     params: {
@@ -149,6 +172,7 @@ export default {
                   title: "گروه مرکز هزینه و درآمد"
                 },
                 {
+                  perm: "floatAccount",
                   to: {
                     name: "FloatAccounts",
                     params: {
@@ -163,6 +187,7 @@ export default {
               title: "کالا",
               children: [
                 {
+                  perm: "wareLevel",
                   to: {
                     name: "WareLevels",
                     params: {
@@ -172,6 +197,7 @@ export default {
                   title: "ماهیت"
                 },
                 {
+                  perm: "wareLevel",
                   to: {
                     name: "WareLevels",
                     params: {
@@ -181,6 +207,7 @@ export default {
                   title: "گروه"
                 },
                 {
+                  perm: "wareLevel",
                   to: {
                     name: "WareLevels",
                     params: {
@@ -190,24 +217,28 @@ export default {
                   title: "دسته بندی"
                 },
                 {
+                  perm: "ware",
                   to: {
                     name: "Wares"
                   },
                   title: "کالا"
                 },
                 {
+                  perm: "warehouse",
                   to: {
                     name: "Warehouses"
                   },
                   title: "انبار"
                 },
                 {
+                  perm: "unit",
                   to: {
                     name: "Units"
                   },
                   title: "واحد"
                 },
                 {
+                  perm: "firstPeriodInventory",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -222,6 +253,7 @@ export default {
               title: "پیشفرض ها",
               children: [
                 {
+                  perm: "defaultAccount",
                   to: {
                     name: "DefaultAccounts",
                     params: {
@@ -231,6 +263,7 @@ export default {
                   title: "حساب های دریافت"
                 },
                 {
+                  perm: "defaultAccount",
                   to: {
                     name: "DefaultAccounts",
                     params: {
@@ -240,6 +273,7 @@ export default {
                   title: "حساب های پرداخت"
                 },
                 {
+                  perm: "defaultAccount",
                   to: {
                     name: "DefaultAccounts",
                     params: {
@@ -249,6 +283,7 @@ export default {
                   title: "حساب های فاکتور"
                 },
                 {
+                  perm: "factorExpenses",
                   to: {
                     name: "FactorExpenses",
                     params: {
@@ -258,6 +293,7 @@ export default {
                   title: "هزینه های فاکتور خرید"
                 },
                 {
+                  perm: "factorExpenses",
                   to: {
                     name: "FactorExpenses",
                     params: {
@@ -267,6 +303,7 @@ export default {
                   title: "هزینه های فاکتور فروش"
                 },
                 {
+                  perm: "defaultAccounts",
                   to: {
                     name: "DefaultAccounts",
                     params: {
@@ -276,6 +313,7 @@ export default {
                   title: "حساب های بستن"
                 },
                 {
+                  perm: "defaultAccounts",
                   to: {
                     name: "DefaultAccounts",
                     params: {
@@ -299,6 +337,7 @@ export default {
           title: "حسابداری",
           children: [
             {
+              perm: "create.sanad",
               to: {
                 name: "SanadForm"
               },
@@ -308,6 +347,7 @@ export default {
               title: "لیست اسناد",
               children: [
                 {
+                  perm: "get.sanad",
                   to: {
                     name: "List",
                     params: {
@@ -317,6 +357,7 @@ export default {
                   title: "همه"
                 },
                 {
+                  perm: "get.sanad",
                   to: {
                     name: "List",
                     params: {
@@ -326,6 +367,7 @@ export default {
                   title: "اسناد نامتوازن"
                 },
                 {
+                  perm: "get.sanad",
                   to: {
                     name: "List",
                     params: {
@@ -338,6 +380,7 @@ export default {
             },
 
             {
+              perm: "close.financialYear",
               to: {
                 name: "Closing"
               },
@@ -352,6 +395,7 @@ export default {
               title: "دریافت",
               children: [
                 {
+                  perm: "create.receiveTransaction",
                   to: {
                     name: "TransactionForm",
                     params: {
@@ -361,6 +405,7 @@ export default {
                   title: "ثبت دریافت"
                 },
                 {
+                  perm: "get.receiveTransaction",
                   to: {
                     name: "List",
                     params: {
@@ -371,6 +416,7 @@ export default {
                   title: "لیست دریافت ها"
                 },
                 {
+                  perm: "create.receivedCheque",
                   to: {
                     name: "ChequeForm",
                     params: {
@@ -380,6 +426,7 @@ export default {
                   title: "ثبت چک دریافتنی"
                 },
                 {
+                  perm: "get.receivedCheque",
                   to: {
                     name: "List",
                     params: {
@@ -395,6 +442,7 @@ export default {
               title: "پرداخت",
               children: [
                 {
+                  perm: "create.paymentTransaction",
                   to: {
                     name: "TransactionForm",
                     params: {
@@ -404,6 +452,7 @@ export default {
                   title: "ثبت پرداخت"
                 },
                 {
+                  perm: "get.paymentTransaction",
                   to: {
                     name: "List",
                     params: {
@@ -414,6 +463,7 @@ export default {
                   title: "لیست پرداخت ها"
                 },
                 {
+                  perm: "create.paidCheque",
                   to: {
                     name: "ChequeForm",
                     params: {
@@ -423,6 +473,7 @@ export default {
                   title: "ثبت چک پرداختنی"
                 },
                 {
+                  perm: "get.paidCheque",
                   to: {
                     name: "List",
                     params: {
@@ -433,6 +484,7 @@ export default {
                   title: "لیست چک های پرداختنی"
                 },
                 {
+                  perm: "chequebook",
                   to: {
                     name: "ChequebookForm"
                   },
@@ -444,6 +496,7 @@ export default {
               title: "تنخواه",
               children: [
                 {
+                  perm: "create.imprestTransaction",
                   title: "پرداخت تنخواه",
                   to: {
                     name: "TransactionForm",
@@ -453,6 +506,7 @@ export default {
                   }
                 },
                 {
+                  perm: "get.imprestTransaction",
                   to: {
                     name: "List",
                     params: {
@@ -463,12 +517,14 @@ export default {
                   title: "لیست پرداخت های تنخواه"
                 },
                 {
+                  perm: "imprestSettlement",
                   title: "تسویه تنخواه",
                   to: {
                     name: "ImprestSettlement"
                   }
                 },
                 {
+                  perm: "defaultAccount",
                   title: "حساب های پیشفرض تنخواه",
                   to: {
                     name: "DefaultAccounts",
@@ -489,6 +545,7 @@ export default {
               children: [
                 {
                   title: "ثبت فاکتور خرید",
+                  perm: "create.buyFactor",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -496,8 +553,8 @@ export default {
                     }
                   }
                 },
-
                 {
+                  perm: "get.buyFactor",
                   to: {
                     name: "List",
                     params: {
@@ -513,6 +570,7 @@ export default {
               title: "فاکتور فروش",
               children: [
                 {
+                  perm: "create.saleFactor",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -522,6 +580,7 @@ export default {
                   title: "ثبت فاکتور فروش"
                 },
                 {
+                  perm: "get.saleFactor",
                   to: {
                     name: "List",
                     params: {
@@ -537,6 +596,7 @@ export default {
               title: "برگشت از خرید",
               children: [
                 {
+                  perm: "create.backFromBuyFactor",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -546,6 +606,7 @@ export default {
                   title: "ثبت برگشت از خرید"
                 },
                 {
+                  perm: "get.backFromBuyFactor",
                   to: {
                     name: "List",
                     params: {
@@ -561,6 +622,7 @@ export default {
               title: "برگشت از فروش",
               children: [
                 {
+                  perm: "create.backFromSaleFactor",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -570,6 +632,7 @@ export default {
                   title: "ثبت برگشت از فروش"
                 },
                 {
+                  perm: "get.backFromSaleFactor",
                   to: {
                     name: "List",
                     params: {
@@ -590,12 +653,14 @@ export default {
               title: "انتقال",
               children: [
                 {
+                  perm: "create.transfer",
                   to: {
                     name: "TransferForm"
                   },
                   title: "ثبت انتقال"
                 },
                 {
+                  perm: "get.transfer",
                   to: {
                     name: "List",
                     params: {
@@ -611,6 +676,7 @@ export default {
               children: [
                 {
                   title: "رسید تعدیل انبار",
+                  perm: "create.adjustment",
                   to: {
                     name: "AdjustmentForm",
                     params: {
@@ -619,6 +685,7 @@ export default {
                   }
                 },
                 {
+                  perm: "get.adjustment",
                   to: {
                     name: "List",
                     params: {
@@ -630,6 +697,7 @@ export default {
                 },
                 {
                   title: "حواله تعدیل انبار",
+                  perm: "create.adjustment",
                   to: {
                     name: "AdjustmentForm",
                     params: {
@@ -638,6 +706,7 @@ export default {
                   }
                 },
                 {
+                  perm: "get.adjustment",
                   to: {
                     name: "List",
                     params: {
@@ -656,6 +725,7 @@ export default {
           children: [
             {
               title: "دفاتر حسابداری",
+              perm: "ledgerReport",
               children: [
                 {
                   title: "گروه حساب",
@@ -718,6 +788,7 @@ export default {
               ]
             },
             {
+              perm: "billReport",
               to: {
                 name: "BillReport"
               },
@@ -727,24 +798,28 @@ export default {
               title: "تراز حساب ها",
               children: [
                 {
+                  perm: "accountBalanceReport",
                   to: {
                     name: "AccountsBalanceReport"
                   },
                   title: "تراز سطوح حساب ها"
                 },
                 {
+                  perm: "floatAccountBalanceByGroupReport",
                   to: {
                     name: "FloatAccountsBalanceReportByGroup"
                   },
                   title: "تراز گروه و حساب شناور"
                 },
                 {
+                  perm: "floatAccountBalanceReport",
                   to: {
                     name: "FloatAccountsBalanceReport"
                   },
                   title: "تراز حساب شناور"
                 },
                 {
+                  perm: "floatAccountBalanceByGroupReport",
                   to: {
                     name: "FloatAccountsBalanceReportByGroup",
                     params: {
@@ -754,6 +829,7 @@ export default {
                   title: "تراز گروه و مرکز هزینه و درآمد"
                 },
                 {
+                  perm: "floatAccountBalanceReport",
                   to: {
                     name: "FloatAccountsBalanceReport",
                     params: {
@@ -768,18 +844,21 @@ export default {
               title: "گزارش کالا",
               children: [
                 {
+                  perm: "wareInventoryReport",
                   to: {
                     name: "DetailedWareInventoryReport"
                   },
                   title: "کاردکس کالا"
                 },
                 {
+                  perm: "allWaresInventoryReport",
                   to: {
                     name: "AllWaresInventoryReport"
                   },
                   title: "کاردکس همه کالا ها"
                 },
                 {
+                  perm: "buyReport",
                   to: {
                     name: "BuySaleReport",
                     params: {
@@ -789,6 +868,7 @@ export default {
                   title: "گزارش خرید"
                 },
                 {
+                  perm: "saleReport",
                   to: {
                     name: "BuySaleReport",
                     params: {
@@ -803,12 +883,14 @@ export default {
               title: "گزارش انبار",
               children: [
                 {
+                  perm: "warehouseInventoryReport",
                   to: {
                     name: "DetailedWarehouseInventoryReport"
                   },
                   title: "کاردکس انبار"
                 },
                 {
+                  perm: "allWarehousesInventoryReport",
                   to: {
                     name: "AllWarehousesInventoryReport"
                   },
@@ -817,6 +899,7 @@ export default {
               ]
             },
             {
+              perm: "journalReport",
               to: {
                 name: "JournalReport"
               },
@@ -824,6 +907,7 @@ export default {
             },
             {
               title: "سود و زیان",
+              perm: "incomeStatementReport",
               children: [
                 {
                   to: {
@@ -843,6 +927,7 @@ export default {
               ]
             },
             {
+              perm: "balanceSheetReport",
               to: {
                 name: "BalanceSheetReport"
               },
@@ -858,12 +943,13 @@ export default {
               children: [
                 {
                   title: "تنظیمات",
+                  perm: "option",
                   to: {
                     name: "Options"
                   }
                 },
-
                 {
+                  perm: "defaultAccount",
                   to: {
                     name: "DefaultAccounts",
                     params: {
@@ -873,6 +959,7 @@ export default {
                   title: "حساب های پیشفرض"
                 },
                 {
+                  perm: "car",
                   title: "ماشین ها",
                   to: {
                     name: "Cars"
@@ -880,17 +967,20 @@ export default {
                 },
                 {
                   title: "راننده ها",
+                  perm: "driver",
                   to: {
                     name: "Drivers"
                   }
                 },
                 {
+                  perm: "driving",
                   title: "انتصاب راننده به ماشین",
                   to: {
                     name: "Drivings"
                   }
                 },
                 {
+                  perm: "association",
                   title: "انجمن",
                   to: {
                     name: "Associations"
@@ -902,12 +992,14 @@ export default {
               title: "بارنامه",
               children: [
                 {
+                  perm: "ladingBillSeries",
                   title: "سری بارنامه",
                   to: {
                     name: "LadingBillSeries"
                   }
                 },
                 {
+                  perm: "revoke.ladingBillNumber",
                   title: "ابطال شماره بارنامه",
                   to: {
                     name: "RevokeLadingBillNumber"
@@ -917,6 +1009,7 @@ export default {
             },
             {
               title: "حواله",
+              perm: "remittance",
               to: {
                 name: "Remittance"
               }
@@ -926,12 +1019,14 @@ export default {
               children: [
                 {
                   title: "بارگیری حمل و نقل",
+                  perm: "lading",
                   to: {
                     name: "Lading"
                   }
                 },
                 {
                   title: "بارگیری شرکت نفت",
+                  perm: "oilCompanyLading",
                   to: {
                     name: "OilCompanyLading"
                   }
@@ -942,12 +1037,14 @@ export default {
               title: "پرداخت",
               children: [
                 {
+                  perm: "otherDriverPayment",
                   title: "پرداخت راننده متفرقه",
                   to: {
                     name: "DriverPayment"
                   }
                 },
                 {
+                  perm: "otherDriverPayment",
                   title: "گزارش مبلغ قابل پرداخت رانندگان متفرقه",
                   to: {
                     name: "DriverPaymentReport"
@@ -957,11 +1054,30 @@ export default {
             }
           ]
         }
-      ]
-    };
-  },
-  methods: {},
-  computed: {
+      ];
+      let setVisibility = route => {
+        let visible = false;
+
+        if (route.perm) {
+          visible = this.hasPerm("", route.perm);
+        } else if (route.children) {
+          for (let child of route.children) {
+            visible |= setVisibility(child);
+          }
+          route.show = visible;
+        } else {
+          visible = true;
+        }
+
+        route.show = visible;
+        return visible;
+      };
+
+      for (let route of routes) {
+        setVisibility(route);
+      }
+      return routes;
+    },
     username() {
       if (this.user.username.includes("manager")) return "manager";
       return this.user.username;
