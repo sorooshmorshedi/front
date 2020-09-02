@@ -1,9 +1,8 @@
 <template>
-  <balance :title="title" :cols="datatableCols" :url="url" :showAccountFilters="false"/>
+  <balance :title="title" :cols="cols" :url="url" :showAccountFilters="false" />
 </template>
 
 <script>
-import datatableCols from "./_datatableCols";
 import Balance from "../Balance";
 
 export default {
@@ -15,14 +14,25 @@ export default {
     }
   },
   data() {
-    return {
-      datatableCols
-    };
+    return {};
   },
   computed: {
     title() {
       if (this.isCostCenter) return "تراز مراکز هزینه ";
       else return "تراز حساب های شناور ";
+    },
+    cols() {
+      let text = "تفضیلی شناور";
+      if (this.isCostCenter) text = "مرکز هزینه و درآمد";
+      return {
+        cols: [
+          {
+            text: text,
+            value: "float_account_name",
+            type: "text"
+          }
+        ]
+      };
     },
     url() {
       return `reports/balance/floats?is_cost_center=${this.isCostCenter}`;
