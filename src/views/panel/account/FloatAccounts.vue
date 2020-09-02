@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       baseUrl: "accounts/floatAccounts",
-      permissionBasename: 'floatAccount',
+      permissionBasename: "floatAccount",
       cols: [
         {
           text: "نام حساب",
@@ -103,10 +103,14 @@ export default {
     getSerialized() {
       let data = this.copy(this.item);
       data = this.extractIds(data);
+      console.log(data);
       data.syncFloatAccountGroups = [];
-      for (const fag of data.floatAccountGroups) {
-        data.syncFloatAccountGroups.push(fag.id);
+      if (data.floatAccountGroups) {
+        for (const fag of data.floatAccountGroups) {
+          data.syncFloatAccountGroups.push(fag.id);
+        }
       }
+      data.is_cost_center = this.is_cost_center;
       return data;
     }
   }
