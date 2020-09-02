@@ -52,13 +52,14 @@ export default [{
     },
     {
       name: 'LedgerReport',
-      path: 'ledger',
+      path: 'ledger/:level?',
       component: Ledger,
       props: (route) => {
         return {
-          ledgerAccountIds: route.query.accs
+          ledgerAccountIds: route.query.accs,
+          ...route.params
         }
-      }
+      },
     },
     {
       name: 'BillReport',

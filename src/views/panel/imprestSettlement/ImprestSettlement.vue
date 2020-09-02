@@ -299,7 +299,6 @@ export default {
         data.items.items.push(item);
       });
 
-      console.log(data, this.jsonToFormData(data));
       return this.jsonToFormData(data);
     }
   }

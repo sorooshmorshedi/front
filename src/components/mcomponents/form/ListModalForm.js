@@ -1,8 +1,10 @@
 import ListModalForm from "./ListModalForm.vue";
 import OpenSanadBtn from "@/components/form/OpenSanadBtn";
 import jsonToFormData from "@/mixin/_jsonToFormData";
+import queryBinding from "@/mixin/queryBinding";
 
 export default {
+  mixins: [queryBinding],
   components: {
     ListModalForm,
     OpenSanadBtn
@@ -11,7 +13,6 @@ export default {
     id: {
       default: null
     },
-    itemObject: {}
   },
   data() {
     return {
@@ -96,12 +97,6 @@ export default {
     }
   },
   watch: {
-    urlQuery() {
-      this.setDefaults(this.urlQuery);
-    },
-    itemObject() {
-      this.setDefaults(this.urlQuery);
-    },
     $route(newRoute, oldRoute) {
       if (!newRoute.params.id) {
         this.clearForm();
@@ -126,11 +121,6 @@ export default {
     if (this.id) {
       this.getItem();
     }
-    this.EventBus.$on('get:accounts', () => this.setDefaults(this.urlQuery))
-    this.EventBus.$on('sameRouteClick', () => this.clearForm())
-  },
-  mounted() {
-    this.setDefaults(this.urlQuery)
   },
   methods: {
     getRowTemplate() {
@@ -138,30 +128,6 @@ export default {
     },
     getItemTemplate() {
       return {}
-    },
-    /*
-      Set default fields with data urlQuery.item
-    */
-    setDefaults(data) {
-      this.$nextTick(() => {
-
-        if (this.itemObject) {
-          this.item = this.itemObject;
-        }
-        for (let key in data) {
-          let path = key.split('.')
-          let lastObject = path.slice(0, path.length - 1).reduce((o, i) => o[i], this)
-          let lastKey = path[path.length - 1];
-
-          switch (lastKey) {
-            case 'account':
-              lastObject[lastKey] = this.accounts.filter(o => o.id == data[key])[0];
-              break
-            default:
-              lastObject[lastKey] = data[key]
-          }
-        }
-      })
     },
     getData() {
       // must be implemented
@@ -196,7 +162,6 @@ export default {
     },
     setItem(item) {
       // must be implemented, but by default
-      console.log('haaa');
       this.item = item;
       if (this.hasIdProp && this.id != item.id) {
         this.changeRouteTo(item.id);

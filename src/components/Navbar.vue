@@ -660,37 +660,59 @@ export default {
                 {
                   title: "گروه حساب",
                   to: {
-                    name: "LedgerReport"
+                    name: "LedgerReport",
+                    params: {
+                      level: "level0"
+                    }
                   }
                 },
                 {
                   title: "کل",
                   to: {
-                    name: "LedgerReport"
+                    name: "LedgerReport",
+                    params: { level: "level1" }
                   }
                 },
                 {
                   title: "معین",
                   to: {
-                    name: "LedgerReport"
+                    name: "LedgerReport",
+                    params: { level: "level2" }
                   }
                 },
                 {
                   title: "تفصیلی",
                   to: {
-                    name: "LedgerReport"
+                    name: "LedgerReport",
+                    params: { level: "level3" }
                   }
                 },
                 {
                   title: "گروه شناور",
                   to: {
-                    name: "LedgerReport"
+                    name: "LedgerReport",
+                    params: { level: "floatAccountGroups" }
+                  }
+                },
+                {
+                  title: "حساب شناور",
+                  to: {
+                    name: "LedgerReport",
+                    params: { level: "floatAccounts" }
                   }
                 },
                 {
                   title: "گروه مرکز هزینه و درآمد",
                   to: {
-                    name: "LedgerReport"
+                    name: "LedgerReport",
+                    params: { level: "costCenterGroups" }
+                  }
+                },
+                {
+                  title: "مرکز هزینه و درآمد",
+                  to: {
+                    name: "LedgerReport",
+                    params: { level: "costCenters" }
                   }
                 }
               ]

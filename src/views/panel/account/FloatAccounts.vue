@@ -103,7 +103,6 @@ export default {
     getSerialized() {
       let data = this.copy(this.item);
       data = this.extractIds(data);
-      console.log(data);
       data.syncFloatAccountGroups = [];
       if (data.floatAccountGroups) {
         for (const fag of data.floatAccountGroups) {

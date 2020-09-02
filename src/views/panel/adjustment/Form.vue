@@ -176,7 +176,6 @@ export default {
       items = items.map(this.extractIds);
       item.items = items;
       item.type = this.type;
-      console.log(item);
       return {
         adjustment: item
       };

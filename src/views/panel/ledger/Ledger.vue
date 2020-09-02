@@ -68,12 +68,17 @@
 
 <script>
 import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
+import queryBinding from "@/mixin/queryBinding";
 export default {
   name: "Ledger",
+  mixins: [queryBinding],
   components: { SanadItemListReport },
   props: {
     ledgerAccountIds: {
       default: () => []
+    },
+    level: {
+      default: null
     }
   },
   data() {
@@ -82,7 +87,7 @@ export default {
         results: []
       },
       ledger: {
-        level: null,
+        level: this.level,
         account: null,
         floatAccount: null,
         costCenter: null
@@ -94,13 +99,15 @@ export default {
         { value: "level2", text: "معین" },
         { value: "level3", text: "تفضیلی" },
         { value: "floatAccountGroups", text: "گروه شناور" },
-        { value: "costCenterGroups", text: "مرکز هزینه و درآمد" }
+        { value: "costCenterGroups", text: "مرکز هزینه و درآمد" },
+        { value: "floatAccounts", text: "شناور" },
+        { value: "costCenters", text: "مرکز هزینه و درآمد" }
       ]
     };
   },
   computed: {
     showAccountInTable() {
-      return this.ledger.level != 3;
+      return this.ledger.level != "level3";
     }
   },
   created() {
@@ -134,6 +141,9 @@ export default {
     }
   },
   watch: {
+    level() {
+      this.ledger.level = this.level;
+    },
     "ledger.level"() {
       this.filters = this.getFiltersTemplate();
       this.ledger.account = this.ledger.floatAccount = this.ledger.costCenter = null;
@@ -145,15 +155,20 @@ export default {
           : null;
       } else {
         this.filters.account__code__startswith = null;
-        if (this.ledger.level == "floatAccountGroups") {
-          this.filters["floatAccount__floatAccountGroups"] = this.ledger.account
-            ? this.ledger.account.id
-            : null;
-        } else {
-          this.filters["costCenter__floatAccountGroups"] = this.ledger.account
-            ? this.ledger.account.id
-            : null;
-        }
+        let filterKeys = {
+          floatAccountGroups: "floatAccount__floatAccountGroups",
+          costCenterGroups: "costCenter__floatAccountGroups",
+          floatAccounts: "floatAccount",
+          costCenters: "costCenter"
+        };
+
+        Object.values(filterKeys).forEach(filterKey => {
+          this.filters[filterKey] = null;
+        });
+
+        this.filters[filterKeys[this.ledger.level]] = this.ledger.account
+          ? this.ledger.account.id
+          : null;
       }
     },
     "ledger.floatAccount"() {
