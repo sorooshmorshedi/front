@@ -5,6 +5,7 @@
     :cols="cols"
     :deletable="item.id"
     :clearable="false"
+    :isEditing.sync="isEditing"
     @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
