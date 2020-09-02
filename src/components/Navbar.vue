@@ -594,6 +594,15 @@ export default {
                     name: "TransferForm"
                   },
                   title: "ثبت انتقال"
+                },
+                {
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "transfer"
+                    }
+                  },
+                  title: "لیست انتقال ها"
                 }
               ]
             },

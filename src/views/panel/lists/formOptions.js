@@ -6,6 +6,7 @@ import sanadUnbalanced from './_sanadUnbalanced'
 import sanadEmpty from './_sanadEmpty'
 import factor from './_factor'
 import receipt from './_receipt'
+import transfer from './_transfer'
 export default {
   transaction,
   cheque,
@@ -15,4 +16,5 @@ export default {
   sanadEmpty,
   factor,
   receipt,
+  transfer,
 }
