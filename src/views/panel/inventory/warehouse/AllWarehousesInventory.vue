@@ -49,19 +49,19 @@ export default {
         },
         {
           text: "وارده",
-          value: "input_count",
+          value: "input",
           type: "numeric",
           filterable: false
         },
         {
           text: "صادره",
-          value: "output_count",
+          value: "output",
           type: "numeric",
           filterable: false
         },
         {
           text: "مانده",
-          value: "remaining_count",
+          value: "remain",
           type: "numeric",
           filterable: false
         }
