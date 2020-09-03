@@ -131,7 +131,7 @@ export default {
         },
         {
           text: "شرح فاکتور",
-          value: "factor__explanation",
+          value: "factor.explanation",
           type: "text"
         },
         {
