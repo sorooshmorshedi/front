@@ -727,7 +727,7 @@ export default {
               title: "دفاتر حسابداری",
               children: [
                 {
-                  perm: "ledgerReport",
+                  perm: "sanadItemsReport",
                   title: "گروه حساب",
                   to: {
                     name: "LedgerReport",
@@ -737,7 +737,7 @@ export default {
                   }
                 },
                 {
-                  perm: "ledgerReport",
+                  perm: "sanadItemsReport",
                   title: "کل",
                   to: {
                     name: "LedgerReport",
@@ -745,7 +745,7 @@ export default {
                   }
                 },
                 {
-                  perm: "ledgerReport",
+                  perm: "sanadItemsReport",
                   title: "معین",
                   to: {
                     name: "LedgerReport",
@@ -753,7 +753,7 @@ export default {
                   }
                 },
                 {
-                  perm: "ledgerReport",
+                  perm: "sanadItemsReport",
                   title: "تفصیلی",
                   to: {
                     name: "LedgerReport",
@@ -761,7 +761,7 @@ export default {
                   }
                 },
                 {
-                  perm: "ledgerReport",
+                  perm: "sanadItemsReport",
                   title: "گروه شناور",
                   to: {
                     name: "LedgerReport",
@@ -769,7 +769,7 @@ export default {
                   }
                 },
                 {
-                  perm: "ledgerReport",
+                  perm: "sanadItemsReport",
                   title: "حساب شناور",
                   to: {
                     name: "LedgerReport",
@@ -777,7 +777,7 @@ export default {
                   }
                 },
                 {
-                  perm: "ledgerReport",
+                  perm: "sanadItemsReport",
                   title: "گروه مرکز هزینه و درآمد",
                   to: {
                     name: "LedgerReport",
@@ -785,7 +785,7 @@ export default {
                   }
                 },
                 {
-                  perm: "ledgerReport",
+                  perm: "sanadItemsReport",
                   title: "مرکز هزینه و درآمد",
                   to: {
                     name: "LedgerReport",
@@ -795,7 +795,7 @@ export default {
               ]
             },
             {
-              perm: "billReport",
+              perm: "sanadItemsReport",
               to: {
                 name: "BillReport"
               },
@@ -906,7 +906,7 @@ export default {
               ]
             },
             {
-              perm: "journalReport",
+              perm: "sanadItemsReport",
               to: {
                 name: "JournalReport"
               },
@@ -914,15 +914,16 @@ export default {
             },
             {
               title: "سود و زیان",
-              perm: "incomeStatementReport",
               children: [
                 {
+                  perm: "incomeStatementReport",
                   to: {
                     name: "IncomeStatementReport"
                   },
                   title: "کلی"
                 },
                 {
+                  perm: "incomeStatementReport",
                   to: {
                     name: "IncomeStatementReport",
                     params: {

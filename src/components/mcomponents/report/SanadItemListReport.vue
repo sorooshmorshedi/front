@@ -1,7 +1,7 @@
 <template>
   <m-datatable
     :headers="headers"
-    api-url="reports/ledger"
+    api-url="reports/sanadItems"
     :filters.sync="localFilters"
     :searchable="false"
     :previousApiData.sync="previousApiData"
