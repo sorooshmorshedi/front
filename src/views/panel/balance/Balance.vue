@@ -78,6 +78,7 @@
             show-expand
             :expanded.sync="accounts"
             :searchable="false"
+            :export-url="url"
           >
             <template #item.data-table-expand></template>
 
@@ -374,20 +375,23 @@ export default {
         );
       };
 
-      let sortedAccounts = accounts.filter(o => o.level == 0);
+      if (accounts.length && accounts[0].level) {
+        let sortedAccounts = accounts.filter(o => o.level == 0);
 
-      for (let i = 0; i < 3; i++) {
-        for (let account of accounts.filter(o => o.level == i)) {
-          sortedAccounts.splice(
-            sortedAccounts.indexOf(account),
-            // sortedAccounts.indexOf(account) + 1, // for sorting from kol to tafsili
-            0,
-            ...getChildren(account)
-          );
+        for (let i = 0; i < 3; i++) {
+          for (let account of accounts.filter(o => o.level == i)) {
+            sortedAccounts.splice(
+              sortedAccounts.indexOf(account),
+              // sortedAccounts.indexOf(account) + 1, // for sorting from kol to tafsili
+              0,
+              ...getChildren(account)
+            );
+          }
         }
+        this.accounts = sortedAccounts;
+      } else {
+        this.accounts = accounts;
       }
-
-      this.accounts = sortedAccounts;
     },
     clearFilters() {
       this.accountFilters = {

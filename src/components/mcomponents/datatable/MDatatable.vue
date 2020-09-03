@@ -188,6 +188,9 @@ export default {
     apiUrl: {
       default: null
     },
+    exportUrl: {
+      default: null
+    },
     headers: {
       required: true
     },
@@ -275,6 +278,9 @@ export default {
     },
     serverProcessing() {
       return this.apiUrl != null;
+    },
+    serverExport() {
+      return this.exportUrl != null;
     }
   },
   watch: {
@@ -438,19 +444,33 @@ export default {
       }
       return filters;
     },
+    getExportUrl(outputFormat) {
+      let exportUrl = this.exportUrl || this.apiUrl;
+      let url = "";
+      if (exportUrl.includes("?")) {
+        url = exportUrl.replace("?", `/${outputFormat}?`);
+      } else {
+        url = `${exportUrl}/${outputFormat}?`;
+      }
+      url = this.endpoint(url);
+      return url;
+    },
     exportTo(outputFormat) {
-      if (this.serverProcessing) {
-        let url = this.endpoint(`${this.apiUrl}/${outputFormat}`) + "?";
-
+      if (this.serverProcessing || this.serverExport) {
+        let url = this.getExportUrl(outputFormat);
         if (this.selectedItems.length) {
           url += "id__in=" + this.selectedItems.map(o => o.id).join(",");
         } else {
-          Object.keys(this.filters).forEach(k => {
+          let filters = {
+            ...this.filters,
+            search: this.search
+          };
+          Object.keys(filters).forEach(k => {
             if (this.filters[k]) url += k + "=" + this.filters[k] + "&";
           });
-          url += "search=" + this.search;
         }
-        url += "&token=" + this.token;
+        if (url[url.length - 1] != "&") url += "&";
+        url += "token=" + this.token;
 
         let element = document.createElement("a");
         element.href = url;
