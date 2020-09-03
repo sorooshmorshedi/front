@@ -725,9 +725,9 @@ export default {
           children: [
             {
               title: "دفاتر حسابداری",
-              perm: "ledgerReport",
               children: [
                 {
+                  perm: "ledgerReport",
                   title: "گروه حساب",
                   to: {
                     name: "LedgerReport",
@@ -737,6 +737,7 @@ export default {
                   }
                 },
                 {
+                  perm: "ledgerReport",
                   title: "کل",
                   to: {
                     name: "LedgerReport",
@@ -744,6 +745,7 @@ export default {
                   }
                 },
                 {
+                  perm: "ledgerReport",
                   title: "معین",
                   to: {
                     name: "LedgerReport",
@@ -751,6 +753,7 @@ export default {
                   }
                 },
                 {
+                  perm: "ledgerReport",
                   title: "تفصیلی",
                   to: {
                     name: "LedgerReport",
@@ -758,6 +761,7 @@ export default {
                   }
                 },
                 {
+                  perm: "ledgerReport",
                   title: "گروه شناور",
                   to: {
                     name: "LedgerReport",
@@ -765,6 +769,7 @@ export default {
                   }
                 },
                 {
+                  perm: "ledgerReport",
                   title: "حساب شناور",
                   to: {
                     name: "LedgerReport",
@@ -772,6 +777,7 @@ export default {
                   }
                 },
                 {
+                  perm: "ledgerReport",
                   title: "گروه مرکز هزینه و درآمد",
                   to: {
                     name: "LedgerReport",
@@ -779,6 +785,7 @@ export default {
                   }
                 },
                 {
+                  perm: "ledgerReport",
                   title: "مرکز هزینه و درآمد",
                   to: {
                     name: "LedgerReport",

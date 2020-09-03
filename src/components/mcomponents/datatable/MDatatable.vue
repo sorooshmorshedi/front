@@ -446,7 +446,7 @@ export default {
           url += "id__in=" + this.selectedItems.map(o => o.id).join(",");
         } else {
           Object.keys(this.filters).forEach(k => {
-            url += k + "=" + this.filters[k] + "&";
+            if (this.filters[k]) url += k + "=" + this.filters[k] + "&";
           });
           url += "search=" + this.search;
         }

@@ -68,10 +68,17 @@
 
       <template #item.activate="{ item }">
         <v-btn
-          :disabled="company && company.id == item.id"
+          v-if="company && company.id != item.id"
           @click="activeCompany(item)"
-          class="blue white--text mr-1"
-        >فعال کردن شرکت</v-btn>
+          color="blue"
+          icon
+          large
+        >
+          <v-icon>fa-toggle-off</v-icon>
+        </v-btn>
+        <v-btn v-else icon color="blue" large>
+          <v-icon>fa-toggle-on</v-icon>
+        </v-btn>
       </template>
     </m-form>
   </div>
