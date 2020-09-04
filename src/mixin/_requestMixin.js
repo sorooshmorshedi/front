@@ -6,7 +6,7 @@ export default {
       if (this.isDev) {
         return "http://localhost:8001/" + url;
       }
-      else return "http://185.239.105.10/" + url;
+      else return "http://185.239.105.10:8000/" + url;
       // else return "http://api." + window.location.hostname + "/" + url;
     },
     request(options) {
