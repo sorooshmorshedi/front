@@ -5,14 +5,20 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="2">
-          <date placeholder="از تاریخ" v-model="filters.from_date"  />
+          <date placeholder="از تاریخ" v-model="filters.from_date" />
         </v-col>
         <v-col cols="12" md="2">
-          <date placeholder="تا تاریخ" v-model="filters.to_date"  />
+          <date placeholder="تا تاریخ" v-model="filters.to_date" />
         </v-col>
-
         <v-col cols="12" md="2">
           <v-btn @click="getData()" class="blue white--text w-100px mt-1">گزارش</v-btn>
+        </v-col>
+        <v-col cols="6" class="d-flex justify-end">
+          <v-btn
+            :href="this.endpoint('reports/incomeStatement/xlsx') + `?detailed=${detailed == true}&token=${token}`"
+            target="_blank"
+            class="export-btn"
+          >اکسل</v-btn>
         </v-col>
         <v-col cols="12">
           <v-simple-table dense>
