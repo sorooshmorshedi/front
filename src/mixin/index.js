@@ -163,7 +163,7 @@ Vue.mixin({
       if (!value) value = "";
       else {
         let numeric_value = Number(value);
-        if (number < 0) {
+        if (numeric_value < 0) {
           isNegative = true;
           numeric_value = -numeric_value
         }

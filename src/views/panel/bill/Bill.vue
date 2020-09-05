@@ -47,8 +47,7 @@ export default {
   data() {
     return {
       filters: {
-        // account: null
-        account: 591
+        account: null
       }
     };
   },
