@@ -5,10 +5,10 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="2">
-          <date placeholder="از تاریخ" v-model="filters.from_date"  />
+          <date placeholder="از تاریخ" v-model="filters.from_date" />
         </v-col>
         <v-col cols="12" md="2">
-          <date placeholder="تا تاریخ" v-model="filters.to_date"  />
+          <date placeholder="تا تاریخ" v-model="filters.to_date" />
         </v-col>
         <v-col cols="12" md="3">
           <v-switch label="در نظر نگرفتن سند بستن" v-model="filters.skipClosingSanad"></v-switch>
@@ -16,6 +16,14 @@
 
         <v-col cols="12" md="2">
           <v-btn @click="getData()" class="blue white--text w-100px mt-1">گزارش</v-btn>
+        </v-col>
+
+        <v-col cols="12" md="3" class="d-flex justify-end">
+          <v-btn
+            :href="this.endpoint('reports/balanceSheet/xlsx') + `?detailed=${detailed == true}&token=${token}`"
+            target="_blank"
+            class="export-btn"
+          >اکسل</v-btn>
         </v-col>
 
         <template v-if="!_.isEmpty(d)">
@@ -90,7 +98,7 @@
           </v-col>
           <v-col cols="12" md="6">
             <v-simple-table dense>
-              <thead class="grey lighten-3 ">
+              <thead class="grey lighten-3">
                 <tr>
                   <th colspan="2" class="text-center">بدهی ها و حقوق صاحبان سهام</th>
                 </tr>
