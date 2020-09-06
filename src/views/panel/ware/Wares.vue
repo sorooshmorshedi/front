@@ -24,6 +24,9 @@
             :disabled="!isEditing"
             item-text="name"
             item-value="id"
+            :hint="parents"
+            :hide-details="false"
+            :persistent-hint="true"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" v-if="item.id">
@@ -139,6 +142,22 @@ export default {
     },
     items() {
       return this.wares;
+    },
+    parents() {
+      let parent = this.item.category;
+      let parents = [];
+      let parentId = false;
+      if (typeof parent == typeof 72) {
+        parentId = parent;
+      } else if (parent && parent.id) {
+        parentId = parent.id;
+      }
+      while (parentId) {
+        let parent = this.wareLevels.filter(o => o.id == parentId)[0];
+        parents.push(parent.name);
+        parentId = parent.parent;
+      }
+      return parents.reverse().join(" > ");
     }
   },
   methods: {
@@ -154,6 +173,11 @@ export default {
     getSerialized() {
       let item = this.extractIds(this.item);
       return item;
+    },
+    getItemTemplate() {
+      return {
+        category: null
+      };
     }
   }
 };

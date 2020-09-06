@@ -68,7 +68,7 @@
 
       <template #item.activate="{ item }">
         <v-btn
-          v-if="company && company.id != item.id"
+          v-if="!company || company.id != item.id"
           @click="activeCompany(item)"
           color="blue"
           icon
