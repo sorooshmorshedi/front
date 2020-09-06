@@ -14,6 +14,8 @@ import DriverPayment from "./DriverPayment"
 import DriverPaymentReport from "./reports/OtherDriversPaymentReport.vue"
 import RemittancesReport from "./reports/RemittancesReport.vue"
 import LadingBillSeriesList from "./reports/LadingBillSeriesList"
+import LadingsReport from "./reports/LadingsReport"
+import OilCompanyLadingsReport from "./reports/OilCompanyLadingsReport"
 
 export default [{
     name: 'Options',
@@ -86,6 +88,16 @@ export default [{
     name: 'LadingBillSeriesList',
     path: 'ladingBillSeriesList',
     component: LadingBillSeriesList,
+  },
+  {
+    name: 'LadingsReport',
+    path: 'ladingsReport',
+    component: LadingsReport
+  },
+  {
+    name: 'OilCompanyLadingsReport',
+    path: 'oilCompanyLadingsReport',
+    component: OilCompanyLadingsReport
   },
 
 ]

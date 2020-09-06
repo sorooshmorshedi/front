@@ -136,6 +136,7 @@
                 <td></td>
                 <td>{{ rowsComplicationPrice | toMoney }}</td>
                 <td>{{ rowsSum('sum') | toMoney }}</td>
+                <td>{{ rowsSum('net_price') | toMoney }}</td>
                 <td>{{ rowsSum('company_commission') | toMoney }}</td>
                 <td>{{ rowsSum('car_income') | toMoney }}</td>
                 <td class="d-print-none">
@@ -194,9 +195,7 @@ export default {
     this.getData();
     if (this.id) {
       this.getItem();
-    } else {
-      this.rows.push(this.getRowTemplate());
-    }
+    } 
   },
   watch: {
     rows: {
@@ -222,6 +221,9 @@ export default {
     },
     getRowTemplate() {
       return {
+        net_price: 0,
+        gross_price: 0,
+        insurance_price: 0,
         tax_percent: this.getOptionValue("taxPercent"),
         complication_percent: this.getOptionValue("addedValuePercentOfOilCompanyLading")
       };
