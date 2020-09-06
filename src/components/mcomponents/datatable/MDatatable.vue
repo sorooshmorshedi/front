@@ -41,6 +41,13 @@
       <!-- Add row number field -->
       <template #item.rowNumber="{ item }">{{ getRowNumber(item) }}</template>
 
+      <!-- Add detail icon -->
+      <template #item.detail="{ item }">
+        <v-btn @click="$emit('detail', item)" color="light-blue white--text" icon>
+          <v-icon>fa-external-link-alt</v-icon>
+        </v-btn>
+      </template>
+
       <!-- Add Filter btn and menu to headers -->
       <template v-for="header in headersWithFilter" v-slot:[getHeaderSlot(header.value)]="{header}">
         <template v-if="header.filterable != false && !isPrinting">
@@ -169,6 +176,17 @@
         <template v-else>{{ getItemValue(item, header.value) }}</template>
       </template>
 
+      <template v-if="apiResponse" v-slot:body.append="{ headers }">
+        <template v-for="sum, i in [apiResponse.page_sum, apiResponse.sum]">
+          <tr v-if="sum">
+            <td v-for="header in headers" class="text-center">
+              <template v-if="header.value == 'rowNumber'">{{ i == 0?"جمع این صفحه":"جمع"}}</template>
+              <template v-else>{{ sum[header.value] | toMoney }}</template>
+            </td>
+          </tr>
+        </template>
+      </template>
+
       <!-- Pass user templates to vuetify data table -->
       <template v-for="(index, name) in $slots" v-slot:[name]>
         <slot :name="name" />
@@ -224,12 +242,16 @@ export default {
       loading: false,
       showSelect: false,
       options: {},
+      apiResponse: null,
 
       numericValues: ["bed", "bes", "value", "fee", "price", "count"],
       booleanValues: ["is_auto_created"]
     };
   },
   computed: {
+    hasDetail() {
+      return this.$listeners && this.$listeners.detail;
+    },
     filterTypes() {
       let filterTypes = [
         {
@@ -267,8 +289,21 @@ export default {
           sortable: false,
           filterable: false
         },
-        ...this.headers
+        ...this.headers.map(o => {
+          o.align = "center";
+          return o;
+        })
       ];
+
+      if (this.hasDetail) {
+        headers.push({
+          text: "",
+          value: "detail",
+          sortable: false,
+          filterable: false,
+          visible: false
+        });
+      }
 
       for (let header of headers) {
         header.filter = filter(header.value);
@@ -401,7 +436,7 @@ export default {
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
 
       let ordering;
-      if (sortBy.length === 1 && sortDesc.length === 1) {
+      if (sortBy && sortBy.length === 1 && sortDesc.length === 1) {
         ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replace(".", "__")}`;
       }
 
@@ -432,6 +467,7 @@ export default {
           } else {
             this.totalItems = undefined;
           }
+          this.apiResponse = data;
           this.tableItems = data.results;
           this.loading = false;
         }
