@@ -50,6 +50,10 @@ Vue.mixin({
   },
   mounted() {},
   methods: {
+    newTab(to) {
+      let routeData = this.$router.resolve(to);
+      window.open(routeData.href, '_blank');
+    },
     getOptionValue(codename) {
       return this.systemOptions.filter(o => o.codename == codename)[0].value;
     },

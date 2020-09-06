@@ -187,7 +187,7 @@ export default {
     getRemittanceData() {
       if (!this.remittance) return;
       this.request({
-        url: this.endpoint("dashtbashi/otherDriverPaymentsReport"),
+        url: this.endpoint("dashtbashi/report/otherDriverPayments"),
         params: {
           remittance: this.remittance.id
         },
