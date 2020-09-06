@@ -1007,6 +1007,13 @@ export default {
                   }
                 },
                 {
+                  perm: "ladingBillSeries",
+                  title: "لیست سری های بارنامه",
+                  to: {
+                    name: "LadingBillSeriesList"
+                  }
+                },
+                {
                   perm: "revoke.ladingBillNumber",
                   title: "ابطال شماره بارنامه",
                   to: {
@@ -1017,10 +1024,22 @@ export default {
             },
             {
               title: "حواله",
-              perm: "remittance",
-              to: {
-                name: "Remittance"
-              }
+              children: [
+                {
+                  title: "ثبت حواله",
+                  perm: "remittance",
+                  to: {
+                    name: "Remittance"
+                  }
+                },
+                {
+                  title: "لیست حواله ها",
+                  perm: "remittance",
+                  to: {
+                    name: "RemittancesReport"
+                  }
+                }
+              ]
             },
             {
               title: "بارگیری",
@@ -1033,12 +1052,27 @@ export default {
                   }
                 },
                 {
+                  title: "لیست بارگیری های حمل و نقل",
+                  perm: "lading",
+                  to: {
+                    name: "LadingsReport"
+                  }
+                },
+                {
                   title: "بارگیری شرکت نفت",
                   perm: "oilCompanyLading",
                   to: {
                     name: "OilCompanyLading"
                   }
-                }
+                },
+                {
+                  title: "لیست بارگیری های شرکت نفت",
+                  perm: "oilCompanyLading",
+                  to: {
+                    name: "OilCompanyLadingsReport"
+                  }
+
+                },
               ]
             },
             {
