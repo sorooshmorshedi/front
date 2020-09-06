@@ -1,7 +1,6 @@
 <template>
   <m-form
     :title="title"
-    :ListRouteParams="{form: 'adjustment'}"
     :showList="false"
     :listRoute="{name:'List', params:{form: 'adjustment', type: type}}"
     :exportParams="{id: this.id}"

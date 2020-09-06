@@ -5,7 +5,7 @@
       :hasIdProp="true"
       :showList="false"
       :showListBtn="!isFpi"
-      :ListRoute="listRoute"
+      :listRoute="listRoute"
       :canClear="!isFpi"
       :showNavigationButtons="!isFpi"
       :showSubmitAndClearForm="!isFpi"

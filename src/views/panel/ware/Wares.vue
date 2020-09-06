@@ -44,7 +44,7 @@
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="6">
-          <money label=" * قیمت" v-model="item.price" :disabled="!isEditing" />
+          <money label="قیمت" v-model="item.price" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
           <v-select
@@ -59,7 +59,7 @@
         <v-col cols="12" md="6">
           <v-autocomplete
             :return-object="false"
-            label="انبار پیشفرض"
+            label=" * انبار پیشفرض"
             :items="warehouses"
             v-model="item.warehouse"
             :disabled="!isEditing"
