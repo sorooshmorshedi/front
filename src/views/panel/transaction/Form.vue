@@ -52,7 +52,7 @@
           <v-col cols="12" md="6">
             <account-select
               :label="accountLabel"
-              itemsType="level3"
+              :itemsType="accountsType"
               v-model="item.account"
               :disabled="modalMode || !isEditing"
               required
@@ -335,6 +335,10 @@ export default {
     this.getDefaultAccounts();
   },
   computed: {
+    accountsType() {
+      if (this.isImprest) return "imprests";
+      return "level3";
+    },
     imprestSettlementId() {
       if (this.item.imprestSettlements.length) {
         return this.item.imprestSettlements[0];
