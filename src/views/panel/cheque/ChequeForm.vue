@@ -53,7 +53,8 @@
                 label=" * چک"
                 :items="paidCheques"
                 v-model="item"
-                item-text="title"
+                @change="item && (item.account = null)"
+                item-text="serial"
                 item-value="id"
               />
             </v-col>
@@ -85,7 +86,7 @@
             <date
               label=" * تاریخ سررسید"
               v-model="item.due"
-              :default="true"
+              :default="false"
               :disabled="!isEditing"
             />
           </v-col>
@@ -158,7 +159,7 @@ export default {
     },
     modalMode: {
       default: false
-    },
+    }
   },
   components: { money, date, FormList },
   mixins: [
