@@ -91,7 +91,7 @@ export default {
       return ["factor", "closingAccounts", "imprest"].includes(this.usage);
     },
     showActions() {
-      if (this.usage == "imprest") return true;
+      if (["imprest", "receive", "payment"].includes(this.usage)) return true;
       return this.item.id != undefined;
     }
   },
