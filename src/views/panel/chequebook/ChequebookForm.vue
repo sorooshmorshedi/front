@@ -1,6 +1,7 @@
 <template>
   <m-form
     title="دسته چک"
+    :full-width="true"
     :items="items"
     :cols="cols"
     :canSubmit="canSubmit"

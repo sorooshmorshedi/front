@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" :md="showList?6:12">
+    <v-col cols="12" :md="formWidth">
       <v-card>
         <v-card-title class="title" v-if="showTitle">
           {{ title }}
@@ -18,21 +18,12 @@
         <v-card-actions v-if="showActions">
           <v-spacer></v-spacer>
           <slot name="actions"></slot>
-          <v-btn
-            v-if="deletable && canDelete"
-            @click="emitDelete"
-            color="red"
-            outlined
-          >حذف</v-btn>
-          <v-btn
-            @click="emitSubmit"
-            v-if="submitable && canSubmit"
-            class="green white--text"
-          >ثبت</v-btn>
+          <v-btn v-if="deletable && canDelete" @click="emitDelete" color="red" outlined>حذف</v-btn>
+          <v-btn @click="emitSubmit" v-if="submitable && canSubmit" class="green white--text">ثبت</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
-    <v-col cols="12" md="6" v-if="showList" class="items-list">
+    <v-col cols="12" :md="listWidth" v-if="showList" class="items-list">
       <v-card>
         <v-card-text>
           <datatable :cols="cols" :data="items" @click:row="rowClick" />
@@ -81,10 +72,24 @@ export default {
     },
     canDelete: {
       default: true
+    },
+
+    fullWidth: {
+      default: false
     }
   },
   data() {
     return {};
+  },
+  computed: {
+    formWidth() {
+      if (this.fullWidth) return 12;
+      return this.showList ? 6 : 12;
+    },
+    listWidth() {
+      if (this.fullWidth) return 12;
+      return 6;
+    }
   },
   watch: {
     urlQuery() {
