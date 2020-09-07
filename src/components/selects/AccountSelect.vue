@@ -272,10 +272,15 @@ export default {
     setItem() {
       if (this.value != this.item) this.item = this.value;
 
-      if (this.floatAccount != this.localFloaAccount)
-        this.localFloatAccount = this.floatAccount;
-      if (this.costCenter != this.localCostCenter)
-        this.localCostCenter = this.costCenter;
+      if (!this.item) {
+        this.localFloatAccount = null;
+        this.localCostCenter = null;
+      } else {
+        if (this.floatAccount != this.localFloaAccount)
+          this.localFloatAccount = this.floatAccount;
+        if (this.costCenter != this.localCostCenter)
+          this.localCostCenter = this.costCenter;
+      }
     },
     emitChange() {
       this.$emit("change", {

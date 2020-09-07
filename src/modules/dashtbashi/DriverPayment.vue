@@ -32,17 +32,17 @@
             :items="$store.state.drivings"
             item-text="title"
             item-value="id"
-            :disabled="!isEditing"
+            :disabled="this.id != undefined"
             @change="getDrivingData"
             :return-object="true"
           />
         </v-col>
 
         <v-col cols="12" md="2">
-          <date v-model="item.date" label="تاریخ" :default="true" :disabled="!isEditing" />
+          <date v-model="item.date" label="تاریخ" :default="true" :disabled="this.id != undefined" />
         </v-col>
         <v-col cols="12" md="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
+          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="this.id != undefined"></v-textarea>
         </v-col>
 
         <v-col cols="12">
@@ -51,7 +51,7 @@
             :headers="ladingHeaders"
             :items="ladings"
             v-model="selectedLadings"
-            :show-select="isEditing"
+            :show-select="this.id == undefined"
             item-key="id"
             :disable-pagination="true"
             :hide-default-footer="true"
@@ -69,7 +69,7 @@
             :headers="imprestHeaders"
             :items="imprests"
             v-model="selectedImprests"
-            :show-select="isEditing"
+            :show-select="this.id == undefined"
             item-key="id"
             :disable-pagination="true"
             :hide-default-footer="true"
@@ -273,7 +273,7 @@ export default {
       this.selectedLadings = [];
       this.selectedImprests = [];
       this.getDrivingLadings(driving);
-      this.getDriverNotSettledImprests(driving.driver);
+      this.getDriverNotSettledImprests(driving);
     },
     getDrivingLadings(driving, callback = null) {
       this.request({
@@ -314,13 +314,16 @@ export default {
       this.submit(this.performClearForm);
     },
 
-    getDriverNotSettledImprests(driver, callback = null) {
+    getDriverNotSettledImprests(driving, callback = null) {
+      console.log({
+        account: driving.car.payableAccount,
+        floatAccount: driving.driver.floatAccount
+      });
       this.request({
         url: this.endpoint("imprests/notSettledImprests"),
         params: {
-          account: 609
-          // floatAccount: '',
-          // costCenter: '',
+          account: driving.car.payableAccount,
+          floatAccount: driving.driver.floatAccount
         },
         method: "get",
         success: data => {
@@ -389,6 +392,9 @@ export default {
 
       data.item.ladings = this.selectedLadings.map(o => o.id);
       data.item.imprests = this.selectedImprests.map(o => o.id);
+
+      data.payment.account = this.item.driving.car.payableAccount;
+      data.payment.floatAccount = this.item.driving.driver.floatAccount;
 
       return data;
     },
