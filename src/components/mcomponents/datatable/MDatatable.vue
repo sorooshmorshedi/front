@@ -32,7 +32,6 @@
       :loading="loading"
       v-model="selectedItems"
       :search="search"
-      :custom-filter="filterItems"
       :disable-pagination="isPrinting"
       :disable-sort="isPrinting"
       :hide-default-footer="isPrinting"
