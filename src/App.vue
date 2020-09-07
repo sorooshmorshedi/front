@@ -1,12 +1,7 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" @click.native.ctrl.alt="developersDialog = true">
     <template v-if="isAppReady">
-      <v-system-bar
-        app
-        class="indigo lighten-5"
-        v-show="!isPrinting"
-        @click.ctrl.alt="developersDialog = true"
-      >
+      <v-system-bar app class="indigo lighten-5" v-show="!isPrinting">
         <m-system-bar />
       </v-system-bar>
       <v-navigation-drawer
