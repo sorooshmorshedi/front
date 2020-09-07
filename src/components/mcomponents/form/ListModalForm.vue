@@ -73,10 +73,6 @@ export default {
     canDelete: {
       default: true
     },
-
-    fullWidth: {
-      default: false
-    }
   },
   data() {
     return {};

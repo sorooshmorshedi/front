@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" :md="showList?6:12">
+    <v-col cols="12" :md="formWidth">
       <v-card>
         <v-card-title v-if="showHeader">
           <span>{{ title }}</span>
@@ -80,7 +80,7 @@
       </v-card>
     </v-col>
 
-    <v-col cols="12" md="6" v-if="showList" class="items-list">
+    <v-col cols="12" :md="listWidth" v-if="showList" class="items-list">
       <v-card>
         <v-card-text>
           <m-datatable :headers="cols" :items="items" @click:row="rowClick" v-on="listeners">
@@ -180,6 +180,10 @@ export default {
     },
     cancelConfirmBtnText: {
       default: "لغو تایید"
+    },
+
+    fullWidth: {
+      default: false
     }
   },
   data() {
@@ -188,6 +192,15 @@ export default {
     };
   },
   computed: {
+    formWidth() {
+      if (this.fullWidth) return 12;
+      return this.showList ? 6 : 12;
+    },
+    listWidth() {
+      if (this.fullWidth) return 12;
+      return 6;
+    },
+
     listeners() {
       let listeners = this.$listeners;
       listeners["click:row"] = this.rowClick;
