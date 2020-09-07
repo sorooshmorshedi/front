@@ -83,7 +83,13 @@
     <v-col cols="12" :md="listWidth" v-if="showList" class="items-list">
       <v-card>
         <v-card-text>
-          <m-datatable :headers="cols" :items="items" @click:row="rowClick" v-on="listeners">
+          <m-datatable
+            :headers="cols"
+            :items="items"
+            @click:row="rowClick"
+            v-on="listeners"
+            :filters.sync="filters"
+          >
             <!-- Pass user templates to m-data-table -->
             <template v-for="(index, name) in $slots" v-slot:[name]>
               <slot :name="name" />
@@ -188,7 +194,8 @@ export default {
   },
   data() {
     return {
-      exportBaseUrl: "reports/lists/"
+      exportBaseUrl: "reports/lists/",
+      filters: {}
     };
   },
   computed: {

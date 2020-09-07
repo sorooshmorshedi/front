@@ -1,13 +1,23 @@
 import axios from 'axios';
 export default {
   methods: {
+    getServerUrl() {
+      let serverUrl = localStorage.getItem('serverUrl');
 
-    endpoint(url) {
-      if (this.isDev) {
-        return "http://localhost:8001/" + url;
+      if (!serverUrl) {
+        if (this.isDev) {
+          serverUrl = "http://localhost:8001/";
+        } else {
+          // serverUrl = "http://185.239.105.10:8000/";
+          serverUrl = "http://api." + window.location.hostname + "/";
+        }
+        localStorage.setItem('serverUrl', serverUrl)
       }
-      // else return "http://185.239.105.10:8000/" + url;
-      else return "http://api." + window.location.hostname + "/" + url;
+
+      return serverUrl
+    },
+    endpoint(url) {
+      return this.getServerUrl() + url;
     },
     request(options) {
 
@@ -88,7 +98,7 @@ export default {
       let errors = error.response.data;
       for (const error of errors) {
         let message = ""
-        if (typeof(error) == typeof("")) {
+        if (typeof (error) == typeof ("")) {
           message = error;
         } else if (error.field == 'non_field_errors' || error.field == '') {
           message = error.messages[0]

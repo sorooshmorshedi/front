@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="12" md="4">
           <v-text-field
-            v-if="searchable"
+            v-if="searchable && false"
             v-model="search"
             max-width="300px"
             append-icon="search"
@@ -31,7 +31,8 @@
       :server-items-length="totalItems"
       :loading="loading"
       v-model="selectedItems"
-      :search.sync="search"
+      :search="search"
+      :custom-filter="filterItems"
       :disable-pagination="isPrinting"
       :disable-sort="isPrinting"
       :hide-default-footer="isPrinting"

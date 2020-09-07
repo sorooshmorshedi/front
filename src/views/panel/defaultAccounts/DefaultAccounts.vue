@@ -85,7 +85,7 @@ export default {
       return `level${this.item.account_level || 3}`;
     },
     items() {
-      return this.defaultAccounts.filter(o => o.usage == this.usage);
+      return this.defaultAccounts.filter(o => o.usage.includes(this.usage));
     },
     canClear() {
       return ["factor", "closingAccounts", "imprest"].includes(this.usage);

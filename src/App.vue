@@ -1,7 +1,12 @@
 <template>
   <v-app id="app">
     <template v-if="isAppReady">
-      <v-system-bar app class="indigo lighten-5" v-show="!isPrinting">
+      <v-system-bar
+        app
+        class="indigo lighten-5"
+        v-show="!isPrinting"
+        @click.ctrl.alt="developersDialog = true"
+      >
         <m-system-bar />
       </v-system-bar>
       <v-navigation-drawer
@@ -108,6 +113,24 @@
         </v-btn>
       </v-snackbar>
     </template>
+
+    <v-dialog
+      v-model="developersDialog"
+      scrollable
+      max-width="500px"
+      transition="dialog-transition"
+    >
+      <v-card class="ltr">
+        <v-card-title class="text-center">Welcome Developer!</v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field class="ltr" label="Server Url" v-model="serverUrl" />
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -132,16 +155,26 @@ export default {
   data() {
     return {
       isAppReady: false,
-      showDrawer: false
+      showDrawer: false,
+      developersDialog: false
     };
   },
   computed: {
+    serverUrl: {
+      get() {
+        return localStorage.getItem("serverUrl");
+      },
+      set(value) {
+        localStorage.setItem("serverUrl", value);
+      }
+    },
     ...mapState({
       snackbar: state => state.snackbar
     })
   },
   created() {
     this.getDateTime();
+    this.log(`server url is : ${this.getServerUrl()}`);
   },
   methods: {
     routeClick(routeName) {
