@@ -79,7 +79,7 @@
           <v-col cols="12" md="2" v-if="!isFpi">
             <v-text-field label="نوع فاکتور" disabled :value="item.is_definite?'قطعی':'موقت'" />
           </v-col>
-          <v-col cols="12" md="6" v-if="!isFpi">
+          <v-col cols="12" md="4" v-if="!isFpi">
             <account-select
               :label="' * ' + accountName"
               itemsType="persons"
@@ -101,7 +101,7 @@
             ></v-textarea>
           </v-col>
 
-          <v-col cols="12" v-if="!isFpi">
+          <v-col cols="12" md="2" v-if="!isFpi">
             <v-switch label="فاکتور مالیات دارد" v-model="item.has_tax" :disabled="!isEditing"></v-switch>
           </v-col>
         </v-row>
@@ -243,7 +243,7 @@
                   </td>
                 </tr>
                 <tr class="bg-info text-white">
-                  <td colspan="8"></td>
+                  <td colspan="7"></td>
                   <td v-if="hasDiscount" colspan="4"></td>
                   <td v-if="item.has_tax" colspan="2"></td>
                   <td>
@@ -654,7 +654,7 @@ export default {
       },
       deep: true
     },
-    'item.has_tax'() {
+    "item.has_tax"() {
       if (this.item.has_tax == false) {
         this.item.taxPercent = 0;
         this.item.taxValue = 0;
