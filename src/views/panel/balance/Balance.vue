@@ -74,11 +74,11 @@
             :headers="headers"
             :items="accounts"
             :hidden-cols="hiddenCols"
+            :searchable="false"
+            :export-url="url"
             :filters.sync="filters"
             show-expand
             :expanded.sync="accounts"
-            :searchable="false"
-            :export-url="url"
           >
             <template #item.data-table-expand></template>
 
@@ -123,7 +123,7 @@
               </template>
             </template>
 
-            <template v-slot:body.append="{ headers }" v-if="canShowSum()">
+            <template v-slot:body.append="{ headers }">
               <tr class="text-center">
                 <td :colspan="2 + cols.cols.length"></td>
                 <td>جمع کل</td>
@@ -152,17 +152,17 @@ export default {
   components: { date, MDatatable },
   props: {
     title: {
-      required: true
+      required: true,
     },
     cols: {
-      required: true
+      required: true,
     },
     url: {
-      required: true
+      required: true,
     },
     showAccountFilters: {
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -183,13 +183,13 @@ export default {
         { value: 0, text: "گروه" },
         { value: 1, text: "کل" },
         { value: 2, text: "معین" },
-        { value: 3, text: "تفضیلی" }
+        { value: 3, text: "تفضیلی" },
       ],
       specialAccounts: [
         { value: "all", text: "همه" },
         { value: "bank", text: "بانک" },
         { value: "buyer", text: "خریدار" },
-        { value: "seller", text: "فروشنده" }
+        { value: "seller", text: "فروشنده" },
       ],
       accountStatuses: [
         { value: "all", text: "همه" },
@@ -197,8 +197,8 @@ export default {
         { value: "bedRemain", text: "مانده بدهکار" },
         { value: "besRemain", text: "مانده بستانکار" },
         { value: "withoutRemain", text: "بدون مانده" },
-        { value: "withTransaction", text: "حساب های دارای گردش" }
-      ]
+        { value: "withTransaction", text: "حساب های دارای گردش" },
+      ],
     };
   },
   computed: {
@@ -221,7 +221,7 @@ export default {
         bed: bed,
         bes: bes,
         bedRemain: Math.max(bed - bes),
-        besRemain: Math.max(bes - bed)
+        besRemain: Math.max(bes - bed),
       };
     },
     hiddenCols() {
@@ -230,9 +230,9 @@ export default {
     },
     headers() {
       let cols = [...this.cols.cols, ...datatableBaseCols.cols];
-      cols = cols.filter(o => !this.hiddenCols.includes(o.value));
+      cols = cols.filter((o) => !this.hiddenCols.includes(o.value));
       return cols;
-    }
+    },
   },
   created() {
     this.debouncedGetData = _.debounce(this.getData, 1000);
@@ -248,27 +248,17 @@ export default {
         if (this.debouncedGetData) this.debouncedGetData();
         else this.getData();
       },
-      deep: true
+      deep: true,
     },
     accountFilters: {
       handler() {
         if (this.debouncedFilterAccounts) this.debouncedFilterAccounts();
         else this.filterAccounts();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
-    canShowSum() {
-      let datatable = this.$refs.datatable;
-      if (datatable) {
-        return (
-          datatable.$refs.datatable.$children[0].pageStop ==
-          this.accounts.length
-        );
-      }
-      return false;
-    },
     hasSubAccount(item) {
       return (
         (item._floatAccounts && item._floatAccounts.length) ||
@@ -278,12 +268,12 @@ export default {
     getSubAccounts(item) {
       return [
         ...(this.accountFilters.showFloatAccounts ? item._floatAccounts : []),
-        ...(this.accountFilters.showCostCenters ? item._costCenters : [])
+        ...(this.accountFilters.showCostCenters ? item._costCenters : []),
       ];
     },
     getData() {
       let filters = {};
-      Object.keys(this.sanadFilters).forEach(k => {
+      Object.keys(this.sanadFilters).forEach((k) => {
         if (["undefined", ""].includes(this.sanadFilters[k])) return;
         if (k.includes("date") || k.includes("due")) {
           let gDate = this.toGDate(this.sanadFilters[k]);
@@ -300,17 +290,17 @@ export default {
         url: this.endpoint(this.url),
         method: "get",
         params: {
-          ...filters
+          ...filters,
         },
-        success: data => {
+        success: (data) => {
           this.allAccounts = data;
           this.filterAccounts();
-        }
+        },
       });
     },
     filterAccounts() {
       let filters = this.accountFilters;
-      let accounts = this.allAccounts.filter(acc => {
+      let accounts = this.allAccounts.filter((acc) => {
         if (filters.level != "all") {
           if (acc.level != filters.level) return false;
         }
@@ -369,17 +359,17 @@ export default {
 
       accounts.sort((a, b) => a.code - b.code);
 
-      let getChildren = account => {
+      let getChildren = (account) => {
         return accounts.filter(
-          o => o.code.startsWith(account.code) && o.level == account.level + 1
+          (o) => o.code.startsWith(account.code) && o.level == account.level + 1
         );
       };
 
       if (accounts.length && accounts[0].level) {
-        let sortedAccounts = accounts.filter(o => o.level == 0);
+        let sortedAccounts = accounts.filter((o) => o.level == 0);
 
         for (let i = 0; i < 3; i++) {
-          for (let account of accounts.filter(o => o.level == i)) {
+          for (let account of accounts.filter((o) => o.level == i)) {
             sortedAccounts.splice(
               sortedAccounts.indexOf(account),
               // sortedAccounts.indexOf(account) + 1, // for sorting from kol to tafsili
@@ -400,11 +390,11 @@ export default {
         special: "all",
         showFloatAccounts: false,
         showCostCenters: false,
-        showDifferences: false
+        showDifferences: false,
       };
       this.sanadFilters = {};
-    }
-  }
+    },
+  },
 };
 </script>
 

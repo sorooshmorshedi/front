@@ -204,33 +204,33 @@ import { jsPDF } from "jspdf";
 export default {
   props: {
     apiUrl: {
-      default: null
+      default: null,
     },
     exportUrl: {
-      default: null
+      default: null,
     },
     headers: {
-      required: true
+      required: true,
     },
     filters: {
       default() {
         return {};
-      }
+      },
     },
     searchable: {
-      default: true
+      default: true,
     },
     previousApiData: {
-      default: null
+      default: null,
     },
     currentApiData: {
-      default: null
+      default: null,
     },
     items: {
       default() {
         return [];
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -245,7 +245,7 @@ export default {
       apiResponse: null,
 
       numericValues: ["bed", "bes", "value", "fee", "price", "count"],
-      booleanValues: ["is_auto_created"]
+      booleanValues: ["is_auto_created"],
     };
   },
   computed: {
@@ -255,28 +255,28 @@ export default {
     filterTypes() {
       let filterTypes = [
         {
-          getKey: valueName => valueName
+          getKey: (valueName) => valueName,
         },
         {
-          key: "icontains"
+          key: "icontains",
         },
         {
-          key: "gte"
+          key: "gte",
         },
         {
-          key: "lte"
-        }
+          key: "lte",
+        },
       ];
       for (let filterType of filterTypes) {
         if (!filterType.getKey) {
-          filterType.getKey = valueName => `${valueName}__${filterType.key}`;
+          filterType.getKey = (valueName) => `${valueName}__${filterType.key}`;
         }
       }
       return filterTypes;
     },
     headersWithFilter() {
-      let filter = propertyName => {
-        return value => {
+      let filter = (propertyName) => {
+        return (value) => {
           if (!this.filters[propertyName]) return true;
           return String(value).includes(this.filters[propertyName]);
         };
@@ -287,12 +287,12 @@ export default {
           text: "#",
           value: "rowNumber",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
-        ...this.headers.map(o => {
+        ...this.headers.map((o) => {
           o.align = "center";
           return o;
-        })
+        }),
       ];
 
       if (this.hasDetail) {
@@ -301,7 +301,7 @@ export default {
           value: "detail",
           sortable: false,
           filterable: false,
-          visible: false
+          visible: false,
         });
       }
 
@@ -316,7 +316,7 @@ export default {
     },
     serverExport() {
       return this.exportUrl != null;
-    }
+    },
   },
   watch: {
     items() {
@@ -329,18 +329,18 @@ export default {
       handler() {
         if (this.serverProcessing) this.getDataFromApi();
       },
-      deep: true
+      deep: true,
     },
     filters: {
       handler() {
         this.options.page = 1;
         if (this.serverProcessing) this.getDataFromApi();
       },
-      deep: true
+      deep: true,
     },
     search() {
       if (this.serverProcessing) this.getDataFromApi();
-    }
+    },
   },
   mounted() {
     if (this.serverProcessing) this.getDataFromApi();
@@ -350,17 +350,17 @@ export default {
       return [
         {
           text: header.text,
-          value: true
+          value: true,
         },
         {
           text: "غیر " + header.text,
-          value: false
-        }
+          value: false,
+        },
       ];
     },
     getSelectItemValue(header, item) {
       let value = header.items.filter(
-        o => o.value == this.getItemValue(item, header.value)
+        (o) => o.value == this.getItemValue(item, header.value)
       );
       if (value.length) return value[0].text;
       return "";
@@ -456,9 +456,9 @@ export default {
           offset: offset,
           ordering: ordering,
           search: this.search,
-          ...this.getFilters()
+          ...this.getFilters(),
         },
-        success: data => {
+        success: (data) => {
           this.$emit("update:previousApiData", this.currentApiData);
           this.$emit("update:currentApiData", data);
 
@@ -470,7 +470,7 @@ export default {
           this.apiResponse = data;
           this.tableItems = data.results;
           this.loading = false;
-        }
+        },
       });
     },
     getFilters() {
@@ -495,13 +495,13 @@ export default {
       if (this.serverProcessing || this.serverExport) {
         let url = this.getExportUrl(outputFormat);
         if (this.selectedItems.length) {
-          url += "id__in=" + this.selectedItems.map(o => o.id).join(",");
+          url += "id__in=" + this.selectedItems.map((o) => o.id).join(",");
         } else {
           let filters = {
             ...this.filters,
-            search: this.search
+            search: this.search,
           };
-          Object.keys(filters).forEach(k => {
+          Object.keys(filters).forEach((k) => {
             if (this.filters[k]) url += k + "=" + this.filters[k] + "&";
           });
         }
@@ -521,10 +521,10 @@ export default {
           let doc = new jsPDF();
 
           doc.html(document.body, {
-            callback: function(doc) {
+            callback: function (doc) {
               doc.page = 1;
               doc.save();
-            }
+            },
           });
           // this.print();
         } else if (outputFormat == "xlsx") {
@@ -546,8 +546,8 @@ export default {
         if (o) return o[i];
         return null;
       }, item);
-    }
-  }
+    },
+  },
 };
 </script>
 
