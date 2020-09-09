@@ -85,11 +85,11 @@
 
       <loader />
 
-      <v-content class="app-background-color">
+      <v-main class="app-background-color">
         <v-container fluid>
           <router-view></router-view>
         </v-container>
-      </v-content>
+      </v-main>
 
       <v-footer class="indigo lighten-5">
         <m-footer />
