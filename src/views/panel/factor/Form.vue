@@ -464,7 +464,7 @@
                         target="_blank"
                         rel="noopener noreferrer"
                         block
-                      >چاپ فاکتور</v-btn>
+                      >چاپ</v-btn>
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-btn
@@ -473,7 +473,7 @@
                         target="_blank"
                         rel="noopener noreferrer"
                         block
-                      >PDF فاکتور</v-btn>
+                      >PDF</v-btn>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -494,26 +494,6 @@
                         rel="noopener noreferrer"
                         block
                       >PDF {{receiptLabel}}</v-btn>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" md="6">
-                      <v-btn
-                        class="export-btn"
-                        :href="exportLinks.preFactor.html"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        block
-                      >چاپ پیش فاکتور</v-btn>
-                    </v-col>
-                    <v-col cols="12" md="6">
-                      <v-btn
-                        class="export-btn"
-                        :href="exportLinks.preFactor.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        block
-                      >PDF پیش فاکتور</v-btn>
                     </v-col>
                   </v-row>
                 </v-col>

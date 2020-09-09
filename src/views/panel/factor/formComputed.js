@@ -92,15 +92,9 @@ export default {
         'pdf': item.pdf + "&hide_prices=true"
       }
 
-      let preFactor = {
-        'html': item.html + "&pre_factor=true",
-        'pdf': item.pdf + "&pre_factor=true"
-      }
-
       return {
         item,
         receipt,
-        preFactor,
       };
     },
     sum() {
