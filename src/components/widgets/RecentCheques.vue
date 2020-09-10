@@ -1,5 +1,5 @@
 <template>
-  <div>ha</div>
+  <div></div>
 </template>
 
 <script>

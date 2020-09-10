@@ -554,7 +554,7 @@
           v-if="id && !isFpi"
           @click="definiteFactor"
           :disabled="item.is_definite"
-          class="blue white--text"
+          class="blue white--text mr-1"
         >قطعی کردن فاکتور</v-btn>
       </template>
     </m-form>
