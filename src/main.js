@@ -9,6 +9,10 @@ require('@fortawesome/fontawesome-free/css/all.css')
 
 import 'cleave.js'
 
+import Chart from 'chart.js'
+Chart.defaults.global.defaultFontFamily = 'IRANSans';
+
+
 import WareSelect from '@/components/selects/WareSelect.vue';
 Vue.component('WareSelect', WareSelect);
 

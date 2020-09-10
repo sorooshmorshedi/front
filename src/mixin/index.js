@@ -182,9 +182,9 @@ Vue.mixin({
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
       if (isNegative) {
-        return `-${value}`;
+        return `-${formattedValue}`;
       } else {
-        return value
+        return formattedValue
       }
     },
     todayDate() {
