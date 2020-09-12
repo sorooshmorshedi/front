@@ -1,5 +1,11 @@
 <template>
   <div class="d-flex">
+    <v-icon
+      @click="ware && showInventory()"
+      color="cyan"
+      class="pl-2 mr-3"
+      v-if="ware && ware.unit?ware.unit.name:''"
+    >fa-boxes</v-icon>
     <v-autocomplete
       :label="label"
       :items="wares"
@@ -7,9 +13,6 @@
       item-text="name"
       item-value="id"
       :disabled="disabled"
-      prepend-icon="fa-boxes"
-      :suffix="ware && ware.unit?ware.unit.name:''"
-      @click:prepend="ware && showInventory()"
       :return-object="true"
     ></v-autocomplete>
 
@@ -24,15 +27,13 @@
                 <th>#</th>
                 <th>انبار</th>
                 <th>مانده</th>
-                <th>فی خرید</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(inventory, i) in ware.inventory" :key="inventory.id">
+              <tr v-for="(inventory, i) in inventories" :key="inventory.id">
                 <td>{{ i + 1 }}</td>
                 <td>{{ inventory.warehouse.name }}</td>
                 <td>{{ inventory.count | toMoney }}</td>
-                <td>{{ inventory.fee | toMoney }}</td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -51,14 +52,32 @@ export default {
     disabled: {},
     label: {},
     returnObject: {
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
       ware: null,
-      dialog: false
+      dialog: false,
     };
+  },
+  computed: {
+    inventories() {
+      let inventories = this.ware.inventory.reduce((v, inventory) => {
+        let member = v.filter((o) => o.warehouse.id == inventory.warehouse.id);
+        if (member.length) {
+          member.count += inventory.count;
+        } else {
+          v.push({
+            warehouse: inventory.warehouse,
+            count: inventory.count,
+          });
+        }
+        return v;
+      }, []);
+
+      return inventories.sort((a, b) => a.warehouse.id - b.warehouse.id);
+    },
   },
   created() {
     this.getWares();
@@ -70,7 +89,7 @@ export default {
     },
     setWare(value) {
       if (this.value != this.ware) this.ware = this.value;
-    }
+    },
   },
   watch: {
     value() {
@@ -80,8 +99,8 @@ export default {
       let ware = this.ware;
       if (ware && ware.id && !this.returnObject) ware = ware.id;
       this.$emit("input", ware);
-    }
-  }
+    },
+  },
 };
 </script>
 
