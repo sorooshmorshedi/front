@@ -128,7 +128,7 @@ export default {
   components: { money, date, mtime },
   mixins: [formsMixin, wareApiMixin, ListModalFormMixin],
   props: {
-    id: {}
+    id: {},
   },
   data() {
     return {
@@ -140,8 +140,8 @@ export default {
       hasIdProp: true,
       inventory: {
         ware: null,
-        warehouses: []
-      }
+        warehouses: [],
+      },
     };
   },
   methods: {
@@ -183,9 +183,7 @@ export default {
       let items = this.rows.slice(0, this.rows.length - 1);
       items = items.map(this.extractIds);
       item.items = items;
-      return {
-        transfer: item
-      };
+      return item;
     },
     setItem(transfer) {
       this.item = transfer;
@@ -193,17 +191,17 @@ export default {
       this.rows.push(this.copy(this.rowTemplate));
 
       this.changeRouteTo(transfer.id);
-    }
+    },
   },
   computed: {
     sum() {
       let res = 0;
-      this.rows.forEach(row => {
+      this.rows.forEach((row) => {
         if (row.count) res += +row.count;
       });
       return res;
-    }
-  }
+    },
+  },
 };
 </script>
 

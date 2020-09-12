@@ -99,13 +99,14 @@
         :value="snackbar.show"
         @input="$store.commit('setSnackbar', {show:false})"
         :color="snackbar.color"
-        right
+        :left="true"
+        :outlined="false"
       >
-        {{ snackbar.text }}
         <!-- <v-btn color="white" outlined @click="$store.commit('setSnackbar', {show:false})">بستن</v-btn> -->
         <v-btn color="white" icon @click="$store.commit('setSnackbar', {show:false})">
           <v-icon>fa-times</v-icon>
         </v-btn>
+        {{ snackbar.text }}
       </v-snackbar>
     </template>
 
