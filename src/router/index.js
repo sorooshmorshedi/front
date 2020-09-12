@@ -49,4 +49,32 @@ const router = new VueRouter({
   routes
 })
 
+
+import navbar from "@/components/Navbar"
+
+let getTitle = (name, params, routes) => {
+  let title = ''
+  for (let route of routes) {
+    if (route.to) {
+      let is_same = route.to.name == name
+      if (route.to.params && params) {
+        Object.keys(params).forEach(key => {
+          is_same &= route.to.params[key] == params[key]
+        })
+      }
+      if (is_same) return route.title
+    } else if (route.children) {
+      title = getTitle(name, params, route.children)
+      if (title) return title;
+    }
+  }
+  return false
+}
+
+router.afterEach((to, from) => {
+  Vue.nextTick(() => {
+    document.title = getTitle(to.name, to.params, navbar.data().allRoutes);
+  });
+});
+
 export default router

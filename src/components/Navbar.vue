@@ -16,11 +16,8 @@ export default {
   name: "NavBar",
   components: { NavbarListItem },
   data() {
-    return {};
-  },
-  computed: {
-    routes() {
-      let routes = [
+    return {
+      allRoutes: [
         {
           to: {
             name: "Home"
@@ -1096,7 +1093,13 @@ export default {
             }
           ]
         }
-      ];
+
+      ]
+    };
+  },
+  computed: {
+    routes() {
+      let routes = this.allRoutes;
       let setVisibility = route => {
         let visible = false;
 
