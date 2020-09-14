@@ -31,7 +31,7 @@
             :items="ladingBillSeries?ladingBillSeries.numbers:[]"
             v-model="billNumber"
             :item-text="(o) => o.number + ' : ' + (o.is_revoked?'باطل شده':'باطل نشده')"
-            item-text="title"
+            item-text="number"
             item-value="id"
           ></v-autocomplete>
         </v-col>
