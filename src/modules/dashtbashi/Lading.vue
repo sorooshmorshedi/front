@@ -306,8 +306,8 @@ import GetApi from "./GetApi";
 export default {
   props: {
     id: {
-      default: null
-    }
+      default: null,
+    },
   },
   mixins: [formsMixin, ListModalFormMixin, GetApi],
   data() {
@@ -327,12 +327,12 @@ export default {
       remittance: null,
       contractorTypes: [
         { id: "o", title: "سایر" },
-        { id: "cmp", title: "شرکت" }
+        { id: "cmp", title: "شرکت" },
       ],
       wareTypes: [
         { id: "b", title: "خریداری شده" },
-        { id: "s", title: "فروش رفته" }
-      ]
+        { id: "s", title: "فروش رفته" },
+      ],
     };
   },
   computed: {
@@ -341,26 +341,26 @@ export default {
         +this.item.association_price +
         +this.item.bill_price +
         +this.item.cargo_tip_price;
-      this.item.lading_bill_total_value = value;
+      this.item.lading_bill_total_value = value || 0;
       return value;
     },
     ladingTotalValue() {
       let value = this.item.destination_amount * this.item.contractor_price;
-      this.item.lading_total_value = value;
+      this.item.lading_total_value = value || 0;
       return value;
     },
     companyCommissionIncome() {
       let value =
         this.item.destination_amount *
         (this.item.contractor_price - this.item.fare_price);
-      this.item.company_commission_income = value;
+      this.item.company_commission_income = value || 0;
       return value;
     },
     carIncome() {
       let value = this.item.destination_amount * this.item.fare_price;
-      this.item.car_income = value;
+      this.item.car_income = value || 0;
       return value;
-    }
+    },
   },
   watch: {
     ladingBillSearchInput() {
@@ -370,7 +370,7 @@ export default {
       this.getRemittances(this.remittanceSearch);
     },
     remittance() {
-      Object.keys(this.remittance).forEach(key => {
+      Object.keys(this.remittance).forEach((key) => {
         if (key == "id") {
           this.item.remittance = this.remittance.id;
         } else {
@@ -378,22 +378,30 @@ export default {
           this.$set(this.item, key, this.remittance[key]);
         }
       });
-    }
+    },
   },
   methods: {
+    clearForm() {
+      this.isEditing = true;
+      this.item = this.getItemTemplate();
+      this.changeRouteTo(null);
+      this.remittance = null;
+      this.hasRemittance = true;
+    },
     getItemTemplate() {
       return {
         remittance: {},
         association: {
           id: null,
-          price: null
+          price: null,
         },
         association_price: 0,
         cargo_tip_price: 0,
         contractor_type: this.contractorTypes[0],
         lading_ware: null,
         lading_contractor_price: null,
-        lading_contractor: null
+        lading_contractor: null,
+        lading_bill_total_value: 0,
       };
     },
     getData() {
@@ -409,11 +417,11 @@ export default {
         url: this.endpoint("dashtbashi/ladingBillSeries/?limit=10&offset=0"),
         method: "get",
         params: {
-          serial__icontains: search
+          serial__icontains: search,
         },
-        success: data => {
+        success: (data) => {
           this.ladingBillSeriesItems = data["results"];
-        }
+        },
       });
     },
     setItem(item) {
@@ -430,19 +438,19 @@ export default {
         method: "get",
         params: {
           id: this.id,
-          position: pos
+          position: pos,
         },
-        success: data => {
+        success: (data) => {
           this.setItem(data);
         },
-        error: error => {
+        error: (error) => {
           if (error.response.status == 404) {
             this.notify("بارگیری وجود ندارد", "warning");
           }
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
