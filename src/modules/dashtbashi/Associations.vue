@@ -16,13 +16,13 @@
     <template #default>
       <v-row>
         <v-col cols="12" md="12">
-          <v-text-field label="نام" v-model="item.name" :disabled="isEditing" />
+          <v-text-field label="نام" v-model="item.name" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="12">
-          <money label="مبلغ" v-model="item.price" :disabled="isEditing" />
+          <money label="مبلغ" v-model="item.price" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="isEditing" />
+          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>
@@ -38,7 +38,7 @@ export default {
     return {
       item: {},
       baseUrl: "dashtbashi/associations",
-      basePermission: "association",
+      permissionBasename: "association",
       leadingSlash: true,
       cols: [
         {
