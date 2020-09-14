@@ -37,6 +37,14 @@
         </v-col>
       </v-row>
     </template>
+
+    <template #item.detail="{ item }">
+      <v-btn
+        v-if="usage == 'imprest'"
+        color="blue white--text"
+        :to="{name: 'Accounts', params:{level: 3}, query:{parent: item.account.id}}"
+      >تعریف حساب تفصیلی</v-btn>
+    </template>
   </m-form>
 </template>
 <script>
@@ -47,8 +55,8 @@ export default {
   mixins: [ListModalFormMixin, AccountApiMixin],
   props: {
     usage: {
-      requried: true
-    }
+      requried: true,
+    },
   },
   data() {
     return {
@@ -60,15 +68,19 @@ export default {
           text: "نام",
           value: "name",
           type: "text",
-          filters: ["name"]
         },
         {
           text: "حساب",
           value: "account.title",
           type: "text",
-          filters: ["account.title"]
-        }
-      ]
+        },
+        {
+          text: "",
+          value: "detail",
+          filterable: false,
+          sortable: false,
+        },
+      ],
     };
   },
   computed: {
@@ -85,7 +97,9 @@ export default {
       return `level${this.item.account_level || 3}`;
     },
     items() {
-      return this.defaultAccounts.filter(o => o.usage.toLowerCase().includes(this.usage));
+      return this.defaultAccounts.filter((o) =>
+        o.usage.toLowerCase().includes(this.usage)
+      );
     },
     canClear() {
       return ["factor", "closingAccounts", "imprest"].includes(this.usage);
@@ -93,12 +107,12 @@ export default {
     showActions() {
       if (["imprest", "receive", "payment"].includes(this.usage)) return true;
       return this.item.id != undefined;
-    }
+    },
   },
   methods: {
     getItemTemplate() {
       return {
-        usage: this.usage
+        usage: this.usage,
       };
     },
     getData() {
@@ -116,7 +130,7 @@ export default {
         item.account_level = level;
       }
       return item;
-    }
-  }
+    },
+  },
 };
 </script>

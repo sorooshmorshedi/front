@@ -256,14 +256,14 @@ export default {
   mixins: [ListModalFormMixin, AccountApiMixin],
   props: {
     level: {
-      requried: true
+      requried: true,
     },
     account_type: {
-      default: "o"
+      default: "o",
     },
     usage: {
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
@@ -272,20 +272,20 @@ export default {
       personTypes: [
         {
           title: "حقیقی",
-          id: "r"
+          id: "r",
         },
         {
           title: "حقوقی",
-          id: "l"
+          id: "l",
         },
         {
           title: "پیمانکاران",
-          id: "c"
+          id: "c",
         },
         {
           title: "سایر",
-          id: "o"
-        }
+          id: "o",
+        },
       ],
       cols: [
         {
@@ -296,28 +296,28 @@ export default {
             {
               label: "از کد حساب",
               model: "code__from",
-              filter: fromCodeFilter
+              filter: fromCodeFilter,
             },
             {
               label: "تا کد حساب",
               model: "code__to",
-              filter: toCodeFilter
-            }
-          ]
+              filter: toCodeFilter,
+            },
+          ],
         },
         {
           text: "نام حساب",
           value: "name",
           type: "text",
-          filters: ["name"]
+          filters: ["name"],
         },
         {
           text: "نوع",
           value: "type.name",
           type: "text",
-          filters: ["type.name"]
-        }
-      ]
+          filters: ["type.name"],
+        },
+      ],
     };
   },
   computed: {
@@ -360,7 +360,7 @@ export default {
     },
     items() {
       return this.accounts.filter(
-        o => o.level == this.level && o.account_type == this.account_type
+        (o) => o.level == this.level && o.account_type == this.account_type
       );
     },
     parentItems() {
@@ -372,14 +372,21 @@ export default {
     parents() {
       if (!this.hasParent || !this.item.parent) return [];
       let parents = [];
-      this.accountParentsName(this.item).forEach(parent => {
+      this.accountParentsName(this.item).forEach((parent) => {
         parents.push({
-          text: parent
+          text: parent,
         });
       });
       // parents.splice(parent.length - 1, 1);
       return parents;
-    }
+    },
+  },
+  created() {
+    this.EventBus.$on("get:accounts", () => {
+      let parent = this.urlQuery.parent;
+      if (parent)
+        this.item.parent = this.accounts.filter((o) => o.id == parent)[0];
+    });
   },
   methods: {
     setItem(item) {
@@ -387,18 +394,20 @@ export default {
       this.request({
         url: this.endpoint(url),
         method: "get",
-        success: data => {
+        success: (data) => {
           item = data;
           if (typeof item.parent == typeof 72) {
-            item.parent = this.parentItems.filter(o => o.id == item.parent)[0];
+            item.parent = this.parentItems.filter(
+              (o) => o.id == item.parent
+            )[0];
           }
           this.item = item;
-        }
+        },
       });
     },
     getItemTemplate() {
       return {
-        is_real: true
+        is_real: true,
       };
     },
     getData() {
@@ -407,14 +416,14 @@ export default {
       this.getFloatAccountGroups(true);
     },
     getAccount(id) {
-      return this.accounts.filter(o => (o.id = id))[0];
+      return this.accounts.filter((o) => (o.id = id))[0];
     },
     getSerialized() {
       let item = this.copy(this.item);
       item = this.extractIds(item);
       item.account_type = this.account_type;
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
