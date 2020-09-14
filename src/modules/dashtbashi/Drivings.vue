@@ -38,24 +38,19 @@
           />
         </v-col>
         <v-col cols="12" md="12">
-          <v-text-field label="هزینه موبایل" v-model="item.mobile_cost" :disabled="!isEditing" />
+          <money label="هزینه موبایل" v-model="item.mobile_cost" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="حقوق ثابت" v-model="item.fixed_salary" :disabled="!isEditing" />
+          <money label="حقوق ثابت" v-model="item.fixed_salary" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field
-            type="number"
-            label="درصد پورسانت"
-            v-model="item.commission"
-            :disabled="!isEditing"
-          />
+          <money label="درصد پورسانت" v-model="item.commission" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="پاداش" v-model="item.reward" :disabled="!isEditing" />
+          <money label="پاداش" v-model="item.reward" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="عائله" v-model="item.family" :disabled="!isEditing" />
+          <money label="عائله" v-model="item.family" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12">
           <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
@@ -80,15 +75,15 @@ export default {
           text: "عنوان",
           value: "title",
           type: "text",
-          filters: ["title"]
-        }
-      ]
+          filters: ["title"],
+        },
+      ],
     };
   },
   computed: {
     items() {
       return this.$store.state.drivings;
-    }
+    },
   },
   methods: {
     getData() {
@@ -99,7 +94,7 @@ export default {
     getSerialized() {
       let item = this.extractIds(this.item);
       return item;
-    }
-  }
+    },
+  },
 };
 </script>

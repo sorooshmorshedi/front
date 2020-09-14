@@ -85,13 +85,13 @@ export default {
           this.options.defaultParams = this.filters;
           break;
         case "received":
-          this.options.label = "چک های دریافتی";
+          this.options.label = "چک های دریافتنی";
           this.filters = {
             received_or_paid: "r",
           };
           break;
         case "paid":
-          this.options.label = "چک های پرداختی";
+          this.options.label = "چک های پرداختنی";
           this.filters = {
             received_or_paid: "p",
           };
