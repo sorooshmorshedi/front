@@ -152,14 +152,14 @@ export default {
   name: "ChequeForm",
   props: {
     receivedOrPaid: {
-      requried: true
+      requried: true,
     },
     id: {
-      default: null
+      default: null,
     },
     modalMode: {
-      default: false
-    }
+      default: false,
+    },
   },
   components: { money, date, FormList },
   mixins: [
@@ -167,7 +167,7 @@ export default {
     accountApiMixin,
     formsMixin,
     GetChequebooksApi,
-    ListModalFormMixin
+    ListModalFormMixin,
   ],
   data() {
     return {
@@ -177,27 +177,27 @@ export default {
       chequebook: {},
       cheque: {
         received_or_paid: this.receivedOrPaid,
-        account: null
+        account: null,
       },
       paidCheques: [],
       chequeTypes: [
         {
           label: "شخصی",
-          value: "p"
+          value: "p",
         },
         {
           label: "شخصی سایرین",
-          value: "op"
+          value: "op",
         },
         {
           label: "شرکت",
-          value: "c"
+          value: "c",
         },
         {
           label: "شرکت سایرین",
-          value: "oc"
-        }
-      ]
+          value: "oc",
+        },
+      ],
     };
   },
   computed: {
@@ -241,7 +241,7 @@ export default {
         return false;
       }
       return false;
-    }
+    },
   },
   created() {
     this.getAccounts();
@@ -271,7 +271,7 @@ export default {
         account: null,
         floatAccount: null,
         costCenter: null,
-        received_or_paid: this.receivedOrPaid
+        received_or_paid: this.receivedOrPaid,
       };
     },
     getItemByPosition(pos) {
@@ -281,16 +281,16 @@ export default {
         params: {
           received_or_paid: this.receivedOrPaid,
           id: this.id,
-          position: pos
+          position: pos,
         },
-        success: data => {
+        success: (data) => {
           this.setItem(data);
         },
-        error: error => {
+        error: (error) => {
           if (error.response.status == 404) {
             this.notify("چک وجود ندارد", "warning");
           }
-        }
+        },
       });
     },
     setItem(item) {
@@ -304,20 +304,24 @@ export default {
     getPaidCheques() {
       this.paidCheques = [];
 
+      let params = {
+        chequebook__id: this.chequebook.id,
+      };
+      if (this.id == undefined) {
+        params["status"] = "blank";
+      }
+
       this.request({
         url: this.endpoint("reports/lists/cheques"),
         method: "get",
         loading: false,
-        params: {
-          chequebook__id: this.chequebook.id
-          // status: "blank"
-        },
-        success: data => {
+        params: params,
+        success: (data) => {
           this.paidCheques = data;
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

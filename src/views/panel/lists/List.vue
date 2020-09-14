@@ -34,7 +34,7 @@ export default {
   components: { MDatatable },
   props: {
     form: { required: true },
-    type: {}
+    type: {},
   },
   data() {
     return {
@@ -46,8 +46,8 @@ export default {
         text: "",
         value: "detail",
         sortable: false,
-        filterable: false
-      }
+        filterable: false,
+      },
     };
   },
   created() {
@@ -61,12 +61,12 @@ export default {
       switch (this.type) {
         case "ia":
           this.options.label = "رسید های تعدیل انبار";
-          this.filters = { type : this.type };
+          this.filters = { type: this.type };
           this.options.defaultParams = this.filters;
           break;
         case "oa":
           this.options.label = "حواله های تعدیل انبار";
-          this.filters = { type : this.type };
+          this.filters = { type: this.type };
           this.options.defaultParams = this.filters;
           break;
         case "receive":
@@ -87,13 +87,13 @@ export default {
         case "received":
           this.options.label = "چک های دریافتی";
           this.filters = {
-            received_or_paid: "r"
+            received_or_paid: "r",
           };
           break;
         case "paid":
           this.options.label = "چک های پرداختی";
           this.filters = {
-            received_or_paid: "p"
+            received_or_paid: "p",
           };
           break;
         default:
@@ -132,7 +132,12 @@ export default {
         }
       }
       this.showTable = true;
-    }
+
+      this.filters = {
+        ...this.filters,
+        ...this.$route.query,
+      };
+    },
   },
   watch: {
     form() {
@@ -140,8 +145,11 @@ export default {
     },
     type() {
       this.init();
-    }
-  }
+    },
+    urlQuery() {
+      this.init();
+    },
+  },
 };
 </script>
 
