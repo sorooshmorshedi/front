@@ -31,6 +31,10 @@ export default {
           value: "id"
         },
         {
+          text: "تاریخ",
+          value: "date"
+        },
+        {
           text: "سریال",
           value: "serial"
         },

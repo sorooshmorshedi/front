@@ -14,10 +14,13 @@
   >
     <template>
       <v-row>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="2">
           <v-text-field disabled label="عطف" v-model="item.id" />
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="2">
+          <date label="تاریخ" v-model="item.date" :disabled="!isEditing" :default="true" />
+        </v-col>
+        <v-col cols="12" md="2">
           <v-text-field label="سریال" v-model="item.serial" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
@@ -38,8 +41,8 @@ import GetApi from "./GetApi";
 export default {
   props: {
     id: {
-      default: null
-    }
+      default: null,
+    },
   },
   mixins: [formsMixin, ListModalFormMixin, GetApi],
   data() {
@@ -48,7 +51,7 @@ export default {
       baseUrl: "dashtbashi/ladingBillSeries",
       leadingSlash: true,
       hasList: false,
-      hasIdProp: true
+      hasIdProp: true,
     };
   },
   methods: {
@@ -63,19 +66,19 @@ export default {
         method: "get",
         params: {
           id: this.id,
-          position: pos
+          position: pos,
         },
-        success: data => {
+        success: (data) => {
           this.setItem(data);
         },
-        error: error => {
+        error: (error) => {
           if (error.response.status == 404) {
             this.notify("حواله وجود ندارد", "warning");
           }
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
