@@ -58,7 +58,7 @@
             <v-autocomplete
               :return-object="true"
               v-if="item.contractor_type == 'cmp'"
-              label="نوع کالا"
+              label="نوع هزینه ی حمل"
               v-model="item.ware_type"
               :items="wareTypes"
               :disabled="!isEditing"

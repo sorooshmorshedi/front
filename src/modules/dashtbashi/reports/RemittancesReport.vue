@@ -28,36 +28,36 @@ export default {
       headers: [
         {
           text: "عطف",
-          value: "id"
+          value: "id",
         },
         {
           text: "شماره",
-          value: "code"
+          value: "code",
         },
         {
           text: "تاریخ صدور",
-          value: "issue_date"
+          value: "issue_date",
         },
         {
           text: "مقدار حواله",
-          value: "amount"
+          value: "amount",
+          type: "numeric",
         },
         {
           text: "مبدا",
-          value: "origin.name"
+          value: "origin.name",
         },
         {
           text: "مقصد",
-          value: "destination.name"
+          value: "destination.name",
         },
         {
           text: "پیمانکار",
-          value: "contractor.name"
-        }
-
-      ]
+          value: "contractor.name",
+        },
+      ],
     };
-  }
+  },
 };
 </script>
 
