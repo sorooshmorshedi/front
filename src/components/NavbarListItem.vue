@@ -2,6 +2,7 @@
   <v-list-item
     v-if="!hasChild"
     :to="route.to"
+    exact
     link
     :class="'level-' + level"
     flat
@@ -66,5 +67,9 @@ export default {
 }
 .level-3 {
   font-weight: 300 !important;
+}
+.v-list-item__title, .v-list-item__subtitle {
+  white-space: normal !important;
+  line-height: 1.2rem !important;
 }
 </style>

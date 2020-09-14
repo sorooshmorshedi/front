@@ -73,7 +73,7 @@ let getTitle = (name, params, routes) => {
 
 router.afterEach((to, from) => {
   Vue.nextTick(() => {
-    document.title = getTitle(to.name, to.params, navbar.data().allRoutes);
+    document.title = getTitle(to.name, to.params, navbar.computed.allRoutes());
   });
 });
 
