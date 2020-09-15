@@ -38,6 +38,7 @@
       <v-btn small @click="copySanadToNewSanad" class="teal white--text mr-1">کپی سند به سند جدید</v-btn>
 
       <v-btn
+        disabled
         small
         @click="reorderSanads"
         class="teal white--text mr-1"
