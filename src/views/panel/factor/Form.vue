@@ -6,6 +6,7 @@
       :showList="false"
       :showListBtn="!isFpi"
       :listRoute="listRoute"
+      :exportParams="(isFpi || isCw) && {id: this.id}"
       :showClearBtn="!isFpi"
       :showNavigationBtns="!isFpi"
       :showSubmitAndClearBtn="!isFpi"
@@ -48,7 +49,7 @@
           class="teal lue white--text mr-1"
           :to="{name: 'Accounts', params: {level: 3, account_type: 'p'}, query: {showForm: true}}"
         >تعریف حساب اشخاص</v-btn>
-        <v-btn @click="exportsDialog = true" class="export-btn mr-1">خروجی</v-btn>
+        <v-btn v-if="!isFpi && !isCw" @click="exportsDialog = true" class="export-btn mr-1">خروجی</v-btn>
       </template>
 
       <template>
@@ -121,9 +122,10 @@
                   <th>* تعداد</th>
                   <th>واحد</th>
 
-                  <th v-if="!isCw">* قیمت واحد</th>
-
-                  <th>جمع</th>
+                  <template v-if="!isCw">
+                    <th>* قیمت واحد</th>
+                    <th>جمع</th>
+                  </template>
 
                   <th v-if="showDiscount">تخفیف (مبلغ)</th>
                   <th v-if="showDiscount">تخفیف (درصد)</th>
@@ -158,23 +160,17 @@
                     <span v-else>-</span>
                   </td>
                   <td>
-                    <money
-                      v-model="rows[i].count"
-                      :disabled="!isEditing"
-                      decimalScale="6"
-                    />
+                    <money v-model="rows[i].count" :disabled="!isEditing" decimalScale="6" />
                   </td>
                   <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
-                  <td v-if="!isCw">
-                    <money v-model="rows[i].fee" :disabled="!isEditing" />
-                  </td>
-                  <td dir="ltr">
-                    <money
-                      :value="rowSum(rows[i])"
-                      disabled
-                      decimalScale="6"
-                    />
-                  </td>
+                  <template v-if="!isCw">
+                    <td>
+                      <money v-model="rows[i].fee" :disabled="!isEditing" />
+                    </td>
+                    <td dir="ltr">
+                      <money :value="rowSum(rows[i])" disabled decimalScale="6" />
+                    </td>
+                  </template>
                   <td v-if="showDiscount">
                     <money
                       :disabled="!isEditing || hasValue(rows[i].discountPercent)"
@@ -191,25 +187,13 @@
                     />
                   </td>
                   <td v-if="showDiscount">
-                    <money
-                      :value="rowSumAfterDiscount(row)"
-                      decimalScale="6"
-                      disabled
-                    />
+                    <money :value="rowSumAfterDiscount(row)" decimalScale="6" disabled />
                   </td>
                   <td v-if="item.has_tax">
-                    <money
-                      :value="rowTax(row)"
-                      disabled
-                      decimalScale="6"
-                    />
+                    <money :value="rowTax(row)" disabled decimalScale="6" />
                   </td>
                   <td v-if="item.has_tax">
-                    <money
-                      decimalScale="6"
-                      :value="rowSumAfterTax(row)"
-                      disabled
-                    />
+                    <money decimalScale="6" :value="rowSumAfterTax(row)" disabled />
                   </td>
                   <td>
                     <v-textarea
@@ -241,7 +225,8 @@
                   </td>
                 </tr>
                 <tr class="bg-info text-white">
-                  <td colspan="7"></td>
+                  <td colspan="6"></td>
+                  <td v-if="!isCw"></td>
                   <td v-if="showDiscount" colspan="4"></td>
                   <td v-if="showTax && item.has_tax" colspan="2"></td>
                   <td>
@@ -259,7 +244,7 @@
           <v-col cols="12" md="8" class>
             <div class="pa-3 ml-5" style="border: 1px dashed #9e9e9e">
               <div class="d-flex">
-                <h3>هزینه های </h3>
+                <h3>هزینه های</h3>
                 <v-spacer></v-spacer>
               </div>
               <v-simple-table class="mt-3">
