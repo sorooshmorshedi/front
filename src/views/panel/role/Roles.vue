@@ -250,6 +250,7 @@ export default {
         { name: "saleFactor", label: "فاکتور فروش" },
         { name: "backFromBuyFactor", label: "فاکتور برگشت از خرید" },
         { name: "backFromSaleFactor", label: "فاکتور برگشت از فروش" },
+        { name: "consumptionWareFactor", label: "حواله کالای مصرفی" },
         { name: "transfer", label: "انتقال" },
         { name: "report", label: "گزارش ها" },
         { name: "exportverifier", label: "تایید کنندگان خروجی" },
