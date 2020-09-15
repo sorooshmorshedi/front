@@ -35,28 +35,41 @@
         </v-btn>
 
         <v-btn
+          v-if="hasPerm('create.sanad')"
           class="blue white--text mr-3"
           :to="{name: 'SanadForm' }"
           @click="routeClick('SanadForm')"
         >سند</v-btn>
         <v-btn
+          v-if="hasPerm('create.saleFactor')"
           class="blue white--text mr-1"
           :to="{name: 'FactorForm', params: { type: 'sale' } }"
           @click="routeClick('FactorForm')"
         >فاکتور فروش</v-btn>
         <v-btn
+          v-if="hasPerm('create.buyFactor')"
           class="blue white--text mr-1"
           :to="{name: 'FactorForm', params: { type: 'buy' } }"
           @click="routeClick('FactorForm')"
         >فاکتور خرید</v-btn>
-        <v-btn class="blue white--text mr-1" :to="{name: 'AccountTree' }">نمودار درختی</v-btn>
-        <v-btn class="blue white--text mr-1" :to="{name: 'AccountsBalanceReport' }">تراز حساب ها</v-btn>
         <v-btn
+          v-if="hasPerm('get.account')"
+          class="blue white--text mr-1"
+          :to="{name: 'AccountTree' }"
+        >نمودار درختی</v-btn>
+        <v-btn
+          v-if="hasPerm('accountBalanceReport')"
+          class="blue white--text mr-1"
+          :to="{name: 'AccountsBalanceReport' }"
+        >تراز حساب ها</v-btn>
+        <v-btn
+          v-if="hasPerm('create.receiveTransaction')"
           class="blue white--text mr-1"
           :to="{ name: 'TransactionForm', params: { transactionType: 'receive' } }"
           @click="routeClick('TransactionForm')"
         >دریافت</v-btn>
         <v-btn
+          v-if="hasPerm('create.paymentTransaction')"
           class="blue white--text mr-1"
           :to="{ name: 'TransactionForm', params: { transactionType: 'payment' } }"
           @click="routeClick('TransactionForm')"
@@ -146,13 +159,13 @@ export default {
     mNavbar,
     mFooter,
     mSystemBar,
-    Loader
+    Loader,
   },
   data() {
     return {
       isAppReady: false,
       showDrawer: false,
-      developersDialog: false
+      developersDialog: false,
     };
   },
   computed: {
@@ -162,11 +175,11 @@ export default {
       },
       set(value) {
         localStorage.setItem("serverUrl", value);
-      }
+      },
     },
     ...mapState({
-      snackbar: state => state.snackbar
-    })
+      snackbar: (state) => state.snackbar,
+    }),
   },
   created() {
     this.getDateTime();
@@ -183,11 +196,11 @@ export default {
         url: this.endpoint(`home/time`),
         method: "get",
         token: false,
-        success: data => {
+        success: (data) => {
           let now = moment(data.time);
           this.$store.commit("setTime", now);
           this.isAppReady = true;
-        }
+        },
       });
     },
     logout() {
@@ -196,8 +209,8 @@ export default {
       if (this.$route.name != "Login") {
         this.$router.push({ name: "Login" });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
