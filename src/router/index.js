@@ -59,6 +59,7 @@ let getTitle = (name, params, routes) => {
       let is_same = route.to.name == name
       if (route.to.params && params) {
         Object.keys(params).forEach(key => {
+          if (key == 'id') return;
           is_same &= route.to.params[key] == params[key]
         })
       }
