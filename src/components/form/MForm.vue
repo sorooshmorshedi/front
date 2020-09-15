@@ -335,7 +335,7 @@ export default {
     .v-text-field--outlined.v-input--dense.v-text-field--outlined
       > .v-input__control
       > .v-input__slot {
-      min-height: 30px !important;
+      min-height: 32px !important;
     }
 
     .v-text-field.v-text-field--enclosed .v-text-field__details,

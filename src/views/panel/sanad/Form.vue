@@ -116,7 +116,6 @@
                 </td>
                 <td>
                   <v-textarea
-                    style="width: 300px"
                     v-model="rows[i].explanation"
                     :disabled="!isEditing"
                     rows="1"

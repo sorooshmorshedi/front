@@ -48,7 +48,7 @@
           :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
         />
       </v-col>
-      <v-col>
+      <v-col v-if="item.costCenterGroup || (item.floatAccounts && item.is_cost_center)">
         <account-select
           v-if="item.costCenterGroup"
           :child-of="item.costCenterGroup.id"
@@ -87,23 +87,23 @@ export default {
     floatAccount: {},
     costCenter: {},
     label: {
-      default: null
+      default: null,
     },
     placeholder: {
-      default: null
+      default: null,
     },
     disabled: {
-      default: false
+      default: false,
     },
     accountDisabled: {
       // only disables account (not float and cost center)
-      default: false
+      default: false,
     },
     itemText: {
-      default: null
+      default: null,
     },
     multiple: {
-      default: false
+      default: false,
     },
     itemsType: {
       default: "all",
@@ -125,28 +125,28 @@ export default {
           "costCenters",
           "costCenterGroups",
 
-          "imprests"
+          "imprests",
         ].includes(value);
-      }
+      },
     },
     childOf: {
-      default: null
+      default: null,
     },
     deepSelect: {
-      default: true
+      default: true,
     },
     showLedgerBtn: {
-      default: true
+      default: true,
     },
     horizontal: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       item: null,
       localFloatAccount: undefined,
-      localCostCenter: undefined
+      localCostCenter: undefined,
     };
   },
   computed: {
@@ -159,23 +159,25 @@ export default {
       let items = [];
 
       if (this.itemsType == "floatAccounts") {
-        items = this.floatAccounts.filter(o => o.is_cost_center == false);
+        items = this.floatAccounts.filter((o) => o.is_cost_center == false);
       }
 
       if (this.itemsType == "floatAccountGroups") {
-        items = this.floatAccountGroups.filter(o => o.is_cost_center == false);
+        items = this.floatAccountGroups.filter(
+          (o) => o.is_cost_center == false
+        );
       }
 
       if (this.itemsType == "costCenters") {
-        items = this.floatAccounts.filter(o => o.is_cost_center == true);
+        items = this.floatAccounts.filter((o) => o.is_cost_center == true);
       }
 
       if (this.itemsType == "costCenterGroups") {
-        items = this.floatAccountGroups.filter(o => o.is_cost_center == true);
+        items = this.floatAccountGroups.filter((o) => o.is_cost_center == true);
       }
 
       !items.length &&
-        this.accounts.forEach(item => {
+        this.accounts.forEach((item) => {
           if (this.itemsType == "all") {
             items.push(item);
           }
@@ -214,7 +216,7 @@ export default {
           if (this.itemsType == "imprests") {
             let isImprest =
               this.defaultAccounts.filter(
-                o => o.usage == "imprest" && o.account.id == item.parent
+                (o) => o.usage == "imprest" && o.account.id == item.parent
               ).length != 0;
             if (isImprest) {
               items.push(item);
@@ -223,10 +225,11 @@ export default {
         });
 
       if (this.childOf) {
-        items = items.filter(o => {
+        items = items.filter((o) => {
           if (["floatAccounts", "costCenters"]) {
             return (
-              o.floatAccountGroups.filter(o => o.id == this.childOf).length == 1
+              o.floatAccountGroups.filter((o) => o.id == this.childOf).length ==
+              1
             );
           } else {
             return o.parent == this.childOf;
@@ -250,7 +253,7 @@ export default {
           "sellers",
           "imprests",
           "floatAccountGroups",
-          "costCenterGroups"
+          "costCenterGroups",
         ].includes(this.itemsType)
       );
     },
@@ -258,7 +261,7 @@ export default {
       return ["level3", "persons", "buyers", "sellers", "imprests"].includes(
         this.itemsType
       );
-    }
+    },
   },
   created() {
     this.getDefaultAccounts();
@@ -286,9 +289,9 @@ export default {
       this.$emit("change", {
         account: this.item,
         floatAccount: this.localFloatAccount,
-        costCenter: this.localCostCenter
+        costCenter: this.localCostCenter,
       });
-    }
+    },
   },
   watch: {
     value() {
@@ -322,8 +325,8 @@ export default {
     localCostCenter() {
       this.$emit("update:costCenter", this.localCostCenter);
       this.emitChange();
-    }
-  }
+    },
+  },
 };
 </script>
 
