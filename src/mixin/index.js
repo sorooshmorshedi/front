@@ -50,6 +50,14 @@ Vue.mixin({
   },
   mounted() {},
   methods: {
+    downloadUrl(url) {
+      let element = document.createElement("a");
+      element.href = url;
+      element.target = "_blank";
+      element.rel = "noopener noreferrer";
+      element.click();
+      element.remove();
+    },
     newTab(to) {
       let routeData = this.$router.resolve(to);
       window.open(routeData.href, '_blank');

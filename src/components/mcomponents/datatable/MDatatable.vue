@@ -508,12 +508,7 @@ export default {
         if (url[url.length - 1] != "&") url += "&";
         url += "token=" + this.token;
 
-        let element = document.createElement("a");
-        element.href = url;
-        element.target = "_blank";
-        element.rel = "noopener noreferrer";
-        element.click();
-        element.remove();
+        this.downloadUrl(url);
       } else {
         if (outputFormat == "html") {
           this.print();
