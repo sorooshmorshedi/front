@@ -24,6 +24,7 @@
               rel="noopener noreferrer"
             >چاپ</v-btn>
             <v-btn small class="export-btn mr-1" :href="pdfUrl" rel="noopener noreferrer">PDF</v-btn>
+            <v-btn small class="export-btn mr-1" @click="downloadUrl(excelUrl)">اکسل</v-btn>
           </template>
         </v-card-title>
 
@@ -113,90 +114,90 @@ export default {
   components: { MDatatable },
   props: {
     showHeader: {
-      default: true
+      default: true,
     },
     title: {
-      required: true
+      required: true,
     },
     showListBtn: {
-      default: true
+      default: true,
     },
     listRoute: {
-      default: undefined
+      default: undefined,
     },
     showClearBtn: {
-      default: true
+      default: true,
     },
     exportParams: {},
 
     showList: {
-      default: true
+      default: true,
     },
     items: {
-      default: () => []
+      default: () => [],
     },
     cols: {
-      default: () => []
+      default: () => [],
     },
 
     showActions: {
-      default: true
+      default: true,
     },
     showNavigationBtns: {
-      default: true
+      default: true,
     },
     hasFirst: {
-      default: true
+      default: true,
     },
     hasPrev: {
-      default: true
+      default: true,
     },
     hasNext: {
-      default: true
+      default: true,
     },
     hasLast: {
-      default: true
+      default: true,
     },
 
     canSubmit: {
-      default: true
+      default: true,
     },
     canDelete: {
-      default: true
+      default: true,
     },
     canEdit: {
-      default: true
+      default: true,
     },
 
     isEditing: {
-      default: false
+      default: false,
     },
 
     showSubmitAndClearBtn: {
-      default: true
+      default: true,
     },
 
     canConfirm: {
-      default: false
+      default: false,
     },
     canCancelConfirm: {
-      default: false
+      default: false,
     },
     confirmBtnText: {
-      default: "تایید"
+      default: "تایید",
     },
     cancelConfirmBtnText: {
-      default: "لغو تایید"
+      default: "لغو تایید",
     },
 
     fullWidth: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       exportBaseUrl: "reports/lists/",
-      filters: {}
+      filters: {},
     };
   },
   computed: {
@@ -234,17 +235,23 @@ export default {
       let path = this.exportBaseUrl + this.listRoute.params.form + "s/pdf?";
       path = this.addParams(path);
       return this.endpoint(path);
-    }
+    },
+    excelUrl() {
+      if (!this.hasExport) return "";
+      let path = this.exportBaseUrl + this.listRoute.params.form + "s/xlsx?";
+      path = this.addParams(path);
+      return this.endpoint(path);
+    },
   },
   methods: {
     emit(event) {
       this.$emit(event);
     },
     addParams(url) {
-      Object.keys(this.listRoute.params).forEach(k => {
+      Object.keys(this.listRoute.params).forEach((k) => {
         url += k + "=" + this.listRoute.params[k] + "&";
       });
-      Object.keys(this.exportParams).forEach(k => {
+      Object.keys(this.exportParams).forEach((k) => {
         url += k + "=" + this.exportParams[k] + "&";
       });
       url += "token=" + this.token;
@@ -271,8 +278,8 @@ export default {
     rowClick(item) {
       this.$emit("update:is-editing", false);
       this.$emit("click:row", item);
-    }
-  }
+    },
+  },
 };
 </script>
 
