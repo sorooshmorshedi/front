@@ -253,7 +253,7 @@ export default {
         { name: "consumptionWareFactor", label: "حواله کالای مصرفی" },
         { name: "transfer", label: "انتقال" },
         { name: "report", label: "گزارش ها" },
-        { name: "exportverifier", label: "تایید کنندگان خروجی" },
+        { name: "exportVerifier", label: "تایید کنندگان خروجی" },
         { name: "driver", label: "راننده" },
         { name: "car", label: "ماشین" },
         { name: "driving", label: "انتصاب راننده به ماشین" },

@@ -4,6 +4,7 @@
     :items="items"
     :cols="cols"
     :deletable="item.id"
+    :is-editing.sync="isEditing"
     @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
@@ -18,8 +19,6 @@
               label=" * فرم"
               :items="forms"
               v-model="item.form"
-              item-text="label"
-              item-value="value"
             ></v-autocomplete>
           </v-col>
           <v-col cols="12">
@@ -40,15 +39,17 @@ export default {
   mixins: [ListModalFormMixin],
   data() {
     let forms = [
-      { label: "سند", value: "S" },
-      { label: "فاکتور خرید", value: "FB" },
-      { label: "فاکتور فروش", value: "FS" },
-      { label: "فاکتور برگشت از خرید", value: "FBFB" },
-      { label: "فاکتور برگشت از فروش", value: "FBFS" },
-      { label: "رسید", value: "RT" },
-      { label: "حواله", value: "RC" },
-      { label: "دریافت", value: "TR" },
-      { label: "پرداخت", value: "TP" }
+      { text: "سند", value: "s" },
+      { text: "فاکتور خرید", value: "fb" },
+      { text: "فاکتور فروش", value: "fs" },
+      { text: "فاکتور برگشت از خرید", value: "fbfb" },
+      { text: "فاکتور برگشت از فروش", value: "fbfs" },
+      { text: "دریافت", value: "tr" },
+      { text: "پرداخت", value: "tp" },
+      { text: "انتقال", value: "t" },
+      { text: "حواله کالای مصرفی", value: "cwr" },
+      { text: "رسید تعدیل انبار", value: "ia" },
+      { text: "حواله تعدیل انبار", value: "oa" },
     ];
     return {
       item: {},
@@ -60,29 +61,23 @@ export default {
         {
           text: "فرم",
           value: "form",
-          type: "select",
-          filters: ["select"],
-          options: forms
+          items: forms,
         },
         {
           text: "نام",
           value: "name",
-          type: "text",
-          filters: ["name"]
         },
         {
           text: "حساب",
           value: "account.title",
-          type: "text",
-          filters: ["account__title__icontains"]
-        }
-      ]
+        },
+      ],
     };
   },
   computed: {
     hasParent() {
       return this.level != 0;
-    }
+    },
   },
   methods: {
     getData() {
@@ -92,9 +87,9 @@ export default {
       this.request({
         url: this.endpoint("reports/exportVerifiers/"),
         method: "get",
-        success: data => {
+        success: (data) => {
           this.items = data;
-        }
+        },
       });
     },
     setItem(item) {
@@ -104,7 +99,7 @@ export default {
       let item = this.extractIds(this.item);
       item.type = this.factorType;
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
