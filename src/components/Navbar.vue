@@ -679,6 +679,33 @@ export default {
                 },
               ],
             },
+            {
+              title: "حواله کالای مصرفی",
+              children: [
+                {
+                  perm: "create.consumptionFactor",
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      type: "cw",
+                    },
+                  },
+                  title: "ثبت حواله کالای مصرفی",
+                },
+                {
+                  perm: "get.consumptionFactor",
+                  to: {
+                    name: "List",
+                    params: {
+                      form: "factor",
+                      type: "cw",
+                    },
+                  },
+                  title: "لیست حواله های کالای مصرفی",
+                },
+              ],
+            },
+            
           ],
         },
         {

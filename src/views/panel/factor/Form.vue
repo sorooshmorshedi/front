@@ -1,7 +1,7 @@
 <template>
   <div>
     <m-form
-      :title="formTitle"
+      :title="title"
       :hasIdProp="true"
       :showList="false"
       :showListBtn="!isFpi"
@@ -26,21 +26,25 @@
       <template #header-btns>
         <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
         <v-btn
-          v-if="id && !isFpi"
+          v-if="id && !isFpi && !isCw"
           @click="transactionsDialog = true"
           class="light-blue white--text mr-1"
         >مشاهده {{ transactionType.label }} ها</v-btn>
         <v-btn
-          v-if="id && !isFpi && canSubmitTransaction"
+          v-if="id && canSubmitTransaction"
           class="teal white--text mr-1"
           :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{accountId: item.account.id, factorId: id}}"
         >ثبت {{ transactionType.label }}</v-btn>
-        <v-btn v-if="id && !isBack && !isFpi" class="teal white--text mr-1" @click="reverseFactor">
+        <v-btn
+          v-if="id && !isBack && !isFpi && !isCw"
+          class="teal white--text mr-1"
+          @click="reverseFactor"
+        >
           ثبت
           <span v-html="reverseLabel"></span>
         </v-btn>
         <v-btn
-          v-if="!isFpi"
+          v-if="!isFpi && !isCw"
           class="teal lue white--text mr-1"
           :to="{name: 'Accounts', params: {level: 3, account_type: 'p'}, query: {showForm: true}}"
         >تعریف حساب اشخاص</v-btn>
@@ -50,14 +54,14 @@
       <template>
         <v-row>
           <v-col cols="12" md="2" v-if="!isFpi">
-            <v-text-field label="شماره فاکتور" disabled v-model="item.code" />
+            <v-text-field label="شماره" disabled v-model="item.code" />
           </v-col>
           <v-col cols="12" md="2" v-if="!isFpi">
             <v-text-field label="عطف" disabled :value="item.id" />
           </v-col>
           <v-col cols="12" md="2">
             <date
-              label=" * تاریخ فاکتور"
+              label=" * تاریخ"
               required
               v-model="item.date"
               :default="true"
@@ -66,18 +70,18 @@
           </v-col>
           <v-col cols="12" md="2">
             <mtime
-              label=" * ساعت فاکتور"
+              label=" * ساعت"
               required
               v-model="item.time"
               :default="true"
               :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="2" v-if="hasBijak && !isFpi">
+          <v-col cols="12" md="2" v-if="hasBijak">
             <v-text-field label="بیجک" v-model="item.bijak" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2" v-if="!isFpi">
-            <v-text-field label="نوع فاکتور" disabled :value="item.is_definite?'قطعی':'موقت'" />
+            <v-text-field label="نوع" disabled :value="item.is_definite?'قطعی':'موقت'" />
           </v-col>
           <v-col cols="12" md="4" v-if="!isFpi">
             <account-select
@@ -101,7 +105,7 @@
             ></v-textarea>
           </v-col>
 
-          <v-col cols="12" md="2" v-if="!isFpi">
+          <v-col cols="12" md="2" v-if="showTax">
             <v-switch label="فاکتور مالیات دارد" v-model="item.has_tax" :disabled="!isEditing"></v-switch>
           </v-col>
         </v-row>
@@ -116,14 +120,20 @@
                   <th>* انبار</th>
                   <th>* تعداد</th>
                   <th>واحد</th>
-                  <th>* قیمت واحد</th>
-                  <th>جمع</th>
-                  <th v-if="hasDiscount">تخفیف (مبلغ)</th>
-                  <th v-if="hasDiscount">تخفیف (درصد)</th>
-                  <th v-if="hasDiscount">جمع کل پس از تخفیف</th>
 
-                  <th v-if="item.has_tax">مالیات</th>
-                  <th v-if="item.has_tax">جمع مبلغ کل و مالیات</th>
+                  <th v-if="!isCw">* قیمت واحد</th>
+
+                  <th>جمع</th>
+
+                  <th v-if="showDiscount">تخفیف (مبلغ)</th>
+                  <th v-if="showDiscount">تخفیف (درصد)</th>
+                  <th v-if="showDiscount">جمع کل پس از تخفیف</th>
+
+                  <template v-if="showTax && item.has_tax">
+                    <th>مالیات</th>
+                    <th>جمع مبلغ کل و مالیات</th>
+                  </template>
+
                   <th>توضیحات</th>
                   <th v-if="isBuy">قیمت فروش</th>
                   <th class="d-print-none"></th>
@@ -149,48 +159,39 @@
                   </td>
                   <td>
                     <money
-                      class="form-control form-control"
                       v-model="rows[i].count"
                       :disabled="!isEditing"
                       decimalScale="6"
                     />
                   </td>
                   <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
-                  <td>
-                    <money
-                      class="form-control form-control"
-                      v-model="rows[i].fee"
-                      :disabled="!isEditing"
-                    />
+                  <td v-if="!isCw">
+                    <money v-model="rows[i].fee" :disabled="!isEditing" />
                   </td>
                   <td dir="ltr">
                     <money
-                      class="form-control form-control"
                       :value="rowSum(rows[i])"
                       disabled
                       decimalScale="6"
                     />
                   </td>
-                  <td v-if="hasDiscount">
+                  <td v-if="showDiscount">
                     <money
                       :disabled="!isEditing || hasValue(rows[i].discountPercent)"
-                      class="form-control form-control"
                       v-model="rows[i].discountValue"
                     />
                   </td>
-                  <td v-if="hasDiscount">
+                  <td v-if="showDiscount">
                     <v-text-field
                       :disabled="!isEditing || (hasValue(rows[i].discountValue) && !hasValue(rows[i].discountPercent))"
                       type="number"
                       min="0"
                       max="100"
-                      class="form-control form-control"
                       v-model="rows[i].discountPercent"
                     />
                   </td>
-                  <td v-if="hasDiscount">
+                  <td v-if="showDiscount">
                     <money
-                      class="form-control form-control"
                       :value="rowSumAfterDiscount(row)"
                       decimalScale="6"
                       disabled
@@ -198,7 +199,6 @@
                   </td>
                   <td v-if="item.has_tax">
                     <money
-                      class="form-control form-control"
                       :value="rowTax(row)"
                       disabled
                       decimalScale="6"
@@ -207,7 +207,6 @@
                   <td v-if="item.has_tax">
                     <money
                       decimalScale="6"
-                      class="form-control form-control"
                       :value="rowSumAfterTax(row)"
                       disabled
                     />
@@ -226,7 +225,6 @@
                       style="width: 80px"
                       v-if="rows[i].ware"
                       :disabled="!isEditing"
-                      class="form-control form-control"
                       v-model="rows[i].sale_price"
                     />
                   </td>
@@ -244,8 +242,8 @@
                 </tr>
                 <tr class="bg-info text-white">
                   <td colspan="7"></td>
-                  <td v-if="hasDiscount" colspan="4"></td>
-                  <td v-if="item.has_tax" colspan="2"></td>
+                  <td v-if="showDiscount" colspan="4"></td>
+                  <td v-if="showTax && item.has_tax" colspan="2"></td>
                   <td>
                     <v-btn @click="deleteItemRow(-1)" icon class="red--text" :disabled="!isEditing">
                       <v-icon>delete_sweep</v-icon>
@@ -257,11 +255,11 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="!isFpi">
+        <v-row v-if="showFactorExpenses">
           <v-col cols="12" md="8" class>
             <div class="pa-3 ml-5" style="border: 1px dashed #9e9e9e">
               <div class="d-flex">
-                <h3>هزینه های فاکتور</h3>
+                <h3>هزینه های </h3>
                 <v-spacer></v-spacer>
               </div>
               <v-simple-table class="mt-3">
@@ -322,7 +320,6 @@
                     <td>
                       <money
                         :disabled="!isEditing || hasValue(item.discountPercent)"
-                        class="form-control"
                         v-model="item.discountValue"
                         placeholder="مبلغ"
                       />
@@ -333,7 +330,6 @@
                         type="number"
                         min="0"
                         max="100"
-                        class="form-control"
                         v-model="item.discountPercent"
                         placeholder="درصد"
                       />
@@ -359,7 +355,6 @@
                         type="number"
                         min="0"
                         max="100"
-                        class="form-control"
                         v-model="item.taxPercent"
                         placeholder="درصد"
                       />
@@ -584,18 +579,18 @@ export default {
     wareApiMixin,
     getFactorExpensesApi,
     formComputed,
-    formMethods
+    formMethods,
   ],
   props: {
     type: {
-      required: true
+      required: true,
     },
     id: {
-      default: false
+      default: false,
     },
     fromId: {
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
@@ -612,8 +607,8 @@ export default {
       exportOptions: {
         summarized: false,
         hide_expenses: false,
-        hide_remain: false
-      }
+        hide_remain: false,
+      },
     };
   },
   watch: {
@@ -621,7 +616,7 @@ export default {
       handler(newRows, oldRows) {
         this.setDefaultValues();
       },
-      deep: true
+      deep: true,
     },
     factorExpensesCopy: {
       handler() {
@@ -632,15 +627,15 @@ export default {
           this.factorExpensesCopy.push({});
         }
       },
-      deep: true
+      deep: true,
     },
     "item.has_tax"() {
       if (this.item.has_tax == false) {
         this.item.taxPercent = 0;
         this.item.taxValue = 0;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

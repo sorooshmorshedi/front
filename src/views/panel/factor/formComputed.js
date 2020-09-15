@@ -23,27 +23,33 @@ export default {
     isFpi() {
       return this.type == 'fpi';
     },
-    formTitle() {
+    isCw() {
+      return this.type == 'cw';
+    },
+    title() {
       switch (this.type) {
         case "sale":
           return "فاکتور فروش";
-          break;
         case "backFromSale":
           return "فاکتور برگشت از فروش";
-          break;
         case "buy":
           return "فاکتور خرید";
-          break;
         case "backFromBuy":
           return "فاکتور برگشت از خرید";
         case "fpi":
           return "موجودی اول دوره";
-          break;
+        case "cw":
+          return "حواله ی کالای مصرفی";
       }
-
     },
-    hasDiscount() {
-      return !this.isFpi;
+    showDiscount() {
+      return !this.isFpi && !this.isCw;
+    },
+    showTax() {
+      return !this.isFpi && !this.isCw;
+    },
+    showFactorExpenses() {
+      return !this.isFpi && !this.isCw;
     },
     reverseLabel() {
       switch (this.type) {
@@ -64,7 +70,7 @@ export default {
       return sum;
     },
     canSubmitTransaction() {
-      if (!this.id) return false;
+      if (!this.id || this.isFpi || this.isCw) return false;
       return this.item.paidValue < this.sum.total;
     },
     exportLinks() {
@@ -140,6 +146,7 @@ export default {
       return res;
     },
     accountName() {
+      if (this.isCw) return "حساب"
       if (["buy", "backFromSale"].includes(this.type)) {
         return "فروشنده";
       } else {
@@ -148,7 +155,7 @@ export default {
     },
 
     hasBijak() {
-      return ["buy", "backFromBuy"].includes(this.type);
+      return ["buy", "backFromBuy"].includes(this.type) || this.isFpi;
     },
     transactionType() {
       let label;
