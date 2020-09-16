@@ -74,7 +74,12 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <account-select label="پیمانکار" v-model="item.contractor" :disabled="!isEditing" />
+            <account-select
+              label="پیمانکار"
+              v-model="item.contractor"
+              :disabled="!isEditing"
+              items-type="level3"
+            />
           </v-col>
 
           <v-col cols="12" md="3">
