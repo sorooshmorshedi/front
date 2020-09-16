@@ -55,10 +55,10 @@
       <template>
         <v-row>
           <v-col cols="12" md="2" v-if="!isFpi">
-            <v-text-field label="شماره" disabled v-model="item.code" />
+            <v-text-field label="عطف" disabled :value="item.id" />
           </v-col>
           <v-col cols="12" md="2" v-if="!isFpi">
-            <v-text-field label="عطف" disabled :value="item.id" />
+            <v-text-field label="شماره" disabled v-model="item.code" />
           </v-col>
           <v-col cols="12" md="2">
             <date
@@ -97,13 +97,22 @@
             />
           </v-col>
 
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="4">
             <v-textarea
               label="شرح"
               v-model="item.explanation"
               :disabled="!isEditing"
               @keyup.enter.stop
             ></v-textarea>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-text-field
+              v-if="item.created_by"
+              label="ثبت کننده"
+              disabled
+              v-model="item.created_by.name"
+            />
           </v-col>
 
           <v-col cols="12" md="2" v-if="showTax">
