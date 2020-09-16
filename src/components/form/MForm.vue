@@ -87,6 +87,7 @@
         <v-card-text>
           <m-datatable
             :headers="cols"
+            :api-url="apiUrl"
             :items="items"
             @click:row="rowClick"
             v-on="listeners"
@@ -134,7 +135,10 @@ export default {
       default: true,
     },
     items: {
-      default: () => [],
+      default: undefined,
+    },
+    apiUrl: {
+      default: undefined
     },
     cols: {
       default: () => [],
