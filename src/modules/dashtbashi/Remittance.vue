@@ -67,7 +67,12 @@
           <city-select label="مقصد" v-model="item.destination" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
-          <account-select label="نام پیمانکار" v-model="item.contractor" :disabled="!isEditing" />
+          <account-select
+            label="نام پیمانکار"
+            v-model="item.contractor"
+            :disabled="!isEditing"
+            items-type="level3"
+          />
         </v-col>
 
         <v-col cols="12" md="3">
@@ -124,8 +129,8 @@ import GetApi from "./GetApi";
 export default {
   props: {
     id: {
-      default: null
-    }
+      default: null,
+    },
   },
   mixins: [formsMixin, ListModalFormMixin, GetApi],
   data() {
@@ -134,7 +139,7 @@ export default {
       hasList: false,
       hasIdProp: true,
       baseUrl: "dashtbashi/remittances",
-      leadingSlash: true
+      leadingSlash: true,
     };
   },
   methods: {
@@ -149,19 +154,19 @@ export default {
         method: "get",
         params: {
           id: this.id,
-          position: pos
+          position: pos,
         },
-        success: data => {
+        success: (data) => {
           this.setItem(data);
         },
-        error: error => {
+        error: (error) => {
           if (error.response.status == 404) {
             this.notify("حواله وجود ندارد", "warning");
           }
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
