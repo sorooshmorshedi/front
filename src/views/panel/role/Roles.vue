@@ -46,7 +46,11 @@
               >انتخاب همه</v-btn>
             </div>
             <v-expansion-panels multiple class="mt-3">
-              <v-expansion-panel v-for="(model, i) in models" :key="i">
+              <v-expansion-panel
+                v-for="(model, i) in models"
+                :key="i"
+                v-if="showModelPermissions(model)"
+              >
                 <v-expansion-panel-header>
                   <v-row no-gutters>
                     <v-col>{{ model.label }}</v-col>
@@ -181,16 +185,16 @@ export default {
         "update",
         "delete",
         "firstConfirm",
-        "secondConfirm"
+        "secondConfirm",
       ],
       cols: [
         {
           text: "نام",
           value: "name",
           type: "text",
-          filters: ["name"]
-        }
-      ]
+          filters: ["name"],
+        },
+      ],
     };
   },
   computed: {
@@ -213,7 +217,7 @@ export default {
       return result;
     },
     permissions() {
-      return this.rawPermissions.filter(o => {
+      return this.rawPermissions.filter((o) => {
         let codename = o.codename;
         let f =
           !codename.startsWith("get") &&
@@ -231,7 +235,10 @@ export default {
         { name: "user", label: "کاربران" },
         { name: "company", label: "شرکت ها" },
         { name: "financialYear", label: "سال های مالی" },
-        { name: "floatAccountGroup", label: "گروه حساب شناور و مرکز هزینه و درآمد" },
+        {
+          name: "floatAccountGroup",
+          label: "گروه حساب شناور و مرکز هزینه و درآمد",
+        },
         { name: "floatAccount", label: "حساب شناور و مرکز هزینه و درآمد" },
         { name: "account", label: "حساب ها" },
         { name: "defaultAccount", label: "حساب های پیشفرض" },
@@ -263,33 +270,43 @@ export default {
         { name: "ladingBillNumber", label: "کد بارگیری" },
         { name: "lading", label: "بارگیری" },
         { name: "oilCompanyLading", label: "بارگیری شرکت نفت" },
-        { name: "otherDriverPayment", label: "پرداخت رانندگان متفرقه" }
-      ].filter(o => o.label.includes(this.modelSearch));
-    }
+        { name: "otherDriverPayment", label: "پرداخت رانندگان متفرقه" },
+      ].filter((o) => o.label.includes(this.modelSearch));
+    },
   },
   methods: {
+    showModelPermissions(model) {
+      if (!this.item || !this.item.id) return true;
+      let show = false;
+      for (let permission of this.rawPermissions) {
+        if (model.name.toLowerCase().includes(permission.contentType.model)) {
+          show |= this.item.permissions[permission.id];
+        }
+      }
+      return show;
+    },
     getPermissionBtns(model) {
       let permissionBtns = [
         {
           icon: "fa-eye",
           tootltip: "مشاهده",
-          hasOwn: true
+          hasOwn: true,
         },
         {
           icon: "fa-plus",
           tootltip: "تعریف",
-          hasOwn: false
+          hasOwn: false,
         },
         {
           icon: "fa-edit",
           tootltip: "ویرایش",
-          hasOwn: true
+          hasOwn: true,
         },
         {
           icon: "fa-trash-alt",
           tootltip: "حذف",
-          hasOwn: true
-        }
+          hasOwn: true,
+        },
       ];
       if (this.hasConfirmPermission(model)) {
         permissionBtns.push(
@@ -303,12 +320,12 @@ export default {
     hasConfirmPermission(model) {
       return (
         this.rawPermissions.filter(
-          o => o.codename == `firstConfirm.${model.name}`
+          (o) => o.codename == `firstConfirm.${model.name}`
         ).length != 0
       );
     },
     getPermissionByCodename(codename) {
-      let results = this.rawPermissions.filter(o => o.codename == codename);
+      let results = this.rawPermissions.filter((o) => o.codename == codename);
       if (results.length) return results[0];
       return null;
     },
@@ -350,14 +367,14 @@ export default {
       }
     },
     getModelPermissions(model) {
-      return this.permissions.filter(o => o.codename.includes(model));
+      return this.permissions.filter((o) => o.codename.includes(model));
     },
     getItemTemplate() {
       let item = {
         name: "",
         permissions: {},
         localPerms: {},
-        localOwnPerms: {}
+        localOwnPerms: {},
       };
 
       for (const model of this.models) {
@@ -382,7 +399,7 @@ export default {
     setItem(item) {
       this.item = {
         ...this.getItemTemplate(),
-        ...item
+        ...item,
       };
 
       let permissions = {};
@@ -413,7 +430,7 @@ export default {
       }
     },
     isCheckedPermission(permission) {
-      return this.item.permissions.filter(id => id == permission.id).length;
+      return this.item.permissions.filter((id) => id == permission.id).length;
     },
     getData() {
       this.getRoles(this.setRoles);
@@ -426,13 +443,13 @@ export default {
       this.request({
         url: this.endpoint(`users/permissions/list`),
         method: "get",
-        success: data => {
+        success: (data) => {
           this.rawPermissions = data;
           for (let permission of this.rawPermissions) {
             this.getItemTemplate().permissions[permission.id] = false;
           }
           this.clearForm();
-        }
+        },
       });
     },
     setAll({ model = null, value, justOwn = false }) {
@@ -460,7 +477,7 @@ export default {
           this.item.localOwnPerms[model] = [];
         }
       } else {
-        Object.keys(this.item.localPerms).forEach(key => {
+        Object.keys(this.item.localPerms).forEach((key) => {
           if (value) {
             this.item.localPerms[key] = [0, 1, 2, 3, 4, 5];
           } else {
@@ -473,13 +490,13 @@ export default {
     getSerialized() {
       let item = this.item;
       let permissions = [];
-      Object.keys(item.permissions).forEach(permissionId => {
+      Object.keys(item.permissions).forEach((permissionId) => {
         if (item.permissions[permissionId]) permissions.push(permissionId);
       });
       item.permissions = permissions;
       return item;
-    }
+    },
   },
-  filters: {}
+  filters: {},
 };
 </script>
