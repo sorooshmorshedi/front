@@ -49,7 +49,10 @@
       <v-row>
         <v-col cols="12" lg="6">
           <v-row>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" lg="3">
+              <v-text-field disabled label="عطف" v-model="item.id" background-color="white" />
+            </v-col>
+            <v-col cols="12" lg="3">
               <v-text-field disabled label="شماره سند" v-model="item.code" background-color="white"></v-text-field>
             </v-col>
             <v-col cols="12" lg="6">
@@ -198,7 +201,7 @@ export default {
       leadingSlash: true,
       hasList: false,
       hasIdProp: true,
-      rowKey: "account"
+      rowKey: "account",
     };
   },
   computed: {
@@ -208,29 +211,29 @@ export default {
     },
     bedSum() {
       let sum = 0;
-      this.rows.forEach(r => {
+      this.rows.forEach((r) => {
         if (r.bed) sum += +r.bed;
       });
       return sum;
     },
     besSum() {
       let sum = 0;
-      this.rows.forEach(r => {
+      this.rows.forEach((r) => {
         if (r.bes) sum += +r.bes;
       });
       return sum;
-    }
+    },
   },
   methods: {
     getItemTemplate() {
       return {
-        type: "temporary"
+        type: "temporary",
       };
     },
     getRowTemplate() {
       return {
         bed: 0,
-        bes: 0
+        bes: 0,
       };
     },
     getSanadByCode(code) {
@@ -239,18 +242,18 @@ export default {
         url: this.endpoint("sanads/getSanadByCode"),
         method: "get",
         params: {
-          code
+          code,
         },
-        success: data => {
+        success: (data) => {
           this.selectSanad(data);
-        }
+        },
       });
     },
     setItem(item) {
       this.item = item;
       this.itemsToDelete = [];
       this.rows = [];
-      item.items.forEach(item => {
+      item.items.forEach((item) => {
         let row = { ...item };
         this.rows.push(row);
       });
@@ -266,7 +269,7 @@ export default {
         for (const row of rows) {
           if (row.id) delete row.id;
           this.rows.push({
-            ...row
+            ...row,
           });
         }
       });
@@ -289,8 +292,8 @@ export default {
         item: this.extractIds(this.item),
         items: {
           ids_to_delete: this.itemsToDelete,
-          items: []
-        }
+          items: [],
+        },
       };
 
       this.rows.forEach((row, i) => {
@@ -310,12 +313,12 @@ export default {
       this.request({
         url: this.endpoint("sanads/reorder"),
         method: "post",
-        success: data => {
+        success: (data) => {
           this.successNotify();
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,6 +1,10 @@
 export default {
   url: "reports/lists/sanads",
   cols: [{
+      text: "عطف",
+      value: "id",
+    },
+    {
       text: "شماره",
       value: "code",
     },
