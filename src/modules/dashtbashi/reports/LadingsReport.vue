@@ -28,35 +28,37 @@ export default {
       headers: [
         {
           text: "شماره حواله",
-          value: "remittance.code"
+          value: "remittance.code",
         },
         {
           text: "کالا",
-          value: "ware.name"
+          value: "ware.name",
         },
         {
           text: "نرخ حواله پیمانکار",
-          value: "contractor_price"
+          value: "contractor_price",
+          type: "numeric",
         },
         {
           text: "پیمانکار",
-          value: "contractor.name"
+          value: "contractor.name",
         },
         {
           text: "نرخ کرایه",
-          value: "fare_price"
+          value: "fare_price",
+          type: "numeric",
         },
         {
           text: "مبدا",
-          value: "origin.name"
+          value: "origin.name",
         },
         {
           text: "مقصد",
-          value: "destination.name"
+          value: "destination.name",
         },
         {
           text: "حمل کننده",
-          value: "driving.driver.name"
+          value: "driving.driver.name",
         },
         {
           text: "ماشین",
@@ -66,16 +68,16 @@ export default {
         },
         {
           text: "شماره بارنامه",
-          value: "billNumber.number"
+          value: "billNumber.number",
         },
         {
           text: "مبلغ بارنامه",
           value: "bill_price",
-          type: 'numeric'
+          type: "numeric",
         },
-      ]
+      ],
     };
-  }
+  },
 };
 </script>
 
