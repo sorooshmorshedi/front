@@ -34,7 +34,7 @@
         <v-card-actions class="pb-3 flex-column flex-md-row">
           <v-btn text :to="{name: 'ForgetPassword'}">رمز عبور خود را فراموش کرده اید؟</v-btn>
           <v-spacer></v-spacer>
-          <v-btn @click="login()" class="blue white--text mr-2 w-100px">ورود</v-btn>
+          <v-btn @keyup.enter="login" @click="login" class="blue white--text mr-2 w-100px">ورود</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
     };
   },
   created() {},
@@ -58,10 +58,10 @@ export default {
         method: "post",
         data: {
           username: this.username,
-          password: this.password
+          password: this.password,
         },
         token: false,
-        success: data => {
+        success: (data) => {
           this.setToken(data.token);
           let redirectUrl = this.urlQuery.redirectUrl;
           if (redirectUrl) {
@@ -69,10 +69,10 @@ export default {
           } else {
             this.$router.push({ name: "Home" });
           }
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
