@@ -23,13 +23,20 @@
         <v-col cols="12" md="2">
           <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
         </v-col>
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="5">
           <v-textarea
             label="توضیحات"
             class="form-control"
-            rows="5"
             v-model="item.explanation"
             :disabled="!isEditing"
+          />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-text-field
+            v-if="item.created_by"
+            label="ثبت کننده"
+            disabled
+            v-model="item.created_by.name"
           />
         </v-col>
       </v-row>
@@ -118,8 +125,8 @@ export default {
   props: {
     id: {},
     type: {
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -131,8 +138,8 @@ export default {
       hasIdProp: true,
       inventory: {
         ware: null,
-        warehouses: []
-      }
+        warehouses: [],
+      },
     };
   },
   methods: {
@@ -143,11 +150,11 @@ export default {
         params: {
           id: this.item.id,
           position: position,
-          type: this.type
+          type: this.type,
         },
-        success: data => {
+        success: (data) => {
           this.setItem(data);
-        }
+        },
       });
     },
     getData() {
@@ -176,7 +183,7 @@ export default {
       item.items = items;
       item.type = this.type;
       return {
-        adjustment: item
+        adjustment: item,
       };
     },
     setItem(adjustment) {
@@ -185,7 +192,7 @@ export default {
       this.rows.push(this.copy(this.rowTemplate));
 
       this.changeRouteTo(adjustment.id);
-    }
+    },
   },
   computed: {
     title() {
@@ -194,12 +201,12 @@ export default {
     },
     sum() {
       let res = 0;
-      this.rows.forEach(row => {
+      this.rows.forEach((row) => {
         if (row.count) res += +row.count;
       });
       return res;
-    }
-  }
+    },
+  },
 };
 </script>
 

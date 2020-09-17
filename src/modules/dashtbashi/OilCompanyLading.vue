@@ -42,8 +42,17 @@
             item-value="id"
           />
         </v-col>
-        <v-col cols="12" md="12">
+        <v-col cols="12" md="9">
           <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
+        </v-col>
+
+        <v-col cols="12" md="3">
+          <v-text-field
+            v-if="item.created_by"
+            label="ثبت کننده"
+            disabled
+            v-model="item.created_by.name"
+          />
         </v-col>
 
         <v-col cols="12">
@@ -172,7 +181,7 @@ export default {
       hasIdProp: true,
       baseUrl: "dashtbashi/oilCompanyLadings",
       leadingSlash: true,
-      permissionBasename: "oilCompanyLading"
+      permissionBasename: "oilCompanyLading",
     };
   },
   computed: {
@@ -189,13 +198,13 @@ export default {
         sum += this.complicationPrice(row);
       }
       return sum;
-    }
+    },
   },
   created() {
     this.getData();
     if (this.id) {
       this.getItem();
-    } 
+    }
   },
   watch: {
     rows: {
@@ -205,15 +214,15 @@ export default {
           this.rows.push(this.getRowTemplate());
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     getItemTemplate() {
       return {
         company_commission: +this.getOptionValue(
           "companyCommissionFromOilCompanyLading"
-        )
+        ),
       };
     },
     getData() {
@@ -225,7 +234,9 @@ export default {
         gross_price: 0,
         insurance_price: 0,
         tax_percent: this.getOptionValue("taxPercent"),
-        complication_percent: this.getOptionValue("addedValuePercentOfOilCompanyLading")
+        complication_percent: this.getOptionValue(
+          "addedValuePercentOfOilCompanyLading"
+        ),
       };
     },
     taxPrice(row) {
@@ -247,18 +258,19 @@ export default {
       row.sum = sum;
       return sum;
     },
-    netPrice(row){
+    netPrice(row) {
       let value = +row.gross_price - +row.insurance_price;
       row.net_price = value;
       return value;
     },
     companyCommission(row) {
-      let value = (this.netPrice(row) * +this.item.company_commission) / 100 || 0;
+      let value =
+        (this.netPrice(row) * +this.item.company_commission) / 100 || 0;
       row.company_commission = value;
       return value;
     },
     carIncome(row) {
-      let value = (this.netPrice(row) - this.companyCommission(row)) || 0;
+      let value = this.netPrice(row) - this.companyCommission(row) || 0;
       row.car_income = value;
       return value;
     },
@@ -278,18 +290,18 @@ export default {
         method: "get",
         params: {
           id: this.id,
-          position: position
+          position: position,
         },
-        success: data => {
+        success: (data) => {
           this.setItem(data);
-        }
+        },
       });
     },
     setItem(item) {
       this.item = item;
       this.itemsToDelete = [];
       this.rows = [];
-      item.items.forEach(item => {
+      item.items.forEach((item) => {
         let row = { ...item };
         this.rows.push(row);
       });
@@ -298,7 +310,7 @@ export default {
     },
     deleteRow(index) {
       if (index == -1) {
-        this.rows.forEach(row => {
+        this.rows.forEach((row) => {
           if (row.id) this.itemsToDelete.push(row.id);
         });
         this.rows.splice(0, this.rows.length - 1);
@@ -313,8 +325,8 @@ export default {
         form: this.extractIds(this.item),
         items: {
           ids_to_delete: this.itemsToDelete,
-          items: []
-        }
+          items: [],
+        },
       };
 
       this.rows.forEach((row, i) => {
@@ -329,8 +341,8 @@ export default {
       });
 
       return data;
-    }
-  }
+    },
+  },
 };
 </script>
 

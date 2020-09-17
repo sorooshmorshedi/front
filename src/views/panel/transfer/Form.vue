@@ -20,13 +20,20 @@
         <v-col cols="12" md="2">
           <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
         </v-col>
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="5">
           <v-textarea
             label="توضیحات"
             class="form-control"
-            rows="5"
             v-model="item.explanation"
             :disabled="!isEditing"
+          />
+        </v-col>
+        <v-col cols="3">
+          <v-text-field
+            v-if="item.created_by"
+            label="ثبت کننده"
+            disabled
+            v-model="item.created_by.name"
           />
         </v-col>
       </v-row>

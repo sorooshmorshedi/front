@@ -62,8 +62,16 @@
               @update:costCenter="v => item.costCenter = v"
             />
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" md="8">
             <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-text-field
+              v-if="item.created_by"
+              label="ثبت کننده"
+              disabled
+              v-model="item.created_by.name"
+            />
           </v-col>
         </v-row>
 
@@ -296,14 +304,14 @@ export default {
   mixins: [ListModalFormMixin, accountApiMixin],
   props: {
     transactionType: {
-      required: true
+      required: true,
     },
     id: {},
     accountId: {},
     factorId: {},
     modalMode: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -323,11 +331,11 @@ export default {
         buy: "خرید",
         sale: "فروش",
         backFromBuy: "برگشت از خرید",
-        backFromSale: "برگشت از فروش"
+        backFromSale: "برگشت از فروش",
       },
       d: {
-        getNotPaidFactors: null
-      }
+        getNotPaidFactors: null,
+      },
     };
   },
   created() {
@@ -367,7 +375,7 @@ export default {
     itemPaymentMethods() {
       let type = this.transactionType == "receive" ? "receive" : "payment";
       return this.defaultAccounts.filter(
-        o => o.usage && o.usage.toLowerCase().includes(type)
+        (o) => o.usage && o.usage.toLowerCase().includes(type)
       );
     },
     itemAccounts() {
@@ -379,12 +387,12 @@ export default {
         sum += +factor.payment.value;
       }
       return sum <= this.sum;
-    }
+    },
   },
   watch: {
     "item.account"() {
       if (this.item.account) this.d.getNotPaidFactors();
-    }
+    },
   },
   methods: {
     validatePaidValue(factor) {
@@ -394,7 +402,7 @@ export default {
       } else if (paymentValue > 0) {
         let remain = +factor.remain;
         let oldPayments = 0;
-        factor.payments.forEach(payment => {
+        factor.payments.forEach((payment) => {
           if (payment.item == this.item.id) oldPayments += +payment.value;
         });
         if (paymentValue - oldPayments > remain)
@@ -409,19 +417,19 @@ export default {
         params: {
           id: this.item.id,
           position: position,
-          type: this.transactionType
+          type: this.transactionType,
         },
-        success: data => {
+        success: (data) => {
           this.setItem(data);
-        }
+        },
       });
     },
     setAccount(accountId) {
-      let account = this.itemAccounts.filter(o => o.id == accountId)[0];
+      let account = this.itemAccounts.filter((o) => o.id == accountId)[0];
       this.item.account = account;
     },
     selectNotPaidFactor(factorId) {
-      let factor = this.factors.filter(o => o.id == factorId);
+      let factor = this.factors.filter((o) => o.id == factorId);
       if (factor.length) factor = factor[0];
       else {
         console.error("Factor Not Found");
@@ -443,9 +451,9 @@ export default {
         params: {
           transactionType: this.transactionType,
           itemId: this.item.id,
-          accountId: this.item.account.id
+          accountId: this.item.account.id,
         },
-        success: data => {
+        success: (data) => {
           this.factors = [];
           for (let factor of data) {
             factor.prevPaidValue = factor.paidValue;
@@ -453,7 +461,7 @@ export default {
 
             let payment = [];
             if (this.item.id) {
-              payment = factor.payments.filter(p => {
+              payment = factor.payments.filter((p) => {
                 return p.item == this.item.id;
               });
             }
@@ -465,13 +473,13 @@ export default {
             } else {
               factor.payment = {
                 value: 0,
-                factor: factor.id
+                factor: factor.id,
               };
             }
             this.factors.push(factor);
           }
           if (this.factorId) this.selectNotPaidFactor(this.factorId);
-        }
+        },
       });
     },
     validate(clearForm) {
@@ -498,7 +506,7 @@ export default {
       });
 
       let sum = 0;
-      this.factors.forEach(factor => {
+      this.factors.forEach((factor) => {
         sum += +factor.payment.value;
       });
       if (sum != 0 && sum > this.sum) {
@@ -525,7 +533,7 @@ export default {
 
       data.items = {
         items: [],
-        ids_to_delete: this.itemsToDelete
+        ids_to_delete: this.itemsToDelete,
       };
       this.rows.forEach((row, i) => {
         if (i == this.rows.length - 1) return row;
@@ -544,9 +552,9 @@ export default {
 
       data.payments = {
         items: [],
-        ids_to_delete: []
+        ids_to_delete: [],
       };
-      this.factors.forEach(factor => {
+      this.factors.forEach((factor) => {
         let payment = factor.payment;
         data.payments.items.push(payment);
       });
@@ -587,7 +595,7 @@ export default {
 
       this.$nextTick(() => {
         this.$refs.chequeForm.setDefaults({
-          "item.account": this.item.account.id
+          "item.account": this.item.account.id,
         });
       });
     },
@@ -628,7 +636,7 @@ export default {
         account: null,
         floatAccount: null,
         costCenter: null,
-        imprestSettlements: []
+        imprestSettlements: [],
       };
     },
     splitValue(reverse = false) {
@@ -655,21 +663,21 @@ export default {
     },
     getRowTemplate() {
       return {
-        value: 0
+        value: 0,
       };
     },
     setItem(item) {
       this.rows = [];
       this.item = item;
       this.itemsToDelete = [];
-      item.items.forEach(item => {
+      item.items.forEach((item) => {
         this.rows.push(this.copy(item));
       });
       this.rows.push(this.getRowTemplate());
 
       if (!this.modalMode) this.changeRouteTo(item.id);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -70,8 +70,16 @@
             <v-col cols="12" md="2">
               <money label="مبلغ" :disabled="true" :value="imprestSum" />
             </v-col>
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="8">
               <v-textarea label="شرح سند" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-text-field
+                v-if="item.created_by"
+                label="ثبت کننده"
+                disabled
+                v-model="item.created_by.name"
+              />
             </v-col>
           </v-row>
         </v-col>
@@ -189,14 +197,14 @@ export default {
       hasList: false,
       hasIdProp: true,
       imprests: [],
-      imprest: {}
+      imprest: {},
     };
   },
   computed: {
     imprestSum() {
       if (this.imprest && this.imprest.sanad) return this.imprest.sanad.bed;
       return 0;
-    }
+    },
   },
   methods: {
     getNotSettledImprests(accountData) {
@@ -205,20 +213,20 @@ export default {
         url: this.endpoint("imprests/notSettledImprests"),
         params: this.extractIds(accountData),
         method: "get",
-        success: data => {
+        success: (data) => {
           this.imprests = data;
           let imprestId = this.urlQuery.imprest;
-          let imprests = data.filter(o => o.id == imprestId);
+          let imprests = data.filter((o) => o.id == imprestId);
           if (imprests.length) {
             this.imprest = imprests[0];
             this.isEditing = true;
           }
-        }
+        },
       });
     },
     getItemTemplate() {
       return {
-        account: null
+        account: null,
       };
     },
     getRowTemplate() {
@@ -230,11 +238,11 @@ export default {
         method: "get",
         params: {
           id: this.id,
-          position: position
+          position: position,
         },
-        success: data => {
+        success: (data) => {
           this.setItem(data);
-        }
+        },
       });
     },
 
@@ -245,7 +253,7 @@ export default {
       this.rows = [this.getRowTemplate()];
       if (this.id) {
         this.$router.push({
-          name: "ImprestSettlement"
+          name: "ImprestSettlement",
         });
       }
     },
@@ -261,7 +269,7 @@ export default {
 
       this.itemsToDelete = [];
       this.rows = [];
-      item.items.forEach(item => {
+      item.items.forEach((item) => {
         let row = { ...item };
         this.rows.push(row);
       });
@@ -269,7 +277,7 @@ export default {
     },
     deleteRow(index) {
       if (index == -1) {
-        this.rows.forEach(row => {
+        this.rows.forEach((row) => {
           if (row.id) this.itemsToDelete.push(row.id);
         });
         this.rows.splice(0, this.rows.length - 1);
@@ -284,8 +292,8 @@ export default {
         item: this.extractIds(this.item),
         items: {
           ids_to_delete: this.itemsToDelete,
-          items: []
-        }
+          items: [],
+        },
       };
 
       data.item.transaction = this.imprest.id;
@@ -300,8 +308,8 @@ export default {
       });
 
       return this.jsonToFormData(data);
-    }
-  }
+    },
+  },
 };
 </script>
 

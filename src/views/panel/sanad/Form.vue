@@ -66,7 +66,7 @@
             <v-col cols="12" lg="12">
               <v-text-field
                 v-if="item.created_by"
-                label="صادر کننده سند"
+                label="ثبت کننده"
                 disabled
                 v-model="item.created_by.name"
               />

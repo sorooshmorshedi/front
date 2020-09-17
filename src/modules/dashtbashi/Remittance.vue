@@ -114,6 +114,16 @@
         <v-col cols="12" md="6">
           <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
+
+        <v-col cols="3">
+          <v-text-field
+            v-if="item.created_by"
+            label="ثبت کننده"
+            disabled
+            v-model="item.created_by.name"
+          />
+        </v-col>
+
         <v-col cols="12" md="3">
           <v-switch label="اتمام بارگیری" v-model="item.is_finished" :disabled="!isEditing" />
         </v-col>
