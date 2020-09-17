@@ -50,7 +50,9 @@ export default {
       password: "",
     };
   },
-  created() {},
+  mounted(){
+    document.title = 'ورود'
+  },
   methods: {
     login() {
       this.request({

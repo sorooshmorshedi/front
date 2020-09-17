@@ -74,7 +74,9 @@ let getTitle = (name, params, routes) => {
 
 router.afterEach((to, from) => {
   Vue.nextTick(() => {
-    document.title = getTitle(to.name, to.params, navbar.computed.allRoutes());
+    let title = getTitle(to.name, to.params, navbar.computed.allRoutes());
+    if (!title) title = "سامانه حسابداری سبحان"
+    document.title = title
   });
 });
 
