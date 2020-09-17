@@ -41,6 +41,15 @@
         <v-col cols="12" md="2">
           <date v-model="item.date" label="تاریخ" :default="true" :disabled="this.id != undefined" />
         </v-col>
+
+        <v-col cols="2">
+          <v-text-field
+            v-if="item.created_by"
+            label="ثبت کننده"
+            disabled
+            v-model="item.created_by.name"
+          />
+        </v-col>
         <v-col cols="12" md="12">
           <v-textarea label="توضیحات" v-model="item.explanation" :disabled="this.id != undefined"></v-textarea>
         </v-col>
@@ -154,68 +163,68 @@ export default {
       ladingHeaders: [
         {
           text: "شماره حواله",
-          value: "remittance.code"
+          value: "remittance.code",
         },
         {
           text: "تاریخ بارگیری",
-          value: "lading_date"
+          value: "lading_date",
         },
         {
           text: "تاریخ بارنامه",
-          value: "bill_date"
+          value: "bill_date",
         },
         {
           text: "نام پیمانکار",
-          value: "contractor.name"
+          value: "contractor.name",
         },
         {
           text: "انعام",
-          value: "tipPrice"
+          value: "tipPrice",
         },
 
         {
           text: "درآمد ماشین",
-          value: "carIncome"
+          value: "carIncome",
         },
         {
           text: "بدهی باربری",
-          value: "cargoDebt"
-        }
+          value: "cargoDebt",
+        },
       ],
       ladings: [],
       selectedLadings: [],
       imprestHeaders: [
         {
           text: "شماره",
-          value: "code"
+          value: "code",
         },
         {
           text: "حساب",
-          value: "account.name"
+          value: "account.name",
         },
         {
           text: "شناور",
-          value: "floatAccount.name"
+          value: "floatAccount.name",
         },
         {
           text: "تاریخ",
-          value: "transaction.date"
+          value: "transaction.date",
         },
         {
           text: "مبلغ پرداختی",
-          value: "paidValue"
+          value: "paidValue",
         },
         {
           text: "مبلغ دریافتی",
-          value: "receivedValue"
+          value: "receivedValue",
         },
         {
           text: "مانده پرداخت نشده",
-          value: "remain"
-        }
+          value: "remain",
+        },
       ],
       imprests: [],
-      selectedImprests: []
+      selectedImprests: [],
     };
   },
   computed: {
@@ -239,7 +248,7 @@ export default {
     },
     payableValue() {
       return this.ladingsSum - this.cargoDebtsSum - this.imprestsSum;
-    }
+    },
   },
   methods: {
     getImprestSettledValue(imprest) {
@@ -252,10 +261,10 @@ export default {
       return imprest.sanad.bed - this.getImprestSettledValue(imprest);
     },
     getData() {
-      this.getDrivings(false, data => {
+      this.getDrivings(false, (data) => {
         let drivingId = this.urlQuery["item.driving"];
         if (drivingId) {
-          this.item.driving = data.filter(o => o.id == drivingId)[0];
+          this.item.driving = data.filter((o) => o.id == drivingId)[0];
           this.getDrivingData(this.item.driving);
         }
       });
@@ -265,7 +274,7 @@ export default {
       this.paymentDialog = true;
       this.$nextTick(() => {
         this.$refs.transactionForm.setDefaults({
-          "rows.0.value": this.payableValue
+          "rows.0.value": this.payableValue,
         });
       });
     },
@@ -281,20 +290,20 @@ export default {
         method: "get",
         params: {
           dirving: driving.id,
-          is_paid: false
+          is_paid: false,
         },
-        success: data => {
+        success: (data) => {
           this.ladings = data;
           if (this.item.remittance) {
             this.selectedLadings = this.ladings.filter(
-              o =>
+              (o) =>
                 !o.remittance ||
                 (o.remittance.id == this.item.remittance &&
                   this.item.selectedLadings.includes(String(o.id)))
             );
           }
           callback && callback(data);
-        }
+        },
       });
     },
     validate(payment) {
@@ -317,33 +326,33 @@ export default {
     getDriverNotSettledImprests(driving, callback = null) {
       console.log({
         account: driving.car.payableAccount,
-        floatAccount: driving.driver.floatAccount
+        floatAccount: driving.driver.floatAccount,
       });
       this.request({
         url: this.endpoint("imprests/notSettledImprests"),
         params: {
           account: driving.car.payableAccount,
-          floatAccount: driving.driver.floatAccount
+          floatAccount: driving.driver.floatAccount,
         },
         method: "get",
-        success: data => {
+        success: (data) => {
           this.imprests = data;
           if (this.item.remittance) {
             this.selectedImprests = this.imprests;
           }
           callback && callback(data);
-        }
+        },
       });
     },
     getItemTemplate() {
       return {
         ladings: [],
-        imprests: []
+        imprests: [],
       };
     },
     getRowTemplate() {
       return {
-        tax_percent: this.getOptionValue("taxPercent")
+        tax_percent: this.getOptionValue("taxPercent"),
       };
     },
     getItemByPosition(position) {
@@ -352,11 +361,11 @@ export default {
         method: "get",
         params: {
           id: this.id,
-          position: position
+          position: position,
         },
-        success: data => {
+        success: (data) => {
           this.setItem(data);
-        }
+        },
       });
     },
     setItem(item) {
@@ -374,7 +383,7 @@ export default {
     },
     deleteRow(index) {
       if (index == -1) {
-        this.rows.forEach(row => {
+        this.rows.forEach((row) => {
           if (row.id) this.itemsToDelete.push(row.id);
         });
         this.rows.splice(0, this.rows.length - 1);
@@ -387,11 +396,11 @@ export default {
     getSerialized() {
       let data = {
         item: this.extractIds(this.item),
-        payment: this.extractIds(this.payment)
+        payment: this.extractIds(this.payment),
       };
 
-      data.item.ladings = this.selectedLadings.map(o => o.id);
-      data.item.imprests = this.selectedImprests.map(o => o.id);
+      data.item.ladings = this.selectedLadings.map((o) => o.id);
+      data.item.imprests = this.selectedImprests.map((o) => o.id);
 
       data.payment.account = this.item.driving.car.payableAccount;
       data.payment.floatAccount = this.item.driving.driver.floatAccount;
@@ -408,8 +417,8 @@ export default {
       this.imprests = [];
       this.changeRouteTo(null);
       this.see;
-    }
-  }
+    },
+  },
 };
 </script>
 
