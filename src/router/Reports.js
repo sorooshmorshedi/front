@@ -2,6 +2,8 @@ import Panel from '@/views/panel/Panel.vue';
 
 import List from '@/views/panel/lists/List.vue';
 
+import AccountsCoding from '../views/panel/account/Coding';
+
 import AccountsBalance from '../views/panel/balance/accounts/AccountsBalance.vue';
 import FloatAccountsBalanceByGroup from '../views/panel/balance/floatAccountsByGroup/FloatAccountsBalanceByGroup.vue';
 import FloatAccountsBalance from '../views/panel/balance/floatAccounts/FloatAccountsBalance.vue';
@@ -32,6 +34,11 @@ export default [{
           ...route.query
         }
       },
+    },
+    {
+      name: 'AccountsCoding',
+      path: 'accountsCoding',
+      component: AccountsCoding,
     },
     {
       name: 'AccountsBalanceReport',

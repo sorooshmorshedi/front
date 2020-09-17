@@ -240,7 +240,6 @@ export default {
       tableItems: this.items,
       selectedItems: [],
       loading: false,
-      showSelect: false,
       options: {},
       apiResponse: null,
 
@@ -492,49 +491,53 @@ export default {
       return url;
     },
     exportTo(outputFormat) {
-      if (this.serverProcessing || this.serverExport) {
-        let url = this.getExportUrl(outputFormat);
-        if (this.selectedItems.length) {
-          url += "id__in=" + this.selectedItems.map((o) => o.id).join(",");
+      this.$store.commit("setIsPrinting", true);
+      this.$nextTick(() => {
+        if (this.serverProcessing || this.serverExport) {
+          let url = this.getExportUrl(outputFormat);
+          if (this.selectedItems.length) {
+            url += "id__in=" + this.selectedItems.map((o) => o.id).join(",");
+          } else {
+            let filters = {
+              ...this.filters,
+              search: this.search,
+            };
+            Object.keys(filters).forEach((k) => {
+              if (this.filters[k]) url += k + "=" + this.filters[k] + "&";
+            });
+          }
+          if (url[url.length - 1] != "&") url += "&";
+          url += "token=" + this.token;
+
+          this.downloadUrl(url);
         } else {
-          let filters = {
-            ...this.filters,
-            search: this.search,
-          };
-          Object.keys(filters).forEach((k) => {
-            if (this.filters[k]) url += k + "=" + this.filters[k] + "&";
-          });
+          if (outputFormat == "html") {
+            this.print();
+            return;
+            let doc = new jsPDF();
+
+            doc.html(document.body, {
+              callback: function (doc) {
+                doc.page = 1;
+                doc.save();
+              },
+            });
+            // this.print();
+          } else if (outputFormat == "xlsx") {
+            let workbook = XLSX.utils.table_to_book(
+              document.getElementById("datatable")
+            );
+            let wb = workbook;
+
+            if (!wb.Workbook) wb.Workbook = {};
+            if (!wb.Workbook.Views) wb.Workbook.Views = [];
+            if (!wb.Workbook.Views[0]) wb.Workbook.Views[0] = {};
+            wb.Workbook.Views[0].RTL = true;
+            XLSX.writeFile(workbook, "export.xlsx");
+          }
         }
-        if (url[url.length - 1] != "&") url += "&";
-        url += "token=" + this.token;
-
-        this.downloadUrl(url);
-      } else {
-        if (outputFormat == "html") {
-          this.print();
-          return;
-          let doc = new jsPDF();
-
-          doc.html(document.body, {
-            callback: function (doc) {
-              doc.page = 1;
-              doc.save();
-            },
-          });
-          // this.print();
-        } else if (outputFormat == "xlsx") {
-          let workbook = XLSX.utils.table_to_book(
-            document.getElementById("datatable")
-          );
-          let wb = workbook;
-
-          if (!wb.Workbook) wb.Workbook = {};
-          if (!wb.Workbook.Views) wb.Workbook.Views = [];
-          if (!wb.Workbook.Views[0]) wb.Workbook.Views[0] = {};
-          wb.Workbook.Views[0].RTL = true;
-          XLSX.writeFile(workbook, "export.xlsx");
-        }
-      }
+        this.$store.commit("setIsPrinting", false);
+      });
     },
     getItemValue(item, dotNotationString) {
       return dotNotationString.split(".").reduce((o, i) => {

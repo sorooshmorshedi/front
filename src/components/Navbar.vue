@@ -785,6 +785,13 @@ export default {
           title: "گزارش",
           children: [
             {
+              perm: "accountsCodingReport",
+              to: {
+                name: "AccountsCoding",
+              },
+              title: "گزارش کدینگ حساب ها",
+            },
+            {
               title: "دفاتر حسابداری",
               children: [
                 {

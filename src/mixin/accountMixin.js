@@ -83,6 +83,31 @@ export default {
     },
   },
   methods: {
+    getSortedAccounts(accounts, reverse = false) {
+      reverse = reverse ? 0 : 1
+
+      accounts.sort((a, b) => b.id - a.id);
+
+      accounts.sort((a, b) => a.code - b.code);
+      let getChildren = (account) => {
+        return accounts.filter(
+          (o) => o.code.startsWith(account.code) && o.level == account.level + 1
+        );
+      };
+
+      let sortedAccounts = this.accounts.filter((o) => o.level == 0);
+
+      for (let i = 0; i < 3; i++) {
+        for (let account of accounts.filter((o) => o.level == i)) {
+          sortedAccounts.splice(
+            sortedAccounts.indexOf(account) + reverse,
+            0,
+            ...getChildren(account)
+          );
+        }
+      }
+      return sortedAccounts;
+    },
     getAccounts(force = false, init = false) {
       if (!force && this.accounts.length) return;
       if (this.isGetting.accounts) return;

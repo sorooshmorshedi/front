@@ -72,13 +72,13 @@
           <m-datatable
             ref="datatable"
             :headers="headers"
-            :items="accounts"
+            :items="items"
             :hidden-cols="hiddenCols"
             :searchable="false"
             :export-url="url"
             :filters.sync="filters"
             show-expand
-            :expanded.sync="accounts"
+            :expanded.sync="items"
           >
             <template #item.data-table-expand></template>
 
@@ -146,9 +146,11 @@
 import date from "@/components/mcomponents/cleave/Date";
 import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import datatableBaseCols from "./_datatableBaseCols";
+import AccountApiMixin from "@/mixin/accountMixin";
 import _ from "lodash";
 export default {
   name: "Balance",
+  mixins: [AccountApiMixin],
   components: { date, MDatatable },
   props: {
     title: {
@@ -172,7 +174,7 @@ export default {
       filters: {},
 
       allAccounts: [],
-      accounts: [],
+      items: [],
       debouncedGetData: null,
       debouncedFilterAccounts: null,
 
@@ -205,7 +207,7 @@ export default {
     sum() {
       let bed = 0,
         bes = 0;
-      for (const account of this.accounts) {
+      for (const account of this.items) {
         if (this.accountFilters.level == "all" && account.level != undefined) {
           if (account.level == 0) {
             bed += +account.bed_sum;
@@ -354,33 +356,10 @@ export default {
 
         return true;
       });
-
-      accounts.sort((a, b) => b.id - a.id);
-
-      accounts.sort((a, b) => a.code - b.code);
-
-      let getChildren = (account) => {
-        return accounts.filter(
-          (o) => o.code.startsWith(account.code) && o.level == account.level + 1
-        );
-      };
-
       if (accounts.length && accounts[0].level != undefined) {
-        let sortedAccounts = accounts.filter((o) => o.level == 0);
-
-        for (let i = 0; i < 3; i++) {
-          for (let account of accounts.filter((o) => o.level == i)) {
-            sortedAccounts.splice(
-              sortedAccounts.indexOf(account),
-              // sortedAccounts.indexOf(account) + 1, // for sorting from kol to tafsili
-              0,
-              ...getChildren(account)
-            );
-          }
-        }
-        this.accounts = sortedAccounts;
+        this.items = this.getSortedAccounts(accounts, true);
       } else {
-        this.accounts = accounts;
+        this.items = accounts;
       }
     },
     clearFilters() {
