@@ -365,7 +365,7 @@ export default {
         );
       };
 
-      if (accounts.length && accounts[0].level) {
+      if (accounts.length && accounts[0].level != undefined) {
         let sortedAccounts = accounts.filter((o) => o.level == 0);
 
         for (let i = 0; i < 3; i++) {
