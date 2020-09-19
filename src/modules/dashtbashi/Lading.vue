@@ -20,14 +20,23 @@
       <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
     </template>
     <template>
-      <v-row v-if="!id">
-        <v-col cols="12">
-          <v-switch label="بارگیری سیستمی" v-model="hasRemittance"></v-switch>
+      <v-row>
+        <v-col cols="12" md="2">
+          <v-text-field label="عطف" v-model="item.id" :disabled="true" />
         </v-col>
-      </v-row>
-      <template v-if="hasRemittance">
-        <v-row>
-          <v-col cols="12" md="3">
+        <v-col cols="12" md="2">
+          <v-autocomplete
+            :return-object="true"
+            label="نوع بارگیری"
+            v-model="item.type"
+            :disabled="!isEditing"
+            :items="types"
+            item-value="id"
+            clearable
+          />
+        </v-col>
+        <template v-if="hasRemittance">
+          <v-col cols="12" md="2">
             <v-autocomplete
               :return-object="true"
               label="شماره حواله"
@@ -40,95 +49,6 @@
               clearable
             />
           </v-col>
-          <v-col cols="12" md="3">
-            <ware-select label="کالا" v-model="item.ware" :disabled="!isEditing" />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-              :return-object="false"
-              label="نوع پیمانکار"
-              v-model="item.contractor_type"
-              :items="contractorTypes"
-              :disabled="!isEditing"
-              item-text="title"
-              item-value="id"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-              :return-object="true"
-              v-if="item.contractor_type == 'cmp'"
-              label="نوع هزینه ی حمل"
-              v-model="item.ware_type"
-              :items="wareTypes"
-              :disabled="!isEditing"
-              item-text="title"
-              item-value="id"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-              label="نرخ حواله پیمانکار"
-              v-model="item.contractor_price"
-              :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <account-select
-              label="پیمانکار"
-              v-model="item.contractor"
-              :disabled="!isEditing"
-              items-type="level3"
-            />
-          </v-col>
-
-          <v-col cols="12" md="3">
-            <money
-              label="مبلغ اختلاف بارنامه"
-              v-model="item.lading_bill_difference"
-              :disabled="!isEditing"
-            />
-          </v-col>
-
-          <v-col cols="12" md="3">
-            <v-autocomplete
-              :return-object="true"
-              label="روش پرداخت مبلغ حواله"
-              v-model="item.remittance_payment_method"
-              :items="remittancePaymentMethods"
-              :disabled="!isEditing"
-              item-text="title"
-              item-value="id"
-            />
-          </v-col>
-
-          <v-col cols="12" md="3">
-            <money label="نرخ کرایه" v-model="item.fare_price" :disabled="!isEditing" />
-          </v-col>
-
-          <v-col cols="12" md="3">
-            <city-select label="مبدا" v-model="item.origin" :disabled="!isEditing" />
-          </v-col>
-          <v-col cols="12" md="3">
-            <city-select label="مقصد" v-model="item.destination" :disabled="!isEditing" />
-          </v-col>
-
-          <v-col cols="12" md="3">
-            <money label="انعام راننده" v-model="item.driver_tip_price" :disabled="!isEditing" />
-          </v-col>
-
-          <v-col cols="12" md="3">
-            <v-autocomplete
-              :return-object="true"
-              label="پرداخت کننده انعام"
-              v-model="item.driver_tip_payer"
-              :items="tipPayers"
-              :disabled="!isEditing"
-              item-text="title"
-              item-value="id"
-            />
-          </v-col>
-
           <v-col cols="12" md="3">
             <v-text-field
               label="شماره بارگیری"
@@ -145,6 +65,71 @@
             />
           </v-col>
           <v-col cols="12" md="3">
+            <ware-select label="کالا" v-model="item.ware" :disabled="!isEditing" />
+          </v-col>
+
+          <v-col cols="12" md="3">
+            <account-select
+              label="پیمانکار"
+              v-model="item.contractor"
+              :disabled="!isEditing"
+              items-type="level3"
+            />
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <money
+              label="نرخ حواله پیمانکار"
+              v-model="item.contractor_price"
+              :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <money label="نرخ کرایه" v-model="item.fare_price" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="2">
+            <money
+              label="فی کمیسیون"
+              v-model="+item.contractor_price - +item.fare_price"
+              :disabled="true"
+            />
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <money label="انعام راننده" v-model="item.driver_tip_price" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+              :return-object="true"
+              label="پرداخت کننده انعام"
+              v-model="item.driver_tip_payer"
+              :items="tipPayers"
+              :disabled="!isEditing"
+              item-text="title"
+              item-value="id"
+            />
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <money
+              label="مبلغ اختلاف بارنامه"
+              v-model="item.lading_bill_difference"
+              :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+              :return-object="true"
+              label="روش پرداخت مبلغ حواله"
+              v-model="item.remittance_payment_method"
+              :items="remittancePaymentMethods"
+              :disabled="!isEditing"
+              item-text="title"
+              item-value="id"
+            />
+          </v-col>
+
+          <v-col cols="12" md="2">
             <money
               label="مقدار بارنامه مبدا"
               v-model="item.original_amount"
@@ -152,7 +137,7 @@
               @input="!is_destination_amount_dirty?item.destination_amount = item.original_amount:''"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
               label="مقدار بارنامه مقصد"
               v-model="item.destination_amount"
@@ -160,11 +145,41 @@
               @input="is_destination_amount_dirty = true"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
+            <city-select label="مبدا" v-model="item.origin" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="2">
+            <city-select label="مقصد" v-model="item.destination" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="2">
             <v-file-input label="فایل" />
           </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+              :return-object="false"
+              label="نوع پیمانکار"
+              v-model="item.contractor_type"
+              :items="contractorTypes"
+              :disabled="!isEditing"
+              item-text="title"
+              item-value="id"
+            />
+          </v-col>
 
-          <v-col cols="3">
+          <v-col cols="12" md="2">
+            <v-autocomplete
+              :return-object="true"
+              v-if="item.contractor_type == 'cmp'"
+              label="نوع هزینه ی حمل"
+              v-model="item.ware_type"
+              :items="wareTypes"
+              :disabled="!isEditing"
+              item-text="title"
+              item-value="id"
+            />
+          </v-col>
+
+          <v-col cols="12" md="2">
             <v-text-field
               v-if="item.created_by"
               label="ثبت کننده"
@@ -173,26 +188,25 @@
             />
           </v-col>
 
-          <v-col cols="12">
+          <v-col cols="12" md="6">
             <v-textarea
               label="توضیحات بارگیری"
               v-model="item.lading_explanation"
               :disabled="!isEditing"
             />
           </v-col>
-
           <template v-if="item.driving">
-            <v-col cols="3">
+            <v-col cols="2">
               <money label="مبلغ کل" :value="ladingTotalValue" disabled />
             </v-col>
-            <v-col cols="3">
+            <v-col cols="2">
               <money
                 :label="'درآمد کمسیون ' + (item.driving.car.owner == 'o'?'متفرقه': 'شرکت')"
                 :value="companyCommissionIncome"
                 disabled
               />
             </v-col>
-            <v-col cols="3">
+            <v-col cols="2">
               <money
                 :label="item.driving.car.owner == 'o'?'حساب پرداختنی راننده متفرقه':'درآمد ماشین'"
                 :value="carIncome"
@@ -204,16 +218,13 @@
           <v-col cols="12">
             <v-divider color="indigo" style="border-width: 2px;"></v-divider>
           </v-col>
-        </v-row>
-      </template>
+        </template>
+      </v-row>
       <v-row>
         <v-col cols="12">
           <v-card-title class="py-0">بارنامه دولتی</v-card-title>
         </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field label="عطف" v-model="item.id" :disabled="true" />
-        </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="4">
           <v-autocomplete
             :return-object="true"
             label="حمل کننده"
@@ -225,27 +236,7 @@
           />
         </v-col>
 
-        <v-col cols="12" md="3">
-          <money label="انعام باربری" v-model="item.cargo_tip_price" :disabled="!isEditing" />
-        </v-col>
-
-        <v-col cols="12" md="3">
-          <v-autocomplete
-            :return-object="true"
-            label="انجمن"
-            v-model="item.association"
-            :items="$store.state.associations"
-            item-text="name"
-            item-value="id"
-            :disabled="!isEditing"
-            @change="item.association_price = item.association.price"
-          />
-        </v-col>
-        <v-col cols="12" md="3">
-          <money label="مبلغ انجمن" v-model="item.association_price" :disabled="!isEditing" />
-        </v-col>
-
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="2">
           <v-autocomplete
             :return-object="true"
             label="سری بارنامه"
@@ -260,7 +251,7 @@
             clearable
           ></v-autocomplete>
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="2">
           <v-autocomplete
             :return-object="true"
             label="شماره بارنامه"
@@ -271,7 +262,7 @@
             :disabled="!isEditing"
           ></v-autocomplete>
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="2">
           <date
             label="تاریخ بارنامه"
             v-model="item.bill_date"
@@ -279,11 +270,31 @@
             :disabled="!isEditing"
           />
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="2">
           <money label="مبلغ بارنامه" v-model="item.bill_price" :disabled="!isEditing" />
         </v-col>
 
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="2">
+          <money label="انعام باربری" v-model="item.cargo_tip_price" :disabled="!isEditing" />
+        </v-col>
+
+        <v-col cols="12" md="2">
+          <v-autocomplete
+            :return-object="true"
+            label="انجمن"
+            v-model="item.association"
+            :items="$store.state.associations"
+            item-text="name"
+            item-value="id"
+            :disabled="!isEditing"
+            @change="item.association_price = item.association.price"
+          />
+        </v-col>
+        <v-col cols="12" md="2">
+          <money label="مبلغ انجمن" v-model="item.association_price" :disabled="!isEditing" />
+        </v-col>
+
+        <v-col cols="12" md="2">
           <v-autocomplete
             :return-object="true"
             label="نحوه دریافت"
@@ -294,11 +305,15 @@
             item-value="id"
           />
         </v-col>
-        <v-col cols="12" md="3">
+
+        <v-col cols="12" md="4">
+          <money label="ارزش افزوده بارنامه دولتی" :disabled="!isEditing" />
+        </v-col>
+        <v-col cols="12" md="2">
           <v-file-input label="فایل"></v-file-input>
         </v-col>
 
-        <v-col cols="12" md="9">
+        <v-col cols="12" md="4">
           <v-textarea
             label="توضیحات بارنامه"
             v-model="item.bill_explanation"
@@ -306,7 +321,7 @@
           />
         </v-col>
 
-        <v-col cols="3">
+        <v-col cols="6">
           <money label="مبلغ کل بارنامه" :value="billTotalPrice" disabled />
         </v-col>
       </v-row>
@@ -347,6 +362,22 @@ export default {
       wareTypes: [
         { id: "b", title: "خریداری شده" },
         { id: "s", title: "فروش رفته" },
+      ],
+      types: [
+        {
+          // سیستمی
+          text: "بارگیری کامل",
+          id: "fl",
+        },
+        {
+          // غیر سیستمی
+          text: "بارنامه دولتی",
+          id: "gl",
+        },
+        {
+          text: "بار آزاد رنگی",
+          id: "fcl",
+        },
       ],
     };
   },

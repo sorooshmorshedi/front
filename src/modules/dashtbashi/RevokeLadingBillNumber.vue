@@ -12,9 +12,9 @@
           <v-btn
             @click="revokeLadingBillNumber(item, null)"
             v-if="item.is_revoked"
-            color="blue white--text"
+            color="red white--text"
           >لغو ابطال</v-btn>
-          <v-btn @click="openRevokeDialog(item)" v-else color="red white--text">ابطال</v-btn>
+          <v-btn @click="openRevokeDialog(item)" v-else color="blue white--text">ابطال</v-btn>
         </template>
       </m-datatable>
     </v-card-text>
@@ -82,6 +82,8 @@ export default {
         {
           text: "",
           value: "detail",
+          filterable: false,
+          sortable: false,
         },
       ];
     },
@@ -103,7 +105,7 @@ export default {
         success: (data) => {
           this.successNotify();
           item.is_revoked = !item.is_revoked;
-          if (!item.is_revoked) item.revoked_at = null;
+          item.revoked_at = date;
           this.dialog = false;
         },
       });

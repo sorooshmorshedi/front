@@ -34,7 +34,7 @@
 
       <template #item.activate="{ item }">
         <v-btn
-          v-if="financialYear.id != item.id"
+          v-if="!financialYear || financialYear.id != item.id"
           @click="activeFinancialYear(item)"
           color="blue"
           icon

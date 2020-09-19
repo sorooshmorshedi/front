@@ -16,7 +16,7 @@
     <template #default>
       <v-row>
         <v-col cols="12" md="6">
-          <label>شماره ماشین</label>
+          <label>* شماره ماشین</label>
           <v-row no-gutters class="flex-row-reverse">
             <v-col cols="3">
               <div
@@ -113,7 +113,19 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="0" md="6"></v-col>
+        <v-col cols="12" md="6">
+          <v-autocomplete
+            class="mt-5"
+            label="* نوع پیمان"
+            v-model="item.type"
+            :items="types"
+            item-text="text"
+            item-value="id"
+            :disabled="!isEditing"
+            :return-object="true"
+          />
+        </v-col>
+
         <v-col cols="12" md="6">
           <v-text-field
             label="شماره کارت هوشمند"
@@ -123,7 +135,7 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-autocomplete
-            label="مالک"
+            label=" * مالک"
             v-model="item.owner"
             :items="owners"
             item-text="text"
@@ -142,7 +154,7 @@
           <v-text-field label="VIN" v-model="item.vin" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="نوع" v-model="item.type" :disabled="!isEditing" />
+          <v-text-field label="نوع" v-model="item.car_type" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field label="سیستم" v-model="item.system" :disabled="!isEditing" />
@@ -190,61 +202,71 @@ export default {
       baseUrl: "dashtbashi/cars",
       permissionBasename: "car",
       leadingSlash: true,
+      types: [
+        {
+          text: "حمل و نقل",
+          id: "t",
+        },
+        {
+          text: "رنگی",
+          id: "c",
+        },
+      ],
       owners: [
         {
           text: "حاج رحمان",
-          id: "rn"
+          id: "rn",
         },
         {
           text: "حاج رحیم",
-          id: "rm"
+          id: "rm",
         },
         {
           text: "حاج ابراهیم",
-          id: "e"
+          id: "e",
         },
         {
           text: "شراکتی",
-          id: "c"
+          id: "c",
         },
         {
           text: "دیگر",
-          id: "o"
-        }
+          id: "o",
+        },
       ],
       cols: [
         {
           text: "شماره",
           value: "car_number_str",
           type: "text",
-          filters: ["car_number_str"]
-        }
-      ]
+          filters: ["car_number_str"],
+        },
+      ],
     };
   },
   computed: {
     items() {
       return this.$store.state.cars;
-    }
+    },
   },
   mounted() {
     IMask(document.getElementById("car-number-1"), {
-      mask: "00"
+      mask: "00",
     });
     IMask(document.getElementById("car-number-2"), {
-      mask: "a"
+      mask: "a",
     });
     IMask(document.getElementById("car-number-3"), {
-      mask: "000"
+      mask: "000",
     });
     IMask(document.getElementById("car-number-4"), {
-      mask: "00"
+      mask: "00",
     });
   },
   methods: {
     getItemTemplate() {
       return {
-        car_number: [null, null, null, null]
+        car_number: [null, null, null, null],
       };
     },
     getData() {
@@ -253,7 +275,7 @@ export default {
     getSerialized() {
       let item = this.extractIds(this.item);
       return item;
-    }
-  }
+    },
+  },
 };
 </script>

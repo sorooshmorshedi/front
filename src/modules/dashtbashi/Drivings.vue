@@ -18,7 +18,7 @@
         <v-col cols="12" md="6">
           <v-autocomplete
             :return-object="true"
-            label="ماشین"
+            label="* ماشین"
             v-model="item.car"
             :items="$store.state.cars"
             item-text="car_number_str"
@@ -29,7 +29,7 @@
         <v-col cols="12" md="6">
           <v-autocomplete
             :return-object="true"
-            label="راننده"
+            label="* راننده"
             v-model="item.driver"
             :disabled="!isEditing"
             :items="$store.state.drivers"

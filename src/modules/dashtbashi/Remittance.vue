@@ -61,21 +61,6 @@
           <money label="نرخ کرایه" v-model="item.fare_price" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
-          <city-select label="مبدا" v-model="item.origin" :disabled="!isEditing" />
-        </v-col>
-        <v-col cols="12" md="3">
-          <city-select label="مقصد" v-model="item.destination" :disabled="!isEditing" />
-        </v-col>
-        <v-col cols="12" md="3">
-          <account-select
-            label="نام پیمانکار"
-            v-model="item.contractor"
-            :disabled="!isEditing"
-            items-type="level3"
-          />
-        </v-col>
-
-        <v-col cols="12" md="3">
           <money label="انعام" v-model="item.driver_tip_price" :disabled="!isEditing" />
         </v-col>
 
@@ -108,6 +93,21 @@
             :disabled="!isEditing"
             item-text="title"
             item-value="id"
+          />
+        </v-col>
+
+        <v-col cols="12" md="3">
+          <city-select label="مبدا" v-model="item.origin" :disabled="!isEditing" />
+        </v-col>
+        <v-col cols="12" md="3">
+          <city-select label="مقصد" v-model="item.destination" :disabled="!isEditing" />
+        </v-col>
+        <v-col cols="12" md="3">
+          <account-select
+            label="نام پیمانکار"
+            v-model="item.contractor"
+            :disabled="!isEditing"
+            items-type="level3"
           />
         </v-col>
 
