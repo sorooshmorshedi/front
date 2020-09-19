@@ -1013,6 +1013,7 @@ export default {
         },
         {
           title: "حمل و نقل",
+          module: "dashtbashi",
           children: [
             {
               title: "اطلاعات پایه",
@@ -1170,7 +1171,10 @@ export default {
       let setVisibility = (route) => {
         let visible = false;
 
-        if (route.perm) {
+        if (route.module && !this.user.modules.includes(route.module)) {
+          console.log(route.module);
+          visible = false;
+        } else if (route.perm) {
           visible = this.hasPerm("", route.perm);
         } else if (route.children) {
           for (let child of route.children) {

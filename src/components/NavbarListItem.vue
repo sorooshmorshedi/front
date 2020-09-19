@@ -13,7 +13,7 @@
     </v-list-item-content>
   </v-list-item>
 
-  <v-list-group v-else no-action :sub-group="subGroup">
+  <v-list-group v-else-if="route.show" no-action :sub-group="subGroup">
     <template #activator>
       <v-list-item flat>
         <v-list-item-content>
@@ -43,7 +43,7 @@ export default {
   computed: {
     hasChild() {
       return this.route.children && this.route.children.length;
-    }
+    },
   },
   beforeCreate() {
     this.$options.components.NavbarListItem = require("./NavbarListItem.vue").default;
@@ -53,8 +53,8 @@ export default {
       if (this.$route.name == route.to.name) {
         this.EventBus.$emit("sameRouteClick");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -68,7 +68,8 @@ export default {
 .level-3 {
   font-weight: 300 !important;
 }
-.v-list-item__title, .v-list-item__subtitle {
+.v-list-item__title,
+.v-list-item__subtitle {
   white-space: normal !important;
   line-height: 1.2rem !important;
 }
