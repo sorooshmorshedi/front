@@ -4,7 +4,7 @@
       @click="ware && showInventory()"
       color="cyan"
       class="pl-2 mr-3"
-      v-if="ware && ware.unit?ware.unit.name:''"
+      :disabled="!ware"
     >fa-boxes</v-icon>
     <v-autocomplete
       :label="label"
@@ -14,6 +14,7 @@
       item-value="id"
       :disabled="disabled"
       :return-object="true"
+      :suffix="ware && ware.unit?ware.unit.name:''"
     ></v-autocomplete>
 
     <v-dialog v-if="ware" v-model="dialog" scrollable max-width="500px">
