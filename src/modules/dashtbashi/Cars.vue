@@ -117,8 +117,8 @@
           <v-autocomplete
             class="mt-5"
             label="* نوع پیمان"
-            v-model="item.type"
-            :items="types"
+            v-model="item.contract_type"
+            :items="contractTypes"
             item-text="text"
             item-value="id"
             :disabled="!isEditing"
@@ -202,7 +202,7 @@ export default {
       baseUrl: "dashtbashi/cars",
       permissionBasename: "car",
       leadingSlash: true,
-      types: [
+      contractTypes: [
         {
           text: "حمل و نقل",
           id: "t",
