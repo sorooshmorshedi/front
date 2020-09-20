@@ -273,7 +273,9 @@ export default {
   },
   methods: {
     setItem() {
-      if (this.value != this.item) this.item = this.value;
+      if (this.value != this.item) {
+        this.item = this.value;
+      }
 
       if (!this.item) {
         this.localFloatAccount = null;
@@ -296,9 +298,8 @@ export default {
   watch: {
     value() {
       this.setItem();
-    },
-    item() {
-      this.setItem();
+      this.localFloatAccount = null;
+      this.localCostCenter = null;
     },
     floatAccount() {
       this.setItem();

@@ -94,6 +94,7 @@
             <account-select
               label="گروه حساب تفضیلی شناور"
               itemsType="floatAccountGroups"
+              :deep-select="false"
               v-model="item.floatAccountGroup"
               item-text="name"
               item-value="id"
@@ -104,6 +105,7 @@
             <template v-if="hasCostCenter">
               <account-select
                 label="گروه مرکز هزینه و درآمد"
+                :deep-select="false"
                 itemsType="costCenterGroups"
                 v-model="item.costCenterGroup"
                 item-text="name"

@@ -5,7 +5,7 @@
     :listRoute="{name:'List', params:{form: 'sanad'}}"
     :exportParams="{id: this.id}"
     :canEdit="canEdit"
-    :canDelete="canDelete"
+    :canDelete="false"
     :canSubmit="canSubmit"
     :isEditing.sync="isEditing"
     :confirmBtnText="confirmBtnText"

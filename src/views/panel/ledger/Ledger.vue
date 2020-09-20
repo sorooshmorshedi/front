@@ -156,8 +156,8 @@ export default {
       } else {
         this.filters.account__code__startswith = null;
         let filterKeys = {
-          floatAccountGroups: "floatAccount__floatAccountGroups",
-          costCenterGroups: "costCenter__floatAccountGroups",
+          floatAccountGroups: "account__floatAccountGroup",
+          costCenterGroups: "account__floatAccountGroup",
           floatAccounts: "floatAccount",
           costCenters: "costCenter"
         };
