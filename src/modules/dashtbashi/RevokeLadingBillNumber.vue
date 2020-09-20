@@ -53,7 +53,9 @@ export default {
   components: { MDatatable },
   data() {
     return {
-      filters: {},
+      filters: {
+        not_used: true,
+      },
       item: null,
       date: null,
       dialog: false,
