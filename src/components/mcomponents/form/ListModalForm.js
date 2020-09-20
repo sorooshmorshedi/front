@@ -3,11 +3,14 @@ import OpenSanadBtn from "@/components/form/OpenSanadBtn";
 import jsonToFormData from "@/mixin/_jsonToFormData";
 import queryBinding from "@/mixin/queryBinding";
 
+import MFileInput from "@/components/mcomponents/form/MFileInput";
+
 export default {
   mixins: [queryBinding],
   components: {
     ListModalForm,
-    OpenSanadBtn
+    OpenSanadBtn,
+    MFileInput
   },
   props: {
     id: {
@@ -300,14 +303,6 @@ export default {
     jsonToFormData(jsonObject, options) {
       return jsonToFormData(jsonObject, options)
     },
-
-    deleteAttachment(row) {
-      row.attachment = null;
-      row.delete_attachment = true;
-    },
-    hasAttachment(row) {
-      return typeof row.attachment != typeof ''
-    }
 
   }
 

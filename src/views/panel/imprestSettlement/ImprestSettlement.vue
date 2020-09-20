@@ -122,22 +122,11 @@
                   <money :disabled="!isEditing" v-model="rows[i].value" />
                 </td>
                 <td style="max-width: 100px">
-                  <v-file-input
-                    v-if="hasAttachment(rows[i])"
-                    clearable
-                    :show-size="true"
+                  <m-file-input
                     :disabled="!isEditing"
-                    truncate-length
                     v-model="rows[i].attachment"
+                    :delete-attachment.sync="rows[i].delete_attachment"
                   />
-                  <template v-else>
-                    <v-btn icon :href="rows[i].attachment" target="_blank" tag="a">
-                      <v-icon>fa-download</v-icon>
-                    </v-btn>
-                    <v-btn icon @click="deleteAttachment(rows[i])" :disabled="!isEditing">
-                      <v-icon>fa-times</v-icon>
-                    </v-btn>
-                  </template>
                 </td>
                 <td class="d-print-none">
                   <v-btn
