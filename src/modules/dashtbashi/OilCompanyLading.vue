@@ -16,37 +16,39 @@
     @delete="deleteItem"
     @clearForm="clearForm()"
   >
+    <template #header-btns>
+      <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
+    </template>
+
     <template>
       <v-row>
         <v-col cols="12" md="2">
           <v-text-field label="عطف" v-model="item.id" disabled />
         </v-col>
         <v-col cols="12" md="2">
+          <v-autocomplete label="ماه" :items="months" v-model="item.month" :return-object="false" />
+        </v-col>
+        <v-col cols="12" md="2">
           <date v-model="item.date" label="تاریخ سیاهه" :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="2">
-          <date
-            v-model="item.export_date"
-            label="تاریخ گرفتن خروجی"
-            :default="true"
-            :disabled="!isEditing"
-          />
+          <date v-model="item.export_date" label="خروجی" :default="true" :disabled="!isEditing" />
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="4">
           <v-autocomplete
             :return-object="true"
-            label="ماشین"
-            v-model="item.car"
-            :items="$store.state.cars"
-            item-text="car_number_str"
+            label="حمل کننده"
+            v-model="item.driving"
+            :items="$store.state.drivings"
+            item-text="title"
             item-value="id"
           />
         </v-col>
-        <v-col cols="12" md="9">
+        <v-col cols="12" md="8">
           <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
         </v-col>
 
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4">
           <v-text-field
             v-if="item.created_by"
             label="ثبت کننده"
@@ -60,6 +62,10 @@
             <thead>
               <tr>
                 <th>#</th>
+                <th>تاریخ بارگیری</th>
+                <th>مبدا</th>
+                <th>مقصد</th>
+                <th>وزن</th>
                 <th>مبلغ ناخالص</th>
                 <th>حق بیمه تامین اجتماعی</th>
                 <th>درصد مالیات بر ارزش افزوده</th>
@@ -76,6 +82,18 @@
             <tbody>
               <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                 <td class="tr-counter">{{ i+1 }}</td>
+                <td>
+                  <date v-model="row.date" :default="true" :disabled="!isEditing" />
+                </td>
+                <td>
+                  <city-select v-model="row.origin" :disabled="!isEditing" />
+                </td>
+                <td>
+                  <city-select v-model="row.destination" :disabled="!isEditing" />
+                </td>
+                <td>
+                  <money v-model="row.weight" :disabled="!isEditing" />
+                </td>
                 <td>
                   <money v-model="row.gross_price" :disabled="!isEditing" />
                 </td>
@@ -137,7 +155,7 @@
                 </td>
               </tr>
               <tr class="grey lighten-3 text-white">
-                <td class="text-left">مجموع:</td>
+                <td colspan="5" class="text-left">مجموع:</td>
                 <td>{{ rowsSum('gross_price') | toMoney }}</td>
                 <td>{{ rowsSum('insurance_price') | toMoney }}</td>
                 <td></td>
@@ -182,6 +200,56 @@ export default {
       baseUrl: "dashtbashi/oilCompanyLadings",
       leadingSlash: true,
       permissionBasename: "oilCompanyLading",
+      months: [
+        {
+          text: "فروردین",
+          value: 1,
+        },
+        {
+          text: "اردیبهشت",
+          value: 2,
+        },
+        {
+          text: "خرداد",
+          value: 3,
+        },
+        {
+          text: "تیر",
+          value: 4,
+        },
+        {
+          text: "مرداد",
+          value: 5,
+        },
+        {
+          text: "شهریور",
+          value: 6,
+        },
+        {
+          text: "مهر",
+          value: 7,
+        },
+        {
+          text: "آبان",
+          value: 8,
+        },
+        {
+          text: "آذر",
+          value: 9,
+        },
+        {
+          text: "دی",
+          value: 10,
+        },
+        {
+          text: "بهمن",
+          value: 11,
+        },
+        {
+          text: "اسفند",
+          value: 12,
+        },
+      ],
     };
   },
   computed: {
@@ -219,21 +287,21 @@ export default {
   },
   methods: {
     getItemTemplate() {
-      return {
-        company_commission: +this.getOptionValue(
-          "companyCommissionFromOilCompanyLading"
-        ),
-      };
+      return {};
     },
     getData() {
-      this.getCars();
+      this.getDrivings();
     },
     getRowTemplate() {
       return {
+        sum: 0,
         net_price: 0,
         gross_price: 0,
         insurance_price: 0,
         tax_percent: this.getOptionValue("taxPercent"),
+        company_commission_percent: +this.getOptionValue(
+          "companyCommissionFromOilCompanyLading"
+        ),
         complication_percent: this.getOptionValue(
           "addedValuePercentOfOilCompanyLading"
         ),
@@ -265,7 +333,7 @@ export default {
     },
     companyCommission(row) {
       let value =
-        (this.netPrice(row) * +this.item.company_commission) / 100 || 0;
+        (this.netPrice(row) * +row.company_commission_percent) / 100 || 0;
       row.company_commission = value;
       return value;
     },
@@ -339,6 +407,12 @@ export default {
 
         data.items.items.push(item);
       });
+
+      data.form.car_income = this.rowsSum("car_income");
+      data.form.company_commission = this.rowsSum("company_commission");
+      data.form.total_value = this.rowsSum("sum");
+      data.form.tax_price = this.rowsTaxPrice;
+      data.form.complication_price = this.rowsComplicationPrice;
 
       return data;
     },
