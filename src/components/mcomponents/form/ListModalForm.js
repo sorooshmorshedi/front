@@ -27,6 +27,7 @@ export default {
 
       // options
       leadingSlash: false,
+      formData: false,
       hasList: true,
       isEditing: true,
       rowKey: null,
@@ -209,7 +210,10 @@ export default {
     },
     getSerialized() {
       // must be implemented, but by default
-      return this.extractIds(this.item);
+      let data = this.extractIds(this.item);
+      if (this.formData) data = this.jsonToFormData(data);
+      console.log(data);
+      return data;
     },
     submit(clearForm = true) {
       if (this.item.id) this.updateItem(clearForm);

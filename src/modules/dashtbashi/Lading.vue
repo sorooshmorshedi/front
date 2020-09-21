@@ -152,7 +152,12 @@
             <city-select label="مقصد" v-model="item.destination" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2">
-            <v-file-input label="فایل" />
+            <m-file-input
+              label="فایل"
+              :disabled="!isEditing"
+              v-model="item.lading_attachment"
+              :delete-attachment.sync="item.delete_lading_attachment"
+            />
           </v-col>
           <v-col cols="12" md="2">
             <v-autocomplete
@@ -310,7 +315,12 @@
           <money label="ارزش افزوده بارنامه دولتی" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="2">
-          <v-file-input label="فایل"></v-file-input>
+          <m-file-input
+            label="فایل"
+            :disabled="!isEditing"
+            v-model="item.bill_attachment"
+            :delete-attachment.sync="item.delete_bill_attachment"
+          />
         </v-col>
 
         <v-col cols="12" md="4">
@@ -345,6 +355,7 @@ export default {
       baseUrl: "dashtbashi/ladings",
       leadingSlash: true,
       permissionBasename: "lading",
+      formData: true,
       hasList: false,
       hasIdProp: true,
       hasRemittance: true,
