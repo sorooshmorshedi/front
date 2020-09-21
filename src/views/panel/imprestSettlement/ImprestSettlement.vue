@@ -293,6 +293,7 @@ export default {
 
         let item = this.copy(row);
         item = this.extractIds(item);
+        this.removeAttachmentUrls(item);
         data.items.items.push(item);
       });
 

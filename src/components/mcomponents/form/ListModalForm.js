@@ -208,11 +208,20 @@ export default {
         this.changeRouteTo(null);
       }
     },
+    removeAttachmentUrls(data) {
+      Object.keys(data).forEach((key) => {
+        if (key.includes('attachment') && typeof (data[key]) == typeof ("")) {
+          delete data[key]
+        }
+      })
+    },
     getSerialized() {
       // must be implemented, but by default
       let data = this.extractIds(this.item);
-      if (this.formData) data = this.jsonToFormData(data);
-      console.log(data);
+      this.removeAttachmentUrls(data)
+      if (this.formData) {
+        data = this.jsonToFormData(data);
+      }
       return data;
     },
     submit(clearForm = true) {

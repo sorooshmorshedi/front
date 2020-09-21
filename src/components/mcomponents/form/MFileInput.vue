@@ -19,7 +19,6 @@
       :show-size="true"
       :disabled="disabled"
       truncate-length
-      :value="value"
       @change="inputChanged"
     />
     <template v-else>
