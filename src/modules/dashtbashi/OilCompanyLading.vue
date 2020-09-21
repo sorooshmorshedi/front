@@ -155,7 +155,8 @@
                 </td>
               </tr>
               <tr class="grey lighten-3 text-white">
-                <td colspan="5" class="text-left">مجموع:</td>
+                <td colspan="4" class="text-right">مجموع:</td>
+                <td>{{ rowsSum('weight') | toMoney }}</td>
                 <td>{{ rowsSum('gross_price') | toMoney }}</td>
                 <td>{{ rowsSum('insurance_price') | toMoney }}</td>
                 <td></td>
