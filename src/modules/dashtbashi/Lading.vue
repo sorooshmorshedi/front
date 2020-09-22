@@ -119,22 +119,20 @@
           </v-col>
           <v-col cols="12" md="2">
             <v-autocomplete
-              :return-object="true"
+              :return-object="false"
               label="روش پرداخت مبلغ حواله"
               v-model="item.remittance_payment_method"
               :items="remittancePaymentMethods"
               :disabled="!isEditing"
-              item-text="title"
-              item-value="id"
             />
           </v-col>
 
           <v-col cols="12" md="2">
             <money
               label="مقدار بارنامه مبدا"
-              v-model="item.original_amount"
+              v-model="item.origin_amount"
               :disabled="!isEditing"
-              @input="!is_destination_amount_dirty?item.destination_amount = item.original_amount:''"
+              @input="!is_destination_amount_dirty?item.destination_amount = item.origin_amount:''"
             />
           </v-col>
           <v-col cols="12" md="2">
@@ -301,13 +299,11 @@
 
         <v-col cols="12" md="2">
           <v-autocomplete
-            :return-object="true"
+            :return-object="false"
             label="نحوه دریافت"
             v-model="item.receive_type"
             :items="receiveTypes"
             :disabled="!isEditing"
-            item-text="title"
-            item-value="id"
           />
         </v-col>
 

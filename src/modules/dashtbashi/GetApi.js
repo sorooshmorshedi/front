@@ -11,29 +11,29 @@ export default {
         }
       ],
       remittancePaymentMethods: [{
-          title: "کمیسیون و کرایه به شرکت",
-          id: "tc"
+          text: "کمیسیون و کرایه به شرکت",
+          value: "tc"
         },
         {
-          title: "کمیسیون به شرکت و کرایه به راننده",
-          id: "tcd"
+          text: "کمیسیون به شرکت و کرایه به راننده",
+          value: "tcd"
         },
         {
-          title: "کمیسیون و کرایه با شرکت",
-          id: "cp"
+          text: "کمیسیون و کرایه با شرکت",
+          value: "cp"
         }
       ],
       receiveTypes: [{
-          title: "نسیه",
-          id: "cr"
+          text: "نسیه",
+          value: "cr"
         },
         {
-          title: "نقدی",
-          id: "cs"
+          text: "نقدی",
+          value: "cs"
         },
         {
-          title: "کارت خوان",
-          id: "p"
+          text: "کارت خوان",
+          value: "p"
         },
       ]
     }

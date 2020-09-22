@@ -86,13 +86,11 @@
 
         <v-col cols="12" md="3">
           <v-autocomplete
-            :return-object="true"
+            :return-object="false"
             label="روش پرداخت مبلغ حواله"
             v-model="item.remittance_payment_method"
             :items="remittancePaymentMethods"
             :disabled="!isEditing"
-            item-text="title"
-            item-value="id"
           />
         </v-col>
 

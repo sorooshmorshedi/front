@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>گزارش بارگیری ها</v-card-title>
+    <v-card-title>گزارش بارگیری برای پیمانکار</v-card-title>
     <v-card-text>
       <v-row>
         <v-col cols="12" class="text-center">
@@ -36,15 +36,19 @@ export default {
         },
         {
           text: "شماره بارگیری",
-          value: "lading_number"
+          value: "lading_number",
         },
         {
           text: "تاریخ بارگیری",
-          value: "lading_date"
+          value: "lading_date",
         },
         {
           text: "کالا",
           value: "ware.name",
+        },
+        {
+          text: "پیمانکار",
+          value: "contractor.name",
         },
         {
           text: "نرخ حواله پیمانکار",
@@ -52,12 +56,13 @@ export default {
           type: "numeric",
         },
         {
-          text: "پیمانکار",
-          value: "contractor.name",
+          text: "انعام راننده",
+          value: "driver_tip_price",
+          type: "numeric",
         },
         {
-          text: "نرخ کرایه",
-          value: "fare_price",
+          text: "مبلغ اختلاف بارنامه",
+          value: "lading_bill_difference",
           type: "numeric",
         },
         {
@@ -69,6 +74,16 @@ export default {
           value: "destination.name",
         },
         {
+          text: "مقدار بارنامه مبدا",
+          value: "origin_amount",
+          type: "numeric",
+        },
+        {
+          text: "مقدار بارنامه مقصد",
+          value: "destination_amount",
+          type: "numeric",
+        },
+        {
           text: "حمل کننده",
           value: "driving.driver.name",
         },
@@ -77,25 +92,6 @@ export default {
           value: "driving.car.car_number_str",
           filterable: false,
           sortable: false,
-        },
-        {
-          text: "شماره بارنامه",
-          value: "billNumber.number",
-        },
-        {
-          text: "مبلغ بارنامه",
-          value: "bill_price",
-          type: "numeric",
-        },
-        {
-          text: "مبلغ کل بارگیری",
-          value: "lading_total_value",
-          type: "numeric",
-        },
-        {
-          text: "مبلغ کل بارنامه دولتی",
-          value: "lading_bill_total_value",
-          type: "numeric",
         },
       ],
     };

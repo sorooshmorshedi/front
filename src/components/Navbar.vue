@@ -1089,6 +1089,38 @@ export default {
                     name: "RevokeLadingBillNumber",
                   },
                 },
+                {
+                  title: "گزارش بارنامه برای کامیون های آقا ابراهیم",
+                  perm: "lading",
+                  to: {
+                    name: "LadingNumberReport",
+                    query: { "filters.driving__car__owner": "e" },
+                  },
+                },
+                {
+                  title: "گزارش بارنامه برای کامیون های آقا رحیم",
+                  perm: "lading",
+                  to: {
+                    name: "LadingNumberReport",
+                    query: { "filters.driving__car__owner": "rm" },
+                  },
+                },
+                {
+                  title: "گزارش بارنامه برای کامیون های متفرقه",
+                  perm: "lading",
+                  to: {
+                    name: "LadingNumberReport",
+                    query: { "filters.driving__car__owner": "o" },
+                  },
+                },
+                {
+                  title: "گزارش بارنامه برای کامیون های حاج رحمان",
+                  perm: "lading",
+                  to: {
+                    name: "LadingNumberReport",
+                    query: { "filters.driving__car__owner": "rn" },
+                  },
+                },
               ],
             },
             {
@@ -1125,6 +1157,27 @@ export default {
                   perm: "lading",
                   to: {
                     name: "LadingsReport",
+                  },
+                },
+                {
+                  title: "گزارش بارگیری حمل و نقل برای پیمانکار",
+                  perm: "lading",
+                  to: {
+                    name: "LadingsReportForContractor",
+                  },
+                },
+                {
+                  title: "گزارش بارگیری حمل و نقل برای راننده",
+                  perm: "lading",
+                  to: {
+                    name: "LadingsReportForDriver",
+                  },
+                },
+                {
+                  title: "گزارش کمیسیون حمل و نقل",
+                  perm: "lading",
+                  to: {
+                    name: "TransportationCommissionReport",
                   },
                 },
                 {
