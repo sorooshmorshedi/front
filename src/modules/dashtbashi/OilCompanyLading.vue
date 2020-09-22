@@ -101,34 +101,20 @@
                   <money v-model="row.insurance_price" :disabled="!isEditing" />
                 </td>
                 <td>
-                  <v-text-field
-                    type="number"
-                    v-model="row.tax_percent"
-                    :disabled="!isEditing || hasValue(row.tax_price)"
-                  />
+                  <v-text-field type="number" v-model="row.tax_percent" :disabled="!isEditing" />
                 </td>
                 <td>
-                  <money
-                    v-if="!hasValue(row.tax_percent)"
-                    v-model="row.tax_price"
-                    :disabled="!isEditing"
-                  />
-                  <money v-else :value="taxPrice(row)" disabled />
+                  <money :value="taxPrice(row)" disabled />
                 </td>
                 <td>
                   <v-text-field
                     type="number"
                     v-model="row.complication_percent"
-                    :disabled="!isEditing || hasValue(row.complication_price)"
+                    :disabled="!isEditing"
                   />
                 </td>
                 <td>
-                  <money
-                    v-if="!hasValue(row.complication_percent)"
-                    v-model="row.complication_price"
-                    :disabled="!isEditing"
-                  />
-                  <money v-else :value="complicationPrice(row)" disabled />
+                  <money :value="complicationPrice(row)" disabled />
                 </td>
                 <td>
                   <money :value="rowSum(row)" :disabled="true" />
@@ -256,7 +242,7 @@ export default {
   computed: {
     rowsTaxPrice() {
       let sum = 0;
-      for (const row of this.rows) {
+      for (let row of this.rows) {
         sum += this.taxPrice(row);
       }
       return sum;
@@ -309,14 +295,13 @@ export default {
       };
     },
     taxPrice(row) {
-      return +row.tax_price || (+row.tax_percent * +row.gross_price) / 100 || 0;
+      row.tax_value = (+row.tax_percent * +row.gross_price) / 100 || 0;
+      return row.tax_value;
     },
     complicationPrice(row) {
-      return (
-        +row.complication_price ||
-        (+row.complication_percent * +row.gross_price) / 100 ||
-        0
-      );
+      row.complication_value =
+        (+row.complication_percent * +row.gross_price) / 100 || 0;
+      return row.complication_value;
     },
     rowSum(row) {
       let sum =
@@ -412,8 +397,8 @@ export default {
       data.form.car_income = this.rowsSum("car_income");
       data.form.company_commission = this.rowsSum("company_commission");
       data.form.total_value = this.rowsSum("sum");
-      data.form.tax_price = this.rowsTaxPrice;
-      data.form.complication_price = this.rowsComplicationPrice;
+      data.form.tax_value = this.rowsTaxPrice;
+      data.form.complication_value = this.rowsComplicationPrice;
 
       return data;
     },
