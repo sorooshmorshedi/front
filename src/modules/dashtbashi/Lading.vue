@@ -24,6 +24,18 @@
         <v-col cols="12" md="2">
           <v-text-field label="عطف" v-model="item.id" :disabled="true" />
         </v-col>
+        <v-col cols="12" md="4">
+          <v-autocomplete
+            :return-object="true"
+            label="حمل کننده"
+            v-model="item.driving"
+            :items="$store.state.drivings"
+            item-text="title"
+            item-value="id"
+            :disabled="!isEditing"
+          />
+        </v-col>
+
         <v-col cols="12" md="2">
           <v-autocomplete
             :return-object="false"
@@ -228,18 +240,6 @@
         <v-col cols="12">
           <v-card-title class="py-0">بارنامه دولتی</v-card-title>
         </v-col>
-        <v-col cols="12" md="4">
-          <v-autocomplete
-            :return-object="true"
-            label="حمل کننده"
-            v-model="item.driving"
-            :items="$store.state.drivings"
-            item-text="title"
-            item-value="id"
-            :disabled="!isEditing"
-          />
-        </v-col>
-
         <v-col cols="12" md="2">
           <v-autocomplete
             :return-object="true"
