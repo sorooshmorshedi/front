@@ -1188,10 +1188,20 @@ export default {
                   },
                 },
                 {
-                  title: "لیست بارگیری های شرکت نفت",
+                  title: "گزارش بارگیری شرکت نفت",
                   perm: "oilCompanyLading",
                   to: {
                     name: "OilCompanyLadingsReport",
+                  },
+                },
+                {
+                  title: "گزارش بارگیری شرکت نفت همراه با جزئیات",
+                  perm: "oilCompanyLading",
+                  to: {
+                    name: "OilCompanyLadingsReport",
+                    params: {
+                      detailed: true,
+                    },
                   },
                 },
               ],

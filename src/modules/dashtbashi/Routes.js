@@ -100,8 +100,9 @@ export default [{
   },
   {
     name: 'OilCompanyLadingsReport',
-    path: 'oilCompanyLadingsReport',
-    component: OilCompanyLadingsReport
+    path: 'oilCompanyLadingsReport/:detailed?',
+    component: OilCompanyLadingsReport,
+    props: true
   },
   {
     name: 'LadingNumberReport',

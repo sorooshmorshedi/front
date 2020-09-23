@@ -187,56 +187,6 @@ export default {
       baseUrl: "dashtbashi/oilCompanyLadings",
       leadingSlash: true,
       permissionBasename: "oilCompanyLading",
-      months: [
-        {
-          text: "فروردین",
-          value: 1,
-        },
-        {
-          text: "اردیبهشت",
-          value: 2,
-        },
-        {
-          text: "خرداد",
-          value: 3,
-        },
-        {
-          text: "تیر",
-          value: 4,
-        },
-        {
-          text: "مرداد",
-          value: 5,
-        },
-        {
-          text: "شهریور",
-          value: 6,
-        },
-        {
-          text: "مهر",
-          value: 7,
-        },
-        {
-          text: "آبان",
-          value: 8,
-        },
-        {
-          text: "آذر",
-          value: 9,
-        },
-        {
-          text: "دی",
-          value: 10,
-        },
-        {
-          text: "بهمن",
-          value: 11,
-        },
-        {
-          text: "اسفند",
-          value: 12,
-        },
-      ],
     };
   },
   computed: {
@@ -299,7 +249,7 @@ export default {
       return row.tax_value;
     },
     complicationPrice(row) {
-      row.complication_price=
+      row.complication_price =
         (+row.complication_percent * +row.gross_price) / 100 || 0;
       return row.complication_price;
     },
@@ -309,7 +259,7 @@ export default {
         this.taxPrice(row) +
         this.complicationPrice(row) -
         (+row.insurance_price || 0);
-      row.sum = sum;
+      row.total_value = sum;
       return sum;
     },
     netPrice(row) {
@@ -397,8 +347,11 @@ export default {
       data.form.car_income = this.rowsSum("car_income");
       data.form.company_commission = this.rowsSum("company_commission");
       data.form.total_value = this.rowsSum("sum");
+      data.form.gross_price = this.rowsSum("gross_price");
+      data.form.insurance_price = this.rowsTaxPrice;
       data.form.tax_value = this.rowsTaxPrice;
       data.form.complication_price = this.rowsComplicationPrice;
+      data.form.weight = this.rowsSum("weight");
 
       return data;
     },
