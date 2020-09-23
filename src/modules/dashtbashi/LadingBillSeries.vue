@@ -1,6 +1,7 @@
 <template>
   <m-form
     title="سری بارنامه"
+    :listRoute="{name:'LadingBillSeriesList'}"
     :showNavigationButtons="true"
     :showSubmitAndClearForm="true"
     :showList="false"
