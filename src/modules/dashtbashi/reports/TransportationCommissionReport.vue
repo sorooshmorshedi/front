@@ -9,7 +9,11 @@
             api-url="dashtbashi/report/ladings/"
             :filters.sync="filters"
             @detail="(item) => newTab({name: 'Lading', params: {id: item.id}})"
-          ></m-datatable>
+          >
+          <template #item.commission="{ item }">
+            {{ item.contractor_price - item.fare_price }} 
+          </template>
+          </m-datatable>
         </v-col>
       </v-row>
     </v-card-text>
@@ -62,7 +66,7 @@ export default {
         },
         {
           text: "کمیسیون",
-          value: "",
+          value: "commission",
           type: "numeric",
         },
         {
