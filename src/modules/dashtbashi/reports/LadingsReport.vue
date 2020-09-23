@@ -36,11 +36,11 @@ export default {
         },
         {
           text: "شماره بارگیری",
-          value: "lading_number"
+          value: "lading_number",
         },
         {
           text: "تاریخ بارگیری",
-          value: "lading_date"
+          value: "lading_date",
         },
         {
           text: "کالا",
@@ -67,6 +67,11 @@ export default {
         {
           text: "مقصد",
           value: "destination.name",
+        },
+        {
+          text: "مقدار بارنامه مقصد",
+          value: "destination_amount",
+          type: "numeric",
         },
         {
           text: "حمل کننده",
