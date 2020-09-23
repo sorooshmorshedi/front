@@ -281,14 +281,16 @@ export default {
         };
       };
 
-      let headers = [
+      let headers = this.headers.filter((h) => h.show != false);
+
+      headers = [
         {
           text: "#",
           value: "rowNumber",
           sortable: false,
           filterable: false,
         },
-        ...this.headers.map((o) => {
+        ...headers.map((o) => {
           o.align = "center";
           return o;
         }),
