@@ -299,9 +299,9 @@ export default {
       return row.tax_value;
     },
     complicationPrice(row) {
-      row.complication_value =
+      row.complication_price=
         (+row.complication_percent * +row.gross_price) / 100 || 0;
-      return row.complication_value;
+      return row.complication_price;
     },
     rowSum(row) {
       let sum =
@@ -398,7 +398,7 @@ export default {
       data.form.company_commission = this.rowsSum("company_commission");
       data.form.total_value = this.rowsSum("sum");
       data.form.tax_value = this.rowsTaxPrice;
-      data.form.complication_value = this.rowsComplicationPrice;
+      data.form.complication_price = this.rowsComplicationPrice;
 
       return data;
     },
