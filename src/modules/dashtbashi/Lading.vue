@@ -26,16 +26,17 @@
         </v-col>
         <v-col cols="12" md="2">
           <v-autocomplete
-            :return-object="true"
+            :return-object="false"
             label="نوع بارگیری"
             v-model="item.type"
             :disabled="!isEditing"
             :items="types"
             item-value="id"
-            clearable
           />
         </v-col>
-        <template v-if="hasRemittance">
+      </v-row>
+      <v-row v-if="item.type.includes('l')">
+        <template>
           <v-col cols="12" md="2">
             <v-autocomplete
               :return-object="true"
@@ -223,7 +224,7 @@
           </v-col>
         </template>
       </v-row>
-      <v-row>
+      <v-row v-if="item.type.includes('b')">
         <v-col cols="12">
           <v-card-title class="py-0">بارنامه دولتی</v-card-title>
         </v-col>
@@ -354,7 +355,6 @@ export default {
       formData: true,
       hasList: false,
       hasIdProp: true,
-      hasRemittance: true,
       ladingBillSeries: null,
       ladingBillSeriesItems: [],
       ladingBillSearchInput: "",
@@ -372,16 +372,17 @@ export default {
       ],
       types: [
         {
-          // سیستمی
-          text: "بارگیری کامل",
-          id: "fl",
+          text: "بارگیری",
+          id: "l",
         },
         {
-          // غیر سیستمی
-          text: "بارنامه دولتی",
-          id: "gl",
+          text: "بارگیری و بارنامه دولتی",
+          id: "lb",
         },
-        
+        {
+          text: "بارنامه دولتی",
+          id: "b",
+        },
       ],
     };
   },
@@ -436,10 +437,10 @@ export default {
       this.item = this.getItemTemplate();
       this.changeRouteTo(null);
       this.remittance = null;
-      this.hasRemittance = true;
     },
     getItemTemplate() {
       return {
+        type: '',
         remittance: {},
         association: {
           id: null,
