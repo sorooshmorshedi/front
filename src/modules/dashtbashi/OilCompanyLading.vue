@@ -340,7 +340,7 @@ export default {
 
       data.form.car_income = this.rowsSum("car_income");
       data.form.company_commission = this.rowsSum("company_commission");
-      data.form.total_value = this.rowsSum("sum");
+      data.form.total_value = this.rowsSum("total_value");
       data.form.gross_price = this.rowsSum("gross_price");
       data.form.insurance_price = this.rowsTaxPrice;
       data.form.tax_value = this.rowsTaxPrice;

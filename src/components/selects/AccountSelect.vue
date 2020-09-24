@@ -2,10 +2,11 @@
   <v-row no-gutters :class="{'flex-row': horizontal, 'flex-column': !horizontal}">
     <v-col :cols="horizontal && hasDeepSelect?6:12">
       <div class="d-flex">
+        <v-icon v-if="hasLedger" @click="openBalanceDialog" color="cyan" class="mr-3">fa-wallet</v-icon>
         <v-icon
           @click="item && openLedger(item)"
           color="cyan"
-          class="pl-2 mr-3"
+          class="pl-2 mr-2"
           v-if="showLedgerBtn && hasLedger"
         >fa-book-open</v-icon>
         <v-autocomplete
@@ -75,6 +76,14 @@
         />
       </v-col>
     </template>
+
+    <v-dialog v-model="balanceDialog" max-width="500px" v-if="item">
+      <v-card>
+        <v-card-title>مانده حساب {{ item.name }}</v-card-title>
+
+        <v-card-text></v-card-text>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -138,6 +147,9 @@ export default {
     showLedgerBtn: {
       default: true,
     },
+    showBalanceBtn: {
+      default: true,
+    },
     horizontal: {
       default: false,
     },
@@ -147,6 +159,7 @@ export default {
       item: null,
       localFloatAccount: undefined,
       localCostCenter: undefined,
+      balanceDialog: false,
     };
   },
   computed: {
@@ -272,6 +285,9 @@ export default {
     this.setItem();
   },
   methods: {
+    openBalanceDialog() {
+      this.balanceDialog = true;
+    },
     setItem() {
       if (this.value != this.item) {
         this.item = this.value;

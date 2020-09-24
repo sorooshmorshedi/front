@@ -48,7 +48,7 @@ export default {
         },
         {
           text: "نرخ کرایه",
-          value: "fare_fee",
+          value: "fare_price",
           type: "numeric",
         },
         {
