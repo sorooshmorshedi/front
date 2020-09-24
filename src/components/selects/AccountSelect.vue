@@ -81,7 +81,28 @@
       <v-card>
         <v-card-title>مانده حساب {{ item.name }}</v-card-title>
 
-        <v-card-text></v-card-text>
+        <v-card-text>
+          <v-row>
+            <v-col cols="12">
+              <v-simple-table class="text-center">
+                <thead>
+                  <tr>
+                    <th class="text-center">بدهکار</th>
+                    <th class="text-center">بستانکار</th>
+                    <th class="text-center">مانده</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ item.balance.bed | toMoney}}</td>
+                    <td>{{ item.balance.bes | toMoney}}</td>
+                    <td>{{ item.balance.remain | toMoney}}</td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </v-col>
+          </v-row>
+        </v-card-text>
       </v-card>
     </v-dialog>
   </v-row>
@@ -286,7 +307,14 @@ export default {
   },
   methods: {
     openBalanceDialog() {
-      this.balanceDialog = true;
+      this.request({
+        url: this.endpoint(`accounts/accounts/${this.item.id}`),
+        method: "get",
+        success: (data) => {
+          this.item = data;
+          this.balanceDialog = true;
+        },
+      });
     },
     setItem() {
       if (this.value != this.item) {
