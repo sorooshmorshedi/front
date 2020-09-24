@@ -1,6 +1,6 @@
 <template>
   <m-form
-    title="بارگیری"
+    title
     :showList="false"
     :isEditing.sync="isEditing"
     :canDelete="canDelete"
@@ -48,6 +48,9 @@
         </v-col>
       </v-row>
       <v-row v-if="item.type.includes('l')">
+        <v-col cols="12">
+          <v-card-title class="py-0">بارگیری</v-card-title>
+        </v-col>
         <template>
           <v-col cols="12" md="2">
             <v-autocomplete
@@ -440,7 +443,7 @@ export default {
     },
     getItemTemplate() {
       return {
-        type: '',
+        type: "",
         remittance: {},
         association: {
           id: null,
