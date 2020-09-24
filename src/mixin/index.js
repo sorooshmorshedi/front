@@ -50,6 +50,19 @@ Vue.mixin({
   },
   mounted() {},
   methods: {
+    canGet(name) {
+      let flag = this.$store.state.isGetting[name]
+      if (!flag) {
+        this.toggleIsGetting(name)
+      }
+      return !flag;
+    },
+    toggleIsGetting(name) {
+      let state = this.$store.state.isGetting[name]
+      let newState = {}
+      newState[name] = !state
+      this.$store.commit('updateIsGetting', newState)
+    },
     downloadUrl(url) {
       let element = document.createElement("a");
       element.href = url;
@@ -83,7 +96,6 @@ Vue.mixin({
 
     },
     initTooltips() {
-      console.log('init tooltips');
       $(function () {
         $('[data-toggle="tooltip"]').tooltip()
       })

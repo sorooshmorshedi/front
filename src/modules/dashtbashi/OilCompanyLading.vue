@@ -205,12 +205,6 @@ export default {
       return sum;
     },
   },
-  created() {
-    this.getData();
-    if (this.id) {
-      this.getItem();
-    }
-  },
   watch: {
     rows: {
       handler() {

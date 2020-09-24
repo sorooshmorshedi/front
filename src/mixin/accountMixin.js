@@ -110,31 +110,22 @@ export default {
     },
     getAccounts(force = false, init = false) {
       if (!force && this.accounts.length) return;
-      if (this.isGetting.accounts) return;
-      this.$store.commit('updateIsGetting', {
-        accounts: true
-      })
+      if (!this.canGet('accounts')) return;
 
       return this.request({
         url: this.endpoint('accounts/accounts'),
         method: 'get',
         success: data => {
-          this.log('Get Accounts : Done')
           this.$store.commit('setAccounts', data);
-          this.log('Commit Accounts : Done')
           init && this.init();
-          this.log('Init:', init, ' : Done')
           this.EventBus.$emit('get:accounts', data);
-          this.$store.commit('updateIsGetting', {
-            'accounts': false
-          })
+          this.toggleIsGetting('accounts')
         }
       })
     },
     getFloatAccountGroups(force = false, init = false) {
       if (!force && this.floatAccountGroups.length) return;
-      if (this.isGettingFloatAccounts) return;
-      this.isGettingFloatAccounts = true;
+      if (!this.canGet('floatAccountGroups')) return;
 
       return this.request({
         url: this.endpoint("accounts/floatAccountGroups"),
@@ -142,47 +133,49 @@ export default {
         success: data => {
           this.$store.commit('setFloatAccountGroups', data);
           init && this.init();
-          this.isGettingFloatAccounts = false;
+          this.toggleIsGetting('floatAccountGroups')
         }
       })
     },
     getFloatAccounts(force = false, init = false) {
       if (!force && this.floatAccounts.length) return;
+      if (!this.canGet('floatAccounts')) return;
+
       return this.request({
         url: this.endpoint('accounts/floatAccounts'),
         method: 'get',
         success: data => {
           this.$store.commit('setFloatAccounts', data);
           init && this.init();
+          this.toggleIsGetting('floatAccounts')
         }
       })
     },
     getAccountTypes(force = false, init = false) {
       if (!force && this.accountTypes.length) return;
+      if (!this.canGet('accountTypes')) return;
+
       return this.request({
         url: this.endpoint('accounts/accountTypes'),
         method: 'get',
         success: data => {
           this.$store.commit('setAccountTypes', data);
           init && this.init();
+          this.toggleIsGetting('accountTypes')
         }
       })
     },
     getDefaultAccounts(force = false, init = false) {
       if (!force && this.defaultAccounts.length) return;
-      if (this.isGetting.defaultAccounts) return;
-      this.$store.commit('updateIsGetting', {
-        defaultAccounts: true
-      })
+      if (!this.canGet('defaultAccounts')) return;
+
       return this.request({
         url: this.endpoint('accounts/defaultAccounts'),
         method: 'get',
         success: data => {
           this.$store.commit('setDefaultAccounts', data);
           init && this.init();
-          this.$store.commit('updateIsGetting', {
-            defaultAccounts: false
-          })
+          this.toggleIsGetting('defaultAccounts')
         }
       })
     },

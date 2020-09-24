@@ -32,10 +32,7 @@ export default {
     getWares(force = false, init = false) {
       if (!force && this.wares.length) return;
 
-      if (this.isGetting.wares) return;
-      this.$store.commit('updateIsGetting', {
-        wares: true
-      })
+      if (!this.canGet('wares')) return;
 
 
       return this.request({
@@ -47,14 +44,13 @@ export default {
           });
           init && this.init();
 
-          this.$store.commit('updateIsGetting', {
-            'wares': false
-          })
+          this.toggleIsGetting('wares')
         }
       })
     },
     getWarehouses(force = false, init = false) {
       if (!force && this.warehouses.length) return;
+      if (!this.canGet('warehouses')) return;
       return this.request({
         url: this.endpoint('wares/warehouses'),
         method: 'get',
@@ -63,6 +59,7 @@ export default {
             warehouses: data
           });
           init && this.init();
+          this.toggleIsGetting('warehouses')
         }
       })
     },
