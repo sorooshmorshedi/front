@@ -343,7 +343,7 @@ export default {
       data.form.total_value = this.rowsSum("total_value");
       data.form.gross_price = this.rowsSum("gross_price");
       data.form.insurance_price = this.rowsTaxPrice;
-      data.form.tax_value = this.rowsTaxPrice;
+      data.form.tax_price = this.rowsTaxPrice;
       data.form.complication_price = this.rowsComplicationPrice;
       data.form.weight = this.rowsSum("weight");
 
