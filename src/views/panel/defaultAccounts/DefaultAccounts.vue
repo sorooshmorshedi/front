@@ -98,7 +98,7 @@ export default {
     },
     items() {
       return this.defaultAccounts.filter((o) =>
-        o.usage.toLowerCase().includes(this.usage)
+        o.usage.toLowerCase().includes(this.usage.toLowerCase())
       );
     },
     canClear() {
