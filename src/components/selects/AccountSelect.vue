@@ -77,7 +77,7 @@
       </v-col>
     </template>
 
-    <v-dialog v-model="balanceDialog" max-width="500px" v-if="item">
+    <v-dialog v-model="balanceDialog" max-width="500px" v-if="item && item.balance">
       <v-card>
         <v-card-title>مانده حساب {{ item.name }}</v-card-title>
 
