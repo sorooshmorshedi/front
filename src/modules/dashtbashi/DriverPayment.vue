@@ -29,7 +29,7 @@
           <v-autocomplete
             label="حمل کننده"
             v-model="item.driving"
-            :items="$store.state.drivings"
+            :items="$store.state.drivings.filter(o => o.driver.owner == 'o')"
             item-text="title"
             item-value="id"
             :disabled="this.id != undefined"
@@ -289,7 +289,7 @@ export default {
         url: this.endpoint("dashtbashi/ladings/"),
         method: "get",
         params: {
-          dirving: driving.id,
+          driving: driving.id,
           is_paid: false,
         },
         success: (data) => {
@@ -297,8 +297,8 @@ export default {
           if (this.item.remittance) {
             this.selectedLadings = this.ladings.filter(
               (o) =>
-                !o.remittance ||
-                (o.remittance.id == this.item.remittance &&
+                
+                (o.remittance && o.remittance.id == this.item.remittance &&
                   this.item.selectedLadings.includes(String(o.id)))
             );
           }
