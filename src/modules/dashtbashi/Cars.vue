@@ -208,8 +208,8 @@ export default {
           id: "t",
         },
         {
-          text: "رنگی",
-          id: "c",
+          text: "شرکت نفت",
+          id: "o",
         },
       ],
       owners: [

@@ -19,6 +19,17 @@
     @delete="deleteItem"
     @clearForm="clearForm()"
   >
+    <template #header-btns>
+      <v-btn
+        v-if="id"
+        target="_blank"
+        :to="{name:'TransactionForm', params: {transactionType: 'payment', id: item.payment.id}}"
+        class="blue white--text mr-1"
+      >
+        مشاهده دریافت
+        <v-chip class="app-background-color mr-2" x-small>{{ item.payment.code }}</v-chip>
+      </v-btn>
+    </template>
     <template>
       <v-row>
         <v-col cols="12" md="2">
@@ -29,7 +40,7 @@
           <v-autocomplete
             label="حمل کننده"
             v-model="item.driving"
-            :items="$store.state.drivings.filter(o => o.driver.owner == 'o')"
+            :items="$store.state.drivings.filter(o => o.car.owner == 'o')"
             item-text="title"
             item-value="id"
             :disabled="this.id != undefined"
@@ -328,10 +339,6 @@ export default {
     },
 
     getDriverNotSettledImprests(driving, callback = null) {
-      console.log({
-        account: driving.car.payableAccount,
-        floatAccount: driving.driver.floatAccount,
-      });
       this.request({
         url: this.endpoint("imprests/notSettledImprests"),
         params: {
@@ -373,7 +380,6 @@ export default {
       });
     },
     setItem(item) {
-      console.log("set item", item);
       this.changeRouteTo(item.id);
       this.isEditing = false;
       this.item = item;
