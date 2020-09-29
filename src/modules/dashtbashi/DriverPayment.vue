@@ -56,7 +56,7 @@
 
         <v-col cols="12">
           <div class="mb-1 mr-1">بارگیری ها</div>
-          <v-data-table
+          <m-datatable
             :headers="ladingHeaders"
             :items="ladings"
             v-model="selectedLadings"
@@ -69,12 +69,12 @@
             <template #item.carIncome="{ item }">{{ getCarIncome(item) | toMoney}}</template>
             <template #item.sum="{ item }">{{ getLadingSum(item) | toMoney }}</template>
             <template #item.cargoDebt="{ item }">{{ getCargoDebt(item) | toMoney }}</template>
-          </v-data-table>
+          </m-datatable>
         </v-col>
 
         <v-col cols="12">
           <div class="mb-1 mr-1">تنخواه ها</div>
-          <v-data-table
+          <m-datatable
             :headers="imprestHeaders"
             :items="imprests"
             v-model="selectedImprests"
@@ -86,7 +86,7 @@
             <template #item.paidValue="{ item }">{{ item.sanad.bed | toMoney }}</template>
             <template #item.receivedValue="{ item }">{{ getImprestSettledValue(item) | toMoney }}</template>
             <template #item.remain="{ item }">{{ getImprestNotSettledValue(item) | toMoney}}</template>
-          </v-data-table>
+          </m-datatable>
         </v-col>
 
         <v-col cols="12" md="4">
@@ -145,10 +145,12 @@ import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 
+import MDatatable from "@/components/mcomponents/datatable/MDatatable";
+
 export default {
   name: "DriverPaymentForm",
   mixins: [formsMixin, GetApi, ListModalFormMixin, LadingMixin],
-  components: { TransactionForm },
+  components: { TransactionForm, MDatatable },
   props: ["id"],
   data() {
     return {
@@ -297,9 +299,9 @@ export default {
           if (this.item.remittance) {
             this.selectedLadings = this.ladings.filter(
               (o) =>
-                
-                (o.remittance && o.remittance.id == this.item.remittance &&
-                  this.item.selectedLadings.includes(String(o.id)))
+                o.remittance &&
+                o.remittance.id == this.item.remittance &&
+                this.item.selectedLadings.includes(String(o.id))
             );
           }
           callback && callback(data);
