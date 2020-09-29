@@ -44,7 +44,7 @@
               :itemsType="itemsType"
               v-model="item.parent"
               :disabled="item.id != undefined || !isEditing"
-              @input="(parent) => parent && (item.type = parent.type)"
+              @input="(parent) => !id && parent && (item.type = parent.type)"
             />
           </v-col>
           <v-col cols="12" v-if="parents.length">
