@@ -15,7 +15,7 @@
   >
     <template #default>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" md="8">
           <v-autocomplete
             :return-object="true"
             label=" * دسته بندی"
@@ -28,6 +28,14 @@
             :hide-details="false"
             :persistent-hint="true"
           ></v-autocomplete>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-switch
+            :disabled="!isEditing"
+            label="کالا خدماتی است"
+            v-model="item.is_service"
+            hint="کالای خدماتی انبار گردانی ندارد"
+          ></v-switch>
         </v-col>
         <v-col cols="12" v-if="item.id">
           <v-text-field label="کد" v-model="item.code" disabled :disabled="!isEditing" />
@@ -55,6 +63,7 @@
             :items="pricingTypes"
             v-model="item.pricingType"
             item-text="name"
+            item-value="id"
             :disabled="!isEditing"
             :return-object="true"
           ></v-select>
@@ -101,8 +110,8 @@ export default {
   mixins: [ListModalFormMixin, WareApiMixin],
   props: {
     level: {
-      requried: true
-    }
+      requried: true,
+    },
   },
   data() {
     return {
@@ -118,27 +127,27 @@ export default {
             {
               label: "از",
               model: "code__from",
-              filter: fromCodeFilter
+              filter: fromCodeFilter,
             },
             {
               label: "تا",
               model: "code__to",
-              filter: toCodeFilter
-            }
-          ]
+              filter: toCodeFilter,
+            },
+          ],
         },
         {
           text: "نام",
           value: "name",
           type: "text",
-          filters: ["name"]
-        }
-      ]
+          filters: ["name"],
+        },
+      ],
     };
   },
   computed: {
     parentItems() {
-      return this.wareLevels.filter(o => o.level == 2);
+      return this.wareLevels.filter((o) => o.level == 2);
     },
     items() {
       return this.wares;
@@ -153,12 +162,12 @@ export default {
         parentId = parent.id;
       }
       while (parentId) {
-        let parent = this.wareLevels.filter(o => o.id == parentId)[0];
+        let parent = this.wareLevels.filter((o) => o.id == parentId)[0];
         parents.push(parent.name);
         parentId = parent.parent;
       }
       return parents.reverse().join(" > ");
-    }
+    },
   },
   methods: {
     getData() {
@@ -176,9 +185,9 @@ export default {
     },
     getItemTemplate() {
       return {
-        category: null
+        category: null,
       };
-    }
-  }
+    },
+  },
 };
 </script>
