@@ -1220,7 +1220,7 @@ export default {
                   perm: "otherDriverPayment",
                   title: "لیست پرداخت راننده متفرقه",
                   to: {
-                    name: "OtherDriverPaymentList",
+                    name: "OtherDriverPaymentsList",
                   },
                 },
                 {

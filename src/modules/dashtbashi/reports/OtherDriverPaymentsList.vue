@@ -8,7 +8,7 @@
             :headers="headers"
             api-url="dashtbashi/otherDriverPayments/"
             :filters.sync="filters"
-            @detail="(item) => newTab({name: 'Lading', params: {id: item.id}})"
+            @detail="(item) => newTab({name: 'OtherDriverPayment', params: {id: item.id}})"
           ></m-datatable>
         </v-col>
       </v-row>
