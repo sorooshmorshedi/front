@@ -1213,7 +1213,14 @@ export default {
                   perm: "otherDriverPayment",
                   title: "پرداخت راننده متفرقه",
                   to: {
-                    name: "DriverPayment",
+                    name: "OtherDriverPayment",
+                  },
+                },
+                {
+                  perm: "otherDriverPayment",
+                  title: "لیست پرداخت راننده متفرقه",
+                  to: {
+                    name: "OtherDriverPaymentList",
                   },
                 },
                 {

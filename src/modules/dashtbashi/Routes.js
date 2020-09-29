@@ -9,9 +9,9 @@ import RevokeLadingBillNumber from "./RevokeLadingBillNumber"
 import Remittance from "./Remittance"
 import Lading from "./Lading"
 import OilCompanyLading from "./OilCompanyLading"
-import DriverPayment from "./DriverPayment"
+import OtherDriverPayment from "./OtherDriverPayment"
 
-import DriverPaymentReport from "./reports/OtherDriversPaymentReport.vue"
+import OtherDriverPaymentReport from "./reports/OtherDriversPaymentReport.vue"
 import RemittancesReport from "./reports/RemittancesReport.vue"
 import LadingBillSeriesList from "./reports/LadingBillSeriesList"
 import LadingsReport from "./reports/LadingsReport"
@@ -20,6 +20,7 @@ import OilCompanyLadingsReport from "./reports/OilCompanyLadingsReport"
 import LadingsReportForContractor from "./reports/LadingsReportForContractor"
 import LadingsReportForDriver from "./reports/LadingsReportForDriver"
 import TransportationCommissionReport from "./reports/TransportationCommissionReport"
+import OtherDriverPaymentsList from "./reports/OtherDriverPaymentsList"
 
 export default [{
     name: 'Options',
@@ -71,16 +72,16 @@ export default [{
     component: OilCompanyLading,
     props: true,
   }, {
-    name: 'DriverPayment',
-    path: 'driverPayment/:id?',
-    component: DriverPayment,
+    name: 'OtherDriverPayment',
+    path: 'otherDriverPayment/:id?',
+    component: OtherDriverPayment,
     props: true,
   },
 
   {
-    name: 'DriverPaymentReport',
-    path: 'driverPaymentReport',
-    component: DriverPaymentReport,
+    name: 'OtherDriverPaymentReport',
+    path: 'OtherDriverPaymentReport',
+    component: OtherDriverPaymentReport,
     props: true,
   },
   {
@@ -123,6 +124,11 @@ export default [{
     name: 'TransportationCommissionReport',
     path: 'transportationCommissionReport',
     component: TransportationCommissionReport
+  },
+  {
+    name: 'OtherDriverPaymentsList',
+    path: 'otherDriverPaymentsList',
+    component: OtherDriverPaymentsList
   },
 
 ]
