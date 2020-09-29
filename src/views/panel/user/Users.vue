@@ -62,7 +62,7 @@
           :disabled="!isEditing"
           v-if="item.id && hasPerm('changePassword', 'user', item)"
           @click=" showChangePasswordDialog = true "
-          class="blue white--text"
+          class="blue white--text mr-1"
         >تغیر کلمه عبور</v-btn>
       </template>
     </m-form>
