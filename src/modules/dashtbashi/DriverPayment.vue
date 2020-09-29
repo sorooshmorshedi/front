@@ -64,6 +64,7 @@
             item-key="id"
             :disable-pagination="true"
             :hide-default-footer="true"
+            :show-export-btns="false"
           >
             <template #item.tipPrice="{ item }">{{ item.driver_tip_price | toMoney}}</template>
             <template #item.carIncome="{ item }">{{ getCarIncome(item) | toMoney}}</template>
@@ -82,6 +83,7 @@
             item-key="id"
             :disable-pagination="true"
             :hide-default-footer="true"
+            :show-export-btns="false"
           >
             <template #item.paidValue="{ item }">{{ item.sanad.bed | toMoney }}</template>
             <template #item.receivedValue="{ item }">{{ getImprestSettledValue(item) | toMoney }}</template>

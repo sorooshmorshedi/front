@@ -13,7 +13,7 @@
             hide-details
           />
         </v-col>
-        <v-col cols="12" md="8" class="mt-1 text-left">
+        <v-col cols="12" md="8" class="mt-1 text-left" v-if="showExportBtns">
           <v-btn @click="exportTo('html')" class="export-btn">چاپ</v-btn>
           <v-btn @click="exportTo('pdf')" class="export-btn mr-1">خروجی PDF</v-btn>
           <v-btn @click="exportTo('xlsx')" class="export-btn mr-1">خروجی اکسل</v-btn>
@@ -205,6 +205,9 @@ export default {
   props: {
     apiUrl: {
       default: null,
+    },
+    showExportBtns: {
+      default: true
     },
     exportUrl: {
       default: null,
