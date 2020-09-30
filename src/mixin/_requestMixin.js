@@ -106,6 +106,7 @@ export default {
           message = error.field + ' : ' + error.messages, 'danger'
         }
         this.notify(message, 'danger');
+        break;
       }
     },
     handle_406(error, options) {
