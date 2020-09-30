@@ -53,11 +53,9 @@ export default {
   },
   watch: {
     searchValue() {
-      console.log("perform search");
       this.filteredData = this.performSearch(this.data, this.searchValue);
     },
     data() {
-      console.log("perform search");
       this.filteredData = this.performSearch(this.data, this.searchValue);
     }
   },

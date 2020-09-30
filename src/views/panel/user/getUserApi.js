@@ -12,6 +12,12 @@ export default {
               name: 'Companies'
             });
           }
+
+          if (!this.financialYear && this.$route && !['FinancialYears'].includes(this.$route.name)) {
+            this.$router.push({
+              name: 'FinancialYears'
+            });
+          }
         }
       });
     },

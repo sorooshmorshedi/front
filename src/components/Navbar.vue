@@ -1242,7 +1242,6 @@ export default {
         let visible = false;
 
         if (route.module && !this.user.modules.includes(route.module)) {
-          console.log(route.module);
           visible = false;
         } else if (route.perm) {
           visible = this.hasPerm("", route.perm);
