@@ -1,5 +1,9 @@
 export default {
   computed: {
+    accountType() {
+      if (this.isCw) return 'level3'
+      else return 'persons';
+    },
     permissionBasename() {
       return this.type
     },

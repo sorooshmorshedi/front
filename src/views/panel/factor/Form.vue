@@ -87,7 +87,7 @@
           <v-col cols="12" md="4" v-if="!isFpi">
             <account-select
               :label="' * ' + accountName"
-              itemsType="persons"
+              :itemsType="accountType"
               v-model="item.account"
               :disabled="!isEditing"
               :floatAccount="item.floatAccount"
