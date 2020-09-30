@@ -8,7 +8,7 @@ export default {
         if (this.isDev) {
           serverUrl = "http://localhost:8001/";
         } else {
-          serverUrl = "http://185.239.105.10:8000/";
+          serverUrl = "https://api.app.sobhan.net/";
           // serverUrl = "http://api." + window.location.hostname + "/";
         }
         localStorage.setItem('serverUrl', serverUrl)
