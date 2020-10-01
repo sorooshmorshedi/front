@@ -8,13 +8,13 @@
         :class="item.expanded ? 'tree-open' : 'tree-close'"
       ></span>
       <span
-        :title="item.title"
+        :title="item.nodeTitle"
         class="node-title"
         @mouseover="nodeMouseOver(item, index, parent)"
         @contextmenu.prevent="nodeContextMenu($event, item, index, parent)"
         @click="nodeClick(item, index, parent)"
         style="user-select: none"
-        v-html="item.title"
+        v-html="item.nodeTitle"
       ></span>
     </div>
     <template v-if="showNextUl">

@@ -13,40 +13,40 @@ export default {
   provide() {
     return {
       isLeaf: this.isLeaf,
-      emitEventToTree: this.emitEventToParent
+      emitEventToTree: this.emitEventToParent,
     };
   },
   props: {
     data: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     canDeleteRoot: {
       type: Boolean,
-      default: false
+      default: false,
     },
     maxLevel: {
       type: Number,
-      default: 1024
+      default: 1024,
     },
     allowGetParentNode: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       searchValue: "",
-      filteredData: this.data
+      filteredData: this.data,
     };
   },
   computed: {
     childBind() {
       return Object.assign({}, this.$attrs, {
         ...this.$props,
-        data: this.filteredData
+        data: this.filteredData,
       });
-    }
+    },
   },
   mounted() {
     this.filteredData = this.performSearch(this.data, this.searchValue);
@@ -57,20 +57,22 @@ export default {
     },
     data() {
       this.filteredData = this.performSearch(this.data, this.searchValue);
-    }
+    },
   },
   methods: {
     performSearch(data, searchValue) {
       let expand = false;
-      data = data.map(node => {
+      data = data.map((node) => {
         if (node.children) {
           node.children = this.performSearch(node.children, searchValue);
         }
 
-        if (!node.originalTitle) node.originalTitle = node.title;
+        if (!node.originalTitle) {
+          node.originalTitle = node.title;
+        }
         let title = node.originalTitle;
 
-        let hasExpandedChild = node.children.filter(o => o.expanded == true)
+        let hasExpandedChild = node.children.filter((o) => o.expanded == true)
           .length;
         if (
           searchValue &&
@@ -86,7 +88,7 @@ export default {
           expand = false;
         }
 
-        this.$set(node, "title", title);
+        this.$set(node, "nodeTitle", title);
         this.$set(node, "expanded", expand);
 
         if (searchValue == "") {
@@ -155,7 +157,7 @@ export default {
       const { halfcheck, checked } = parent;
       addnode = Object.assign(
         {
-          checked: !halfcheck && checked
+          checked: !halfcheck && checked,
         },
         addnode
       );
@@ -194,8 +196,8 @@ export default {
       }
       // this.$emit('delNode', { parentNode: parent, delNode: node })
       this.emitEventToParent("del-node", { parentNode: parent, delNode: node });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">
