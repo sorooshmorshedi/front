@@ -44,7 +44,7 @@
               :itemsType="itemsType"
               v-model="item.parent"
               :disabled="item.id != undefined || !isEditing"
-              @input="(parent) => !id && parent && (item.type = parent.type)"
+              @input="(parent) => !item.id && parent && (item.type = parent.type)"
             />
           </v-col>
           <v-col cols="12" v-if="parents.length">
@@ -55,7 +55,7 @@
             </v-breadcrumbs>
           </v-col>
         </template>
-        <v-col cols="12" v-if="!isPerson && !isBank">
+        <v-col cols="12" v-if="!isPerson && !isBank && level != 0">
           <v-autocomplete
             label="نوع"
             :items="accountTypes"
@@ -411,6 +411,7 @@ export default {
     getItemTemplate() {
       return {
         is_real: true,
+        type: null,
       };
     },
     getData() {
