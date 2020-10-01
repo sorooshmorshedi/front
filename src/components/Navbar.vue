@@ -339,6 +339,7 @@ export default {
         },
         {
           title: "حسابداری",
+          module: "sanads",
           children: [
             {
               perm: "create.sanad",
@@ -394,6 +395,7 @@ export default {
         },
         {
           title: "خزانه داری",
+          module: "transactions",
           children: [
             {
               title: "دریافت",
@@ -574,6 +576,7 @@ export default {
         },
         {
           title: "بازرگانی",
+          module: "factors",
           children: [
             {
               title: "فاکتور خرید",
@@ -683,6 +686,7 @@ export default {
         },
         {
           title: "انبار",
+          module: "factors",
           children: [
             {
               title: "انتقال",
