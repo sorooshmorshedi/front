@@ -78,7 +78,7 @@ export default {
       }
     },
     handle_403(error) {
-      this.notify(error.response.data.detail, 'warning');
+      this.notify(error.response.data[0].messages[0], 'warning');
     },
     handle_401(error) {
       if (this.$router.currentRoute.name == 'Login') return;
