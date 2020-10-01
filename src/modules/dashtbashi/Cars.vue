@@ -34,7 +34,7 @@
                         id="car-number-1"
                         type="text"
                         v-model.lazy="item.car_number[0]"
-                        :disabled="!isEditing"
+                        :disabled="item.id"
                       />
                     </div>
                   </div>
@@ -57,7 +57,7 @@
                         id="car-number-2"
                         type="text"
                         v-model.lazy="item.car_number[1]"
-                        :disabled="!isEditing"
+                        :disabled="item.id"
                       />
                     </div>
                   </div>
@@ -80,7 +80,7 @@
                         id="car-number-3"
                         type="text"
                         v-model.lazy="item.car_number[2]"
-                        :disabled="!isEditing"
+                        :disabled="item.id"
                       />
                     </div>
                   </div>
@@ -103,7 +103,7 @@
                         id="car-number-4"
                         type="text"
                         v-model.lazy="item.car_number[3]"
-                        :disabled="!isEditing"
+                        :disabled="item.id"
                       />
                       <div class="v-text-field__suffix">ایران</div>
                     </div>
@@ -121,7 +121,7 @@
             :items="contractTypes"
             item-text="text"
             item-value="id"
-            :disabled="!isEditing"
+            :disabled="item.id"
             :return-object="true"
           />
         </v-col>
@@ -140,7 +140,7 @@
             :items="owners"
             item-text="text"
             item-value="id"
-            :disabled="!isEditing"
+            :disabled="item.id"
             :return-object="true"
           />
         </v-col>
@@ -227,7 +227,7 @@ export default {
         },
         {
           text: "شراکتی",
-          id: "c",
+          id: "p",
         },
         {
           text: "دیگر",

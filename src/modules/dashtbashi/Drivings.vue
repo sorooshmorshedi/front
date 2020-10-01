@@ -23,7 +23,7 @@
             :items="$store.state.cars"
             item-text="car_number_str"
             item-value="id"
-            :disabled="!isEditing"
+            :disabled="item.id"
           />
         </v-col>
         <v-col cols="12" md="6">
@@ -31,7 +31,7 @@
             :return-object="true"
             label="* راننده"
             v-model="item.driver"
-            :disabled="!isEditing"
+            :disabled="item.id"
             :items="$store.state.drivers"
             item-text="name"
             item-value="id"
