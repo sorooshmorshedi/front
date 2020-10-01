@@ -16,7 +16,7 @@
     <template #default>
       <v-row>
         <v-col cols="12" md="12">
-          <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
+          <v-text-field label=" * نام" v-model="item.name" :disabled="item.id" />
         </v-col>
         <v-col cols="12" md="4">
           <v-text-field
@@ -98,15 +98,15 @@ export default {
           text: "نام",
           value: "name",
           type: "text",
-          filters: ["name"]
-        }
-      ]
+          filters: ["name"],
+        },
+      ],
     };
   },
   computed: {
     items() {
       return this.$store.state.drivers;
-    }
+    },
   },
   methods: {
     getData() {
@@ -115,7 +115,7 @@ export default {
     getSerialized() {
       let item = this.extractIds(this.item);
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
