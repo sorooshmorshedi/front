@@ -39,11 +39,11 @@
 </template>
 <script>
 import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import GetFactorExpenseApi from "./getFactorExpensesApi";
 
 export default {
-  mixins: [ListModalFormMixin, GetFactorExpenseApi],
+  mixins: [MFormMixin, GetFactorExpenseApi],
   props: {
     factorType: {
       requried: true

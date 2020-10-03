@@ -253,10 +253,10 @@
 <script>
 import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";
 import AccountApiMixin from "@/mixin/accountMixin";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
-  mixins: [ListModalFormMixin, AccountApiMixin],
+  mixins: [MFormMixin, AccountApiMixin],
   props: {
     level: {
       requried: true,

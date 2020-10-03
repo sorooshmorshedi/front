@@ -27,10 +27,10 @@
 </template>
 <script>
 import AccountApiMixin from "@/mixin/accountMixin";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
-  mixins: [ListModalFormMixin, AccountApiMixin],
+  mixins: [MFormMixin, AccountApiMixin],
   props: {
     is_cost_center: {
       default: false

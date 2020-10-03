@@ -27,11 +27,9 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import formOptions from "./formOptions";
 export default {
   name: "List",
-  components: { MDatatable },
   props: {
     form: { required: true },
     type: {},

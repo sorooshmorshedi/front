@@ -66,7 +66,7 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 
 import GetApi from "../GetApi";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "../LadingMixin";

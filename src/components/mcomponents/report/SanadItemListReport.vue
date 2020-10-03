@@ -69,12 +69,10 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import accountApiMixin from "@/mixin/accountMixin";
 import _ from "lodash";
 export default {
   name: "Ledger",
-  components: { MDatatable },
   mixins: [accountApiMixin],
   props: {
     filters: {},

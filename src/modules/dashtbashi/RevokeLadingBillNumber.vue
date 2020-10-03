@@ -45,12 +45,10 @@
 
 <script>
 import GetApi from "./GetApi";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
-  mixins: [GetApi, ListModalFormMixin],
-  components: { MDatatable },
+  mixins: [GetApi, MFormMixin],
   data() {
     return {
       filters: {

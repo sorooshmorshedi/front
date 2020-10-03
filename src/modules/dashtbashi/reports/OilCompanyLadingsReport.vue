@@ -51,12 +51,10 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import GetApi from "../GetApi";
 
 export default {
   name: "Form",
-  components: { MDatatable },
   mixins: [GetApi],
   props: {
     detailed: {

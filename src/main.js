@@ -9,9 +9,18 @@ require('@fortawesome/fontawesome-free/css/all.css')
 
 import 'cleave.js'
 
+import '@/components/mcomponents/form'
+
 import Chart from 'chart.js'
 Chart.defaults.global.defaultFontFamily = 'IRANSans';
 
+import MDatatable from "@bit/mmd-mostafaee.vue.m-datatable";
+Vue.component('MDatatable', MDatatable);
+
+import {
+  MForm
+} from "@bit/mmd-mostafaee.vue.m-form";
+Vue.component('MForm', MForm);
 
 import WareSelect from '@/components/selects/WareSelect.vue';
 Vue.component('WareSelect', WareSelect);
@@ -31,9 +40,8 @@ Vue.component('date', date);
 import ContextMenu from "@/components/mcomponents/ContextMenu";
 Vue.component('ContextMenu', ContextMenu);
 
-import MForm from "@/components/form/MForm";
-Vue.component('MForm', MForm);
-
+import OpenSanadBtn from "@/components/form/OpenSanadBtn";
+Vue.component('OpenSanadBtn', OpenSanadBtn);
 
 import _ from 'lodash'
 window._ = _

@@ -28,11 +28,9 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import wareApiMixin from "@/mixin/wareApi";
 import _ from "lodash";
 export default {
-  components: { MDatatable },
   mixins: [wareApiMixin],
   props: ["warehouseId"],
   data() {
@@ -40,37 +38,37 @@ export default {
       url: "reports/inventory/warehouse/all",
       warehouse: null,
       filters: {
-        warehouse: null
+        warehouse: null,
       },
       headers: [
         {
           text: "کالا",
-          value: "name"
+          value: "name",
         },
         {
           text: "وارده",
           value: "input",
           type: "numeric",
-          filterable: false
+          filterable: false,
         },
         {
           text: "صادره",
           value: "output",
           type: "numeric",
-          filterable: false
+          filterable: false,
         },
         {
           text: "مانده",
           value: "remain",
           type: "numeric",
-          filterable: false
-        }
-      ]
+          filterable: false,
+        },
+      ],
     };
   },
   created() {
     this.getWarehouses();
-  }
+  },
 };
 </script>
 

@@ -154,16 +154,14 @@ import date from "@/components/mcomponents/cleave/Date";
 
 import GetApi from "./GetApi";
 import LadingMixin from "./LadingMixin";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
-
 export default {
   name: "DriverPaymentForm",
-  mixins: [formsMixin, GetApi, ListModalFormMixin, LadingMixin],
-  components: { TransactionForm, MDatatable },
+  mixins: [formsMixin, GetApi, MFormMixin, LadingMixin],
+  components: { TransactionForm },
   props: ["id"],
   data() {
     return {

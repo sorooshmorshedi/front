@@ -21,11 +21,8 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
-
 export default {
   name: "Form",
-  components: { MDatatable },
   data() {
     return {
       filters: {},

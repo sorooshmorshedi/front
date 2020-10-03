@@ -68,7 +68,7 @@
 
 <script>
 import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
-import queryBinding from "@/mixin/queryBinding";
+import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
 export default {
   name: "Ledger",
   mixins: [queryBinding],

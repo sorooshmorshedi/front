@@ -27,10 +27,10 @@
 </template>
 <script>
 import WareApiMixin from "@/mixin/wareApi";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
-  mixins: [ListModalFormMixin, WareApiMixin],
+  mixins: [MFormMixin, WareApiMixin],
   data() {
     return {
       item: {},

@@ -18,10 +18,8 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import _ from "lodash";
 export default {
-  components: { MDatatable },
   data() {
     return {
       url: "reports/inventory/ware/all",
@@ -30,14 +28,14 @@ export default {
           text: "کالا",
           value: "name",
           type: "text",
-          sortable: false
+          sortable: false,
         },
         {
           text: "مقدار وارده",
           value: "input.count",
           type: "number",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "فی وارده",
@@ -45,7 +43,7 @@ export default {
           type: "money",
           sortable: false,
           filters: [],
-          filterable: false
+          filterable: false,
         },
         {
           text: "مبلغ وارده",
@@ -53,7 +51,7 @@ export default {
           type: "money",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "مقدار صادره",
@@ -61,7 +59,7 @@ export default {
           type: "number",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "فی صادره",
@@ -69,7 +67,7 @@ export default {
           type: "money",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "مبلغ صادره",
@@ -77,7 +75,7 @@ export default {
           type: "money",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "مقدار مانده",
@@ -85,7 +83,7 @@ export default {
           type: "number",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "فی مانده",
@@ -93,7 +91,7 @@ export default {
           type: "money",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "مبلغ مانده",
@@ -101,12 +99,12 @@ export default {
           type: "money",
           sortable: false,
           filterable: false,
-          filters: []
-        }
+          filters: [],
+        },
       ],
-      filters: {}
+      filters: {},
     };
-  }
+  },
 };
 </script>
 

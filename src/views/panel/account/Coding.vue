@@ -10,11 +10,8 @@
 <script>
 import AccountApiMixin from "@/mixin/accountMixin";
 
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
-
 export default {
   mixins: [AccountApiMixin],
-  components: { MDatatable },
   data() {
     return {
       filters: {},

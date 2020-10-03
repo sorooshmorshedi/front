@@ -25,11 +25,11 @@
   </div>
 </template>
 <script>
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import getCitiesApi from "./getCitiesApi";
 
 export default {
-  mixins: [ListModalFormMixin, getCitiesApi],
+  mixins: [MFormMixin, getCitiesApi],
   props: {},
   data() {
     return {

@@ -116,12 +116,12 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
 import _ from "lodash";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
   name: "Form",
   components: { money, date, mtime },
-  mixins: [formsMixin, wareApiMixin, ListModalFormMixin],
+  mixins: [formsMixin, wareApiMixin, MFormMixin],
   props: {
     id: {},
     type: {

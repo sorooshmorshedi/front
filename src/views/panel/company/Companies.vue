@@ -84,11 +84,11 @@
   </div>
 </template>
 <script>
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import GetUserApi from "@/views/panel/user/getUserApi";
 
 export default {
-  mixins: [ListModalFormMixin, GetUserApi],
+  mixins: [MFormMixin, GetUserApi],
   props: {},
   data() {
     return {

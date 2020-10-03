@@ -33,10 +33,10 @@
   </m-form>
 </template>
 <script>
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
-  mixins: [ListModalFormMixin],
+  mixins: [MFormMixin],
   data() {
     let forms = [
       { text: "سند", value: "s" },

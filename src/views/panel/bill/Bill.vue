@@ -32,27 +32,26 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import accountApiMixin from "@/mixin/accountMixin";
 import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
 export default {
   name: "Bill",
-  components: { MDatatable, SanadItemListReport },
+  components: { SanadItemListReport },
   mixins: [accountApiMixin],
   props: {
     ledgerAccountIds: {
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
       filters: {
-        account: null
-      }
+        account: null,
+      },
     };
   },
   methods: {},
-  watch: {}
+  watch: {},
 };
 </script>
 

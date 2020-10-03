@@ -561,13 +561,13 @@ import mtime from "@/components/mcomponents/cleave/Time";
 
 import formComputed from "./formComputed.js";
 import formMethods from "./formMethods.js";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
   name: "Form",
   components: { money, date, mtime },
   mixins: [
-    ListModalFormMixin,
+    MFormMixin,
     formsMixin,
     accountApiMixin,
     wareApiMixin,

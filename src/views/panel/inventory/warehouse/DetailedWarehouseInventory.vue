@@ -32,11 +32,9 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import wareApiMixin from "@/mixin/wareApi";
 import _ from "lodash";
 export default {
-  components: { MDatatable },
   mixins: [wareApiMixin],
   data() {
     return {
@@ -47,7 +45,7 @@ export default {
           value: "factor.date",
           type: "date",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "نوع فاکتور",
@@ -57,96 +55,96 @@ export default {
           items: [
             {
               label: "خرید",
-              value: "buy"
+              value: "buy",
             },
             {
               label: "برگشت از خرید",
-              value: "backFromBuy"
+              value: "backFromBuy",
             },
             {
               label: "فروش",
-              value: "sale"
+              value: "sale",
             },
             {
               label: "برگشت از فروش",
-              value: "backFromSale"
+              value: "backFromSale",
             },
             {
               label: "موجودی اول دوره",
-              value: "fpi"
+              value: "fpi",
             },
             {
               label: "وارده از انتقال",
-              value: "it"
+              value: "it",
             },
             {
               label: "صادره با انتقال",
-              value: "ot"
-            }
-          ]
+              value: "ot",
+            },
+          ],
         },
         {
           text: "عطف فاکتور",
           value: "factor.id",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "شماره فاکتور",
           value: "factor.code",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "شرح فاکتور",
           value: "factor.explanation",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "انبار",
           value: "warehouse.name",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "نام حساب",
           value: "factor.account.name",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "وارده",
           value: "input",
           type: "numeric",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "صادره",
           value: "output",
           type: "numeric",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "مانده",
           value: "remain",
           type: "numeric",
           sortable: false,
-          filterable: false
-        }
+          filterable: false,
+        },
       ],
       filters: {
         ware: null,
-        warehouse: null
-      }
+        warehouse: null,
+      },
     };
   },
   created() {
     this.getWarehouses();
   },
-  methods: {}
+  methods: {},
 };
 </script>
 

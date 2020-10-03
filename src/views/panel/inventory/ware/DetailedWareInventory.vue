@@ -23,24 +23,22 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import _ from "lodash";
 export default {
-  components: { MDatatable },
   props: ["wareId"],
   data() {
     return {
       url: "reports/inventory/ware",
       ware: null,
       filters: {
-        ware: null
+        ware: null,
       },
       headers: [
         {
           text: "تاریخ",
           value: "factor.date",
           type: "date",
-          sortable: false
+          sortable: false,
         },
         {
           text: "نوع فاکتور",
@@ -50,53 +48,53 @@ export default {
           items: [
             {
               text: "خرید",
-              value: "buy"
+              value: "buy",
             },
             {
               text: "برگشت از خرید",
-              value: "backFromBuy"
+              value: "backFromBuy",
             },
             {
               text: "فروش",
-              value: "sale"
+              value: "sale",
             },
             {
               text: "برگشت از فروش",
-              value: "backFromSale"
+              value: "backFromSale",
             },
             {
               text: "موجودی اول دوره",
-              value: "fpi"
-            }
-          ]
+              value: "fpi",
+            },
+          ],
         },
         {
           text: "شماره فاکتور",
           value: "factor.code",
           type: "number",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "شرح فاکتور",
           value: "factor.explanation",
           type: "text",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "نام حساب",
           value: "factor.account.name",
           type: "text",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "مقدار وارده",
           value: "input.count",
           type: "numeric",
           sortable: false,
-          filterable: false
+          filterable: false,
         },
         {
           text: "فی وارده",
@@ -104,7 +102,7 @@ export default {
           type: "numeric",
           sortable: false,
           filters: [],
-          filterable: false
+          filterable: false,
         },
         {
           text: "مبلغ وارده",
@@ -112,7 +110,7 @@ export default {
           type: "numeric",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "مقدار صادره",
@@ -120,7 +118,7 @@ export default {
           type: "number",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "فی صادره",
@@ -128,7 +126,7 @@ export default {
           type: "numeric",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "مبلغ صادره",
@@ -136,7 +134,7 @@ export default {
           type: "numeric",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "مقدار مانده",
@@ -144,7 +142,7 @@ export default {
           type: "numeric",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "فی مانده",
@@ -152,7 +150,7 @@ export default {
           type: "numeric",
           sortable: false,
           filterable: false,
-          filters: []
+          filters: [],
         },
         {
           text: "مبلغ مانده",
@@ -160,9 +158,9 @@ export default {
           type: "numeric",
           sortable: false,
           filterable: false,
-          filters: []
-        }
-      ]
+          filters: [],
+        },
+      ],
     };
   },
   created() {},
@@ -172,10 +170,10 @@ export default {
       handler() {
         this.filters.ware = this.ware.id;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
-  computed: {}
+  computed: {},
 };
 </script>
 

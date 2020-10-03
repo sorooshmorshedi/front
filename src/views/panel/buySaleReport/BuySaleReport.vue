@@ -28,26 +28,24 @@
 
 <script>
 import wareApiMixin from "@/mixin/wareApi";
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 export default {
   props: {
     wareId: {},
     type: {
-      required: true
-    }
+      required: true,
+    },
   },
   mixins: [wareApiMixin],
-  components: { MDatatable },
   data() {
     return {
       url: "reports/buySale",
       ware: null,
       filters: {
         factor__type__in: "",
-        ware: ""
+        ware: "",
       },
       layout: {
-        title: ""
+        title: "",
       },
       headers: [
         {
@@ -56,90 +54,90 @@ export default {
           items: [
             {
               text: "موجودی اول دوره",
-              value: "fpi"
+              value: "fpi",
             },
             {
               text: "فروش",
-              value: "sale"
+              value: "sale",
             },
             {
               text: "برگشت از فروش",
-              value: "backFromSale"
+              value: "backFromSale",
             },
             {
               text: "خرید",
-              value: "buy"
+              value: "buy",
             },
             {
               text: "برگشت از خرید",
-              value: "backFromBuy"
-            }
-          ]
+              value: "backFromBuy",
+            },
+          ],
         },
         {
           text: "تاریخ",
           value: "factor.date",
-          type: "date"
+          type: "date",
         },
         {
           text: "شماره عطف",
-          value: "factor.id"
+          value: "factor.id",
         },
         {
           text: "شماره فاکتور",
-          value: "factor.code"
+          value: "factor.code",
         },
         {
           text: "خریدار/فروشنده",
           value: "factor.account.name",
-          type: "text"
+          type: "text",
         },
         {
           text: "انبار",
           value: "warehouse.name",
-          type: "text"
+          type: "text",
         },
         {
           text: "تعداد",
           value: "count",
           type: "numeric",
-          sortable: false
+          sortable: false,
         },
         {
           text: "فی",
           value: "fee",
           type: "numeric",
-          sortable: false
+          sortable: false,
         },
         {
           text: "مبلغ",
           value: "value",
           type: "numeric",
-          sortable: false
+          sortable: false,
         },
         {
           text: "تخفیف",
           value: "discount",
           type: "numeric",
-          sortable: false
+          sortable: false,
         },
         {
           text: "مبلغ کل",
           value: "total_value",
           type: "numeric",
-          sortable: false
+          sortable: false,
         },
         {
           text: "شرح فاکتور",
           value: "factor.explanation",
-          type: "text"
+          type: "text",
         },
         {
           text: "توضیحات",
           value: "explanation",
-          type: "text"
-        }
-      ]
+          type: "text",
+        },
+      ],
     };
   },
   created() {
@@ -147,7 +145,7 @@ export default {
   },
   methods: {
     getData() {
-      Promise.all([this.getWares()]).then(data => {
+      Promise.all([this.getWares()]).then((data) => {
         this.init();
       });
     },
@@ -157,7 +155,7 @@ export default {
       this.setDefaultFilters();
 
       if (this.wareId) {
-        this.ware = this.wares.filter(o => o.id == this.wareId)[0];
+        this.ware = this.wares.filter((o) => o.id == this.wareId)[0];
       }
     },
     setLayout() {
@@ -166,18 +164,14 @@ export default {
     },
     setDefaultFilters() {
       if (this.type == "sale") {
-        this.filters["factor__type__in"] = ["sale", "backFromSale"].join(
-          ","
-        );
+        this.filters["factor__type__in"] = ["sale", "backFromSale"].join(",");
       } else {
-        this.filters["factor__type__in"] = ["buy", "backFromBuy"].join(
-          ","
-        );
+        this.filters["factor__type__in"] = ["buy", "backFromBuy"].join(",");
       }
     },
     selectWare() {
       this.filters.ware = this.ware.id;
-    }
+    },
   },
   watch: {
     form() {
@@ -190,9 +184,9 @@ export default {
       handler() {
         this.selectWare();
       },
-      deep: true
-    }
-  }
+      deep: true,
+    },
+  },
 };
 </script>
 

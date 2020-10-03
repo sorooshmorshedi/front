@@ -144,14 +144,13 @@
 
 <script>
 import date from "@/components/mcomponents/cleave/Date";
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import datatableBaseCols from "./_datatableBaseCols";
 import AccountApiMixin from "@/mixin/accountMixin";
 import _ from "lodash";
 export default {
   name: "Balance",
   mixins: [AccountApiMixin],
-  components: { date, MDatatable },
+  components: { date },
   props: {
     title: {
       required: true,

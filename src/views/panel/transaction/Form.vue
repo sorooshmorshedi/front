@@ -291,7 +291,7 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import _ from "lodash";
@@ -301,7 +301,7 @@ import ChequeForm from "../cheque/ChequeForm.vue";
 export default {
   name: "TransactionForm",
   components: { ChequeForm, money, date },
-  mixins: [ListModalFormMixin, accountApiMixin],
+  mixins: [MFormMixin, accountApiMixin],
   props: {
     transactionType: {
       required: true,

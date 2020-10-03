@@ -26,11 +26,11 @@
   </m-form>
 </template>
 <script>
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import GetOptionsApi from "@/views/panel/options/getOptionsApi";
 
 export default {
-  mixins: [ListModalFormMixin, GetOptionsApi],
+  mixins: [MFormMixin, GetOptionsApi],
   data() {
     return {
       item: {},

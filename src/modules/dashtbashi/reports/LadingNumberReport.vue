@@ -17,14 +17,12 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 import GetApi from "../GetApi";
-import QueryBinding from "@/mixin/queryBinding";
+import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
 
 export default {
   name: "Form",
-  components: { MDatatable },
-  mixins: [GetApi, QueryBinding],
+  mixins: [GetApi, queryBinding],
   data() {
     return {
       filters: {

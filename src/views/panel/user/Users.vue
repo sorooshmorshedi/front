@@ -82,11 +82,11 @@
   </div>
 </template>
 <script>
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import getRolesApi from "../role/getRolesApi";
 
 export default {
-  mixins: [ListModalFormMixin, getRolesApi],
+  mixins: [MFormMixin, getRolesApi],
   props: {},
   data() {
     return {

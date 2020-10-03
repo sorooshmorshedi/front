@@ -192,11 +192,11 @@
   </m-form>
 </template>
 <script>
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import GetApi from "./GetApi";
 
 export default {
-  mixins: [ListModalFormMixin, GetApi],
+  mixins: [MFormMixin, GetApi],
   data() {
     return {
       baseUrl: "dashtbashi/cars",

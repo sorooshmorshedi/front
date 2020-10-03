@@ -132,7 +132,7 @@
 
 <script>
 import formsMixin from "@/mixin/forms";
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import GetApi from "./GetApi";
 export default {
   props: {
@@ -140,7 +140,7 @@ export default {
       default: null,
     },
   },
-  mixins: [formsMixin, ListModalFormMixin, GetApi],
+  mixins: [formsMixin, MFormMixin, GetApi],
   data() {
     return {
       item: {},

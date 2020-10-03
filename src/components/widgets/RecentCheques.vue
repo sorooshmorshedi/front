@@ -19,9 +19,7 @@
 </template>
 
 <script>
-import MDatatable from "@/components/mcomponents/datatable/MDatatable";
 export default {
-  components: { MDatatable },
   props: {
     type: {
       required: true,

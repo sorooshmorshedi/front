@@ -171,12 +171,12 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
   name: "Form",
   components: { money, date },
-  mixins: [formsMixin, accountApiMixin, ListModalFormMixin],
+  mixins: [formsMixin, accountApiMixin, MFormMixin],
   props: ["id"],
   data() {
     return {

@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import ListModalFormMixin from "@/components/mcomponents/form/ListModalForm.js";
+import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 import accountApiMixin from "@/mixin/accountMixin";
 import money from "@/components/mcomponents/cleave/Money";
@@ -74,7 +74,7 @@ import GetChequebookApi from "./getChequebooksApi";
 export default {
   name: "ChequebookForm",
   components: { money, date },
-  mixins: [ListModalFormMixin, GetChequebookApi, accountApiMixin, formsMixin],
+  mixins: [MFormMixin, GetChequebookApi, accountApiMixin, formsMixin],
   data() {
     return {
       baseUrl: "cheques/chequebooks",
