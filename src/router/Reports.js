@@ -1,24 +1,24 @@
-import Panel from '@/views/panel/Panel.vue';
+const Panel = () => import('@/views/panel/Panel.vue');
 
-import List from '@/views/panel/lists/List.vue';
+const List = () => import('@/views/panel/lists/List.vue');
 
-import AccountsCoding from '../views/panel/account/Coding';
+const AccountsCoding = () => import('../views/panel/account/Coding');
 
-import AccountsBalance from '../views/panel/balance/accounts/AccountsBalance.vue';
-import FloatAccountsBalanceByGroup from '../views/panel/balance/floatAccountsByGroup/FloatAccountsBalanceByGroup.vue';
-import FloatAccountsBalance from '../views/panel/balance/floatAccounts/FloatAccountsBalance.vue';
+const AccountsBalance = () => import('../views/panel/balance/accounts/AccountsBalance.vue');
+const FloatAccountsBalanceByGroup = () => import('../views/panel/balance/floatAccountsByGroup/FloatAccountsBalanceByGroup.vue');
+const FloatAccountsBalance = () => import('../views/panel/balance/floatAccounts/FloatAccountsBalance.vue');
 
-import Ledger from '@/views/panel/ledger/Ledger.vue';
-import Bill from '@/views/panel/bill/Bill.vue';
-import Journal from '@/views/panel/journal/Journal.vue';
-import IncomeStatement from '@/views/panel/incomeStatement/IncomeStatement.vue';
-import BalanceSheet from '@/views/panel/balanceSheet/BalanceSheet.vue';
-import BuySaleReport from '@/views/panel/buySaleReport/BuySaleReport.vue';
+const Ledger = () => import('@/views/panel/ledger/Ledger.vue');
+const Bill = () => import('@/views/panel/bill/Bill.vue');
+const Journal = () => import('@/views/panel/journal/Journal.vue');
+const IncomeStatement = () => import('@/views/panel/incomeStatement/IncomeStatement.vue');
+const BalanceSheet = () => import('@/views/panel/balanceSheet/BalanceSheet.vue');
+const BuySaleReport = () => import('@/views/panel/buySaleReport/BuySaleReport.vue');
 
-import DetailedWareInventory from '@/views/panel/inventory/ware/DetailedWareInventory.vue';
-import AllWaresInventory from '@/views/panel/inventory/ware/AllWaresInventory.vue';
-import DetailedWarehouseInventory from '@/views/panel/inventory/warehouse/DetailedWarehouseInventory.vue';
-import AllWarehousesInventory from '@/views/panel/inventory/warehouse/AllWarehousesInventory.vue';
+const DetailedWareInventory = () => import('@/views/panel/inventory/ware/DetailedWareInventory.vue');
+const AllWaresInventory = () => import('@/views/panel/inventory/ware/AllWaresInventory.vue');
+const DetailedWarehouseInventory = () => import('@/views/panel/inventory/warehouse/DetailedWarehouseInventory.vue');
+const AllWarehousesInventory = () => import('@/views/panel/inventory/warehouse/AllWarehousesInventory.vue');
 
 export default [{
   name: 'Reports',

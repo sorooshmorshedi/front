@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d2244f4"],{e01d:function(n,e,t){"use strict";t.r(e);var a=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("div",[t("router-view")],1)},r=[],u={name:"Sanad",data:function(){return{}}},c=u,i=t("2877"),o=Object(i["a"])(c,a,r,!1,null,"17682f69",null);e["default"]=o.exports}}]);
+//# sourceMappingURL=chunk-2d2244f4.cb6b89a6.js.map
