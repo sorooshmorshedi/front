@@ -9,8 +9,6 @@ require('@fortawesome/fontawesome-free/css/all.css')
 
 import 'cleave.js'
 
-import '@/components/mcomponents/form'
-
 import Chart from 'chart.js'
 Chart.defaults.global.defaultFontFamily = 'IRANSans';
 
