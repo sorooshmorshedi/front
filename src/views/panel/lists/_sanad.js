@@ -2,7 +2,7 @@ export default {
   url: "reports/lists/sanads",
   cols: [{
       text: "عطف",
-      value: "id",
+      value: "lcoal_id",
     },
     {
       text: "شماره",

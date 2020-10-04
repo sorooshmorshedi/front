@@ -49,7 +49,7 @@
         <v-col cols="12" lg="6">
           <v-row>
             <v-col cols="12" lg="3">
-              <v-text-field disabled label="عطف" v-model="item.id" background-color="white" />
+              <v-text-field disabled label="عطف" v-model="item.local_id" background-color="white" />
             </v-col>
             <v-col cols="12" lg="3">
               <v-text-field disabled label="شماره سند" v-model="item.code" background-color="white"></v-text-field>
