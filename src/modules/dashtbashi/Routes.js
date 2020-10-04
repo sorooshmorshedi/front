@@ -1,26 +1,26 @@
-const Options = () => import('./Options')
-const Cars = () => import('./Cars')
-const Drivers = () => import('./Drivers')
-const Drivings = () => import('./Drivings')
-const Associations = () => import("./Associations")
+import Options from './Options';
+import Cars from './Cars';
+import Drivers from './Drivers';
+import Drivings from './Drivings';
+import Associations from "./Associations"
 
-const LadingBillSeries = () => import("./LadingBillSeries")
-const RevokeLadingBillNumber = () => import("./RevokeLadingBillNumber")
-const Remittance = () => import("./Remittance")
-const Lading = () => import("./Lading")
-const OilCompanyLading = () => import("./OilCompanyLading")
-const OtherDriverPayment = () => import("./OtherDriverPayment")
+import LadingBillSeries from "./LadingBillSeries"
+import RevokeLadingBillNumber from "./RevokeLadingBillNumber"
+import Remittance from "./Remittance"
+import Lading from "./Lading"
+import OilCompanyLading from "./OilCompanyLading"
+import OtherDriverPayment from "./OtherDriverPayment"
 
-const OtherDriverPaymentReport = () => import("./reports/OtherDriversPaymentReport.vue")
-const RemittancesReport = () => import("./reports/RemittancesReport.vue")
-const LadingBillSeriesList = () => import("./reports/LadingBillSeriesList")
-const LadingsReport = () => import("./reports/LadingsReport")
-const LadingNumberReport = () => import("./reports/LadingNumberReport")
-const OilCompanyLadingsReport = () => import("./reports/OilCompanyLadingsReport")
-const LadingsReportForContractor = () => import("./reports/LadingsReportForContractor")
-const LadingsReportForDriver = () => import("./reports/LadingsReportForDriver")
-const TransportationCommissionReport = () => import("./reports/TransportationCommissionReport")
-const OtherDriverPaymentsList = () => import("./reports/OtherDriverPaymentsList")
+import OtherDriverPaymentReport from "./reports/OtherDriversPaymentReport.vue"
+import RemittancesReport from "./reports/RemittancesReport.vue"
+import LadingBillSeriesList from "./reports/LadingBillSeriesList"
+import LadingsReport from "./reports/LadingsReport"
+import LadingNumberReport from "./reports/LadingNumberReport"
+import OilCompanyLadingsReport from "./reports/OilCompanyLadingsReport"
+import LadingsReportForContractor from "./reports/LadingsReportForContractor"
+import LadingsReportForDriver from "./reports/LadingsReportForDriver"
+import TransportationCommissionReport from "./reports/TransportationCommissionReport"
+import OtherDriverPaymentsList from "./reports/OtherDriverPaymentsList"
 
 export default [{
     name: 'Options',

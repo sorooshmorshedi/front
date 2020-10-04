@@ -1,53 +1,53 @@
-const Panel = () => import('@/views/panel/Panel.vue')
+import Panel from '@/views/panel/Panel.vue';
 
-const Home = () => import('@/views/panel/Home.vue')
+import Home from '@/views/panel/Home.vue';
 
-const Companies = () => import('@/views/panel/company/Companies.vue')
-const FinancialYears = () => import('@/views/panel/company/FinancialYears.vue')
+import Companies from '@/views/panel/company/Companies.vue';
+import FinancialYears from '@/views/panel/company/FinancialYears.vue';
 
-const Users = () => import('@/views/panel/user/Users')
-const Roles = () => import('@/views/panel/role/Roles')
-const Cities = () => import('@/views/panel/city/Cities')
+import Users from '@/views/panel/user/Users';
+import Roles from '@/views/panel/role/Roles';
+import Cities from '@/views/panel/city/Cities';
 
-const Accounts = () => import('../views/panel/account/Accounts.vue')
-const FloatAccounts = () => import('../views/panel/account/FloatAccounts.vue')
-const FloatAccountGroups = () => import('../views/panel/account/FloatAccountGroups.vue')
-const AccountTree = () => import('@/views/panel/account/Tree.vue')
+import Accounts from '../views/panel/account/Accounts.vue';
+import FloatAccounts from '../views/panel/account/FloatAccounts.vue';
+import FloatAccountGroups from '../views/panel/account/FloatAccountGroups.vue';
+import AccountTree from '@/views/panel/account/Tree.vue';
 
-const DefaultAccounts = () => import('@/views/panel/defaultAccounts/DefaultAccounts.vue')
+import DefaultAccounts from '@/views/panel/defaultAccounts/DefaultAccounts.vue';
 
-const WareLevels = () => import('@/views/panel/ware/WareLevels.vue')
-const Wares = () => import('@/views/panel/ware/Wares.vue')
+import WareLevels from '@/views/panel/ware/WareLevels.vue';
+import Wares from '@/views/panel/ware/Wares.vue';
 
-const Warehouses = () => import('@/views/panel/ware/Warehouses.vue')
-const Units = () => import('@/views/panel/ware/Units.vue')
+import Warehouses from '@/views/panel/ware/Warehouses.vue';
+import Units from '@/views/panel/ware/Units.vue';
 
-const Sanad = () => import('@/views/panel/sanad/Sanad.vue')
-const SanadForm = () => import('@/views/panel/sanad/Form.vue')
+import Sanad from '@/views/panel/sanad/Sanad.vue';
+import SanadForm from '@/views/panel/sanad/Form.vue';
 
-const Transaction = () => import('@/views/panel/transaction/Transaction.vue')
-const TransactionForm = () => import('@/views/panel/transaction/Form.vue')
+import Transaction from '@/views/panel/transaction/Transaction.vue';
+import TransactionForm from '@/views/panel/transaction/Form.vue';
 
 
-const Factor = () => import('@/views/panel/factor/Factor.vue')
-const FactorForm = () => import('@/views/panel/factor/Form.vue')
-const FactorExpenses = () => import('@/views/panel/factor/Expenses.vue')
+import Factor from '@/views/panel/factor/Factor.vue';
+import FactorForm from '@/views/panel/factor/Form.vue';
+import FactorExpenses from '@/views/panel/factor/Expenses.vue';
 
-const TransferForm = () => import('@/views/panel/transfer/Form.vue')
+import TransferForm from '@/views/panel/transfer/Form.vue';
 
-const AdjustmentForm = () => import('@/views/panel/adjustment/Form.vue')
+import AdjustmentForm from '@/views/panel/adjustment/Form.vue';
 
-const ChequebookForm = () => import('../views/panel/chequebook/ChequebookForm.vue')
+import ChequebookForm from '../views/panel/chequebook/ChequebookForm.vue';
 
-const Cheque = () => import('@/views/panel/cheque/Cheque.vue')
-const ChequeDetail = () => import('../views/panel/cheque/ChequeDetail.vue')
-const ChequeForm = () => import('../views/panel/cheque/ChequeForm.vue')
+import Cheque from '@/views/panel/cheque/Cheque.vue';
+import ChequeDetail from '../views/panel/cheque/ChequeDetail.vue';
+import ChequeForm from '../views/panel/cheque/ChequeForm.vue';
 
-const ExportVerifiers = () => import('@/views/panel/exportVerifiers/ExportVerifiers.vue')
+import ExportVerifiers from '@/views/panel/exportVerifiers/ExportVerifiers.vue';
 
-const Closing = () => import('../views/panel/closing/Closing.vue')
+import Closing from '../views/panel/closing/Closing.vue';
 
-const ImprestSettlement = () => import('@/views/panel/imprestSettlement/ImprestSettlement')
+import ImprestSettlement from '@/views/panel/imprestSettlement/ImprestSettlement';
 
 import DashtbashiRoutes from '@/modules/dashtbashi/Routes';
 
