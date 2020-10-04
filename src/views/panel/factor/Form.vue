@@ -55,10 +55,10 @@
       <template>
         <v-row>
           <v-col cols="12" md="2" v-if="!isFpi">
-            <v-text-field label="عطف" disabled :value="item.id" />
+            <v-text-field label="شماره موقت" disabled :value="item.temporary_code" />
           </v-col>
           <v-col cols="12" md="2" v-if="!isFpi">
-            <v-text-field label="شماره" disabled v-model="item.code" />
+            <v-text-field label="شماره قطعی" disabled v-model="item.code" />
           </v-col>
           <v-col cols="12" md="2">
             <date
