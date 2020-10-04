@@ -35,19 +35,19 @@
         </v-btn>
 
         <v-btn
-          v-if="hasPerm('create.sanad')"
+          v-if="hasPerm('create.sanad') && hasModule('sanads')"
           class="blue white--text mr-3"
           :to="{name: 'SanadForm' }"
           @click="routeClick('SanadForm')"
         >سند</v-btn>
         <v-btn
-          v-if="hasPerm('create.saleFactor')"
+          v-if="hasPerm('create.saleFactor')  && hasModule('factors')"
           class="blue white--text mr-1"
           :to="{name: 'FactorForm', params: { type: 'sale' } }"
           @click="routeClick('FactorForm')"
         >فاکتور فروش</v-btn>
         <v-btn
-          v-if="hasPerm('create.buyFactor')"
+          v-if="hasPerm('create.buyFactor') && hasModule('factors')"
           class="blue white--text mr-1"
           :to="{name: 'FactorForm', params: { type: 'buy' } }"
           @click="routeClick('FactorForm')"
@@ -63,13 +63,13 @@
           :to="{name: 'AccountsBalanceReport' }"
         >تراز حساب ها</v-btn>
         <v-btn
-          v-if="hasPerm('create.receiveTransaction')"
+          v-if="hasPerm('create.receiveTransaction') && hasModule('transactions')"
           class="blue white--text mr-1"
           :to="{ name: 'TransactionForm', params: { transactionType: 'receive' } }"
           @click="routeClick('TransactionForm')"
         >دریافت</v-btn>
         <v-btn
-          v-if="hasPerm('create.paymentTransaction')"
+          v-if="hasPerm('create.paymentTransaction') && hasModule('transactions')"
           class="blue white--text mr-1"
           :to="{ name: 'TransactionForm', params: { transactionType: 'payment' } }"
           @click="routeClick('TransactionForm')"

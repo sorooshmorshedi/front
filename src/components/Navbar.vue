@@ -686,7 +686,7 @@ export default {
         },
         {
           title: "انبار",
-          module: "factors",
+          module: "warehouses",
           children: [
             {
               title: "انتقال",
@@ -1245,7 +1245,7 @@ export default {
       let setVisibility = (route) => {
         let visible = false;
 
-        if (route.module && !this.user.modules.includes(route.module)) {
+        if (route.module && !this.hasModule(route.module)) {
           visible = false;
         } else if (route.perm) {
           visible = this.hasPerm("", route.perm);
