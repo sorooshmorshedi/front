@@ -41,10 +41,10 @@
     <v-col cols="12" md="6">
       <template v-if="account && account.level != undefined">
         <accounts
+          ref="accountsForm"
           usage="tree"
           :level="account.level"
           :type="account.type"
-          :item-object="account"
           class="mt-n3"
         />
       </template>
@@ -68,16 +68,16 @@ export default {
           title: "سرفصل حساب ها",
           expanded: true,
           show: true,
-          children: []
-        }
+          children: [],
+        },
       ],
-      tree: {}
+      tree: {},
     };
   },
   watch: {
     accounts() {
       if (this.accounts.length) this.updateRoot();
-    }
+    },
   },
   created() {
     this.getAccounts();
@@ -86,6 +86,7 @@ export default {
   methods: {
     setAccount(node) {
       this.account = { ...node };
+      this.$refs.accountsForm.setItem(node);
     },
     contextMenu(node, index, parent, e) {
       if (!node.id) return;
@@ -112,7 +113,7 @@ export default {
       }
     },
     appendChildren(root) {
-      root.children = this.accountsSelectValues.all.filter(o =>
+      root.children = this.accountsSelectValues.all.filter((o) =>
         o.code.startsWith(root.code)
       );
     },
@@ -121,22 +122,22 @@ export default {
         name: "Accounts",
         params: {
           level: node.level,
-          account_type: node.account_type
+          account_type: node.account_type,
         },
         query: {
           showForm: true,
-          item: node
-        }
+          item: node,
+        },
       });
     },
     createChildAccount(node) {
       this.setAccount({
         parent: node,
         level: node.level + 1,
-        type: node.type
+        type: node.type,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

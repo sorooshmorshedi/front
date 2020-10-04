@@ -14,7 +14,7 @@
         @contextmenu.prevent="nodeContextMenu($event, item, index, parent)"
         @click="nodeClick(item, index, parent)"
         style="user-select: none"
-        v-html="item.nodeTitle"
+        v-html="item.nodeTitle || item.title"
       ></span>
     </div>
     <template v-if="showNextUl">
