@@ -21,7 +21,7 @@
             label=" * دسته بندی"
             :items="parentItems"
             v-model="item.category"
-            :disabled="!isEditing"
+            :disabled="item.id || !isEditing"
             item-text="name"
             item-value="id"
             :hint="parents"
@@ -31,14 +31,14 @@
         </v-col>
         <v-col cols="12" md="4">
           <v-switch
-            :disabled="!isEditing"
+            :disabled="item.id || !isEditing"
             label="کالا خدماتی است"
             v-model="item.is_service"
             hint="کالای خدماتی انبار گردانی ندارد"
           ></v-switch>
         </v-col>
         <v-col cols="12" v-if="item.id">
-          <v-text-field label="کد" v-model="item.code" disabled :disabled="!isEditing" />
+          <v-text-field label="کد" v-model="item.code" disabled />
         </v-col>
         <v-col cols="12" md="8">
           <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
