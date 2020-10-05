@@ -10,7 +10,7 @@
   "dependencies": {
     "@bit/mmd-mostafaee.vue.m-datatable": "^1.0.3",
     "@bit/mmd-mostafaee.vue.m-form": "^1.0.5",
-    "@bit/mmd-mostafaee.vue.query-binding": "^1.0.0",
+    "@bit/mmd-mostafaee.vue.query-binding": "file:./components/query-binding",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
