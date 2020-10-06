@@ -69,28 +69,29 @@
 <script>
 import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
 import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
+import AccountMixin from "@/mixin/accountMixin";
 export default {
   name: "Ledger",
-  mixins: [queryBinding],
+  mixins: [queryBinding, AccountMixin],
   components: { SanadItemListReport },
   props: {
     ledgerAccountIds: {
-      default: () => []
+      default: () => [],
     },
     level: {
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
       apiData: {
-        results: []
+        results: [],
       },
       ledger: {
         level: this.level,
         account: null,
         floatAccount: null,
-        costCenter: null
+        costCenter: null,
       },
       filters: {},
       accountLevels: [
@@ -101,14 +102,14 @@ export default {
         { value: "floatAccountGroups", text: "گروه شناور" },
         { value: "costCenterGroups", text: "مرکز هزینه و درآمد" },
         { value: "floatAccounts", text: "شناور" },
-        { value: "costCenters", text: "مرکز هزینه و درآمد" }
-      ]
+        { value: "costCenters", text: "مرکز هزینه و درآمد" },
+      ],
     };
   },
   computed: {
     showAccountInTable() {
       return this.ledger.level != "level3";
-    }
+    },
   },
   created() {
     this.filters = this.getFiltersTemplate();
@@ -123,7 +124,7 @@ export default {
         floatAccount: null,
         costCenter: null,
         floatAccount__floatAccountGroups: null,
-        costCenter__floatAccountGroups: null
+        costCenter__floatAccountGroups: null,
       };
     },
     init() {
@@ -138,7 +139,7 @@ export default {
           }
         }
       }
-    }
+    },
   },
   watch: {
     level() {
@@ -159,10 +160,10 @@ export default {
           floatAccountGroups: "account__floatAccountGroup",
           costCenterGroups: "account__floatAccountGroup",
           floatAccounts: "floatAccount",
-          costCenters: "costCenter"
+          costCenters: "costCenter",
         };
 
-        Object.values(filterKeys).forEach(filterKey => {
+        Object.values(filterKeys).forEach((filterKey) => {
           this.filters[filterKey] = null;
         });
 
@@ -180,8 +181,8 @@ export default {
       this.filters["costCenter"] = this.ledger.costCenter
         ? this.ledger.costCenter.id
         : null;
-    }
-  }
+    },
+  },
 };
 </script>
 

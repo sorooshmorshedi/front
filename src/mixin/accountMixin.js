@@ -197,7 +197,8 @@ export default {
       let routeData = this.$router.resolve({
         name: "LedgerReport",
         query: {
-          accs: [+account.id, ]
+          'ledger.account': account.id,
+          'ledger.level': `level${account.level}`
         }
       });
       window.open(
