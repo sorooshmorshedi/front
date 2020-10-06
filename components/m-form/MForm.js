@@ -100,7 +100,7 @@ export default {
     $route(newRoute, oldRoute) {
       if (!newRoute.params.id) {
         this.clearForm();
-      } else {
+      } else if (newRoute.params.id != this.item.id) {
         this.getItem();
       }
     },
@@ -274,8 +274,7 @@ export default {
       if (clearForm) {
         this.clearForm();
       } else {
-        this.item = data;
-        this.getItem();
+        this.setItem(data)
         this.isEditing = false;
       }
       if (this.hasList) {
