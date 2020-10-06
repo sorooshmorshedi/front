@@ -3,14 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --host localhost --port 8080",
     "build": "vue-cli-service build",
     "deploy": "npm run build && git add . && git commit -m build && git push arvan"
   },
   "dependencies": {
     "@bit/mmd-mostafaee.vue.m-datatable": "^1.0.3",
-    "@bit/mmd-mostafaee.vue.m-form": "^1.0.5",
-    "@bit/mmd-mostafaee.vue.query-binding": "file:./components/query-binding",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
@@ -35,7 +33,9 @@
     "vue-router": "^3.1.5",
     "vuetify": "^2.3.10",
     "vuex": "^3.3.0",
-    "xlsx": "^0.16.6"
+    "xlsx": "^0.16.6",
+    "@bit/mmd-mostafaee.vue.query-binding": "file:./components/query-binding",
+    "@bit/mmd-mostafaee.vue.m-form": "file:./components/m-form"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",
@@ -55,7 +55,8 @@
     "componentsDefaultDirectory": "components/{name}",
     "packageManager": "npm",
     "overrides": {
-      "mmd-mostafaee.vue/query-binding": {}
+      "mmd-mostafaee.vue/query-binding": {},
+      "mmd-mostafaee.vue/m-datatable": {}
     }
   }
 }

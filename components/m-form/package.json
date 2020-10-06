@@ -1,0 +1,16 @@
+{
+  "name": "@bit/mmd-mostafaee.vue.m-form",
+  "version": "1.0.6",
+  "homepage": "https://bit.dev/mmd-mostafaee/vue/m-form",
+  "main": "index.js",
+  "dependencies": {
+    "@bit/mmd-mostafaee.vue.query-binding": "file:../query-binding",
+    "@bit/mmd-mostafaee.vue.m-datatable": null
+  },
+  "devDependencies": {},
+  "peerDependencies": {},
+  "license": "SEE LICENSE IN LICENSE",
+  "bit": {
+    "env": {}
+  }
+}
