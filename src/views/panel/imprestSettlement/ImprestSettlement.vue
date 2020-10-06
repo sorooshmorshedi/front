@@ -103,10 +103,10 @@
                 <td style="max-width: 80px">
                   <date v-model="rows[i].date" :disabled="!isEditing" />
                 </td>
-                <td>
+                <td style="max-width: 100px">
                   <v-textarea v-model="rows[i].explanation" :disabled="!isEditing"></v-textarea>
                 </td>
-                <td v-tooltip="accountParentsName(row.account).join(' > ')">
+                <td style="max-width: 280px" v-tooltip="accountParentsName(row.account).join(' > ')">
                   <account-select
                     :horizontal="true"
                     items-type="level3"
@@ -118,10 +118,10 @@
                     @update:costCenter="v => rows[i].costCenter = v"
                   />
                 </td>
-                <td style="width: 150px">
+                <td style="width: 120px">
                   <money :disabled="!isEditing" v-model="rows[i].value" />
                 </td>
-                <td style="max-width: 100px">
+                <td style="max-width: 80px">
                   <m-file-input
                     :disabled="!isEditing"
                     v-model="rows[i].attachment"
