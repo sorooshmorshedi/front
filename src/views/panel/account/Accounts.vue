@@ -264,6 +264,9 @@ export default {
     account_type: {
       default: "o",
     },
+    parent: {
+      default: null,
+    },
     usage: {
       default: null,
     },
@@ -321,6 +324,7 @@ export default {
           filters: ["type.name"],
         },
       ],
+      fetchedItems: [],
     };
   },
   computed: {
@@ -384,6 +388,11 @@ export default {
       return parents;
     },
   },
+  watch: {
+    parent() {
+      if (!this.item.id) this.item.parent = this.parent;
+    },
+  },
   created() {
     this.EventBus.$on("get:accounts", () => {
       let parent = this.urlQuery.parent;
@@ -394,6 +403,13 @@ export default {
   methods: {
     setItem(item) {
       let url = `accounts/accounts/${item.id}`;
+
+      let fetchedItem = this.fetchedItems.filter((o) => o.id == item.id);
+      if (fetchedItem.length) {
+        this.item = fetchedItem[0];
+        return;
+      }
+
       this.request({
         url: this.endpoint(url),
         method: "get",
@@ -404,6 +420,7 @@ export default {
               (o) => o.id == item.parent
             )[0];
           }
+          this.fetchedItems.push(item);
           this.item = item;
         },
       });

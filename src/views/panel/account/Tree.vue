@@ -39,14 +39,8 @@
     </v-col>
 
     <v-col cols="12" md="6">
-      <template v-if="account && account.level != undefined">
-        <accounts
-          ref="accountsForm"
-          usage="tree"
-          :level="account.level"
-          :type="account.type"
-          class="mt-n3"
-        />
+      <template>
+        <accounts ref="accountsForm" usage="tree" :level="level" :parent="parent" class="mt-n3" />
       </template>
     </v-col>
   </v-row>
@@ -62,7 +56,9 @@ export default {
   components: { TreeComponent, Accounts },
   data() {
     return {
-      account: null,
+      account: {
+        level: 0,
+      },
       root: [
         {
           title: "سرفصل حساب ها",
@@ -72,6 +68,8 @@ export default {
         },
       ],
       tree: {},
+      parent: null,
+      level: 0,
     };
   },
   watch: {
@@ -86,6 +84,8 @@ export default {
   methods: {
     setAccount(node) {
       this.account = { ...node };
+      this.parent = null;
+      this.level = node.level;
       this.$refs.accountsForm.setItem(node);
     },
     contextMenu(node, index, parent, e) {
@@ -131,11 +131,9 @@ export default {
       });
     },
     createChildAccount(node) {
-      this.setAccount({
-        parent: node,
-        level: node.level + 1,
-        type: node.type,
-      });
+      this.$refs.accountsForm.clearForm();
+      this.parent = node;
+      this.level = node.level + 1;
     },
   },
 };
