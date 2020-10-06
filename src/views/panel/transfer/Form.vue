@@ -74,7 +74,7 @@
                 <td>
                   <money v-model="rows[i].count" :disabled="!isEditing" />
                 </td>
-                <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
+                <td>{{ rows[i].ware?rows[i].ware.unit_name:' - ' }}</td>
                 <td class="tr-warehouse">
                   <v-autocomplete
                     :return-object="true"

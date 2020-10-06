@@ -171,7 +171,7 @@
                   <td>
                     <money v-model="rows[i].count" :disabled="!isEditing" decimalScale="6" />
                   </td>
-                  <td>{{ rows[i].ware?rows[i].ware.unit.name:' - ' }}</td>
+                  <td>{{ rows[i].ware?rows[i].ware.unit_name:' - ' }}</td>
                   <template v-if="!isCw">
                     <td>
                       <money v-model="rows[i].fee" :disabled="!isEditing" />

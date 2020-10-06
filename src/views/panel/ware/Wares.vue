@@ -21,7 +21,7 @@
             label=" * دسته بندی"
             :items="parentItems"
             v-model="item.category"
-            :disabled="item.id || !isEditing"
+            :disabled="item.id != undefined || !isEditing"
             item-text="name"
             item-value="id"
             :hint="parents"
@@ -31,7 +31,7 @@
         </v-col>
         <v-col cols="12" md="4">
           <v-switch
-            :disabled="item.id || !isEditing"
+            :disabled="item.id != undefined || !isEditing"
             label="کالا خدماتی است"
             v-model="item.is_service"
             hint="کالای خدماتی انبار گردانی ندارد"
@@ -177,7 +177,14 @@ export default {
       this.getWares(true);
     },
     setItem(item) {
-      this.item = this.copy(item);
+      this.request({
+        url: this.endpoint(`wares/wares/${item.id}`),
+        method: "get",
+        success: (data) => {
+          item = data;
+          this.item = item;
+        },
+      });
     },
     getSerialized() {
       let item = this.extractIds(this.item);

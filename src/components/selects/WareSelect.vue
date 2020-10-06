@@ -14,10 +14,10 @@
       item-value="id"
       :disabled="disabled"
       :return-object="true"
-      :suffix="ware && ware.unit?ware.unit.name:''"
+      :suffix="ware && ware.unit_name"
     ></v-autocomplete>
 
-    <v-dialog v-if="ware" v-model="dialog" scrollable max-width="500px">
+    <v-dialog v-if="inventories.length" v-model="dialog" scrollable max-width="500px">
       <v-card>
         <v-card-title>موجودی انبار ها برای {{ ware.name }}</v-card-title>
 
@@ -60,11 +60,12 @@ export default {
     return {
       ware: null,
       dialog: false,
+      wareInventory: [],
     };
   },
   computed: {
     inventories() {
-      let inventories = this.ware.inventory.reduce((v, inventory) => {
+      let inventories = this.wareInventory.reduce((v, inventory) => {
         let member = v.filter((o) => o.warehouse.id == inventory.warehouse.id);
         if (member.length) {
           member.count += inventory.count;
@@ -86,7 +87,14 @@ export default {
   },
   methods: {
     showInventory() {
-      this.dialog = true;
+      this.request({
+        url: this.endpoint(`wares/wares/${this.item.id}`),
+        method: "get",
+        success: (data) => {
+          this.wareInventory = data.inventory;
+          this.dialog = true;
+        },
+      });
     },
     setWare(value) {
       if (this.value != this.ware) this.ware = this.value;
