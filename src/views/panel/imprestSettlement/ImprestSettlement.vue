@@ -17,7 +17,7 @@
     @delete="deleteItem"
   >
     <template #header-btns>
-      <open-item-btn v-if="item.item" :item="item.item" />
+      <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
 
       <v-btn
         v-if="imprest.id != undefined"
@@ -106,7 +106,10 @@
                 <td style="max-width: 100px">
                   <v-textarea v-model="rows[i].explanation" :disabled="!isEditing"></v-textarea>
                 </td>
-                <td style="max-width: 280px" v-tooltip="accountParentsName(row.account).join(' > ')">
+                <td
+                  style="max-width: 280px"
+                  v-tooltip="accountParentsName(row.account).join(' > ')"
+                >
                   <account-select
                     :horizontal="true"
                     items-type="level3"
