@@ -66,8 +66,24 @@ export default {
               value: "backFromSale",
             },
             {
-              text: "موجودی اول دوره",
-              value: "fpi",
+              text: "وارده از انتقال",
+              value: "it",
+            },
+            {
+              text: "صادره با انتقال",
+              value: "ot",
+            },
+            {
+              text: "حواله کالای مصرفی",
+              value: "cw",
+            },
+            {
+              text: "رسید تعدیل انبار",
+              value: "ia",
+            },
+            {
+              text: "حواله تعدیل انبار",
+              value: "oa",
             },
           ],
         },
