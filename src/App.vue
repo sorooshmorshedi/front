@@ -43,13 +43,13 @@
         <v-btn
           v-if="hasPerm('create.receiveTransaction') && hasModule('transactions')"
           class="blue white--text mr-1"
-          :to="{ name: 'TransactionForm', params: { transactionType: 'receive' } }"
+          :to="{ name: 'TransactionForm', params: { type: 'receive' } }"
           @click="routeClick('TransactionForm')"
         >دریافت</v-btn>
         <v-btn
           v-if="hasPerm('create.paymentTransaction') && hasModule('transactions')"
           class="blue white--text mr-1"
-          :to="{ name: 'TransactionForm', params: { transactionType: 'payment' } }"
+          :to="{ name: 'TransactionForm', params: { type: 'payment' } }"
           @click="routeClick('TransactionForm')"
         >پرداخت</v-btn>
         <v-btn

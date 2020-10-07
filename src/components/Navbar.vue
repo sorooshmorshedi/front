@@ -405,7 +405,7 @@ export default {
                   to: {
                     name: "TransactionForm",
                     params: {
-                      transactionType: "receive",
+                      type: "receive",
                     },
                   },
                   title: "ثبت دریافت",
@@ -467,7 +467,7 @@ export default {
                   to: {
                     name: "TransactionForm",
                     params: {
-                      transactionType: "payment",
+                      type: "payment",
                     },
                   },
                   title: "ثبت پرداخت",
@@ -538,7 +538,7 @@ export default {
                   to: {
                     name: "TransactionForm",
                     params: {
-                      transactionType: "imprest",
+                      type: "imprest",
                     },
                   },
                 },

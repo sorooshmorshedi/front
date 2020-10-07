@@ -3,8 +3,8 @@
     <m-form
       :title="title"
       :showList="false"
-      :listRoute="{name:'List', params: {form: 'transaction', type: transactionType}}"
-      :exportParams="{id: this.id}"
+      :listRoute="{name:'List', params: {form: 'transaction', type: type}}"
+      :exportParams="{id: id}"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
       :canDelete="canDelete"
@@ -47,7 +47,7 @@
             <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2">
-            <date v-if="transactionType == 'payment'" placeholder="تاریخ راس" disabled />
+            <date v-if="type == 'payment'" placeholder="تاریخ راس" disabled />
           </v-col>
           <v-col cols="12" md="6">
             <account-select
@@ -276,7 +276,7 @@
         <v-card-text>
           <cheque-form
             ref="chequeForm"
-            :receivedOrPaid="transactionType[0]"
+            :receivedOrPaid="type[0]"
             :modalMode="true"
             :account="item.account"
             :floatAccount="item.floatAccount"
@@ -303,7 +303,7 @@ export default {
   components: { ChequeForm, money, date },
   mixins: [MFormMixin, accountApiMixin],
   props: {
-    transactionType: {
+    type: {
       required: true,
     },
     id: {},
@@ -348,32 +348,29 @@ export default {
       return "level3";
     },
     imprestSettlementId() {
-      if (this.item.imprestSettlements.length) {
-        return this.item.imprestSettlements[0];
-      }
-      return null;
+      return this.item.imprestSettlement;
     },
     title() {
-      if (this.transactionType == "receive") {
+      if (this.type == "receive") {
         return "دریافت";
-      } else if (this.transactionType == "payment") {
+      } else if (this.type == "payment") {
         return "پرداخت";
       } else if (this.isImprest) {
         return "پرداخت تنخواه";
       }
     },
     permissionBasename() {
-      return `${this.transactionType}Transaction`;
+      return `${this.type}Transaction`;
     },
     isImprest() {
-      return this.transactionType == "imprest";
+      return this.type == "imprest";
     },
     accountLabel() {
       if (this.isImprest) return "* تنخواه گردان";
       return " * کد - نام مشتری";
     },
     itemPaymentMethods() {
-      let type = this.transactionType == "receive" ? "receive" : "payment";
+      let type = this.type == "receive" ? "receive" : "payment";
       return this.defaultAccounts.filter(
         (o) => o.usage && o.usage.toLowerCase().includes(type)
       );
@@ -417,7 +414,7 @@ export default {
         params: {
           id: this.item.id,
           position: position,
-          type: this.transactionType,
+          type: this.type,
         },
         success: (data) => {
           this.setItem(data);
@@ -449,7 +446,7 @@ export default {
         url: this.endpoint("factors/notPaidFactors"),
         method: "get",
         params: {
-          transactionType: this.transactionType,
+          transactionType: this.type,
           itemId: this.item.id,
           accountId: this.item.account.id,
         },
@@ -529,7 +526,7 @@ export default {
       let data = {};
 
       data.item = this.extractIds(this.item);
-      data.item.type = this.transactionType;
+      data.item.type = this.type;
 
       data.items = {
         items: [],
@@ -636,7 +633,7 @@ export default {
         account: null,
         floatAccount: null,
         costCenter: null,
-        imprestSettlements: [],
+        imprestSettlement: {},
       };
     },
     splitValue(reverse = false) {

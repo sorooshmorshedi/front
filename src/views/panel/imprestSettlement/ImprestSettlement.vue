@@ -23,7 +23,7 @@
       <v-btn
         v-if="imprest.id != undefined"
         class="blue white--text mr-1"
-        :to="{name: 'TransactionForm', params: {id: imprest.id, transactionType: 'imprest'}}"
+        :to="{name: 'TransactionForm', params: {id: imprest.id, type: 'imprest'}}"
       >مشاهده پرداخت</v-btn>
     </template>
 
@@ -65,7 +65,7 @@
                 disabled
                 item-text="code"
                 item-value="id"
-                @change="imprest.imprestSettlements.length && setItem(imprest.imprestSettlements[0])"
+                @change="imprest.imprestSettlement && setItem(imprest.imprestSettlement)"
               />
             </v-col>
             <v-col cols="12" md="2">

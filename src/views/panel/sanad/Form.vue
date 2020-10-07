@@ -30,7 +30,7 @@
         small
         v-if="item.transaction"
         class="light-blue white--text mr-1"
-        :to="{name: 'TransactionForm', params: {transactionType: item.transaction.type, id: item.transaction.id }}"
+        :to="{name: 'TransactionForm', params: {type: item.transaction.type, id: item.transaction.id }}"
       >
         <span>مشاهده دریافت/پرداخت</span>
       </v-btn>

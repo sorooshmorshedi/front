@@ -23,7 +23,7 @@
       <v-btn
         v-if="id"
         target="_blank"
-        :to="{name:'TransactionForm', params: {transactionType: 'payment', id: item.payment.id}}"
+        :to="{name:'TransactionForm', params: {type: 'payment', id: item.payment.id}}"
         class="blue white--text mr-1"
       >
         مشاهده دریافت
@@ -135,7 +135,7 @@
 
         <v-dialog v-model="paymentDialog">
           <transaction-form
-            transactionType="payment"
+            type="payment"
             :modal-mode="true"
             :id="payment.id"
             @submit="validate"
@@ -265,10 +265,7 @@ export default {
   },
   methods: {
     getImprestSettledValue(imprest) {
-      return imprest.imprestSettlements.reduce(
-        (v, o) => v + +o.settled_value,
-        0
-      );
+      return +imprest.imprestSettlement.settled_value
     },
     getImprestNotSettledValue(imprest) {
       return imprest.sanad.bed - this.getImprestSettledValue(imprest);

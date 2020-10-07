@@ -1,6 +1,7 @@
 import Panel from '@/views/panel/Panel.vue';
 
 import List from '@/views/panel/lists/List.vue';
+import TransactionsList from '@/views/panel/lists/TransactionsList.vue';
 
 import AccountsCoding from '../views/panel/account/Coding';
 
@@ -26,7 +27,7 @@ export default [{
   component: Panel,
   children: [{
       name: 'List',
-      path: 'lists/:form/:type?',
+      path: 'tlists/:form/:type?',
       component: List,
       props: (route) => {
         return {
@@ -35,6 +36,13 @@ export default [{
         }
       },
     },
+    {
+      name: 'TransactionsList',
+      path: 'lists/transactions/:type',
+      component: TransactionsList,
+      props: true
+    },
+
     {
       name: 'AccountsCoding',
       path: 'accountsCoding',

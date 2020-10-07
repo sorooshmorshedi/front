@@ -162,10 +162,7 @@ export default {
         items[0].imprests.push(imprest);
 
         let paidValue = imprest.items.reduce((v, o) => v + +o.value, 0);
-        let settledValue = imprest.imprestSettlements.reduce(
-          (v, o) => v + +o.settled_value,
-          0
-        );
+        let settledValue = imprest.imprestSettlement.settled_value;
         let payableValue = paidValue - settledValue;
         items[0].imprestSum += payableValue;
       }
