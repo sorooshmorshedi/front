@@ -24,7 +24,7 @@
       <template #header-btns>
         <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
         <v-btn
-          v-if="isImprest && id != undefined"
+          v-if="isImprest && id != undefined && hasPerm('', 'imprestSettlement')"
           class="blue white--text mr-1"
           :to="{name: 'ImprestSettlement', params: {id: imprestSettlementId}, query: {
             'item.account': item.account.id,

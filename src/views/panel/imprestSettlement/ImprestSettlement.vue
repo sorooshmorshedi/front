@@ -2,14 +2,15 @@
   <m-form
     title="تسویه تنخواه"
     formName="تسویه تنخواه"
-    @clearForm="clearForm(true)"
     :showList="false"
     :isEditing.sync="isEditing"
-    :canDelete="canDelete"
+    :canDelete="false"
     :confirmBtnText="confirmBtnText"
     :cancelConfirmBtnText="cancelConfirmBtnText"
     :canConfirm="canConfirm"
     :canCancelConfirm="canCancelConfirm"
+    :showClearBtn="false"
+    :showListBtn="false"
     @cancelConfirm="cancelConfirm"
     @confirm="confirm"
     @goToForm="getItemByPosition"
@@ -47,7 +48,7 @@
                 label="نام تنخواه گردان"
                 items-type="imprests"
                 v-model="item.account"
-                :disabled="id != undefined || !isEditing"
+                :disabled="true"
                 :floatAccount="item.floatAccount"
                 @update:floatAccount="v => item.floatAccount = v"
                 :costCenter="item.costCenter"
@@ -61,7 +62,7 @@
                 v-model="imprest"
                 label="شماره پرداخت تنخواه"
                 :items="imprests"
-                :disabled="id != undefined || !isEditing"
+                disabled
                 item-text="code"
                 item-value="id"
                 @change="imprest.imprestSettlements.length && setItem(imprest.imprestSettlements[0])"
@@ -71,7 +72,7 @@
               <money label="مبلغ" :disabled="true" :value="imprestSum" />
             </v-col>
             <v-col cols="12" md="8">
-              <v-textarea label="شرح سند" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
+              <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
             </v-col>
             <v-col cols="12" md="4">
               <v-text-field

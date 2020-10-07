@@ -32,10 +32,10 @@ export default {
           title: "خانه",
         },
         {
-          title: "اطلاعات پایه",
+          title: "تعاریف",
           children: [
             {
-              title: "تعاریف",
+              title: "اطلاعات پایه",
               children: [
                 {
                   to: {
@@ -552,13 +552,6 @@ export default {
                     },
                   },
                   title: "لیست پرداخت های تنخواه",
-                },
-                {
-                  perm: "imprestSettlement",
-                  title: "تسویه تنخواه",
-                  to: {
-                    name: "ImprestSettlement",
-                  },
                 },
                 {
                   perm: "defaultAccount",
