@@ -34,7 +34,7 @@
           item-text="name"
           item-value="id"
           :showLedgerBtn="false"
-          :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          :class="{'': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
         />
         <account-select
           v-if="item.floatAccounts && !item.is_cost_center"
