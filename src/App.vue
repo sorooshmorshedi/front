@@ -41,28 +41,6 @@
           @click="routeClick('SanadForm')"
         >سند</v-btn>
         <v-btn
-          v-if="hasPerm('create.saleFactor')  && hasModule('factors')"
-          class="blue white--text mr-1"
-          :to="{name: 'FactorForm', params: { type: 'sale' } }"
-          @click="routeClick('FactorForm')"
-        >فاکتور فروش</v-btn>
-        <v-btn
-          v-if="hasPerm('create.buyFactor') && hasModule('factors')"
-          class="blue white--text mr-1"
-          :to="{name: 'FactorForm', params: { type: 'buy' } }"
-          @click="routeClick('FactorForm')"
-        >فاکتور خرید</v-btn>
-        <v-btn
-          v-if="hasPerm('get.account')"
-          class="blue white--text mr-1"
-          :to="{name: 'AccountTree' }"
-        >نمودار درختی</v-btn>
-        <v-btn
-          v-if="hasPerm('accountBalanceReport')"
-          class="blue white--text mr-1"
-          :to="{name: 'AccountsBalanceReport' }"
-        >تراز حساب ها</v-btn>
-        <v-btn
           v-if="hasPerm('create.receiveTransaction') && hasModule('transactions')"
           class="blue white--text mr-1"
           :to="{ name: 'TransactionForm', params: { transactionType: 'receive' } }"
@@ -74,6 +52,38 @@
           :to="{ name: 'TransactionForm', params: { transactionType: 'payment' } }"
           @click="routeClick('TransactionForm')"
         >پرداخت</v-btn>
+        <v-btn
+          v-if="hasPerm('create.buyFactor') && hasModule('factors')"
+          class="blue white--text mr-1"
+          :to="{name: 'FactorForm', params: { type: 'buy' } }"
+          @click="routeClick('FactorForm')"
+        >فاکتور خرید</v-btn>
+        <v-btn
+          v-if="hasPerm('create.saleFactor')  && hasModule('factors')"
+          class="blue white--text mr-1"
+          :to="{name: 'FactorForm', params: { type: 'sale' } }"
+          @click="routeClick('FactorForm')"
+        >فاکتور فروش</v-btn>
+        <v-btn
+          v-if="hasPerm('sanadItemsReport')"
+          class="blue white--text mr-1"
+          :to="{name: 'LedgerReport', params: { level: 'level3' }}"
+        >گردش حساب</v-btn>
+        <v-btn
+          v-if="hasPerm('accountBalanceReport')"
+          class="blue white--text mr-1"
+          :to="{name: 'AccountsBalanceReport' }"
+        >تراز حساب ها</v-btn>
+        <v-btn
+          v-if="hasPerm('get.account')"
+          class="blue white--text mr-1"
+          :to="{name: 'Accounts', params: {level: 3} }"
+        >تعریف حساب</v-btn>
+        <v-btn
+          v-if="hasPerm('get.account')"
+          class="blue white--text mr-1"
+          :to="{name: 'AccountTree' }"
+        >نمودار درختی</v-btn>
 
         <v-spacer></v-spacer>
 
