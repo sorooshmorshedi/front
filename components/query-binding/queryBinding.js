@@ -42,6 +42,10 @@ export default {
             case 'account':
               lastObject[lastKey] = this.accounts.filter(o => o.id == data[key])[0];
               break
+            case 'ware':
+              console.log('wares', this.wares);
+              lastObject[lastKey] = this.wares.filter(o => o.id == data[key])[0];
+              break
             default:
               lastObject[lastKey] = data[key]
           }
