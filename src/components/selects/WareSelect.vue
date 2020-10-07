@@ -88,7 +88,7 @@ export default {
   methods: {
     showInventory() {
       this.request({
-        url: this.endpoint(`wares/wares/${this.item.id}`),
+        url: this.endpoint(`wares/wares/${this.ware.id}`),
         method: "get",
         success: (data) => {
           this.wareInventory = data.inventory;
