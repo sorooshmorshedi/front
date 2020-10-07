@@ -28,6 +28,8 @@
           class="blue white--text mr-1"
           :to="{name: 'ImprestSettlement', params: {id: imprestSettlementId}, query: {
             'item.account': item.account.id,
+            'item.floatAccount': item.floatAccount && item.floatAccount.id,
+            'item.costCenter': item.costCenter && item.costCenter.id,
             'imprest': item.id,
           }}"
         >تسویه تنخواه</v-btn>

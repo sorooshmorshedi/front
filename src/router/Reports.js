@@ -27,7 +27,7 @@ export default [{
   component: Panel,
   children: [{
       name: 'List',
-      path: 'tlists/:form/:type?',
+      path: 'lists/:form/:type?',
       component: List,
       props: (route) => {
         return {

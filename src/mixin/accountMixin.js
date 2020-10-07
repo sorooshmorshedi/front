@@ -11,10 +11,11 @@ export default {
   computed: {
     ...mapState({
       accounts: state => state.accounts,
-      floatAccountGroups: state => state.floatAccountGroups,
-      floatAccounts: state => state.floatAccounts,
+      floatAccountGroups: state => state.floatAccountGroups.filter(o => !o.is_cost_center),
+      floatAccounts: state => state.floatAccounts.filter(o => !o.is_cost_center),
+      costCenters: state => state.floatAccounts.filter(o => o.is_cost_center),
+      costCenterGroups: state => state.floatAccountGroups.filter(o => o.is_cost_center),
       accountTypes: state => state.accountTypes,
-      costCenterGroups: state => state.costCenterGroups,
       defaultAccounts: state => state.defaultAccounts,
       isGetting: state => state.isGetting
     }),
