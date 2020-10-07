@@ -77,11 +77,6 @@ export default [{
       name: 'DetailedWareInventoryReport',
       path: 'inventory/ware/detailed',
       component: DetailedWareInventory,
-      props: (route) => {
-        return {
-          wareId: route.query.wareId
-        }
-      }
     },
     {
       name: 'DetailedWarehouseInventoryReport',

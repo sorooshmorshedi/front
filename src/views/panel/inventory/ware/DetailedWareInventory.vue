@@ -5,12 +5,12 @@
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <ware-select label="کالا" v-model="ware" />
+          <ware-select label="کالا" v-model="inventory.ware" />
         </v-col>
 
         <v-col cols="12" class="detailed-ware-inventory">
           <m-datatable
-            v-if="ware"
+            v-if="inventory.ware"
             :api-url="url"
             :headers="headers"
             :filters.sync="filters"
@@ -24,12 +24,15 @@
 
 <script>
 import _ from "lodash";
+import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
 export default {
-  props: ["wareId"],
+  mixins: [queryBinding],
   data() {
     return {
       url: "reports/inventory/ware",
-      ware: null,
+      inventory: {
+        ware: null,
+      },
       filters: {
         ware: null,
       },
@@ -166,14 +169,20 @@ export default {
   created() {},
   methods: {},
   watch: {
-    ware: {
+    "inventory.ware": {
       handler() {
-        this.filters.ware = this.ware.id;
+        if (this.inventory.ware) {
+          this.filters.ware = this.inventory.ware.id;
+        }
       },
       deep: true,
     },
   },
-  computed: {},
+  computed: {
+    wares() {
+      return this.$store.state.wares.wares;
+    },
+  },
 };
 </script>
 

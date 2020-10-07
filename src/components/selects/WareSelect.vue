@@ -1,9 +1,10 @@
 <template>
   <div class="d-flex">
+    <v-icon @click="openInventory" color="cyan" class="mr-3" :disabled="!ware">fa-pallet</v-icon>
     <v-icon
-      @click="ware && showInventory()"
+      @click="showInventory"
       color="cyan"
-      class="pl-2 mr-3"
+      class="pl-2 mr-2"
       :disabled="!ware"
     >fa-boxes</v-icon>
     <v-autocomplete
@@ -86,6 +87,15 @@ export default {
     this.setWare();
   },
   methods: {
+    openInventory() {
+      let routeData = this.$router.resolve({
+        name: "DetailedWareInventoryReport",
+        query: {
+          "inventory.ware": this.ware.id,
+        },
+      });
+      window.open(routeData.href, "_blank");
+    },
     showInventory() {
       this.request({
         url: this.endpoint(`wares/wares/${this.ware.id}`),
