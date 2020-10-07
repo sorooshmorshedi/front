@@ -163,8 +163,11 @@ export default {
           isValid = false;
         }
         if (r.fee == undefined || r.fee == "") {
-          this.notify(`لطفا قیمت واحد ردیف ${i + 1} را وارد کنید`, "danger");
-          isValid = false;
+          if (this.isCw) r.fee = 0
+          else {
+            this.notify(`لطفا قیمت واحد ردیف ${i + 1} را وارد کنید`, "danger");
+            isValid = false;
+          }
         }
         if (r.count == undefined) {
           this.notify(`لطفا تعداد ردیف ${i + 1} را وارد کنید`, "danger");

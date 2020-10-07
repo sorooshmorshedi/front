@@ -2,7 +2,7 @@
   <div>
     <m-form
       :title="title"
-      :hasIdProp="true"
+      :hasIdProp="hasIdProp"
       :showList="false"
       :showListBtn="!isFpi"
       :listRoute="listRoute"
@@ -593,6 +593,7 @@ export default {
       baseUrl: "factors/factors",
       leadingSlash: true,
       rowKey: "ware",
+      hasIdProp: true,
 
       exportsDialog: false,
       factorExpensesDialog: false,

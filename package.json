@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --host localhost --port 8080",
     "build": "vue-cli-service build",
-    "deploy": "npm run build && git add . && git commit -m build && git push arvan"
+    "deploy": "npm run build && git add . && git commit --amend -CHEAD && git push arvan"
   },
   "dependencies": {
     "@bit/mmd-mostafaee.vue.m-datatable": "^1.0.3",
