@@ -18,7 +18,7 @@
       <v-btn
         v-if="item.id"
         class="blue white--text mr-1"
-        :to="{name: 'List', params: {form: 'cheque'}, query: {filters: JSON.stringify({chequebook__id: item.id})}}"
+        :to="{name: 'ChequesList', params: {type: 'p'}, query: {filters: JSON.stringify({chequebook__id: item.id})}}"
       >مشاهده چک ها</v-btn>
     </template>
     <template #default>
@@ -85,39 +85,39 @@ export default {
           text: "حساب",
           value: "account.name",
           type: "text",
-          filters: ["account__name__icontains"]
+          filters: ["account__name__icontains"],
         },
         {
           text: "سری",
           value: "serial",
           type: "text",
-          filters: ["serial__icontains"]
+          filters: ["serial__icontains"],
         },
         {
           text: "از سریال",
           value: "serial_from",
           type: "number",
-          filters: ["serial__icontains"]
+          filters: ["serial__icontains"],
         },
         {
           text: "تا سریال",
           value: "serial_to",
           type: "number",
-          filters: ["serial__icontains"]
+          filters: ["serial__icontains"],
         },
         {
           text: "توضیحات",
           value: "explanation",
           type: "text",
-          filters: ["account__icontains"]
-        }
-      ]
+          filters: ["account__icontains"],
+        },
+      ],
     };
   },
   computed: {
     items() {
       return this.chequebooks;
-    }
+    },
   },
   methods: {
     getData() {
@@ -126,8 +126,8 @@ export default {
     getSerialized() {
       let item = this.extractIds(this.item);
       return item;
-    }
-  }
+    },
+  },
 };
 </script>
 

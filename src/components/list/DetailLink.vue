@@ -1,5 +1,5 @@
 <template>
-  <v-btn color="light-blue white--text" :to="to" target="_blank" icon>
+  <v-btn color="light-blue white--text" :to="to" icon>
     <v-icon>fa-external-link-alt</v-icon>
   </v-btn>
 </template>

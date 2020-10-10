@@ -17,77 +17,96 @@
 
 <script>
 export default {
-  name: "TransactionsList",
+  name: "ChequesList",
   props: {
     type: {},
   },
   data() {
     return {
       filters: {},
-      url: "reports/lists/transactions",
+      url: "reports/lists/cheques",
     };
   },
   computed: {
     title() {
       switch (this.type) {
-        case "receive":
-          return "دریافت ها";
-        case "payment":
-          return "پرداخت ها";
-        case "imprest":
-          return "پرداخت های تنخواه";
+        case "r":
+          return "چک های دریافتنی";
+        case "p":
+          return "چک های پرداختنی";
       }
     },
     headers() {
       let headers = [
         {
           text: "شماره",
-          value: "code",
+          value: "serial",
         },
         {
-          text: "نام حساب",
-          value: "account.name",
+          text: "شرح",
+          value: "explanation",
         },
         {
           text: "تاریخ",
           value: "date",
         },
         {
-          text: "توضیحات",
-          value: "explanation",
+          text: "تاریخ سررسید",
+          value: "due",
         },
         {
-          text: "مبلغ مجموع",
-          value: "sanad.bed",
-          type: "numeric",
+          text: "مبلغ",
+          value: "value",
+        },
+        {
+          text: "نام حساب",
+          value: "account.name",
+        },
+        {
+          text: "وضعیت",
+          value: "status",
+          items: [
+            {
+              text: "سفید",
+              value: "blank",
+            },
+            {
+              text: "پاس نشده",
+              value: "notPassed",
+            },
+            {
+              text: "در جریان",
+              value: "inFlow",
+            },
+            {
+              text: "پاس شده",
+              value: "passed",
+            },
+            {
+              text: "برگشتی",
+              value: "bounced",
+            },
+            {
+              text: "نقدی",
+              value: "cashed",
+            },
+            {
+              text: "باطل شده",
+              value: "revoked",
+            },
+            {
+              text: "انتقالی",
+              value: "transferred",
+            },
+          ],
+        },
+        {
+          text: "نام بانک",
+          value: "bankName",
+          type: "text",
+          filters: ["bankName__icontains"],
         },
       ];
-      let imprestHeaders = [
-        {
-          text: "تاریخ تسویه",
-          value: "imprestSettlement.date",
-        },
-        {
-          text: "مبلغ تسویه شده",
-          value: "imprestSettlement.settled_value",
-          type: "numeric",
-        },
-        {
-          text: "مانده",
-          value: "remain",
-          type: "numeric",
-          sortable: false,
-          filterable: false,
-        },
-        {
-          text: "تسویه",
-          value: "settle",
-          sortable: false,
-          filterable: false,
-        },
-      ];
-
-      if (this.type == "imprest") headers = headers.concat(imprestHeaders);
 
       headers.push({
         text: "جزئیات",
@@ -95,14 +114,16 @@ export default {
         sortable: false,
         filterable: false,
       });
+
       return headers;
     },
   },
   created() {
-    this.filters.type = this.type;
+    this.filters.received_or_paid = this.type;
   },
   watch: {
     $route() {
+      this.filters.received_or_paid = this.type;
       this.$refs.datatable.getDataFromApi();
     },
   },
@@ -116,25 +137,10 @@ export default {
     },
     to(item) {
       return {
-        name: "TransactionForm",
+        name: "ChequeDetail",
         params: {
           type: this.type,
           id: item.id,
-        },
-      };
-    },
-
-    toSettle(item) {
-      return {
-        name: "ImprestSettlement",
-        params: {
-          id: item.imprestSettlement ? item.imprestSettlement.id : null,
-        },
-        query: {
-          "item.account": item.account.id,
-          "item.floatAccount": item.floatAccount && item.floatAccount.id,
-          "item.costCenter": item.costCenter && item.costCenter.id,
-          imprest: item.id,
         },
       };
     },

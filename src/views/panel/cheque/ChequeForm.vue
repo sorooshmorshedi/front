@@ -4,7 +4,7 @@
       :title="title"
       :showListBtn="false"
       :showList="false"
-      :listRoute="{name: 'List', params:{form: 'cheque', type: this.receivedOrPaid == 'p'?'paid':'received'}}"
+      :listRoute="{name: 'ChequesList', params:{type: this.receivedOrPaid == 'p'?'paid':'received'}}"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
       :canDelete="canDelete"
@@ -134,7 +134,7 @@
         </v-row>
       </template>
     </m-form>
-    <form-list class="mt-3" form="cheque" :type="isPaidCheque?'paid':'received'" ref="formList" />
+    <cheques-list class="mt-3" form="cheque" :type="isPaidCheque?'paid':'received'" ref="formList" />
   </div>
 </template>
 
@@ -143,7 +143,7 @@ import accountApiMixin from "@/mixin/accountMixin";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import getChequeApiMixin from "./getChequeApi.js";
-import FormList from "@/views/panel/lists/List";
+import ChequesList from "@/views/panel/lists/ChequesList";
 import formsMixin from "@/mixin/forms";
 import GetChequebooksApi from "@/views/panel/chequebook/getChequebooksApi";
 import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
@@ -161,7 +161,7 @@ export default {
       default: false,
     },
   },
-  components: { money, date, FormList },
+  components: { money, date, ChequesList },
   mixins: [
     getChequeApiMixin,
     accountApiMixin,

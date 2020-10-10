@@ -1,7 +1,11 @@
 import Panel from '@/views/panel/Panel.vue';
 
-import List from '@/views/panel/lists/List.vue';
 import TransactionsList from '@/views/panel/lists/TransactionsList.vue';
+import FactorsList from '@/views/panel/lists/FactorsList.vue';
+import SanadsList from '@/views/panel/lists/SanadsList.vue';
+import TransfersList from '@/views/panel/lists/TransfersList.vue';
+import ChequesList from '@/views/panel/lists/ChequesList.vue';
+import AdjustmentsList from '@/views/panel/lists/AdjustmentsList.vue';
 
 import AccountsCoding from '../views/panel/account/Coding';
 
@@ -26,20 +30,38 @@ export default [{
   path: '/report',
   component: Panel,
   children: [{
-      name: 'List',
-      path: 'lists/:form/:type?',
-      component: List,
-      props: (route) => {
-        return {
-          ...route.params,
-          ...route.query
-        }
-      },
+      name: 'TransfersList',
+      path: 'lists/transfers',
+      component: TransfersList,
+    },
+    {
+      name: 'SanadsList',
+      path: 'lists/sanads/:type',
+      component: SanadsList,
+      props: true
+    },
+    {
+      name: 'FactorsList',
+      path: 'lists/factors/:type',
+      component: FactorsList,
+      props: true
     },
     {
       name: 'TransactionsList',
       path: 'lists/transactions/:type',
       component: TransactionsList,
+      props: true
+    },
+    {
+      name: 'ChequesList',
+      path: 'lists/cheques/:type',
+      component: ChequesList,
+      props: true
+    },
+    {
+      name: 'AdjustmentsList',
+      path: 'lists/adjustments/:type',
+      component: AdjustmentsList,
       props: true
     },
 

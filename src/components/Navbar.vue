@@ -354,9 +354,9 @@ export default {
                 {
                   perm: "get.sanad",
                   to: {
-                    name: "List",
+                    name: "SanadsList",
                     params: {
-                      form: "sanad",
+                      type: "all",
                     },
                   },
                   title: "همه",
@@ -364,9 +364,9 @@ export default {
                 {
                   perm: "get.sanad",
                   to: {
-                    name: "List",
+                    name: "SanadsList",
                     params: {
-                      form: "sanadUnbalanced",
+                      type: "unbalanced",
                     },
                   },
                   title: "اسناد نامتوازن",
@@ -374,9 +374,9 @@ export default {
                 {
                   perm: "get.sanad",
                   to: {
-                    name: "List",
+                    name: "SanadsList",
                     params: {
-                      form: "sanadEmpty",
+                      type: "empty",
                     },
                   },
                   title: "اسناد خالی",
@@ -413,9 +413,8 @@ export default {
                 {
                   perm: "get.receiveTransaction",
                   to: {
-                    name: "List",
+                    name: "TransactionsList",
                     params: {
-                      form: "transaction",
                       type: "receive",
                     },
                   },
@@ -434,10 +433,9 @@ export default {
                 {
                   perm: "get.receivedCheque",
                   to: {
-                    name: "List",
+                    name: "ChequesList",
                     params: {
-                      form: "cheque",
-                      type: "received",
+                      type: "r",
                     },
                   },
                   title: "لیست چک های دریافتی",
@@ -445,10 +443,9 @@ export default {
                 {
                   perm: "get.receivedCheque",
                   to: {
-                    name: "List",
+                    name: "ChequesList",
                     params: {
-                      form: "cheque",
-                      type: "received",
+                      type: "r",
                     },
                     query: {
                       status__in: "notPassed,bounced",
@@ -475,9 +472,8 @@ export default {
                 {
                   perm: "get.paymentTransaction",
                   to: {
-                    name: "List",
+                    name: "TransactionsList",
                     params: {
-                      form: "transaction",
                       type: "payment",
                     },
                   },
@@ -496,10 +492,9 @@ export default {
                 {
                   perm: "get.paidCheque",
                   to: {
-                    name: "List",
+                    name: "ChequesList",
                     params: {
-                      form: "cheque",
-                      type: "paid",
+                      type: "p",
                     },
                   },
                   title: "لیست چک های پرداختنی",
@@ -507,10 +502,9 @@ export default {
                 {
                   perm: "get.paidCheque",
                   to: {
-                    name: "List",
+                    name: "ChequesList",
                     params: {
-                      form: "cheque",
-                      type: "paid",
+                      type: "p",
                     },
                     query: {
                       status__in: "notPassed,bounced",
@@ -545,9 +539,8 @@ export default {
                 {
                   perm: "get.imprestTransaction",
                   to: {
-                    name: "List",
+                    name: "TransactionsList",
                     params: {
-                      form: "transaction",
                       type: "imprest",
                     },
                   },
@@ -587,9 +580,8 @@ export default {
                 {
                   perm: "get.buyFactor",
                   to: {
-                    name: "List",
+                    name: "FactorsList",
                     params: {
-                      form: "factor",
                       type: "buy",
                     },
                   },
@@ -613,9 +605,8 @@ export default {
                 {
                   perm: "get.saleFactor",
                   to: {
-                    name: "List",
+                    name: "FactorsList",
                     params: {
-                      form: "factor",
                       type: "sale",
                     },
                   },
@@ -639,9 +630,8 @@ export default {
                 {
                   perm: "get.backFromBuyFactor",
                   to: {
-                    name: "List",
+                    name: "FactorsList",
                     params: {
-                      form: "factor",
                       type: "backFromBuy",
                     },
                   },
@@ -665,9 +655,8 @@ export default {
                 {
                   perm: "get.backFromSaleFactor",
                   to: {
-                    name: "List",
+                    name: "FactorsList",
                     params: {
-                      form: "factor",
                       type: "backFromSale",
                     },
                   },
@@ -694,10 +683,7 @@ export default {
                 {
                   perm: "get.transfer",
                   to: {
-                    name: "List",
-                    params: {
-                      form: "transfer",
-                    },
+                    name: "TransfersList",
                   },
                   title: "لیست انتقال ها",
                 },
@@ -719,9 +705,8 @@ export default {
                 {
                   perm: "get.adjustment",
                   to: {
-                    name: "List",
+                    name: "AdjustmentsList",
                     params: {
-                      form: "adjustment",
                       type: "ia",
                     },
                   },
@@ -740,9 +725,8 @@ export default {
                 {
                   perm: "get.adjustment",
                   to: {
-                    name: "List",
+                    name: "AdjustmentsList",
                     params: {
-                      form: "adjustment",
                       type: "oa",
                     },
                   },
@@ -766,9 +750,8 @@ export default {
                 {
                   perm: "get.consumptionFactor",
                   to: {
-                    name: "List",
+                    name: "FactorsList",
                     params: {
-                      form: "factor",
                       type: "cw",
                     },
                   },

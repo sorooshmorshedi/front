@@ -3,7 +3,7 @@
     <m-form
       :title="title"
       :showList="false"
-      :listRoute="{name:'List', params: {form: 'transaction', type: type}}"
+      :listRoute="{name:'TransactionsList', params: {type: type}}"
       :exportParams="{id: id}"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"

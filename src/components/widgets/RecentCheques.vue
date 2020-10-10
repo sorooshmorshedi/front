@@ -69,9 +69,8 @@ export default {
     },
     listRoute() {
       return {
-        name: "List",
+        name: "ChequesList",
         params: {
-          form: "cheque",
           type: this.type == "p" ? "paid" : "received",
         },
         query: {

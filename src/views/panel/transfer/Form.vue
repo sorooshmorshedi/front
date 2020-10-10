@@ -1,7 +1,7 @@
 <template>
   <m-form
     title="انتقال بین انبار ها"
-    :listRoute="{name:'List', params:{form: 'transfer'}}"
+    :listRoute="{name:'TransfersList'}"
     :showList="false"
     :exportParams="{id: this.id}"
     :isEditing.sync="isEditing"

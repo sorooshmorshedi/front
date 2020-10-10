@@ -2,7 +2,7 @@
   <m-form
     title="سند حسابداری"
     :showList="false"
-    :listRoute="{name:'List', params:{form: 'sanad'}}"
+    :listRoute="{name:'SanadsList'}"
     :exportParams="{id: this.id}"
     :canEdit="canEdit"
     :canDelete="false"

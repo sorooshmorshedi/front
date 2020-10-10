@@ -2,7 +2,7 @@
   <m-form
     :title="title"
     :showList="false"
-    :listRoute="{name:'List', params:{form: 'adjustment', type: type}}"
+    :listRoute="{name:'AdjustmentsList', params:{type: type}}"
     :exportParams="{id: this.id}"
     :isEditing.sync="isEditing"
     :canDelete="canDelete"

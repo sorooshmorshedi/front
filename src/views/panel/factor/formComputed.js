@@ -17,9 +17,8 @@ export default {
     },
     listRoute() {
       return {
-        name: 'List',
+        name: 'FactorsList',
         params: {
-          form: 'factor',
           type: this.type
         }
       }
