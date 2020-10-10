@@ -1,6 +1,14 @@
 <template>
   <v-card>
-    <v-card-title>{{ title }}</v-card-title>
+    <v-card-title>
+      {{ title }}
+      <v-spacer></v-spacer>
+      <v-btn
+        small
+        @click="reorderSanads"
+        class="teal white--text mr-1"
+      >مرتب کردن کد اسناد بر اساس تاریخ</v-btn>
+    </v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
         <template #item.remain="{ item }">{{ getRemain(item) | toMoney}}</template>
@@ -100,6 +108,17 @@ export default {
           id: item.id,
         },
       };
+    },
+
+    reorderSanads() {
+      this.request({
+        url: this.endpoint("sanads/reorder"),
+        method: "post",
+        success: (data) => {
+          this.successNotify();
+          this.$refs.datatable.getDataFromApi();
+        },
+      });
     },
   },
 };

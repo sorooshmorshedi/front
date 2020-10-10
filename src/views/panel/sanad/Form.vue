@@ -36,12 +36,6 @@
       </v-btn>
 
       <v-btn small @click="copySanadToNewSanad" class="teal white--text mr-1">کپی سند به سند جدید</v-btn>
-
-      <v-btn
-        small
-        @click="reorderSanads"
-        class="teal white--text mr-1"
-      >مرتب کردن کد اسناد بر اساس تاریخ</v-btn>
     </template>
 
     <template>
@@ -307,15 +301,6 @@ export default {
       });
 
       return data;
-    },
-    reorderSanads() {
-      this.request({
-        url: this.endpoint("sanads/reorder"),
-        method: "post",
-        success: (data) => {
-          this.successNotify();
-        },
-      });
     },
   },
 };

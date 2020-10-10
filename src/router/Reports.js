@@ -36,7 +36,7 @@ export default [{
     },
     {
       name: 'SanadsList',
-      path: 'lists/sanads/:type',
+      path: 'lists/sanads/:type?',
       component: SanadsList,
       props: true
     },
