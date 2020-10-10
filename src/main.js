@@ -41,6 +41,9 @@ Vue.component('ContextMenu', ContextMenu);
 import OpenSanadBtn from "@/components/form/OpenSanadBtn";
 Vue.component('OpenSanadBtn', OpenSanadBtn);
 
+import DetailLink from "@/components/list/DetailLink";
+Vue.component('DetailLink', DetailLink);
+
 import _ from 'lodash'
 window._ = _
 
