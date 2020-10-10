@@ -264,12 +264,12 @@ export default {
     companyCommission(row) {
       let value =
         (this.netPrice(row) * +row.company_commission_percent) / 100 || 0;
-      row.company_commission = value;
+      row.company_commission = value.toFixed(6);
       return value;
     },
     carIncome(row) {
       let value = this.netPrice(row) - this.companyCommission(row) || 0;
-      row.car_income = value;
+      row.car_income = value.toFixed(6);
       return value;
     },
     rowsSum(key) {

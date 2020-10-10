@@ -24,19 +24,19 @@ export default {
   props: {
     value: {},
     decimalScale: {
-      default: 0
+      default: 0,
     },
     label: {},
     placeholder: {
-      default: null
+      default: null,
     },
     disabled: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      formattedAmount: ""
+      formattedAmount: "",
     };
   },
   mounted() {
@@ -45,7 +45,7 @@ export default {
   watch: {
     value() {
       if (this.value != this.getAmount()) this.setAmount(this.value);
-    }
+    },
   },
   methods: {
     setAmount(value) {
@@ -56,19 +56,31 @@ export default {
         else value = String(value);
       }
 
-      value = value.split(",").join("");
-      this.formattedAmount = value
+      let valueParts = value.split(".");
+
+      value = valueParts[0].split(",").join("");
+      let formattedAmount = value
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+      if (valueParts.length == 2) {
+        formattedAmount = `${formattedAmount}.${valueParts[1].substr(0, 6)}`;
+      }
+
+      this.formattedAmount = formattedAmount;
     },
     getAmount() {
-      return this.formattedAmount.split(",").join("");
+      let valueParts = this.formattedAmount.split(",").join("").split(".");
+      if (valueParts.length == 2) {
+        return `${valueParts[0]}.${valueParts[1].substr(0, 6)}`;
+      }
+      return valueParts[0];
     },
     change(newValue) {
       this.setAmount(newValue);
       this.$emit("input", this.getAmount());
-    }
-  }
+    },
+  },
 };
 </script>
 
