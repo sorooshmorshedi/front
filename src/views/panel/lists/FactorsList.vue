@@ -38,6 +38,8 @@ export default {
           return "فاکتور های فروش";
         case "backFromSale":
           return "فاکتور های برگشت از فروش";
+        case "cw":
+          return "حواله های کالای مصرفی";
       }
     },
     headers() {
