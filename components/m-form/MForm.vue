@@ -229,18 +229,21 @@ export default {
       return false;
     },
     printUrl() {
+      return "";
       if (!this.hasExport) return "";
       let path = this.exportBaseUrl + this.listRoute.params.form + "s/html?";
       path = this.addParams(path);
       return this.endpoint(path);
     },
     pdfUrl() {
+      return "";
       if (!this.hasExport) return "";
       let path = this.exportBaseUrl + this.listRoute.params.form + "s/pdf?";
       path = this.addParams(path);
       return this.endpoint(path);
     },
     excelUrl() {
+      return "";
       if (!this.hasExport) return "";
       let path = this.exportBaseUrl + this.listRoute.params.form + "s/xlsx?";
       path = this.addParams(path);

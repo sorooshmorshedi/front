@@ -134,7 +134,7 @@
         </v-row>
       </template>
     </m-form>
-    <cheques-list class="mt-3" form="cheque" :type="isPaidCheque?'paid':'received'" ref="formList" />
+    <cheques-list class="mt-3" form="cheque" :type="receivedOrPaid" ref="formList" />
   </div>
 </template>
 

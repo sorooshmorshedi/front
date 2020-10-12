@@ -1,7 +1,8 @@
 <template>
-  <v-list nav dense class="navbar-list">
+  <v-list nav dense class="navbar-list white--text">
     <navbar-list-item
       v-for="(route, i) in routes"
+      class="level-0"
       :key="i"
       :route="route"
       :level="1"
@@ -26,13 +27,15 @@ export default {
     allRoutes() {
       return [
         {
+          title: "خانه",
+          icon: "fa-home",
           to: {
             name: "Home",
           },
-          title: "خانه",
         },
         {
           title: "تعاریف",
+          icon: "fa-database",
           children: [
             {
               title: "اطلاعات پایه",
@@ -339,6 +342,7 @@ export default {
         },
         {
           title: "حسابداری",
+          icon: "fa-wallet",
           module: "sanads",
           children: [
             {
@@ -395,6 +399,7 @@ export default {
         },
         {
           title: "خزانه داری",
+          icon: "$safeIcon",
           module: "transactions",
           children: [
             {
@@ -562,6 +567,7 @@ export default {
         },
         {
           title: "بازرگانی",
+          icon: "$buySaleIcon",
           module: "factors",
           children: [
             {
@@ -668,6 +674,7 @@ export default {
         },
         {
           title: "انبار",
+          icon: "$warehouseIcon",
           module: "warehouses",
           children: [
             {
@@ -763,6 +770,7 @@ export default {
         },
         {
           title: "گزارش",
+          icon: "$reportIcon",
           children: [
             {
               perm: "accountsCodingReport",
@@ -993,6 +1001,7 @@ export default {
         },
         {
           title: "حمل و نقل",
+          icon: "$transportationIcon",
           module: "dashtbashi",
           children: [
             {
@@ -1253,13 +1262,36 @@ export default {
 
 <style lang="scss">
 .navbar-list {
+  border: none !important;
   .list-item-title {
-    // color: white;
     font-weight: 300 !important;
     font-size: 0.9rem !important;
   }
-  .v-icon {
-    // color: rgba(white, 0.8) !important;
+
+  .level-0.v-list-group--active > .v-list-group__header {
+    background-color: rgba(#fff, 0.4) !important;
+  }
+
+  .level-2 > .v-list-item--active {
+    background-color: rgba(#fff, 0.6) !important;
+  }
+
+  .level-3.v-list-item--active {
+    &:before {
+      background-color: rgba(#fff, 0) !important;
+    }
+    background-color: rgba(#fff, 0.9) !important;
+    border: none !important;
+    border-radius: 4px !important;
+    .v-list-item__title {
+      color: #212121 !important;
+    }
+  }
+
+  .v-list-group__header__append-icon,
+  .v-list-group__header__prepend-icon {
+    color: white !important;
   }
 }
 </style>
+

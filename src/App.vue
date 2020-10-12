@@ -8,9 +8,13 @@
         app
         right
         clipped
-        class="indigo lighten-5"
+        class="indigo lighten-1 white--text"
+        dark
         :value="showDrawer"
         v-if="user"
+        mini-variant
+        permanent
+        expand-on-hover
       >
         <m-navbar />
       </v-navigation-drawer>

@@ -57,5 +57,22 @@ export default new Vuetify({
   },
   icons: {
     iconfont: 'md',
+    values: {
+      safeIcon: {
+        component: () => import('@/icons/SafeIcon.vue')
+      },
+      buySaleIcon: {
+        component: () => import('@/icons/BuySaleIcon.vue')
+      },
+      warehouseIcon: {
+        component: () => import('@/icons/WarehouseIcon.vue')
+      },
+      reportIcon: {
+        component: () => import('@/icons/ReportIcon.vue')
+      },
+      transportationIcon: {
+        component: () => import('@/icons/TransportationIcon.vue')
+      }
+    }
   },
 });
