@@ -57,7 +57,7 @@
               <v-text-field label="شماره پرداخت تنخواه" :value="imprest && imprest.code" disabled />
             </v-col>
             <v-col cols="12" md="2">
-              <money label="مبلغ" :disabled="true" :value="imprestSum" />
+              <money label="مبلغ تنخواه" :disabled="true" :value="imprestSum" />
             </v-col>
             <v-col cols="12" md="8">
               <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
