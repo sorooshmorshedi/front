@@ -26,12 +26,7 @@
         <v-btn
           v-if="isImprest && id != undefined && hasPerm('', 'imprestSettlement')"
           class="blue white--text mr-1"
-          :to="{name: 'ImprestSettlement', params: {id: imprestSettlementId}, query: {
-            'item.account': item.account.id,
-            'item.floatAccount': item.floatAccount && item.floatAccount.id,
-            'item.costCenter': item.costCenter && item.costCenter.id,
-            'imprest': item.id,
-          }}"
+          :to="{name: 'ImprestSettlement', params: {id: item.id}}"
         >تسویه تنخواه</v-btn>
         <v-btn
           v-if="!isImprest"
@@ -348,9 +343,6 @@ export default {
     accountsType() {
       if (this.isImprest) return "imprests";
       return "level3";
-    },
-    imprestSettlementId() {
-      return this.item.imprestSettlement;
     },
     title() {
       if (this.type == "receive") {
