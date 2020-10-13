@@ -69,11 +69,12 @@ export default {
       let inventories = this.wareInventory.reduce((v, inventory) => {
         let member = v.filter((o) => o.warehouse.id == inventory.warehouse.id);
         if (member.length) {
-          member.count += inventory.count;
+          member = member[0]
+          member.count += +inventory.count;
         } else {
           v.push({
             warehouse: inventory.warehouse,
-            count: inventory.count,
+            count: +inventory.count,
           });
         }
         return v;
