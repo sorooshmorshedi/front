@@ -11,6 +11,7 @@
     clearable
     style="min-width: 140px"
     v-bind="$attrs"
+    @click:clear="isDirty = true"
   />
 </template>
 
@@ -26,17 +27,17 @@ export default {
     return {
       localValue: null,
       mask: null,
-      isDirty: false
+      isDirty: false,
     };
   },
   watch: {
     value() {
       this.localValue = this.value;
 
-      if (this.localValue == undefined) {
+      if (this.localValue == undefined && !this.isDirty) {
         this.setToday();
       }
-    }
+    },
   },
   created() {
     this.mask = IMask.createMask({
@@ -44,23 +45,23 @@ export default {
       lazy: true,
       blocks: {
         YYYY: {
-          mask: "0000"
+          mask: "0000",
         },
         MM: {
           mask: IMask.MaskedRange,
           from: 1,
-          to: 12
+          to: 12,
         },
         DD: {
           mask: IMask.MaskedRange,
           from: 1,
-          to: 31
-        }
-      }
+          to: 31,
+        },
+      },
     });
   },
   mounted() {
-    if (this.default) {
+    if (this.default && !this.value && !this.isDirty) {
       this.setToday();
     } else {
       this.localValue = this.value;
@@ -80,11 +81,12 @@ export default {
       }
     },
     setToday() {
+      this.isDirty = true;
       this.localValue = this.now.format("jYYYY-jMM-jDD");
       this.change();
       this.$emit("input", this.mask.value);
-    }
-  }
+    },
+  },
 };
 </script>
 
