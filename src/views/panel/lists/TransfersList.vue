@@ -3,10 +3,6 @@
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
-        <template #item.remain="{ item }">{{ getRemain(item) | toMoney}}</template>
-        <template #item.settle="{ item }">
-          <v-btn color="light-blue white--text" :to="toSettle(item)" text>تسویه</v-btn>
-        </template>
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>

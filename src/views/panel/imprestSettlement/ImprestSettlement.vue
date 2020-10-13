@@ -47,26 +47,14 @@
               <account-select
                 label="نام تنخواه گردان"
                 items-type="imprests"
-                v-model="item.account"
+                v-model="imprest.account"
+                :floatAccount="imprest.floatAccount"
+                :costCenter="imprest.costCenter"
                 :disabled="true"
-                :floatAccount="item.floatAccount"
-                @update:floatAccount="v => item.floatAccount = v"
-                :costCenter="item.costCenter"
-                @update:costCenter="v => item.costCenter = v"
-                @change="getNotSettledImprests"
               />
             </v-col>
             <v-col cols="12" md="2">
-              <v-autocomplete
-                :return-object="true"
-                v-model="imprest"
-                label="شماره پرداخت تنخواه"
-                :items="imprests"
-                disabled
-                item-text="code"
-                item-value="id"
-                @change="imprest.imprestSettlement && setItem(imprest.imprestSettlement)"
-              />
+              <v-text-field label="شماره پرداخت تنخواه" :value="imprest && imprest.code" disabled />
             </v-col>
             <v-col cols="12" md="2">
               <money label="مبلغ" :disabled="true" :value="imprestSum" />
@@ -184,7 +172,7 @@ export default {
   props: ["id"],
   data() {
     return {
-      baseUrl: "imprests/imprestSettlement",
+      baseUrl: "transactions",
       leadingSlash: true,
       rowKey: "account",
       hasList: false,
@@ -198,47 +186,27 @@ export default {
       if (this.imprest && this.imprest.sanad) return this.imprest.sanad.bed;
       return 0;
     },
+    createUrl() {
+      return "imprests/imprestSettlement/";
+    },
+    retrieveUrl() {
+      return `transactions/${this.id}/`;
+    },
+    updateUrl() {
+      return `imprests/imprestSettlement/${this.item.id}/`;
+    },
   },
   methods: {
-    getNotSettledImprests(accountData) {
-      if (this.id) return;
-      this.request({
-        url: this.endpoint("imprests/notSettledImprests"),
-        params: this.extractIds(accountData),
-        method: "get",
-        success: (data) => {
-          this.imprests = data;
-          let imprestId = this.urlQuery.imprest;
-          let imprests = data.filter((o) => o.id == imprestId);
-          if (imprests.length) {
-            this.imprest = imprests[0];
-            this.isEditing = true;
-          }
-        },
-      });
-    },
     getItemTemplate() {
+      return {
+        items: [],
+      };
+    },
+    getRowTemplate() {
       return {
         account: null,
       };
     },
-    getRowTemplate() {
-      return {};
-    },
-    getItemByPosition(position) {
-      return this.request({
-        url: this.endpoint("imprests/imprestSettlement/byPosition"),
-        method: "get",
-        params: {
-          id: this.id,
-          position: position,
-        },
-        success: (data) => {
-          this.setItem(data);
-        },
-      });
-    },
-
     clearForm() {
       this.item = {};
       this.imprests = [];
@@ -250,15 +218,19 @@ export default {
         });
       }
     },
-    setItem(item) {
-      this.changeRouteTo(item.id);
-      this.item = item;
-      this.item.account = item.transaction.account;
-      this.item.floatAccount = item.transaction.floatAccount;
-      this.item.costCenter = item.transaction.costCenter;
+    setItem(imprest) {
+      console.log(imprest);
 
-      this.imprest = item.transaction;
-      this.imprests.push(this.imprest);
+      this.changeRouteTo(imprest.id);
+
+      this.imprest = imprest;
+
+      let item = imprest.imprestSettlement;
+      if (!item) {
+        item = this.getItemTemplate();
+      }
+
+      this.item = item;
 
       this.itemsToDelete = [];
       this.rows = [];

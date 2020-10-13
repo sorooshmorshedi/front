@@ -128,13 +128,7 @@ export default {
       return {
         name: "ImprestSettlement",
         params: {
-          id: item.imprestSettlement ? item.imprestSettlement.id : null,
-        },
-        query: {
-          "item.account": item.account.id,
-          "item.floatAccount": item.floatAccount && item.floatAccount.id,
-          "item.costCenter": item.costCenter && item.costCenter.id,
-          imprest: item.id,
+          id: item.id,
         },
       };
     },
