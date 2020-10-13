@@ -214,7 +214,7 @@ export default {
         if (this.accountFilters.level == "all" && account.level != undefined) {
           if (account.level == 0) {
             bed += +account.bed_sum;
-            bes += account.bes_sum;
+            bes += +account.bes_sum;
           }
         } else {
           bed += +account.bed_sum;

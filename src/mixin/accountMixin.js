@@ -96,7 +96,7 @@ export default {
         );
       };
 
-      let sortedAccounts = this.accounts.filter((o) => o.level == 0);
+      let sortedAccounts = accounts.filter((o) => o.level == 0);
 
       for (let i = 0; i < 3; i++) {
         for (let account of accounts.filter((o) => o.level == i)) {
