@@ -46,6 +46,9 @@ export default {
   created() {
     this.getCities();
   },
+  mounted(){
+    this.setItem();
+  },
   methods: {
     setItem() {
       if (this.value != this.item) this.item = this.value;
@@ -53,9 +56,6 @@ export default {
   },
   watch: {
     value() {
-      this.setItem();
-    },
-    item() {
       this.setItem();
     },
     item() {
