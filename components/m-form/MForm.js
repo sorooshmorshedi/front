@@ -35,6 +35,9 @@ export default {
     createUrl() {
       return this.baseUrl + (this.leadingSlash ? "/" : "")
     },
+    retrieveUrl() {
+      return this.updateUrl;
+    },
     updateUrl() {
       let id = this.item.id || this.id || null;
       return id && `${this.baseUrl}/${id}${this.leadingSlash ? "/" : ""}`;
@@ -139,7 +142,7 @@ export default {
         // this.setItem(this.items.filter(o => o.id == this.id)[0])
       } else {
         this.request({
-          url: this.endpoint(this.updateUrl),
+          url: this.endpoint(this.retrieveUrl),
           method: "get",
           success: data => {
             this.setItem(data);
