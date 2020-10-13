@@ -26,7 +26,13 @@
           <v-text-field label="عطف" v-model="item.id" disabled />
         </v-col>
         <v-col cols="12" md="2">
-          <v-autocomplete label="ماه" :items="months" v-model="item.month" :return-object="false" />
+          <v-autocomplete
+            label="ماه"
+            :items="months"
+            v-model="item.month"
+            :return-object="false"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="2">
           <date v-model="item.date" label="تاریخ سیاهه" :default="true" :disabled="!isEditing" />
@@ -42,6 +48,7 @@
             :items="$store.state.drivings"
             item-text="title"
             item-value="id"
+            :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" md="8">
