@@ -45,6 +45,7 @@ export default {
           init && this.init();
 
           this.toggleIsGetting('wares')
+          this.EventBus.$emit('get:wares', data);
         }
       })
     },
