@@ -35,11 +35,14 @@
             </template>
             <v-col v-else cols="0" md="4"></v-col>
 
-            <v-col cols="12" md="6">
-              <date placeholder="از تاریخ" v-model="sanadFilters.from_date" />
+            <v-col cols="12" md="4">
+              <date label="از تاریخ" v-model="sanadFilters.from_date" />
             </v-col>
-            <v-col cols="12" md="6">
-              <date placeholder="تا تاریخ" v-model="sanadFilters.to_date" />
+            <v-col cols="12" md="4">
+              <date label="تا تاریخ" v-model="sanadFilters.to_date" />
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-select :items="accountStatuses" v-model="accountFilters.status" label="وضعیت حساب"></v-select>
             </v-col>
 
             <v-col cols="12" md="6">
@@ -199,6 +202,7 @@ export default {
         { value: "besRemain", text: "مانده بستانکار" },
         { value: "withoutRemain", text: "بدون مانده" },
         { value: "withTransaction", text: "حساب های دارای گردش" },
+        { value: "withoutTransaction", text: "حساب های بدون گردش" },
       ],
     };
   },
@@ -322,6 +326,9 @@ export default {
               break;
             case "withTransaction":
               if (acc.bed_sum == 0 && acc.bes_sum == 0) return false;
+              break;
+            case "withoutTransaction":
+              if (acc.bed_sum != 0 || acc.bes_sum != 0) return false;
               break;
           }
         }
