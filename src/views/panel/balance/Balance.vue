@@ -305,7 +305,9 @@ export default {
     },
     filterAccounts() {
       let filters = this.accountFilters;
-      let accounts = this.allAccounts.filter((acc) => {
+
+      let sortedAccounts = this.getSortedAccounts(this.allAccounts, true);
+      let accounts = sortedAccounts.filter((acc) => {
         if (filters.level != "all") {
           if (acc.level != filters.level) return false;
         }
@@ -362,11 +364,8 @@ export default {
 
         return true;
       });
-      if (accounts.length && accounts[0].level != undefined) {
-        this.items = this.getSortedAccounts(accounts, true);
-      } else {
-        this.items = accounts;
-      }
+
+      this.items = accounts;
     },
     clearFilters() {
       this.accountFilters = {
