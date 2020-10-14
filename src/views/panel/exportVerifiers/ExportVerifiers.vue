@@ -68,8 +68,8 @@ export default {
           value: "name",
         },
         {
-          text: "حساب",
-          value: "account.title",
+          text: "سمت",
+          value: "post",
         },
       ],
     };
