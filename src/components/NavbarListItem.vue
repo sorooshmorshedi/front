@@ -23,6 +23,7 @@
     :sub-group="subGroup"
     class="navbar-list-item"
     :class="'level-' + level"
+    v-model="visible"
   >
     <template #activator>
       <v-list-item flat class="pr-0 my-0" :class="'level-' + level" :input-value="true" exact>
@@ -52,15 +53,34 @@ export default {
   name: "NavbarListItem",
   props: ["route", "subGroup", "level"],
   data() {
-    return {};
+    return {
+      visible: false,
+    };
   },
   computed: {
     hasChild() {
       return this.route.children && this.route.children.length;
     },
   },
+  watch: {
+    visible() {
+      if (this.visible) {
+        this.EventBus.$emit("navbar:closeOthers", {
+          route: this.route,
+          level: this.level,
+        });
+      }
+    },
+  },
   beforeCreate() {
     this.$options.components.NavbarListItem = require("./NavbarListItem.vue").default;
+  },
+  created() {
+    this.EventBus.$on("navbar:closeOthers", ({ route, level }) => {
+      if (this.route.title != route.title && level <= this.level) {
+        this.visible = false;
+      }
+    });
   },
   methods: {
     routeClick(route) {
