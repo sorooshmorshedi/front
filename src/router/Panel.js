@@ -16,7 +16,6 @@ import AccountTree from '@/views/panel/account/Tree.vue';
 
 import DefaultAccounts from '@/views/panel/defaultAccounts/DefaultAccounts.vue';
 
-import WareLevels from '@/views/panel/ware/WareLevels.vue';
 import Wares from '@/views/panel/ware/Wares.vue';
 
 import Warehouses from '@/views/panel/ware/Warehouses.vue';
@@ -110,15 +109,10 @@ export default [{
       component: AccountTree,
     },
     {
-      name: 'WareLevels',
-      path: 'wareLevels/:level',
-      component: WareLevels,
-      props: true
-    },
-    {
       name: 'Wares',
-      path: 'wares',
+      path: 'wares/:level',
       component: Wares,
+      props: true
     },
     {
       name: 'Warehouses',

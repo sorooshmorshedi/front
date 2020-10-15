@@ -1,6 +1,6 @@
 <template>
   <m-form
-    title="کالا"
+    :title="title"
     :items="items"
     :cols="cols"
     :canSubmit="canSubmit"
@@ -13,87 +13,106 @@
     @submit="submit"
     @delete="deleteItem"
   >
+    <template #header-btns>
+      <template v-for="i in 3">
+        <v-btn
+          :key="i"
+          v-if="i-1 != level"
+          class="blue white--text mr-1"
+          :to="`/panel/wares/${i-1}`"
+        >تعریف {{ getWareTitle(i-1) }}</v-btn>
+        <v-btn
+          :key="i"
+          v-else
+          class="blue white--text mr-1"
+          @click="clearForm"
+        >تعریف {{ getWareTitle(i-1) }}</v-btn>
+      </template>
+      <v-btn class="blue white--text mr-1" :to="{name:'Wares', params: {level:3}}">تعریف کالا</v-btn>
+    </template>
+
     <template #default>
       <v-row>
-        <v-col cols="12" md="8">
+        <v-col cols="12" :md="isWare?8:12">
           <v-autocomplete
             :return-object="true"
-            label=" * دسته بندی"
+            :label="' * ' + getWareTitle(level - 1)"
             :items="parentItems"
-            v-model="item.category"
-            :disabled="item.id != undefined || !isEditing"
+            v-model="item.parent"
             item-text="name"
+            :disabled="item.id != undefined || !isEditing"
             item-value="id"
-            :hint="parents"
-            :hide-details="false"
-            :persistent-hint="true"
           ></v-autocomplete>
         </v-col>
-        <v-col cols="12" md="4">
-          <v-switch
-            :disabled="item.id != undefined || !isEditing"
-            label="کالا خدماتی است"
-            v-model="item.is_service"
-            hint="کالای خدماتی انبار گردانی ندارد"
-          ></v-switch>
-        </v-col>
-        <v-col cols="12" v-if="item.id">
+        <template v-if="isWare">
+          <v-col cols="12" md="4">
+            <v-switch
+              :disabled="item.id != undefined || !isEditing"
+              label="کالا خدماتی است"
+              v-model="item.is_service"
+              hint="کالای خدماتی انبار گردانی ندارد"
+            ></v-switch>
+          </v-col>
+        </template>
+        <v-col cols="12">
           <v-text-field label="کد" v-model="item.code" disabled />
         </v-col>
-        <v-col cols="12" md="8">
+        <v-col cols="12" :md="isWare?8:12">
           <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
         </v-col>
-        <v-col cols="12" md="4">
-          <v-autocomplete
-            :return-object="true"
-            label=" * واحد"
-            :items="units"
-            v-model="item.unit"
-            item-text="name"
-            item-value="id"
-            :disabled="!isEditing"
-          ></v-autocomplete>
-        </v-col>
-        <v-col cols="12" md="6">
-          <money label="قیمت" v-model="item.price" :disabled="!isEditing" />
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-select
-            label=" * نوع قیمت گذاری"
-            :items="pricingTypes"
-            v-model="item.pricingType"
-            item-text="name"
-            item-value="id"
-            :disabled="!isEditing"
-            :return-object="true"
-          ></v-select>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-autocomplete
-            :return-object="false"
-            label=" * انبار پیشفرض"
-            :items="warehouses"
-            v-model="item.warehouse"
-            :disabled="!isEditing"
-            item-text="name"
-            item-value="id"
-          ></v-autocomplete>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field label="بارکد" v-model="item.barcode" :disabled="!isEditing" />
-        </v-col>
-        <v-col cols="12" md="6">
-          <money label="حداقل فروش" v-model="item.minSale" :disabled="!isEditing" />
-        </v-col>
-        <v-col cols="12" md="6">
-          <money label="حداکثر فروش" v-model="item.maxSale" :disabled="!isEditing" />
-        </v-col>
-        <v-col cols="12" md="6">
-          <money label="حداقل موجودی" v-model="item.minInventory" :disabled="!isEditing" />
-        </v-col>
-        <v-col cols="12" md="6">
-          <money label="حداکثر موجودی" v-model="item.maxInventory" :disabled="!isEditing" />
-        </v-col>
+        <template v-if="isWare">
+          <v-col cols="12" md="4">
+            <v-autocomplete
+              :return-object="true"
+              label=" * واحد"
+              :items="units"
+              v-model="item.unit"
+              item-text="name"
+              item-value="id"
+              :disabled="!isEditing"
+            ></v-autocomplete>
+          </v-col>
+          <v-col cols="12" md="6">
+            <money label="قیمت" v-model="item.price" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-select
+              label=" * نوع قیمت گذاری"
+              :items="pricingTypes"
+              v-model="item.pricingType"
+              item-text="name"
+              item-value="id"
+              :disabled="!isEditing"
+              :return-object="true"
+            ></v-select>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-autocomplete
+              :return-object="false"
+              label=" * انبار پیشفرض"
+              :items="warehouses"
+              v-model="item.warehouse"
+              :disabled="!isEditing"
+              item-text="name"
+              item-value="id"
+            ></v-autocomplete>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field label="بارکد" v-model="item.barcode" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="6">
+            <money label="حداقل فروش" v-model="item.minSale" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="6">
+            <money label="حداکثر فروش" v-model="item.maxSale" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="6">
+            <money label="حداقل موجودی" v-model="item.minInventory" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="6">
+            <money label="حداکثر موجودی" v-model="item.maxInventory" :disabled="!isEditing" />
+          </v-col>
+        </template>
         <v-col cols="12">
           <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
@@ -122,38 +141,31 @@ export default {
         {
           text: "کد",
           value: "code",
-          type: "number",
-          filters: [
-            {
-              label: "از",
-              model: "code__from",
-              filter: fromCodeFilter,
-            },
-            {
-              label: "تا",
-              model: "code__to",
-              filter: toCodeFilter,
-            },
-          ],
         },
         {
           text: "نام",
           value: "name",
-          type: "text",
-          filters: ["name"],
         },
       ],
     };
   },
   computed: {
+    title() {
+      return this.getWareTitle(this.level);
+    },
+    isWare() {
+      return this.level == 3;
+    },
     parentItems() {
-      return this.wareLevels.filter((o) => o.level == 2);
+      return this.wares.filter((o) => o.level == +this.level - 1);
     },
     items() {
-      return this.wares;
+      return this.wares.filter((o) => {
+        return o.level == this.level;
+      });
     },
     parents() {
-      let parent = this.item.category;
+      let parent = this.item.parent;
       let parents = [];
       let parentId = false;
       if (typeof parent == typeof 72) {
@@ -162,7 +174,7 @@ export default {
         parentId = parent.id;
       }
       while (parentId) {
-        let parent = this.wareLevels.filter((o) => o.id == parentId)[0];
+        let parent = this.wares.filter((o) => o.id == parentId)[0];
         parents.push(parent.name);
         parentId = parent.parent;
       }
@@ -171,10 +183,22 @@ export default {
   },
   methods: {
     getData() {
-      this.getWareLevels();
       this.getUnits();
       this.getWarehouses();
       this.getWares(true);
+    },
+
+    getWareTitle(level) {
+      switch (Number(level)) {
+        case 0:
+          return "ماهیت";
+        case 1:
+          return "گروه";
+        case 2:
+          return "دسته بندی";
+        case 3:
+          return "کالا";
+      }
     },
     setItem(item) {
       this.request({
@@ -188,11 +212,12 @@ export default {
     },
     getSerialized() {
       let item = this.extractIds(this.item);
+      item.level = this.level;
       return item;
     },
     getItemTemplate() {
       return {
-        category: null,
+        parent: null,
       };
     },
   },

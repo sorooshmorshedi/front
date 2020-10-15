@@ -194,9 +194,9 @@ export default {
               title: "کالا",
               children: [
                 {
-                  perm: "wareLevel",
+                  perm: "ware",
                   to: {
-                    name: "WareLevels",
+                    name: "Wares",
                     params: {
                       level: 0,
                     },
@@ -204,9 +204,9 @@ export default {
                   title: "ماهیت",
                 },
                 {
-                  perm: "wareLevel",
+                  perm: "ware",
                   to: {
-                    name: "WareLevels",
+                    name: "Wares",
                     params: {
                       level: 1,
                     },
@@ -214,9 +214,9 @@ export default {
                   title: "گروه",
                 },
                 {
-                  perm: "wareLevel",
+                  perm: "ware",
                   to: {
-                    name: "WareLevels",
+                    name: "Wares",
                     params: {
                       level: 2,
                     },
@@ -227,6 +227,9 @@ export default {
                   perm: "ware",
                   to: {
                     name: "Wares",
+                    params: {
+                      level: 3
+                    }
                   },
                   title: "کالا",
                 },

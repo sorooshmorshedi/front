@@ -17,18 +17,6 @@ export default {
     }
   },
   methods: {
-    getWareLevels(force = false) {
-      if (!force && this.wareLevels.length) return;
-      return this.request({
-        url: this.endpoint("wares/wareLevels"),
-        method: "get",
-        success: data => {
-          this.$store.commit("setWares", {
-            wareLevels: data
-          });
-        }
-      });
-    },
     getWares(force = false, init = false) {
       if (!force && this.wares.length) return;
 
@@ -80,7 +68,6 @@ export default {
   },
   computed: {
     ...mapState({
-      wareLevels: state => state.wares.wareLevels,
       wares: state => state.wares.wares,
       warehouses: state => state.wares.warehouses,
       units: state => state.wares.units,

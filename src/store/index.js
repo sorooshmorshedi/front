@@ -27,7 +27,6 @@ export default new Vuex.Store({
     accountTypes: [],
     defaultAccounts: [],
     wares: {
-      wareLevels: [],
       wares: [],
       warehouses: [],
       units: [],
@@ -96,7 +95,6 @@ export default new Vuex.Store({
       state.chequebooks = data;
     },
     setWares(state, wares) {
-      wares.wareLevels && (state.wares.wareLevels = wares.wareLevels);
       wares.wares && (state.wares.wares = wares.wares);
       wares.warehouses && (state.wares.warehouses = wares.warehouses);
       wares.units && (state.wares.units = wares.units);

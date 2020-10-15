@@ -141,7 +141,7 @@ Vue.mixin({
       return false
     },
     hasModule(moduleName) {
-      return this.user && this.user.modules.includes(moduleName);
+      return this.user && (this.user.is_staff || this.user.modules.includes(moduleName));
     },
     goTo(selector) {
       $('body,html')
