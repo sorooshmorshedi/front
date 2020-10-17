@@ -1,15 +1,10 @@
 <template>
   <div class="d-flex">
     <v-icon @click="openInventory" color="cyan" class="mr-3" :disabled="!ware">fa-pallet</v-icon>
-    <v-icon
-      @click="showInventory"
-      color="cyan"
-      class="pl-2 mr-2"
-      :disabled="!ware"
-    >fa-boxes</v-icon>
+    <v-icon @click="showInventory" color="cyan" class="pl-2 mr-2" :disabled="!ware">fa-boxes</v-icon>
     <v-autocomplete
       :label="label"
-      :items="wares"
+      :items="wares.filter(o => o.level == 3)"
       v-model="ware"
       item-text="name"
       item-value="id"
@@ -69,7 +64,7 @@ export default {
       let inventories = this.wareInventory.reduce((v, inventory) => {
         let member = v.filter((o) => o.warehouse.id == inventory.warehouse.id);
         if (member.length) {
-          member = member[0]
+          member = member[0];
           member.count += +inventory.count;
         } else {
           v.push({
