@@ -5,6 +5,9 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="4">
+          <v-select :items="wareLevels" v-model="filters.level" label="وضعیت کالا" />
+        </v-col>
+        <v-col cols="12" md="4">
           <v-select :items="waresStatuses" v-model="filters.status" label="وضعیت کالا"></v-select>
         </v-col>
         <v-col cols="12" class="all-wares-inventory">
@@ -28,9 +31,13 @@ export default {
       url: "reports/inventory/ware/all",
       headers: [
         {
-          text: "کالا",
+          text: "کد",
+          value: "code",
+          sortable: false,
+        },
+        {
+          text: "نام",
           value: "name",
-          type: "text",
           sortable: false,
         },
         {
@@ -113,6 +120,13 @@ export default {
         { value: "withTransaction", text: "کالا های دارای گردش" },
         { value: "withoutTransaction", text: "کالا های بدون گردش" },
       ],
+      wareLevels: [
+        { value: undefined, text: "همه" },
+        { value: 0, text: "ماهیت" },
+        { value: 1, text: "گروه" },
+        { value: 2, text: "دسته بندی" },
+        { value: 3, text: "کالا" },
+      ],
     };
   },
 };
@@ -122,9 +136,9 @@ export default {
 .all-wares-inventory #datatable > div.v-data-table__wrapper > table tr {
   td,
   th {
-    &:nth-child(7),
-    &:nth-child(10),
-    &:nth-child(13) {
+    &:nth-child(8),
+    &:nth-child(11),
+    &:nth-child(14) {
       border-right: 1px solid #e0e0e0 !important;
     }
   }
