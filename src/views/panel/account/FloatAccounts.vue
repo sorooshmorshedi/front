@@ -44,8 +44,8 @@ export default {
   mixins: [MFormMixin, AccountApiMixin],
   props: {
     is_cost_center: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -56,15 +56,15 @@ export default {
           text: "نام حساب",
           value: "name",
           type: "text",
-          filters: ["name"]
+          filters: ["name"],
         },
         {
           text: "توضیحات",
           value: "explanation",
           type: "text",
-          filters: ["expalantion"]
-        }
-      ]
+          filters: ["expalantion"],
+        },
+      ],
     };
   },
   computed: {
@@ -73,14 +73,10 @@ export default {
       else return "حساب شناور";
     },
     items() {
-      return this.floatAccounts.filter(
-        o => o.is_cost_center == this.isCostCenter
-      );
-    },
-    groupOptions() {
-      return this.floatAccountGroups.filter(
-        o => o.is_cost_center == this.isCostCenter
-      );
+      if (this.isCostCenter) {
+        return this.costCenters;
+      }
+      return this.floatAccounts;
     },
     isCostCenter() {
       return ["true", true].includes(this.is_cost_center);
@@ -88,12 +84,12 @@ export default {
     groupType() {
       if (this.isCostCenter) return "costCenterGroups";
       else return "floatAccountGroups";
-    }
+    },
   },
   methods: {
     getItemTempate() {
       return {
-        is_cost_center: this.is_cost_center
+        is_cost_center: this.is_cost_center,
       };
     },
     getData() {
@@ -111,7 +107,7 @@ export default {
       }
       data.is_cost_center = this.is_cost_center;
       return data;
-    }
-  }
+    },
+  },
 };
 </script>
