@@ -45,7 +45,11 @@ export default {
       },
       headers: [
         {
-          text: "کالا",
+          text: "کد",
+          value: "code",
+        },
+         {
+          text: "نام",
           value: "name",
         },
         {
