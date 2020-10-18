@@ -35,9 +35,17 @@
           />
         </v-col>
         <v-col cols="12" md="2">
-          <date v-model="item.date" label="تاریخ سیاهه" :default="true" :disabled="!isEditing" />
+          <date v-model="item.date" label="تاریخ ثبت" :default="true" :disabled="!isEditing" />
         </v-col>
-        <v-col cols="12" md="2">
+        <v-col cols="12" md="3">
+          <date
+            v-model="item.list_date"
+            label="تاریخ سیاهه"
+            :default="true"
+            :disabled="!isEditing"
+          />
+        </v-col>
+        <v-col cols="12" md="3">
           <date v-model="item.export_date" label="خروجی" :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="4">
