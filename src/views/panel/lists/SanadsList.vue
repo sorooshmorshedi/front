@@ -5,16 +5,22 @@
       <v-spacer></v-spacer>
       <v-btn
         small
-        @click="reorderSanads"
+        @click="reorderSanads('date')"
         class="teal white--text mr-1"
       >مرتب کردن کد اسناد بر اساس تاریخ</v-btn>
+      <v-btn
+        small
+        @click="reorderSanads('local_id')"
+        class="teal white--text mr-1"
+      >مرتب کردن کد اسناد بر اساس عطف</v-btn>
+      <v-btn
+        small
+        @click="reorderSanads(null)"
+        class="teal white--text mr-1"
+      >بازگردانی کد اسناد به حالت اولیه</v-btn>
     </v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
-        <template #item.remain="{ item }">{{ getRemain(item) | toMoney}}</template>
-        <template #item.settle="{ item }">
-          <v-btn color="light-blue white--text" :to="toSettle(item)" text>تسویه</v-btn>
-        </template>
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
@@ -61,7 +67,7 @@ export default {
       let headers = [
         {
           text: "عطف",
-          value: "lcoal_id",
+          value: "local_id",
         },
         {
           text: "شماره",
@@ -109,11 +115,28 @@ export default {
         },
       };
     },
-
-    reorderSanads() {
+    confirm() {
+      if (
+        confirm(
+          "با انجام این عملیات کد اسناد تغییر میکنند. میخواهید ادامه دهید؟"
+        )
+      ) {
+        if (confirm("از انجام این عملیات اطمینان دارید؟")) {
+          return true;
+        }
+      }
+      return false;
+    },
+    reorderSanads(order) {
+      if (!this.confirm()) {
+        return;
+      }
       this.request({
         url: this.endpoint("sanads/reorder"),
         method: "post",
+        data: {
+          order: order,
+        },
         success: (data) => {
           this.successNotify();
           this.$refs.datatable.getDataFromApi();
