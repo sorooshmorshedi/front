@@ -84,8 +84,10 @@
                   </v-row>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <v-row v-if="Object.keys(item.permissions).length == rawPermissions.length">
-                    <v-col cols="12">
+                  <v-row
+                    v-if="Object.keys(item.permissions).length == rawPermissions.length"
+                  >
+                    <v-col cols="12" v-if="hasShortcutPerms(model.name)">
                       <v-row no-gutters>
                         <v-col cols="12" class="pb-0">
                           <v-btn-toggle
@@ -219,13 +221,15 @@ export default {
     permissions() {
       return this.rawPermissions.filter((o) => {
         let codename = o.codename;
+        console.log(o.contentType.model == 'report');
         let f =
-          !codename.startsWith("get") &&
-          !codename.startsWith("create") &&
-          !codename.startsWith("update") &&
-          !codename.startsWith("firstConfirm") &&
-          !codename.startsWith("secondConfirm") &&
-          !codename.startsWith("delete");
+          o.contentType.model == "report" ||
+          (!codename.startsWith("get") &&
+            !codename.startsWith("create") &&
+            !codename.startsWith("update") &&
+            !codename.startsWith("firstConfirm") &&
+            !codename.startsWith("secondConfirm") &&
+            !codename.startsWith("delete"));
         return f;
       });
     },
@@ -365,8 +369,11 @@ export default {
         let permission = this.getPermissionByCodename(codename);
       }
     },
+    hasShortcutPerms(model) {
+      return !["report"].includes(model);
+    },
     getModelPermissions(model) {
-      return this.permissions.filter((o) => o.codename.includes(model));
+      return this.permissions.filter((o) => o.codename.toLowerCase().includes(model));
     },
     getItemTemplate() {
       let item = {
