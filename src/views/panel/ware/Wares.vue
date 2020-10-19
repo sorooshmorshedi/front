@@ -33,7 +33,7 @@
 
     <template #default>
       <v-row>
-        <v-col cols="12" :md="isWare?8:12">
+        <v-col cols="12" :md="isWare?8:12" v-if="level != 0">
           <v-autocomplete
             :return-object="true"
             :label="' * ' + getWareTitle(level - 1)"
