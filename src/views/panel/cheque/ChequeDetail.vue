@@ -61,7 +61,7 @@
                   <td>{{ cheque.date }}</td>
                 </tr>
                 <tr>
-                  <th>دریافت کننده:</th>
+                  <th>کد و نام مشتری:</th>
                   <td>{{ cheque.account && cheque.account.title }}</td>
                 </tr>
                 <tr v-if="cheque.floatAccount">
@@ -78,7 +78,7 @@
                 </tr>
 
                 <tr v-if="isPaidCheque">
-                  <th>توضیحات:</th>
+                  <th>شرح:</th>
                   <td>{{ cheque.chequebook.explanation }}</td>
                 </tr>
               </tbody>

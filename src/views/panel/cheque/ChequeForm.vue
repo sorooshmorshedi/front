@@ -69,7 +69,7 @@
           </v-col>
           <v-col cols="12" md="6">
             <account-select
-              :label="' * ' + (isPaidCheque?'دریافت کننده':'پرداخت کننده')"
+              label="* کد و نام مشتری"
               items-type="level3"
               v-model="item.account"
               :disabled="modalMode || !isEditing"
@@ -216,8 +216,8 @@ export default {
     },
     title() {
       let title = "چک ";
-      if (this.isPaidCheque) title += "پرداختی";
-      else title += "دریافتی";
+      if (this.isPaidCheque) title += "پرداختنی";
+      else title += "دریافتنی";
       return title;
     },
     canSetSanadCode() {

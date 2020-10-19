@@ -56,7 +56,7 @@
         <v-col cols="2">
           <v-text-field
             v-if="item.created_by"
-            label="ثبت کننده"
+            label="کاربر"
             disabled
             v-model="item.created_by.name"
           />

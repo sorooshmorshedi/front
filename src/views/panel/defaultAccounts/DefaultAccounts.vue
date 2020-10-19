@@ -91,6 +91,7 @@ export default {
       if (this.usage == "factor") return title + "فاکتور";
       if (this.usage == "closeAccounts") return title + "بستن";
       if (this.usage == "imprest") return title + "تنخواه";
+      if (this.usage == "other") return title  = "دیگر حساب های پیشفرض";
     },
     accountLevel() {
       if (this.usage == "imprest") return "level2";

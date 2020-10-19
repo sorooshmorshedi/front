@@ -60,7 +60,7 @@
             <v-col cols="12" lg="12">
               <v-text-field
                 v-if="item.created_by"
-                label="ثبت کننده"
+                label="کاربر"
                 disabled
                 v-model="item.created_by.name"
               />
@@ -85,8 +85,8 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>* شماره - نام حساب</th>
-                <th>توضیحات ردیف</th>
+                <th>* کد و نام حساب</th>
+                <th>شرح ردیف</th>
                 <th>بدهکار</th>
                 <th class="d-print-none">
                   <a @click.prevent="exchangeValue()" href>

@@ -60,12 +60,12 @@
             />
           </v-col>
           <v-col cols="12" md="8">
-            <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
+            <v-textarea label="شرح" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field
               v-if="item.created_by"
-              label="ثبت کننده"
+              label="کاربر"
               disabled
               v-model="item.created_by.name"
             />
@@ -81,11 +81,11 @@
                   <th>* نوع {{ title }}</th>
                   <th>* نام حساب</th>
                   <th>* مبلغ</th>
-                  <th>شماره مستند</th>
+                  <th>شماره پیگیری</th>
                   <th>* تاریخ {{ title }}</th>
                   <th>سررسید</th>
                   <th>نام بانک</th>
-                  <th>توضیحات</th>
+                  <th>شرح ردیف</th>
                 </tr>
               </thead>
               <tbody>
@@ -361,7 +361,7 @@ export default {
     },
     accountLabel() {
       if (this.isImprest) return "* تنخواه گردان";
-      return " * کد - نام مشتری";
+      return " * کد - نام حساب";
     },
     itemPaymentMethods() {
       let type = this.type == "receive" ? "receive" : "payment";

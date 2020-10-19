@@ -73,7 +73,7 @@
             ></v-autocomplete>
           </v-col>
           <v-col cols="12" md="6">
-            <money label="قیمت" v-model="item.price" :disabled="!isEditing" />
+            <money label="قیمت فروش" v-model="item.price" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="6">
             <v-select

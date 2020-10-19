@@ -53,7 +53,7 @@ export default {
           value: "date",
         },
         {
-          text: "توضیحات",
+          text: "شرح",
           value: "explanation",
         },
         {

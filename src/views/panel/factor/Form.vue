@@ -109,7 +109,7 @@
           <v-col cols="12" md="2">
             <v-text-field
               v-if="item.created_by"
-              label="ثبت کننده"
+              label="کاربر"
               disabled
               v-model="item.created_by.name"
             />
@@ -126,10 +126,9 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>* شرح</th>
+                  <th>* نام کالا</th>
                   <th>* انبار</th>
                   <th>* تعداد</th>
-                  <th>واحد</th>
 
                   <template v-if="!isCw">
                     <th>* قیمت واحد</th>
@@ -171,7 +170,6 @@
                   <td>
                     <money v-model="rows[i].count" :disabled="!isEditing" decimalScale="6" />
                   </td>
-                  <td>{{ rows[i].ware?rows[i].ware.unit_name:' - ' }}</td>
                   <template v-if="!isCw">
                     <td>
                       <money v-model="rows[i].fee" :disabled="!isEditing" />
@@ -254,7 +252,7 @@
           <v-col cols="12" md="8" class>
             <div class="pa-3 ml-5" style="border: 1px dashed #9e9e9e">
               <div class="d-flex">
-                <h3>هزینه های</h3>
+                <h3>هزینه های فاکتور</h3>
                 <v-spacer></v-spacer>
               </div>
               <v-simple-table class="mt-3">
@@ -367,7 +365,7 @@
 
         <v-dialog v-model="factorExpensesDialog" scrollable max-width="1200px">
           <v-card class="form-fields">
-            <v-card-title>هزینه های ثابت فاکتور</v-card-title>
+            <v-card-title>هزینه های فاکتور</v-card-title>
             <v-card-text>
               <v-simple-table>
                 <thead>

@@ -58,11 +58,11 @@ export default {
           value: "time",
         },
         {
-          text: "حساب",
+          text: ["buy", "backFromBuy"].includes(this.type) ? "فروشنده" : "حساب",
           value: "account.name",
         },
         {
-          text: "توضیحات",
+          text: "شرح",
           value: "explanation",
         },
         {
