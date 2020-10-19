@@ -34,7 +34,7 @@ export default {
       return this.data.map((o) => o.name);
     },
     dataset() {
-      return this.data.map((o) => o[this.value] || Math.floor(Math.random() * 10 ** 9));
+      return this.data.map((o) => o[this.value]);
     },
     backgroundColor() {
       return this.data.map((o, i) => this.colors[i % this.colors.length]);
