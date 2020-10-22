@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex" :title="ware && ware.name">
     <v-icon @click="openInventory" color="cyan" class="mr-3" :disabled="!ware">fa-pallet</v-icon>
     <v-icon @click="showInventory" color="cyan" class="pl-2 mr-2" :disabled="!ware">fa-boxes</v-icon>
     <v-autocomplete

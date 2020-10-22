@@ -3,7 +3,7 @@
     title="بارگیری شرکت نفت"
     :isEditing.sync="isEditing"
     :showList="false"
-    :listRoute="{name:'OilCompanyLadingsReport'}"
+    :listRoute="{name:'OilCompanyLadingsList'}"
     :canDelete="canDelete"
     :canSubmit="canSubmit"
     :confirmBtnText="confirmBtnText"

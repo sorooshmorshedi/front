@@ -228,8 +228,8 @@ export default {
                   to: {
                     name: "Wares",
                     params: {
-                      level: 3
-                    }
+                      level: 3,
+                    },
                   },
                   title: "کالا",
                 },
@@ -1081,38 +1081,6 @@ export default {
                     name: "RevokeLadingBillNumber",
                   },
                 },
-                {
-                  title: "گزارش بارنامه برای کامیون های آقا ابراهیم",
-                  perm: "lading",
-                  to: {
-                    name: "LadingNumberReport",
-                    query: { "filters.driving__car__owner": "e" },
-                  },
-                },
-                {
-                  title: "گزارش بارنامه برای کامیون های آقا رحیم",
-                  perm: "lading",
-                  to: {
-                    name: "LadingNumberReport",
-                    query: { "filters.driving__car__owner": "rm" },
-                  },
-                },
-                {
-                  title: "گزارش بارنامه برای کامیون های متفرقه",
-                  perm: "lading",
-                  to: {
-                    name: "LadingNumberReport",
-                    query: { "filters.driving__car__owner": "o" },
-                  },
-                },
-                {
-                  title: "گزارش بارنامه برای کامیون های حاج رحمان",
-                  perm: "lading",
-                  to: {
-                    name: "LadingNumberReport",
-                    query: { "filters.driving__car__owner": "rn" },
-                  },
-                },
               ],
             },
             {
@@ -1152,27 +1120,6 @@ export default {
                   },
                 },
                 {
-                  title: "گزارش بارگیری حمل و نقل برای پیمانکار",
-                  perm: "lading",
-                  to: {
-                    name: "LadingsReportForContractor",
-                  },
-                },
-                {
-                  title: "گزارش بارگیری حمل و نقل برای راننده",
-                  perm: "lading",
-                  to: {
-                    name: "LadingsReportForDriver",
-                  },
-                },
-                {
-                  title: "گزارش کمیسیون حمل و نقل",
-                  perm: "lading",
-                  to: {
-                    name: "TransportationCommissionReport",
-                  },
-                },
-                {
                   title: "بارگیری شرکت نفت",
                   perm: "oilCompanyLading",
                   to: {
@@ -1183,14 +1130,14 @@ export default {
                   title: "گزارش بارگیری شرکت نفت",
                   perm: "oilCompanyLading",
                   to: {
-                    name: "OilCompanyLadingsReport",
+                    name: "OilCompanyLadingsList",
                   },
                 },
                 {
-                  title: "گزارش بارگیری شرکت نفت همراه با جزئیات",
+                  title: "لیست بارگیری شرکت نفت همراه با جزئیات",
                   perm: "oilCompanyLading",
                   to: {
-                    name: "OilCompanyLadingsReport",
+                    name: "OilCompanyLadingsList",
                     params: {
                       detailed: true,
                     },
@@ -1215,6 +1162,66 @@ export default {
                     name: "OtherDriverPaymentsList",
                   },
                 },
+              ],
+            },
+            {
+              title: "گزارشات",
+              children: [
+                {
+                  title: "گزارش بارنامه برای کامیون های آقا ابراهیم",
+                  perm: "lading",
+                  to: {
+                    name: "LadingNumberReport",
+                    query: { "filters.driving__car__owner": "e" },
+                  },
+                },
+                {
+                  title: "گزارش بارنامه برای کامیون های آقا رحیم",
+                  perm: "lading",
+                  to: {
+                    name: "LadingNumberReport",
+                    query: { "filters.driving__car__owner": "rm" },
+                  },
+                },
+                {
+                  title: "گزارش بارنامه برای کامیون های متفرقه",
+                  perm: "lading",
+                  to: {
+                    name: "LadingNumberReport",
+                    query: { "filters.driving__car__owner": "o" },
+                  },
+                },
+                {
+                  title: "گزارش بارنامه برای کامیون های حاج رحمان",
+                  perm: "lading",
+                  to: {
+                    name: "LadingNumberReport",
+                    query: { "filters.driving__car__owner": "rn" },
+                  },
+                },
+
+                {
+                  title: "گزارش بارگیری حمل و نقل برای پیمانکار",
+                  perm: "lading",
+                  to: {
+                    name: "LadingsReportForContractor",
+                  },
+                },
+                {
+                  title: "گزارش بارگیری حمل و نقل برای راننده",
+                  perm: "lading",
+                  to: {
+                    name: "LadingsReportForDriver",
+                  },
+                },
+                {
+                  title: "گزارش کمیسیون حمل و نقل",
+                  perm: "lading",
+                  to: {
+                    name: "TransportationCommissionReport",
+                  },
+                },
+
                 {
                   perm: "otherDriverPayment",
                   title: "گزارش مبلغ قابل پرداخت رانندگان متفرقه",

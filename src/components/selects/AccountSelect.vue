@@ -1,5 +1,9 @@
 <template>
-  <v-row no-gutters :class="{'flex-row': horizontal, 'flex-column': !horizontal}">
+  <v-row
+    no-gutters
+    :class="{'flex-row': horizontal, 'flex-column': !horizontal}"
+    :title="item && item.title"
+  >
     <v-col :cols="horizontal && hasDeepSelect?6:12">
       <div class="d-flex">
         <v-icon v-if="hasLedger" @click="openBalanceDialog" color="cyan" class="mr-3">fa-wallet</v-icon>

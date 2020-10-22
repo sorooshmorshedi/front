@@ -72,7 +72,15 @@
               :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
+            <date
+              label="تاریخ سند"
+              v-model="item.sanad_date"
+              :default="true"
+              :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
             <date
               label="تاریخ بارگیری"
               v-model="item.lading_date"
@@ -92,7 +100,6 @@
               items-type="level3"
             />
           </v-col>
-
           <v-col cols="12" md="2">
             <money
               label="نرخ حواله پیمانکار"
@@ -110,10 +117,10 @@
               :disabled="true"
             />
           </v-col>
-
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="3">
             <money label="انعام راننده" v-model="item.driver_tip_price" :disabled="!isEditing" />
           </v-col>
+
           <v-col cols="12" md="2">
             <v-autocomplete
               :return-object="true"

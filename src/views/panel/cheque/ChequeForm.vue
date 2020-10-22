@@ -38,7 +38,7 @@
                 required
                 label=" * دسته چک"
                 :items="chequebooks"
-                item-text="account.name"
+                item-text="serial"
                 item-value="id"
                 v-model="item.chequebook"
                 :disabled="id != null || !isEditing"
