@@ -145,7 +145,7 @@
                   </template>
 
                   <th>توضیحات</th>
-                  <th v-if="isSale">قیمت فروش</th>
+                  <th v-if="isBuy">قیمت فروش</th>
                   <th class="d-print-none"></th>
                 </tr>
               </thead>
@@ -211,7 +211,7 @@
                       auto-grow
                     ></v-textarea>
                   </td>
-                  <td v-if="isSale">
+                  <td v-if="isBuy">
                     <money
                       style="width: 80px"
                       v-if="rows[i].ware"
