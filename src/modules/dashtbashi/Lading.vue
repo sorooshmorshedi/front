@@ -424,14 +424,16 @@ export default {
       this.getRemittances(this.remittanceSearch);
     },
     remittance() {
-      Object.keys(this.remittance).forEach((key) => {
-        if (key == "id") {
-          this.item.remittance = this.remittance.id;
-        } else {
-          this.item[key] = null;
-          this.$set(this.item, key, this.remittance[key]);
-        }
-      });
+      if (this.remittance) {
+        Object.keys(this.remittance).forEach((key) => {
+          if (key == "id") {
+            this.item.remittance = this.remittance.id;
+          } else {
+            this.item[key] = null;
+            this.$set(this.item, key, this.remittance[key]);
+          }
+        });
+      }
     },
   },
   methods: {
