@@ -145,7 +145,7 @@
                   </template>
 
                   <th>توضیحات</th>
-                  <th v-if="isBuy">قیمت فروش</th>
+                  <th v-if="isBuy">قیمت جدید فروش</th>
                   <th class="d-print-none"></th>
                 </tr>
               </thead>
