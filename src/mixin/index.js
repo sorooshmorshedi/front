@@ -123,7 +123,7 @@ Vue.mixin({
         text: msg
       });
     },
-    hasPerm(operation, basename, object = null) {
+    hasPerm(operation, basename='', object = null) {
       if (this.user.is_superuser) return true
       let roles = this.user.roles.filter(o => this.company && o.company == this.company.id);
       for (let role of roles) {
