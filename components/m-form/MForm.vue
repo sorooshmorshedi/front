@@ -129,7 +129,10 @@ export default {
     showClearBtn: {
       default: true,
     },
-    exportParams: {},
+    exportBaseUrl: {},
+    exportParams: {
+      default: () => {},
+    },
 
     showList: {
       default: true,
@@ -200,7 +203,6 @@ export default {
   },
   data() {
     return {
-      exportBaseUrl: "reports/lists/",
       filters: {},
     };
   },
@@ -225,27 +227,23 @@ export default {
       return this.financialYear && !this.financialYear.is_closed;
     },
     hasExport() {
-      if (this.exportParams && this.exportParams.id) return true;
-      return false;
+      return this.exportBaseUrl != undefined;
     },
     printUrl() {
-      return "";
       if (!this.hasExport) return "";
-      let path = this.exportBaseUrl + this.listRoute.params.form + "s/html?";
+      let path = this.exportBaseUrl + "/html?";
       path = this.addParams(path);
       return this.endpoint(path);
     },
     pdfUrl() {
-      return "";
       if (!this.hasExport) return "";
-      let path = this.exportBaseUrl + this.listRoute.params.form + "s/pdf?";
+      let path = this.exportBaseUrl + "/pdf?";
       path = this.addParams(path);
       return this.endpoint(path);
     },
     excelUrl() {
-      return "";
       if (!this.hasExport) return "";
-      let path = this.exportBaseUrl + this.listRoute.params.form + "s/xlsx?";
+      let path = this.exportBaseUrl + "/xlsx?";
       path = this.addParams(path);
       return this.endpoint(path);
     },
@@ -255,9 +253,11 @@ export default {
       this.$emit(event);
     },
     addParams(url) {
-      Object.keys(this.listRoute.params).forEach((k) => {
-        url += k + "=" + this.listRoute.params[k] + "&";
-      });
+      if (this.listRoute && this.listRoute.params) {
+        Object.keys(this.listRoute.params).forEach((k) => {
+          url += k + "=" + this.listRoute.params[k] + "&";
+        });
+      }
       Object.keys(this.exportParams).forEach((k) => {
         url += k + "=" + this.exportParams[k] + "&";
       });

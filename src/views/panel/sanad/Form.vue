@@ -3,6 +3,7 @@
     title="سند حسابداری"
     :showList="false"
     :listRoute="{name:'SanadsList'}"
+    exportBaseUrl="reports/lists/sanads"
     :exportParams="{id: this.id}"
     :canEdit="canEdit"
     :canDelete="false"
