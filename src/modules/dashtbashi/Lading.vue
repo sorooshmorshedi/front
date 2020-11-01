@@ -60,7 +60,7 @@
               :disabled="!isEditing"
               :items="remittances"
               :search-input.sync="remittanceSearch"
-              item-text="code"
+              :item-text="(item) => item.code + ' - ' + item.contractor.name"
               item-value="id"
               clearable
             />
