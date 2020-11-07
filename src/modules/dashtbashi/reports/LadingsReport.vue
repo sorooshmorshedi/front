@@ -26,7 +26,7 @@ export default {
       headers: [
         {
           text: "عطف",
-          value: "id",
+          value: "local_id",
         },
         {
           text: "شماره حواله",

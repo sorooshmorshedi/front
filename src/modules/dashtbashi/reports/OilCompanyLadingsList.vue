@@ -87,7 +87,7 @@ export default {
       let headers = [
         {
           text: "عطف",
-          value: "id",
+          value: "local_id",
         },
         {
           text: "تاریخ ثبت",

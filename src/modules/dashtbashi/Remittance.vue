@@ -19,7 +19,7 @@
     <template>
       <v-row>
         <v-col cols="12" md="3">
-          <v-text-field disabled label="عطف" v-model="item.id" />
+          <v-text-field disabled label="عطف" v-model="item.local_id" />
         </v-col>
         <v-col cols="12" md="3">
           <v-text-field label="شماره حواله" v-model="item.code" :disabled="!isEditing" />

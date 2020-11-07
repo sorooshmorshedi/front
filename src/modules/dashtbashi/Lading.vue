@@ -3,6 +3,7 @@
     title
     :showList="false"
     :isEditing.sync="isEditing"
+    :listRoute="{name:'LadingsReport'}"
     :canDelete="canDelete"
     :canSubmit="canSubmit"
     :confirmBtnText="confirmBtnText"
@@ -22,7 +23,7 @@
     <template>
       <v-row>
         <v-col cols="12" md="2">
-          <v-text-field label="عطف" v-model="item.id" :disabled="true" />
+          <v-text-field label="عطف" v-model="item.local_id" :disabled="true" />
         </v-col>
         <v-col cols="12" md="4">
           <v-autocomplete

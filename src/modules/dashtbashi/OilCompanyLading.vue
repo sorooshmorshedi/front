@@ -24,7 +24,7 @@
     <template>
       <v-row>
         <v-col cols="12" md="2">
-          <v-text-field label="عطف" v-model="item.id" disabled />
+          <v-text-field label="عطف" v-model="item.local_id" disabled />
         </v-col>
         <v-col cols="12" md="2">
           <v-autocomplete
