@@ -69,12 +69,12 @@
           @click="routeClick('FactorForm')"
         >فاکتور فروش</v-btn>
         <v-btn
-          v-if="hasPerm('sanadItemsReport')"
+          v-if="hasPerm('get.sanadItemsReport')"
           class="blue white--text mr-1"
           :to="{name: 'LedgerReport', params: { level: 'level3' }}"
         >گردش حساب</v-btn>
         <v-btn
-          v-if="hasPerm('accountBalanceReport')"
+          v-if="hasPerm('get.accountBalanceReport')"
           class="blue white--text mr-1"
           :to="{name: 'AccountsBalanceReport' }"
         >تراز حساب ها</v-btn>
