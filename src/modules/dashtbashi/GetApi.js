@@ -135,6 +135,7 @@ export default {
       });
     },
     getRemittances(code) {
+      if (code) code = String(code).match(/\d+/)[0];
       this.request({
         url: this.endpoint("dashtbashi/remittances/?limit=10&offset=0"),
         method: "get",

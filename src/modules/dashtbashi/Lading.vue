@@ -433,6 +433,12 @@ export default {
     },
     remittance() {
       if (this.remittance) {
+        if (
+          this.item.remittance &&
+          this.item.remittance.id == this.remittance.id
+        ) {
+          return;
+        }
         Object.keys(this.remittance).forEach((key) => {
           if (key == "id") {
             this.item.remittance = this.remittance.id;
