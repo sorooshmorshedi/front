@@ -180,6 +180,7 @@ export default {
       isAppReady: false,
       showDrawer: false,
       developersDialog: false,
+      timeInterval: null,
     };
   },
   computed: {
@@ -211,9 +212,13 @@ export default {
         method: "get",
         token: false,
         success: (data) => {
-          let now = moment(data.time);
+          let now = moment.unix(data.time);
           this.$store.commit("setTime", now);
           this.isAppReady = true;
+
+          this.timeInterval = window.setInterval(() => {
+            this.$store.commit("setTime", this.now.add(1, "second"));
+          }, 1000);
         },
       });
     },

@@ -65,7 +65,7 @@ export default {
       }
     },
     limit() {
-      return this.now.add("day", 1).format("jYYYY-jMM-jDD");
+      return this.now.clone().add("day", 1).format("jYYYY-jMM-jDD");
     },
     listRoute() {
       return {
