@@ -33,11 +33,15 @@
         <v-row>
           <template v-if="isPaidCheque">
             <v-col cols="12" md="3">
+              <account-select itemsType="banks" label="* بانک" v-model="bank" />
+            </v-col>
+            <v-col cols="12" md="3">
               <v-autocomplete
+                v-if="bank"
                 :return-object="true"
                 required
                 label=" * دسته چک"
-                :items="chequebooks"
+                :items="chequebooks.filter(o => o.account.id == bank.id)"
                 item-text="serial"
                 item-value="id"
                 v-model="item.chequebook"
@@ -47,11 +51,12 @@
             </v-col>
             <v-col cols="12" md="3">
               <v-autocomplete
+                v-if="item.chequebook"
                 :return-object="true"
                 required
                 :disabled="!chequebook || !isEditing"
                 label=" * چک"
-                :items="paidCheques"
+                :items="paidCheques.filter(o => o.chequebook.id == item.chequebook.id)"
                 v-model="item"
                 @change="item && (item.account = null)"
                 item-text="serial"
@@ -180,6 +185,7 @@ export default {
         account: null,
       },
       paidCheques: [],
+      bank: null,
       chequeTypes: [
         {
           label: "شخصی",
@@ -298,6 +304,9 @@ export default {
         this.changeRouteTo(item.id);
       }
       this.item = item;
+      if (this.isPaidCheque) {
+        this.bank = item.chequebook.account;
+      }
       this.getPaidCheques();
       this.isEditing = false;
     },
@@ -306,6 +315,7 @@ export default {
 
       let params = {
         chequebook__id: this.chequebook.id,
+        received_or_paid: "p",
       };
       if (this.id == undefined) {
         params["status"] = "blank";
