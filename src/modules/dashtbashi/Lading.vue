@@ -495,13 +495,10 @@ export default {
       });
     },
     setItem(item) {
-      // must be implemented, but by default
       this.item = item;
       this.remittance = item.remittance;
       this.ladingBillSeries = item.billNumber ? item.billNumber.series : null;
-      if (!this.hasList && this.id != item.id) {
-        this.changeRouteTo(item.id);
-      }
+      this.changeRouteTo(item.id);
     },
     getItemByPosition(pos) {
       this.request({
