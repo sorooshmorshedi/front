@@ -429,7 +429,7 @@ export default {
                   title: "لیست دریافت ها",
                 },
                 {
-                  perm: "create.receivedCheque",
+                  perm: "submit.receivedCheque",
                   to: {
                     name: "ChequeForm",
                     params: {
@@ -488,7 +488,7 @@ export default {
                   title: "لیست پرداخت ها",
                 },
                 {
-                  perm: "create.paidCheque",
+                  perm: "submit.paidCheque",
                   to: {
                     name: "ChequeForm",
                     params: {
