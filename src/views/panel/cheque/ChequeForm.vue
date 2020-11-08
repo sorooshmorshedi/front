@@ -217,6 +217,9 @@ export default {
         return "receivedCheque";
       }
     },
+    canSubmit() {
+      return this.hasPerm("submit", this.permissionBasename, this.item);
+    },
     isPaidCheque() {
       return this.receivedOrPaid == "p";
     },
