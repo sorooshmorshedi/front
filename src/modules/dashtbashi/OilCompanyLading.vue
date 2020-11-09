@@ -209,16 +209,16 @@ export default {
     rowsTaxPrice() {
       let sum = 0;
       for (let row of this.rows) {
-        sum += this.taxPrice(row);
+        sum += +this.taxPrice(row);
       }
-      return sum;
+      return sum.toFixed(6);
     },
     rowsComplicationPrice() {
       let sum = 0;
       for (const row of this.rows) {
-        sum += this.complicationPrice(row);
+        sum += +this.complicationPrice(row);
       }
-      return sum;
+      return sum.toFixed(6);
     },
   },
   watch: {
@@ -260,7 +260,7 @@ export default {
     },
     complicationPrice(row) {
       row.complication_price =
-        (+row.complication_percent * +row.gross_price) / 100 || 0;
+        ((+row.complication_percent * +row.gross_price) / 100 || 0).toFixed(6);
       return row.complication_price;
     },
     rowSum(row) {
@@ -287,16 +287,6 @@ export default {
       let value = this.netPrice(row) - this.companyCommission(row) || 0;
       row.car_income = value.toFixed(6);
       return value;
-    },
-    rowsSum(key) {
-      let sum = 0;
-      for (const row of this.rows) {
-        let value = row[key];
-        if (this.hasValue(value)) {
-          sum += +value;
-        }
-      }
-      return sum;
     },
     getItemByPosition(position) {
       return this.request({

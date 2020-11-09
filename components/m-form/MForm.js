@@ -295,7 +295,8 @@ export default {
           sum += +value;
         }
       }
-      return sum;
+      sum = sum.toFixed(6);
+      return sum
     },
 
     deleteRow(index) {
