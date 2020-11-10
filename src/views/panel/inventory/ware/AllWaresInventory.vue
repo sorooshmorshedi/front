@@ -5,7 +5,7 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="4">
-          <v-select :items="wareLevels" v-model="filters.level" label="وضعیت کالا" />
+          <v-select :items="wareLevels" v-model="filters.level" label="سطح کالا" />
         </v-col>
         <v-col cols="12" md="4">
           <v-select :items="waresStatuses" v-model="filters.status" label="وضعیت کالا"></v-select>

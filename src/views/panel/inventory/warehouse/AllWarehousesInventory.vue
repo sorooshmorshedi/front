@@ -4,7 +4,7 @@
 
     <v-card-text>
       <v-row>
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="4">
           <v-autocomplete
             :return-object="false"
             label="انبار"
@@ -13,6 +13,9 @@
             item-text="title"
             item-value="id"
           />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-select :items="wareLevels" v-model="filters.level" label="سطح کالا" />
         </v-col>
         <v-col cols="12" md="4">
           <v-select :items="waresStatuses" v-model="filters.status" label="وضعیت کالا"></v-select>
@@ -78,6 +81,14 @@ export default {
         { value: "withoutRemain", text: "بدون مانده" },
         { value: "withTransaction", text: "کالا های دارای گردش" },
         { value: "withoutTransaction", text: "کالا های بدون گردش" },
+      ],
+
+      wareLevels: [
+        { value: null, text: "همه" },
+        { value: 0, text: "ماهیت" },
+        { value: 1, text: "گروه" },
+        { value: 2, text: "دسته بندی" },
+        { value: 3, text: "کالا" },
       ],
     };
   },
