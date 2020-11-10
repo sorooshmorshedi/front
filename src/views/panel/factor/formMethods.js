@@ -15,7 +15,8 @@ export default {
         method: "get",
         success: data => {
           if (!data.message) {
-            successResponse(data)
+            this.setItem(data)
+            this.isEditing = false;
           }
         }
       });
