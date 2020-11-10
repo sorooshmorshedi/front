@@ -441,7 +441,7 @@ export default {
 
       let ordering;
       if (sortBy && sortBy.length === 1 && sortDesc.length === 1) {
-        ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replace(".", "__")}`;
+        ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replaceAll(".", "__")}`;
       }
 
       let limit = itemsPerPage;
@@ -480,7 +480,7 @@ export default {
     getFilters() {
       let filters = {};
       for (let filterKey of Object.keys(this.filters)) {
-        filters[filterKey.replace(".", "__")] = this.filters[filterKey];
+        filters[filterKey.replaceAll(".", "__")] = this.filters[filterKey];
       }
       return filters;
     },
