@@ -46,11 +46,7 @@
               >انتخاب همه</v-btn>
             </div>
             <v-expansion-panels multiple class="mt-3">
-              <v-expansion-panel
-                v-for="(model, i) in models"
-                :key="i"
-                v-if="showModelPermissions(model)"
-              >
+              <v-expansion-panel v-for="(model, i) in models" :key="i">
                 <v-expansion-panel-header>
                   <v-row no-gutters>
                     <v-col>{{ model.label }}</v-col>
@@ -84,9 +80,7 @@
                   </v-row>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <v-row
-                    v-if="Object.keys(item.permissions).length == rawPermissions.length"
-                  >
+                  <v-row v-if="Object.keys(item.permissions).length == rawPermissions.length">
                     <v-col cols="12" v-if="hasShortcutPerms(model.name)">
                       <v-row no-gutters>
                         <v-col cols="12" class="pb-0">
@@ -179,7 +173,7 @@ export default {
       baseUrl: "users/roles/list",
       permissionBasename: "role",
       items: [],
-      modelSearch: "",
+      modelSearch: "موجودی",
       rawPermissions: [],
       operations: [
         "get",
@@ -221,9 +215,10 @@ export default {
     permissions() {
       return this.rawPermissions.filter((o) => {
         let codename = o.codename;
-        console.log(o.contentType.model == 'report');
+        console.log(o.contentType.model == "report");
         let f =
           o.contentType.model == "report" ||
+          o.codename.includes("firstPeriodInventory") ||
           (!codename.startsWith("get") &&
             !codename.startsWith("create") &&
             !codename.startsWith("update") &&
@@ -234,7 +229,7 @@ export default {
       });
     },
     models() {
-      return [
+      let models = [
         { name: "role", label: "نقش ها" },
         { name: "user", label: "کاربران" },
         { name: "company", label: "شرکت ها" },
@@ -260,6 +255,7 @@ export default {
         { name: "saleFactor", label: "فاکتور فروش" },
         { name: "backFromBuyFactor", label: "فاکتور برگشت از خرید" },
         { name: "backFromSaleFactor", label: "فاکتور برگشت از فروش" },
+        { name: "firstPeriodInventory", label: "موجودی اول دوره" },
         { name: "consumptionWareFactor", label: "حواله کالای مصرفی" },
         { name: "transfer", label: "انتقال" },
         { name: "report", label: "گزارش ها" },
@@ -275,14 +271,19 @@ export default {
         { name: "oilCompanyLading", label: "بارگیری شرکت نفت" },
         { name: "otherDriverPayment", label: "پرداخت رانندگان متفرقه" },
       ].filter((o) => o.label.includes(this.modelSearch));
+
+      return models.filter((o) => this.showModelPermissions(o));
     },
   },
   methods: {
     showModelPermissions(model) {
-      if (!this.item || !this.item.id) return true;
+      if (!this.item || !this.item.id || this.isEditing) return true;
       let show = false;
       for (let permission of this.rawPermissions) {
-        if (model.name.toLowerCase().includes(permission.contentType.model)) {
+        if (
+          model.name.toLowerCase().includes(permission.contentType.model) ||
+          permission.codename.includes(model.name)
+        ) {
           show |= this.item.permissions[permission.id];
         }
       }
@@ -370,10 +371,12 @@ export default {
       }
     },
     hasShortcutPerms(model) {
-      return !["report"].includes(model);
+      return !["firstPeriodInventory", "report"].includes(model);
     },
     getModelPermissions(model) {
-      return this.permissions.filter((o) => o.codename.toLowerCase().includes(model));
+      return this.permissions.filter((o) =>
+        o.codename.toLowerCase().includes(model.toLowerCase())
+      );
     },
     getItemTemplate() {
       let item = {
