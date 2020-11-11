@@ -252,7 +252,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
-                      type: "fpi",
+                      type: "firstPeriodInventory",
                     },
                   },
                   title: "ثبت موجودی اول دوره",

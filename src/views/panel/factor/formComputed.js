@@ -1,13 +1,17 @@
 export default {
   computed: {
+
+    canSubmit() {
+      if (this.item.id || this.isFpi) {
+        return this.hasPerm('update', this.type, this.item)
+      } else {
+        return this.hasPerm('create', this.type, this.item)
+      }
+    },
     accountType() {
       if (this.isCw) return 'level3'
       else return 'persons';
     },
-    permissionBasename() {
-      return this.type
-    },
-
     createUrl() {
       if (this.isFpi) {
         return "factors/firstPeriodInventory"
@@ -24,7 +28,7 @@ export default {
       }
     },
     isFpi() {
-      return this.type == 'fpi';
+      return this.type == 'firstPeriodInventory';
     },
     isCw() {
       return this.type == 'cw';
