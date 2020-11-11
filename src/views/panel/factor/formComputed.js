@@ -19,6 +19,13 @@ export default {
         return 'factors/factors/'
       }
     },
+    updateUrl() {
+      if (this.isFpi) {
+        return "factors/firstPeriodInventory"
+      } else {
+        return `factors/factors/${this.item.id}/`
+      }
+    },
     listRoute() {
       return {
         name: 'FactorsList',
