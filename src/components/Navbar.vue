@@ -145,7 +145,7 @@ export default {
                 {
                   perm: "account",
                   to: {
-                    name: "AccountTree",
+                    name: "AccountsTree",
                   },
                   title: "نمودار درختی حساب ها",
                 },

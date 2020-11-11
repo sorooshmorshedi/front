@@ -86,7 +86,7 @@
         <v-btn
           v-if="hasPerm('get.account')"
           class="blue white--text mr-1"
-          :to="{name: 'AccountTree' }"
+          :to="{name: 'AccountsTree' }"
         >نمودار درختی</v-btn>
 
         <v-spacer></v-spacer>

@@ -12,7 +12,7 @@ import Cities from '@/views/panel/city/Cities';
 import Accounts from '../views/panel/account/Accounts.vue';
 import FloatAccounts from '../views/panel/account/FloatAccounts.vue';
 import FloatAccountGroups from '../views/panel/account/FloatAccountGroups.vue';
-import AccountTree from '@/views/panel/account/Tree.vue';
+import AccountsTree from '@/views/panel/account/AccountsTree.vue';
 
 import DefaultAccounts from '@/views/panel/defaultAccounts/DefaultAccounts.vue';
 
@@ -104,9 +104,9 @@ export default [{
       props: true
     },
     {
-      name: 'AccountTree',
+      name: 'AccountsTree',
       path: 'tree',
-      component: AccountTree,
+      component: AccountsTree,
     },
     {
       name: 'Wares',
