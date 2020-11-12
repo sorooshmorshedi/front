@@ -234,6 +234,13 @@ export default {
                   title: "کالا",
                 },
                 {
+                  perm: "ware",
+                  to: {
+                    name: "WaresTree",
+                  },
+                  title: "نمودار درختی کالا ها",
+                },
+                {
                   perm: "warehouse",
                   to: {
                     name: "Warehouses",

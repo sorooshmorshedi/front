@@ -39,16 +39,14 @@
     </v-col>
 
     <v-col cols="12" md="6">
-      <template>
-        <accounts ref="accountsForm" usage="tree" :level="level" :parent="parent" class="mt-n3" />
-      </template>
+      <accounts ref="accountsForm" usage="tree" :level="level" :parent="parent" class="mt-n3" />
     </v-col>
   </v-row>
 </template>
 
 <script>
 import accountMixin from "@/mixin/accountMixin";
-import TreeComponent from "./tree/tree";
+import TreeComponent from "@/components/tree/Tree";
 import Accounts from "../account/Accounts";
 
 export default {

@@ -2,6 +2,7 @@
   <m-form
     :title="title"
     :items="items"
+    :showList="showList"
     :cols="cols"
     :canSubmit="canSubmit"
     :canDelete="canDelete"
@@ -130,6 +131,9 @@ export default {
   props: {
     level: {
       requried: true,
+    },
+    showList: {
+      default: true,
     },
   },
   data() {

@@ -17,6 +17,7 @@ import AccountsTree from '@/views/panel/account/AccountsTree.vue';
 import DefaultAccounts from '@/views/panel/defaultAccounts/DefaultAccounts.vue';
 
 import Wares from '@/views/panel/ware/Wares.vue';
+import WaresTree from '@/views/panel/ware/WaresTree.vue';
 
 import Warehouses from '@/views/panel/ware/Warehouses.vue';
 import Units from '@/views/panel/ware/Units.vue';
@@ -86,6 +87,11 @@ export default [{
       component: FinancialYears,
     },
     {
+      name: 'AccountsTree',
+      path: 'accounts/tree',
+      component: AccountsTree,
+    },
+    {
       name: 'Accounts',
       path: 'accounts/:level/:account_type?',
       component: Accounts,
@@ -104,9 +110,9 @@ export default [{
       props: true
     },
     {
-      name: 'AccountsTree',
-      path: 'tree',
-      component: AccountsTree,
+      name: 'WaresTree',
+      path: 'wares/tree',
+      component: WaresTree,
     },
     {
       name: 'Wares',
