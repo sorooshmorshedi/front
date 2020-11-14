@@ -765,7 +765,7 @@ export default {
                   title: "ثبت حواله کالای مصرفی",
                 },
                 {
-                  perm: "get.consumptionFactor",
+                  perm: "get.consumptionWareFactor",
                   to: {
                     name: "FactorsList",
                     params: {
