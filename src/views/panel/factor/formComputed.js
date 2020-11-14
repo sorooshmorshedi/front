@@ -10,6 +10,7 @@ export default {
     },
     permissionBasename() {
       if (this.isFpi) return this.type
+      if (this.isCw) return "consumptionWareFactor"
       return this.type + "Factor";
     },
     accountType() {

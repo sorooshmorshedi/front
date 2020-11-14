@@ -755,7 +755,7 @@ export default {
               title: "حواله کالای مصرفی",
               children: [
                 {
-                  perm: "create.consumptionFactor",
+                  perm: "create.consumptionWareFactor",
                   to: {
                     name: "FactorForm",
                     params: {
