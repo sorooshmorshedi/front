@@ -50,7 +50,7 @@ export default {
           return "فاکتور خرید";
         case "backFromBuy":
           return "فاکتور برگشت از خرید";
-        case "fpi":
+        case "firstPeriodInventory":
           return "موجودی اول دوره";
         case "cw":
           return "حواله ی کالای مصرفی";
