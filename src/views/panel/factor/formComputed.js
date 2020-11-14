@@ -3,10 +3,14 @@ export default {
 
     canSubmit() {
       if (this.item.id || this.isFpi) {
-        return this.hasPerm('update', this.type, this.item)
+        return this.hasPerm('update', this.permissionBasename, this.item)
       } else {
-        return this.hasPerm('create', this.type, this.item)
+        return this.hasPerm('create', this.permissionBasename, this.item)
       }
+    },
+    permissionBasename() {
+      if (this.isFpi) return this.type
+      return this.type + "Factor";
     },
     accountType() {
       if (this.isCw) return 'level3'
