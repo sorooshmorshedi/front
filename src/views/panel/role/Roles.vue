@@ -173,7 +173,7 @@ export default {
       baseUrl: "users/roles/list",
       permissionBasename: "role",
       items: [],
-      modelSearch: "موجودی",
+      modelSearch: "",
       rawPermissions: [],
       operations: [
         "get",
