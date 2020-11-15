@@ -4,8 +4,19 @@
 
     <v-card-text>
       <v-row>
-        <v-col cols="12">
-          <ware-select label="کالا" v-model="inventory.ware" />
+        <v-col cols="12" md="6">
+          <ware-select label="کالا" v-model="inventory.ware" @input="setWarehouse" />
+        </v-col>
+
+        <v-col cols="12" md="6">
+          <v-autocomplete
+            :return-object="false"
+            label="انبار"
+            :items="warehouses"
+            v-model="filters.warehouse"
+            item-text="title"
+            item-value="id"
+          />
         </v-col>
 
         <v-col cols="12" class="detailed-ware-inventory">
@@ -25,8 +36,9 @@
 <script>
 import _ from "lodash";
 import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
+import wareApiMixin from "@/mixin/wareApi";
 export default {
-  mixins: [queryBinding],
+  mixins: [queryBinding, wareApiMixin],
   data() {
     return {
       url: "reports/inventory/ware",
@@ -35,6 +47,7 @@ export default {
       },
       filters: {
         ware: null,
+        warehouse: null,
       },
       headers: [
         {
@@ -182,8 +195,14 @@ export default {
       ],
     };
   },
-  created() {},
-  methods: {},
+  created() {
+    this.getWarehouses();
+  },
+  methods: {
+    setWarehouse(ware) {
+      this.filters.warehouse = ware.warehouse.id;
+    },
+  },
   watch: {
     "inventory.ware": {
       handler() {
