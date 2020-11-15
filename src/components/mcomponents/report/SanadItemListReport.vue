@@ -7,6 +7,10 @@
     :previousApiData.sync="previousApiData"
     :currentApiData.sync="apiData"
   >
+    <template #item.detail="{ item }">
+      <detail-link :to="to(item.sanad)" :new-tab="true" />
+    </template>
+
     <template v-if="apiData.previous" v-slot:body.prepend="{ headers }">
       <tr class="text-center">
         <td colspan="4"></td>
@@ -77,28 +81,28 @@ export default {
   props: {
     filters: {},
     showAccountInTable: {
-      required: true
+      required: true,
     },
     sortable: {
-      required: true
+      required: true,
     },
     filterable: {
-      required: true
+      required: true,
     },
     showRemain: {
-      required: true
+      required: true,
     },
     showPreviousRemain: {
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       apiData: {
-        results: []
+        results: [],
       },
       localFilters: this.filters,
-      previousApiData: null
+      previousApiData: null,
     };
   },
   computed: {
@@ -136,7 +140,7 @@ export default {
     pageSum() {
       let bed = 0;
       let bes = 0;
-      this.apiData.results.forEach(item => {
+      this.apiData.results.forEach((item) => {
         bed += +item.bed;
         bes += +item.bes;
       });
@@ -149,21 +153,21 @@ export default {
           value: "sanad.date",
           type: "date",
           sortable: this.sortable,
-          filterable: this.filterable
+          filterable: this.filterable,
         },
         {
           text: "شماره سند",
           value: "sanad.code",
           type: "numeric",
           sortable: this.sortable,
-          filterable: this.filterable
+          filterable: this.filterable,
         },
         {
           text: "شرح",
           value: "explanation",
           sortable: this.sortable,
-          filterable: this.filterable
-        }
+          filterable: this.filterable,
+        },
       ];
       if (this.showAccountInTable) {
         headers = headers.concat([
@@ -171,13 +175,13 @@ export default {
             text: "کد حساب",
             value: "account.code",
             showRangeFilter: true,
-            sortable: false
+            sortable: false,
           },
           {
             text: "نام حساب",
             value: "account.name",
-            sortable: false
-          }
+            sortable: false,
+          },
         ]);
       }
       headers = headers.concat([
@@ -186,15 +190,15 @@ export default {
           value: "bed",
           type: "money",
           sortable: this.sortable,
-          filterable: this.filterable
+          filterable: this.filterable,
         },
         {
           text: "بستانکار",
           value: "bes",
           type: "money",
           sortable: this.sortable,
-          filterable: this.filterable
-        }
+          filterable: this.filterable,
+        },
       ]);
       if (this.showRemain) {
         headers = headers.concat([
@@ -203,27 +207,47 @@ export default {
             value: "remain",
             sortable: false,
             filterable: false,
-            align: "center"
+            align: "center",
           },
           {
             text: "تشخیص",
             value: "remain_type",
             sortable: false,
             filterable: false,
-            align: "center"
-          }
+            align: "center",
+          },
         ]);
       }
 
+      headers = headers.concat([
+        {
+          text: "مشاهده سند",
+          value: "detail",
+          sortable: false,
+          filterable: false,
+          align: "left",
+        },
+      ]);
+
       return headers;
-    }
+    },
   },
   watch: {
     filters() {
       this.$emit("update:filters", this.localFilters);
-    }
+    },
   },
-  methods: {}
+  methods: {
+    to(item) {
+      console.log(item);
+      return {
+        name: "SanadForm",
+        params: {
+          id: item.id,
+        },
+      };
+    },
+  },
 };
 </script>
 
