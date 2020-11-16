@@ -72,7 +72,10 @@ export default new Vuetify({
       },
       transportationIcon: {
         component: () => import('@/icons/TransportationIcon.vue')
-      }
+      },
+      clearFiltersIcon: {
+        component: () => import('@/icons/ClearFilters.vue')
+      },
     }
   },
 });

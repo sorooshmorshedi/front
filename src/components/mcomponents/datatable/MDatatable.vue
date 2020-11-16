@@ -158,6 +158,12 @@
         {{ header.text }}
       </template>
 
+      <template #header.rowNumber>
+        <v-btn @click="clearAllFilters" icon title="خالی کردن فیلتر ها">
+          <v-icon class>$clearFiltersIcon</v-icon>
+        </v-btn>
+      </template>
+
       <!-- Mask Data -->
       <template v-for="header in headers" v-slot:[getItemSlot(header.value)]="{ item }">
         <!-- numeric -->
@@ -207,7 +213,7 @@ export default {
       default: null,
     },
     showExportBtns: {
-      default: true
+      default: true,
     },
     exportUrl: {
       default: null,
@@ -404,6 +410,13 @@ export default {
       }
       this.$emit("update:filters", newFilters);
     },
+    clearAllFilters() {
+      let newFilters = { ...this.filters };
+      Object.keys(newFilters).forEach((key) => {
+        newFilters[key] = "";
+      });
+      this.$emit("update:filters", newFilters);
+    },
     getFilterField(header) {
       if (this.isDate(header)) return "date";
       if (this.isNumber(header)) return "money";
@@ -441,7 +454,10 @@ export default {
 
       let ordering;
       if (sortBy && sortBy.length === 1 && sortDesc.length === 1) {
-        ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replaceAll(".", "__")}`;
+        ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replaceAll(
+          ".",
+          "__"
+        )}`;
       }
 
       let limit = itemsPerPage;
