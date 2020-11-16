@@ -118,6 +118,9 @@
                     :disabled="!isEditing"
                     rows="1"
                     auto-grow
+                    :prepend-inner-icon="i != 0?'$curvedArrowLeftIcon':'far fa-clone'"
+                    :append-icon="i == 0?'':''"
+                    @click:prepend-inner="i == 0?rows.map(o => o.explanation = rows[0].explanation):rows[i].explanation = rows[i-1].explanation"
                   ></v-textarea>
                 </td>
                 <td style="width: 150px">

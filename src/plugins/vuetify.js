@@ -76,6 +76,9 @@ export default new Vuetify({
       clearFiltersIcon: {
         component: () => import('@/icons/ClearFilters.vue')
       },
+      curvedArrowLeftIcon: {
+        component: () => import('@/icons/CurvedArrowLeft.vue')
+      },
     }
   },
 });
