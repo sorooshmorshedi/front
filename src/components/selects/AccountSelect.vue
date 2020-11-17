@@ -6,13 +6,13 @@
   >
     <v-col :cols="horizontal && hasDeepSelect?6:12">
       <div class="d-flex">
-        <v-icon v-if="hasLedger" @click="openBalanceDialog" color="cyan" class="mr-3">fa-wallet</v-icon>
         <v-icon
           @click="item && openLedger(item)"
           color="cyan"
-          class="pl-2 mr-2"
+          class="mr-2"
           v-if="showLedgerBtn && hasLedger"
         >fa-book-open</v-icon>
+        <v-icon v-if="hasLedger" @click="openBalanceDialog" color="cyan" class="pl-2 mr-3">fa-wallet</v-icon>
         <v-autocomplete
           :items="items"
           v-model="item"
