@@ -1,8 +1,14 @@
+.is-editing {
+  .tr-counter {
+    cursor: move;
+  }
+}
+
 .tr-counter {
   width: 10px;
 }
 
-.tr-account{
+.tr-account {
   min-width: 570px;
 }
 

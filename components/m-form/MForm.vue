@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row :class="{'is-editing': isEditing}">
     <v-col cols="12" :md="formWidth">
       <v-card>
         <v-card-title v-if="showHeader">

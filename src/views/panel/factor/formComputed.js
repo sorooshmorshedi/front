@@ -28,7 +28,7 @@ export default {
       if (this.isFpi) {
         return "factors/firstPeriodInventory"
       } else {
-        return `factors/factors/${this.item.id}/`
+        return `factors/factors/${this.id}/`
       }
     },
     listRoute() {

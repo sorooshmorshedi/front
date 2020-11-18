@@ -43,8 +43,8 @@
 
       <v-row>
         <v-col cols="12">
-          <v-simple-table>
-            <thead>
+          <input-table v-model="rows">
+            <template #thead>
               <tr>
                 <th>#</th>
                 <th>* نام/کد کالا</th>
@@ -53,8 +53,8 @@
                 <th>توضیحات</th>
                 <th class="d-print-none"></th>
               </tr>
-            </thead>
-            <tbody>
+            </template>
+            <template #tbody>
               <tr v-for="(row,i) in rows" :key="i">
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td class="tr-ware">
@@ -76,7 +76,12 @@
                   <money v-model="rows[i].count" :disabled="!isEditing" />
                 </td>
                 <td>
-                  <v-text-field v-model="rows[i].explanation" :disabled="!isEditing" />
+                  <row-textarea
+                    v-model="rows[i].explanation"
+                    :disabled="!isEditing"
+                    :i="i"
+                    @updateRowsExplanation="updateRowsExplanation"
+                  />
                 </td>
                 <td class="d-print-none">
                   <v-btn
@@ -101,8 +106,8 @@
                   </v-btn>
                 </td>
               </tr>
-            </tbody>
-          </v-simple-table>
+            </template>
+          </input-table>
         </v-col>
       </v-row>
     </template>
@@ -188,7 +193,7 @@ export default {
     },
     setItem(adjustment) {
       this.item = adjustment;
-      this.rows = adjustment.items;
+      this.rows = adjustment.items.sort((a, b) => a.order - b.order);
       this.rows.push(this.copy(this.rowTemplate));
 
       this.changeRouteTo(adjustment.id);

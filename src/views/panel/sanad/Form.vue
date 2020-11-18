@@ -82,8 +82,8 @@
         </v-col>
 
         <v-col cols="12">
-          <v-simple-table class="form-items">
-            <thead>
+          <input-table v-model="rows">
+            <template #thead>
               <tr>
                 <th>#</th>
                 <th>* کد و نام حساب</th>
@@ -96,9 +96,13 @@
                 </th>
                 <th>بستانکار</th>
               </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
+            </template>
+            <template #tbody>
+              <tr
+                v-for="(row,i) in rows"
+                :key="i"
+                :class="{'draggable': i != rows.length-1 && isEditing}"
+              >
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td v-tooltip="accountParentsName(row.account).join(' > ')">
                   <account-select
@@ -113,15 +117,12 @@
                   />
                 </td>
                 <td>
-                  <v-textarea
+                  <row-textarea
                     v-model="rows[i].explanation"
                     :disabled="!isEditing"
-                    rows="1"
-                    auto-grow
-                    :prepend-inner-icon="i != 0?'$curvedArrowLeftIcon':'far fa-clone'"
-                    :append-icon="i == 0?'':''"
-                    @click:prepend-inner="i == 0?rows.map(o => o.explanation = rows[0].explanation):rows[i].explanation = rows[i-1].explanation"
-                  ></v-textarea>
+                    :i="i"
+                    @updateRowsExplanation="updateRowsExplanation"
+                  />
                 </td>
                 <td style="width: 150px">
                   <money
@@ -154,7 +155,8 @@
                   </v-btn>
                 </td>
               </tr>
-              <tr class="grey lighten-3 text-white">
+
+              <tr class="grey lighten-3 text-white" key="last-row">
                 <td colspan="2">
                   <span
                     v-if="bedSum != besSum"
@@ -170,8 +172,8 @@
                   </v-btn>
                 </td>
               </tr>
-            </tbody>
-          </v-simple-table>
+            </template>
+          </input-table>
         </v-col>
       </v-row>
     </template>
@@ -250,10 +252,12 @@ export default {
       this.item = item;
       this.itemsToDelete = [];
       this.rows = [];
-      item.items.forEach((item) => {
-        let row = { ...item };
-        this.rows.push(row);
-      });
+      item.items
+        .sort((a, b) => a.order - b.order)
+        .forEach((item) => {
+          let row = { ...item };
+          this.rows.push(row);
+        });
       this.rows.push(this.getRowTemplate());
       this.changeRouteTo(item.id);
       this.isEditing = false;

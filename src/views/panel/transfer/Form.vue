@@ -3,6 +3,7 @@
     title="انتقال بین انبار ها"
     :listRoute="{name:'TransfersList'}"
     :showList="false"
+    exportBaseUrl="reports/lists/transfers"
     :exportParams="{id: this.id}"
     :isEditing.sync="isEditing"
     :canDelete="canDelete"
@@ -40,8 +41,8 @@
 
       <v-row>
         <v-col cols="12">
-          <v-simple-table>
-            <thead>
+          <input-table v-model="rows">
+            <template #thead>
               <tr>
                 <th>#</th>
                 <th>* نام/کد کالا</th>
@@ -52,8 +53,8 @@
                 <th>توضیحات</th>
                 <th class="d-print-none"></th>
               </tr>
-            </thead>
-            <tbody>
+            </template>
+            <template #tbody>
               <tr v-for="(row,i) in rows" :key="i">
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td class="tr-ware">
@@ -88,7 +89,12 @@
                   <span v-else>-</span>
                 </td>
                 <td>
-                  <v-text-field v-model="rows[i].explanation" :disabled="!isEditing" />
+                  <row-textarea
+                    v-model="rows[i].explanation"
+                    :disabled="!isEditing"
+                    :i="i"
+                    @updateRowsExplanation="updateRowsExplanation"
+                  />
                 </td>
                 <td class="d-print-none">
                   <v-btn
@@ -113,8 +119,8 @@
                   </v-btn>
                 </td>
               </tr>
-            </tbody>
-          </v-simple-table>
+            </template>
+          </input-table>
         </v-col>
       </v-row>
     </template>
@@ -194,7 +200,7 @@ export default {
     },
     setItem(transfer) {
       this.item = transfer;
-      this.rows = transfer.items;
+      this.rows = transfer.items.sort((a, b) => a.order - b.order);
       this.rows.push(this.copy(this.rowTemplate));
 
       this.changeRouteTo(transfer.id);

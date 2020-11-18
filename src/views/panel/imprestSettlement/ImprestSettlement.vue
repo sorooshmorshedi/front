@@ -74,8 +74,8 @@
         </v-col>
 
         <v-col cols="12">
-          <v-simple-table class="form-items">
-            <thead>
+          <input-table class="form-items">
+            <template #thead>
               <tr>
                 <th>#</th>
                 <th>* تاریخ</th>
@@ -85,15 +85,20 @@
                 <th></th>
                 <th></th>
               </tr>
-            </thead>
-            <tbody>
+            </template>
+            <template #tbody>
               <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td style="max-width: 80px">
                   <date v-model="rows[i].date" :disabled="!isEditing" />
                 </td>
                 <td style="max-width: 100px">
-                  <v-textarea v-model="rows[i].explanation" :disabled="!isEditing"></v-textarea>
+                  <row-textarea
+                    v-model="rows[i].explanation"
+                    :disabled="!isEditing"
+                    :i="i"
+                    @updateRowsExplanation="updateRowsExplanation"
+                  />
                 </td>
                 <td
                   style="max-width: 280px"
@@ -149,8 +154,8 @@
                 <td>{{ imprestSum - rowsSum('value') | toMoney}}</td>
                 <td colspan="2"></td>
               </tr>
-            </tbody>
-          </v-simple-table>
+            </template>
+          </input-table>
         </v-col>
       </v-row>
     </template>
@@ -219,8 +224,6 @@ export default {
       }
     },
     setItem(imprest) {
-      console.log(imprest);
-
       this.changeRouteTo(imprest.id);
 
       this.imprest = imprest;
@@ -234,10 +237,12 @@ export default {
 
       this.itemsToDelete = [];
       this.rows = [];
-      item.items.forEach((item) => {
-        let row = { ...item };
-        this.rows.push(row);
-      });
+      item.items
+        .sort((a, b) => a.order - b.order)
+        .forEach((item) => {
+          let row = { ...item };
+          this.rows.push(row);
+        });
       this.rows.push(this.getRowTemplate());
     },
     deleteRow(index) {

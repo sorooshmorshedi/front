@@ -74,8 +74,8 @@
 
         <v-row>
           <v-col cols="12">
-            <v-simple-table>
-              <thead>
+            <input-table v-model="rows">
+              <template #thead>
                 <tr>
                   <th class="tr-counter">#</th>
                   <th>* نوع {{ title }}</th>
@@ -87,8 +87,8 @@
                   <th>نام بانک</th>
                   <th>شرح ردیف</th>
                 </tr>
-              </thead>
-              <tbody>
+              </template>
+              <template #tbody>
                 <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                   <td>{{ i+1 }}</td>
                   <td style="min-width: 150px">
@@ -157,11 +157,11 @@
                     />
                   </td>
                   <td>
-                    <v-text-field
-                      :disabled="!isEditing || isChequeType(row)"
-                      type="text"
-                      class="form-control form-control"
+                    <row-textarea
                       v-model="rows[i].explanation"
+                      :disabled="!isEditing || isChequeType(row)"
+                      :i="i"
+                      @updateRowsExplanation="updateRowsExplanation"
                     />
                   </td>
                   <td class="d-print-none">
@@ -194,8 +194,8 @@
                     </v-btn>
                   </td>
                 </tr>
-              </tbody>
-            </v-simple-table>
+              </template>
+            </input-table>
           </v-col>
         </v-row>
       </template>
@@ -661,7 +661,7 @@ export default {
       this.rows = [];
       this.item = item;
       this.itemsToDelete = [];
-      item.items.forEach((item) => {
+      item.items.sort((a, b) => a.order - b.order).forEach((item) => {
         this.rows.push(this.copy(item));
       });
       this.rows.push(this.getRowTemplate());

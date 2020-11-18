@@ -1,12 +1,16 @@
 import jsonToFormData from "./jsonToFormData";
 import MFileInput from "./MFileInput";
+import InputTable from "./InputTable";
+import RowTextarea from "./RowTextarea";
 
 import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
 
 export default {
   mixins: [queryBinding],
   components: {
-    MFileInput
+    MFileInput,
+    InputTable,
+    RowTextarea
   },
   props: {
     id: {
@@ -284,6 +288,14 @@ export default {
         this.getData();
       }
       this.successNotify();
+    },
+
+    updateRowsExplanation(i) {
+      if (i == 0) {
+        this.rows.map((o) => (o.explanation = this.rows[0].explanation))
+      } else {
+        this.rows[i].explanation = this.rows[i - 1].explanation;
+      }
     },
 
     // Helpers

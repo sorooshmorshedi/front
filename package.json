@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@bit/mmd-mostafaee.vue.m-datatable": "^1.0.3",
+    "@bit/mmd-mostafaee.vue.m-form": "file:./components/m-form",
+    "@bit/mmd-mostafaee.vue.query-binding": "file:./components/query-binding",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
@@ -31,11 +33,10 @@
     "vue-imask": "^6.0.5",
     "vue-persian-datetime-picker": "^2.1.5",
     "vue-router": "^3.1.5",
+    "vuedraggable": "^2.24.3",
     "vuetify": "^2.3.10",
     "vuex": "^3.3.0",
-    "xlsx": "^0.16.6",
-    "@bit/mmd-mostafaee.vue.query-binding": "file:./components/query-binding",
-    "@bit/mmd-mostafaee.vue.m-form": "file:./components/m-form"
+    "xlsx": "^0.16.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",

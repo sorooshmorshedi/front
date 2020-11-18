@@ -122,8 +122,8 @@
 
         <v-row>
           <v-col cols="12">
-            <v-simple-table>
-              <thead>
+            <input-table v-model="rows">
+              <template #thead>
                 <tr>
                   <th>#</th>
                   <th>* نام کالا</th>
@@ -148,8 +148,8 @@
                   <th v-if="isBuy">قیمت جدید فروش</th>
                   <th class="d-print-none"></th>
                 </tr>
-              </thead>
-              <tbody>
+              </template>
+              <template #tbody>
                 <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                   <td class="tr-counter">{{ i+1 }}</td>
                   <td class="tr-ware">
@@ -203,13 +203,13 @@
                     <money decimalScale="6" :value="rowSumAfterTax(row)" disabled />
                   </td>
                   <td>
-                    <v-textarea
+                    <row-textarea
                       style="width: 150px"
                       v-model="rows[i].explanation"
                       :disabled="!isEditing"
-                      rows="1"
-                      auto-grow
-                    ></v-textarea>
+                      :i="i"
+                      @updateRowsExplanation="updateRowsExplanation"
+                    />
                   </td>
                   <td v-if="isBuy">
                     <money
@@ -243,8 +243,8 @@
                     </v-btn>
                   </td>
                 </tr>
-              </tbody>
-            </v-simple-table>
+              </template>
+            </input-table>
           </v-col>
         </v-row>
 
@@ -255,8 +255,8 @@
                 <h3>هزینه های فاکتور</h3>
                 <v-spacer></v-spacer>
               </div>
-              <v-simple-table class="mt-3">
-                <thead>
+              <input-table v-model="item.expenses" class="mt-3">
+                <template #thead>
                   <tr>
                     <th>#</th>
                     <th>نام هزینه ثابت</th>
@@ -267,8 +267,8 @@
                     <th>مرکز هزینه و درآمد</th>
                     <th>توضیحات</th>
                   </tr>
-                </thead>
-                <tbody v-if="item.expenses.length">
+                </template>
+                <template #tbody v-if="item.expenses.length">
                   <tr v-for="(e,i) in item.expenses" :key="i">
                     <td>{{ i+1 }}</td>
                     <td>{{ e.expense.name }}</td>
@@ -283,13 +283,13 @@
                     <td>{{ sum.expenses | toMoney }}</td>
                     <td colspan="4"></td>
                   </tr>
-                </tbody>
+                </template>
                 <tbody v-else>
                   <tr>
                     <td colspan="7">هزینه ای ثبت نشده است</td>
                   </tr>
                 </tbody>
-              </v-simple-table>
+              </input-table>
               <div class="d-flex mt-2">
                 <v-spacer></v-spacer>
                 <v-btn

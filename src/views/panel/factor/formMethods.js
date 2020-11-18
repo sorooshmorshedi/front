@@ -191,7 +191,7 @@ export default {
     setItem(item) {
       this.item = item;
       this.itemsToDelete = [];
-      this.rows = item.items;
+      this.rows = item.items.sort((a, b) => a.order - b.order);
       this.rows.push(this.getRowTemplate());
 
       if (this.fromId) {
