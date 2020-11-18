@@ -40,7 +40,7 @@
                 v-if="bank"
                 :return-object="true"
                 required
-                label=" * دسته چک"
+                label=" * سری دسته چک"
                 :items="chequebooks.filter(o => o.account.id == bank.id)"
                 item-text="serial"
                 item-value="id"
