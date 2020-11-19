@@ -75,12 +75,15 @@ export default {
           value: "is_definite",
           type: "boolean",
         },
-        {
+      ];
+
+      if (this.type != 'cw') {
+        headers.push({
           text: "مالیات ",
           value: "has_tax",
           type: "boolean",
-        },
-      ];
+        });
+      }
 
       headers.push({
         text: "جزئیات",
