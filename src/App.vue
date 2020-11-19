@@ -27,12 +27,14 @@
           :to="{name: 'Companies'}"
           depressed
           class="white mr-4"
+          :title="company.id"
         >{{ company.name }}</v-btn>
         <v-btn
           v-if="financialYear"
           :to="{name: 'FinancialYears'}"
           depressed
           class="text-right white mr-1"
+          :title="financialYear.id"
         >
           <span class="pl-1">سال مالی</span>
           {{ financialYear.name }}
@@ -91,7 +93,7 @@
 
         <v-spacer></v-spacer>
 
-        <span class="white--text mr-3">
+        <span class="white--text mr-3" :title="user.id">
           <span>{{ user.name }}</span>
         </span>
         <span class="ml-3">
