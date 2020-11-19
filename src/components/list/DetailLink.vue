@@ -1,5 +1,5 @@
 <template>
-  <v-btn color="light-blue white--text" :to="to" icon :target="newTab?'_blank':''">
+  <v-btn color="light-blue white--text" :to="to" icon :target="target">
     <v-icon>fa-external-link-alt</v-icon>
   </v-btn>
 </template>
@@ -10,8 +10,8 @@ export default {
     to: {
       required: true,
     },
-    newTab: {
-      default: false,
+    target: {
+      default: '_blank',
     },
   },
 };
