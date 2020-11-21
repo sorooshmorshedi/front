@@ -23,6 +23,7 @@
           :placeholder="placeholder"
           item-value="id"
           :return-object="true"
+          v-bind="$attrs"
         ></v-autocomplete>
       </div>
     </v-col>
@@ -39,6 +40,7 @@
           item-value="id"
           :showLedgerBtn="false"
           :class="{'': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          v-bind="$attrs"
         />
         <account-select
           v-if="item.floatAccounts && !item.is_cost_center"
@@ -51,6 +53,7 @@
           item-value="id"
           :showLedgerBtn="false"
           :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          v-bind="$attrs"
         />
       </v-col>
       <v-col v-if="item.costCenterGroup || (item.floatAccounts && item.is_cost_center)">
@@ -65,6 +68,7 @@
           item-value="id"
           :showLedgerBtn="false"
           :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          v-bind="$attrs"
         />
         <account-select
           v-if="item.floatAccounts && item.is_cost_center"
@@ -77,6 +81,7 @@
           item-value="id"
           :showLedgerBtn="false"
           :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          v-bind="$attrs"
         />
       </v-col>
     </template>
@@ -356,7 +361,7 @@ export default {
       this.setItem();
     },
     item() {
-      this.$emit("input", this.item);
+      this.$emit("input", this.item || null);
       if (this.item) {
         if (!this.item.floatAccountGroup) {
           this.$emit("update:floatAccount", null);

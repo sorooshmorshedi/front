@@ -100,6 +100,7 @@
               item-text="name"
               item-value="id"
               :disabled="!isEditing"
+              :clearable="true"
             />
           </v-col>
           <v-col cols="12" md="6">
