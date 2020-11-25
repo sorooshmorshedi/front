@@ -776,6 +776,25 @@ export default {
                 },
               ],
             },
+            {
+              title: "انبارگردانی",
+              children: [
+                {
+                  perm: "create.warehouseHandling",
+                  to: {
+                    name: "WarehouseHandlingForm",
+                  },
+                  title: "ثبت",
+                },
+                {
+                  perm: "get.warehouseHandling",
+                  to: {
+                    name: "WarehouseHandlingList",
+                  },
+                  title: "لیست انبارگردانی ها",
+                },
+              ],
+            },
           ],
         },
         {

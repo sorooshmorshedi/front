@@ -20,6 +20,7 @@
         <v-col cols="12" md="4">
           <v-select :items="waresStatuses" v-model="filters.status" label="وضعیت کالا"></v-select>
         </v-col>
+
         <v-col cols="12">
           <m-datatable
             :api-url="url"
@@ -73,22 +74,6 @@ export default {
           type: "numeric",
           filterable: false,
         },
-      ],
-
-      waresStatuses: [
-        { value: "all", text: "همه" },
-        { value: "withRemain", text: "کالا های دارای مانده" },
-        { value: "withoutRemain", text: "بدون مانده" },
-        { value: "withTransaction", text: "کالا های دارای گردش" },
-        { value: "withoutTransaction", text: "کالا های بدون گردش" },
-      ],
-
-      wareLevels: [
-        { value: null, text: "همه" },
-        { value: 0, text: "ماهیت" },
-        { value: 1, text: "گروه" },
-        { value: 2, text: "دسته بندی" },
-        { value: 3, text: "کالا" },
       ],
     };
   },

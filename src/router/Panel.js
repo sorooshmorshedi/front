@@ -37,6 +37,8 @@ import TransferForm from '@/views/panel/transfer/Form.vue';
 
 import AdjustmentForm from '@/views/panel/adjustment/Form.vue';
 
+import WarehouseHandlingForm from '@/views/panel/warehouseHandling/Form.vue';
+
 import ChequebookForm from '../views/panel/chequebook/ChequebookForm.vue';
 
 import Cheque from '@/views/panel/cheque/Cheque.vue';
@@ -203,6 +205,12 @@ export default [{
       name: 'AdjustmentForm',
       path: 'adjustment/form/:type/:id?',
       component: AdjustmentForm,
+      props: true,
+    },
+    {
+      name: 'WarehouseHandlingForm',
+      path: 'warehouseHandling/form/:id?',
+      component: WarehouseHandlingForm,
       props: true,
     },
     {

@@ -5,8 +5,7 @@
     :listRoute="{name:'WarehouseHandlingList'}"
     exportBaseUrl="reports/lists/warehouseHandlings"
     :exportParams="{id: this.id}"
-    :canEdit="canEdit"
-    :canDelete="false"
+    :canDelete="canDelete"
     :canSubmit="canSubmit"
     :isEditing.sync="isEditing"
     :confirmBtnText="confirmBtnText"
@@ -20,85 +19,120 @@
     @delete="deleteItem"
     @clearForm="clearForm()"
   >
-    <template #header-btns></template>
+    <template #header-btns v-if="item.is_definite">
+      <v-btn
+        :to="{name: 'AdjustmentForm', params: {id:item.inputAdjustment, type: 'ia'}}"
+        class="blue white--text mr-1"
+      >مشاهده حواله</v-btn>
+
+      <v-btn
+        :to="{name: 'AdjustmentForm', params: {id:item.outputAdjustment, type: 'oa'}}"
+        class="blue white--text mr-1"
+      >مشاهده رسید</v-btn>
+    </template>
 
     <template>
       <v-row>
-        <v-col cols="12" lg="6">
-          <v-row>
-            <v-col cols="12" lg="6">
-              <v-text-field disabled label="شماره" v-model="item.code" />
-            </v-col>
-            <v-col cols="12" lg="6">
-              <date
-                class="form-control"
-                v-model="item.date"
-                label=" * تاریخ "
-                :default="true"
-                :disabled="!isEditing"
-              />
-            </v-col>
-            <v-col cols="12" lg="12">
-              <v-text-field
-                v-if="item.created_by"
-                label="کاربر"
-                disabled
-                v-model="item.created_by.name"
-              />
-            </v-col>
-          </v-row>
+        <v-col cols="12" md="2">
+          <v-text-field disabled label="شماره" v-model="item.code" />
         </v-col>
-        <v-col cols="12" lg="6">
-          <v-row>
-            <v-col cols="12" lg="12">
-              <v-textarea
-                label="شرح سند"
-                v-model="item.explanation"
-                :disabled="!isEditing"
-                height="105"
-              ></v-textarea>
-            </v-col>
-          </v-row>
+        <v-col cols="12" md="2">
+          <date
+            v-model="item.start_date"
+            label=" * تاریخ آغاز"
+            :default="true"
+            :disabled="!isEditing"
+          />
+        </v-col>
+        <v-col cols="12" md="2">
+          <date
+            v-model="item.counting_date"
+            label=" * تاریخ شمارش"
+            :default="true"
+            :disabled="!isEditing"
+          />
+        </v-col>
+        <v-col cols="12" md="2">
+          <date
+            v-model="item.submit_date"
+            label=" * تاریخ ثبت انبار گردانی"
+            :default="true"
+            :disabled="!isEditing"
+          />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field label="* انبار گردان" v-model="item.handler" :disabled="!isEditing" />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-autocomplete
+            :return-object="false"
+            label="* انبار"
+            :items="warehouses"
+            v-model="filters.warehouse"
+            item-text="title"
+            item-value="id"
+            :disabled="id != undefined"
+          />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-select
+            :items="waresStatuses"
+            v-model="filters.status"
+            label="وضعیت کالا"
+            :disabled="id != undefined"
+          />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-textarea label="شرح" v-model="item.explanation" :disabled="!isEditing" />
+        </v-col>
+        <v-col cols="12" md="3">
+          <v-text-field
+            v-if="item.created_by"
+            label="کاربر"
+            disabled
+            v-model="item.created_by.name"
+          />
         </v-col>
 
         <v-col cols="12">
-          <input-table v-model="rows">
+          <input-table v-model="rows" v-if="filters.warehouse">
             <template #thead>
               <tr>
                 <th>#</th>
                 <th>کد کالا</th>
                 <th>نام کالا</th>
-                <th>* مانده</th>
-                <th>تعداد موجودی</th>
+                <th>* موجودی شمارش شده انبار</th>
+                <th>مانده سیستم</th>
                 <th>مغایرت</th>
               </tr>
             </template>
             <template #tbody>
-              <tr v-for="(ware, i) in wares" :key="i">
+              <tr v-for="(row, i) in rows" :key="i">
                 <td class="tr-counter">{{ i+1 }}</td>
-                <td>{{ ware.code }}</td>
-                <td>{{ ware.name }}</td>
+                <td>{{ row.ware.code }}</td>
+                <td>{{ row.ware.name }}</td>
                 <td>
-                  <money />
+                  <money v-model="row.warehouse_remain" :disabled="!isEditing" />
                 </td>
-                <td>1</td>
-                <td>3</td>
-                <td class="d-print-none">
-                  <v-btn
-                    v-if="i != rows.length-1"
-                    @click="deleteRow(i)"
-                    class="red--text"
-                    icon
-                    :disabled="!isEditing"
-                  >
-                    <v-icon>delete</v-icon>
-                  </v-btn>
-                </td>
+                <td>{{ getSystemRemain(row) | toMoney }}</td>
+                <td
+                  dir="ltr"
+                  :class="getContradictionStyle(row)"
+                >{{ getContradiction(row) | toMoney }}</td>
               </tr>
             </template>
           </input-table>
         </v-col>
       </v-row>
+    </template>
+
+    <template #footer-outside-btns>
+      <v-btn
+        v-if="id"
+        @click="definite"
+        :disabled="item.is_definite"
+        class="blue white--text mr-1"
+      >ثبت نهایی</v-btn>
     </template>
   </m-form>
 </template>
@@ -116,61 +150,100 @@ export default {
   props: ["id"],
   data() {
     return {
-      baseUrl: "sanads",
-      permissionBasename: "sanad",
+      baseUrl: "factors/warehouseHandlings",
+      permissionBasename: "warehouseHandling",
       leadingSlash: true,
       hasList: false,
       hasIdProp: true,
-      rowKey: "account",
+      filters: {},
+      inventory: [],
+      rows: [],
     };
   },
-  computed: {
-    canEdit() {
-      if (!this.item.id) return true;
-      return !this.item.is_auto_created;
-    },
-    bedSum() {
-      let sum = 0;
-      this.rows.forEach((r) => {
-        if (r.bed) sum += +r.bed;
-      });
-      return sum;
-    },
-    besSum() {
-      let sum = 0;
-      this.rows.forEach((r) => {
-        if (r.bes) sum += +r.bes;
-      });
-      return sum;
+  watch: {
+    filters: {
+      handler() {
+        this.getWareInventory();
+      },
+      deep: true,
     },
   },
+  created() {
+    this.getWares();
+    this.getWarehouses();
+  },
   methods: {
-    getItemTemplate() {
-      return {
-        type: "temporary",
-      };
-    },
-    getRowTemplate() {
-      return {
-        bed: 0,
-        bes: 0,
-      };
-    },
-    getSanadByCode(code) {
-      this.log("Get sanad by code: ", code);
-      return this.request({
-        url: this.endpoint("sanads/getSanadByCode"),
-        method: "get",
+    getWareInventory() {
+      this.request({
+        url: this.endpoint("reports/inventory/warehouse/all"),
         params: {
-          code,
+          ...this.filters,
+          level: 3,
         },
         success: (data) => {
-          this.selectSanad(data);
+          this.inventory = data;
+          if (!this.id) {
+            this.rows = data.map((o) => {
+              return {
+                id: null,
+                ware: o,
+                system_remain: o.remain,
+              };
+            });
+          }
         },
       });
+    },
+    definite() {
+      this.request({
+        url: this.endpoint("factors/warehouseHandlings/definite"),
+        method: "post",
+        data: {
+          id: this.id,
+        },
+        success: (data) => {
+          this.successResponse(data);
+        },
+      });
+    },
+    clearForm() {
+      this.isEditing = true;
+      this.item = this.getItemTemplate();
+      this.filters = this.getFilterTemplate();
+      this.changeRouteTo(null);
+    },
+    getFilterTemplate() {
+      return {
+        warehouse: null,
+        level: 3,
+        status: "all",
+      };
+    },
+    getSystemRemain(row) {
+      if (this.item.is_definite) {
+        return row.system_remain;
+      } else {
+        return this.inventory.filter((o) => o.id == row.ware.id)[0]["remain"];
+      }
+    },
+    getContradiction(row) {
+      if (!row.warehouse_remain) return "-";
+      row.contradiction = row.warehouse_remain - this.getSystemRemain(row) || 0;
+      return row.contradiction;
+    },
+    getContradictionStyle(row) {
+      let contradiction = this.getContradiction(row);
+      if (!row.warehouse_remain) return "";
+      if (contradiction > 0) return "green--text";
+      else return "red--text";
+    },
+    getItemTemplate() {
+      return {};
     },
     setItem(item) {
       this.item = item;
+      this.filters.warehouse = item.warehouse.id;
+      this.filters.status = item.ware_status;
       this.itemsToDelete = [];
       this.rows = [];
       item.items
@@ -179,56 +252,22 @@ export default {
           let row = { ...item };
           this.rows.push(row);
         });
-      this.rows.push(this.getRowTemplate());
       this.changeRouteTo(item.id);
       this.isEditing = false;
     },
-    copySanadToNewSanad() {
-      let rows = this.copy(this.rows);
-      this.clearForm();
-      this.$nextTick(() => {
-        this.rows = [];
-        for (const row of rows) {
-          if (row.id) delete row.id;
-          this.rows.push({
-            ...row,
-          });
-        }
-      });
-    },
-    exchangeValue(row) {
-      if (row) {
-        let tmp = row.bed;
-        row.bed = row.bes;
-        row.bes = tmp;
-      } else {
-        for (const row of this.rows) {
-          let tmp = row.bed;
-          row.bed = row.bes;
-          row.bes = tmp;
-        }
-      }
-    },
     getSerialized() {
+      let item = {
+        ...this.item,
+        warehouse: this.filters.warehouse,
+        ware_status: this.filters.status,
+      };
       let data = {
-        item: this.extractIds(this.item),
+        item: this.extractIds(item),
         items: {
           ids_to_delete: this.itemsToDelete,
-          items: [],
+          items: this.rows.map((o) => this.extractIds(o)),
         },
       };
-
-      this.rows.forEach((row, i) => {
-        if (i == this.rows.length - 1) return;
-
-        let item = this.copy(row);
-        item = this.extractIds(item);
-        item.bed = +item.bed;
-        item.bes = +item.bes;
-
-        data.items.items.push(item);
-      });
-
       return data;
     },
   },

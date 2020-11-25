@@ -13,7 +13,52 @@ export default {
           id: 'wm',
           name: 'میانگین موزون'
         },
-      ]
+      ],
+
+      waresStatuses: [{
+          value: "all",
+          text: "همه"
+        },
+        {
+          value: "withRemain",
+          text: "کالا های دارای مانده"
+        },
+        {
+          value: "withoutRemain",
+          text: "بدون مانده"
+        },
+        {
+          value: "withTransaction",
+          text: "کالا های دارای گردش"
+        },
+        {
+          value: "withoutTransaction",
+          text: "کالا های بدون گردش"
+        },
+      ],
+
+      wareLevels: [{
+          value: null,
+          text: "همه"
+        },
+        {
+          value: 0,
+          text: "ماهیت"
+        },
+        {
+          value: 1,
+          text: "گروه"
+        },
+        {
+          value: 2,
+          text: "دسته بندی"
+        },
+        {
+          value: 3,
+          text: "کالا"
+        },
+      ],
+
     }
   },
   methods: {

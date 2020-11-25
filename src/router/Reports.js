@@ -6,6 +6,7 @@ import SanadsList from '@/views/panel/lists/SanadsList.vue';
 import TransfersList from '@/views/panel/lists/TransfersList.vue';
 import ChequesList from '@/views/panel/lists/ChequesList.vue';
 import AdjustmentsList from '@/views/panel/lists/AdjustmentsList.vue';
+import WarehouseHandlingList from '@/views/panel/lists/WarehouseHandlingList.vue';
 
 import AccountsCoding from '../views/panel/account/Coding';
 
@@ -63,6 +64,11 @@ export default [{
       path: 'lists/adjustments/:type',
       component: AdjustmentsList,
       props: true
+    },
+    {
+      name: 'WarehouseHandlingList',
+      path: 'lists/warehouseHandling',
+      component: WarehouseHandlingList,
     },
 
     {
