@@ -258,6 +258,7 @@ export default {
         { name: "firstPeriodInventory", label: "موجودی اول دوره" },
         { name: "consumptionWareFactor", label: "حواله کالای مصرفی" },
         { name: "transfer", label: "انتقال" },
+        { name: "warehouseHandling", label: "انبارگردانی" },
         { name: "report", label: "گزارش ها" },
         { name: "exportVerifier", label: "تایید کنندگان خروجی" },
         { name: "driver", label: "راننده" },
