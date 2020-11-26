@@ -18,17 +18,41 @@
     @submit="submit"
     @delete="deleteItem"
     @clearForm="clearForm()"
+    ref="mForm"
   >
-    <template #header-btns v-if="item.is_definite">
-      <v-btn
-        :to="{name: 'AdjustmentForm', params: {id:item.inputAdjustment, type: 'ia'}}"
-        class="blue white--text mr-1"
-      >مشاهده حواله</v-btn>
+    <template #header-btns>
+      <template v-if="item.is_definite">
+        <v-btn
+          :to="{name: 'AdjustmentForm', params: {id:item.inputAdjustment, type: 'ia'}}"
+          class="blue white--text mr-1"
+        >مشاهده حواله</v-btn>
 
-      <v-btn
-        :to="{name: 'AdjustmentForm', params: {id:item.outputAdjustment, type: 'oa'}}"
-        class="blue white--text mr-1"
-      >مشاهده رسید</v-btn>
+        <v-btn
+          :to="{name: 'AdjustmentForm', params: {id:item.outputAdjustment, type: 'oa'}}"
+          class="blue white--text mr-1"
+        >مشاهده رسید</v-btn>
+      </template>
+
+      <template v-if="$refs.mForm">
+        <v-btn
+          small
+          class="export-btn mr-1"
+          :href="$refs.mForm.printUrl + '&hide_remains=true'"
+          target="_blank"
+          rel="noopener noreferrer"
+        >چاپ بدون مانده</v-btn>
+        <v-btn
+          small
+          class="export-btn mr-1"
+          :href="$refs.mForm.pdfUrl + '&hide_remains=true'"
+          rel="noopener noreferrer"
+        >PDF بدون مانده</v-btn>
+        <v-btn
+          small
+          class="export-btn mr-1"
+          @click="downloadUrl($refs.mForm.excelUrl + '&hide_remains=true')"
+        >اکسل بدون مانده</v-btn>
+      </template>
     </template>
 
     <template>
@@ -106,7 +130,7 @@
                 <th>مغایرت</th>
               </tr>
             </template>
-            <template #tbody>
+            <template #tbody v-if="inventory.length">
               <tr v-for="(row, i) in rows" :key="i">
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td>{{ row.ware.code }}</td>
@@ -171,6 +195,7 @@ export default {
   created() {
     this.getWares();
     this.getWarehouses();
+    this.filters = this.getFilterTemplate();
   },
   methods: {
     getWareInventory() {
