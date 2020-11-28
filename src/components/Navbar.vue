@@ -784,7 +784,7 @@ export default {
                   to: {
                     name: "WarehouseHandlingForm",
                   },
-                  title: "ثبت",
+                  title: "ثبت انبارگردانی",
                 },
                 {
                   perm: "get.warehouseHandling",
