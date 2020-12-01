@@ -2,6 +2,8 @@
   <m-form
     title="تسویه تنخواه"
     formName="تسویه تنخواه"
+    exportBaseUrl="reports/lists/imprestSettlements"
+    :exportParams="{id: imprest.id}"
     :showList="false"
     :isEditing.sync="isEditing"
     :canDelete="false"
