@@ -155,7 +155,7 @@
                   <td class="tr-ware">
                     <ware-select v-model="rows[i].ware" :disabled="!isEditing" />
                   </td>
-                  <td class="tr-warehouse">
+                  <td class="tr-warehouse" :title="rows[i].warehouse && rows[i].warehouse.name">
                     <v-autocomplete
                       :return-object="true"
                       v-if="rows[i].ware && !rows[i].ware.isService"

@@ -91,7 +91,7 @@
               <template #tbody>
                 <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                   <td>{{ i+1 }}</td>
-                  <td style="min-width: 150px">
+                  <td style="min-width: 150px" :title="rows[i].type && rows[i].type.name">
                     <v-autocomplete
                       :return-object="true"
                       :disabled="!isEditing || hasCheque(row)"
@@ -129,7 +129,7 @@
                       v-model="rows[i].value"
                     />
                   </td>
-                  <td style="width: 50px">
+                  <td style="width: 100px" :title="rows[i].documentNumber">
                     <v-text-field
                       :disabled="!isEditing || isChequeType(row)"
                       type="text"
@@ -141,12 +141,11 @@
                     <date
                       :disabled="!isEditing || isChequeType(row)"
                       default="1"
-                      class="form-control"
                       v-model="rows[i].date"
                     />
                   </td>
                   <td>
-                    <date class="form-control" disabled v-model="rows[i].due" />
+                    <date disabled v-model="rows[i].due" />
                   </td>
                   <td>
                     <v-text-field
@@ -156,7 +155,7 @@
                       v-model="rows[i].bankName"
                     />
                   </td>
-                  <td>
+                  <td style="min-width: 120px">
                     <row-textarea
                       v-model="rows[i].explanation"
                       :disabled="!isEditing || isChequeType(row)"
@@ -336,7 +335,6 @@ export default {
     };
   },
   created() {
-    this.d.getNotPaidFactors = _.debounce(this.getNotPaidFactors, 1000, {});
     this.getDefaultAccounts();
   },
   computed: {
@@ -382,7 +380,7 @@ export default {
   },
   watch: {
     "item.account"() {
-      if (this.item.account) this.d.getNotPaidFactors();
+      if (this.item.account) this.getNotPaidFactors();
     },
   },
   methods: {
@@ -661,9 +659,11 @@ export default {
       this.rows = [];
       this.item = item;
       this.itemsToDelete = [];
-      item.items.sort((a, b) => a.order - b.order).forEach((item) => {
-        this.rows.push(this.copy(item));
-      });
+      item.items
+        .sort((a, b) => a.order - b.order)
+        .forEach((item) => {
+          this.rows.push(this.copy(item));
+        });
       this.rows.push(this.getRowTemplate());
 
       if (!this.modalMode) this.changeRouteTo(item.id);
