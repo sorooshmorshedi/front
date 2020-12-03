@@ -74,8 +74,8 @@ export default {
   computed: {
     title() {
       let title = "هزینه های پیشفرض فاکتور ";
-      if (this.factorType == "sale") return title + "خرید";
-      else return title + "فروش";
+      if (this.factorType == "sale") return title + "فروش";
+      else return title + "خرید";
     },
     items() {
       return this.factorExpenses.filter(o => o.type == this.factorType);
