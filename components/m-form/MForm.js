@@ -292,9 +292,9 @@ export default {
 
     updateRowsExplanation(i) {
       if (i == 0) {
-        this.rows.map((o) => (o.explanation = this.rows[0].explanation))
+        this.rows.map((o) => this.$set(o, 'explanation', this.rows[0].explanation))
       } else {
-        this.rows[i].explanation = this.rows[i - 1].explanation;
+        this.$set(this.rows[i], 'explanation', this.rows[i - 1].explanation)
       }
     },
 
