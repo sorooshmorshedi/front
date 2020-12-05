@@ -50,10 +50,22 @@ export default {
       password: "",
     };
   },
-  mounted(){
-    document.title = 'ورود'
+  mounted() {
+    document.title = "ورود";
+    if (this.token) {
+      this.$router.push();
+      this.redirect();
+    }
   },
   methods: {
+    redirect() {
+      let redirectUrl = this.urlQuery.redirectUrl;
+      if (redirectUrl) {
+        this.$router.push(redirectUrl);
+      } else {
+        this.$router.push({ name: "Home" });
+      }
+    },
     login() {
       this.request({
         url: this.endpoint("login"),
@@ -65,12 +77,7 @@ export default {
         token: false,
         success: (data) => {
           this.setToken(data.token);
-          let redirectUrl = this.urlQuery.redirectUrl;
-          if (redirectUrl) {
-            this.$router.push(redirectUrl);
-          } else {
-            this.$router.push({ name: "Home" });
-          }
+          this.redirect();
         },
       });
     },

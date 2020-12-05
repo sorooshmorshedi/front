@@ -83,6 +83,7 @@ export default {
     handle_401(error) {
       if (this.$router.currentRoute.name == 'Login') return;
       this.notify('شما از سامانه خارج شده اید', 'warning');
+      this.setToken('');
       this.$router.push({
         name: "Login",
         query: {
