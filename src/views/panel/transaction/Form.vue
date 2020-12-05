@@ -329,9 +329,6 @@ export default {
         backFromBuy: "برگشت از خرید",
         backFromSale: "برگشت از فروش",
       },
-      d: {
-        getNotPaidFactors: null,
-      },
     };
   },
   created() {
@@ -375,7 +372,7 @@ export default {
       for (const factor of this.factors) {
         sum += +factor.payment.value;
       }
-      return sum <= this.sum;
+      return sum <= this.rowsSum("value");
     },
   },
   watch: {
@@ -385,6 +382,7 @@ export default {
   },
   methods: {
     validatePaidValue(factor) {
+      console.log(factor);
       let paymentValue = +factor.payment.value;
       if (paymentValue < 0) {
         factor.payment.value = 0;
@@ -445,20 +443,21 @@ export default {
         success: (data) => {
           this.factors = [];
           for (let factor of data) {
+            console.log(factor.paidValue);
             factor.prevPaidValue = factor.paidValue;
+            console.log(factor.prevPaidValue);
             factor.remain = +factor.sum - +factor.paidValue;
 
             let payment = [];
             if (this.item.id) {
-              payment = factor.payments.filter((p) => {
-                return p.item == this.item.id;
-              });
+              payment = factor.payments.filter((o) => o.transaction == this.id);
             }
 
             if (payment.length) {
               payment = payment[0];
               factor.payment = this.copy(payment);
               factor.prevPaidValue -= payment.value;
+              console.log(factor.prevPaidValue);
             } else {
               factor.payment = {
                 value: 0,
