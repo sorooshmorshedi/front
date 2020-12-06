@@ -403,24 +403,24 @@ export default {
         +this.item.association_price +
         +this.item.bill_price +
         +this.item.cargo_tip_price;
-      this.item.lading_bill_total_value = value || 0;
+      this.item.lading_bill_total_value = Math.round(value * 100 || 0) / 100;
       return value;
     },
     ladingTotalValue() {
       let value = this.item.destination_amount * this.item.contractor_price;
-      this.item.lading_total_value = value || 0;
+      this.item.lading_total_value = Math.round(value * 100 || 0) / 100;
       return value;
     },
     companyCommissionIncome() {
       let value =
         this.item.destination_amount *
         (this.item.contractor_price - this.item.fare_price);
-      this.item.company_commission_income = value || 0;
+      this.item.company_commission_income = Math.round(value * 100 || 0) / 100;
       return value;
     },
     carIncome() {
       let value = this.item.destination_amount * this.item.fare_price;
-      this.item.car_income = value || 0;
+      this.item.car_income = Math.round(value * 100 || 0) / 100;
       return value;
     },
   },
