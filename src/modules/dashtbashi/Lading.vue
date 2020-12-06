@@ -442,7 +442,7 @@ export default {
         Object.keys(this.remittance).forEach((key) => {
           if (key == "id") {
             this.item.remittance = this.remittance.id;
-          } else {
+          } else if (!["local_id"].includes(key)) {
             this.item[key] = null;
             this.$set(this.item, key, this.remittance[key]);
           }
