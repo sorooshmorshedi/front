@@ -1,3 +1,4 @@
+import _ from 'lodash'
 export default {
   data() {
     return {
@@ -85,8 +86,12 @@ export default {
           text: "کارت خوان",
           value: "p"
         },
-      ]
+      ],
+      d: {}
     }
+  },
+  created() {
+    this.d.getRemittances = _.debounce(this.getRemittances, 300);
   },
   methods: {
     getDrivers(force, callback = null) {

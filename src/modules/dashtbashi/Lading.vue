@@ -61,10 +61,12 @@
               :disabled="!isEditing"
               :items="remittances"
               :search-input.sync="remittanceSearch"
-              :item-text="(item) => item.code + ' - ' + item.contractor.name"
+              item-text="title"
               item-value="id"
               clearable
             />
+
+              <!-- :item-text="(item) => item.code + ' - ' + item.contractor.name" -->
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
@@ -429,7 +431,10 @@ export default {
       this.getLadingBillSeries(this.ladingBillSearchInput);
     },
     remittanceSearch() {
-      this.getRemittances(this.remittanceSearch);
+      console.log(this.remittanceSearch);
+      if (this.remittanceSearch != null) {
+        this.d.getRemittances(this.remittanceSearch);
+      }
     },
     remittance() {
       if (this.remittance) {
@@ -449,6 +454,9 @@ export default {
         });
       }
     },
+  },
+  mounted() {
+    this.getRemittances(this.remittanceSearch);
   },
   methods: {
     clearForm() {
