@@ -526,6 +526,7 @@ export default {
             Object.keys(filters).forEach((k) => {
               if (this.filters[k]) url += k + "=" + this.filters[k] + "&";
             });
+            url += `headers=${JSON.stringify(this.headers)}&`;
           }
           if (url[url.length - 1] != "&") url += "&";
           url += "token=" + this.token;
