@@ -443,7 +443,7 @@ export default {
     getSerialized() {
       let item = this.copy(this.item);
       item = this.extractIds(item);
-      item.account_type = this.account_type;
+      if (!item.id) item.account_type = this.account_type;
       return item;
     },
   },

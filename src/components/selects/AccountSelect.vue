@@ -239,13 +239,13 @@ export default {
           }
 
           if (this.itemsType == "buyers") {
-            if (item.person_type == "buyer") {
+            if (item.buyer_or_seller == "b") {
               items.push(item);
             }
           }
 
           if (this.itemsType == "sellers") {
-            if (item.person_type == "seller") {
+            if (item.buyer_or_seller == "s") {
               items.push(item);
             }
           }
