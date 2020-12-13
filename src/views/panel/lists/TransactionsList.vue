@@ -31,9 +31,9 @@ export default {
     title() {
       switch (this.type) {
         case "receive":
-          return "دریافت ها";
+          return "لیست دریافت ها";
         case "payment":
-          return "پرداخت ها";
+          return "لیست پرداخت ها";
         case "imprest":
           return "پرداخت های تنخواه";
       }
