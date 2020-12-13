@@ -221,7 +221,7 @@ export default {
         },
         {
           text: "تاریخ",
-          value: "transaction.date",
+          value: "date",
         },
         {
           text: "مبلغ پرداختی",
