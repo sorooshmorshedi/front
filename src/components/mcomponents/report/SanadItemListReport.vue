@@ -188,14 +188,14 @@ export default {
         {
           text: "بدهکار",
           value: "bed",
-          type: "money",
+          type: "numeric",
           sortable: this.sortable,
           filterable: this.filterable,
         },
         {
           text: "بستانکار",
           value: "bes",
-          type: "money",
+          type: "numeric",
           sortable: this.sortable,
           filterable: this.filterable,
         },
@@ -205,6 +205,7 @@ export default {
           {
             text: "مانده",
             value: "remain",
+            type: "numeric",
             sortable: false,
             filterable: false,
             align: "center",
