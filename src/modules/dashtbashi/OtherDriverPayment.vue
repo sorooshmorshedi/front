@@ -2,6 +2,8 @@
   <m-form
     title="پرداخت رانندگان متفرقه"
     formName="پرداخت رانندگان متفرقه"
+    exportBaseUrl="dashtbashi/export/otherDriverPayments"
+    :exportParams="{id: id}"
     :isEditing.sync="isEditing"
     :deletable="true"
     :showList="false"
@@ -265,7 +267,7 @@ export default {
   },
   methods: {
     getImprestSettledValue(imprest) {
-      return +imprest.imprestSettlement.settled_value
+      return +imprest.imprestSettlement.settled_value;
     },
     getImprestNotSettledValue(imprest) {
       return imprest.sanad.bed - this.getImprestSettledValue(imprest);

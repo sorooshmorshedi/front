@@ -7,6 +7,7 @@
           <m-datatable
             :headers="headers"
             api-url="dashtbashi/otherDriverPayments/"
+            export-url="dashtbashi/report/otherDriverPayments/"
             :filters.sync="filters"
             @detail="(item) => newTab({name: 'OtherDriverPayment', params: {id: item.id}})"
           ></m-datatable>

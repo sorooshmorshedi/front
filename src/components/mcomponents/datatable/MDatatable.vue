@@ -290,7 +290,11 @@ export default {
         };
       };
 
-      let headers = this.headers.filter((h) => h.show != false);
+      let headers = this.headers.filter((h) => {
+        if (h.show == false) return false;
+        if (this.isPrinting && h.hideInPrint == true) return false;
+        return true;
+      });
 
       headers = [
         {
@@ -506,7 +510,7 @@ export default {
       if (exportUrl.includes("?")) {
         url = exportUrl.replace("?", `/${outputFormat}?`);
       } else {
-        url = `${exportUrl}/${outputFormat}?`;
+        url = `${exportUrl}${exportUrl.endsWith("/") ? "" : "/"}${outputFormat}?`;
       }
       url = this.endpoint(url);
       return url;
@@ -536,6 +540,8 @@ export default {
         } else {
           if (outputFormat == "html") {
             this.print();
+          } else if (outputFormat == "pdf") {
+            this.print();
             return;
             let doc = new jsPDF();
 
@@ -545,7 +551,6 @@ export default {
                 doc.save();
               },
             });
-            // this.print();
           } else if (outputFormat == "xlsx") {
             let workbook = XLSX.utils.table_to_book(
               document.getElementById("datatable")

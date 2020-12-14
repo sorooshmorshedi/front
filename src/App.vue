@@ -5,6 +5,7 @@
         <m-system-bar />
       </v-system-bar>
       <v-navigation-drawer
+        v-show="!isPrinting"
         app
         right
         clipped
@@ -19,7 +20,7 @@
         <m-navbar />
       </v-navigation-drawer>
 
-      <v-app-bar app clipped-right class="indigo darken-1" v-if="user">
+      <v-app-bar app clipped-right class="indigo darken-1" v-if="user" v-show="!isPrinting">
         <v-app-bar-nav-icon @click="showDrawer = !showDrawer" class="white--text" />
 
         <v-btn

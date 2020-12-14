@@ -3,34 +3,35 @@
     <v-card-title>گزارش مبلغ قابل پرداخت به رانندگان متفرقه</v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="12" md="3">
-          <v-autocomplete
-            :return-object="true"
-            label="شماره حواله"
-            v-model="remittance"
-            :items="remittances"
-            :search-input.sync="remittanceSearch"
-            item-text="code"
-            item-value="id"
-            clearable
-            :multiple="false"
-            @change="getRemittanceData"
-          />
-        </v-col>
-        <template v-if="remittance">
+        <template v-if="!isPrinting">
           <v-col cols="12" md="3">
-            <account-select label="پیمانکار" v-model="remittance.contractor" :disabled="true" />
+            <v-autocomplete
+              :return-object="true"
+              label="شماره حواله"
+              v-model="remittance"
+              :items="remittances"
+              :search-input.sync="remittanceSearch"
+              item-text="code"
+              item-value="id"
+              clearable
+              :multiple="false"
+              @change="getRemittanceData"
+            />
           </v-col>
-          <v-col cols="12" md="3">
-            <date v-model="filters.fromDate" label="از تاریخ" />
-          </v-col>
-          <v-col cols="12" md="3">
-            <date v-model="filters.toDate" label="تا تاریخ" />
-          </v-col>
+          <template v-if="remittance">
+            <v-col cols="12" md="3">
+              <account-select label="پیمانکار" v-model="remittance.contractor" :disabled="true" />
+            </v-col>
+            <v-col cols="12" md="3">
+              <date v-model="filters.fromDate" label="از تاریخ" />
+            </v-col>
+            <v-col cols="12" md="3">
+              <date v-model="filters.toDate" label="تا تاریخ" />
+            </v-col>
+          </template>
         </template>
-
         <v-col cols="12">
-          <v-data-table
+          <m-datatable
             v-if="remittance"
             :headers="tableHeaders"
             :items="items"
@@ -38,14 +39,6 @@
             :disable-pagination="true"
             :hide-default-footer="true"
           >
-            <template #item.carIncome="{ item }">{{ item.carIncome | toMoney }}</template>
-            <template #item.imprestSum="{ item }">{{ item.imprestSum | toMoney }}</template>
-            <template #item.cargoDebt="{ item }">{{ item.cargoDebt | toMoney }}</template>
-            <template #item.tipPrice="{ item }">{{ item.tipPrice | toMoney }}</template>
-            <template #item.payableValue="{ item }">
-              <span class="ltr d-inline-block">{{ item.payableValue | toMoney }}</span>
-            </template>
-
             <template #item.pay="{ item }">
               <v-btn
                 v-if="!item.sumRow"
@@ -53,7 +46,7 @@
                 color="blue white--text"
               >پرداخت</v-btn>
             </template>
-          </v-data-table>
+          </m-datatable>
         </v-col>
       </v-row>
     </v-card-text>
@@ -85,37 +78,43 @@ export default {
       tableHeaders: [
         {
           text: "حمل کننده",
-          value: "driving.title"
+          value: "driving.title",
         },
         {
           text: "جمع انعام",
-          value: "tipPrice"
+          value: "tipPrice",
+          type: "numeric",
         },
         {
           text: "جمع درآمد ماشین",
-          value: "carIncome"
+          value: "carIncome",
+          type: "numeric",
         },
         {
           text: "جمع بدهی باربری",
-          value: "cargoDebt"
+          value: "cargoDebt",
+          type: "numeric",
         },
         {
           text: "جمع تنخواه",
-          value: "imprestSum"
+          value: "imprestSum",
+          type: "numeric",
         },
         {
           text: "مبلغ قابل پرداخت",
-          value: "payableValue"
+          value: "payableValue",
+          type: "numeric",
         },
         {
           text: "پرداخت",
-          value: "pay"
-        }
+          value: "pay",
+          hideInPrint: true,
+        },
       ],
       data: {
         ladings: [],
-        imprests: []
-      }
+        imprests: [],
+      },
     };
   },
   computed: {
@@ -123,7 +122,7 @@ export default {
       let items = [];
       for (const lading of this.data.ladings) {
         const driving = lading.driving;
-        let item = items.filter(o => o.driving.id == driving.id);
+        let item = items.filter((o) => o.driving.id == driving.id);
         if (item.length != 0) {
           item = item[0];
           item.ladings = lading;
@@ -138,7 +137,7 @@ export default {
             cargoDebt: 0,
             ladingSum: 0,
             imprestSum: 0,
-            payableValue: 0
+            payableValue: 0,
           };
           items.push(item);
         }
@@ -172,13 +171,13 @@ export default {
       }
 
       return items;
-    }
+    },
   },
   created() {},
   watch: {
     remittanceSearch() {
       this.getRemittances(this.remittanceSearch);
-    }
+    },
   },
   methods: {
     getRemittanceData() {
@@ -186,15 +185,15 @@ export default {
       this.request({
         url: this.endpoint("dashtbashi/report/otherDriverPayments"),
         params: {
-          remittance: this.remittance.id
+          remittance: this.remittance.id,
         },
         method: "get",
-        success: data => {
+        success: (data) => {
           this.data = data;
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
