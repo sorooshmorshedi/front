@@ -4,6 +4,7 @@
       :title="title"
       :showList="false"
       :listRoute="{name:'TransactionsList', params: {type: type}}"
+      exportBaseUrl="reports/lists/transactions"
       :exportParams="{id: id}"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
