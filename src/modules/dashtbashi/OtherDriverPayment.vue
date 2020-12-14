@@ -159,7 +159,7 @@ import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import TransactionForm from "@/views/panel/transaction/Form";
 
 export default {
-  name: "DriverPaymentForm",
+  name: "OtherDriverPaymentForm",
   mixins: [formsMixin, GetApi, MFormMixin, LadingMixin],
   components: { TransactionForm },
   props: ["id"],

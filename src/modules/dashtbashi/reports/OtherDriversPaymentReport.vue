@@ -49,7 +49,7 @@
             <template #item.pay="{ item }">
               <v-btn
                 v-if="!item.sumRow"
-                :to="{name: 'DriverPayment', query: { 'item.driving': item.driving.id, 'item.remittance': remittance.id, 'item.selectedLadings': item.selectedLadings }}"
+                :to="{name: 'OtherDriverPayment', query: { 'item.driving': item.driving.id, 'item.remittance': remittance.id, 'item.selectedLadings': item.selectedLadings }}"
                 color="blue white--text"
               >پرداخت</v-btn>
             </template>

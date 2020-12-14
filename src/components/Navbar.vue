@@ -1252,7 +1252,7 @@ export default {
                   perm: "otherDriverPayment",
                   title: "گزارش مبلغ قابل پرداخت رانندگان متفرقه",
                   to: {
-                    name: "DriverPaymentReport",
+                    name: "OtherDriverPaymentReport",
                   },
                 },
               ],
