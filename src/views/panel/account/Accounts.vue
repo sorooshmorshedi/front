@@ -367,9 +367,7 @@ export default {
       return this.account_type == "p";
     },
     items() {
-      return this.accounts.filter(
-        (o) => o.level == this.level && o.account_type == this.account_type
-      );
+      return this.accounts.filter((o) => o.level == this.level);
     },
     parentItems() {
       return this.accountsSelectValues.levels[this.level - 1];
