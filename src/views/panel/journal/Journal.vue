@@ -49,22 +49,23 @@ export default {
   data() {
     return {
       journal: {
-        level: ""
+        level: "",
       },
       filters: {
-        financial_year: null
+        financial_year: null,
+        title: "دفتر روزنامه",
       },
       accountLevels: [
         { value: "level0", text: "گروه" },
         { value: "level1", text: "کل" },
         { value: "level2", text: "معین" },
-        { value: "level3", text: "تفضیلی" }
-      ]
+        { value: "level3", text: "تفضیلی" },
+      ],
     };
   },
   created() {
     this.filters.financial_year = this.financialYear.id;
-  }
+  },
 };
 </script>
 
