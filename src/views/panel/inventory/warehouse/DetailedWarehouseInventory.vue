@@ -15,6 +15,7 @@
             v-model="filters.warehouse"
             item-text="title"
             item-value="id"
+            clearable
           />
         </v-col>
         <v-col cols="12">

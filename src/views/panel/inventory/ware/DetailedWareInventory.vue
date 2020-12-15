@@ -63,6 +63,10 @@ export default {
           sortable: false,
           items: [
             {
+              text: "موجودی اول دوره",
+              value: "fpi",
+            },
+            {
               text: "خرید",
               value: "buy",
             },
@@ -147,7 +151,7 @@ export default {
         {
           text: "مقدار صادره",
           value: "output.count",
-          type: "number",
+          type: "numeric",
           sortable: false,
           filterable: false,
           filters: [],

@@ -528,7 +528,7 @@ export default {
               search: this.search,
             };
             Object.keys(filters).forEach((k) => {
-              if (this.filters[k])
+              if (this.filters[k] != undefined)
                 url += k.replaceAll(".", "__") + "=" + this.filters[k] + "&";
             });
             url += `headers=${JSON.stringify(this.headers.filter(o => o.hideInExport != true))}&`;
