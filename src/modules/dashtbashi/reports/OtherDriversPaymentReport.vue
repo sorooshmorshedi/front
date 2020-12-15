@@ -108,7 +108,7 @@ export default {
         {
           text: "پرداخت",
           value: "pay",
-          hideInPrint: true,
+          hideInExport: true,
         },
       ],
       data: {

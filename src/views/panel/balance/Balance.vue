@@ -7,14 +7,14 @@
         <v-col cols="12" md="6">
           <v-row>
             <v-col cols="12" md="4">
-              <v-select label="تعداد ستون ها" v-model="colsCount" :items="[2, 4]"></v-select>
+              <v-select label="تعداد ستون ها" v-model="filters.cols_count" :items="[2, 4]"></v-select>
             </v-col>
 
             <template v-if="showAccountFilters">
               <v-col cols="12" md="4">
                 <v-select
                   label="سطح حساب"
-                  v-model="accountFilters.level"
+                  v-model="filters.level"
                   item-text="text"
                   item-value="value"
                   :items="accountLevels"
@@ -25,7 +25,7 @@
               <v-col cols="12" md="4">
                 <v-select
                   label="حساب های خاص"
-                  v-model="accountFilters.special"
+                  v-model="filters.account_type"
                   :items="specialAccounts"
                   item-text="text"
                   item-value="value"
@@ -36,37 +36,38 @@
             <v-col v-else cols="0" md="4"></v-col>
 
             <v-col cols="12" md="4">
-              <date label="از تاریخ" v-model="sanadFilters.from_date" />
+              <date label="از تاریخ" v-model="filters.from_date" />
             </v-col>
             <v-col cols="12" md="4">
-              <date label="تا تاریخ" v-model="sanadFilters.to_date" />
+              <date label="تا تاریخ" v-model="filters.to_date" />
             </v-col>
             <v-col cols="12" md="4">
-              <v-select :items="accountStatuses" v-model="accountFilters.status" label="وضعیت حساب"></v-select>
+              <v-select
+                :items="accountStatuses"
+                v-model="filters.balance_status"
+                label="وضعیت حساب"
+              ></v-select>
             </v-col>
 
             <v-col cols="12" md="6">
-              <v-text-field label="از شماره سند" type="number" v-model="sanadFilters.from_code" />
+              <v-text-field label="از شماره سند" type="number" v-model="filters.from_code" />
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="تا شماره سند" type="number" v-model="sanadFilters.to_code" />
+              <v-text-field label="تا شماره سند" type="number" v-model="filters.to_code" />
             </v-col>
           </v-row>
         </v-col>
         <v-col cols="12" md="6">
           <v-col cols="12">
-            <v-switch label="نمایش مغایرت حساب ها" v-model="accountFilters.showDifferences" />
+            <v-switch label="نمایش مغایرت حساب ها" v-model="filters.show_differences" />
           </v-col>
           <template v-if="showAccountFilters">
             <v-col cols="12">
-              <v-switch
-                label="نمایش حساب های تفضیلی شناور"
-                v-model="accountFilters.showFloatAccounts"
-              />
+              <v-switch label="نمایش حساب های تفضیلی شناور" v-model="filters.show_float_accounts" />
             </v-col>
 
             <v-col cols="12">
-              <v-switch label="نمایش مرکز هزینه و درآمد" v-model="accountFilters.showCostCenters" />
+              <v-switch label="نمایش مرکز هزینه و درآمد" v-model="filters.show_cost_centers" />
             </v-col>
           </template>
         </v-col>
@@ -86,7 +87,7 @@
             <template #item.data-table-expand></template>
 
             <template
-              v-if="accountFilters.showFloatAccounts || accountFilters.showCostCenters"
+              v-if="filters.show_float_accounts || filters.show_cost_centers"
               v-slot:expanded-item="{ headers, item }"
             >
               <template v-if="hasSubAccount(item)">
@@ -180,8 +181,6 @@ export default {
       debouncedGetData: null,
       debouncedFilterAccounts: null,
 
-      colsCount: 2,
-
       accountLevels: [
         { value: "all", text: "همه" },
         { value: 0, text: "گروه" },
@@ -197,12 +196,12 @@ export default {
       ],
       accountStatuses: [
         { value: "all", text: "همه" },
-        { value: "withRemain", text: "حساب های دارای مانده" },
-        { value: "bedRemain", text: "مانده بدهکار" },
-        { value: "besRemain", text: "مانده بستانکار" },
-        { value: "withoutRemain", text: "بدون مانده" },
-        { value: "withTransaction", text: "حساب های دارای گردش" },
-        { value: "withoutTransaction", text: "حساب های بدون گردش" },
+        { value: "with_remain", text: "حساب های دارای مانده" },
+        { value: "bed_remain", text: "مانده بدهکار" },
+        { value: "bes_remain", text: "مانده بستانکار" },
+        { value: "without_remain", text: "بدون مانده" },
+        { value: "with_transaction", text: "حساب های دارای گردش" },
+        { value: "without_transaction", text: "حساب های بدون گردش" },
       ],
     };
   },
@@ -211,7 +210,7 @@ export default {
       let bed = 0,
         bes = 0;
       for (const account of this.items) {
-        if (this.accountFilters.level == "all" && account.level != undefined) {
+        if (this.filters.level == "all" && account.level != undefined) {
           if (account.level == 0) {
             bed += +account.bed_sum;
             bes += +account.bes_sum;
@@ -230,7 +229,7 @@ export default {
       };
     },
     hiddenCols() {
-      if (this.colsCount == 4) return [];
+      if (this.filters.cols_count == 4) return [];
       return ["bed_sum", "bes_sum"];
     },
     headers() {
@@ -248,7 +247,7 @@ export default {
     url() {
       this.getData();
     },
-    sanadFilters: {
+    filters: {
       handler() {
         if (this.debouncedGetData) this.debouncedGetData();
         else this.getData();
@@ -266,40 +265,25 @@ export default {
   methods: {
     hasSubAccount(item) {
       return (
-        (item._floatAccounts && item._floatAccounts.length) ||
-        (item._costCenters && item._costCenters.length)
+        (item.floatAccounts_data && item.floatAccounts_data.length) ||
+        (item.costCenters_data && item.costCenters_data.length)
       );
     },
     getSubAccounts(item) {
       return [
-        ...(this.accountFilters.showFloatAccounts ? item._floatAccounts : []),
-        ...(this.accountFilters.showCostCenters ? item._costCenters : []),
+        ...(this.filters.show_float_accounts ? item.floatAccounts_data : []),
+        ...(this.filters.show_cost_centers ? item.costCenters_data : []),
       ];
     },
     getData() {
-      let filters = {};
-      Object.keys(this.sanadFilters).forEach((k) => {
-        if (["undefined", ""].includes(this.sanadFilters[k])) return;
-        if (k.includes("date") || k.includes("due")) {
-          let gDate = this.toGDate(this.sanadFilters[k]);
-          if (gDate == "Invalid date") {
-            this.notify("فرمت تاریخ وارد شده معتبر نمی باشد", "danger");
-            return;
-          }
-          filters[k] = gDate;
-        } else {
-          filters[k] = this.sanadFilters[k];
-        }
-      });
+      this.updateFilters();
       this.request({
         url: this.endpoint(this.url),
         method: "get",
-        params: {
-          ...filters,
-        },
+        params: this.filters,
         success: (data) => {
-          this.allAccounts = data;
-          this.filterAccounts();
+          this.items = data;
+          // this.filterAccounts();
         },
       });
     },
@@ -343,20 +327,22 @@ export default {
         if (filters.special != "all") {
           switch (filters.special) {
             case "seller":
-              if (!acc._person || acc._person.type != "seller") return false;
+              if (!acc.person_data || acc.person_data.type != "seller")
+                return false;
               break;
             case "buyer":
-              if (!acc._person || acc._person.type != "buyer") return false;
+              if (!acc.person_data || acc.person_data.type != "buyer")
+                return false;
               break;
             case "bank":
-              if (!acc._bank) return false;
+              if (!acc.bank_data) return false;
               break;
           }
         }
 
         if (filters.showDifferences) {
-          if (!acc._type) return false;
-          let nature = acc._type.nature;
+          if (!acc.type_data) return false;
+          let nature = acc.type_data.nature;
           if (acc.bes_remain == 0 && acc.bed_remain == 0) return false;
           if (nature == "bed" && acc.bes_remain == 0) return false;
           if (nature == "bes" && acc.bed_remain == 0) return false;
@@ -364,6 +350,8 @@ export default {
 
         return true;
       });
+
+      this.updateFilters();
 
       this.items = accounts;
     },
@@ -377,6 +365,32 @@ export default {
         showDifferences: false,
       };
       this.sanadFilters = {};
+      this.filters = {
+        cols_count: 2,
+      };
+    },
+    updateFilters() {
+      let filters = {};
+      Object.keys(this.sanadFilters).forEach((k) => {
+        if (["undefined", ""].includes(this.sanadFilters[k])) return;
+        if (k.includes("date") || k.includes("due")) {
+          let gDate = this.toGDate(this.sanadFilters[k]);
+          if (gDate == "Invalid date") {
+            this.notify("فرمت تاریخ وارد شده معتبر نمی باشد", "danger");
+            return;
+          }
+          filters[k] = gDate;
+        } else {
+          filters[k] = this.sanadFilters[k];
+        }
+      });
+
+    return;
+      this.filters = {
+        ...filters,
+        ...this.filters,
+        ...this.accountFilters,
+      };
     },
   },
 };

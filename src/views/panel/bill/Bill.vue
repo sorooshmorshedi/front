@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12" class="ledger">
       <v-card>
-        <v-card-title>صورت حساب تفصیلی</v-card-title>
+        <v-card-title>{{ title }}</v-card-title>
         <v-card-text>
           <v-row>
             <v-col cols="12">
@@ -47,8 +47,14 @@ export default {
     return {
       filters: {
         account: null,
+        title: "صورت حساب تفصیلی",
       },
     };
+  },
+  computed: {
+    title() {
+      return "صورت حساب تفصیلی";
+    },
   },
   methods: {},
   watch: {},

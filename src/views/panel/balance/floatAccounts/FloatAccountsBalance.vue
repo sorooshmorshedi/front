@@ -35,7 +35,7 @@ export default {
       };
     },
     url() {
-      return `reports/balance/floats?is_cost_center=${this.isCostCenter}`;
+      return `reports/balance/floats?is_cost_center=${this.isCostCenter}&`;
     },
     isCostCenter() {
       return ["true", true].includes(this.is_cost_center);

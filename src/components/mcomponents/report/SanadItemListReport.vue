@@ -227,6 +227,7 @@ export default {
           sortable: false,
           filterable: false,
           align: "left",
+          hideInExport: true
         },
       ]);
 

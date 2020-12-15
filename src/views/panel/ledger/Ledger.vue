@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12" class="ledger">
       <v-card>
-        <v-card-title>دفتر کل، معین، تفضیلی</v-card-title>
+        <v-card-title>{{ title }}</v-card-title>
         <v-card-text>
           <v-row>
             <v-col cols="12" md="4">
@@ -107,6 +107,9 @@ export default {
     };
   },
   computed: {
+    title() {
+      return "دفتر کل، معین، تفضیلی";
+    },
     showAccountInTable() {
       return this.ledger.level != "level3";
     },
@@ -125,6 +128,7 @@ export default {
         costCenter: null,
         floatAccount__floatAccountGroups: null,
         costCenter__floatAccountGroups: null,
+        title: this.title,
       };
     },
     init() {

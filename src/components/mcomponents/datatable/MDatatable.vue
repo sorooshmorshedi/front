@@ -292,7 +292,7 @@ export default {
 
       let headers = this.headers.filter((h) => {
         if (h.show == false) return false;
-        if (this.isPrinting && h.hideInPrint == true) return false;
+        if (this.isPrinting && h.hideInExport == true) return false;
         return true;
       });
 
@@ -531,7 +531,7 @@ export default {
               if (this.filters[k])
                 url += k.replaceAll(".", "__") + "=" + this.filters[k] + "&";
             });
-            url += `headers=${JSON.stringify(this.headers)}&`;
+            url += `headers=${JSON.stringify(this.headers.filter(o => o.hideInExport != true))}&`;
           }
           if (url[url.length - 1] != "&") url += "&";
           url += "token=" + this.token;
