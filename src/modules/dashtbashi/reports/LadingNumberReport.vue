@@ -27,6 +27,7 @@ export default {
     return {
       filters: {
         driving__car__owner: "",
+        title: "گزارش بارنامه"
       },
     };
   },

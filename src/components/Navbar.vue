@@ -1123,7 +1123,7 @@ export default {
                   title: "لیست حواله ها",
                   perm: "remittance",
                   to: {
-                    name: "RemittancesReport",
+                    name: "RemittancesList",
                   },
                 },
               ],
@@ -1142,7 +1142,7 @@ export default {
                   title: "لیست بارگیری های حمل و نقل",
                   perm: "lading",
                   to: {
-                    name: "LadingsReport",
+                    name: "LadingsList",
                   },
                 },
                 {
@@ -1153,7 +1153,7 @@ export default {
                   },
                 },
                 {
-                  title: "گزارش بارگیری شرکت نفت",
+                  title: "لیست بارگیری شرکت نفت",
                   perm: "oilCompanyLading",
                   to: {
                     name: "OilCompanyLadingsList",

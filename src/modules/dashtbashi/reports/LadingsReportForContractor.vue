@@ -22,7 +22,9 @@ export default {
   name: "Form",
   data() {
     return {
-      filters: {},
+      filters: {
+        title: "گزارش بارگیری برای پیمانکار"
+      },
       headers: [
         {
           text: "عطف",

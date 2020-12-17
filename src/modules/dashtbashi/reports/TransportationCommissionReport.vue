@@ -10,9 +10,7 @@
             :filters.sync="filters"
             @detail="(item) => newTab({name: 'Lading', params: {id: item.id}})"
           >
-          <template #item.commission="{ item }">
-            {{ item.contractor_price - item.fare_price }} 
-          </template>
+            <template #item.commission="{ item }">{{ item.contractor_price - item.fare_price }}</template>
           </m-datatable>
         </v-col>
       </v-row>
@@ -25,7 +23,9 @@ export default {
   name: "Form",
   data() {
     return {
-      filters: {},
+      filters: {
+        title: "گزارش کمیسیون حمل و نقل",
+      },
       headers: [
         {
           text: "عطف",

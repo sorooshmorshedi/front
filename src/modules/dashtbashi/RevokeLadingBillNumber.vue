@@ -4,7 +4,7 @@
 
     <v-card-text>
       <m-datatable
-        api-url="dashtbashi/ladingBillNumbers"
+        api-url="dashtbashi/report/ladingBillNumbers"
         :headers="headers"
         :filters.sync="filters"
       >
@@ -84,6 +84,7 @@ export default {
           value: "detail",
           filterable: false,
           sortable: false,
+          hideInExport: true,
         },
       ];
     },

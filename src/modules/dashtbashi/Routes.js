@@ -12,9 +12,9 @@ import OilCompanyLading from "./OilCompanyLading"
 import OtherDriverPayment from "./OtherDriverPayment"
 
 import OtherDriverPaymentReport from "./reports/OtherDriversPaymentReport.vue"
-import RemittancesReport from "./reports/RemittancesReport.vue"
+import RemittancesList from "./reports/RemittancesList.vue"
 import LadingBillSeriesList from "./reports/LadingBillSeriesList"
-import LadingsReport from "./reports/LadingsReport"
+import LadingsList from "./reports/LadingsList"
 import LadingNumberReport from "./reports/LadingNumberReport"
 import OilCompanyLadingsList from "./reports/OilCompanyLadingsList"
 import LadingsReportForContractor from "./reports/LadingsReportForContractor"
@@ -85,9 +85,9 @@ export default [{
     props: true,
   },
   {
-    name: 'RemittancesReport',
-    path: 'remittancesReport',
-    component: RemittancesReport,
+    name: 'RemittancesList',
+    path: 'remittancesList',
+    component: RemittancesList,
   },
   {
     name: 'LadingBillSeriesList',
@@ -95,9 +95,9 @@ export default [{
     component: LadingBillSeriesList,
   },
   {
-    name: 'LadingsReport',
-    path: 'ladingsReport',
-    component: LadingsReport
+    name: 'LadingsList',
+    path: 'ladingsList',
+    component: LadingsList
   },
   {
     name: 'OilCompanyLadingsList',

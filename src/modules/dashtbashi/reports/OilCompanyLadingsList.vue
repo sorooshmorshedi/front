@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>گزارش بارگیری های شرکت نفت</v-card-title>
+    <v-card-title>لیست بارگیری های شرکت نفت</v-card-title>
     <v-card-text>
       <v-row>
         <v-col cols="2" md="4">
@@ -78,7 +78,7 @@ export default {
   computed: {
     url() {
       if (this.detailed) {
-        return "dashtbashi/report/oilCompanyLadings/detailed";
+        return "dashtbashi/report/oilCompanyLadingItems/";
       } else {
         return "dashtbashi/report/oilCompanyLadings/";
       }
@@ -88,6 +88,7 @@ export default {
         {
           text: "عطف",
           value: "local_id",
+          show: !this.detailed,
         },
         {
           text: "تاریخ ثبت",
@@ -137,6 +138,7 @@ export default {
           text: "ماه",
           value: "month",
           items: this.months,
+          type: "select",
           show: !this.detailed,
         },
         {
