@@ -159,7 +159,8 @@
       </template>
 
       <template #header.rowNumber>
-        <v-btn @click="clearAllFilters" icon title="خالی کردن فیلتر ها">
+        <span v-if="isPrinting">#</span>
+        <v-btn v-else @click="clearAllFilters" icon title="خالی کردن فیلتر ها">
           <v-icon class>$clearFiltersIcon</v-icon>
         </v-btn>
       </template>
@@ -510,7 +511,9 @@ export default {
       if (exportUrl.includes("?")) {
         url = exportUrl.replace("?", `/${outputFormat}?`);
       } else {
-        url = `${exportUrl}${exportUrl.endsWith("/") ? "" : "/"}${outputFormat}?`;
+        url = `${exportUrl}${
+          exportUrl.endsWith("/") ? "" : "/"
+        }${outputFormat}?`;
       }
       url = this.endpoint(url);
       return url;
@@ -531,7 +534,9 @@ export default {
               if (this.filters[k] != undefined)
                 url += k.replaceAll(".", "__") + "=" + this.filters[k] + "&";
             });
-            url += `headers=${JSON.stringify(this.headers.filter(o => o.hideInExport != true))}&`;
+            url += `headers=${JSON.stringify(
+              this.headers.filter((o) => o.hideInExport != true)
+            )}&`;
           }
           if (url[url.length - 1] != "&") url += "&";
           url += "token=" + this.token;

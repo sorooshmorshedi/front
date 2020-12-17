@@ -33,6 +33,7 @@
         <v-col cols="12">
           <m-datatable
             v-if="remittance"
+            :filters.sync="filters"
             :headers="tableHeaders"
             :items="items"
             item-key="id"
