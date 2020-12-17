@@ -207,6 +207,7 @@
 <script>
 import XLSX from "xlsx";
 import { jsPDF } from "jspdf";
+import _ from "lodash";
 
 export default {
   props: {
@@ -255,6 +256,8 @@ export default {
 
       numericValues: ["bed", "bes", "value", "fee", "price", "count"],
       booleanValues: ["is_auto_created"],
+
+      d: {},
     };
   },
   computed: {
@@ -338,27 +341,30 @@ export default {
       this.tableItems = this.items;
     },
     apiUrl() {
-      if (this.serverProcessing) this.getDataFromApi();
+      if (this.serverProcessing) this.d.getDataFromApi();
     },
     options: {
       handler() {
-        if (this.serverProcessing) this.getDataFromApi();
+        if (this.serverProcessing) this.d.getDataFromApi();
       },
       deep: true,
     },
     filters: {
       handler() {
         this.options.page = 1;
-        if (this.serverProcessing) this.getDataFromApi();
+        if (this.serverProcessing) this.d.getDataFromApi();
       },
       deep: true,
     },
     search() {
-      if (this.serverProcessing) this.getDataFromApi();
+      if (this.serverProcessing) this.d.getDataFromApi();
     },
   },
+  created() {
+    this.d.getDataFromApi = _.debounce(this.getDataFromApi, 500);
+  },
   mounted() {
-    if (this.serverProcessing) this.getDataFromApi();
+    if (this.serverProcessing) this.d.getDataFromApi();
   },
   methods: {
     getBooleanFilterItems(header) {
