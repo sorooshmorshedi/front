@@ -177,6 +177,8 @@ export default {
           this.$store.commit('setDefaultAccounts', data);
           init && this.init();
           this.toggleIsGetting('defaultAccounts')
+
+          this.EventBus.$emit('get:defaultAccounts', data);
         }
       })
     },
@@ -193,6 +195,11 @@ export default {
       }
       // console.error('Account not found: ', property, '=', value);
       return null;
+    },
+    getDefaultAccount(codename) {
+      let res = this.defaultAccounts.filter(o => o.codename == codename);
+      if (res.length) return res[0]
+      return null
     },
     openLedger(account) {
       let routeData = this.$router.resolve({

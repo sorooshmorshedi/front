@@ -84,7 +84,7 @@
           <v-col cols="12" md="2" v-if="!isFpi">
             <v-text-field label="نوع" disabled :value="item.is_definite?'قطعی':'موقت'" />
           </v-col>
-          <v-col cols="12" md="4" v-if="!isFpi">
+          <v-col cols="12" md="4">
             <account-select
               :label="' * ' + accountName"
               :itemsType="accountType"
@@ -132,7 +132,7 @@
 
                   <template v-if="!isCw">
                     <th>* قیمت واحد</th>
-                    <th>جمع</th>
+                    <th>مبلغ کل</th>
                   </template>
 
                   <th v-if="showDiscount">تخفیف (مبلغ)</th>
@@ -231,9 +231,17 @@
                     </v-btn>
                   </td>
                 </tr>
-                <tr class="bg-info text-white">
-                  <td colspan="6"></td>
-                  <td v-if="!isCw"></td>
+                <tr class="grey lighten-3 text-white">
+                  <td colspan="3"></td>
+
+                  <td v-if="isFpi">{{ rowsSum('count') | toMoney }}</td>
+                  <td v-else></td>
+
+                  <td></td>
+
+                  <td v-if="isFpi">{{ sum.sum | toMoney }}</td>
+                  <td v-else></td>
+
                   <td v-if="!isSale"></td>
                   <td v-if="showDiscount" colspan="4"></td>
                   <td v-if="showTax && item.has_tax" colspan="2"></td>

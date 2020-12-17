@@ -14,7 +14,7 @@ export default {
       return this.type + "Factor";
     },
     accountType() {
-      if (this.isCw) return 'level3'
+      if (this.isCw || this.isFpi) return 'level3'
       else return 'persons';
     },
     createUrl() {
@@ -165,7 +165,7 @@ export default {
       return res;
     },
     accountName() {
-      if (this.isCw) return "حساب"
+      if (this.isCw || this.isFpi) return "حساب"
       if (["buy", "backFromSale"].includes(this.type)) {
         return "فروشنده";
       } else {
