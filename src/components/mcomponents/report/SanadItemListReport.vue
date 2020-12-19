@@ -3,7 +3,6 @@
     :headers="headers"
     api-url="reports/sanadItems"
     :filters.sync="localFilters"
-    :searchable="false"
     :previousApiData.sync="previousApiData"
     :currentApiData.sync="apiData"
   >
@@ -227,7 +226,7 @@ export default {
           sortable: false,
           filterable: false,
           align: "left",
-          hideInExport: true
+          hideInExport: true,
         },
       ]);
 

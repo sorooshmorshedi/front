@@ -26,7 +26,6 @@
             :api-url="url"
             :headers="headers"
             :filters.sync="filters"
-            :searchable="false"
           />
         </v-col>
       </v-row>

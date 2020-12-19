@@ -78,7 +78,6 @@
             :headers="headers"
             :items="items"
             :hidden-cols="hiddenCols"
-            :searchable="false"
             :export-url="url"
             :filters.sync="filters"
             show-expand
@@ -385,7 +384,7 @@ export default {
         }
       });
 
-    return;
+      return;
       this.filters = {
         ...filters,
         ...this.filters,

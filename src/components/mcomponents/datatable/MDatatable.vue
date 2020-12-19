@@ -1,8 +1,12 @@
 <template>
   <v-card>
     <v-card-title v-show="!isPrinting">
-      <v-row>
-        <v-col cols="12" md="4">
+      <v-row no-gutters>
+        <v-col
+          cols="12"
+          class="mt-1 text-left d-flex flex-column flex-md-row justify-end"
+          v-if="showExportBtns"
+        >
           <v-text-field
             v-if="searchable && false"
             v-model="search"
@@ -12,11 +16,9 @@
             single-line
             hide-details
           />
-        </v-col>
-        <v-col cols="12" md="8" class="mt-1 text-left" v-if="showExportBtns">
-          <v-btn @click="exportTo('html')" class="export-btn">چاپ</v-btn>
-          <v-btn @click="exportTo('pdf')" class="export-btn mr-1">خروجی PDF</v-btn>
-          <v-btn @click="exportTo('xlsx')" class="export-btn mr-1">خروجی اکسل</v-btn>
+          <v-btn @click="exportTo('html')" class="export-btn block">چاپ</v-btn>
+          <v-btn @click="exportTo('pdf')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی PDF</v-btn>
+          <v-btn @click="exportTo('xlsx')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی اکسل</v-btn>
         </v-col>
       </v-row>
     </v-card-title>
@@ -37,6 +39,7 @@
       :hide-default-footer="isPrinting"
       :footer-props="{ showFirstLastPage: true }"
       v-on="$listeners"
+      :mobile-breakpoint="0"
     >
       <!-- Add row number field -->
       <template #item.rowNumber="{ item }">{{ getRowNumber(item) }}</template>

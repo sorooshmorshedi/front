@@ -25,7 +25,6 @@
             :api-url="url"
             :headers="headers"
             :filters.sync="filters"
-            :searchable="false"
           ></m-datatable>
         </v-col>
       </v-row>

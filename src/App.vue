@@ -20,7 +20,7 @@
         <m-navbar />
       </v-navigation-drawer>
 
-      <v-app-bar app clipped-right class="indigo darken-1" v-if="user" v-show="!isPrinting">
+      <v-app-bar app clipped-right class="indigo darken-1 app-bar" v-if="user" v-show="!isPrinting">
         <v-app-bar-nav-icon @click="showDrawer = !showDrawer" class="white--text" />
 
         <v-btn
@@ -238,5 +238,18 @@ export default {
 
 <style lang="scss">
 @import "./styles/main";
+
+.app-bar {
+  overflow-y: auto;
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 </style>
 

@@ -17,7 +17,6 @@
             :headers="headers"
             :api-url="url"
             :filters.sync="filters"
-            :searchable="false"
             ref="datatable"
           />
         </v-col>

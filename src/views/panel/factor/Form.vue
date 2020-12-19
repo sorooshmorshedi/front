@@ -150,7 +150,11 @@
                 </tr>
               </template>
               <template #tbody>
-                <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
+                <tr
+                  v-for="(row,i) in rows"
+                  :key="i"
+                  :class="{'d-print-none': i == rows.length-1,'draggable': i != rows.length-1 && isEditing}"
+                >
                   <td class="tr-counter">{{ i+1 }}</td>
                   <td class="tr-ware">
                     <ware-select v-model="rows[i].ware" :disabled="!isEditing" />

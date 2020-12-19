@@ -3,7 +3,7 @@
     <v-card-title>گزارش کدینگ حساب ها</v-card-title>
 
     <v-card-text>
-      <m-datatable :headers="headers" :items="items" :searchable="false" :filters.sync="filters"></m-datatable>
+      <m-datatable :headers="headers" :items="items" :filters.sync="filters"></m-datatable>
     </v-card-text>
   </v-card>
 </template>
