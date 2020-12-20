@@ -16,6 +16,8 @@
         mini-variant
         permanent
         expand-on-hover
+        :mobile-breakpoint="0"
+        :bottom="true"
       >
         <m-navbar />
       </v-navigation-drawer>
