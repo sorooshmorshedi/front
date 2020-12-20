@@ -172,14 +172,14 @@
                     <span v-else>-</span>
                   </td>
                   <td>
-                    <money v-model="rows[i].count" :disabled="!isEditing" decimalScale="6" />
+                    <money v-model="rows[i].count" :disabled="!isEditing" />
                   </td>
                   <template v-if="!isCw">
                     <td>
                       <money v-model="rows[i].fee" :disabled="!isEditing" />
                     </td>
                     <td dir="ltr">
-                      <money :value="rowSum(rows[i])" disabled decimalScale="6" />
+                      <money :value="rowSum(rows[i])" disabled :decimalScale="0" />
                     </td>
                   </template>
                   <td v-if="showDiscount">
@@ -198,13 +198,13 @@
                     />
                   </td>
                   <td v-if="showDiscount">
-                    <money :value="rowSumAfterDiscount(row)" decimalScale="6" disabled />
+                    <money :value="rowSumAfterDiscount(row)" :decimalScale="0" disabled />
                   </td>
                   <td v-if="item.has_tax">
-                    <money :value="rowTax(row)" disabled decimalScale="6" />
+                    <money :value="rowTax(row)" disabled :decimalScale="0" />
                   </td>
                   <td v-if="item.has_tax">
-                    <money decimalScale="6" :value="rowSumAfterTax(row)" disabled />
+                    <money :decimalScale="0" :value="rowSumAfterTax(row)" disabled />
                   </td>
                   <td>
                     <row-textarea
@@ -238,12 +238,12 @@
                 <tr class="grey lighten-3 text-white">
                   <td colspan="3"></td>
 
-                  <td v-if="isFpi">{{ rowsSum('count') | toMoney }}</td>
+                  <td v-if="isFpi">{{ rowsSum('count') | toMoney(0) }}</td>
                   <td v-else></td>
 
                   <td></td>
 
-                  <td v-if="isFpi">{{ sum.sum | toMoney }}</td>
+                  <td v-if="isFpi">{{ sum.sum | toMoney(0) }}</td>
                   <td v-else></td>
 
                   <td v-if="!isSale"></td>
@@ -318,7 +318,7 @@
                 <tbody>
                   <tr>
                     <td>جمع:</td>
-                    <td colspan="2">{{ sum.sum | toMoney }} ریال</td>
+                    <td colspan="2">{{ sum.sum | toMoney(0) }} ریال</td>
                   </tr>
                   <tr>
                     <td>تخفیف</td>
@@ -342,7 +342,7 @@
                   </tr>
                   <tr>
                     <td>مبلغ فاکتور پس از تخفیف:</td>
-                    <td colspan="2">{{ sum.afterDiscount | toMoney }} ریال</td>
+                    <td colspan="2">{{ sum.afterDiscount | toMoney(0) }} ریال</td>
                   </tr>
                   <tr v-if="item.has_tax">
                     <td>مالیات</td>
@@ -352,7 +352,7 @@
                         v-model="item.taxValue"
                         :value="sum.tax"
                       />
-                      <money v-else :disabled="true" :value="sum.tax" />
+                      <money v-else :disabled="true" :value="sum.tax" :decimalScale="0" />
                     </td>
                     <td>
                       <v-text-field
@@ -367,7 +367,7 @@
                   </tr>
                   <tr>
                     <td>مبلغ کل فاکتور:</td>
-                    <td colspan="2">{{ sum.total | toMoney }} ریال</td>
+                    <td colspan="2">{{ sum.total | toMoney(0) }} ریال</td>
                   </tr>
                 </tbody>
               </table>

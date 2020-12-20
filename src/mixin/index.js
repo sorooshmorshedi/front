@@ -123,7 +123,7 @@ Vue.mixin({
         text: msg
       });
     },
-    hasPerm(operation, basename='', object = null) {
+    hasPerm(operation, basename = '', object = null) {
       if (this.user.is_superuser) return true
       let roles = this.user.roles.filter(o => this.company && o.company == this.company.id);
       for (let role of roles) {
@@ -236,12 +236,13 @@ Vue.mixin({
     toJalali(date) {
       return moment(date).format('jYYYY/jMM/jDD');
     },
-    toMoney(value) {
+    toMoney(value, decimalScale = 2) {
 
       let isNegative = false;
       if (value == null || value == undefined) value = "";
       else {
         let numeric_value = Number(value);
+        numeric_value = numeric_value.toFixed(decimalScale);
         if (numeric_value < 0) {
           isNegative = true;
           numeric_value = -numeric_value

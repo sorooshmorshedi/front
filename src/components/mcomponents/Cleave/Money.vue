@@ -24,7 +24,7 @@ export default {
   props: {
     value: {},
     decimalScale: {
-      default: 0,
+      default: 6,
     },
     label: {},
     placeholder: {
@@ -52,6 +52,7 @@ export default {
       if (!value) value = "";
       else {
         let numeric_value = Number(value);
+        numeric_value = numeric_value.toFixed(this.decimalScale);
         if (!isNaN(numeric_value)) value = String(numeric_value);
         else value = String(value);
       }

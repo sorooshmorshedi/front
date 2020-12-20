@@ -158,17 +158,17 @@
               </tr>
               <tr class="grey lighten-3 text-white">
                 <td colspan="4" class="text-right">مجموع:</td>
-                <td>{{ rowsSum('weight') | toMoney }}</td>
-                <td>{{ rowsSum('gross_price') | toMoney }}</td>
-                <td>{{ rowsSum('insurance_price') | toMoney }}</td>
+                <td>{{ rowsSum('weight') | toMoney(0) }}</td>
+                <td>{{ rowsSum('gross_price') | toMoney(0) }}</td>
+                <td>{{ rowsSum('insurance_price') | toMoney(0) }}</td>
                 <td></td>
-                <td>{{ rowsTaxPrice | toMoney }}</td>
+                <td>{{ rowsTaxPrice | toMoney(0) }}</td>
                 <td></td>
-                <td>{{ rowsComplicationPrice | toMoney }}</td>
-                <td>{{ rowsSum('sum') | toMoney }}</td>
-                <td>{{ rowsSum('net_price') | toMoney }}</td>
-                <td>{{ rowsSum('company_commission') | toMoney }}</td>
-                <td>{{ rowsSum('car_income') | toMoney }}</td>
+                <td>{{ rowsComplicationPrice | toMoney(0) }}</td>
+                <td>{{ rowsSum('sum') | toMoney(0) }}</td>
+                <td>{{ rowsSum('net_price') | toMoney(0) }}</td>
+                <td>{{ rowsSum('company_commission') | toMoney(0) }}</td>
+                <td>{{ rowsSum('car_income') | toMoney(0) }}</td>
                 <td class="d-print-none">
                   <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
                     <v-icon>delete_sweep</v-icon>
