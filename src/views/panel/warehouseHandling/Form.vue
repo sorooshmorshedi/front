@@ -208,10 +208,10 @@ export default {
           offset: 0,
         },
         success: (data) => {
-          this.inventory = data.results;
+          data = data.results.slice(0, data.results.length - 1)
+          this.inventory = data;
           if (!this.id) {
-            let rows = data.results;
-            this.rows = rows.map((o) => {
+            this.rows = data.map((o) => {
               return {
                 id: null,
                 ware: o,
