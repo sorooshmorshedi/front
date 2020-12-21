@@ -204,11 +204,14 @@ export default {
         params: {
           ...this.filters,
           level: 3,
+          limit: 1000000,
+          offset: 0,
         },
         success: (data) => {
-          this.inventory = data;
+          this.inventory = data.results;
           if (!this.id) {
-            this.rows = data.map((o) => {
+            let rows = data.results;
+            this.rows = rows.map((o) => {
               return {
                 id: null,
                 ware: o,
