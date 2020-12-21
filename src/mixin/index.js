@@ -242,12 +242,12 @@ Vue.mixin({
       if (value == null || value == undefined) value = "";
       else {
         let numeric_value = Number(value);
-        numeric_value = numeric_value.toFixed(decimalScale);
+        numeric_value = Number(numeric_value.toFixed(decimalScale));
         if (numeric_value < 0) {
           isNegative = true;
           numeric_value = -numeric_value
         }
-        if (!isNaN(numeric_value)) value = String(numeric_value);
+        if (!isNaN(numeric_value)) value = numeric_value.toString();
         else value = String(value);
       }
 
