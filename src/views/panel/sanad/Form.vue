@@ -225,6 +225,11 @@ export default {
           title: "دریافت/پرداخت",
           routeName: "TransactionForm",
         },
+        {
+          name: "imprestSettlement",
+          title: "تسویه تنخواه",
+          routeName: "ImprestSettlement",
+        },
       ];
       for (let form of forms) {
         let formObj = this.item[form["name"]];
