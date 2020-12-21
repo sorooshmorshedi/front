@@ -52,9 +52,10 @@ export default {
       if (!value) value = "";
       else {
         let numeric_value = Number(value);
-        numeric_value = numeric_value.toFixed(this.decimalScale);
-        if (!isNaN(numeric_value)) value = String(numeric_value);
+        numeric_value = Number(numeric_value.toFixed(this.decimalScale))
+        if (!isNaN(numeric_value)) value = numeric_value.toString();
         else value = String(value);
+        console.log(numeric_value);
       }
 
       let valueParts = value.split(".");

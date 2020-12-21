@@ -22,19 +22,10 @@
   >
     <template #header-btns>
       <v-btn
-        small
-        v-if="item.factor"
+        v-if="relatedForm"
         class="light-blue white--text mr-1"
-        :to="{name: 'FactorForm', params: {type: item.factor.type, id: item.factor.id }}"
-      >مشاهده فاکتور این سند</v-btn>
-      <v-btn
-        small
-        v-if="item.transaction"
-        class="light-blue white--text mr-1"
-        :to="{name: 'TransactionForm', params: {type: item.transaction.type, id: item.transaction.id }}"
-      >
-        <span>مشاهده دریافت/پرداخت</span>
-      </v-btn>
+        :to="relatedForm.to"
+      >{{ relatedForm.title }}</v-btn>
 
       <v-btn small @click="copySanadToNewSanad" class="teal white--text mr-1">کپی سند به سند جدید</v-btn>
     </template>
@@ -213,6 +204,46 @@ export default {
     };
   },
   computed: {
+    relatedForm() {
+      // not working for chequeStatusChange
+      let forms = [
+        { name: "factor", title: "فاکتور", routeName: "FactorForm" },
+        { name: "adjustment", title: "تعدیل", routeName: "AdjustmentForm" },
+        { name: "lading", title: "بارگیری", routeName: "Lading" },
+        {
+          name: "oilCompanyLading",
+          title: "بارگیری شرکت نفت",
+          routeName: "OilCompanyLading",
+        },
+        {
+          name: "statusChange",
+          title: "چک",
+          routeName: "ChequeDetail",
+        },
+        {
+          name: "transaction",
+          title: "دریافت/پرداخت",
+          routeName: "TransactionForm",
+        },
+      ];
+      for (let form of forms) {
+        let formObj = this.item[form["name"]];
+        console.log(formObj);
+        if (formObj) {
+          return {
+            title: form.title,
+            to: {
+              name: form.routeName,
+              params: {
+                id: formObj.id,
+                type: formObj.type,
+              },
+            },
+          };
+        }
+      }
+      return null;
+    },
     canEdit() {
       if (!this.item.id) return true;
       return !this.item.is_auto_created;

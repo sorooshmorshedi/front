@@ -120,7 +120,7 @@
                   <v-text-field type="number" v-model="row.tax_percent" :disabled="!isEditing" />
                 </td>
                 <td>
-                  <money :value="taxPrice(row)" disabled />
+                  <money :value="taxPrice(row)" disabled :decimalScale="0" />
                 </td>
                 <td>
                   <v-text-field
@@ -130,19 +130,19 @@
                   />
                 </td>
                 <td>
-                  <money :value="complicationPrice(row)" disabled />
+                  <money :value="complicationPrice(row)" disabled :decimalScale="0" />
                 </td>
                 <td>
-                  <money :value="rowSum(row)" :disabled="true" />
+                  <money :value="rowSum(row)" :disabled="true" :decimalScale="0" />
                 </td>
                 <td>
-                  <money :value="netPrice(row)" :disabled="true" />
+                  <money :value="netPrice(row)" :disabled="true" :decimalScale="0" />
                 </td>
                 <td>
-                  <money :value="companyCommission(row)" :disabled="true" />
+                  <money :value="companyCommission(row)" :disabled="true" :decimalScale="0" />
                 </td>
                 <td>
-                  <money :value="carIncome(row)" :disabled="true" />
+                  <money :value="carIncome(row)" :disabled="true" :decimalScale="0" />
                 </td>
                 <td class="d-print-none">
                   <v-btn
@@ -259,8 +259,9 @@ export default {
       return row.tax_value;
     },
     complicationPrice(row) {
-      row.complication_price =
-        ((+row.complication_percent * +row.gross_price) / 100 || 0).toFixed(6);
+      row.complication_price = (
+        (+row.complication_percent * +row.gross_price) / 100 || 0
+      ).toFixed(6);
       return row.complication_price;
     },
     rowSum(row) {

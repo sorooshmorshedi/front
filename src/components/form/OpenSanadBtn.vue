@@ -10,11 +10,11 @@ export default {
   props: {
     sanad: {
       type: Object,
-      required: true
+      required: true,
     },
     tableStyle: {
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     btnClasses() {
@@ -22,7 +22,7 @@ export default {
       } else {
         return "blue white--text mr-1";
       }
-    }
+    },
   },
   mounted() {},
   methods: {
@@ -30,12 +30,13 @@ export default {
       let routeData = this.$router.resolve({
         name: "SanadForm",
         params: {
-          id: this.sanad.id
-        }
+          id: this.sanad.id,
+        },
       });
-      window.open(routeData.href, "_blank");
-    }
-  }
+      // window.open(routeData.href, "_blank");
+      window.open(routeData.href);
+    },
+  },
 };
 </script>
 
