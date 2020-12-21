@@ -6,6 +6,7 @@
       :showList="false"
       :showListBtn="!isFpi"
       :listRoute="listRoute"
+      :exportBaseUrl="(isFpi || isCw)?'reports/lists/factors':undefined"
       :exportParams="(isFpi || isCw) && {id: this.id}"
       :showClearBtn="!isFpi"
       :showNavigationBtns="!isFpi"
