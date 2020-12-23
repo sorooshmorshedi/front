@@ -3,6 +3,16 @@
     <v-card-title>گزارش بارگیری برای راننده</v-card-title>
     <v-card-text>
       <v-row>
+        <v-col cols="12">
+          <v-autocomplete
+            :return-object="false"
+            label="* ماشین"
+            v-model="filters.driving__car"
+            :items="$store.state.cars"
+            item-text="car_number_str"
+            item-value="id"
+          />
+        </v-col>
         <v-col cols="12" class="text-center">
           <m-datatable
             :headers="headers"
@@ -17,8 +27,10 @@
 </template>
 
 <script>
+import GetApi from "../GetApi";
 export default {
-  name: "Form",
+  name: "LadingsReportForDriver",
+  mixins: [GetApi],
   data() {
     return {
       filters: {
