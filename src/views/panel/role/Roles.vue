@@ -215,7 +215,6 @@ export default {
     permissions() {
       return this.rawPermissions.filter((o) => {
         let codename = o.codename;
-        console.log(o.contentType.model == "report");
         let f =
           o.contentType.model == "report" ||
           o.codename.includes("firstPeriodInventory") ||

@@ -240,7 +240,6 @@ export default {
   },
   methods: {
     to(item) {
-      console.log(item);
       return {
         name: "SanadForm",
         params: {

@@ -233,7 +233,6 @@ export default {
       ];
       for (let form of forms) {
         let formObj = this.item[form["name"]];
-        console.log(formObj);
         if (formObj) {
           return {
             title: form.title,

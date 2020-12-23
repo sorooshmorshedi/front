@@ -64,7 +64,6 @@ export default {
   },
   methods: {
     performSearch(data, searchValue) {
-      console.log('perform search');
       let expand = false;
       data = data.map((node) => {
         if (node.children) {

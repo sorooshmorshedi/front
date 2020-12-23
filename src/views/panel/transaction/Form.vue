@@ -383,7 +383,6 @@ export default {
   },
   methods: {
     validatePaidValue(factor) {
-      console.log(factor);
       let paymentValue = +factor.payment.value;
       if (paymentValue < 0) {
         factor.payment.value = 0;
@@ -444,9 +443,7 @@ export default {
         success: (data) => {
           this.factors = [];
           for (let factor of data) {
-            console.log(factor.paidValue);
             factor.prevPaidValue = factor.paidValue;
-            console.log(factor.prevPaidValue);
             factor.remain = +factor.sum - +factor.paidValue;
 
             let payment = [];
@@ -458,7 +455,6 @@ export default {
               payment = payment[0];
               factor.payment = this.copy(payment);
               factor.prevPaidValue -= payment.value;
-              console.log(factor.prevPaidValue);
             } else {
               factor.payment = {
                 value: 0,

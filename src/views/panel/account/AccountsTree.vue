@@ -81,7 +81,6 @@ export default {
   },
   methods: {
     setAccount(node) {
-      console.log(node);
       this.account = { ...node };
       this.parent = null;
       this.level = node.level;

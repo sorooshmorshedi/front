@@ -431,7 +431,6 @@ export default {
       this.getLadingBillSeries(this.ladingBillSearchInput);
     },
     remittanceSearch() {
-      console.log(this.remittanceSearch);
       if (this.remittanceSearch != null) {
         this.d.getRemittances(this.remittanceSearch);
       }

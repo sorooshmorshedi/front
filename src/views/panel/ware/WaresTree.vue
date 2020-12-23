@@ -91,7 +91,6 @@ export default {
       this.$refs.menu.open(e);
     },
     updateRoot() {
-      console.log("update root");
       this.root[0].children = [];
       let tree = {};
       for (let item of this.items) {

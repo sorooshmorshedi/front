@@ -30,7 +30,6 @@ export default {
   computed: {
     limitedValue() {
       if (this.value) {
-        console.log(this.width);
         return this.value.substr(0, this.width / 2.2) + "...";
       }
       return this.value;
@@ -38,7 +37,6 @@ export default {
   },
   mounted() {
     if (this.$refs.textarea) {
-      console.log(this.$refs.textarea.$vnode.elm.offsetWidth);
     }
   },
 };

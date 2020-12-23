@@ -211,14 +211,14 @@ export default {
       for (let row of this.rows) {
         sum += +this.taxPrice(row);
       }
-      return sum.toFixed(6);
+      return +sum.toFixed(6);
     },
     rowsComplicationPrice() {
       let sum = 0;
       for (const row of this.rows) {
         sum += +this.complicationPrice(row);
       }
-      return sum.toFixed(6);
+      return +sum.toFixed(6);
     },
   },
   watch: {
@@ -259,7 +259,7 @@ export default {
       return row.tax_value;
     },
     complicationPrice(row) {
-      row.complication_price = (
+      row.complication_price = +(
         (+row.complication_percent * +row.gross_price) / 100 || 0
       ).toFixed(6);
       return row.complication_price;
@@ -281,12 +281,12 @@ export default {
     companyCommission(row) {
       let value =
         (this.netPrice(row) * +row.company_commission_percent) / 100 || 0;
-      row.company_commission = value.toFixed(6);
+      row.company_commission = +value.toFixed(6);
       return value;
     },
     carIncome(row) {
       let value = this.netPrice(row) - this.companyCommission(row) || 0;
-      row.car_income = value.toFixed(6);
+      row.car_income = +value.toFixed(6);
       return value;
     },
     getItemByPosition(position) {
