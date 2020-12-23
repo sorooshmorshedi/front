@@ -33,8 +33,8 @@ export default {
   mixins: [MFormMixin, AccountApiMixin],
   props: {
     is_cost_center: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -45,15 +45,15 @@ export default {
           text: "نام گروه",
           value: "name",
           type: "text",
-          filters: ["name"]
+          filters: ["name"],
         },
         {
           text: "توضیحات",
           value: "explanation",
           type: "text",
-          filters: ["expalantion"]
-        }
-      ]
+          filters: ["expalantion"],
+        },
+      ],
     };
   },
   computed: {
@@ -62,23 +62,22 @@ export default {
       else return "گروه حساب شناور";
     },
     items() {
-      return this.floatAccountGroups.filter(
-        o => o.is_cost_center == this.isCostCenter
-      );
+      if (this.isCostCenter) return this.costCenterGroups;
+      return this.floatAccountGroups;
     },
     isCostCenter() {
       return ["true", true].includes(this.is_cost_center);
-    }
+    },
   },
   methods: {
     getItemTemplate() {
       return {
-        is_cost_center: this.is_cost_center
+        is_cost_center: this.is_cost_center,
       };
     },
     getData() {
       this.getFloatAccountGroups(true);
-    }
-  }
+    },
+  },
 };
 </script>

@@ -202,21 +202,19 @@ export default {
       let items = [];
 
       if (this.itemsType == "floatAccounts") {
-        items = this.floatAccounts.filter((o) => o.is_cost_center == false);
+        items = this.floatAccounts;
       }
 
       if (this.itemsType == "floatAccountGroups") {
-        items = this.floatAccountGroups.filter(
-          (o) => o.is_cost_center == false
-        );
+        items = this.floatAccountGroups;
       }
 
       if (this.itemsType == "costCenters") {
-        items = this.floatAccounts.filter((o) => o.is_cost_center == true);
+        items = this.costCenters;
       }
 
       if (this.itemsType == "costCenterGroups") {
-        items = this.floatAccountGroups.filter((o) => o.is_cost_center == true);
+        items = this.costCenterGroups;
       }
 
       !items.length &&
