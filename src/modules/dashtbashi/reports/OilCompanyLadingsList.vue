@@ -100,6 +100,11 @@ export default {
           value: "list_date",
         },
         {
+          text: "شماره بارگیری",
+          value: "bill_number",
+          show: this.detailed,
+        },
+        {
           text: "مبلغ ناخالص",
           value: "gross_price",
           type: "numeric",

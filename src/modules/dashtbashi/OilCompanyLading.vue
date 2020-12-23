@@ -79,6 +79,7 @@
               <tr>
                 <th>#</th>
                 <th>تاریخ بارگیری</th>
+                <th>شماره بارنامه</th>
                 <th>مبدا</th>
                 <th>مقصد</th>
                 <th>وزن</th>
@@ -100,6 +101,9 @@
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td>
                   <date v-model="row.date" :default="true" :disabled="!isEditing" />
+                </td>
+                <td>
+                  <v-text-field v-model="row.bill_number" :disabled="!isEditing" />
                 </td>
                 <td>
                   <city-select v-model="row.origin" :disabled="!isEditing" />
