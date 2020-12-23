@@ -263,5 +263,12 @@ Vue.mixin({
         return formattedValue
       }
     },
+
+    truncate(value, maxLength = 30) {
+      if (typeof value == typeof "" && value.length > maxLength + 20) {
+        return value.substr(0, 30) + "...";
+      }
+      return value
+    }
   }
 })

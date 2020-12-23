@@ -183,7 +183,11 @@
         </template>
 
         <!-- other-->
-        <template v-else>{{ getItemValue(item, header.value) }}</template>
+        <template v-else>
+          <span
+            v-tooltip="getItemValue(item, header.value).length > 50?getItemValue(item, header.value):''"
+          >{{ getItemValue(item, header.value) | truncate(50) }}</span>
+        </template>
       </template>
 
       <template v-if="apiResponse" v-slot:body.append="{ headers }">
@@ -582,10 +586,12 @@ export default {
       });
     },
     getItemValue(item, dotNotationString) {
-      return dotNotationString.split(".").reduce((o, i) => {
+      let value = dotNotationString.split(".").reduce((o, i) => {
         if (o) return o[i];
         return null;
       }, item);
+
+      return value;
     },
   },
 };
