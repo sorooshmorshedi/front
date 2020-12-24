@@ -4,6 +4,8 @@
     :isEditing.sync="isEditing"
     :showList="false"
     :listRoute="{name:'OilCompanyLadingsList'}"
+    exportBaseUrl="dashtbashi/export/oilCompanyLadings"
+    :exportParams="{id: id}"
     :canDelete="canDelete"
     :canSubmit="canSubmit"
     :confirmBtnText="confirmBtnText"
@@ -343,8 +345,6 @@ export default {
 
         let item = this.copy(row);
         item = this.extractIds(item);
-        item.bed = +item.bed;
-        item.bes = +item.bes;
 
         data.items.items.push(item);
       });
