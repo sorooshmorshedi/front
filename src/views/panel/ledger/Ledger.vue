@@ -122,6 +122,7 @@ export default {
     getFiltersTemplate() {
       return {
         financial_year: this.financialYear.id,
+        account_title: "",
         account__code__startswith: "",
         order_sanads_by: "code",
         floatAccount: null,
@@ -154,6 +155,11 @@ export default {
       this.ledger.account = this.ledger.floatAccount = this.ledger.costCenter = null;
     },
     "ledger.account"() {
+      if (this.ledger.account) {
+        this.filters.account_title =
+          this.ledger.account.title || this.ledger.account.name;
+      }
+
       if (this.ledger.level.includes("level")) {
         this.filters.account__code__startswith = this.ledger.account
           ? this.ledger.account.code

@@ -168,21 +168,21 @@ export default {
           filterable: this.filterable,
         },
       ];
-      if (this.showAccountInTable) {
-        headers = headers.concat([
-          {
-            text: "کد حساب",
-            value: "account.code",
-            showRangeFilter: true,
-            sortable: false,
-          },
-          {
-            text: "نام حساب",
-            value: "account.name",
-            sortable: false,
-          },
-        ]);
-      }
+      headers = headers.concat([
+        {
+          text: "کد حساب",
+          value: "account.code",
+          showRangeFilter: true,
+          sortable: false,
+          show: this.showAccountInTable,
+        },
+        {
+          text: "نام حساب",
+          value: "account.name",
+          sortable: false,
+          show: this.showAccountInTable,
+        },
+      ]);
       headers = headers.concat([
         {
           text: "بدهکار",
@@ -199,25 +199,25 @@ export default {
           filterable: this.filterable,
         },
       ]);
-      if (this.showRemain) {
-        headers = headers.concat([
-          {
-            text: "مانده",
-            value: "remain",
-            type: "numeric",
-            sortable: false,
-            filterable: false,
-            align: "center",
-          },
-          {
-            text: "تشخیص",
-            value: "remain_type",
-            sortable: false,
-            filterable: false,
-            align: "center",
-          },
-        ]);
-      }
+      headers = headers.concat([
+        {
+          text: "مانده",
+          value: "remain",
+          type: "numeric",
+          sortable: false,
+          filterable: false,
+          align: "center",
+          show: this.showRemain,
+        },
+        {
+          text: "تشخیص",
+          value: "remain_type",
+          sortable: false,
+          filterable: false,
+          align: "center",
+          show: this.showRemain,
+        },
+      ]);
 
       headers = headers.concat([
         {
