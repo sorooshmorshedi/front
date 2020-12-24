@@ -184,9 +184,7 @@
 
         <!-- other-->
         <template v-else>
-          <span
-            v-tooltip="getItemValue(item, header.value).length > 50?getItemValue(item, header.value):''"
-          >{{ getItemValue(item, header.value) | truncate(50) }}</span>
+          <truncate :value="getItemValue(item, header.value)" />
         </template>
       </template>
 
@@ -215,6 +213,7 @@
 import XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import _ from "lodash";
+import Truncate from "./Truncate"
 
 export default {
   props: {
@@ -249,6 +248,9 @@ export default {
         return [];
       },
     },
+  },
+  components: {
+    Truncate,
   },
   data() {
     return {
