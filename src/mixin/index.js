@@ -37,7 +37,17 @@ Vue.mixin({
     },
     urlQuery() {
       return this.$route.query;
-    }
+    },
+    isXs() {
+      return (window.innerWidth <= 600)
+    },
+    isSm() {
+      return (window.innerWidth >= 600 && window.innerWidth < 960)
+    },
+    isMd() {
+      return (window.innerWidth >= 960 && window.innerWidth < 1264)
+    },
+
   },
   created() {
 

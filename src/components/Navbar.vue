@@ -1,5 +1,19 @@
 <template>
   <v-list nav dense class="navbar-list white--text">
+    <v-list-item class="grey lighten-4" flat v-if="user && isXs">
+      <v-list-item-icon>
+        <v-icon class="navbar-icon indigo--text mt-3 mr-1">fa fa-user</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content class="black--text">
+        <v-list-item-title class="text-center">{{ user.name }}</v-list-item-title>
+      </v-list-item-content>
+      <v-list-item-action>
+        <v-btn text icon color="red" class="rotate-180" @click="$emit('logout')">
+          <v-icon>logout</v-icon>
+        </v-btn>
+      </v-list-item-action>
+    </v-list-item>
+
     <navbar-list-item
       v-for="(route, i) in routes"
       class="level-0"

@@ -5,31 +5,32 @@
         <m-system-bar />
       </v-system-bar>
       <v-navigation-drawer
+        v-if="user"
         v-show="!isPrinting"
         app
-        right
+        fixed
         clipped
         class="indigo lighten-1 white--text"
         dark
-        :value="showDrawer"
-        v-if="user"
-        mini-variant
-        permanent
-        expand-on-hover
+        v-model="showDrawer"
+        right
+        :temporary="isXs"
+        :permanent="!isXs"
+        :mini-variant="!isXs"
+        :expand-on-hover="!isXs"
         :mobile-breakpoint="0"
-        :bottom="true"
       >
-        <m-navbar />
+        <m-navbar @logout="logout" />
       </v-navigation-drawer>
 
       <v-app-bar app clipped-right class="indigo darken-1 app-bar" v-if="user" v-show="!isPrinting">
-        <v-app-bar-nav-icon @click="showDrawer = !showDrawer" class="white--text" />
+        <v-app-bar-nav-icon v-if="isXs" @click="showDrawer = !showDrawer" class="white--text  ml-4" />
 
         <v-btn
           v-if="company"
           :to="{name: 'Companies'}"
           depressed
-          class="white mr-4"
+          class="white"
           :title="company.id"
         >{{ company.name }}</v-btn>
         <v-btn
@@ -115,8 +116,6 @@
         </span>
       </v-app-bar>
 
-      <loader />
-
       <v-main class="app-background-color">
         <v-container fluid>
           <router-view></router-view>
@@ -159,6 +158,8 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <loader />
   </v-app>
 </template>
 

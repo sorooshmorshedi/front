@@ -93,7 +93,7 @@
                             tile
                             borderless
                           >
-                            <v-tooltip top v-for="(btn, i) in getPermissionBtns(model)">
+                            <v-tooltip top v-for="(btn, i) in getPermissionBtns(model)" :key="i">
                               <template v-slot:activator="{ on, attrs }">
                                 <v-btn
                                   :style="(getPermissionBtns(model).length != i-1)?'border-left: 1px solid black':''"

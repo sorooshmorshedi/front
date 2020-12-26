@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --host localhost --port 8080",
+    "serve": "vue-cli-service serve --port 8080",
     "build": "vue-cli-service build",
     "deploy": "npm run build && git add . && git commit --amend -CHEAD && git push arvan"
   },
