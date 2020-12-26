@@ -345,7 +345,20 @@ export default {
 
         let item = this.copy(row);
         item = this.extractIds(item);
-
+        let decimalKeys = [
+          "gross_price",
+          "insurance_price",
+          "tax_value",
+          "complication_value",
+          "total_value",
+          "complication_pricde",
+          "company_commission",
+          "car_income",
+          "net_price",
+        ];
+        for (const key of decimalKeys) {
+          if (item[key]) item[key] = Number(item[key]).toFixed(6);
+        }
         data.items.items.push(item);
       });
 
