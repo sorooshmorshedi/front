@@ -5,27 +5,45 @@
         <v-card-title v-if="showHeader">
           <span>{{ title }}</span>
           <v-spacer></v-spacer>
-          <v-btn
-            small
-            v-if="showClearBtn"
-            @click.prevent="emit('clearForm')"
-            href="#/"
-            outlined
-            class="teal--text mr-1"
-          >جدید</v-btn>
-          <v-btn small v-if="showListBtn" class="light-blue white--text mr-1" :to="listRoute">لیست</v-btn>
-          <slot name="header-btns"></slot>
-          <template v-if="hasExport">
+          <div class="d-flex flex-wrap justify-center mt-2">
             <v-btn
               small
-              class="export-btn mr-1"
-              :href="printUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >چاپ</v-btn>
-            <v-btn small class="export-btn mr-1" :href="pdfUrl" rel="noopener noreferrer">PDF</v-btn>
-            <v-btn small class="export-btn mr-1" @click="downloadUrl(excelUrl)">اکسل</v-btn>
-          </template>
+              v-if="showClearBtn"
+              @click.prevent="emit('clearForm')"
+              href="#/"
+              outlined
+              class="teal--text mt-1 mt-md-0"
+            >جدید</v-btn>
+            <v-btn
+              small
+              v-if="showListBtn"
+              class="light-blue white--text mr-1 mt-1 mt-md-0"
+              :to="listRoute"
+            >لیست</v-btn>
+            <slot name="header-btns"></slot>
+            <template v-if="hasExport">
+              <span>
+                <v-btn
+                  small
+                  class="export-btn mr-1 mt-1 mt-md-0"
+                  :href="printUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >چاپ</v-btn>
+                <v-btn
+                  small
+                  class="export-btn mr-1 mt-1 mt-md-0"
+                  :href="pdfUrl"
+                  rel="noopener noreferrer"
+                >PDF</v-btn>
+                <v-btn
+                  small
+                  class="export-btn mr-1 mt-1 mt-md-0"
+                  @click="downloadUrl(excelUrl)"
+                >اکسل</v-btn>
+              </span>
+            </template>
+          </div>
         </v-card-title>
 
         <v-card-text class="form-fields">
@@ -33,51 +51,87 @@
         </v-card-text>
 
         <v-card-actions v-if="showActions">
-          <template v-if="showNavigationBtns">
-            <v-btn @click="goToForm('first')" :disabled="!hasFirst" title="اولین" icon>
-              <v-icon>fa-fast-forward</v-icon>
-            </v-btn>
-            <v-btn @click="goToForm('prev')" :disabled="!hasPrev" icon title="قبلی" class="pr-1">
-              <v-icon>fa-step-forward</v-icon>
-            </v-btn>
-            <v-btn @click="goToForm('next')" :disabled="!hasNext" icon title="بعدی" class="pr-1">
-              <v-icon>fa-step-backward</v-icon>
-            </v-btn>
-            <v-btn @click="goToForm('last')" :disabled="!hasLast" icon title="آخرین" class="pr-1">
-              <v-icon>fa-fast-backward</v-icon>
-            </v-btn>
-          </template>
-          <v-spacer></v-spacer>
-          <div v-if="hasFinancialYear" class="order-first order-md-last">
-            <template v-if="isEditing">
-              <v-btn @click="emitDelete" v-if="canDelete" color="red" outlined>حذف</v-btn>
-              <v-btn
-                @click="submit(false)"
-                v-if="canSubmit"
-                class="w-100px mr-1 green white--text"
-              >ثبت</v-btn>
-              <v-btn
-                v-if="showSubmitAndClearBtn && canSubmit"
-                @click="submit(true)"
-                class="mr-1 green white--text"
-              >ثبت و صدور جدید</v-btn>
-              <v-btn
-                v-if="canCancelConfirm"
-                outlined
-                @click="cancelConfirm()"
-                color="red"
-              >{{ cancelConfirmBtnText }}</v-btn>
-              <v-btn
-                v-if="canConfirm"
-                @click="confirm()"
-                color="blue white--text"
-                class="mr-1"
-              >{{ confirmBtnText }}</v-btn>
-              <slot name="footer-btns"></slot>
-            </template>
-            <v-btn v-else-if="canEdit" @click="edit()" class="submit amber w-100px">ویرایش</v-btn>
-            <slot name="footer-outside-btns"></slot>
-          </div>
+          <v-row no-gutters class="d-flex flex-column-reverse flex-md-row mb-1">
+            <v-col cols="12" md="6" class="d-flex justify-center justify-md-start mt-2 mt-md-0">
+              <template v-if="showNavigationBtns">
+                <v-btn @click="goToForm('first')" :disabled="!hasFirst" title="اولین" icon>
+                  <v-icon>fa-fast-forward</v-icon>
+                </v-btn>
+                <v-btn
+                  @click="goToForm('prev')"
+                  :disabled="!hasPrev"
+                  icon
+                  title="قبلی"
+                  class="pr-1"
+                >
+                  <v-icon>fa-step-forward</v-icon>
+                </v-btn>
+                <v-btn
+                  @click="goToForm('next')"
+                  :disabled="!hasNext"
+                  icon
+                  title="بعدی"
+                  class="pr-1"
+                >
+                  <v-icon>fa-step-backward</v-icon>
+                </v-btn>
+                <v-btn
+                  @click="goToForm('last')"
+                  :disabled="!hasLast"
+                  icon
+                  title="آخرین"
+                  class="pr-1"
+                >
+                  <v-icon>fa-fast-backward</v-icon>
+                </v-btn>
+              </template>
+            </v-col>
+            <v-col cols="12" md="6" class="d-flex justify-center justify-md-end">
+              <div v-if="hasFinancialYear" class="d-flex flex-wrap justify-center">
+                <template v-if="isEditing">
+                  <v-btn
+                    @click="emitDelete"
+                    v-if="canDelete"
+                    color="red"
+                    outlined
+                    class="mt-1 mt-md-0 ml-1"
+                  >حذف</v-btn>
+                  <v-btn
+                    @click="submit(false)"
+                    v-if="canSubmit"
+                    class="w-100px ml-1 green white--text mt-1 mt-md-0"
+                  >ثبت</v-btn>
+                  <v-btn
+                    v-if="showSubmitAndClearBtn && canSubmit"
+                    @click="submit(true)"
+                    class="ml-1 mt-1 mt-md-0 green white--text"
+                  >ثبت و صدور جدید</v-btn>
+                  <v-btn
+                    v-if="canCancelConfirm"
+                    outlined
+                    @click="cancelConfirm()"
+                    color="red"
+                    class="mt-1 mt-md-0 ml-1"
+                  >{{ cancelConfirmBtnText }}</v-btn>
+                  <v-btn
+                    v-if="canConfirm"
+                    @click="confirm()"
+                    color="blue white--text"
+                    class="ml-1 mt-1 mt-md-0"
+                  >{{ confirmBtnText }}</v-btn>
+                  <slot name="footer-btns"></slot>
+                </template>
+                <v-btn
+                  v-else-if="canEdit"
+                  @click="edit()"
+                  class="submit amber w-100px mt-1 mt-md-0"
+                >ویرایش</v-btn>
+                <span class="mt-1 mt-md-0">
+                  <slot name="footer-outside-btns"></slot>
+                </span>
+              </div>
+            </v-col>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-col>

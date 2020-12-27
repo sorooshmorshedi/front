@@ -13,11 +13,12 @@
 }
 
 .tr-ware {
+  min-width: 200px;
   width: 280px;
-  ;
 }
 
 .tr-warehouse {
-  width: 180px;
-  ;
+  min-width: 120px !important;
+  width: 180px !important;
+
 }

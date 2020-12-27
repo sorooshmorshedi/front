@@ -128,7 +128,7 @@
                 <tr>
                   <th>#</th>
                   <th>* نام کالا</th>
-                  <th>* انبار</th>
+                  <th class="tr-warehouse" >* انبار</th>
                   <th>* تعداد</th>
 
                   <template v-if="!isCw">
@@ -555,7 +555,7 @@
           v-if="id && !isFpi"
           @click="definiteFactor"
           :disabled="item.is_definite"
-          class="blue white--text mr-1"
+          class="blue white--text"
         >قطعی کردن فاکتور</v-btn>
       </template>
     </m-form>

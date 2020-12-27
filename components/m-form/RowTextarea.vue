@@ -7,6 +7,7 @@
     :prepend-inner-icon="i != 0?'$curvedArrowLeftIcon':'far fa-clone'"
     :append-icon="i == 0?'':''"
     @click:prepend-inner="$emit('updateRowsExplanation', i)"
+    class="row-textarea"
   />
   <div v-else v-tooltip="value">
     <v-textarea :value="limitedValue" v-bind="$attrs" disabled ref="textarea" />
@@ -42,4 +43,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" >
+.row-textarea {
+  min-width: 140px;
+}
+</style>

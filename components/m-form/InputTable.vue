@@ -9,7 +9,7 @@
       @start="drag=true"
       @end="drag=false"
       tag="tbody"
-      draggable=".draggable"
+      :draggable="!isXs?'.draggable':''"
     >
       <slot name="tbody" />
     </draggable>

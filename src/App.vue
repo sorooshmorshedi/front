@@ -24,7 +24,7 @@
       </v-navigation-drawer>
 
       <v-app-bar app clipped-right class="indigo darken-1 app-bar" v-if="user" v-show="!isPrinting">
-        <v-app-bar-nav-icon v-if="isXs" @click="showDrawer = !showDrawer" class="white--text  ml-4" />
+        <v-app-bar-nav-icon v-if="isXs" @click="showDrawer = !showDrawer" class="white--text ml-4" />
 
         <v-btn
           v-if="company"
@@ -112,7 +112,7 @@
             max-height="50"
             max-width="50"
             src="/img/SobhanAccountingLogo.png"
-          ></v-img>
+          />
         </span>
       </v-app-bar>
 

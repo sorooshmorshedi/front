@@ -27,7 +27,11 @@
         :to="relatedForm.to"
       >{{ relatedForm.title }}</v-btn>
 
-      <v-btn small @click="copySanadToNewSanad" class="teal white--text mr-1">کپی سند به سند جدید</v-btn>
+      <v-btn
+        small
+        @click="copySanadToNewSanad"
+        class="teal white--text mr-1 mt-1 mt-md-0"
+      >کپی سند به سند جدید</v-btn>
     </template>
 
     <template>
@@ -86,7 +90,7 @@
             <template #thead>
               <tr>
                 <th>#</th>
-                <th>* کد و نام حساب</th>
+                <th class="tr-account">* کد و نام حساب</th>
                 <th>شرح ردیف</th>
                 <th>بدهکار</th>
                 <th class="d-print-none">

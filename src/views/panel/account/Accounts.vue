@@ -17,20 +17,20 @@
   >
     <template #header-btns>
       <template v-if="item.id != undefined">
-        <v-btn class="blue white--text mr-1" @click="openLedger(item)">دفتر این حساب</v-btn>
+        <v-btn class="blue white--text mr-1 mt-1 mt-md-1" @click="openLedger(item)">دفتر این حساب</v-btn>
       </template>
 
       <template v-for="i in 4" v-if="!isBank && !isPerson">
         <v-btn
           :key="i"
           v-if="i-1 != level"
-          class="blue white--text mr-1"
+          class="blue white--text mr-1 mt-1 mt-md-1"
           :to="`/panel/accounts/${i-1}`"
         >تعریف {{ getTitle(i-1) }}</v-btn>
         <v-btn
           :key="i"
           v-else
-          class="blue white--text mr-1"
+          class="blue white--text mr-1 mt-1 mt-md-1"
           @click="clearForm"
         >تعریف {{ getTitle(i-1) }}</v-btn>
       </template>

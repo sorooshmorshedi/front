@@ -1,5 +1,17 @@
 <template>
   <v-list nav dense class="navbar-list white--text">
+    <v-list-item class flat v-if="user && isXs">
+      <span class="d-block mx-auto px-5 py-2" style="width: 100%;">
+        <v-img
+          class="mx-auto"
+          style="border-radius: 30%"
+          contain
+          width="60%"
+          src="/img/SobhanAccountingLogo.png"
+        />
+      </span>
+    </v-list-item>
+
     <v-list-item class="grey lighten-4" flat v-if="user && isXs">
       <v-list-item-icon>
         <v-icon class="navbar-icon indigo--text mt-3 mr-1">fa fa-user</v-icon>

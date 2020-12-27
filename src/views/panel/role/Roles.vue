@@ -21,13 +21,8 @@
           </v-col>
           <v-col cols="12">
             <v-subheader>دسترسی ها</v-subheader>
-            <div class="d-flex">
-              <v-text-field
-                class="mr-2"
-                placeholder="جستوجو"
-                v-model="modelSearch"
-                :disabled="!isEditing"
-              />
+            <div class="d-flex flex-column flex-md-row">
+              <v-text-field placeholder="جستوجو" v-model="modelSearch" :disabled="!isEditing" />
               <v-spacer></v-spacer>
               <v-btn
                 @click="setAll({value: false})"
@@ -35,6 +30,7 @@
                 small
                 depressed
                 color="cyan white--text"
+                class="mt-1 mt-md-0"
               >عدم انتخاب همه</v-btn>
               <v-btn
                 @click="setAll({value: true})"
@@ -42,7 +38,7 @@
                 small
                 depressed
                 color="cyan white--text"
-                class="mr-1"
+                class="mt-1 mt-md-0 mr-md-1"
               >انتخاب همه</v-btn>
             </div>
             <v-expansion-panels multiple class="mt-3">
@@ -51,7 +47,7 @@
                   <v-row no-gutters>
                     <v-col>{{ model.label }}</v-col>
                     <v-spacer></v-spacer>
-                    <v-col class="text-left pl-6">
+                    <v-col class="text-left pl-6 d-flex justify-end">
                       <v-btn
                         @click.stop="setAll({model: model.name, value:false})"
                         icon
@@ -67,7 +63,6 @@
                       >
                         <v-icon>fa-check-double</v-icon>
                       </v-btn>
-
                       <v-btn
                         @click.stop="setAll({model: model.name, value:true, justOwn: true})"
                         icon

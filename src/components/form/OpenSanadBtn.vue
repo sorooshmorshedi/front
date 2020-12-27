@@ -1,5 +1,11 @@
 <template>
-  <v-btn @click="openSanad(sanad.id)" :class="btnClasses" v-bind="$attrs" :outlined="tableStyle">
+  <v-btn
+    @click="openSanad(sanad.id)"
+    :class="btnClasses"
+    v-bind="$attrs"
+    :outlined="tableStyle"
+    class="mt-1 mt-md-1"
+  >
     مشاهده سند
     <v-chip class="app-background-color mr-2" x-small>{{ sanad.code }}</v-chip>
   </v-btn>
