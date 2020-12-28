@@ -132,6 +132,7 @@
         :color="snackbar.color"
         :left="true"
         :outlined="false"
+        top
       >
         <!-- <v-btn color="white" outlined @click="$store.commit('setSnackbar', {show:false})">بستن</v-btn> -->
         <v-btn color="white" icon @click="$store.commit('setSnackbar', {show:false})">
