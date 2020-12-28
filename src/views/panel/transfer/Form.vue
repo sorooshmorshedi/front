@@ -29,7 +29,7 @@
             :disabled="!isEditing"
           />
         </v-col>
-        <v-col cols="3">
+        <v-col cols="12" md="3">
           <v-text-field
             v-if="item.created_by"
             label="کاربر"

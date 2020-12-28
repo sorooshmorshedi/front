@@ -182,6 +182,11 @@
           <v-icon v-else>fa-times</v-icon>
         </template>
 
+        <!-- date -->
+        <template v-else-if="isDate(header)">
+          <span class="nowrap">{{ getItemValue(item, header.value) }}</span>
+        </template>
+
         <!-- other-->
         <template v-else>
           <truncate :value="getItemValue(item, header.value)" />
@@ -213,7 +218,7 @@
 import XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import _ from "lodash";
-import Truncate from "./Truncate"
+import Truncate from "./Truncate";
 
 export default {
   props: {
@@ -616,5 +621,8 @@ tfoot {
 @page {
   size: auto;
   margin: 0mm;
+}
+.nowrap {
+  white-space: nowrap;
 }
 </style>

@@ -26,8 +26,7 @@
         <v-col cols="12"></v-col>
       </v-row>
     </v-card-text>
-    <v-card-actions>
-      <v-spacer></v-spacer>
+    <v-card-actions class="d-flex justify-center">
       <v-btn
         :disabled="financialYear.is_closed"
         @click="close"

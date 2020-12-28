@@ -107,10 +107,10 @@
                 <td>
                   <v-text-field v-model="row.bill_number" :disabled="!isEditing" />
                 </td>
-                <td>
+                <td class="tr-city">
                   <city-select v-model="row.origin" :disabled="!isEditing" />
                 </td>
-                <td>
+                <td class="tr-city">
                   <city-select v-model="row.destination" :disabled="!isEditing" />
                 </td>
                 <td>

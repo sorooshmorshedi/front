@@ -117,7 +117,7 @@
                     v-if="canConfirm"
                     @click="confirm()"
                     color="blue white--text"
-                    class="ml-1 mt-1 mt-md-0"
+                    class="mt-1 mt-md-0"
                   >{{ confirmBtnText }}</v-btn>
                   <slot name="footer-btns"></slot>
                 </template>

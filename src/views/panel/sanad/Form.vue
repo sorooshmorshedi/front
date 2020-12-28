@@ -23,7 +23,7 @@
     <template #header-btns>
       <v-btn
         v-if="relatedForm"
-        class="light-blue white--text mr-1"
+        class="light-blue white--text mr-1 mt-1 mt-md-0"
         :to="relatedForm.to"
       >{{ relatedForm.title }}</v-btn>
 

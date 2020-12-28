@@ -66,7 +66,7 @@
               clearable
             />
 
-              <!-- :item-text="(item) => item.code + ' - ' + item.contractor.name" -->
+            <!-- :item-text="(item) => item.code + ' - ' + item.contractor.name" -->
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
@@ -225,17 +225,17 @@
             />
           </v-col>
           <template v-if="item.driving">
-            <v-col cols="2">
+            <v-col cols="12" md="2">
               <money label="مبلغ کل" :value="ladingTotalValue" disabled />
             </v-col>
-            <v-col cols="2">
+            <v-col cols="12" md="2">
               <money
                 :label="'درآمد کمسیون ' + (item.driving.car.owner == 'o'?'متفرقه': 'شرکت')"
                 :value="companyCommissionIncome"
                 disabled
               />
             </v-col>
-            <v-col cols="2">
+            <v-col cols="12" md="2">
               <money
                 :label="item.driving.car.owner == 'o'?'حساب پرداختنی راننده متفرقه':'درآمد ماشین'"
                 :value="carIncome"

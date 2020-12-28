@@ -30,16 +30,16 @@
         <v-btn
           v-if="id && !isFpi && !isCw"
           @click="transactionsDialog = true"
-          class="light-blue white--text mr-1"
+          class="light-blue white--text mr-1 mt-1 mt-md-0"
         >مشاهده {{ transactionType.label }} ها</v-btn>
         <v-btn
           v-if="id && canSubmitTransaction"
-          class="teal white--text mr-1"
+          class="teal white--text mr-1 mt-1 mt-md-0"
           :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{accountId: item.account.id, factorId: id}}"
         >ثبت {{ transactionType.label }}</v-btn>
         <v-btn
           v-if="id && !isBack && !isFpi && !isCw"
-          class="teal white--text mr-1"
+          class="teal white--text mr-1 mt-1 mt-md-0"
           @click="reverseFactor"
         >
           ثبت
@@ -47,10 +47,14 @@
         </v-btn>
         <v-btn
           v-if="!isFpi && !isCw"
-          class="teal lue white--text mr-1"
+          class="teal lue white--text mr-1 mt-1 mt-md-0"
           :to="{name: 'Accounts', params: {level: 3, account_type: 'p'}, query: {showForm: true}}"
         >تعریف حساب اشخاص</v-btn>
-        <v-btn v-if="!isFpi && !isCw" @click="exportsDialog = true" class="export-btn mr-1">خروجی</v-btn>
+        <v-btn
+          v-if="!isFpi && !isCw"
+          @click="exportsDialog = true"
+          class="export-btn mr-1 mt-1 mt-md-0"
+        >خروجی</v-btn>
       </template>
 
       <template>
@@ -128,7 +132,7 @@
                 <tr>
                   <th>#</th>
                   <th>* نام کالا</th>
-                  <th class="tr-warehouse" >* انبار</th>
+                  <th class="tr-warehouse">* انبار</th>
                   <th>* تعداد</th>
 
                   <template v-if="!isCw">
@@ -263,7 +267,7 @@
 
         <v-row v-if="showFactorExpenses">
           <v-col cols="12" md="8" class>
-            <div class="pa-3 ml-5" style="border: 1px dashed #9e9e9e">
+            <div class="pa-3 ml-md-5" style="border: 1px dashed #9e9e9e">
               <div class="d-flex">
                 <h3>هزینه های فاکتور</h3>
                 <v-spacer></v-spacer>
@@ -314,64 +318,62 @@
             </div>
           </v-col>
           <v-col cols="12" md="4">
-            <v-simple-table bordered>
-              <table class="table table-bordered finals">
-                <tbody>
-                  <tr>
-                    <td>جمع:</td>
-                    <td colspan="2">{{ sum.sum | toMoney(0) }} ریال</td>
-                  </tr>
-                  <tr>
-                    <td>تخفیف</td>
-                    <td>
-                      <money
-                        :disabled="!isEditing || hasValue(item.discountPercent)"
-                        v-model="item.discountValue"
-                        placeholder="مبلغ"
-                      />
-                    </td>
-                    <td>
-                      <v-text-field
-                        :disabled="!isEditing || hasValue(item.discountValue)"
-                        type="number"
-                        min="0"
-                        max="100"
-                        v-model="item.discountPercent"
-                        placeholder="درصد"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>مبلغ فاکتور پس از تخفیف:</td>
-                    <td colspan="2">{{ sum.afterDiscount | toMoney(0) }} ریال</td>
-                  </tr>
-                  <tr v-if="item.has_tax">
-                    <td>مالیات</td>
-                    <td>
-                      <money
-                        v-if="!(!isEditing || hasValue(item.taxPercent))"
-                        v-model="item.taxValue"
-                        :value="sum.tax"
-                      />
-                      <money v-else :disabled="true" :value="sum.tax" :decimalScale="0" />
-                    </td>
-                    <td>
-                      <v-text-field
-                        :disabled="!isEditing || hasValue(item.taxValue)"
-                        type="number"
-                        min="0"
-                        max="100"
-                        v-model="item.taxPercent"
-                        placeholder="درصد"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>مبلغ کل فاکتور:</td>
-                    <td colspan="2">{{ sum.total | toMoney(0) }} ریال</td>
-                  </tr>
-                </tbody>
-              </table>
+            <v-simple-table bordered class="finals">
+              <tbody>
+                <tr>
+                  <td>جمع:</td>
+                  <td colspan="2">{{ sum.sum | toMoney(0) }} ریال</td>
+                </tr>
+                <tr>
+                  <td>تخفیف</td>
+                  <td>
+                    <money
+                      :disabled="!isEditing || hasValue(item.discountPercent)"
+                      v-model="item.discountValue"
+                      placeholder="مبلغ"
+                    />
+                  </td>
+                  <td>
+                    <v-text-field
+                      :disabled="!isEditing || hasValue(item.discountValue)"
+                      type="number"
+                      min="0"
+                      max="100"
+                      v-model="item.discountPercent"
+                      placeholder="درصد"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>مبلغ فاکتور پس از تخفیف:</td>
+                  <td colspan="2">{{ sum.afterDiscount | toMoney(0) }} ریال</td>
+                </tr>
+                <tr v-if="item.has_tax">
+                  <td>مالیات</td>
+                  <td>
+                    <money
+                      v-if="!(!isEditing || hasValue(item.taxPercent))"
+                      v-model="item.taxValue"
+                      :value="sum.tax"
+                    />
+                    <money v-else :disabled="true" :value="sum.tax" :decimalScale="0" />
+                  </td>
+                  <td>
+                    <v-text-field
+                      :disabled="!isEditing || hasValue(item.taxValue)"
+                      type="number"
+                      min="0"
+                      max="100"
+                      v-model="item.taxPercent"
+                      placeholder="درصد"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>مبلغ کل فاکتور:</td>
+                  <td colspan="2">{{ sum.total | toMoney(0) }} ریال</td>
+                </tr>
+              </tbody>
             </v-simple-table>
           </v-col>
         </v-row>
@@ -555,7 +557,7 @@
           v-if="id && !isFpi"
           @click="definiteFactor"
           :disabled="item.is_definite"
-          class="blue white--text"
+          class="blue white--text mr-1"
         >قطعی کردن فاکتور</v-btn>
       </template>
     </m-form>

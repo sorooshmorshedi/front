@@ -4,7 +4,7 @@
     :class="btnClasses"
     v-bind="$attrs"
     :outlined="tableStyle"
-    class="mt-1 mt-md-1"
+    class="mt-1 mt-md-0"
   >
     مشاهده سند
     <v-chip class="app-background-color mr-2" x-small>{{ sanad.code }}</v-chip>

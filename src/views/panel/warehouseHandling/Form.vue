@@ -22,36 +22,41 @@
   >
     <template #header-btns>
       <template v-if="item.is_definite">
-        <v-btn
-          :to="{name: 'AdjustmentForm', params: {id:item.inputAdjustment, type: 'ia'}}"
-          class="blue white--text mr-1"
-        >مشاهده حواله</v-btn>
+        <span>
+          <v-btn
+            :to="{name: 'AdjustmentForm', params: {id:item.inputAdjustment, type: 'ia'}}"
+            class="blue white--text mr-1 mt-1 mt-md-0"
+          >مشاهده حواله</v-btn>
 
-        <v-btn
-          :to="{name: 'AdjustmentForm', params: {id:item.outputAdjustment, type: 'oa'}}"
-          class="blue white--text mr-1"
-        >مشاهده رسید</v-btn>
+          <v-btn
+            :to="{name: 'AdjustmentForm', params: {id:item.outputAdjustment, type: 'oa'}}"
+            class="blue white--text mr-1 mt-1 mt-md-0"
+          >مشاهده رسید</v-btn>
+        </span>
       </template>
 
       <template v-if="$refs.mForm">
-        <v-btn
-          small
-          class="export-btn mr-1"
-          :href="$refs.mForm.printUrl + '&hide_remains=true'"
-          target="_blank"
-          rel="noopener noreferrer"
-        >چاپ بدون مانده</v-btn>
-        <v-btn
-          small
-          class="export-btn mr-1"
-          :href="$refs.mForm.pdfUrl + '&hide_remains=true'"
-          rel="noopener noreferrer"
-        >PDF بدون مانده</v-btn>
-        <v-btn
-          small
-          class="export-btn mr-1"
-          @click="downloadUrl($refs.mForm.excelUrl + '&hide_remains=true')"
-        >اکسل بدون مانده</v-btn>
+        <span>
+          <v-btn
+            :block="isXs"
+            small
+            class="export-btn mr-1 mt-1 mt-md-0"
+            :href="$refs.mForm.printUrl + '&hide_remains=true'"
+            target="_blank"
+            rel="noopener noreferrer"
+          >چاپ بدون مانده</v-btn>
+          <v-btn
+            small
+            class="export-btn mr-1 mt-1 mt-md-0"
+            :href="$refs.mForm.pdfUrl + '&hide_remains=true'"
+            rel="noopener noreferrer"
+          >PDF بدون مانده</v-btn>
+          <v-btn
+            small
+            class="export-btn mr-1 mt-1 mt-md-0"
+            @click="downloadUrl($refs.mForm.excelUrl + '&hide_remains=true')"
+          >اکسل بدون مانده</v-btn>
+        </span>
       </template>
     </template>
 
@@ -208,7 +213,7 @@ export default {
           offset: 0,
         },
         success: (data) => {
-          data = data.results.slice(0, data.results.length - 1)
+          data = data.results.slice(0, data.results.length - 1);
           this.inventory = data;
           if (!this.id) {
             this.rows = data.map((o) => {

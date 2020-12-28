@@ -24,7 +24,7 @@
 
       <v-btn
         v-if="imprest.id != undefined"
-        class="blue white--text mr-1"
+        class="blue white--text mr-1 mt-1 mt-md-0"
         :to="{name: 'TransactionForm', params: {id: imprest.id, type: 'imprest'}}"
       >مشاهده پرداخت</v-btn>
     </template>
@@ -91,10 +91,10 @@
             <template #tbody>
               <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                 <td class="tr-counter">{{ i+1 }}</td>
-                <td style="max-width: 80px">
+                <td class="tr-date">
                   <date v-model="rows[i].date" :disabled="!isEditing" />
                 </td>
-                <td style="max-width: 100px">
+                <td class="tr-textarea">
                   <row-textarea
                     v-model="rows[i].explanation"
                     :disabled="!isEditing"
@@ -102,10 +102,7 @@
                     @updateRowsExplanation="updateRowsExplanation"
                   />
                 </td>
-                <td
-                  style="max-width: 280px"
-                  v-tooltip="accountParentsName(row.account).join(' > ')"
-                >
+                <td class="tr-account" v-tooltip="accountParentsName(row.account).join(' > ')">
                   <account-select
                     :horizontal="true"
                     items-type="level3"

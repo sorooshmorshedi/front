@@ -243,7 +243,8 @@ export default {
 @import "./styles/main";
 
 .app-bar {
-  overflow-y: auto;
+  overflow-y: hidden;
+  overflow-x: auto !important;
 
   /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none; /* IE and Edge */

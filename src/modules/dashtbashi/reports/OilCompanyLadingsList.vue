@@ -3,7 +3,7 @@
     <v-card-title>لیست بارگیری های شرکت نفت</v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="2" md="4">
+        <v-col cols="12" md="4">
           <v-autocomplete
             label="ماه"
             :items="months"

@@ -26,7 +26,7 @@
         <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
         <v-btn
           v-if="isImprest && id != undefined && hasPerm('', 'imprestSettlement')"
-          class="blue white--text mr-1"
+          class="blue white--text mr-1 mt-1 mt-md-0"
           :to="{name: 'ImprestSettlement', params: {id: item.id}}"
         >تسویه تنخواه</v-btn>
         <v-btn

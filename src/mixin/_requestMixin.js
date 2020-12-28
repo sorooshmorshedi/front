@@ -14,6 +14,8 @@ export default {
         localStorage.setItem('serverUrl', serverUrl)
       }
 
+          serverUrl = "https://api.app.sobhan.net/";
+
       return serverUrl
     },
     endpoint(url) {

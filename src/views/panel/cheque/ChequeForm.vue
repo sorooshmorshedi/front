@@ -24,7 +24,7 @@
       <template #header-btns>
         <v-btn
           v-if="id"
-          class="blue white--text mr-1"
+          class="blue white--text mr-1 mt-1 mt-md-0"
           :to="{ name: 'ChequeDetail', id: id, }"
         >مشاهده جزئیات چک</v-btn>
       </template>

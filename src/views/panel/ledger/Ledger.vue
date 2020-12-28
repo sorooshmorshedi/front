@@ -44,8 +44,10 @@
               <v-col cols="12" md="4">
                 <v-radio-group v-model="filters.order_sanads_by" row>
                   <template #label>مرتب سازی بر اساس:</template>
-                  <v-radio label="تاریخ سند" value="date" />
-                  <v-radio label="شماره سند" value="code" />
+                  <span>
+                    <v-radio label="تاریخ سند" value="date" />
+                    <v-radio label="شماره سند" value="code" />
+                  </span>
                 </v-radio-group>
               </v-col>
               <v-col cols="12">

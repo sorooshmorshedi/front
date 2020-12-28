@@ -17,7 +17,7 @@
     <template #header-btns>
       <v-btn
         v-if="item.id"
-        class="blue white--text mr-1"
+        class="blue white--text mr-1 mt-1 mt-md-0"
         :to="{name: 'ChequesList', params: {type: 'p'}, query: {filters: JSON.stringify({chequebook__id: item.id})}}"
       >مشاهده چک ها</v-btn>
     </template>

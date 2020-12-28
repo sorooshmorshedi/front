@@ -4,25 +4,25 @@
 
     <v-card-text>
       <v-row>
-        <v-col cols="12" md="2">
+        <v-col cols="12" class="d-flex flex-column flex-md-row">
           <date placeholder="از تاریخ" v-model="filters.from_date" />
-        </v-col>
-        <v-col cols="12" md="2">
-          <date placeholder="تا تاریخ" v-model="filters.to_date" />
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-switch label="در نظر نگرفتن سند بستن" v-model="filters.skipClosingSanad"></v-switch>
-        </v-col>
+          <date class="mr-md-3 mt-1 mt-md-0" placeholder="تا تاریخ" v-model="filters.to_date" />
+          <v-switch
+            class="mr-md-3 mt-3 mt-md-1"
+            label="در نظر نگرفتن سند بستن"
+            v-model="filters.skipClosingSanad"
+          ></v-switch>
+          <v-btn
+            :block="isXs"
+            class="blue white--text w-100px mt-3 mr-md-5 mt-md-0"
+            @click="getData()"
+          >گزارش</v-btn>
+          <v-spacer></v-spacer>
 
-        <v-col cols="12" md="2">
-          <v-btn @click="getData()" class="blue white--text w-100px mt-1">گزارش</v-btn>
-        </v-col>
-
-        <v-col cols="12" md="3" class="d-flex justify-end">
           <v-btn
             :href="this.endpoint('reports/balanceSheet/xlsx') + `?detailed=${detailed == true}&token=${token}`"
             target="_blank"
-            class="export-btn"
+            class="export-btn mr-md-3 mt-5 mt-md-0"
           >اکسل</v-btn>
         </v-col>
 
@@ -198,13 +198,13 @@ export default {
   components: { date },
   props: {
     detailed: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       d: {},
-      filters: {}
+      filters: {},
     };
   },
   created() {
@@ -231,22 +231,22 @@ export default {
         url: this.endpoint("reports/balanceSheet"),
         method: "get",
         params: {
-          ...this.filters
+          ...this.filters,
         },
-        success: data => {
+        success: (data) => {
           this.d = data;
-          Object.keys(this.d).forEach(k => {
+          Object.keys(this.d).forEach((k) => {
             this.d[k].remain = this.toMoney(this.d[k].remain);
           });
-        }
+        },
       });
-    }
+    },
   },
   computed: {
     _() {
       return _;
-    }
-  }
+    },
+  },
 };
 </script>
 
