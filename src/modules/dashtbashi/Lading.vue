@@ -143,6 +143,19 @@
               :disabled="!isEditing"
             />
           </v-col>
+
+          <v-col cols="12" md="2">
+            <v-autocomplete
+              :return-object="true"
+              label="دریافت کننده اختلاف بارنامه"
+              v-model="item.lading_bill_difference_receiver"
+              :items="ladingBillDifferenceReceivers"
+              :disabled="!isEditing"
+              item-text="title"
+              item-value="id"
+            />
+          </v-col>
+
           <v-col cols="12" md="2">
             <v-autocomplete
               :return-object="false"

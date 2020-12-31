@@ -61,6 +61,15 @@ export default {
           id: "cnt"
         }
       ],
+      ladingBillDifferenceReceivers: [{
+          title: "راننده",
+          id: "drvr"
+        },
+        {
+          title: "شرکت",
+          id: "cmp"
+        }
+      ],
       remittancePaymentMethods: [{
           text: "کمیسیون و کرایه به شرکت",
           value: "tc"
