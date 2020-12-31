@@ -171,7 +171,9 @@
       <!-- Mask Data -->
       <template v-for="header in headers" v-slot:[getItemSlot(header.value)]="{ item }">
         <!-- numeric -->
-        <template v-if="isNumber(header)">{{ getItemValue(item, header.value) | toMoney }}</template>
+        <template v-if="isNumber(header)">
+          <span dir="ltr">{{ getItemValue(item, header.value) | toMoney }}</span>
+        </template>
 
         <!-- select -->
         <template v-else-if="isSelect(header)">{{ getSelectItemValue(header, item) }}</template>
