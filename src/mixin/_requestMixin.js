@@ -3,16 +3,6 @@ export default {
   methods: {
     getServerUrl() {
       let serverUrl = localStorage.getItem('serverUrl');
-
-      if (!serverUrl) {
-        if (this.isDev) {
-          serverUrl = "http://localhost:8001/";
-        } else {
-          serverUrl = "http://api." + window.location.hostname + "/";
-        }
-        localStorage.setItem('serverUrl', serverUrl)
-      }
-
       return serverUrl
     },
     endpoint(url) {

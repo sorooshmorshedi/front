@@ -6,6 +6,7 @@ node_modules
 .env.local
 .env.*.local
 .bitmap
+public/configs.jcon
 
 # Test files
 src/Test*

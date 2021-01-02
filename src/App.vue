@@ -204,7 +204,22 @@ export default {
     }),
   },
   created() {
-    this.getDateTime();
+    if (!this.isDev) {
+      this.request({
+        url: "/configs.json",
+        method: "get",
+        token: false,
+        success: (data) => {
+          let serverUrl = data.serverUrl;
+          localStorage.setItem("serverUrl", serverUrl);
+          this.log(`server url is : ${serverUrl}`);
+          this.getDateTime();
+        },
+      });
+    } else {
+      this.getDateTime();
+    }
+
     this.log(`server url is : ${this.getServerUrl()}`);
   },
   methods: {
