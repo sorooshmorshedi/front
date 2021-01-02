@@ -219,8 +219,6 @@ export default {
     } else {
       this.getDateTime();
     }
-
-    this.log(`server url is : ${this.getServerUrl()}`);
   },
   methods: {
     routeClick(routeName) {
