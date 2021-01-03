@@ -78,7 +78,7 @@
           <v-col cols="12" md="6">
             <v-switch
               v-if="isAdvari"
-              :disabled="item.id != undefined || !isEditing"
+              :disabled="!isEditing"
               label="موجودی کالای منفی"
               v-model="item.check_inventory"
               :false-value="true"
