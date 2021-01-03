@@ -19,18 +19,18 @@
         <v-btn
           :key="i"
           v-if="i-1 != level"
-          class="blue white--text mr-1 mt-1 mt-md-1"
+          class="blue white--text mr-1 mt-1 mt-md-0"
           :to="`/panel/wares/${i-1}`"
         >تعریف {{ getWareTitle(i-1) }}</v-btn>
         <v-btn
           :key="i"
           v-else
-          class="blue white--text mr-1 mt-1 mt-md-1"
+          class="blue white--text mr-1 mt-1 mt-md-0"
           @click="clearForm"
         >تعریف {{ getWareTitle(i-1) }}</v-btn>
       </template>
       <v-btn
-        class="blue white--text mr-1 mt-1 mt-md-1"
+        class="blue white--text mr-1 mt-1 mt-md-0"
         :to="{name:'Wares', params: {level:3}}"
       >تعریف کالا</v-btn>
     </template>
