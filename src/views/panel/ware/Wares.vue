@@ -29,12 +29,15 @@
           @click="clearForm"
         >تعریف {{ getWareTitle(i-1) }}</v-btn>
       </template>
-      <v-btn class="blue white--text mr-1 mt-1 mt-md-1" :to="{name:'Wares', params: {level:3}}">تعریف کالا</v-btn>
+      <v-btn
+        class="blue white--text mr-1 mt-1 mt-md-1"
+        :to="{name:'Wares', params: {level:3}}"
+      >تعریف کالا</v-btn>
     </template>
 
     <template #default>
       <v-row>
-        <v-col cols="12" :md="isWare?8:12" v-if="level != 0">
+        <v-col cols="12" md="12" v-if="level != 0">
           <v-autocomplete
             :return-object="true"
             :label="' * ' + getWareTitle(level - 1)"
@@ -45,16 +48,6 @@
             item-value="id"
           ></v-autocomplete>
         </v-col>
-        <template v-if="isWare">
-          <v-col cols="12" md="4">
-            <v-switch
-              :disabled="item.id != undefined || !isEditing"
-              label="کالا خدماتی است"
-              v-model="item.is_service"
-              hint="کالای خدماتی انبار گردانی ندارد"
-            ></v-switch>
-          </v-col>
-        </template>
         <v-col cols="12">
           <v-text-field label="کد" v-model="item.code" disabled />
         </v-col>
@@ -73,6 +66,26 @@
               :disabled="!isEditing"
             ></v-autocomplete>
           </v-col>
+
+          <v-col cols="12" md="6">
+            <v-switch
+              :disabled="item.id != undefined || !isEditing"
+              label="کالا خدماتی است"
+              v-model="item.is_service"
+              hint="کالای خدماتی انبار گردانی ندارد"
+            ></v-switch>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-switch
+              v-if="isAdvari"
+              :disabled="item.id != undefined || !isEditing"
+              label="موجودی کالای منفی"
+              v-model="item.check_inventory"
+              :false-value="true"
+              :true-value="false"
+            ></v-switch>
+          </v-col>
+
           <v-col cols="12" md="6">
             <money label="قیمت فروش" v-model="item.price" :disabled="!isEditing" />
           </v-col>

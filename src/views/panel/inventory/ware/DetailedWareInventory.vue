@@ -25,7 +25,18 @@
             :api-url="url"
             :headers="headers"
             :filters.sync="filters"
-          ></m-datatable>
+          >
+            <template #item.factor.code="{ item }">
+              <v-btn
+                v-if="item.factor.code"
+                text
+                color="blue"
+                icon
+                rounded
+                :to="{name: 'FactorForm', params: {id: item.factor.id, type: item.factor.type}}"
+              >{{item.factor.code}}</v-btn>
+            </template>
+          </m-datatable>
         </v-col>
       </v-row>
     </v-card-text>
@@ -36,7 +47,9 @@
 import _ from "lodash";
 import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
 import wareApiMixin from "@/mixin/wareApi";
+import Template from "@/views/Template.vue";
 export default {
+  components: { Template },
   mixins: [queryBinding, wareApiMixin],
   data() {
     return {

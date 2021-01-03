@@ -10,12 +10,15 @@
         <v-col cols="12" md="4">
           <v-select :items="waresStatuses" v-model="filters.status" label="وضعیت کالا"></v-select>
         </v-col>
+        <v-col cols="12" md="4" class="d-flex justify-center justify-md-end">
+          <v-btn
+            v-if="isAdvari"
+            @click="sortInventory"
+            color="blue white--text"
+          >مرتب سازی کاردکس کالا</v-btn>
+        </v-col>
         <v-col cols="12" class="all-wares-inventory">
-          <m-datatable
-            :api-url="url"
-            :headers="headers"
-            :filters.sync="filters"
-          />
+          <m-datatable :api-url="url" :headers="headers" :filters.sync="filters" ref="datatable" />
         </v-col>
       </v-row>
     </v-card-text>
@@ -115,6 +118,18 @@ export default {
       ],
       filters: {},
     };
+  },
+  methods: {
+    sortInventory() {
+      this.request({
+        url: this.endpoint(`wares/sortInventory`),
+        method: "post",
+        success: () => {
+          this.successNotify();
+          this.$refs.datatable.getDataFromApi();
+        },
+      });
+    },
   },
 };
 </script>
