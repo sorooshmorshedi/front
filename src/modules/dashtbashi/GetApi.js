@@ -4,51 +4,51 @@ export default {
     return {
       months: [{
           text: "فروردین",
-          value: 1,
+          value: "1",
         },
         {
           text: "اردیبهشت",
-          value: 2,
+          value: "2",
         },
         {
           text: "خرداد",
-          value: 3,
+          value: "3",
         },
         {
           text: "تیر",
-          value: 4,
+          value: "4",
         },
         {
           text: "مرداد",
-          value: 5,
+          value: "5",
         },
         {
           text: "شهریور",
-          value: 6,
+          value: "6",
         },
         {
           text: "مهر",
-          value: 7,
+          value: "7",
         },
         {
           text: "آبان",
-          value: 8,
+          value: "8",
         },
         {
           text: "آذر",
-          value: 9,
+          value: "9",
         },
         {
           text: "دی",
-          value: 10,
+          value: "10",
         },
         {
           text: "بهمن",
-          value: 11,
+          value: "11",
         },
         {
           text: "اسفند",
-          value: 12,
+          value: "12",
         },
       ],
 
