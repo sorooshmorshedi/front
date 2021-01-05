@@ -113,8 +113,8 @@ export default {
       }
 
       let receipt = {
-        'html': item.html + "&hide_prices=true",
-        'pdf': item.pdf + "&hide_prices=true"
+        'html': item.html + "&summarized=true&hide_prices=true&receipt=true",
+        'pdf': item.pdf + "&summarized=true&hide_prices=true&receipt=true"
       }
 
       return {
