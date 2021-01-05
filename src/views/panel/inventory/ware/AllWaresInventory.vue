@@ -121,14 +121,20 @@ export default {
   },
   methods: {
     sortInventory() {
-      this.request({
-        url: this.endpoint(`wares/sortInventory`),
-        method: "post",
-        success: () => {
-          this.successNotify();
-          this.$refs.datatable.getDataFromApi();
-        },
-      });
+      if (
+        confirm(
+          ` آیا مرتب سازی کاردکس در سال مالی ${this.financialYear.name} انجام شود؟ `
+        )
+      ) {
+        this.request({
+          url: this.endpoint(`wares/sortInventory`),
+          method: "post",
+          success: () => {
+            this.successNotify();
+            this.$refs.datatable.getDataFromApi();
+          },
+        });
+      }
     },
   },
 };
