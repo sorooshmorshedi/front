@@ -172,7 +172,10 @@
       <template v-for="header in headers" v-slot:[getItemSlot(header.value)]="{ item }">
         <!-- numeric -->
         <template v-if="isNumber(header)">
-          <span dir="ltr">{{ getItemValue(item, header.value) | toMoney }}</span>
+          <span
+            dir="ltr"
+            :class="getNumericClasses(item, header.value)"
+          >{{ getItemValue(item, header.value) | toMoney }}</span>
         </template>
 
         <!-- select -->
@@ -461,6 +464,11 @@ export default {
       else flag = this.numericValues.includes(header.value);
       if (flag) header.align = "center";
       return flag;
+    },
+    getNumericClasses(item, valueKey) {
+      let value = this.getItemValue(item, valueKey);
+      if (value < 0) return "red--text";
+      return "";
     },
     isBoolean(header) {
       let flag = false;
