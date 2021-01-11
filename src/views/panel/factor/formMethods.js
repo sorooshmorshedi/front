@@ -96,7 +96,6 @@ export default {
     getSerialized() {
       let factor = this.copy(this.item);
       factor = this.extractIds(factor);
-      if (this.isFpi) factor.type = 'fpi';
 
       let items = [];
       this.rows.forEach((row, i) => {

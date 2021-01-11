@@ -18,18 +18,10 @@ export default {
       else return 'persons';
     },
     createUrl() {
-      if (this.isFpi) {
-        return "factors/firstPeriodInventory"
-      } else {
-        return 'factors/factors/'
-      }
+      return 'factors/factors/'
     },
     updateUrl() {
-      if (this.isFpi) {
-        return "factors/firstPeriodInventory"
-      } else {
-        return `factors/factors/${this.id}/`
-      }
+      return `factors/factors/${this.id}/`
     },
     listRoute() {
       return {
@@ -40,7 +32,7 @@ export default {
       }
     },
     isFpi() {
-      return this.type == 'firstPeriodInventory';
+      return this.type == 'fpi';
     },
     isCw() {
       return this.type == 'cw';
@@ -55,7 +47,7 @@ export default {
           return "فاکتور خرید";
         case "backFromBuy":
           return "فاکتور برگشت از خرید";
-        case "firstPeriodInventory":
+        case "fpi":
           return "موجودی اول دوره";
         case "cw":
           return "حواله ی کالای مصرفی";
