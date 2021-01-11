@@ -1,6 +1,6 @@
 <template>
   <v-list-item
-    v-if="!hasChild"
+    v-if="!hasChild && !route.hide"
     class="navbar-list-item"
     :to="route.to"
     exact
@@ -18,7 +18,7 @@
   </v-list-item>
 
   <v-list-group
-    v-else-if="route.show"
+    v-else-if="route.show && !route.hide"
     no-action
     :sub-group="subGroup"
     class="navbar-list-item"

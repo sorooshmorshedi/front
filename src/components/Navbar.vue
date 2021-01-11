@@ -285,7 +285,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
-                      type: "firstPeriodInventory",
+                      type: "fpi",
                     },
                   },
                   title: "ثبت موجودی اول دوره",
@@ -779,6 +779,7 @@ export default {
             },
             {
               title: "حواله کالای مصرفی",
+              hide: true,
               children: [
                 {
                   perm: "create.consumptionWareFactor",
