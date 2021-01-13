@@ -8,9 +8,11 @@
             <v-col cols="12">
               <account-select
                 label="حساب"
-                :deep-select="false"
                 items-type="level3"
+                :horizontal="true"
                 @input="(v) => filters.account = v.id"
+                @update:floatAccount="v => filters.floatAccount = v.id"
+                @update:costCenter="v => filters.costCenter = v.id"
               />
             </v-col>
             <v-col cols="12" v-if="filters.account">
