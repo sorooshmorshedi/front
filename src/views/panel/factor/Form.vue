@@ -31,12 +31,12 @@
           v-if="id && !isFpi && !isCw"
           @click="transactionsDialog = true"
           class="light-blue white--text mr-1 mt-1 mt-md-0"
-        >مشاهده {{ transactionType.label }} ها</v-btn>
+        >مشاهده {{ transactionLink.label }} ها</v-btn>
         <v-btn
           v-if="id && canSubmitTransaction"
           class="teal white--text mr-1 mt-1 mt-md-0"
-          :to="{name: 'TransactionForm', params: {transactionType: transactionType.name}, query:{accountId: item.account.id, factorId: id}}"
-        >ثبت {{ transactionType.label }}</v-btn>
+          :to="transactionLink.to"
+        >ثبت {{ transactionLink.label }}</v-btn>
         <v-btn
           v-if="id && !isBack && !isFpi && !isCw"
           class="teal white--text mr-1 mt-1 mt-md-0"
@@ -508,7 +508,7 @@
 
         <v-dialog v-model="transactionsDialog" scrollable max-width="1200px">
           <v-card>
-            <v-card-title>{{ transactionType.label }} های فاکتور</v-card-title>
+            <v-card-title>{{ transactionLink.label }} های فاکتور</v-card-title>
             <v-card-text>
               <v-simple-table>
                 <thead>
@@ -531,7 +531,7 @@
                       <td>{{ p.transaction.explanation }}</td>
                       <td>
                         <v-btn @click="openTransaction(p.transaction)" class="blue white--text">
-                          مشاهده {{ transactionType.label }}
+                          مشاهده {{ transactionLink.label }}
                           <v-chip class="app-background-color mr-2" x-small>{{ p.transaction.code }}</v-chip>
                         </v-btn>
                       </td>

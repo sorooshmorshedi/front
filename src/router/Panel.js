@@ -147,7 +147,6 @@ export default [{
         component: TransactionForm,
         props: (route) => {
           return {
-            factorId: route.query.factorId,
             accountId: route.query.accountId,
             ...route.params,
           };

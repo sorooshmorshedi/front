@@ -168,20 +168,33 @@ export default {
     hasBijak() {
       return ["buy", "backFromBuy"].includes(this.type) || this.isFpi;
     },
-    transactionType() {
+    transactionType() {},
+    transactionLink() {
       let label;
-      let name;
+      let type;
       if (["buy", "backFromSale"].includes(this.type)) {
-        name = "payment";
-        label = "پرداخت ";
+        type = "payment";
+        label = "پرداخت";
       } else {
-        name = "receive";
-        label = "دریافت ";
+        type = "receive";
+        label = "دریافت";
+      }
+
+      let to = {
+        name: 'TransactionForm',
+        params: {
+          type: type,
+        },
+        query: {
+          'item.account': this.item.account.id,
+          'factorIds': String(this.id)
+        }
       }
       return {
         label,
-        name
+        to
       };
+
     },
     factorExpenseType() {
       if (this.isBuy || this.isBackFromSale) return 'buy'

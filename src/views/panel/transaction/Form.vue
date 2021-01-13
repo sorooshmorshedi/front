@@ -305,7 +305,6 @@ export default {
     },
     id: {},
     accountId: {},
-    factorId: {},
     modalMode: {
       default: false,
     },
@@ -415,19 +414,29 @@ export default {
       let account = this.itemAccounts.filter((o) => o.id == accountId)[0];
       this.item.account = account;
     },
-    selectNotPaidFactor(factorId) {
-      let factor = this.factors.filter((o) => o.id == factorId);
-      if (factor.length) factor = factor[0];
-      else {
-        console.error("Factor Not Found");
-        return;
+    selectNotPaidFactor(factorIds) {
+      let totalValue = 0;
+      for (let factorId of factorIds) {
+        let factor = this.factors.filter((o) => o.id == factorId);
+        if (factor.length) {
+          factor = factor[0];
+          if (factor.account.id != this.item.account.id) {
+            console.error(
+              "Factor account is not equal to transaction account: ",
+              factor.id
+            );
+          }
+          this.item.floatAccount = factor.floatAccount;
+          this.item.costCenter = factor.costCenter;
+          let value = factor.sum - factor.paidValue;
+          this.rows.push(this.getRowTemplate());
+          factor.payment.value = value;
+          totalValue += value;
+        } else {
+          console.error("Factor Not Found : ", factorId);
+        }
+        this.rows[0].value = totalValue;
       }
-      this.item.floatAccount = factor.floatAccount;
-      this.item.costCenter = factor.costCenter;
-      let value = factor.sum - factor.paidValue;
-      this.rows[0].value = value;
-      this.rows.push(this.getRowTemplate());
-      factor.payment.value = value;
     },
     getNotPaidFactors() {
       if (this.item.account && this.item.account.id)
@@ -463,7 +472,11 @@ export default {
             }
             this.factors.push(factor);
           }
-          if (this.factorId) this.selectNotPaidFactor(this.factorId);
+          let factorIds = this.urlQuery.factorIds;
+          if (factorIds) {
+            factorIds = factorIds.split(",");
+            this.selectNotPaidFactor(factorIds);
+          }
         },
       });
     },
