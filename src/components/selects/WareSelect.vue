@@ -1,8 +1,21 @@
 <template>
-  <div class="d-flex" :title="ware && ware.name">
-    <v-icon @click="openInventory" color="cyan" class="mr-3" :disabled="!ware">fa-pallet</v-icon>
-    <v-icon @click="showInventory" color="cyan" class="pl-2 mr-2" :disabled="!ware">fa-boxes</v-icon>
+  <div class="d-flex">
+    <v-icon
+      title="کاردکس"
+      @click="openInventory"
+      color="cyan"
+      class="mr-3"
+      :disabled="!ware"
+    >fa-pallet</v-icon>
+    <v-icon
+      title="موجودی"
+      @click="showInventory"
+      color="cyan"
+      class="pl-2 mr-2"
+      :disabled="!ware"
+    >fa-boxes</v-icon>
     <v-autocomplete
+      :title="ware && ware.name"
       :label="label"
       :items="wares.filter(o => o.level == 3)"
       v-model="ware"
