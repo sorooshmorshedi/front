@@ -10,15 +10,17 @@
                 label="حساب"
                 items-type="level3"
                 :horizontal="true"
-                @input="(v) => filters.account = v.id"
-                @update:floatAccount="v => filters.floatAccount = v.id"
-                @update:costCenter="v => filters.costCenter = v.id"
+                @input="(v) => filters.account = v?v.id:null"
+                @update:floatAccount="v => filters.floatAccount = v?v.id:null"
+                @update:costCenter="v => filters.costCenter = v?v.id:null"
               />
             </v-col>
             <v-col cols="12" v-if="filters.account">
               <sanad-item-list-report
                 :filters.sync="filters"
                 :showAccountInTable="false"
+                :showFinancialYear="true"
+                :showLink="false"
                 :sortable="true"
                 :filterable="true"
                 :showRemain="true"

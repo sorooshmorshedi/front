@@ -15,6 +15,7 @@
         <td colspan="4"></td>
         <td>منقول از صفحه قبل</td>
         <td v-if="showAccountInTable" colspan="2"></td>
+        <td v-if="showFinancialYear" colspan="1"></td>
         <td>{{ previousLastItem.comulative_bed | toMoney }}</td>
         <td>{{ previousLastItem.comulative_bes | toMoney }}</td>
         <template v-if="showRemain">
@@ -28,6 +29,7 @@
         <td colspan="4"></td>
         <td>مانده از قبل</td>
         <td v-if="showAccountInTable" colspan="2"></td>
+        <td v-if="showFinancialYear" colspan="1"></td>
         <td>{{ lastItem.previous_bed | toMoney }}</td>
         <td>{{ lastItem.previous_bes | toMoney }}</td>
         <template v-if="showRemain">
@@ -42,6 +44,7 @@
         <td colspan="4"></td>
         <td>جمع این صفحه</td>
         <td v-if="showAccountInTable" colspan="2"></td>
+        <td v-if="showFinancialYear" colspan="1"></td>
         <td>{{ pageSum['bed'] | toMoney }}</td>
         <td>{{ pageSum['bes'] | toMoney }}</td>
         <template v-if="showRemain">
@@ -53,6 +56,7 @@
         <td colspan="4"></td>
         <td>جمع تا این صفحه</td>
         <td v-if="showAccountInTable" colspan="2"></td>
+        <td v-if="showFinancialYear" colspan="1"></td>
         <td>{{ lastItem.comulative_bed | toMoney }}</td>
         <td>{{ lastItem.comulative_bes | toMoney }}</td>
         <template v-if="showRemain">
@@ -80,6 +84,12 @@ export default {
   props: {
     filters: {},
     showAccountInTable: {
+      required: true,
+    },
+    showFinancialYear: {
+      required: false,
+    },
+    showLink: {
       required: true,
     },
     sortable: {
@@ -147,6 +157,13 @@ export default {
     },
     headers() {
       let headers = [
+        {
+          text: "سال مالی",
+          value: "financial_year.name",
+          sortable: this.sortable,
+          filterable: this.filterable,
+          show: this.showFinancialYear,
+        },
         {
           text: "تاریخ",
           value: "sanad.date",
@@ -227,6 +244,7 @@ export default {
           filterable: false,
           align: "left",
           hideInExport: true,
+          show: this.showLink,
         },
       ]);
 
