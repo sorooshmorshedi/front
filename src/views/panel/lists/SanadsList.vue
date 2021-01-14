@@ -97,6 +97,10 @@ export default {
           text: "توضیحات",
           value: "explanation",
         },
+        {
+          text: "کاربر",
+          value: "created_by.name",
+        },
       ];
 
       headers.push({
