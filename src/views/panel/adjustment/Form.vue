@@ -24,7 +24,16 @@
         <v-col cols="12" md="2">
           <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" md="2">
+          <mtime
+            label=" * ساعت"
+            required
+            v-model="item.time"
+            :default="true"
+            :disabled="!isEditing"
+          />
+        </v-col>
+        <v-col cols="12" md="3">
           <v-textarea
             label="توضیحات"
             class="form-control"
