@@ -779,7 +779,7 @@ export default {
             },
             {
               title: "حواله کالای مصرفی",
-              hide: true,
+              hide: this.isAdvari,
               children: [
                 {
                   perm: "create.consumptionWareFactor",
