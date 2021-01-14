@@ -1,10 +1,18 @@
 <template>
   <div class="d-flex">
     <v-icon
+      v-if="factorType"
+      title="آخرین قیمت"
+      @click="showPrices"
+      color="cyan"
+      class="mr-3"
+      :disabled="!ware"
+    >fa-dollar-sign</v-icon>
+    <v-icon
       title="کاردکس"
       @click="openInventory"
       color="cyan"
-      class="mr-3"
+      class="mr-2"
       :disabled="!ware"
     >fa-pallet</v-icon>
     <v-icon
@@ -50,6 +58,24 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-if="ware" v-model="pricesDialog" scrollable max-width="1000px">
+      <v-card>
+        <v-card-title>آخرین قیمت های {{ ware.name }}</v-card-title>
+
+        <v-card-text>
+          <v-row>
+            <v-col cols="12">
+              <m-datatable
+                :headers="pricesHeaders"
+                api-url="reports/buySale"
+                :filters.sync="pricesFilters"
+              />
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -64,12 +90,54 @@ export default {
     returnObject: {
       default: true,
     },
+    factorType: {
+      default: null,
+    },
   },
   data() {
     return {
       ware: null,
       dialog: false,
       wareInventory: [],
+      pricesDialog: false,
+      pricesHeaders: [
+        {
+          text: "شماره فاکتور",
+          value: "factor.code",
+        },
+        {
+          text: "تاریخ",
+          value: "factor.date",
+          type: "date",
+        },
+        {
+          text: "تعداد",
+          value: "count",
+          type: "numeric",
+        },
+        {
+          text: "خریدار/فروشنده",
+          value: "factor.account.name",
+          type: "text",
+        },
+        {
+          text: "فی",
+          value: "fee",
+          type: "numeric",
+          sortable: false,
+        },
+        {
+          text: "مبلغ کل",
+          value: "total_value",
+          type: "numeric",
+          sortable: false,
+        },
+      ],
+      pricesFilters: {
+        offset: 0,
+        limit: 5,
+        factor__type__in: null,
+      },
     };
   },
   computed: {
@@ -115,8 +183,15 @@ export default {
         },
       });
     },
+    showPrices() {
+      this.pricesFilters.factor__type__in = this.factorType;
+      this.pricesDialog = true;
+    },
     setWare(value) {
-      if (this.value != this.ware) this.ware = this.value;
+      if (this.value != this.ware) {
+        this.ware = this.value;
+        this.pricesFilters.ware = this.ware.id;
+      }
     },
   },
   watch: {

@@ -318,7 +318,17 @@ export default {
       });
 
 
-    }
+    },
 
+    showPrices(ware) {
+      this.priceWare = ware;
+      if (this.item.account) {
+        this.pricesFilters.factor__account = this.item.account.id;
+        if (this.item.floatAccount) this.pricesFilters.factor__floatAccount = this.item.floatAccount.id;
+        if (this.item.costCenter) this.pricesFilters.factor__costCenter = this.item.costCenter.id;
+      }
+      this.pricesFilters.factor__type__in = this.type;
+      this.pricesDialog = true;
+    },
   }
 }

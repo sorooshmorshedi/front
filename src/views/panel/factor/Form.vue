@@ -132,6 +132,7 @@
                 <tr>
                   <th>#</th>
                   <th>* نام کالا</th>
+                  <th></th>
                   <th class="tr-warehouse">* انبار</th>
                   <th>* تعداد</th>
 
@@ -162,7 +163,21 @@
                 >
                   <td class="tr-counter">{{ i+1 }}</td>
                   <td class="tr-ware">
-                    <ware-select v-model="rows[i].ware" :disabled="!isEditing" />
+                    <ware-select
+                      v-model="rows[i].ware"
+                      :disabled="!isEditing"
+                      :factorType="type"
+                    />
+                  </td>
+                  <td>
+                    <v-btn
+                      icon
+                      color="cyan"
+                      :disabled="!item.account || !item.account.id || !rows[i].ware"
+                      @click="showPrices(rows[i].ware)"
+                    >
+                      <v-icon>fa-hand-holding-usd</v-icon>
+                    </v-btn>
                   </td>
                   <td class="tr-warehouse" :title="rows[i].warehouse && rows[i].warehouse.name">
                     <v-autocomplete
@@ -561,6 +576,24 @@
         >قطعی کردن فاکتور</v-btn>
       </template>
     </m-form>
+
+    <v-dialog v-if="priceWare" v-model="pricesDialog" scrollable max-width="1000px">
+      <v-card>
+        <v-card-title>آخرین قیمت های {{ priceWare.name }} برای {{ item.account.name }}</v-card-title>
+
+        <v-card-text>
+          <v-row>
+            <v-col cols="12">
+              <m-datatable
+                :headers="pricesHeaders"
+                api-url="reports/buySale"
+                :filters.sync="pricesFilters"
+              />
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -618,6 +651,45 @@ export default {
         hide_expenses: false,
         hide_remain: false,
       },
+
+      pricesDialog: false,
+      priceWare: null,
+      pricesFilters: {
+        offset: 0,
+        limit: 5,
+        factor__account: null,
+        factor__floatAccount: null,
+        factor__costCenter: null,
+        factor__type__in: null,
+      },
+      pricesHeaders: [
+        {
+          text: "شماره فاکتور",
+          value: "factor.code",
+        },
+        {
+          text: "تاریخ",
+          value: "factor.date",
+          type: "date",
+        },
+        {
+          text: "تعداد",
+          value: "count",
+          type: "numeric",
+        },
+        {
+          text: "فی",
+          value: "fee",
+          type: "numeric",
+          sortable: false,
+        },
+        {
+          text: "مبلغ کل",
+          value: "total_value",
+          type: "numeric",
+          sortable: false,
+        },
+      ],
     };
   },
   watch: {
