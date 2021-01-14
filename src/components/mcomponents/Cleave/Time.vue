@@ -3,6 +3,7 @@
     v-model="localValue"
     @input="change"
     dir="ltr"
+    :label="label"
     :placeholder="placeholder"
     :disabled="disabled"
     append-icon="fa-clock"
@@ -19,12 +20,21 @@ import IMask from "imask";
 
 export default {
   name: "Time",
-  props: ["value", "id", "default", "disabled", "placeholder"],
+  props: {
+    value: {},
+    id: {},
+    default: {},
+    disabled: {},
+    placeholder: {},
+    label: {
+      default: 'ساعت'
+    },
+  },
   data() {
     return {
       localValue: null,
       mask: null,
-      isDirty: false
+      isDirty: false,
     };
   },
   watch: {
@@ -34,7 +44,7 @@ export default {
         this.setToday();
       }
       this.change();
-    }
+    },
   },
   created() {
     this.mask = IMask.createMask({
@@ -43,14 +53,14 @@ export default {
         HH: {
           mask: IMask.MaskedRange,
           from: 0,
-          to: 23
+          to: 23,
         },
         MM: {
           mask: IMask.MaskedRange,
           from: 0,
-          to: 59
-        }
-      }
+          to: 59,
+        },
+      },
     });
   },
   mounted() {
@@ -75,8 +85,8 @@ export default {
       this.localValue = this.now.format("HH:mm");
       this.change();
       this.$emit("input", this.mask.value);
-    }
-  }
+    },
+  },
 };
 </script>
 

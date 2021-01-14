@@ -89,7 +89,15 @@
             :disabled="!isEditing"
           />
         </v-col>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="2">
+          <mtime
+            label="* ساعت ثبت انبار گردانی"
+            v-model="item.submit_time"
+            :default="true"
+            :disabled="!isEditing"
+          />
+        </v-col>
+        <v-col cols="12" md="2">
           <v-text-field label="* انبار گردان" v-model="item.handler" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
@@ -168,13 +176,14 @@
 
 <script>
 import money from "@/components/mcomponents/cleave/Money";
+import mtime from "@/components/mcomponents/cleave/Time";
 import date from "@/components/mcomponents/cleave/Date";
 import wareApiMixin from "@/mixin/wareApi";
 import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
   name: "Form",
-  components: { money, date },
+  components: { money, date, mtime },
   mixins: [wareApiMixin, MFormMixin],
   props: ["id"],
   data() {
