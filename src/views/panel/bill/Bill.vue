@@ -10,7 +10,7 @@
                 label="حساب"
                 items-type="level3"
                 :horizontal="true"
-                @input="(v) => filters.account = v?v.id:null"
+                @input="(v) => setAccount(v)"
                 @update:floatAccount="v => filters.floatAccount = v?v.id:null"
                 @update:costCenter="v => filters.costCenter = v?v.id:null"
               />
@@ -21,7 +21,7 @@
                 :showAccountInTable="false"
                 :showFinancialYear="true"
                 :showLink="false"
-                :sortable="true"
+                :sortable="false"
                 :filterable="true"
                 :showRemain="true"
                 :showPreviousRemain="false"
@@ -52,6 +52,8 @@ export default {
       filters: {
         account: null,
         title: "صورت حساب تفصیلی",
+        account_title: "",
+        order_sanads_by: "date",
       },
     };
   },
@@ -60,8 +62,14 @@ export default {
       return "صورت حساب تفصیلی";
     },
   },
-  methods: {},
-  watch: {},
+  methods: {
+    setAccount(account) {
+      if (account) {
+        this.filters.account = account.id;
+        this.filters.account_title = account.title;
+      }
+    },
+  },
 };
 </script>
 
