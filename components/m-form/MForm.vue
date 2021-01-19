@@ -346,6 +346,14 @@ export default {
 
 <style lang="scss">
 .form-fields {
+  .v-input {
+    font-size: 11px !important;
+  }
+  input {
+    font-size: 11px !important;
+    padding: 2px 0px !important;
+  }
+
   table {
     textarea {
       margin-top: 0px !important;
