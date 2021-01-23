@@ -10,9 +10,9 @@
                 label="حساب"
                 items-type="level3"
                 :horizontal="true"
-                @input="(v) => setAccount(v)"
-                @update:floatAccount="v => filters.floatAccount = v?v.id:null"
-                @update:costCenter="v => filters.costCenter = v?v.id:null"
+                v-model="bill.account"
+                :floatAccount.sync="bill.floatAccount"
+                :costCenter.sync="bill.costCenter"
               />
             </v-col>
             <v-col cols="12" v-if="filters.account">
@@ -49,8 +49,11 @@ export default {
   },
   data() {
     return {
+      bill: {},
       filters: {
         account: null,
+        floatAccount: null,
+        costCenter: null,
         title: "صورت حساب تفصیلی",
         account_title: "",
         order_sanads_by: "date",
@@ -60,6 +63,18 @@ export default {
   computed: {
     title() {
       return "صورت حساب تفصیلی";
+    },
+  },
+  watch: {
+    bill: {
+      deep: true,
+      handler() {
+        if (this.bill.account) this.filters.account = this.bill.account.id;
+        if (this.bill.floatAccount)
+          this.filters.floatAccount = this.bill.floatAccount.id;
+        if (this.bill.costCenter)
+          this.filters.costCenter = this.bill.costCenter.id;
+      },
     },
   },
   methods: {

@@ -79,7 +79,7 @@
 import accountApiMixin from "@/mixin/accountMixin";
 import _ from "lodash";
 export default {
-  name: "Ledger",
+  name: "SanadItemListReport",
   mixins: [accountApiMixin],
   props: {
     filters: {},
@@ -252,8 +252,13 @@ export default {
     },
   },
   watch: {
-    filters() {
-      this.$emit("update:filters", this.localFilters);
+    filters: {
+      deep: true,
+      handler() {
+        if (JSON.stringify(this.localFilters) != JSON.stringify(this.filters)) {
+          this.localFilters = this.filters;
+        }
+      },
     },
   },
   methods: {
