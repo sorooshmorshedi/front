@@ -255,9 +255,11 @@ export default {
     filters: {
       deep: true,
       handler() {
-        if (JSON.stringify(this.localFilters) != JSON.stringify(this.filters)) {
-          this.localFilters = this.filters;
-        }
+        Object.keys(this.filters).forEach((key) => {
+          if (this.filters[key] != this.localFilters[key]) {
+            this.localFilters[key] = this.filters[key];
+          }
+        });
       },
     },
   },

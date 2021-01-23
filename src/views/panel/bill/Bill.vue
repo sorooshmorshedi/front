@@ -5,7 +5,7 @@
         <v-card-title>{{ title }}</v-card-title>
         <v-card-text>
           <v-row>
-            <v-col cols="12">
+            <v-col cols="12" md="8">
               <account-select
                 label="حساب"
                 items-type="level3"
@@ -14,6 +14,9 @@
                 :floatAccount.sync="bill.floatAccount"
                 :costCenter.sync="bill.costCenter"
               />
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-switch label="احتساب مانده از قبل" v-model="filters.consider_previous_remain"></v-switch>
             </v-col>
             <v-col cols="12" v-if="filters.account">
               <sanad-item-list-report
@@ -57,6 +60,7 @@ export default {
         title: "صورت حساب تفصیلی",
         account_title: "",
         order_sanads_by: "date",
+        consider_previous_remain: "true",
       },
     };
   },
