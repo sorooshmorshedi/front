@@ -110,12 +110,26 @@ export default {
         }
       })
     },
+    getSalePriceTypes(force = false, init = false) {
+      if (!force && this.units.length) return;
+      return this.request({
+        url: this.endpoint('wares/salePriceTypes'),
+        method: 'get',
+        success: data => {
+          this.$store.commit('setWares', {
+            salePriceTypes: data
+          });
+          init && this.init();
+        }
+      })
+    },
   },
   computed: {
     ...mapState({
       wares: state => state.wares.wares,
       warehouses: state => state.wares.warehouses,
       units: state => state.wares.units,
+      salePriceTypes: state => state.wares.salePriceTypes,
       isGetting: state => state.isGetting
     }),
   }

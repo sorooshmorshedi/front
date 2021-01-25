@@ -21,6 +21,7 @@ import WaresTree from '@/views/panel/ware/WaresTree.vue';
 
 import Warehouses from '@/views/panel/ware/Warehouses.vue';
 import Units from '@/views/panel/ware/Units.vue';
+import SalePriceTypes from '@/views/panel/ware/SalePriceTypes.vue';
 
 import Sanad from '@/views/panel/sanad/Sanad.vue';
 import SanadForm from '@/views/panel/sanad/Form.vue';
@@ -126,10 +127,16 @@ export default [{
       name: 'Warehouses',
       path: 'warehouses',
       component: Warehouses
-    }, {
+    },
+    {
       name: 'Units',
       path: 'units',
       component: Units
+    },
+    {
+      name: 'SalePriceTypes',
+      path: 'salePriceTypes',
+      component: SalePriceTypes
     },
     {
       name: 'DefaultAccounts',

@@ -10,6 +10,8 @@
     :smaller-font="formattedAmount.length > 14"
     style="min-width: 90px;"
     v-bind="$attrs"
+    v-on="listeners"
+    autocomplete="off"
   >
     <template #append>
       <!-- <span class="py-1">ریال</span> -->
@@ -39,6 +41,13 @@ export default {
       formattedAmount: "",
     };
   },
+  computed: {
+    listeners() {
+      let listeners = {...this.$listeners};
+      delete listeners.input
+      return listeners;
+    },
+  },
   mounted() {
     this.setAmount(this.value);
   },
@@ -52,7 +61,7 @@ export default {
       if (!value) value = "";
       else {
         let numeric_value = Number(value);
-        numeric_value = Number(numeric_value.toFixed(this.decimalScale))
+        numeric_value = Number(numeric_value.toFixed(this.decimalScale));
         if (!isNaN(numeric_value)) value = numeric_value.toString();
         else value = String(value);
       }

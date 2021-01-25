@@ -29,6 +29,7 @@ export default new Vuex.Store({
       wares: [],
       warehouses: [],
       units: [],
+      salePriceTypes: [],
     },
     chequebooks: [],
     sanads: {
@@ -95,6 +96,7 @@ export default new Vuex.Store({
       wares.wares && (state.wares.wares = wares.wares);
       wares.warehouses && (state.wares.warehouses = wares.warehouses);
       wares.units && (state.wares.units = wares.units);
+      wares.salePriceTypes && (state.wares.salePriceTypes = wares.salePriceTypes);
     },
     setSanads(state, sanads) {
       sanads.sanads && (state.sanads.sanads = sanads.sanads);

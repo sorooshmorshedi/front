@@ -101,6 +101,7 @@ export default {
       this.rows.forEach((row, i) => {
         if (i == this.rows.length - 1) return;
         let item = this.copy(row);
+        item.count = item.unit_count * (item.ware.salePrices.filter(o => o.unit == item.unit.id)[0].conversion_factor || 1);
         item = this.extractIds(item);
         ["discountPercent", "discountValue"].forEach(
           k => {
@@ -159,7 +160,7 @@ export default {
       }
       this.rows.forEach((r, i) => {
         if (i == this.rows.length - 1) return;
-        if (!r.count || r.count == 0) {
+        if (!r.unit_count || r.unit_count == 0) {
           this.notify(`لطفا تعداد ردیف ${i + 1} را وارد کنید`, "danger");
           isValid = false;
         }
@@ -170,7 +171,7 @@ export default {
             isValid = false;
           }
         }
-        if (r.count == undefined) {
+        if (r.unit_count == undefined) {
           this.notify(`لطفا تعداد ردیف ${i + 1} را وارد کنید`, "danger");
           isValid = false;
         }
@@ -223,8 +224,8 @@ export default {
       this.factorExpensesCopy.splice(index, 1);
     },
     rowSum(row) {
-      if (!this.hasValue(row.fee) || !this.hasValue(row.count)) return 0;
-      return +row.fee * +row.count;
+      if (!this.hasValue(row.fee) || !this.hasValue(row.unit_count)) return 0;
+      return +row.fee * +row.unit_count;
     },
     rowDiscount(row) {
       if (!this.rowSum(row)) return 0;
@@ -330,5 +331,31 @@ export default {
       this.pricesFilters.factor__type__in = this.type;
       this.pricesDialog = true;
     },
+    getWareUnits(row) {
+      let ware = row.ware
+      let unitIds = ware.salePrices.map(o => o.unit)
+      let wareUnits = this.units.filter(o => unitIds.includes(o.id))
+      return wareUnits
+    },
+    getWarePrices(row) {
+      if (row.ware && row.unit) {
+        let salePrices = row.ware.salePrices;
+        let unit = row.unit;
+        let prices = salePrices.filter(o => o.unit == unit.id)[0].prices;
+        let result = []
+        for (let salePriceTypeId of Object.keys(prices)) {
+          let salePriceType = this.salePriceTypes.filter(o => o.id == salePriceTypeId)[0]
+          console.log(salePriceType, this.salePriceTypes, salePriceTypeId);
+          result.push({
+            price: prices[salePriceTypeId],
+            name: salePriceType.name
+          })
+        }
+        console.log(result);
+        return result
+      } else {
+        return []
+      }
+    }
   }
 }

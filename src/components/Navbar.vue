@@ -250,6 +250,13 @@ export default {
                   title: "دسته بندی",
                 },
                 {
+                  perm: "salePriceType",
+                  to: {
+                    name: "SalePriceTypes",
+                  },
+                  title: "انواع نرخ های فروش",
+                },
+                {
                   perm: "ware",
                   to: {
                     name: "Wares",

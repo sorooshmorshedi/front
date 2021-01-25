@@ -133,6 +133,7 @@
                   <th>#</th>
                   <th>* نام کالا</th>
                   <th></th>
+                  <th>واحد</th>
                   <th class="tr-warehouse">* انبار</th>
                   <th>* تعداد</th>
 
@@ -151,7 +152,6 @@
                   </template>
 
                   <th>توضیحات</th>
-                  <th v-if="isBuy">قیمت جدید فروش</th>
                   <th class="d-print-none"></th>
                 </tr>
               </template>
@@ -163,11 +163,7 @@
                 >
                   <td class="tr-counter">{{ i+1 }}</td>
                   <td class="tr-ware">
-                    <ware-select
-                      v-model="rows[i].ware"
-                      :disabled="!isEditing"
-                      :factorType="type"
-                    />
+                    <ware-select v-model="rows[i].ware" :disabled="!isEditing" :factorType="type" />
                   </td>
                   <td>
                     <v-btn
@@ -178,6 +174,18 @@
                     >
                       <v-icon>fa-hand-holding-usd</v-icon>
                     </v-btn>
+                  </td>
+                  <td style="min-width: 100px">
+                    <v-autocomplete
+                      v-if="rows[i].ware"
+                      :items="getWareUnits(rows[i])"
+                      v-model="rows[i].unit"
+                      :title="rows[i].unit?rows[i].unit.title:''"
+                      item-text="name"
+                      item-value="id"
+                      :disabled="!isEditing"
+                      :return-object="true"
+                    ></v-autocomplete>
                   </td>
                   <td class="tr-warehouse" :title="rows[i].warehouse && rows[i].warehouse.name">
                     <v-autocomplete
@@ -192,11 +200,38 @@
                     <span v-else>-</span>
                   </td>
                   <td>
-                    <money v-model="rows[i].count" :disabled="!isEditing" />
+                    <money v-model="rows[i].unit_count" :disabled="!isEditing" />
                   </td>
                   <template v-if="!isCw">
                     <td>
-                      <money v-model="rows[i].fee" :disabled="!isEditing" />
+                      <v-menu bottom offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                          <money
+                            v-model="rows[i].fee"
+                            :disabledd="!isEditing"
+                            v-bind="attrs"
+                            v-on="on"
+                          />
+                        </template>
+
+                        <v-list class="pa-0">
+                          <v-list-item
+                            v-for="(price, i) in getWarePrices(rows[i])"
+                            :key="i"
+                            class="px-1"
+                            @click="rows[i].fee = price.price"
+                          >
+                            <v-list-item-content class="pa-0">
+                              <v-list-item-title style="font-size: 13px">
+                                <span>{{ price.name }}</span>
+                              </v-list-item-title>
+                              <v-list-item-subtitle class="text-left">
+                                <span>{{ price.price | toMoney }}</span>
+                              </v-list-item-subtitle>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
                     </td>
                     <td dir="ltr">
                       <money :value="rowSum(rows[i])" disabled :decimalScale="0" />
@@ -235,14 +270,6 @@
                       @updateRowsExplanation="updateRowsExplanation"
                     />
                   </td>
-                  <td v-if="isBuy">
-                    <money
-                      style="width: 80px"
-                      v-if="rows[i].ware"
-                      :disabled="!isEditing"
-                      v-model="rows[i].sale_price"
-                    />
-                  </td>
                   <td class="d-print-none">
                     <v-btn
                       v-if="i != rows.length-1"
@@ -266,7 +293,7 @@
                   <td v-if="isFpi">{{ sum.sum | toMoney(0) }}</td>
                   <td v-else></td>
 
-                  <td v-if="!isSale"></td>
+                  <td></td>
                   <td v-if="showDiscount" colspan="4"></td>
                   <td v-if="showTax && item.has_tax" colspan="2"></td>
                   <td>
@@ -716,6 +743,10 @@ export default {
         this.item.taxValue = 0;
       }
     },
+  },
+  mounted() {
+    this.getUnits();
+    this.getSalePriceTypes();
   },
 };
 </script>
