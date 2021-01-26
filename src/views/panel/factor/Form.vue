@@ -706,6 +706,10 @@ export default {
           type: "numeric",
         },
         {
+          text: "واحد",
+          value: "unit.name",
+        },
+        {
           text: "فی",
           value: "fee",
           type: "numeric",

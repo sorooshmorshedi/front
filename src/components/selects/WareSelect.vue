@@ -115,6 +115,10 @@ export default {
           type: "numeric",
         },
         {
+          text: "واحد",
+          value: "unit.name",
+        },
+        {
           text: "خریدار/فروشنده",
           value: "factor.account.name",
           type: "text",
