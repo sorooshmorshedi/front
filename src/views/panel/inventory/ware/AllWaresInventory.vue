@@ -22,13 +22,36 @@
         </v-col>
       </v-row>
     </v-card-text>
+
+    <v-dialog v-model="errorDialog" scrollable max-width="1200px" transition="dialog-transition">
+      <v-card>
+        <v-card-title>اتمام عملیات مرتب سازی کاردکس کالا به دلیل منفی شدن کالا های زیر امکان پذیر نیست</v-card-title>
+
+        <v-card-text>
+          <m-datatable :headers="errorHeaders" :items="errors" :filters.sync="errorFilters">
+            <template #item.factor_item_order="{ item }">{{ +item.factor_item_order + 1 }}</template>
+            <template #item.factor.code="{ item }">
+              <v-btn
+                :to="{name: 'FactorForm', params: {id: item.factor.id, type: item.factor.type}}"
+                rounded
+                outlined
+                color="blue white--text"
+                target="_blank"
+              >{{ item.factor.code }}</v-btn>
+            </template>
+          </m-datatable>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
 import _ from "lodash";
 import wareApiMixin from "@/mixin/wareApi";
+import MDatatable from "@/components/mcomponents/datatable/MDatatable.vue";
 export default {
+  components: { MDatatable },
   mixins: [wareApiMixin],
   data() {
     return {
@@ -117,11 +140,33 @@ export default {
         },
       ],
       filters: {},
+      errors: [],
+      errorDialog: false,
+      errorFilters: {},
+      errorHeaders: [
+        {
+          text: "کالا",
+          value: "ware_name",
+        },
+        {
+          text: "فاکتور",
+          value: "factor.code",
+        },
+        {
+          text: "شماره ردیف",
+          value: "factor_item_order",
+        },
+        {
+          text: "تعداد کسری",
+          value: "count",
+        },
+      ],
     };
   },
   methods: {
     sortInventory() {
       if (
+        true ||
         confirm(
           ` آیا مرتب سازی کاردکس در سال مالی ${this.financialYear.name} انجام شود؟ `
         )
@@ -132,6 +177,10 @@ export default {
           success: () => {
             this.successNotify();
             this.$refs.datatable.getDataFromApi();
+          },
+          error: (error) => {
+            this.errors = error.response.data[0]["messages"];
+            this.errorDialog = true;
           },
         });
       }
