@@ -181,7 +181,7 @@
                       :items="getWareUnits(rows[i])"
                       v-model="rows[i].unit"
                       :title="rows[i].unit?rows[i].unit.title:''"
-                      @change="rows[i].fee = null"
+                      @change="updateRowFee(rows[i])"
                       item-text="name"
                       item-value="id"
                       :disabled="!isEditing"
@@ -215,7 +215,7 @@
                           />
                         </template>
 
-                        <v-list class="pa-0">
+                        <v-list class="pa-0" v-if="isSale || isBackFromBuy">
                           <v-list-item
                             v-for="(price, i) in getWarePrices(rows[i])"
                             :key="i"

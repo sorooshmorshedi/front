@@ -345,16 +345,29 @@ export default {
         let result = []
         for (let salePriceTypeId of Object.keys(prices)) {
           let salePriceType = this.salePriceTypes.filter(o => o.id == salePriceTypeId)[0]
-          console.log(salePriceType, this.salePriceTypes, salePriceTypeId);
           result.push({
+            id: salePriceTypeId,
             price: prices[salePriceTypeId],
             name: salePriceType.name
           })
         }
-        console.log(result);
         return result
       } else {
         return []
+      }
+    },
+    updateRowFee(row) {
+      if ((this.isSale || this.isBackFromBuy) && this.item.account && row.ware && row.unit) {
+        let defaultSalePriceType = this.item.account.defaultSalePriceType;
+        let prices = this.getWarePrices(row);
+        let price = prices.find(o => o.id == defaultSalePriceType.id);
+        if (price) {
+          row.fee = price.price
+        } else {
+          row.fee = null
+        }
+      } else {
+        row.fee = null
       }
     }
   }
