@@ -194,6 +194,17 @@
             ></v-select>
           </v-col>
           <v-col cols="12" md="4">
+            <v-autocomplete
+              label="نرخ پیشفرض فروش"
+              :items="salePriceTypes"
+              v-model="item.defaultSalePriceType"
+              :return-object="false"
+              item-text="name"
+              item-value="id"
+              :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="4">
             <v-text-field label="موبایل" v-model="item.mobile" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
@@ -223,12 +234,6 @@
           <v-col cols="12" md="4">
             <v-text-field label="کد پستی" v-model="item.postal_code" :disabled="!isEditing" />
           </v-col>
-          <v-col cols="12" md="6">
-            <v-textarea rows="2" label="آدرس 1" v-model="item.address_1" :disabled="!isEditing" />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-textarea rows="2" label="آدرس 2" v-model="item.address_2" :disabled="!isEditing" />
-          </v-col>
           <v-col cols="12" md="4">
             <v-text-field
               label="شماره حساب 1"
@@ -246,6 +251,13 @@
           <v-col cols="12" md="4">
             <v-text-field label="کد اقتصادی" v-model="item.eghtesadi_code" :disabled="!isEditing" />
           </v-col>
+          <v-col cols="12" md="8"></v-col>
+          <v-col cols="12" md="6">
+            <v-textarea rows="2" label="آدرس 1" v-model="item.address_1" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-textarea rows="2" label="آدرس 2" v-model="item.address_2" :disabled="!isEditing" />
+          </v-col>
         </template>
       </v-row>
     </template>
@@ -254,10 +266,11 @@
 <script>
 import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";
 import AccountApiMixin from "@/mixin/accountMixin";
+import wareApiMixin from "@/mixin/wareApi";
 import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 
 export default {
-  mixins: [MFormMixin, AccountApiMixin],
+  mixins: [MFormMixin, AccountApiMixin, AccountApiMixin, wareApiMixin],
   props: {
     level: {
       requried: true,
@@ -398,6 +411,9 @@ export default {
       if (parent)
         this.item.parent = this.accounts.filter((o) => o.id == parent)[0];
     });
+  },
+  mounted() {
+    this.getSalePriceTypes();
   },
   methods: {
     setItem(item) {
