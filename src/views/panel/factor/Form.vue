@@ -181,6 +181,7 @@
                       :items="getWareUnits(rows[i])"
                       v-model="rows[i].unit"
                       :title="rows[i].unit?rows[i].unit.title:''"
+                      @change="rows[i].fee = null"
                       item-text="name"
                       item-value="id"
                       :disabled="!isEditing"
@@ -208,7 +209,7 @@
                         <template v-slot:activator="{ on, attrs }">
                           <money
                             v-model="rows[i].fee"
-                            :disabledd="!isEditing"
+                            :disabled="!isEditing"
                             v-bind="attrs"
                             v-on="on"
                           />
