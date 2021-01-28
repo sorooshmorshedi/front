@@ -98,15 +98,15 @@ export default {
       cols: [
         {
           text: "نام",
-          value: "name"
+          value: "name",
         },
         {
           text: "",
           value: "activate",
           sortable: false,
-          filterable: false
-        }
-      ]
+          filterable: false,
+        },
+      ],
     };
   },
   computed: {
@@ -118,7 +118,7 @@ export default {
     },
     deleteUrl() {
       return this.item.id && `${this.baseUrl}/${this.item.id}/`;
-    }
+    },
   },
   methods: {
     getData() {
@@ -129,9 +129,9 @@ export default {
       this.request({
         url: this.endpoint("companies/"),
         method: "get",
-        success: data => {
+        success: (data) => {
           this.items = data;
-        }
+        },
       });
     },
     activeCompany(item) {
@@ -139,14 +139,15 @@ export default {
         url: this.endpoint("users/setActiveCompany"),
         method: "post",
         data: {
-          company: item.id
+          company: item.id,
         },
-        success: data => {
+        success: (data) => {
           this.successNotify();
+          window.location.reload();
           this.getUser();
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>

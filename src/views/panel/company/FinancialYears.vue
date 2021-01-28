@@ -137,6 +137,7 @@ export default {
         },
         success: (data) => {
           this.successNotify();
+          window.location.reload();
           this.$store.commit("setUser", data);
         },
       });
