@@ -51,7 +51,7 @@
           :to="{name: 'Accounts', params: {level: 3, account_type: 'p'}, query: {showForm: true}}"
         >تعریف حساب اشخاص</v-btn>
         <v-btn
-          v-if="!isFpi && !isCw"
+          v-if="!isFpi && !isCw && id != false"
           @click="exportsDialog = true"
           class="export-btn mr-1 mt-1 mt-md-0"
         >خروجی</v-btn>

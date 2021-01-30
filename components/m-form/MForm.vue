@@ -281,7 +281,9 @@ export default {
       return this.financialYear && !this.financialYear.is_closed;
     },
     hasExport() {
-      return this.exportBaseUrl != undefined;
+      return (
+        this.exportBaseUrl != undefined && this.exportParams.id != undefined
+      );
     },
     printUrl() {
       if (!this.hasExport) return "";
