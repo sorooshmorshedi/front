@@ -220,6 +220,30 @@ export default {
     receiptLabel() {
       if (this.isSale || this.isBackFromBuy) return 'حواله'
       else return 'رسید'
+    },
+    quickTransactionOptions(){
+      if (["buy", "backFromSale"].includes(this.type)) {
+        return [
+          {
+            text: "وجه نقد سریع",
+            codename: "quickCachePayment"
+          }, {
+            text: "بانکی سریع",
+            codename: "quickBankPayment"
+          }
+        ]
+      } else {
+        return [
+          {
+            text: "وجه نقد سریع",
+            codename: "quickCacheReceive"
+          }, {
+            text: "کارتخوان سریع",
+            codename: "quickPosReceive"
+          }
+        ]
+      }
     }
+
   },
 }

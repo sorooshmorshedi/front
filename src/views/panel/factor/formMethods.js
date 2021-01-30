@@ -77,10 +77,11 @@ export default {
       })
     },
     openTransaction(transaction) {
+      console.log(transaction);
       let routeData = this.$router.resolve({
         name: "TransactionForm",
         params: {
-          transactionType: transaction.type,
+          type: transaction.type,
           id: transaction.id
         }
       });
@@ -369,6 +370,21 @@ export default {
       } else {
         row.fee = null
       }
+    },
+    createQuickTransaction(codename){
+
+      this.request({
+        url: this.endpoint('transactions/quickFactorTransaction'),
+        method: 'post',
+        data: {
+          factor_id: this.id,
+          default_account_codename: codename
+        },
+        success: data => {
+          this.setItem(data);
+          this.successNotify();
+        }
+      })
     }
   }
 }

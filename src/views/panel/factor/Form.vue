@@ -27,6 +27,7 @@
     >
       <template #header-btns>
         <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
+
         <v-btn
           v-if="id && !isFpi && !isCw"
           @click="transactionsDialog = true"
@@ -37,6 +38,32 @@
           class="teal white--text mr-1 mt-1 mt-md-0"
           :to="transactionLink.to"
         >ثبت {{ transactionLink.label }}</v-btn>
+        <v-menu bottom offset-y v-if="id && !isFpi && !isCw">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="teal white--text mr-1 mt-1 mt-md-0"
+              v-bind="attrs"
+              v-on="on"
+            >ثبت {{ transactionLink.label }} سریع</v-btn>
+          </template>
+
+          <v-list class="pa-0 pt-1">
+            <v-list-item
+              class="px-1 pb-1"
+              v-for="option in quickTransactionOptions"
+              :key="option.codename"
+            >
+              <v-list-item-content class="pa-0">
+                <v-btn
+                  @click="createQuickTransaction(option.codename)"
+                  block
+                  color="teal lighten-3"
+                >{{ option.text }}</v-btn>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
         <v-btn
           v-if="id && !isBack && !isFpi && !isCw"
           class="teal white--text mr-1 mt-1 mt-md-0"
@@ -769,6 +796,9 @@ export default {
 .custom-checkbox {
   padding-left: 0px;
   margin-left: 0px;
+}
+.v-list-item {
+  min-height: 30px !important;
 }
 </style>
 
