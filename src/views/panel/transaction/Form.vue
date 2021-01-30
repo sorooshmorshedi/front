@@ -201,7 +201,7 @@
       </template>
     </m-form>
 
-    <v-dialog v-model="factorsDialog" scrollable max-width="1200px">
+    <v-dialog v-model="factorsDialog" scrollable max-width="1200px" :persistent="isEditing">
       <v-card>
         <v-card-title>فاکتور های پرداخت نشده</v-card-title>
         <v-card-text>
@@ -226,16 +226,12 @@
                 <td>{{ factorTypes[f.type] }}</td>
                 <td>{{ f.explanation }}</td>
                 <td>{{ f.date }}</td>
-                <td>{{ f.sum | toMoney }}</td>
-                <td>{{ f.prevPaidValue | toMoney }}</td>
+                <td>{{ f.total_sum | toMoney }}</td>
+                <td>{{ f.previous_paid_value | toMoney }}</td>
                 <td v-if="!isEditing">{{ f.payment.value | toMoney }}</td>
                 <td>{{ f.remain | toMoney }}</td>
                 <td v-if="isEditing">
-                  <money
-                    v-model="f.payment.value"
-                    @input="validatePaidValue(f)"
-                    :disabled="!isEditing"
-                  />
+                  <money v-model="f.payment.value" :disabled="!isEditing" />
                 </td>
                 <td>
                   <v-btn @click="openFactor(f)" class="blue white--text">
@@ -259,11 +255,7 @@
             :disabled="!isEditing"
             class="blue white--text"
           >سرشکن کردن از بالا</v-btn>
-          <v-btn
-            :disabled="!isEditing || !isPaymentsValid"
-            @click="factorsDialog = false"
-            class="green white--text w-100px"
-          >تایید</v-btn>
+          <v-btn @click="validatePaidValues" class="green white--text w-100px">تایید</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -381,38 +373,42 @@ export default {
     },
   },
   methods: {
-    validatePaidValue(factor) {
-      let paymentValue = +factor.payment.value;
-      if (paymentValue < 0) {
-        factor.payment.value = 0;
-      } else if (paymentValue > 0) {
-        let remain = +factor.remain;
-        let oldPayments = 0;
-        factor.payments.forEach((payment) => {
-          if (payment.item == this.item.id) oldPayments += +payment.value;
-        });
-        if (paymentValue - oldPayments > remain)
-          this.$nextTick(() => (factor.payment.value = remain + oldPayments));
-      }
-    },
+    validatePaidValues() {
+      if (this.isEditing) {
+        let totalPaymentValue = 0;
 
-    getItemByPosition(position) {
-      return this.request({
-        url: this.endpoint(`${this.baseUrl}/byPosition`),
-        method: "get",
-        params: {
-          id: this.item.id,
-          position: position,
-          type: this.type,
-        },
-        success: (data) => {
-          this.setItem(data);
-        },
-      });
-    },
-    setAccount(accountId) {
-      let account = this.itemAccounts.filter((o) => o.id == accountId)[0];
-      this.item.account = account;
+        for (let factor of this.factors) {
+          let paymentValue = +factor.payment.value;
+          totalPaymentValue += paymentValue;
+
+          console.log(
+            paymentValue + +factor.previous_payment_value,
+            paymentValue,
+            +factor.previous_payment_value,
+            +factor.total_sum
+          );
+          if (
+            paymentValue + +factor.previous_paid_value >
+            +factor.total_sum
+          ) {
+            this.notify(
+              `پرداختی فعلی فاکتور شماره ${factor.code} بیشتر از مانده آن است.`,
+              "danger"
+            );
+            return;
+          }
+        }
+
+        if (totalPaymentValue > this.rowsSum("value")) {
+          this.notify(
+            `جمع کل مبلغ پرداختی فاکتور ها بیشتر از جمع ${this.title} است`,
+            "danger"
+          );
+          return;
+        }
+      }
+
+      this.factorsDialog = false;
     },
     selectNotPaidFactor(factorIds) {
       let totalValue = 0;
@@ -439,46 +435,49 @@ export default {
       }
     },
     getNotPaidFactors() {
-      if (this.item.account && this.item.account.id)
+      if (this.item.account && this.item.account.id) {
         if (this.id) this.item.id = this.id;
+        this.request({
+          url: this.endpoint("transactions/factors"),
+          method: "get",
+          params: {
+            transaction_type: this.type,
+            transaction_id: this.item.id,
+            account_id: this.item.account.id,
+            floatAccount_id:
+              this.item.floatAccount && this.item.floatAccount.id,
+            costCenter_id: this.item.costCenter && this.item.costCenter.id,
+          },
+          success: (data) => {
+            console.log(data);
+            this.factors = data;
+            let factorIds = this.urlQuery.factorIds;
+            if (factorIds) {
+              factorIds = factorIds.split(",");
+              this.selectNotPaidFactor(factorIds);
+            }
+          },
+        });
+      }
+    },
+
+    getItemByPosition(position) {
       return this.request({
-        url: this.endpoint("factors/notPaidFactors"),
+        url: this.endpoint(`${this.baseUrl}/byPosition`),
         method: "get",
         params: {
-          transactionType: this.type,
-          itemId: this.item.id,
-          accountId: this.item.account.id,
+          id: this.item.id,
+          position: position,
+          type: this.type,
         },
         success: (data) => {
-          this.factors = [];
-          for (let factor of data) {
-            factor.prevPaidValue = factor.paidValue;
-            factor.remain = +factor.sum - +factor.paidValue;
-
-            let payment = [];
-            if (this.item.id) {
-              payment = factor.payments.filter((o) => o.transaction == this.id);
-            }
-
-            if (payment.length) {
-              payment = payment[0];
-              factor.payment = this.copy(payment);
-              factor.prevPaidValue -= payment.value;
-            } else {
-              factor.payment = {
-                value: 0,
-                factor: factor.id,
-              };
-            }
-            this.factors.push(factor);
-          }
-          let factorIds = this.urlQuery.factorIds;
-          if (factorIds) {
-            factorIds = factorIds.split(",");
-            this.selectNotPaidFactor(factorIds);
-          }
+          this.setItem(data);
         },
       });
+    },
+    setAccount(accountId) {
+      let account = this.itemAccounts.filter((o) => o.id == accountId)[0];
+      this.item.account = account;
     },
     validate(clearForm) {
       let isValid = true;
@@ -554,7 +553,11 @@ export default {
       };
       this.factors.forEach((factor) => {
         let payment = factor.payment;
-        data.payments.items.push(payment);
+        if (!payment.value) {
+          if (payment.id) data.payments.ids_to_delete.push(payment.id);
+        } else {
+          data.payments.items.push(payment);
+        }
       });
 
       return data;
@@ -635,11 +638,11 @@ export default {
         floatAccount: null,
         costCenter: null,
         imprestSettlement: {},
+        factorPayments: [],
       };
     },
     splitValue(reverse = false) {
-      let total = this.sum;
-      let factors = [];
+      let total = this.rowsSum("value");
       let factor = {};
       for (let i = 0; i < this.factors.length; i++) {
         if (reverse) factor = this.factors[this.factors.length - i - 1];
