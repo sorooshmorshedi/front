@@ -369,7 +369,7 @@ export default {
   },
   watch: {
     "item.account"() {
-      if (this.item.account) this.getNotPaidFactors();
+      if (this.item.account && this.item.account.id) this.getNotPaidFactors();
     },
   },
   methods: {
@@ -381,16 +381,7 @@ export default {
           let paymentValue = +factor.payment.value;
           totalPaymentValue += paymentValue;
 
-          console.log(
-            paymentValue + +factor.previous_payment_value,
-            paymentValue,
-            +factor.previous_payment_value,
-            +factor.total_sum
-          );
-          if (
-            paymentValue + +factor.previous_paid_value >
-            +factor.total_sum
-          ) {
+          if (paymentValue + +factor.previous_paid_value > +factor.total_sum) {
             this.notify(
               `پرداختی فعلی فاکتور شماره ${factor.code} بیشتر از مانده آن است.`,
               "danger"
@@ -413,18 +404,9 @@ export default {
     selectNotPaidFactor(factorIds) {
       let totalValue = 0;
       for (let factorId of factorIds) {
-        let factor = this.factors.filter((o) => o.id == factorId);
-        if (factor.length) {
-          factor = factor[0];
-          if (factor.account.id != this.item.account.id) {
-            console.error(
-              "Factor account is not equal to transaction account: ",
-              factor.id
-            );
-          }
-          this.item.floatAccount = factor.floatAccount;
-          this.item.costCenter = factor.costCenter;
-          let value = factor.sum - factor.paidValue;
+        let factor = this.factors.find((o) => o.id == factorId);
+        if (factor) {
+          let value = factor.remain;
           this.rows.push(this.getRowTemplate());
           factor.payment.value = value;
           totalValue += value;
@@ -449,7 +431,6 @@ export default {
             costCenter_id: this.item.costCenter && this.item.costCenter.id,
           },
           success: (data) => {
-            console.log(data);
             this.factors = data;
             let factorIds = this.urlQuery.factorIds;
             if (factorIds) {

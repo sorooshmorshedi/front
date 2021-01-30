@@ -187,6 +187,8 @@ export default {
         },
         query: {
           'item.account': this.item.account.id,
+          'item.floatAccount': this.item.floatAccount && this.item.floatAccount.id,
+          'item.costCenter': this.item.costCenter && this.item.costCenter.id,
           'factorIds': String(this.id)
         }
       }
