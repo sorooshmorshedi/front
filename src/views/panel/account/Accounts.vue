@@ -112,6 +112,7 @@
                 v-model="item.costCenterGroup"
                 item-text="name"
                 :disabled="!isEditing"
+                :clearable="true"
               />
             </template>
           </v-col>
