@@ -217,14 +217,14 @@ export default {
       for (let row of this.rows) {
         sum += +this.taxPrice(row);
       }
-      return +sum.toFixed(6);
+      return +sum.toFixed(0);
     },
     rowsComplicationPrice() {
       let sum = 0;
       for (const row of this.rows) {
         sum += +this.complicationPrice(row);
       }
-      return +sum.toFixed(6);
+      return +sum.toFixed(0);
     },
   },
   watch: {
@@ -261,13 +261,15 @@ export default {
       };
     },
     taxPrice(row) {
-      row.tax_value = (+row.tax_percent * +row.gross_price) / 100 || 0;
+      row.tax_value = +(
+        (+row.tax_percent * +row.gross_price) / 100 || 0
+      ).toFixed(0);
       return row.tax_value;
     },
     complicationPrice(row) {
       row.complication_price = +(
         (+row.complication_percent * +row.gross_price) / 100 || 0
-      ).toFixed(6);
+      ).toFixed(0);
       return row.complication_price;
     },
     rowSum(row) {
@@ -276,23 +278,23 @@ export default {
         this.taxPrice(row) +
         this.complicationPrice(row) -
         (+row.insurance_price || 0);
-      row.total_value = sum;
+      row.total_value = +sum.toFixed(0);
       return sum;
     },
     netPrice(row) {
       let value = +row.gross_price - +row.insurance_price;
-      row.net_price = value;
+      row.net_price = +value.toFixed(0);
       return value;
     },
     companyCommission(row) {
       let value =
         (this.netPrice(row) * +row.company_commission_percent) / 100 || 0;
-      row.company_commission = +value.toFixed(6);
+      row.company_commission = +value.toFixed(0);
       return value;
     },
     carIncome(row) {
       let value = this.netPrice(row) - this.companyCommission(row) || 0;
-      row.car_income = +value.toFixed(6);
+      row.car_income = +value.toFixed(0);
       return value;
     },
     getItemByPosition(position) {
@@ -357,7 +359,7 @@ export default {
           "net_price",
         ];
         for (const key of decimalKeys) {
-          if (item[key]) item[key] = Number(item[key]).toFixed(6);
+          if (item[key]) item[key] = Number(item[key]).toFixed(0);
         }
         data.items.items.push(item);
       });
@@ -378,4 +380,5 @@ export default {
 </script>
 
 <style scoped lang="scss"></style>
+
 
