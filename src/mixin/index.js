@@ -244,8 +244,8 @@ Vue.mixin({
     }
   },
   filters: {
-    toJalali(date) {
-      return moment(date).format('jYYYY/jMM/jDD');
+    toJalali(date, format='jYYYY/jMM/jDD') {
+      return moment(date).format(format);
     },
     toMoney(value, decimalScale = 2) {
 

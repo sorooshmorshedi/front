@@ -1003,6 +1003,13 @@ export default {
                   },
                   title: "گزارش فروش",
                 },
+                {
+                  perm: "salePrice",
+                  to: {
+                    name: "SalePricesList",
+                  },
+                  title: "گزارش قیمت ها و واحد های کالا ها",
+                },
               ],
             },
             {

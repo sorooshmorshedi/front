@@ -453,7 +453,7 @@ export default {
       return "v-text-field";
     },
     isDate(header) {
-      return header.value.includes("date");
+      return header.type == "date" || header.value.includes("date");
     },
     isSelect(header) {
       return header.items != undefined;

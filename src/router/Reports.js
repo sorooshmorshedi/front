@@ -7,6 +7,7 @@ import TransfersList from '@/views/panel/lists/TransfersList.vue';
 import ChequesList from '@/views/panel/lists/ChequesList.vue';
 import AdjustmentsList from '@/views/panel/lists/AdjustmentsList.vue';
 import WarehouseHandlingList from '@/views/panel/lists/WarehouseHandlingList.vue';
+import SalePricesList from '@/views/panel/lists/SalePricesList.vue';
 
 import AccountsCoding from '../views/panel/account/Coding';
 
@@ -69,6 +70,11 @@ export default [{
       name: 'WarehouseHandlingList',
       path: 'lists/warehouseHandling',
       component: WarehouseHandlingList,
+    },
+    {
+      name: 'SalePricesList',
+      path: 'lists/salePrices',
+      component: SalePricesList,
     },
 
     {
