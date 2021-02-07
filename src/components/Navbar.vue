@@ -406,7 +406,7 @@ export default {
                       type: "all",
                     },
                   },
-                  title: "همه",
+                  title: "تمامی اسناد",
                 },
                 {
                   perm: "get.sanad",

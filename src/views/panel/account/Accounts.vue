@@ -24,13 +24,13 @@
         <v-btn
           :key="i"
           v-if="i-1 != level"
-          class="blue white--text mr-1 mt-1 mt-md-1"
+          class="blue white--text mr-1 mt-1 mt-md-0"
           :to="`/panel/accounts/${i-1}`"
         >تعریف {{ getTitle(i-1) }}</v-btn>
         <v-btn
           :key="i"
           v-else
-          class="blue white--text mr-1 mt-1 mt-md-1"
+          class="blue white--text mr-1 mt-1 mt-md-0"
           @click="clearForm"
         >تعریف {{ getTitle(i-1) }}</v-btn>
       </template>
