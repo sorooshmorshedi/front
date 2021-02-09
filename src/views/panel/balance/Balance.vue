@@ -4,14 +4,27 @@
 
     <v-card-text>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="12">
           <v-row>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="3">
               <v-select label="تعداد ستون ها" v-model="filters.cols_count" :items="[2, 4]"></v-select>
+
+              <v-select
+                class="mt-3"
+                :items="accountStatuses"
+                v-model="filters.balance_status"
+                label="وضعیت حساب"
+              />
+
+              <v-switch
+                class="mt-3"
+                label="نمایش مغایرت حساب ها"
+                v-model="filters.show_differences"
+              />
             </v-col>
 
             <template v-if="showAccountFilters">
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="3">
                 <v-select
                   label="سطح حساب"
                   v-model="filters.level"
@@ -20,10 +33,9 @@
                   :items="accountLevels"
                   :return-object="false"
                 />
-              </v-col>
 
-              <v-col cols="12" md="4">
                 <v-select
+                  class="mt-3"
                   label="حساب های خاص"
                   v-model="filters.account_type"
                   :items="specialAccounts"
@@ -31,45 +43,52 @@
                   item-value="value"
                   :return-object="false"
                 />
+
+                <v-switch
+                  label="نمایش حساب های تفضیلی شناور"
+                  v-model="filters.show_float_accounts"
+                  class="mt-3 text-right"
+                />
+
+                <v-switch
+                  label="نمایش مرکز هزینه و درآمد"
+                  v-model="filters.show_cost_centers"
+                  class="mt-3"
+                />
+              </v-col>
+
+              <v-col cols="12" md="2">
+                <v-text-field
+                  label="از کد حساب"
+                  type="number"
+                  v-model="filters.account__code__gte"
+                />
+                <v-text-field
+                  label="تا کد حساب"
+                  type="number"
+                  v-model="filters.account__code__lte"
+                  class="mt-3"
+                />
               </v-col>
             </template>
-            <v-col v-else cols="0" md="4"></v-col>
 
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="2">
               <date label="از تاریخ" v-model="filters.from_date" />
+              <date label="تا تاریخ" v-model="filters.to_date" class="mt-3" />
             </v-col>
-            <v-col cols="12" md="4">
-              <date label="تا تاریخ" v-model="filters.to_date" />
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-select
-                :items="accountStatuses"
-                v-model="filters.balance_status"
-                label="وضعیت حساب"
-              ></v-select>
-            </v-col>
-
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="2">
               <v-text-field label="از شماره سند" type="number" v-model="filters.from_code" />
+              <v-text-field
+                label="تا شماره سند"
+                type="number"
+                v-model="filters.to_code"
+                class="mt-3"
+              />
             </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field label="تا شماره سند" type="number" v-model="filters.to_code" />
-            </v-col>
+            <v-col cols="12" md="2"></v-col>
           </v-row>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-col cols="12">
-            <v-switch label="نمایش مغایرت حساب ها" v-model="filters.show_differences" />
-          </v-col>
-          <template v-if="showAccountFilters">
-            <v-col cols="12">
-              <v-switch label="نمایش حساب های تفضیلی شناور" v-model="filters.show_float_accounts" />
-            </v-col>
-
-            <v-col cols="12">
-              <v-switch label="نمایش مرکز هزینه و درآمد" v-model="filters.show_cost_centers" />
-            </v-col>
-          </template>
+          <v-col cols="12"></v-col>
+          <template v-if="showAccountFilters"></template>
         </v-col>
 
         <v-col cols="12">
@@ -153,7 +172,6 @@ import _ from "lodash";
 export default {
   name: "Balance",
   mixins: [AccountApiMixin],
-  components: { date },
   props: {
     title: {
       required: true,
@@ -181,20 +199,20 @@ export default {
       debouncedFilterAccounts: null,
 
       accountLevels: [
-        { value: "all", text: "همه" },
+        { value: null, text: "همه" },
         { value: 0, text: "گروه" },
         { value: 1, text: "کل" },
         { value: 2, text: "معین" },
         { value: 3, text: "تفضیلی" },
       ],
       specialAccounts: [
-        { value: "all", text: "همه" },
+        { value: null, text: "همه" },
         { value: "bank", text: "بانک" },
         { value: "buyer", text: "خریدار" },
         { value: "seller", text: "فروشنده" },
       ],
       accountStatuses: [
-        { value: "all", text: "همه" },
+        { value: null, text: "همه" },
         { value: "with_remain", text: "حساب های دارای مانده" },
         { value: "bed_remain", text: "مانده بدهکار" },
         { value: "bes_remain", text: "مانده بستانکار" },
@@ -209,7 +227,7 @@ export default {
       let bed = 0,
         bes = 0;
       for (const account of this.items) {
-        if (this.filters.level == "all" && account.level != undefined) {
+        if (this.filters.level == null && account.level != undefined) {
           if (account.level == 0) {
             bed += +account.bed_sum;
             bes += +account.bes_sum;
@@ -239,7 +257,6 @@ export default {
   },
   created() {
     this.debouncedGetData = _.debounce(this.getData, 1000);
-    this.debouncedFilterAccounts = _.debounce(this.filterAccounts, 200);
     this.clearFilters();
   },
   watch: {
@@ -250,13 +267,6 @@ export default {
       handler() {
         if (this.debouncedGetData) this.debouncedGetData();
         else this.getData();
-      },
-      deep: true,
-    },
-    accountFilters: {
-      handler() {
-        if (this.debouncedFilterAccounts) this.debouncedFilterAccounts();
-        else this.filterAccounts();
       },
       deep: true,
     },
@@ -282,83 +292,14 @@ export default {
         params: this.filters,
         success: (data) => {
           this.items = data;
-          // this.filterAccounts();
         },
       });
     },
-    filterAccounts() {
-      let filters = this.accountFilters;
-
-      let sortedAccounts = this.getSortedAccounts(this.allAccounts, true);
-      let accounts = sortedAccounts.filter((acc) => {
-        if (filters.level != "all") {
-          if (acc.level != filters.level) return false;
-        }
-
-        if (filters.status != "all") {
-          switch (filters.status) {
-            case "withRemain":
-              if (acc.bes_remain == 0 && acc.bes_remain == 0) return false;
-              break;
-            case "bedRemain":
-              if (acc.bed_remain == 0) return false;
-              break;
-            case "besRemain":
-              if (acc.bes_remain == 0) return false;
-              break;
-            case "withoutRemain":
-              if (acc.bed_sum != 0 || acc.bes_sum != 0) return false;
-              break;
-            case "withTransaction":
-              if (acc.bed_sum == 0 && acc.bes_sum == 0) return false;
-              break;
-            case "withoutTransaction":
-              if (acc.bed_sum != 0 || acc.bes_sum != 0) return false;
-              break;
-          }
-        }
-
-        if (filters.from_code) {
-          // todo: check for chilren too
-          if (acc.code < filters.from_code) return false;
-        }
-
-        if (filters.special != "all") {
-          switch (filters.special) {
-            case "seller":
-              if (!acc.person_data || acc.person_data.type != "seller")
-                return false;
-              break;
-            case "buyer":
-              if (!acc.person_data || acc.person_data.type != "buyer")
-                return false;
-              break;
-            case "bank":
-              if (!acc.bank_data) return false;
-              break;
-          }
-        }
-
-        if (filters.showDifferences) {
-          if (!acc.type_data) return false;
-          let nature = acc.type_data.nature;
-          if (acc.bes_remain == 0 && acc.bed_remain == 0) return false;
-          if (nature == "bed" && acc.bes_remain == 0) return false;
-          if (nature == "bes" && acc.bed_remain == 0) return false;
-        }
-
-        return true;
-      });
-
-      this.updateFilters();
-
-      this.items = accounts;
-    },
     clearFilters() {
       this.accountFilters = {
-        level: "all",
-        status: "all",
-        special: "all",
+        level: null,
+        status: null,
+        special: null,
         showFloatAccounts: false,
         showCostCenters: false,
         showDifferences: false,

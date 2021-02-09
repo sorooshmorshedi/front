@@ -3,6 +3,7 @@ import Panel from '@/views/panel/Panel.vue';
 import TransactionsList from '@/views/panel/lists/TransactionsList.vue';
 import FactorsList from '@/views/panel/lists/FactorsList.vue';
 import SanadsList from '@/views/panel/lists/SanadsList.vue';
+import SanadItemsList from '@/views/panel/lists/SanadItemsList.vue';
 import TransfersList from '@/views/panel/lists/TransfersList.vue';
 import ChequesList from '@/views/panel/lists/ChequesList.vue';
 import AdjustmentsList from '@/views/panel/lists/AdjustmentsList.vue';
@@ -41,6 +42,11 @@ export default [{
       path: 'lists/sanads/:type?',
       component: SanadsList,
       props: true
+    },
+    {
+      name: 'SanadItemsList',
+      path: 'lists/sanadItems',
+      component: SanadItemsList,
     },
     {
       name: 'FactorsList',

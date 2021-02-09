@@ -267,7 +267,9 @@ export default {
   },
   methods: {
     getImprestSettledValue(imprest) {
-      return +imprest.imprestSettlement.settled_value;
+      let imprestSettlement = imprest.imprestSettlement;
+      if (imprestSettlement) return +imprestSettlement.settled_value;
+      return 0;
     },
     getImprestNotSettledValue(imprest) {
       return imprest.sanad.bed - this.getImprestSettledValue(imprest);
@@ -335,20 +337,43 @@ export default {
       this.submit(this.performClearForm);
     },
 
-    getDriverNotSettledImprests(driving, callback = null) {
+    getDriverNotSettledImprests(driving) {
+      let filters = {
+        type: "imprest",
+        account: driving.car.payableAccount,
+        floatAccount: driving.driver.floatAccount,
+      };
+      this.imprests = [];
+      this.selectedImprests = [];
+
+      let updateImprests = (data) => {
+        this.imprests = this.imprests.concat(data);
+        if (this.item.remittance) {
+          this.selectedImprests = this.selectedImprests.concat(this.imprests);
+        }
+      };
+
       this.request({
-        url: this.endpoint("imprests/notSettledImprests"),
+        url: this.endpoint("reports/lists/transactions"),
         params: {
-          account: driving.car.payableAccount,
-          floatAccount: driving.driver.floatAccount,
+          ...filters,
+          imprestSettlement__is_settled: false,
         },
         method: "get",
         success: (data) => {
-          this.imprests = data;
-          if (this.item.remittance) {
-            this.selectedImprests = this.imprests;
-          }
-          callback && callback(data);
+          updateImprests(data);
+        },
+      });
+
+      this.request({
+        url: this.endpoint("reports/lists/transactions"),
+        params: {
+          ...filters,
+          imprestSettlement__isnull: true,
+        },
+        method: "get",
+        success: (data) => {
+          updateImprests(data);
         },
       });
     },

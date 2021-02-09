@@ -40,7 +40,6 @@ export default {
             // resolve()
           })
           .catch((error) => {
-            console.error(error);
             this.$store.commit('decrementOGR');
 
             if (options.error) {
@@ -117,7 +116,7 @@ export default {
     },
     handle_noResponse(error, options) {
       console.warn('NO RESPONSE FROM SERVER: ', options.url);
-      this.notify('خطا در برقراری ارتباط با سرور', 'danger');
+      alert('خطا در برقراری ارتباط با سرور');
       return;
     }
 

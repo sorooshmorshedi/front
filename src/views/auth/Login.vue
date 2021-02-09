@@ -53,7 +53,6 @@ export default {
   mounted() {
     document.title = "ورود";
     if (this.token) {
-      this.$router.push();
       this.redirect();
     }
   },

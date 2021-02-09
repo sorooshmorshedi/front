@@ -75,7 +75,7 @@
           :child-of="item.id"
           v-model="localCostCenter"
           :disabled="disabled"
-          placeholder=" * حساب شناور"
+          placeholder="* حساب شناور"
           items-type="floatAccounts"
           item-text="name"
           item-value="id"
