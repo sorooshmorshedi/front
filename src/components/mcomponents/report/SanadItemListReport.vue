@@ -1,6 +1,6 @@
 <template>
   <m-datatable
-    :headers="headers"
+    :headers="getHeaders()"
     api-url="reports/sanadItems"
     :filters.sync="localFilters"
     :previousApiData.sync="previousApiData"
@@ -12,7 +12,7 @@
 
     <template v-if="apiData.previous" v-slot:body.prepend="{ headers }">
       <tr class="text-center">
-        <td colspan="4"></td>
+        <td :colspan="colspan"></td>
         <td>منقول از صفحه قبل</td>
         <td v-if="showAccountInTable" colspan="2"></td>
         <td v-if="showFinancialYear" colspan="1"></td>
@@ -26,7 +26,7 @@
     </template>
     <template v-else-if="showPreviousRemain && lastItem" v-slot:body.prepend="{ headers }">
       <tr class="text-center">
-        <td colspan="4"></td>
+        <td :colspan="colspan"></td>
         <td>مانده از قبل</td>
         <td v-if="showAccountInTable" colspan="2"></td>
         <td v-if="showFinancialYear" colspan="1"></td>
@@ -41,7 +41,7 @@
 
     <template v-if="apiData.results.length" v-slot:body.append="{ headers }">
       <tr class="text-center">
-        <td colspan="4"></td>
+        <td :colspan="colspan"></td>
         <td>جمع این صفحه</td>
         <td v-if="showAccountInTable" colspan="2"></td>
         <td v-if="showFinancialYear" colspan="2"></td>
@@ -53,7 +53,7 @@
         </template>
       </tr>
       <tr v-if="apiData.previous" class="text-center">
-        <td colspan="4"></td>
+        <td :colspan="colspan"></td>
         <td>جمع تا این صفحه</td>
         <td v-if="showAccountInTable" colspan="2"></td>
         <td v-if="showFinancialYear" colspan="1"></td>
@@ -83,6 +83,9 @@ export default {
   mixins: [accountApiMixin],
   props: {
     filters: {},
+    headers: {
+      default: null,
+    },
     showAccountInTable: {
       required: true,
     },
@@ -105,6 +108,9 @@ export default {
     showPreviousRemain: {
       required: true,
     },
+    colspan: {
+      default: 4
+    }
   },
   data() {
     return {
@@ -156,7 +162,22 @@ export default {
       });
       return { bed, bes };
     },
-    headers() {
+  },
+  watch: {
+    filters: {
+      deep: true,
+      handler() {
+        Object.keys(this.filters).forEach((key) => {
+          if (this.filters[key] != this.localFilters[key]) {
+            this.localFilters[key] = this.filters[key];
+          }
+        });
+      },
+    },
+  },
+  methods: {
+    getHeaders() {
+      if (this.headers) return this.headers;
       let headers = [
         {
           text: "سال مالی",
@@ -175,7 +196,6 @@ export default {
         {
           text: "شماره سند",
           value: "sanad.code",
-          type: "numeric",
           sortable: this.sortable,
           filterable: this.filterable,
         },
@@ -185,8 +205,6 @@ export default {
           sortable: this.sortable,
           filterable: this.filterable,
         },
-      ];
-      headers = headers.concat([
         {
           text: "کد حساب",
           value: "account.code",
@@ -200,8 +218,6 @@ export default {
           sortable: false,
           show: this.showAccountInTable,
         },
-      ]);
-      headers = headers.concat([
         {
           text: "بدهکار",
           value: "bed",
@@ -216,8 +232,6 @@ export default {
           sortable: this.sortable,
           filterable: this.filterable,
         },
-      ]);
-      headers = headers.concat([
         {
           text: "مانده",
           value: "remain",
@@ -235,9 +249,6 @@ export default {
           align: "center",
           show: this.showRemain,
         },
-      ]);
-
-      headers = headers.concat([
         {
           text: "مشاهده سند",
           value: "detail",
@@ -247,24 +258,10 @@ export default {
           hideInExport: true,
           show: this.showLink,
         },
-      ]);
+      ];
 
       return headers;
     },
-  },
-  watch: {
-    filters: {
-      deep: true,
-      handler() {
-        Object.keys(this.filters).forEach((key) => {
-          if (this.filters[key] != this.localFilters[key]) {
-            this.localFilters[key] = this.filters[key];
-          }
-        });
-      },
-    },
-  },
-  methods: {
     to(item) {
       return {
         name: "SanadForm",
