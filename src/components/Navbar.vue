@@ -421,6 +421,13 @@ export default {
                   },
                   title: "اسناد خالی",
                 },
+                {
+                  perm: "get.sanad",
+                  to: {
+                    name: "SanadItemsList",
+                  },
+                  title: "جزئیات اسناد",
+                },
               ],
             },
 
