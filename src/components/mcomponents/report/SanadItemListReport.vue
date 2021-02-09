@@ -44,7 +44,7 @@
         <td colspan="4"></td>
         <td>جمع این صفحه</td>
         <td v-if="showAccountInTable" colspan="2"></td>
-        <td v-if="showFinancialYear" colspan="1"></td>
+        <td v-if="showFinancialYear" colspan="2"></td>
         <td>{{ pageSum['bed'] | toMoney }}</td>
         <td>{{ pageSum['bes'] | toMoney }}</td>
         <template v-if="showRemain">
@@ -88,6 +88,7 @@ export default {
     },
     showFinancialYear: {
       required: false,
+      default: false,
     },
     showLink: {
       required: true,
