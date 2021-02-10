@@ -232,15 +232,27 @@
                   </td>
                   <template v-if="!isCw">
                     <td>
-                      <v-menu bottom offset-y v-if="isSale || isBackFromBuy">
+                      <v-menu
+                        bottom
+                        offset-y
+                        left
+                        v-if="isSale || isBackFromBuy"
+                        v-model="priceMenus[i]"
+                      >
                         <template v-slot:activator="{ on, attrs }">
-                          <money
-                            v-model="rows[i].fee"
-                            :disabled="!isEditing"
-                            v-bind="attrs"
-                            v-on="on"
-                            :suffix="getFeeSuffix(row)"
-                          />
+                          <div class="d-flex flex-row">
+                            <money
+                              v-model="rows[i].fee"
+                              :disabled="!isEditing"
+                              v-bind="attrs"
+                              v-on="on"
+                              @click:suffix="priceMenus[i] = true"
+                            />
+                            <span
+                              class="mt-2 mr-1"
+                              style="font-size: 10px; white-space: nowrap"
+                            >{{ getFeeSuffix(row) }}</span>
+                          </div>
                         </template>
 
                         <v-list class="py-0">
@@ -320,7 +332,7 @@
                   </td>
                 </tr>
                 <tr class="grey lighten-3 text-white">
-                  <td colspan="3"></td>
+                  <td colspan="4"></td>
 
                   <td v-if="isFpi">{{ rowsSum('count') | toMoney(0) }}</td>
                   <td v-else></td>
@@ -727,6 +739,9 @@ export default {
         factor__costCenter: null,
         factor__type__in: null,
       },
+
+      priceMenus: {},
+
       pricesHeaders: [
         {
           text: "شماره فاکتور",
