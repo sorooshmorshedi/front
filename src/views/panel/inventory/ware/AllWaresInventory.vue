@@ -140,7 +140,9 @@ export default {
           filterable: false,
         },
       ],
-      filters: {},
+      filters: {
+        level: 3
+      },
       errors: [],
       errorDialog: false,
       errorFilters: {},
