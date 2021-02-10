@@ -77,7 +77,6 @@ export default {
       })
     },
     openTransaction(transaction) {
-      console.log(transaction);
       let routeData = this.$router.resolve({
         name: "TransactionForm",
         params: {
@@ -371,7 +370,7 @@ export default {
         row.fee = null
       }
     },
-    createQuickTransaction(codename){
+    createQuickTransaction(codename) {
 
       this.request({
         url: this.endpoint('transactions/quickFactorTransaction'),
@@ -385,6 +384,11 @@ export default {
           this.successNotify();
         }
       })
+    },
+    getFeeSuffix(row) {
+      let price = this.getWarePrices(row).find(o => o.price == row.fee)
+      if (price) return price.name
+      return null
     }
   }
 }

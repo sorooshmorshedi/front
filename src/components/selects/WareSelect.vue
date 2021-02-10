@@ -5,7 +5,6 @@
       title="آخرین قیمت"
       @click="showPrices"
       color="cyan"
-      class="mr-3"
       :disabled="!ware"
     >fa-dollar-sign</v-icon>
     <v-icon

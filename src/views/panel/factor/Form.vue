@@ -232,34 +232,43 @@
                   </td>
                   <template v-if="!isCw">
                     <td>
-                      <v-menu bottom offset-y>
+                      <v-menu bottom offset-y v-if="isSale || isBackFromBuy">
                         <template v-slot:activator="{ on, attrs }">
                           <money
                             v-model="rows[i].fee"
                             :disabled="!isEditing"
                             v-bind="attrs"
                             v-on="on"
+                            :suffix="getFeeSuffix(row)"
                           />
                         </template>
 
-                        <v-list class="pa-0" v-if="isSale || isBackFromBuy">
+                        <v-list class="py-0">
                           <v-list-item
-                            v-for="(price, i) in getWarePrices(rows[i])"
-                            :key="i"
-                            class="px-1"
+                            v-for="(price, j) in getWarePrices(rows[i])"
+                            :key="j"
+                            class
                             @click="rows[i].fee = price.price"
+                            style="border-bottom: 1px dashed black"
                           >
-                            <v-list-item-content class="pa-0">
-                              <v-list-item-title style="font-size: 13px">
+                            <v-list-item-content>
+                              <v-list-item-title style="font-size: 12px" class="text-center">
                                 <span>{{ price.name }}</span>
                               </v-list-item-title>
-                              <v-list-item-subtitle class="text-left">
+                              <v-list-item-subtitle class="text-center">
                                 <span>{{ price.price | toMoney }}</span>
                               </v-list-item-subtitle>
                             </v-list-item-content>
                           </v-list-item>
                         </v-list>
                       </v-menu>
+                      <money
+                        v-else
+                        v-model="rows[i].fee"
+                        :disabled="!isEditing"
+                        v-bind="attrs"
+                        v-on="on"
+                      />
                     </td>
                     <td dir="ltr">
                       <money :value="rowSum(rows[i])" disabled :decimalScale="0" />
