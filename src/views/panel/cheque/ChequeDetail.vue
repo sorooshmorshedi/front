@@ -177,7 +177,7 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import changeChequeStatus from "./ChangeChequeStatus";
 import getChequeApiMixin from "./getChequeApi.js";
-import OpenSanadBtn from "@/components/form/OpenSanadBtn";
+import OpenSanadBtn from "@/components/btns/OpenSanadBtn";
 export default {
   components: { money, date, changeChequeStatus, OpenSanadBtn },
   mixins: [getChequeApiMixin],

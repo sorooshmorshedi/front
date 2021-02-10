@@ -39,6 +39,14 @@
                 target="_blank"
               >{{ item.factor.code }}</v-btn>
             </template>
+            <template #item.detail="{ item }">
+              <!-- <v-btn
+                :to="{ name: 'DetailedWareInventoryReport', query: { 'inventory.ware': item.ware_id, }, }"
+                color="light-blue white--text"
+                target="_blank"
+              >کاردکس</v-btn>-->
+              <open-inventory-btn :wareId="item.ware_id" />
+            </template>
           </m-datatable>
         </v-card-text>
       </v-card>
@@ -50,8 +58,9 @@
 import _ from "lodash";
 import wareApiMixin from "@/mixin/wareApi";
 import MDatatable from "@/components/mcomponents/datatable/MDatatable.vue";
+import OpenInventoryBtn from "@/components/btns/OpenInventoryBtn";
 export default {
-  components: { MDatatable },
+  components: { MDatatable, OpenInventoryBtn },
   mixins: [wareApiMixin],
   data() {
     return {
@@ -70,73 +79,65 @@ export default {
         {
           text: "مقدار وارده",
           value: "input.count",
-          type: "number",
+          type: "numeric",
           sortable: false,
           filterable: false,
         },
         {
           text: "فی وارده",
           value: "input.fee",
-          type: "money",
+          type: "numeric",
           sortable: false,
-          filters: [],
           filterable: false,
         },
         {
           text: "مبلغ وارده",
           value: "input.value",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
-          filters: [],
         },
         {
           text: "مقدار صادره",
           value: "output.count",
-          type: "number",
+          type: "numeric",
           sortable: false,
           filterable: false,
-          filters: [],
         },
         {
           text: "فی صادره",
           value: "output.fee",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
-          filters: [],
         },
         {
           text: "مبلغ صادره",
           value: "output.value",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
-          filters: [],
         },
         {
           text: "مقدار مانده",
           value: "remain.count",
-          type: "number",
+          type: "numeric",
           sortable: false,
           filterable: false,
-          filters: [],
         },
         {
           text: "فی مانده",
           value: "remain.fee",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
-          filters: [],
         },
         {
           text: "مبلغ مانده",
           value: "remain.value",
-          type: "money",
+          type: "numeric",
           sortable: false,
           filterable: false,
-          filters: [],
         },
       ],
       filters: {},
@@ -153,12 +154,18 @@ export default {
           value: "factor.code",
         },
         {
-          text: "شماره ردیف",
+          text: "شماره ردیف فاکتور",
           value: "factor_item_order",
         },
         {
           text: "تعداد کسری",
           value: "count",
+        },
+        {
+          text: "",
+          value: "detail",
+          sortable: false,
+          filterable: false,
         },
       ],
     };

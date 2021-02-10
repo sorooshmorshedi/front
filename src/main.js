@@ -38,7 +38,7 @@ Vue.component('date', date);
 import ContextMenu from "@/components/mcomponents/ContextMenu";
 Vue.component('ContextMenu', ContextMenu);
 
-import OpenSanadBtn from "@/components/form/OpenSanadBtn";
+import OpenSanadBtn from "@/components/btns/OpenSanadBtn";
 Vue.component('OpenSanadBtn', OpenSanadBtn);
 
 import DetailLink from "@/components/list/DetailLink";

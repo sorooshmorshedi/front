@@ -7,13 +7,7 @@
       color="cyan"
       :disabled="!ware"
     >fa-dollar-sign</v-icon>
-    <v-icon
-      title="کاردکس"
-      @click="openInventory"
-      color="cyan"
-      class="mr-2"
-      :disabled="!ware"
-    >fa-pallet</v-icon>
+    <open-inventory-btn :ware="ware.id" class="mr-2" />
     <v-icon
       title="موجودی"
       @click="showInventory"
@@ -79,8 +73,10 @@
 
 <script>
 import wareApiMixin from "@/mixin/wareApi";
+import OpenInventoryBtn from "@/components/btns/OpenInventoryBtn.vue";
 export default {
   mixins: [wareApiMixin],
+  components: { OpenInventoryBtn },
   props: {
     value: {},
     disabled: {},
@@ -166,15 +162,6 @@ export default {
     this.setWare();
   },
   methods: {
-    openInventory() {
-      let routeData = this.$router.resolve({
-        name: "DetailedWareInventoryReport",
-        query: {
-          "inventory.ware": this.ware.id,
-        },
-      });
-      window.open(routeData.href, "_blank");
-    },
     showInventory() {
       this.request({
         url: this.endpoint(`wares/wares/${this.ware.id}`),

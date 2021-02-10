@@ -1,4 +1,4 @@
-import OpenSanadBtn from "@/components/form/OpenSanadBtn";
+import OpenSanadBtn from "@/components/btns/OpenSanadBtn";
 
 export default {
   components: {
