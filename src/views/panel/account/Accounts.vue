@@ -17,7 +17,7 @@
   >
     <template #header-btns>
       <template v-if="item.id != undefined">
-        <v-btn class="blue white--text mr-1 mt-1 mt-md-1" @click="openLedger(item)">دفتر این حساب</v-btn>
+        <v-btn class="blue white--text mr-1 mt-1 mt-md-0" @click="openLedger(item)">دفتر این حساب</v-btn>
       </template>
 
       <template v-for="i in 4" v-if="!isBank && !isPerson">
