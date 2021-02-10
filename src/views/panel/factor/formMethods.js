@@ -328,6 +328,7 @@ export default {
         if (this.item.floatAccount) this.pricesFilters.factor__floatAccount = this.item.floatAccount.id;
         if (this.item.costCenter) this.pricesFilters.factor__costCenter = this.item.costCenter.id;
       }
+      this.pricesFilters.ware = ware.id;
       this.pricesFilters.factor__type__in = this.type;
       this.pricesDialog = true;
     },

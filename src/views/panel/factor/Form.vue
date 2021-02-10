@@ -721,6 +721,7 @@ export default {
       pricesFilters: {
         offset: 0,
         limit: 5,
+        ware: null,
         factor__account: null,
         factor__floatAccount: null,
         factor__costCenter: null,
