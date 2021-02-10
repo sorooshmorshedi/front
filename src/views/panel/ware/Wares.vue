@@ -281,7 +281,11 @@ export default {
         method: "get",
         success: (data) => {
           item = data;
-          this.rows = item.salePrices;
+          if (item.salePrices.length) {
+            this.rows = item.salePrices;
+          } else {
+            this.rows = [this.getRowTemplate()];
+          }
           this.item = item;
         },
       });
@@ -289,6 +293,7 @@ export default {
     getSerialized() {
       let item = this.extractIds(this.item);
       item.level = this.level;
+      item.salePrices = this.rows.map((o) => this.extractIds(o));
       return item;
     },
     getItemTemplate() {
