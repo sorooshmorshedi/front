@@ -664,6 +664,7 @@
                 :headers="pricesHeaders"
                 api-url="reports/buySale"
                 :filters.sync="pricesFilters"
+                :item-per-page="5"
               />
             </v-col>
           </v-row>
@@ -731,8 +732,6 @@ export default {
       pricesDialog: false,
       priceWare: null,
       pricesFilters: {
-        offset: 0,
-        limit: 5,
         ware: null,
         factor__account: null,
         factor__floatAccount: null,
