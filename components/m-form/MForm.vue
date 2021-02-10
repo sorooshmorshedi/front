@@ -355,6 +355,9 @@ export default {
     font-size: 11px !important;
     padding: 2px 0px !important;
   }
+  label {
+    font-size: 13px !important;
+  }
 
   table {
     textarea {
