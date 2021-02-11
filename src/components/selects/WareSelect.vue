@@ -7,7 +7,7 @@
       color="cyan"
       :disabled="!ware"
     >fa-dollar-sign</v-icon>
-    <open-inventory-btn :ware="ware.id" class="mr-2" />
+    <open-inventory-btn :ware="ware && ware.id" class="mr-2" />
     <v-icon
       title="موجودی"
       @click="showInventory"

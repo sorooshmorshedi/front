@@ -23,12 +23,23 @@
       </v-row>
     </v-card-text>
 
-    <v-dialog v-model="errorDialog" scrollable max-width="1200px" transition="dialog-transition">
+    <v-dialog
+      v-model="errorDialog"
+      scrollable
+      max-width="1200px"
+      transition="dialog-transition"
+      :fullscreen="isPrinting"
+    >
       <v-card>
         <v-card-title>اتمام عملیات مرتب سازی کاردکس کالا به دلیل منفی شدن کالا های زیر امکان پذیر نیست</v-card-title>
 
         <v-card-text>
-          <m-datatable :headers="errorHeaders" :items="errors" :filters.sync="errorFilters">
+          <m-datatable
+            :headers="errorHeaders"
+            :items="errors"
+            :filters.sync="errorFilters"
+            :isDialog="true"
+          >
             <template #item.factor_item_order="{ item }">{{ +item.factor_item_order + 1 }}</template>
             <template #item.factor.code="{ item }">
               <v-btn
@@ -40,11 +51,6 @@
               >{{ item.factor.code }}</v-btn>
             </template>
             <template #item.detail="{ item }">
-              <!-- <v-btn
-                :to="{ name: 'DetailedWareInventoryReport', query: { 'inventory.ware': item.ware_id, }, }"
-                color="light-blue white--text"
-                target="_blank"
-              >کاردکس</v-btn>-->
               <open-inventory-btn :wareId="item.ware_id" />
             </template>
           </m-datatable>
@@ -141,7 +147,7 @@ export default {
         },
       ],
       filters: {
-        level: 3
+        level: 3,
       },
       errors: [],
       errorDialog: false,
@@ -168,6 +174,7 @@ export default {
           value: "detail",
           sortable: false,
           filterable: false,
+          hideInExport: true,
         },
       ],
     };
