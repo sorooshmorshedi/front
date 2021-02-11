@@ -23,7 +23,7 @@
       </v-row>
     </v-card-title>
     <v-data-table
-      id="datatable"
+      :id="'datatable-' + _uid"
       ref="datatable"
       v-bind="$attrs"
       :show-select="!isPrinting"
@@ -227,6 +227,9 @@ import Truncate from "./Truncate";
 
 export default {
   props: {
+    isDialog: {
+      default: false,
+    },
     apiUrl: {
       default: null,
     },
@@ -427,10 +430,17 @@ export default {
       this.$emit("update:filters", newFilters);
     },
     print() {
+      if (this.isDialog) {
+        $(".v-application--wrap")[0].style.display = "none";
+      }
+
       this.$store.commit("setIsPrinting", true);
       this.$nextTick(() => {
         print();
         this.$store.commit("setIsPrinting", false);
+        if (this.isDialog) {
+          $(".v-application--wrap")[0].style.display = "block";
+        }
       });
     },
     clearFilters(header) {
@@ -587,9 +597,7 @@ export default {
               },
             });
           } else if (outputFormat == "xlsx") {
-            let workbook = XLSX.utils.table_to_book(
-              document.getElementById("datatable")
-            );
+            let workbook = XLSX.utils.table_to_book(this.$refs.datatable.$el);
             let wb = workbook;
 
             if (!wb.Workbook) wb.Workbook = {};
