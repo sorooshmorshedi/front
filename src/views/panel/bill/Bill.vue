@@ -24,7 +24,7 @@
                 :showAccountInTable="false"
                 :showFinancialYear="true"
                 :showLink="false"
-                :sortable="false"
+                :sortable="true"
                 :filterable="true"
                 :showRemain="true"
                 :showPreviousRemain="false"
@@ -59,7 +59,6 @@ export default {
         costCenter: null,
         title: "صورت حساب تفصیلی",
         account_title: "",
-        order_sanads_by: "date",
         consider_previous_remain: "true",
       },
     };
