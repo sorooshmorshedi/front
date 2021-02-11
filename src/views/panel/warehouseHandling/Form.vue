@@ -138,9 +138,11 @@
                 <th>#</th>
                 <th>کد کالا</th>
                 <th>نام کالا</th>
+                <th>واحد</th>
                 <th>* موجودی شمارش شده انبار</th>
                 <th>مانده سیستم</th>
                 <th>مغایرت</th>
+                <th>توضیحات</th>
               </tr>
             </template>
             <template #tbody v-if="inventory.length">
@@ -148,6 +150,7 @@
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td>{{ row.ware.code }}</td>
                 <td>{{ row.ware.name }}</td>
+                <td>{{ row.unit }}</td>
                 <td>
                   <money v-model="row.warehouse_remain" :disabled="!isEditing" />
                 </td>
@@ -156,6 +159,14 @@
                   dir="ltr"
                   :class="getContradictionStyle(row)"
                 >{{ getContradiction(row) | toMoney }}</td>
+                <td>
+                  <row-textarea
+                    v-model="row.explanation"
+                    :disabled="!isEditing"
+                    :i="i"
+                    @updateRowsExplanation="updateRowsExplanation"
+                  />
+                </td>
               </tr>
             </template>
           </input-table>
