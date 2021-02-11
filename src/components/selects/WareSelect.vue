@@ -24,6 +24,7 @@
       item-value="id"
       :disabled="disabled"
       :return-object="true"
+      :suffix="ware && ware.main_unit_name"
     ></v-autocomplete>
 
     <v-dialog v-if="inventories.length" v-model="dialog" scrollable max-width="500px">
