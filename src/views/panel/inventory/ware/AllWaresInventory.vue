@@ -83,6 +83,12 @@ export default {
           sortable: false,
         },
         {
+          text: "واحد",
+          value: "unit",
+          sortable: false,
+          filterable: false,
+        },
+        {
           text: "مقدار وارده",
           value: "input.count",
           type: "numeric",

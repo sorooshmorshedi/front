@@ -22,11 +22,7 @@
         </v-col>
 
         <v-col cols="12">
-          <m-datatable
-            :api-url="url"
-            :headers="headers"
-            :filters.sync="filters"
-          />
+          <m-datatable :api-url="url" :headers="headers" :filters.sync="filters" />
         </v-col>
       </v-row>
     </v-card-text>
@@ -51,9 +47,15 @@ export default {
           text: "کد",
           value: "code",
         },
-         {
+        {
           text: "نام",
           value: "name",
+        },
+        {
+          text: "واحد",
+          value: "unit",
+          sortable: false,
+          filterable: false,
         },
         {
           text: "وارده",

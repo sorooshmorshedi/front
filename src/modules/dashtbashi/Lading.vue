@@ -492,6 +492,7 @@ export default {
         lading_contractor_price: null,
         lading_contractor: null,
         lading_bill_total_value: 0,
+        destination_amount: null,
       };
     },
     getData() {
