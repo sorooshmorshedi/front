@@ -537,9 +537,7 @@ export default {
         if (i == this.rows.length - 1) return row;
         let item = this.copy(row);
 
-        if (!item.id) {
-          item.account = item.type.account;
-        }
+        item.account = item.type.account;
 
         if (item.cheque) {
           item.cheque = this.extractIds(item.cheque);
