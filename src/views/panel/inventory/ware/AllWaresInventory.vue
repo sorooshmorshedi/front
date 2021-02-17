@@ -65,6 +65,7 @@ import _ from "lodash";
 import wareApiMixin from "@/mixin/wareApi";
 import MDatatable from "@/components/mcomponents/datatable/MDatatable.vue";
 import OpenInventoryBtn from "@/components/btns/OpenInventoryBtn";
+import { factorTypes } from "@/variables";
 export default {
   components: { MDatatable, OpenInventoryBtn },
   mixins: [wareApiMixin],
@@ -164,7 +165,16 @@ export default {
           value: "ware_name",
         },
         {
-          text: "فاکتور",
+          text: "انبار",
+          value: "warehouse_name",
+        },
+        {
+          text: "نوع فاکتور",
+          value: "factor.type",
+          items: factorTypes,
+        },
+        {
+          text: "شماره فاکتور",
           value: "factor.code",
         },
         {
