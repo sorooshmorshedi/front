@@ -18,7 +18,11 @@
           >مرتب سازی کاردکس کالا</v-btn>
         </v-col>
         <v-col cols="12" class="all-wares-inventory">
-          <m-datatable :api-url="url" :headers="headers" :filters.sync="filters" ref="datatable" />
+          <m-datatable :api-url="url" :headers="headers" :filters.sync="filters" ref="datatable">
+            <template #item.inventory="{ item }">
+              <open-inventory-btn :wareId="item.id" />
+            </template>
+          </m-datatable>
         </v-col>
       </v-row>
     </v-card-text>
@@ -50,7 +54,7 @@
                 target="_blank"
               >{{ item.factor.code }}</v-btn>
             </template>
-            <template #item.detail="{ item }">
+            <template #item.inventory="{ item }">
               <open-inventory-btn :wareId="item.ware_id" />
             </template>
           </m-datatable>
@@ -151,6 +155,13 @@ export default {
           type: "numeric",
           sortable: false,
           filterable: false,
+        },
+        {
+          text: "کاردکس",
+          value: "inventory",
+          sortable: false,
+          filterable: false,
+          hideInExport: true,
         },
       ],
       filters: {
