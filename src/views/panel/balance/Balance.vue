@@ -142,6 +142,15 @@
                     >{{ subAccount.bes_remain | toMoney }}</div>
                   </td>
                 </template>
+                <td>
+                  <div
+                    v-if="getSubAccountLedgerQuery"
+                    class="py-1"
+                    v-for="(subAccount, i ) in getSubAccounts(item)"
+                  >
+                    <open-ledger-btn :query="getSubAccountLedgerQuery(item, subAccount)" />
+                  </div>
+                </td>
               </template>
             </template>
 
@@ -157,6 +166,10 @@
                 </template>
               </tr>
             </template>
+
+            <template #item.ledger="{ item }" v-if="getAccountLedgerQuery">
+              <open-ledger-btn :query="getAccountLedgerQuery(item)" />
+            </template>
           </m-datatable>
         </v-col>
       </v-row>
@@ -165,13 +178,14 @@
 </template>
 
 <script>
-import date from "@/components/mcomponents/cleave/Date";
 import datatableBaseCols from "./_datatableBaseCols";
 import AccountApiMixin from "@/mixin/accountMixin";
 import _ from "lodash";
+import OpenLedgerBtn from "@/components/btns/OpenLedgerBtn.vue";
 export default {
   name: "Balance",
   mixins: [AccountApiMixin],
+  components: { OpenLedgerBtn },
   props: {
     title: {
       required: true,
@@ -184,6 +198,12 @@ export default {
     },
     showAccountFilters: {
       default: true,
+    },
+    getAccountLedgerQuery: {
+      default: null,
+    },
+    getSubAccountLedgerQuery: {
+      default: null,
     },
   },
   data() {
@@ -279,10 +299,21 @@ export default {
       );
     },
     getSubAccounts(item) {
-      return [
-        ...(this.filters.show_float_accounts ? item.floatAccounts_data : []),
-        ...(this.filters.show_cost_centers ? item.costCenters_data : []),
-      ];
+      let subAccounts = [];
+
+      if (this.filters.show_float_accounts) {
+        let floatAccounts = item.floatAccounts_data;
+        floatAccounts.forEach((o) => (o.level = "floatAccounts"));
+        subAccounts = [...subAccounts, ...floatAccounts];
+      }
+
+      if (this.filters.show_cost_centers) {
+        let costCenters = item.costCenters_data;
+        costCenters.forEach((o) => (o.level = "costCenters"));
+        subAccounts = [...subAccounts, ...costCenters];
+      }
+
+      return subAccounts;
     },
     getData() {
       this.updateFilters();

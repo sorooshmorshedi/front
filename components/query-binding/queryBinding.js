@@ -37,22 +37,12 @@ export default {
           let path = key.split('.')
           let lastObject = path.slice(0, path.length - 1).reduce((o, i) => o[i], this)
           let lastKey = path[path.length - 1];
+          let value = data[key]
 
-          switch (lastKey) {
-            case 'account':
-              lastObject[lastKey] = this.accounts.filter(o => o.id == data[key])[0];
-              break
-            case 'floatAccount':
-              lastObject[lastKey] = this.floatAccounts.filter(o => o.id == data[key])[0];
-              break
-            case 'costCenters':
-              lastObject[lastKey] = this.costCenters.filter(o => o.id == data[key])[0];
-              break
-            case 'ware':
-              lastObject[lastKey] = this.wares.filter(o => o.id == data[key])[0];
-              break
-            default:
-              lastObject[lastKey] = data[key]
+          if (isNaN(value)) {
+            lastObject[lastKey] = value
+          } else {
+            lastObject[lastKey] = Number(data[key])
           }
         }
       })

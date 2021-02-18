@@ -1,5 +1,11 @@
 <template>
-  <balance :title="title" :cols="cols" :url="url" :showAccountFilters="false" />
+  <balance
+    :title="title"
+    :cols="cols"
+    :url="url"
+    :showAccountFilters="false"
+    :getAccountLedgerQuery="getAccountLedgerQuery"
+  />
 </template>
 
 <script>
@@ -10,8 +16,8 @@ export default {
   components: { Balance },
   props: {
     is_cost_center: {
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {};
@@ -30,14 +36,14 @@ export default {
           {
             text: "گروه " + text,
             value: "group_name",
-            type: "text"
+            type: "text",
           },
           {
             text: text,
             value: "float_account_name",
-            type: "text"
-          }
-        ]
+            type: "text",
+          },
+        ],
       };
     },
     url() {
@@ -45,7 +51,28 @@ export default {
     },
     isCostCenter() {
       return ["true", true].includes(this.is_cost_center);
-    }
-  }
+    },
+  },
+  methods: {
+    getAccountLedgerQuery(item) {
+      let query = {};
+      if (item.group_name) {
+        query["ledger.account"] = item.group_id;
+        if (this.isCostCenter) {
+          query["ledger.level"] = "costCenterGroups";
+        } else {
+          query["ledger.level"] = "floatAccountGroups";
+        }
+      } else {
+        query["ledger.account"] = item.float_account_id;
+        if (this.isCostCenter) {
+          query["ledger.level"] = "costCenters";
+        } else {
+          query["ledger.level"] = "floatAccounts";
+        }
+      }
+      return query;
+    },
+  },
 };
 </script>

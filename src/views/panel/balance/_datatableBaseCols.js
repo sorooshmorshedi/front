@@ -19,5 +19,12 @@ export default {
       value: "bes_remain",
       type: "numeric",
     },
+    {
+      text: "تراز",
+      value: "ledger",
+      sortable: false,
+      filterable: false,
+      hideInExport: true,
+    },
   ],
 }

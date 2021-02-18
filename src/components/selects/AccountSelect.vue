@@ -6,12 +6,11 @@
   >
     <v-col :cols="horizontal && hasDeepSelect?6:12">
       <div class="d-flex">
-        <v-icon
-          @click="item && openLedger(item)"
-          color="cyan"
-          class="mr-2"
+        <open-ledger-btn
           v-if="showLedgerBtn && hasLedger"
-        >fa-book-open</v-icon>
+          :query="{account: item.id, level: `level${item.level}`}"
+          class="mr-2"
+        />
         <v-icon v-if="hasLedger" @click="openBalanceDialog" color="cyan" class="pl-2 mr-3">fa-wallet</v-icon>
         <v-autocomplete
           :items="items"
@@ -119,8 +118,10 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
+import OpenLedgerBtn from "@/components/btns/OpenLedgerBtn.vue";
 export default {
   mixins: [accountApiMixin],
+  components: { OpenLedgerBtn },
   props: {
     value: {},
     floatAccount: {},

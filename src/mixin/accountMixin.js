@@ -119,7 +119,7 @@ export default {
         success: data => {
           this.$store.commit('setAccounts', data);
           init && this.init();
-          this.EventBus.$emit('get:accounts', data);
+          this.EventBus.$emit('get:accounts');
           this.toggleIsGetting('accounts')
         }
       })
@@ -134,6 +134,7 @@ export default {
         success: data => {
           this.$store.commit('setFloatAccountGroups', data);
           init && this.init();
+          this.EventBus.$emit('get:accounts');
           this.toggleIsGetting('floatAccountGroups')
         }
       })
@@ -148,6 +149,7 @@ export default {
         success: data => {
           this.$store.commit('setFloatAccounts', data);
           init && this.init();
+          this.EventBus.$emit('get:accounts');
           this.toggleIsGetting('floatAccounts')
         }
       })
