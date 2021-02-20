@@ -326,17 +326,36 @@ export default {
     },
     setItem() {
       if (this.value != this.item) {
-        this.item = this.value;
+        if (isNaN(this.value)) {
+          this.item = this.value;
+        } else {
+          this.item = this.items.find((o) => o.id == this.value);
+          this.emitChange();
+        }
       }
 
       if (!this.item) {
         this.localFloatAccount = null;
         this.localCostCenter = null;
       } else {
-        if (this.floatAccount != this.localFloaAccount)
-          this.localFloatAccount = this.floatAccount;
-        if (this.costCenter != this.localCostCenter)
-          this.localCostCenter = this.costCenter;
+        if (this.floatAccount != this.localFloaAccount) {
+          if (isNan(this.floatAccount)) {
+            this.localFloatAccount = this.floatAccount;
+          } else {
+            this.item = this.floatAccounts.find(
+              (o) => o.id == this.floatAccount
+            );
+            this.emitChange();
+          }
+        }
+        if (this.costCenter != this.localCostCenter) {
+          if (isNan(this.costCenter)) {
+            this.localCostCenter = this.costCenter;
+          } else {
+            this.item = this.floatAccounts.find((o) => o.id == this.costCenter);
+            this.emitChange();
+          }
+        }
       }
     },
     emitChange() {

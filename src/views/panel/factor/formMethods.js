@@ -389,7 +389,18 @@ export default {
     getFeeSuffix(row) {
       let price = this.getWarePrices(row).find(o => o.price == row.fee)
       if (price) return price.name
-      return null
+      return undefined
+    },
+    getUnitSuffix(row) {
+      let unit = row.unit
+      let ware = row.ware
+      if (unit && ware) {
+        let conversionFactor = ware.salePrices.find(o => o.unit == unit.id)['conversion_factor']
+        if (conversionFactor != 1) {
+          return `برابر ${conversionFactor} ${ware.main_unit_name}`
+        }
+      }
+      return undefined
     }
   }
 }

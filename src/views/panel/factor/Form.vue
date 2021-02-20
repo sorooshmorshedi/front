@@ -190,7 +190,12 @@
                 >
                   <td class="tr-counter">{{ i+1 }}</td>
                   <td class="tr-ware">
-                    <ware-select v-model="rows[i].ware" :disabled="!isEditing" :factorType="type" />
+                    <ware-select
+                      v-model="rows[i].ware"
+                      :disabled="!isEditing"
+                      :factorType="type"
+                      :show-main-unit="false"
+                    />
                   </td>
                   <td>
                     <v-btn
@@ -213,6 +218,7 @@
                       item-value="id"
                       :disabled="!isEditing"
                       :return-object="true"
+                      :suffix="getUnitSuffix(row)"
                     ></v-autocomplete>
                   </td>
                   <td class="tr-warehouse" :title="rows[i].warehouse && rows[i].warehouse.name">
@@ -274,13 +280,7 @@
                           </v-list-item>
                         </v-list>
                       </v-menu>
-                      <money
-                        v-else
-                        v-model="rows[i].fee"
-                        :disabled="!isEditing"
-                        v-bind="attrs"
-                        v-on="on"
-                      />
+                      <money v-else v-model="rows[i].fee" :disabled="!isEditing" />
                     </td>
                     <td dir="ltr">
                       <money :value="rowSum(rows[i])" disabled :decimalScale="0" />

@@ -58,6 +58,7 @@
                   :filterable="false"
                   :showRemain="true"
                   :showPreviousRemain="true"
+                  :showLink="true"
                 />
               </v-col>
             </template>

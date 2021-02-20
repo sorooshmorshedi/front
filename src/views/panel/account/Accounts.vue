@@ -78,6 +78,7 @@
                 <th>بدهکار</th>
                 <th>بستانکار</th>
                 <th>مانده</th>
+                <th>تشخیص</th>
               </tr>
             </thead>
             <tbody>
@@ -85,6 +86,7 @@
                 <td>{{ item.balance.bed | toMoney}}</td>
                 <td>{{ item.balance.bes | toMoney}}</td>
                 <td>{{ item.balance.remain | toMoney}}</td>
+                <td>{{ getRemainType() }}</td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -417,6 +419,19 @@ export default {
     this.getSalePriceTypes();
   },
   methods: {
+    getRemainType() {
+      let bed = this.item.balance.bed;
+      let bes = this.item.balance.bes;
+      if (bed == bes) {
+        return " - ";
+      } else {
+        if (bed > bes) {
+          return "بدهکار";
+        } else {
+          return "بستانکار";
+        }
+      }
+    },
     setItem(item) {
       let url = `accounts/accounts/${item.id}`;
 

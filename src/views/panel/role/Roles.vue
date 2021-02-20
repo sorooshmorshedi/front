@@ -22,7 +22,7 @@
           <v-col cols="12">
             <v-subheader>دسترسی ها</v-subheader>
             <div class="d-flex flex-column flex-md-row">
-              <v-text-field placeholder="جستوجو" v-model="modelSearch" :disabled="!isEditing" />
+              <v-text-field placeholder="جستجو" v-model="modelSearch" :disabled="!isEditing" />
               <v-spacer></v-spacer>
               <v-btn
                 @click="setAll({value: false})"

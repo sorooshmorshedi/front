@@ -216,7 +216,7 @@ export default {
   },
   methods: {
     setWarehouse(ware) {
-      this.filters.warehouse = ware.warehouse.id;
+      if (ware) this.filters.warehouse = ware.warehouse.id;
     },
   },
   watch: {

@@ -12,7 +12,7 @@
             v-model="search"
             max-width="300px"
             append-icon="search"
-            label="جستوجو"
+            label="جستجو"
             single-line
             hide-details
           />
@@ -95,7 +95,7 @@
                   <v-col cols="12">
                     <component
                       :is="getFilterField(header)"
-                      :label="`جستوجو${serverProcessing?'ی دقیق':''}`"
+                      :label="`جستجو${serverProcessing?'ی دقیق':''}`"
                       :value="filters[`${header.value}`]"
                       @input="emitFilter(`${header.value}`, $event)"
                       clearable
@@ -106,7 +106,7 @@
                     <v-col cols="12">
                       <component
                         :is="getFilterField(header)"
-                        label="جستوجو"
+                        label="جستجو"
                         :value="filters[`${header.value}__icontains`]"
                         @input="emitFilter(`${header.value}__icontains`, $event)"
                         clearable

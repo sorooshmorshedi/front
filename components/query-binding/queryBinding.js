@@ -40,9 +40,9 @@ export default {
           let value = data[key]
 
           if (isNaN(value)) {
-            lastObject[lastKey] = value
+            this.$set(lastObject, lastKey, value)
           } else {
-            lastObject[lastKey] = Number(data[key])
+            this.$set(lastObject, lastKey, Number(value))
           }
         }
       })

@@ -24,7 +24,7 @@
       item-value="id"
       :disabled="disabled"
       :return-object="true"
-      :suffix="ware && ware.main_unit_name"
+      :suffix="getSuffix()"
     ></v-autocomplete>
 
     <v-dialog v-if="inventories.length" v-model="dialog" scrollable max-width="500px">
@@ -87,6 +87,9 @@ export default {
     },
     factorType: {
       default: null,
+    },
+    showMainUnit: {
+      default: true,
     },
   },
   data() {
@@ -177,16 +180,26 @@ export default {
       this.pricesFilters.factor__type__in = this.factorType;
       this.pricesDialog = true;
     },
-    setWare(value) {
+    setWare() {
       if (this.value != this.ware) {
-        this.ware = this.value;
-        this.pricesFilters.ware = this.ware.id;
+        if (isNaN(this.value)) {
+          this.ware = this.value;
+        } else {
+          this.ware = this.wares.find((o) => o.id == this.value);
+        }
+        if (this.ware) {
+          this.pricesFilters.ware = this.ware.id;
+        }
       }
+    },
+    getSuffix() {
+      if (this.showMainUnit && this.ware) return this.ware.main_unit_name;
+      return undefined;
     },
   },
   watch: {
     value() {
-      this.setWare(this.value);
+      this.setWare();
     },
     ware() {
       let ware = this.ware;
