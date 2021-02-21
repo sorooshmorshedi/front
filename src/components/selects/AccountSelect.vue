@@ -307,9 +307,9 @@ export default {
   },
   created() {
     this.getDefaultAccounts();
-    this.getAccounts();
-    this.getFloatAccounts();
-    this.getFloatAccountGroups();
+    this.getAccounts(false, () => this.setItem());
+    this.getFloatAccounts(false, () => this.setItem());
+    this.getFloatAccountGroups(false, () => this.setItem());
 
     this.setItem();
   },
@@ -325,11 +325,13 @@ export default {
       });
     },
     setItem() {
+      console.log(this.items);
       if (this.value != this.item) {
         if (isNaN(this.value)) {
           this.item = this.value;
         } else {
           this.item = this.items.find((o) => o.id == this.value);
+          this.$emit("input", this.item);
           this.emitChange();
         }
       }

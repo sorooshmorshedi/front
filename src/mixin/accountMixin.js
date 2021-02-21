@@ -109,7 +109,7 @@ export default {
       }
       return sortedAccounts;
     },
-    getAccounts(force = false, init = false) {
+    getAccounts(force = false, callback = null) {
       if (!force && this.accounts.length) return;
       if (!this.canGet('accounts')) return;
 
@@ -118,13 +118,13 @@ export default {
         method: 'get',
         success: data => {
           this.$store.commit('setAccounts', data);
-          init && this.init();
+          callback && callback();
           this.EventBus.$emit('get:accounts');
           this.toggleIsGetting('accounts')
         }
       })
     },
-    getFloatAccountGroups(force = false, init = false) {
+    getFloatAccountGroups(force = false, callback = null) {
       if (!force && this.floatAccountGroups.length) return;
       if (!this.canGet('floatAccountGroups')) return;
 
@@ -133,13 +133,13 @@ export default {
         method: 'get',
         success: data => {
           this.$store.commit('setFloatAccountGroups', data);
-          init && this.init();
+          callback && callback()
           this.EventBus.$emit('get:accounts');
           this.toggleIsGetting('floatAccountGroups')
         }
       })
     },
-    getFloatAccounts(force = false, init = false) {
+    getFloatAccounts(force = false, callback = null) {
       if (!force && this.floatAccounts.length) return;
       if (!this.canGet('floatAccounts')) return;
 
@@ -148,7 +148,7 @@ export default {
         method: 'get',
         success: data => {
           this.$store.commit('setFloatAccounts', data);
-          init && this.init();
+          callback && callback()
           this.EventBus.$emit('get:accounts');
           this.toggleIsGetting('floatAccounts')
         }
