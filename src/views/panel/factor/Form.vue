@@ -122,6 +122,7 @@
               :items="factorVisitors"
               v-model="item.visitor"
               item-text="user.name"
+              item-value="id"
               :disabled="!isEditing"
             />
           </v-col>
