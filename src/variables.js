@@ -1,4 +1,4 @@
-export let factorTypes = [{
+export const FactorTypes = [{
   text: "خرید",
   value: 'buy',
 }, {
@@ -13,4 +13,18 @@ export let factorTypes = [{
 }, {
   text: "حواله کالای مصرفی",
   value: 'cw',
+}]
+
+export const VisitorLevels = [{
+  text: "مدیر فروش",
+  value: 0
+}, {
+  text: "سرپرست فروش",
+  value: 1
+}, {
+  text: "سوپروایزر",
+  value: 2
+}, {
+  text: "ویزیتور",
+  value: 3
 }]

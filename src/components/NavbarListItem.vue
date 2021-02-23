@@ -1,6 +1,6 @@
 <template>
   <v-list-item
-    v-if="!hasChild && !route.hide"
+    v-if="!hasChild && !route.hide && route.show"
     class="navbar-list-item"
     :to="route.to"
     exact

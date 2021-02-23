@@ -147,7 +147,7 @@ export default {
     return {
       baseUrl: "factors/transfers",
       permissionBasename: "transfer",
-      leadingSlash: true,
+      appendSlash: true,
       rowKey: "ware",
       hasList: false,
       hasIdProp: true,

@@ -84,9 +84,10 @@
 <script>
 import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import getRolesApi from "../role/getRolesApi";
+import UserApi from "@/views/panel/user/api";
 
 export default {
-  mixins: [MFormMixin, getRolesApi],
+  mixins: [MFormMixin, getRolesApi, UserApi],
   props: {},
   data() {
     return {
@@ -101,21 +102,21 @@ export default {
           text: "نام",
           value: "first_name",
           type: "text",
-          filters: ["first_name"]
+          filters: ["first_name"],
         },
         {
           text: "نام خانوادگی",
           value: "last_name",
           type: "text",
-          filters: ["last_name"]
+          filters: ["last_name"],
         },
         {
           text: "نام کاربری",
           value: "username",
           type: "text",
-          filters: ["username"]
-        }
-      ]
+          filters: ["username"],
+        },
+      ],
     };
   },
   computed: {
@@ -127,27 +128,18 @@ export default {
     },
     deleteUrl() {
       return this.item.id && `users/delete/${this.item.id}`;
-    }
+    },
   },
   methods: {
     getItemTemplate() {
       return {
         roles: [],
-        is_active: true
+        is_active: true,
       };
     },
     getData() {
-      this.getUsers();
+      this.getUsers((data) => (this.items = data));
       this.getRoles(this.setRoles);
-    },
-    getUsers() {
-      this.request({
-        url: this.endpoint(`users/list`),
-        method: "get",
-        success: data => {
-          this.items = data;
-        }
-      });
     },
     setRoles(data) {
       this.roles = data;
@@ -158,20 +150,20 @@ export default {
         method: "post",
         data: {
           user: this.item.id,
-          password: this.newPassword
+          password: this.newPassword,
         },
-        success: data => {
+        success: (data) => {
           this.newPassword = "";
           this.successNotify();
           this.showChangePasswordDialog = false;
-        }
+        },
       });
     },
     getSerialized() {
       let user = { ...this.item };
-      user.roles = this.item.roles.map(o => o.id);
+      user.roles = this.item.roles.map((o) => o.id);
       return user;
-    }
-  }
+    },
+  },
 };
 </script>

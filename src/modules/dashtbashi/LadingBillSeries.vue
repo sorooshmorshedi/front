@@ -50,7 +50,7 @@ export default {
     return {
       item: {},
       baseUrl: "dashtbashi/ladingBillSeries",
-      leadingSlash: true,
+      appendSlash: true,
       hasList: false,
       hasIdProp: true,
     };

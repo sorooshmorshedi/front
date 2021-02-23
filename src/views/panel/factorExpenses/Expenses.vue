@@ -53,7 +53,7 @@ export default {
       item: {},
       baseUrl: "factors/expenses",
       permissionBasename: "factorExpenses",
-      leadingSlash: true,
+      appendSlash: true,
       cols: [
         {
           text: "نام",

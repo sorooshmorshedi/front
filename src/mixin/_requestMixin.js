@@ -1,5 +1,7 @@
 import axios from 'axios';
+import FillStore from '@/utils/fillStore'
 export default {
+  mixins: [FillStore],
   methods: {
     getServerUrl() {
       let serverUrl = localStorage.getItem('serverUrl');
@@ -7,6 +9,33 @@ export default {
     },
     endpoint(url) {
       return this.getServerUrl() + url;
+    },
+    fetchStoreData({
+      url,
+      storeKey,
+      force = false,
+      callback = null,
+    }) {
+
+      let storeData = this.$store.state[storeKey]
+      if (!force && storeData.length) return;
+      if (!this.canGet(storeKey)) return;
+
+      return this.request({
+        url: this.endpoint(url),
+        method: 'get',
+        success: data => {
+          let mutationKey = storeKey.charAt(0).toUpperCase() + storeKey.slice(1)
+          this.$store.commit(`set${mutationKey}`, data);
+
+          callback && callback();
+
+          this.EventBus.$emit(`fetched:${storeKey}`);
+          this.toggleIsGetting(storeKey)
+        }
+      })
+
+
     },
     request(options) {
 

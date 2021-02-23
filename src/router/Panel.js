@@ -53,6 +53,7 @@ import Closing from '../views/panel/closing/Closing.vue';
 import ImprestSettlement from '@/views/panel/imprestSettlement/ImprestSettlement';
 
 import DashtbashiRoutes from '@/modules/dashtbashi/Routes';
+import DistributionRoutes from '@/modules/distribution/Routes';
 
 export default [{
   name: 'Panel',
@@ -60,6 +61,7 @@ export default [{
   component: Panel,
   children: [
     ...DashtbashiRoutes,
+    ...DistributionRoutes,
     {
       name: 'Home',
       path: 'home',

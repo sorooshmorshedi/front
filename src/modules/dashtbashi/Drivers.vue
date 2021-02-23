@@ -92,7 +92,7 @@ export default {
       item: {},
       baseUrl: "dashtbashi/drivers",
       permissionBasename: "driver",
-      leadingSlash: true,
+      appendSlash: true,
       cols: [
         {
           text: "نام",

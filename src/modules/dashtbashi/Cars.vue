@@ -201,7 +201,7 @@ export default {
     return {
       baseUrl: "dashtbashi/cars",
       permissionBasename: "car",
-      leadingSlash: true,
+      appendSlash: true,
       contractTypes: [
         {
           text: "حمل و نقل",

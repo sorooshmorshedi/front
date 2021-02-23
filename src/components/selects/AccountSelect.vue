@@ -325,7 +325,6 @@ export default {
       });
     },
     setItem() {
-      console.log(this.items);
       if (this.value != this.item) {
         if (isNaN(this.value)) {
           this.item = this.value;

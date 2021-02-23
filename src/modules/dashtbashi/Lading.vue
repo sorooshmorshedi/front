@@ -376,7 +376,7 @@ export default {
   data() {
     return {
       baseUrl: "dashtbashi/ladings",
-      leadingSlash: true,
+      appendSlash: true,
       permissionBasename: "lading",
       formData: true,
       hasList: false,

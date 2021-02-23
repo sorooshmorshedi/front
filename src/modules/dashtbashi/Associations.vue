@@ -39,7 +39,7 @@ export default {
       item: {},
       baseUrl: "dashtbashi/associations",
       permissionBasename: "association",
-      leadingSlash: true,
+      appendSlash: true,
       cols: [
         {
           text: "نام",

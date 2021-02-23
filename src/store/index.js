@@ -4,10 +4,12 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 import DashbashiStore from '@/modules/dashtbashi/Store'
+import DistributionStore from '@/modules/distribution/Store'
 
 export default new Vuex.Store({
   state: {
     ...DashbashiStore.state,
+    ...DistributionStore.state,
     user: null,
     OGR: 0, //on going requests
     isGetting: {}, // true if is getting something (account for example)
@@ -44,6 +46,7 @@ export default new Vuex.Store({
   },
   mutations: {
     ...DashbashiStore.mutations,
+    ...DistributionStore.mutations,
     updateIsGetting(state, data) {
       state.isGetting = {
         ...state.isGetting,

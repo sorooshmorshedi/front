@@ -168,7 +168,7 @@ export default {
   data() {
     return {
       baseUrl: "dashtbashi/otherDriverPayments",
-      leadingSlash: true,
+      appendSlash: true,
       permissionBasename: "otherDriverPayment",
       hasList: false,
       hasIdProp: true,

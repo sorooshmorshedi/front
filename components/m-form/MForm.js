@@ -26,7 +26,7 @@ export default {
       // baseUrl: ''
 
       // options
-      leadingSlash: false,
+      appendSlash: false,
       formData: false,
       hasList: true,
       isEditing: true,
@@ -37,21 +37,21 @@ export default {
   },
   computed: {
     createUrl() {
-      return this.baseUrl + (this.leadingSlash ? "/" : "")
+      return this.baseUrl + (this.appendSlash ? "/" : "")
     },
     retrieveUrl() {
       return this.updateUrl;
     },
     updateUrl() {
       let id = this.item.id || this.id || null;
-      return id && `${this.baseUrl}/${id}${this.leadingSlash ? "/" : ""}`;
+      return id && `${this.baseUrl}/${id}${this.appendSlash ? "/" : ""}`;
     },
     confirmUrl() {
       let id = this.item.id || this.id || null;
-      return id && `${this.baseUrl}/${id}/confirm` + (this.leadingSlash ? "/" : "")
+      return id && `${this.baseUrl}/${id}/confirm` + (this.appendSlash ? "/" : "")
     },
     deleteUrl() {
-      return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.leadingSlash ? "/" : "")
+      return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.appendSlash ? "/" : "")
     },
     canSubmit() {
       if (!this.permissionBasename) {
@@ -170,6 +170,9 @@ export default {
     setItem(item) {
       // must be implemented, but by default
       this.item = item;
+      if (this.rowKey) {
+        this.rows = this.copy(this.item.items);
+      }
       if (this.hasIdProp && this.id != item.id) {
         this.changeRouteTo(item.id);
       }
@@ -221,6 +224,20 @@ export default {
     getSerialized() {
       // must be implemented, but by default
       let data = this.extractIds(this.item);
+
+      if (this.rowKey) {
+        let items = this.copy(this.rows);
+        items.map(this.extractIds)
+        items = items.slice(0, -1);
+        data = {
+          item: data,
+          items: {
+            ids_to_delete: this.itemsToDelete,
+            items: items
+          }
+        }
+      }
+
       this.removeAttachmentUrls(data)
       if (this.formData) {
         data = this.jsonToFormData(data);

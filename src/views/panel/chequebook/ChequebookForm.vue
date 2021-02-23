@@ -79,7 +79,7 @@ export default {
     return {
       baseUrl: "cheques/chequebooks",
       permissionBasename: "chequebook",
-      leadingSlash: true,
+      appendSlash: true,
       cols: [
         {
           text: "حساب",

@@ -147,7 +147,7 @@ export default {
       hasList: false,
       hasIdProp: true,
       baseUrl: "dashtbashi/remittances",
-      leadingSlash: true,
+      appendSlash: true,
     };
   },
   methods: {

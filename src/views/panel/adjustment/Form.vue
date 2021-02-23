@@ -147,7 +147,7 @@ export default {
     return {
       baseUrl: "factors/adjustments",
       permissionBasename: "adjustment",
-      leadingSlash: true,
+      appendSlash: true,
       rowKey: "ware",
       hasList: false,
       hasIdProp: true,

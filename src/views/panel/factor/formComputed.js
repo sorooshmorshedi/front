@@ -221,27 +221,35 @@ export default {
       if (this.isSale || this.isBackFromBuy) return 'حواله'
       else return 'رسید'
     },
-    quickTransactionOptions(){
+    quickTransactionOptions() {
       if (["buy", "backFromSale"].includes(this.type)) {
-        return [
-          {
-            text: "وجه نقد سریع",
-            codename: "quickCachePayment"
-          }, {
-            text: "بانکی سریع",
-            codename: "quickBankPayment"
-          }
-        ]
+        return [{
+          text: "وجه نقد سریع",
+          codename: "quickCachePayment"
+        }, {
+          text: "بانکی سریع",
+          codename: "quickBankPayment"
+        }]
       } else {
-        return [
-          {
-            text: "وجه نقد سریع",
-            codename: "quickCacheReceive"
-          }, {
-            text: "کارتخوان سریع",
-            codename: "quickPosReceive"
-          }
-        ]
+        return [{
+          text: "وجه نقد سریع",
+          codename: "quickCacheReceive"
+        }, {
+          text: "کارتخوان سریع",
+          codename: "quickPosReceive"
+        }]
+      }
+    },
+
+    factorVisitors() {
+      console.log('ha');
+      let visitors = this.visitors.filter(o => o.level == 3)
+      let userVisitor = visitors.find(o => o.user.id == this.user.id);
+      if (userVisitor) {
+        this.item.visitor = userVisitor;
+        return [userVisitor];
+      } else {
+        return visitors;
       }
     }
 

@@ -201,7 +201,7 @@ export default {
     return {
       baseUrl: "sanads",
       permissionBasename: "sanad",
-      leadingSlash: true,
+      appendSlash: true,
       hasList: false,
       hasIdProp: true,
       rowKey: "account",

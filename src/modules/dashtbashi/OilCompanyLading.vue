@@ -207,7 +207,7 @@ export default {
       hasList: false,
       hasIdProp: true,
       baseUrl: "dashtbashi/oilCompanyLadings",
-      leadingSlash: true,
+      appendSlash: true,
       permissionBasename: "oilCompanyLading",
     };
   },

@@ -304,7 +304,7 @@ export default {
   data() {
     return {
       baseUrl: "transactions",
-      leadingSlash: true,
+      appendSlash: true,
       hasList: false,
       hasIdProp: true,
       rowKey: "type",

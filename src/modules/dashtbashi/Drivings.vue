@@ -69,7 +69,7 @@ export default {
     return {
       item: {},
       baseUrl: "dashtbashi/drivings",
-      leadingSlash: true,
+      appendSlash: true,
       cols: [
         {
           text: "عنوان",

@@ -116,6 +116,15 @@
           <v-col cols="12" md="2" v-if="!isFpi">
             <v-text-field label="نوع" disabled :value="item.is_definite?'قطعی':'موقت'" />
           </v-col>
+          <v-col cols="12" md="2" v-if="(isSale || isBackFromSale) && hasModule('distribution')">
+            <v-autocomplete
+              label="ویزیتور"
+              :items="factorVisitors"
+              v-model="item.visitor"
+              item-text="user.name"
+              :disabled="!isEditing"
+            />
+          </v-col>
           <v-col cols="12" md="4">
             <account-select
               :label="' * ' + accountName"
@@ -682,6 +691,7 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
+import DistributionApiMixin from "@/modules/distribution/api";
 
 import formComputed from "./formComputed.js";
 import formMethods from "./formMethods.js";
@@ -698,6 +708,7 @@ export default {
     getFactorExpensesApi,
     formComputed,
     formMethods,
+    DistributionApiMixin,
   ],
   props: {
     type: {
@@ -715,7 +726,7 @@ export default {
       hasList: false,
       transactionsDialog: false,
       baseUrl: "factors/factors",
-      leadingSlash: true,
+      appendSlash: true,
       rowKey: "ware",
       hasIdProp: true,
 
@@ -801,6 +812,7 @@ export default {
     },
   },
   mounted() {
+    this.getVisitors();
     this.getUnits();
     this.getSalePriceTypes();
   },

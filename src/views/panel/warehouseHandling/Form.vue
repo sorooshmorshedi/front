@@ -201,7 +201,7 @@ export default {
     return {
       baseUrl: "factors/warehouseHandlings",
       permissionBasename: "warehouseHandling",
-      leadingSlash: true,
+      appendSlash: true,
       hasList: false,
       hasIdProp: true,
       filters: {},

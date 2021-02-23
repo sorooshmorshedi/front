@@ -39,6 +39,7 @@
 
 <script>
 import NavbarListItem from "./NavbarListItem";
+import { VisitorLevels } from "@/variables";
 export default {
   name: "NavBar",
   components: { NavbarListItem },
@@ -1076,6 +1077,66 @@ export default {
             },
           ],
         },
+        {
+          title: "پخش",
+          icon: "fa-truck",
+          module: "distribution",
+          children: [
+            {
+              title: "بازه پورسانت",
+              perm: "commissionRange",
+              to: {
+                name: "CommissionRanges",
+              },
+            },
+            {
+              title: "ویزیتور",
+              children: [
+                {
+                  title: VisitorLevels.find((o) => o.value == 0).text,
+                  perm: "visitor",
+                  to: {
+                    name: "Visitors",
+                    params: {
+                      level: 0,
+                    },
+                  },
+                },
+                {
+                  title: VisitorLevels.find((o) => o.value == 1).text,
+                  perm: "visitor",
+                  to: {
+                    name: "Visitors",
+                    params: {
+                      level: 1,
+                    },
+                  },
+                },
+                {
+                  title: VisitorLevels.find((o) => o.value == 2).text,
+                  perm: "visitor",
+                  to: {
+                    name: "Visitors",
+                    params: {
+                      level: 2,
+                    },
+                  },
+                },
+                {
+                  title: VisitorLevels.find((o) => o.value == 3).text,
+                  perm: "visitor",
+                  to: {
+                    name: "Visitors",
+                    params: {
+                      level: 3,
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+
         {
           title: "حمل و نقل",
           icon: "$transportationIcon",

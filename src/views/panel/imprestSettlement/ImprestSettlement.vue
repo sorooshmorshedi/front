@@ -177,7 +177,7 @@ export default {
   data() {
     return {
       baseUrl: "transactions",
-      leadingSlash: true,
+      appendSlash: true,
       rowKey: "account",
       hasList: false,
       hasIdProp: true,

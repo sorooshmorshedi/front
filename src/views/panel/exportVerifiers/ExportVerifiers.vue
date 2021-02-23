@@ -55,7 +55,7 @@ export default {
       item: {},
       items: [],
       baseUrl: "reports/exportVerifiers",
-      leadingSlash: true,
+      appendSlash: true,
       forms: forms,
       cols: [
         {

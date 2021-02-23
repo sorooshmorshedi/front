@@ -401,6 +401,6 @@ export default {
         }
       }
       return undefined
-    }
+    },
   }
 }
