@@ -145,6 +145,7 @@ export default {
     },
     handle_noResponse(error, options) {
       console.warn('NO RESPONSE FROM SERVER: ', options.url);
+      console.warn(error)
       alert('خطا در برقراری ارتباط با سرور');
       return;
     }

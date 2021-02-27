@@ -17,11 +17,19 @@ export default {
         reload: reload
       })
     },
+    getPaths(reload) {
+      this.fillStore({
+        url: 'distributions/paths/',
+        storeKey: 'paths',
+        reload: reload
+      })
+    },
   },
   computed: {
     ...mapState([
       'visitors',
-      'commissionRanges'
+      'commissionRanges',
+      'paths',
     ]),
   }
 }

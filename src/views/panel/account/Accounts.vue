@@ -261,25 +261,68 @@
           <v-col cols="12" md="6">
             <v-textarea rows="2" label="آدرس 2" v-model="item.address_2" :disabled="!isEditing" />
           </v-col>
+
+          <template v-if="hasModule('distribution')">
+            <v-col cols="12">
+              <v-divider></v-divider>
+            </v-col>
+
+            <v-col cols="12" class="py-0">
+              <v-card-subtitle class="py-0">مسیر</v-card-subtitle>
+            </v-col>
+
+            <v-col cols="12">
+              <v-row>
+                <v-col v-for="(n, i) in 5" :key="i">
+                  <v-autocomplete
+                    v-if="i == 0 || path[i-1] != undefined"
+                    :label="getPathTitle(i)"
+                    :items="getPathItems(i)"
+                    v-model="path[i]"
+                    @input="clearPath(i)"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+          </template>
         </template>
       </v-row>
     </template>
   </m-form>
 </template>
 <script>
-import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";
 import AccountApiMixin from "@/mixin/accountMixin";
 import wareApiMixin from "@/mixin/wareApi";
 import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import DistributionApiMixin from "@/modules/distribution/api";
+import { PathLevels, getText } from "@/variables";
 
 export default {
-  mixins: [MFormMixin, AccountApiMixin, AccountApiMixin, wareApiMixin],
+  mixins: [
+    MFormMixin,
+    AccountApiMixin,
+    AccountApiMixin,
+    wareApiMixin,
+    DistributionApiMixin,
+  ],
   props: {
     level: {
       requried: true,
     },
-    account_type: {
+    accountType: {
       default: "o",
+      validator(value) {
+        return (
+          [
+            "p", // person
+            "b", // bank
+            "o", // other (levels)
+          ].indexOf(value) != -1
+        );
+      },
     },
     parent: {
       default: null,
@@ -314,39 +357,23 @@ export default {
         {
           text: "کد حساب",
           value: "code",
-          type: "number",
-          filters: [
-            {
-              label: "از کد حساب",
-              model: "code__from",
-              filter: fromCodeFilter,
-            },
-            {
-              label: "تا کد حساب",
-              model: "code__to",
-              filter: toCodeFilter,
-            },
-          ],
         },
         {
           text: "نام حساب",
           value: "name",
-          type: "text",
-          filters: ["name"],
         },
         {
           text: "نوع",
           value: "type.name",
-          type: "text",
-          filters: ["type.name"],
         },
       ],
       fetchedItems: [],
+      path: [null, null, null, null, null],
     };
   },
   computed: {
     title() {
-      return this.getTitle(this.level, this.account_type);
+      return this.getTitle(this.level, this.accountType);
     },
     permissionBasename() {
       return `account${this.level}`;
@@ -355,12 +382,7 @@ export default {
       return this.getTitle(+this.level - 1);
     },
     itemsType() {
-      if (this.account_type == "o") {
-        return "level" + (this.level - 1);
-      }
-      if (this.account_type == "b") return "buyers";
-      if (this.account_type == "p") return "sellers";
-      return "all";
+      return "level" + (this.level - 1);
     },
     hasParent() {
       return this.level != 0 && !this.isBank && !this.isPerson;
@@ -377,13 +399,15 @@ export default {
       }
     },
     isBank() {
-      return this.account_type == "b";
+      return this.accountType == "b";
     },
     isPerson() {
-      return this.account_type == "p";
+      return this.accountType == "p";
     },
     items() {
-      return this.accounts.filter((o) => o.level == this.level);
+      return this.accounts.filter(
+        (o) => o.level == this.level && o.account_type == this.accountType
+      );
     },
     parentItems() {
       return this.accountsSelectValues.levels[this.level - 1];
@@ -435,26 +459,39 @@ export default {
     setItem(item) {
       let url = `accounts/accounts/${item.id}`;
 
-      let fetchedItem = this.fetchedItems.filter((o) => o.id == item.id);
-      if (fetchedItem.length) {
-        this.item = fetchedItem[0];
-        return;
+      let fetchedItem = this.fetchedItems.find((o) => o.id == item.id);
+      if (fetchedItem) {
+        this.item = fetchedItem;
+        this.setPath(item.path);
+      } else {
+        this.request({
+          url: this.endpoint(url),
+          method: "get",
+          success: (data) => {
+            item = data;
+            if (typeof item.parent == typeof 72) {
+              item.parent = this.parentItems.filter(
+                (o) => o.id == item.parent
+              )[0];
+            }
+            this.fetchedItems.push(item);
+            this.item = item;
+            this.setPath(item.path);
+          },
+        });
       }
-
-      this.request({
-        url: this.endpoint(url),
-        method: "get",
-        success: (data) => {
-          item = data;
-          if (typeof item.parent == typeof 72) {
-            item.parent = this.parentItems.filter(
-              (o) => o.id == item.parent
-            )[0];
-          }
-          this.fetchedItems.push(item);
-          this.item = item;
-        },
-      });
+    },
+    setPath(pathId) {
+      let path_array = [null, null, null, null, null];
+      if (pathId) {
+        path_array[4] = pathId;
+        let path = this.paths.find((o) => o.id == pathId);
+        for (let i = 3; i >= 0; i--) {
+          path = this.paths.find((o) => o.id == path.parent);
+          path_array[i] = path.id;
+        }
+      }
+      this.path = path_array;
     },
     getItemTemplate() {
       return {
@@ -465,6 +502,7 @@ export default {
     getData() {
       this.getAccounts(true);
       this.getAccountTypes();
+      this.getPaths();
       this.getFloatAccountGroups(true);
     },
     getAccount(id) {
@@ -473,8 +511,29 @@ export default {
     getSerialized() {
       let item = this.copy(this.item);
       item = this.extractIds(item);
-      if (!item.id) item.account_type = this.account_type;
+      if (!item.id) item.account_type = this.accountType;
+      item.path = this.path["4"];
       return item;
+    },
+
+    getPathTitle(level) {
+      return getText(PathLevels, level);
+    },
+    getPathItems(level) {
+      return this.paths.filter(
+        (o) =>
+          o.level == level && (!o.parent || o.parent == this.path[level - 1])
+      );
+    },
+    clearPath(i) {
+      for (let j = i + 1; j < 5; j++) {
+        this.path[j] = null;
+      }
+    },
+    clearForm() {
+      this.isEditing = true;
+      this.item = this.getItemTemplate();
+      this.setPath();
     },
   },
 };

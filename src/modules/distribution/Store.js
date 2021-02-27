@@ -2,6 +2,7 @@ export default {
   state: {
     visitors: [],
     commissionRanges: [],
+    paths: [],
   },
   mutations: {
     setVisitors(state, data) {
@@ -9,6 +10,9 @@ export default {
     },
     setCommissionRanges(state, data) {
       state.commissionRanges = data;
+    },
+    setPaths(state, data) {
+      state.paths = data;
     },
   }
 }

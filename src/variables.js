@@ -28,3 +28,24 @@ export const VisitorLevels = [{
   text: "ویزیتور",
   value: 3
 }]
+
+export const PathLevels = [{
+  text: "استان",
+  value: 0
+}, {
+  text: "شهر",
+  value: 1
+}, {
+  text: "منطقه",
+  value: 2
+}, {
+  text: "محله",
+  value: 3
+}, {
+  text: "خیابان",
+  value: 4
+}]
+
+export function getText(variable, value) {
+  return variable.find((o) => o.value == value).text;
+}

@@ -98,7 +98,7 @@ export default [{
     },
     {
       name: 'Accounts',
-      path: 'accounts/:level/:account_type?',
+      path: 'accounts/:level/:accountType?',
       component: Accounts,
       props: true
     },

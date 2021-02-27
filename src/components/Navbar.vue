@@ -40,6 +40,7 @@
 <script>
 import NavbarListItem from "./NavbarListItem";
 import { VisitorLevels } from "@/variables";
+import { PathLevels } from "@/variables";
 export default {
   name: "NavBar",
   components: { NavbarListItem },
@@ -153,7 +154,7 @@ export default {
                     name: "Accounts",
                     params: {
                       level: 3,
-                      account_type: "p",
+                      accountType: "p",
                     },
                   },
                   title: "اشخاص",
@@ -164,7 +165,7 @@ export default {
                     name: "Accounts",
                     params: {
                       level: 3,
-                      account_type: "b",
+                      accountType: "b",
                     },
                   },
                   title: "بانک",
@@ -1134,6 +1135,62 @@ export default {
                 },
               ],
             },
+            {
+              title: "مسیر",
+              children: [
+                {
+                  title: PathLevels.find((o) => o.value == 0).text,
+                  perm: "path0",
+                  to: {
+                    name: "Paths",
+                    params: {
+                      level: 0,
+                    },
+                  },
+                },
+                {
+                  title: PathLevels.find((o) => o.value == 1).text,
+                  perm: "path1",
+                  to: {
+                    name: "Paths",
+                    params: {
+                      level: 1,
+                    },
+                  },
+                },
+                {
+                  title: PathLevels.find((o) => o.value == 2).text,
+                  perm: "path2",
+                  to: {
+                    name: "Paths",
+                    params: {
+                      level: 2,
+                    },
+                  },
+                },
+                {
+                  title: PathLevels.find((o) => o.value == 3).text,
+                  perm: "path3",
+                  to: {
+                    name: "Paths",
+                    params: {
+                      level: 3,
+                    },
+                  },
+                },
+                {
+                  title: PathLevels.find((o) => o.value == 4).text,
+                  perm: "path4",
+                  to: {
+                    name: "Paths",
+                    params: {
+                      level: 4,
+                    },
+                  },
+                },
+              ],
+            },
+
           ],
         },
 

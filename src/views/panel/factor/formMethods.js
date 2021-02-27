@@ -96,6 +96,7 @@ export default {
     getSerialized() {
       let factor = this.copy(this.item);
       factor = this.extractIds(factor);
+      factor.path = this.item.account.path;
 
       let items = [];
       this.rows.forEach((row, i) => {
@@ -110,7 +111,6 @@ export default {
         );
         items.push(item);
       });
-
 
       let expenses = [];
       this.item.expenses.forEach((row, i) => {

@@ -75,7 +75,7 @@
         <v-btn
           v-if="!isFpi && !isCw"
           class="teal lue white--text mr-1 mt-1 mt-md-0"
-          :to="{name: 'Accounts', params: {level: 3, account_type: 'p'}, query: {showForm: true}}"
+          :to="{name: 'Accounts', params: {level: 3, accountType: 'p'}, query: {showForm: true}}"
         >تعریف حساب اشخاص</v-btn>
         <v-btn
           v-if="!isFpi && !isCw && id != false"
@@ -130,6 +130,7 @@
             <account-select
               :label="' * ' + accountName"
               :itemsType="accountType"
+              :visitor="item.visitor"
               v-model="item.account"
               :disabled="!isEditing"
               :floatAccount="item.floatAccount"

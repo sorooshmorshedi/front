@@ -119,8 +119,10 @@
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
 import OpenLedgerBtn from "@/components/btns/OpenLedgerBtn.vue";
+import DistributionApiMixin from "@/modules/distribution/api";
+
 export default {
-  mixins: [accountApiMixin],
+  mixins: [accountApiMixin, DistributionApiMixin],
   components: { OpenLedgerBtn },
   props: {
     value: {},
@@ -168,6 +170,9 @@ export default {
           "imprests",
         ].includes(value);
       },
+    },
+    visitor: {
+      default: null,
     },
     childOf: {
       default: null,
@@ -279,6 +284,18 @@ export default {
         });
       }
 
+      if (this.visitor) {
+        items = items.filter((item) => {
+          let path = this.paths.find((o) => o.id == item.path);
+          if (path) {
+            let path = this.paths.find((o) => o.id == path.parent);
+            return path.visitors.includes(this.visitor);
+          } else {
+            return false;
+          }
+        });
+      }
+
       return items;
     },
     hasDeepSelect() {
@@ -310,6 +327,7 @@ export default {
     this.getAccounts(false, () => this.setItem());
     this.getFloatAccounts(false, () => this.setItem());
     this.getFloatAccountGroups(false, () => this.setItem());
+    this.getPaths();
 
     this.setItem();
   },
