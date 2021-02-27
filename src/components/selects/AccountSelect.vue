@@ -7,7 +7,7 @@
     <v-col :cols="horizontal && hasDeepSelect?6:12">
       <div class="d-flex">
         <open-ledger-btn
-          v-if="showLedgerBtn && hasLedger"
+          v-if="showLedgerBtn && hasLedger && item"
           :query="{account: item.id, level: `level${item.level}`}"
           class="mr-2"
         />

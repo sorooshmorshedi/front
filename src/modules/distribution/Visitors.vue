@@ -72,6 +72,15 @@
             :disabled="!isEditing"
           />
         </v-col>
+        <v-col cols="12">
+          <account-select
+            :disabled="!isEditing"
+            label="* حساب شناور"
+            itemsType="floatAccounts"
+            :child-of="visitorsDefaultAccount"
+            v-model="item.floatAccount"
+          />
+        </v-col>
       </v-row>
     </template>
   </m-form>
@@ -81,9 +90,12 @@ import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import { VisitorLevels } from "@/variables";
 import UserApiMixin from "@/views/panel/user/api";
+import AccountSelect from "@/components/selects/AccountSelect.vue";
+import AccountApiMixin from "@/mixin/accountMixin";
 
 export default {
-  mixins: [MFormMixin, DistributionApiMixin, UserApiMixin],
+  components: { AccountSelect },
+  mixins: [MFormMixin, DistributionApiMixin, UserApiMixin, AccountApiMixin],
   props: {
     level: {
       requried: true,
@@ -139,10 +151,20 @@ export default {
     parentItems() {
       return this.visitors.filter((o) => o.level == this.level - 1);
     },
+    visitorsDefaultAccount() {
+      let defaultAccount = this.defaultAccounts.find(
+        (o) => o.codename == "visitorsAccount"
+      );
+      if (defaultAccount) {
+        return defaultAccount.account.floatAccountGroup.id;
+      }
+      return null;
+    },
   },
   methods: {
     getData() {
       this.getVisitors(true);
+      this.getDefaultAccounts();
       this.getCommissionRanges();
       this.getUsers((data) => (this.users = data));
     },
