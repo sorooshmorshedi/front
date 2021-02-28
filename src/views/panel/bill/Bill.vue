@@ -29,6 +29,7 @@
                 :showRemain="true"
                 :showPreviousRemain="false"
                 :considerFinancialYear="false"
+                :colspan="3"
               />
             </v-col>
           </v-row>
