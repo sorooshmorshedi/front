@@ -278,23 +278,27 @@ export default {
         this.taxPrice(row) +
         this.complicationPrice(row) -
         (+row.insurance_price || 0);
-      row.total_value = +sum.toFixed(0);
+      sum = +sum.toFixed(0);
+      row.total_value = sum
       return sum;
     },
     netPrice(row) {
       let value = +row.gross_price - +row.insurance_price;
-      row.net_price = +value.toFixed(0);
+      value = +value.toFixed(0);
+      row.net_price = value
       return value;
     },
     companyCommission(row) {
       let value =
         (this.netPrice(row) * +row.company_commission_percent) / 100 || 0;
-      row.company_commission = +value.toFixed(0);
+      value = +value.toFixed(0);
+      row.company_commission = value
       return value;
     },
     carIncome(row) {
       let value = this.netPrice(row) - this.companyCommission(row) || 0;
-      row.car_income = +value.toFixed(0);
+      value = +value.toFixed(0);
+      row.car_income = value
       return value;
     },
     getItemByPosition(position) {
