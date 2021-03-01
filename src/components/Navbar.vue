@@ -1190,6 +1190,27 @@ export default {
                 },
               ],
             },
+            {
+              title: "راننده",
+              perm: "driver",
+              to: {
+                name: "Drivers",
+              },
+            },
+            {
+              title: "موزع",
+              perm: "distributor",
+              to: {
+                name: "Distributors",
+              },
+            },
+            {
+              title: "ماشین",
+              perm: "car",
+              to: {
+                name: "Cars",
+              },
+            },
 
           ],
         },
@@ -1223,14 +1244,14 @@ export default {
                   perm: "car",
                   title: "ماشین ها",
                   to: {
-                    name: "Cars",
+                    name: "DashtbashiCars",
                   },
                 },
                 {
                   title: "راننده ها",
                   perm: "driver",
                   to: {
-                    name: "Drivers",
+                    name: "DashtbashiDrivers",
                   },
                 },
                 {

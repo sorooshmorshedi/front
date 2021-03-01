@@ -20,7 +20,7 @@
             label="ماشین"
             v-model="filters.driving__car"
             @change="(v) => filters.oilCompanyLading__driving__car = v"
-            :items="$store.state.cars"
+            :items="$store.state.dashtbashiCars"
             item-text="car_number_str"
             item-value="id"
           />
@@ -32,7 +32,7 @@
             label="راننده"
             v-model="filters.driving__driver"
             @change="(v) => filters.oilCompanyLading__driving__car = v"
-            :items="$store.state.drivers"
+            :items="$store.state.dashtbashiDrivers"
             item-text="name"
             item-value="id"
           />

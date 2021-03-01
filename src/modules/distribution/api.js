@@ -24,12 +24,36 @@ export default {
         reload: reload
       })
     },
+    getDrivers(reload) {
+      this.fillStore({
+        url: 'distributions/drivers/',
+        storeKey: 'drivers',
+        reload: reload
+      })
+    },
+    getDistributors(reload) {
+      this.fillStore({
+        url: 'distributions/distributors/',
+        storeKey: 'distributors',
+        reload: reload
+      })
+    },
+    getCars(reload) {
+      this.fillStore({
+        url: 'distributions/cars/',
+        storeKey: 'cars',
+        reload: reload
+      })
+    },
   },
   computed: {
     ...mapState([
       'visitors',
       'commissionRanges',
       'paths',
+      'drivers',
+      'distributors',
+      'cars',
     ]),
   }
 }

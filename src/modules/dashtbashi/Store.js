@@ -1,16 +1,16 @@
 export default {
   state: {
-    cars: [],
-    drivers: [],
+    dashtbashiCars: [],
+    dashtbashiDrivers: [],
     drivings: [],
     associations: [],
   },
   mutations: {
-    setCars(state, data) {
-      state.cars = data;
+    setDashtbashiCars(state, data) {
+      state.dashtbashiCars = data;
     },
-    setDrivers(state, data) {
-      state.drivers = data;
+    setDashtbashiDrivers(state, data) {
+      state.dashtbashiDrivers = data;
     },
     setDrivings(state, data) {
       state.drivings = data;

@@ -27,13 +27,13 @@ export default [{
     path: 'options',
     component: Options,
   }, {
-    name: 'Cars',
-    path: 'cars',
+    name: 'DashtbashiCars',
+    path: 'dashtbashiCars',
     component: Cars,
   },
   {
-    name: 'Drivers',
-    path: 'drivers',
+    name: 'DashtbashiDrivers',
+    path: 'dashtbashiDrivers',
     component: Drivers,
   },
   {

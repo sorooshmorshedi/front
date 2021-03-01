@@ -20,7 +20,7 @@
             :return-object="true"
             label="* ماشین"
             v-model="item.car"
-            :items="$store.state.cars"
+            :items="$store.state.dashtbashiCars"
             item-text="car_number_str"
             item-value="id"
             :disabled="item.id"
@@ -32,7 +32,7 @@
             label="* راننده"
             v-model="item.driver"
             :disabled="item.id"
-            :items="$store.state.drivers"
+            :items="$store.state.dashtbashiDrivers"
             item-text="name"
             item-value="id"
           />

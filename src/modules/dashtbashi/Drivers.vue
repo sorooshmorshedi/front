@@ -105,7 +105,7 @@ export default {
   },
   computed: {
     items() {
-      return this.$store.state.drivers;
+      return this.$store.state.dashtbashiDrivers;
     },
   },
   methods: {

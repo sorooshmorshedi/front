@@ -104,23 +104,23 @@ export default {
   },
   methods: {
     getDrivers(force, callback = null) {
-      if (!force && this.$store.state.drivers.length) return;
+      if (!force && this.$store.state.dashtbashiDrivers.length) return;
       return this.request({
         url: this.endpoint("dashtbashi/drivers/"),
         method: "get",
         success: data => {
-          this.$store.commit("setDrivers", data);
+          this.$store.commit("setDashtbashiDrivers", data);
           callback && callback(data);
         }
       });
     },
     getCars(force) {
-      if (!force && this.$store.state.cars.length) return;
+      if (!force && this.$store.state.dashtbashiCars.length) return;
       return this.request({
         url: this.endpoint('dashtbashi/cars/'),
         method: 'get',
         success: data => {
-          this.$store.commit('setCars', data);
+          this.$store.commit('setDashtbashiCars', data);
         }
       })
     },

@@ -246,7 +246,7 @@ export default {
   },
   computed: {
     items() {
-      return this.$store.state.cars;
+      return this.$store.state.dashtbashicars;
     },
   },
   mounted() {

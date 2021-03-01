@@ -8,7 +8,7 @@
             :return-object="false"
             label="* ماشین"
             v-model="filters.driving__car"
-            :items="$store.state.cars"
+            :items="$store.state.dashtbashiCars"
             item-text="car_number_str"
             item-value="id"
 
