@@ -133,6 +133,7 @@ export default {
         floatAccount__floatAccountGroups: null,
         costCenter__floatAccountGroups: null,
         title: this.title,
+        consider_previous_remain: "true",
       };
     },
     init() {
