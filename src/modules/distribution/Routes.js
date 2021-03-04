@@ -1,5 +1,5 @@
 const Visitors = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/Visitors")
-const CommissionRanges = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/CommissionRanges")
+// const CommissionRanges = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/CommissionRanges")
 const Paths = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/Paths")
 const Drivers = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/Drivers")
 const Distributors = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/Distributors")
@@ -10,11 +10,13 @@ export default [{
   path: 'visitors/:level',
   component: Visitors,
   props: true,
-}, {
-  name: 'CommissionRanges',
-  path: 'commissionRanges',
-  component: CommissionRanges,
-}, {
+},
+//  {
+  // name: 'CommissionRanges',
+  // path: 'commissionRanges',
+  // component: CommissionRanges,
+// }, 
+{
   name: 'Paths',
   path: 'paths/:level',
   component: Paths,
