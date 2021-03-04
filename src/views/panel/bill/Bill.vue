@@ -27,8 +27,9 @@
                 :sortable="true"
                 :filterable="true"
                 :showRemain="true"
-                :showPreviousRemain="false"
+                :showPreviousRemain="filters.consider_previous_remain"
                 :considerFinancialYear="false"
+                :colspan="3"
               />
             </v-col>
           </v-row>

@@ -15,7 +15,7 @@
         <td :colspan="colspan"></td>
         <td>منقول از صفحه قبل</td>
         <td v-if="showAccountInTable" colspan="2"></td>
-        <td v-if="showFinancialYear" colspan="1"></td>
+        <td v-if="showFinancialYear" colspan="2"></td>
         <td>{{ previousLastItem.comulative_bed | toMoney }}</td>
         <td>{{ previousLastItem.comulative_bes | toMoney }}</td>
         <template v-if="showRemain">
@@ -29,7 +29,7 @@
         <td :colspan="colspan"></td>
         <td>مانده از قبل</td>
         <td v-if="showAccountInTable" colspan="2"></td>
-        <td v-if="showFinancialYear" colspan="1"></td>
+        <td v-if="showFinancialYear" colspan="2"></td>
         <td>{{ lastItem.previous_bed | toMoney }}</td>
         <td>{{ lastItem.previous_bes | toMoney }}</td>
         <template v-if="showRemain">
@@ -52,11 +52,11 @@
           <td>{{ lastItem.remain_type | toMoney }}</td>
         </template>
       </tr>
-      <tr v-if="apiData.previous" class="text-center">
+      <tr v-if="!apiData.next" class="text-center">
         <td :colspan="colspan"></td>
         <td>جمع تا این صفحه</td>
         <td v-if="showAccountInTable" colspan="2"></td>
-        <td v-if="showFinancialYear" colspan="1"></td>
+        <td v-if="showFinancialYear" colspan="2"></td>
         <td>{{ lastItem.comulative_bed | toMoney }}</td>
         <td>{{ lastItem.comulative_bes | toMoney }}</td>
         <template v-if="showRemain">
