@@ -4,6 +4,7 @@ const Paths = () => import( /* wepackChunkName: "distribution" */ "@/modules/dis
 const Drivers = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/Drivers")
 const Distributors = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/Distributors")
 const Cars = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/Cars")
+const DistributionForm = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/DistributionForm")
 
 export default [{
   name: 'Visitors',
@@ -33,4 +34,9 @@ export default [{
   name: 'Cars',
   path: 'cars',
   component: Cars,
+}, {
+  name: 'DistributionForm',
+  path: 'distribution/:id?',
+  component: DistributionForm,
+  props: true
 }, ]

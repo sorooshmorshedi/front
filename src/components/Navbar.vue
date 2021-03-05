@@ -1211,7 +1211,13 @@ export default {
                 name: "Cars",
               },
             },
-
+            {
+              title: "تحویل فاکتور ها جهت توزیع",
+              perm: "distribution",
+              to: {
+                name: "DistributionForm",
+              },
+            },
           ],
         },
 

@@ -145,6 +145,7 @@
             :items="items"
             @click:row="rowClick"
             v-on="listeners"
+            v-bind="$attrs"
             :filters.sync="filters"
           >
             <!-- Pass user templates to m-data-table -->

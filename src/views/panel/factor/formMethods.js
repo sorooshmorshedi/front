@@ -346,11 +346,13 @@ export default {
         let result = []
         for (let salePriceTypeId of Object.keys(prices)) {
           let salePriceType = this.salePriceTypes.filter(o => o.id == salePriceTypeId)[0]
-          result.push({
-            id: salePriceTypeId,
-            price: prices[salePriceTypeId],
-            name: salePriceType.name
-          })
+          if (salePriceType) {
+            result.push({
+              id: salePriceTypeId,
+              price: prices[salePriceTypeId],
+              name: salePriceType.name
+            })
+          }
         }
         return result
       } else {

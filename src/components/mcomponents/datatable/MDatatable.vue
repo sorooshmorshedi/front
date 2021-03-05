@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title v-show="!isPrinting">
+    <v-card-title v-show="!isPrinting" v-if="showExportBtns">
       <v-row no-gutters>
         <v-col
           cols="12"
@@ -25,20 +25,20 @@
     <v-data-table
       :id="'datatable-' + _uid"
       ref="datatable"
-      v-bind="$attrs"
       :show-select="!isPrinting"
       :headers="headersWithFilter"
       :items="tableItems"
       :options.sync="options"
       :server-items-length="totalItems"
       :loading="loading"
-      v-model="selectedItems"
+      @input="v => selectedItems = v"
       :search="search"
       :disable-pagination="isPrinting"
       :disable-sort="isPrinting"
       :hide-default-footer="isPrinting"
       :footer-props="{ showFirstLastPage: true }"
       v-on="$listeners"
+      v-bind="$attrs"
       :mobile-breakpoint="0"
     >
       <!-- Add row number field -->

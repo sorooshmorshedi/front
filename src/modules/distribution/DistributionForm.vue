@@ -63,7 +63,22 @@
 
         <template v-if="isEditing">
           <v-col cols="12">
-            <path-select :pathIn.sync="filters.path__in" />
+            <tree-select
+              :levelsCount="5"
+              :items="paths"
+              :labels="PathLevels"
+              :itemsIn.sync="filters.path__in"
+              item-text="name"
+            />
+          </v-col>
+          <v-col cols="12">
+            <tree-select
+              :levelsCount="4"
+              :items="visitors"
+              :labels="VisitorLevels"
+              :itemsIn.sync="filters.visitor__in"
+              item-text="user.name"
+            />
           </v-col>
           <v-col cols="12">
             <m-datatable
@@ -97,12 +112,13 @@ import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import mtime from "@/components/mcomponents/cleave/Time";
 import FormsMixin from "@/mixin/forms";
-import PathSelect from "@/modules/distribution/PathSelect";
+import TreeSelect from "@/components/selects/TreeSelect";
+import { PathLevels, VisitorLevels } from "@/variables";
 
 export default {
   name: "DistributionForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin],
-  components: { mtime, PathSelect },
+  components: { mtime, TreeSelect },
   props: {
     id: {},
   },
@@ -116,8 +132,11 @@ export default {
       filters: {
         type: "sale",
         is_definite: true,
+        is_loaded: false,
       },
       factors: [],
+      PathLevels,
+      VisitorLevels,
     };
   },
   computed: {
@@ -167,7 +186,7 @@ export default {
     },
     getItemByPosition(position) {
       return this.request({
-        url: this.endpoint(`${this.baseUrl}/byPosition`),
+        url: this.endpoint(`${this.baseUrl}/byPosition/`),
         method: "get",
         params: {
           id: this.item.id,
@@ -181,6 +200,7 @@ export default {
     getData() {
       this.getCars();
       this.getVisitors();
+      this.getPaths();
     },
     setItem(item) {
       this.item = item;

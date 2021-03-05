@@ -288,8 +288,8 @@ export default {
         items = items.filter((item) => {
           let path = this.paths.find((o) => o.id == item.path);
           if (path) {
-            let path = this.paths.find((o) => o.id == path.parent);
-            return path.visitors.includes(this.visitor);
+            parent = this.paths.find((o) => o.id == path.parent);
+            return parent.visitors.includes(this.visitor.id);
           } else {
             return false;
           }
@@ -358,7 +358,7 @@ export default {
         this.localCostCenter = null;
       } else {
         if (this.floatAccount != this.localFloaAccount) {
-          if (isNan(this.floatAccount)) {
+          if (isNaN(this.floatAccount)) {
             this.localFloatAccount = this.floatAccount;
           } else {
             this.item = this.floatAccounts.find(
@@ -368,7 +368,7 @@ export default {
           }
         }
         if (this.costCenter != this.localCostCenter) {
-          if (isNan(this.costCenter)) {
+          if (isNaN(this.costCenter)) {
             this.localCostCenter = this.costCenter;
           } else {
             this.item = this.floatAccounts.find((o) => o.id == this.costCenter);
