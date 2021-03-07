@@ -1,13 +1,20 @@
+import {
+  mapState
+} from "vuex";
 export default {
   methods: {
-    getUsers(callback) {
-      this.request({
-        url: this.endpoint(`users/list`),
-        method: "get",
-        success: data => {
-          callback(data);
-        }
-      });
+    getUsers(reload, callback) {
+      this.fillStore({
+        url: 'users/list',
+        storeKey: 'users',
+        reload: reload,
+        callback: callback
+      })
     },
   },
+  computed: {
+    ...mapState([
+      'users',
+    ]),
+  }
 }

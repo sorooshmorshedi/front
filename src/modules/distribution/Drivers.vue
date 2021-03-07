@@ -42,7 +42,6 @@ export default {
       baseUrl: "distributions/drivers",
       permissionBasename: "driver",
       appendSlash: true,
-      users: [],
       cols: [
         {
           text: "نام",
@@ -59,7 +58,7 @@ export default {
   methods: {
     getData() {
       this.getDrivers(true);
-      this.getUsers((data) => (this.users = data));
+      this.getUsers();
     },
   },
 };

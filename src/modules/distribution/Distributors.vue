@@ -42,7 +42,6 @@ export default {
       baseUrl: "distributions/distributors",
       permissionBasename: "distributor",
       appendSlash: true,
-      users: [],
       cols: [
         {
           text: "نام",
@@ -59,7 +58,7 @@ export default {
   methods: {
     getData() {
       this.getDistributors(true);
-      this.getUsers((data) => (this.users = data));
+      this.getUsers();
     },
   },
 };

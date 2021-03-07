@@ -2,7 +2,7 @@
   <div class="rtl">
     <m-form
       title="کاربر"
-      :items="items"
+      :items="users"
       :cols="cols"
       :isEditing.sync="isEditing"
       :canDelete="canDelete"
@@ -92,7 +92,6 @@ export default {
   data() {
     return {
       baseUrl: "users/list",
-      items: [],
       roles: [],
       newPassword: "",
       showChangePasswordDialog: false,
@@ -138,7 +137,7 @@ export default {
       };
     },
     getData() {
-      this.getUsers((data) => (this.items = data));
+      this.getUsers();
       this.getRoles(this.setRoles);
     },
     setRoles(data) {

@@ -61,8 +61,65 @@
           />
         </v-col>
 
+        <v-col cols="12" v-if="id">
+          <v-card-subtitle
+            v-if="isEditing"
+          >فاکتور های فعلی (برای حذف فاکتور آن را از انتخاب خارج کنید)</v-card-subtitle>
+          <m-datatable
+            :headers="selectedFactorsHeaders"
+            :filters.sync="filters"
+            v-model="factors"
+            :showExportBtns="false"
+            :items="item.factors"
+            ref="datatable"
+          >
+            <template #item.operations="{ item }">
+              <v-menu offset-y transition="slide-y-transition" origin="center center">
+                <template #activator="{ on, attrs }">
+                  <v-btn
+                    x-small
+                    depressed
+                    color="green white--text"
+                    v-bind="attrs"
+                    v-on="on"
+                  >تحویل کامل</v-btn>
+                </template>
+                <v-card>
+                  <v-card-text class="pa-1">
+                    <v-btn block depressed color="light-blue white--text">ثبت دریافت</v-btn>
+                    <v-btn block depressed color="light-blue white--text" class="mt-1">نسیه</v-btn>
+                  </v-card-text>
+                </v-card>
+              </v-menu>
+
+              <v-menu offset-y transition="slide-y-transition" origin="center center">
+                <template #activator="{ on, attrs }">
+                  <v-btn
+                    depressed
+                    color="orange white--text"
+                    class="mr-1"
+                    v-bind="attrs"
+                    v-on="on"
+                  >تحویل ناقص</v-btn>
+                </template>
+                <v-card>
+                  <v-card-text class="pa-1">
+                    <v-btn block depressed color="light-blue white--text">ثبت برگشت از فروش</v-btn>
+                    <v-btn block depressed color="light-blue white--text" class="mt-1">ثبت دریافت</v-btn>
+                  </v-card-text>
+                </v-card>
+              </v-menu>
+
+              <v-btn x-small depressed color="red white--text" class="mr-1">مرجوع</v-btn>
+            </template>
+          </m-datatable>
+        </v-col>
+
         <template v-if="isEditing">
-          <v-col cols="12">
+          <v-col cols="12" v-if="id">
+            <v-card-subtitle>فاکتور هایی که میخواهید اضافه کنید از لیست پایین انتخاب کنید</v-card-subtitle>
+          </v-col>
+          <v-col cols="12" class="py-1">
             <tree-select
               :levelsCount="5"
               :items="paths"
@@ -71,7 +128,7 @@
               item-text="name"
             />
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" class="py-1">
             <tree-select
               :levelsCount="4"
               :items="visitors"
@@ -80,7 +137,7 @@
               item-text="user.name"
             />
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" class="py-1">
             <m-datatable
               :headers="headers"
               :filters.sync="filters"
@@ -91,17 +148,6 @@
             ></m-datatable>
           </v-col>
         </template>
-
-        <v-col cols="12" v-else>
-          <m-datatable
-            :headers="headers"
-            :filters.sync="filters"
-            v-model="factors"
-            :showExportBtns="false"
-            :items="item.factors"
-            ref="datatable"
-          ></m-datatable>
-        </v-col>
       </v-row>
     </template>
   </m-form>
@@ -177,6 +223,15 @@ export default {
         },
       ];
     },
+    selectedFactorsHeaders() {
+      return [
+        ...this.headers,
+        {
+          text: "عملیات ها",
+          value: "operations",
+        },
+      ];
+    },
   },
   methods: {
     getItemTemplate() {
@@ -186,7 +241,7 @@ export default {
     },
     getItemByPosition(position) {
       return this.request({
-        url: this.endpoint(`${this.baseUrl}/byPosition/`),
+        url: this.endpoint(`${this.baseUrl}/byPosition`),
         method: "get",
         params: {
           id: this.item.id,

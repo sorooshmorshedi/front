@@ -20,6 +20,7 @@ export default new Vuex.Store({
       text: '',
       color: ''
     },
+    users: [],
     options: null,
     cities: [],
     accounts: [],
@@ -33,16 +34,6 @@ export default new Vuex.Store({
       units: [],
       salePriceTypes: [],
     },
-    chequebooks: [],
-    sanads: {
-      sanads: [],
-      transactions: []
-    },
-    factors: {
-      factors: [],
-      factorExpenses: [],
-      receipts: [],
-    }
   },
   mutations: {
     ...DashbashiStore.mutations,
@@ -74,6 +65,9 @@ export default new Vuex.Store({
     setUser(state, user) {
       state.user = user;
     },
+    setUsers(state, users) {
+      state.users = users;
+    },
     setCities(state, data) {
       state.cities = data;
     },
@@ -101,15 +95,5 @@ export default new Vuex.Store({
       wares.units && (state.wares.units = wares.units);
       wares.salePriceTypes && (state.wares.salePriceTypes = wares.salePriceTypes);
     },
-    setSanads(state, sanads) {
-      sanads.sanads && (state.sanads.sanads = sanads.sanads);
-      sanads.transactions && (state.sanads.transactions = sanads.transactions);
-    },
-    setFactors(state, factors) {
-      factors.factorExpenses && (state.factors.factorExpenses = factors.factorExpenses);
-      factors.factors && (state.factors.factors = factors.factors);
-      factors.receipts && (state.factors.receipts = factors.receipts);
-    }
-
   }
 })

@@ -109,7 +109,6 @@ export default {
       item: {},
       baseUrl: "distributions/visitors",
       appendSlash: true,
-      users: [],
       cols: [
         {
           text: "کد",
@@ -166,7 +165,7 @@ export default {
       this.getVisitors(true);
       this.getDefaultAccounts();
       this.getCommissionRanges();
-      this.getUsers((data) => (this.users = data));
+      this.getUsers();
     },
     getTitle(level) {
       return VisitorLevels.find((o) => o.value == level).text;

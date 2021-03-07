@@ -76,7 +76,7 @@
         </v-col>
 
         <v-col cols="12">
-          <input-table class="form-items">
+          <input-table class="form-items" v-model="rows">
             <template #thead>
               <tr>
                 <th>#</th>
