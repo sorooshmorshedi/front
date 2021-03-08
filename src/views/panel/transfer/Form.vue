@@ -49,7 +49,6 @@
                 <th>* واحد</th>
                 <th>* از انبار</th>
                 <th>* تعداد</th>
-                <th>واحد</th>
                 <th>* به انبار</th>
                 <th>توضیحات</th>
                 <th class="d-print-none"></th>
@@ -94,7 +93,6 @@
                 <td>
                   <money v-model="rows[i].unit_count" :disabled="!isEditing" />
                 </td>
-                <td>{{ rows[i].ware?rows[i].ware.unit_name:' - ' }}</td>
                 <td class="tr-warehouse">
                   <v-autocomplete
                     :return-object="true"
