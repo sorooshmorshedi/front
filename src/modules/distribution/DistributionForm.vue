@@ -152,7 +152,7 @@
     </template>
 
     <v-dialog v-model="dialog" scrollable max-width="500px" transition="dialog-transition">
-      <v-card>
+      <v-card v-if="factor">
         <v-card-title>
           فاکتور شماره
           <span>{{ factor.code }}</span>
@@ -196,6 +196,7 @@ export default {
         is_loaded: false,
       },
       factors: [],
+      factor: null,
       PathLevels,
       VisitorLevels,
     };

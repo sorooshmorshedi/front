@@ -29,6 +29,7 @@ export default {
         taxValue: "",
         discountPercent: "",
         discountValue: "",
+        backFrom: null,
         expenses: []
       }
     },
@@ -299,13 +300,16 @@ export default {
     },
     reverseFactor() {
       let rows = this.copy(this.rows);
+
       this.$router.push({
         name: 'FactorForm',
         params: {
-          type: this.reverseType(this.type)
+          type: this.reverseType(this.type),
+          id: this.item.backFactor ? this.item.backFactor.id : null
         },
         query: {
-          'item.account': this.item.account.id
+          'item.account': this.item.account.id,
+          'item.backFrom': this.id
         }
       })
       this.$nextTick(() => {

@@ -132,7 +132,7 @@
               :itemsType="accountType"
               :visitor="item.visitor"
               v-model="item.account"
-              :disabled="!isEditing"
+              :disabled="!isEditing  || item.backFrom != null"
               :floatAccount="item.floatAccount"
               @update:floatAccount="v => item.floatAccount = v"
               :costCenter="item.costCenter"
@@ -203,7 +203,7 @@
                   <td class="tr-ware">
                     <ware-select
                       v-model="rows[i].ware"
-                      :disabled="!isEditing"
+                      :disabled="!isEditing || item.backFrom != null"
                       :factorType="type"
                       :show-main-unit="false"
                     />
