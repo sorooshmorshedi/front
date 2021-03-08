@@ -102,7 +102,7 @@ export default {
       this.rows.forEach((row, i) => {
         if (i == this.rows.length - 1) return;
         let item = this.copy(row);
-        item.count = item.unit_count * (item.ware.salePrices.filter(o => o.unit == item.unit.id)[0].conversion_factor || 1);
+        item.count = this.convertToMainUnit(item.ware, item.unit_count, item.unit)
         item = this.extractIds(item);
         ["discountPercent", "discountValue"].forEach(
           k => {
@@ -332,12 +332,6 @@ export default {
       this.pricesFilters.factor__type__in = this.type;
       this.pricesDialog = true;
     },
-    getWareUnits(row) {
-      let ware = row.ware
-      let unitIds = ware.salePrices.map(o => o.unit)
-      let wareUnits = this.units.filter(o => unitIds.includes(o.id))
-      return wareUnits
-    },
     getWarePrices(row) {
       if (row.ware && row.unit) {
         let salePrices = row.ware.salePrices;
@@ -391,17 +385,6 @@ export default {
     getFeeSuffix(row) {
       let price = this.getWarePrices(row).find(o => o.price == row.fee)
       if (price) return price.name
-      return undefined
-    },
-    getUnitSuffix(row) {
-      let unit = row.unit
-      let ware = row.ware
-      if (unit && ware) {
-        let conversionFactor = ware.salePrices.find(o => o.unit == unit.id)['conversion_factor']
-        if (conversionFactor != 1) {
-          return `برابر ${conversionFactor} ${ware.main_unit_name}`
-        }
-      }
       return undefined
     },
   }

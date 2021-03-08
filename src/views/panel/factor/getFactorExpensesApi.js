@@ -13,9 +13,7 @@ export default {
         url: this.endpoint('factors/expenses/'),
         method: 'get',
         success: data => {
-          this.$store.commit('setFactors', {
-            factorExpenses: data
-          });
+          this.$store.commit('setFactorExpenses', data);
           // init && this.init();
         }
       })
@@ -23,7 +21,7 @@ export default {
   },
   computed: {
     ...mapState({
-      factorExpenses: state => state.factors.factorExpenses,
+      factorExpenses: state => state.factorExpenses,
     }),
   },
   filters: {},

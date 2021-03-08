@@ -34,6 +34,7 @@ export default new Vuex.Store({
       units: [],
       salePriceTypes: [],
     },
+    factorExpenses: []
   },
   mutations: {
     ...DashbashiStore.mutations,
@@ -94,6 +95,9 @@ export default new Vuex.Store({
       wares.warehouses && (state.wares.warehouses = wares.warehouses);
       wares.units && (state.wares.units = wares.units);
       wares.salePriceTypes && (state.wares.salePriceTypes = wares.salePriceTypes);
+    },
+    setFactorExpenses(state, data) {
+      state.factorExpenses = data;
     },
   }
 })

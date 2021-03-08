@@ -46,6 +46,7 @@
               <tr>
                 <th>#</th>
                 <th>* نام/کد کالا</th>
+                <th>* واحد</th>
                 <th>* از انبار</th>
                 <th>* تعداد</th>
                 <th>واحد</th>
@@ -58,8 +59,26 @@
               <tr v-for="(row,i) in rows" :key="i">
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td class="tr-ware">
-                  <ware-select v-model="rows[i].ware" :disabled="!isEditing" />
+                  <ware-select
+                    v-model="rows[i].ware"
+                    :disabled="!isEditing"
+                    :show-main-unit="false"
+                  />
                 </td>
+                <td>
+                  <v-autocomplete
+                    v-if="rows[i].ware"
+                    :items="getWareUnits(row.ware)"
+                    v-model="rows[i].unit"
+                    :title="rows[i].unit?rows[i].unit.title:''"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    :return-object="true"
+                    :suffix="getUnitSuffix(row.ware, row.unit)"
+                  ></v-autocomplete>
+                </td>
+
                 <td class="tr-warehouse">
                   <v-autocomplete
                     :return-object="true"
@@ -73,7 +92,7 @@
                   <span v-else>-</span>
                 </td>
                 <td>
-                  <money v-model="rows[i].count" :disabled="!isEditing" />
+                  <money v-model="rows[i].unit_count" :disabled="!isEditing" />
                 </td>
                 <td>{{ rows[i].ware?rows[i].ware.unit_name:' - ' }}</td>
                 <td class="tr-warehouse">
@@ -160,6 +179,7 @@ export default {
   methods: {
     getData() {
       this.getWarehouses();
+      this.getUnits();
     },
     validate(clearForm = false) {
       let isValid = true;
@@ -169,7 +189,7 @@ export default {
       }
       this.rows.forEach((r, i) => {
         if (i == this.rows.length - 1) return;
-        if (!r.count || r.count == 0) {
+        if (!r.unit_count || r.unit_count == 0) {
           this.notify(`لطفا تعداد ردیف ${i + 1} را وارد کنید`, "danger");
           isValid = false;
         }
@@ -194,7 +214,13 @@ export default {
     getSerialized() {
       let item = this.extractIds(this.item);
       let items = this.rows.slice(0, this.rows.length - 1);
-      items = items.map(this.extractIds);
+
+
+      items = items.map(item => {
+        item.count = this.convertToMainUnit(item.ware, item.unit_count, item.unit)
+        item = this.extractIds(item);
+        return item
+      });
       item.items = items;
       return item;
     },

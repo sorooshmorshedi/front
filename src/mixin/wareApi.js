@@ -123,6 +123,24 @@ export default {
         }
       })
     },
+    getWareUnits(ware) {
+      console.log(ware);
+      let unitIds = ware.salePrices.map(o => o.unit)
+      let wareUnits = this.units.filter(o => unitIds.includes(o.id))
+      return wareUnits
+    },
+    getUnitSuffix(ware, unit) {
+      if (unit && ware) {
+        let conversionFactor = ware.salePrices.find(o => o.unit == unit.id)['conversion_factor']
+        if (conversionFactor != 1) {
+          return `برابر ${conversionFactor} ${ware.main_unit_name}`
+        }
+      }
+      return undefined
+    },
+    convertToMainUnit(ware, count, unit) {
+      return count * (ware.salePrices.filter(o => o.unit == unit.id)[0].conversion_factor || 1);
+    }
   },
   computed: {
     ...mapState({

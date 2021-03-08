@@ -150,6 +150,21 @@
         </template>
       </v-row>
     </template>
+
+    <v-dialog v-model="dialog" scrollable max-width="500px" transition="dialog-transition">
+      <v-card>
+        <v-card-title>
+          فاکتور شماره
+          <span>{{ factor.code }}</span>
+          برای
+          <span>{{ factor.account.name }}</span>
+        </v-card-title>
+
+        <v-card-text>
+
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </m-form>
 </template>
 

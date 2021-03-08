@@ -221,7 +221,7 @@
                   <td style="min-width: 100px">
                     <v-autocomplete
                       v-if="rows[i].ware"
-                      :items="getWareUnits(rows[i])"
+                      :items="getWareUnits(rows[i].ware)"
                       v-model="rows[i].unit"
                       :title="rows[i].unit?rows[i].unit.title:''"
                       @change="updateRowFee(rows[i])"
@@ -229,7 +229,7 @@
                       item-value="id"
                       :disabled="!isEditing"
                       :return-object="true"
-                      :suffix="getUnitSuffix(row)"
+                      :suffix="getUnitSuffix(row.ware, row.unit)"
                     ></v-autocomplete>
                   </td>
                   <td class="tr-warehouse" :title="rows[i].warehouse && rows[i].warehouse.name">
