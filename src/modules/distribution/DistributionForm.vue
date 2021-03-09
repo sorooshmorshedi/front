@@ -74,41 +74,19 @@
             ref="datatable"
           >
             <template #item.operations="{ item }">
-              <v-menu offset-y transition="slide-y-transition" origin="center center">
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    x-small
-                    depressed
-                    color="green white--text"
-                    v-bind="attrs"
-                    v-on="on"
-                  >تحویل کامل</v-btn>
-                </template>
-                <v-card>
-                  <v-card-text class="pa-1">
-                    <v-btn block depressed color="light-blue white--text">ثبت دریافت</v-btn>
-                    <v-btn block depressed color="light-blue white--text" class="mt-1">نسیه</v-btn>
-                  </v-card-text>
-                </v-card>
-              </v-menu>
+              <v-btn
+                x-small
+                depressed
+                color="green white--text"
+                @click="openDialog(item, true)"
+              >تحویل کامل</v-btn>
 
-              <v-menu offset-y transition="slide-y-transition" origin="center center">
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    depressed
-                    color="orange white--text"
-                    class="mr-1"
-                    v-bind="attrs"
-                    v-on="on"
-                  >تحویل ناقص</v-btn>
-                </template>
-                <v-card>
-                  <v-card-text class="pa-1">
-                    <v-btn block depressed color="light-blue white--text">ثبت برگشت از فروش</v-btn>
-                    <v-btn block depressed color="light-blue white--text" class="mt-1">ثبت دریافت</v-btn>
-                  </v-card-text>
-                </v-card>
-              </v-menu>
+              <v-btn
+                depressed
+                color="orange white--text"
+                class="mr-1"
+                @click="openDialog(item, false)"
+              >تحویل ناقص</v-btn>
 
               <v-btn x-small depressed color="red white--text" class="mr-1">مرجوع</v-btn>
             </template>
@@ -151,17 +129,33 @@
       </v-row>
     </template>
 
-    <v-dialog v-model="dialog" scrollable max-width="500px" transition="dialog-transition">
+    <v-dialog v-model="dialog" scrollable max-width="300px" transition="dialog-transition">
       <v-card v-if="factor">
         <v-card-title>
           فاکتور شماره
-          <span>{{ factor.code }}</span>
+          <span class="px-1">{{ factor.code }}</span>
           برای
-          <span>{{ factor.account.name }}</span>
+          <span class="px-1">{{ factor.account.name }}</span>
         </v-card-title>
 
         <v-card-text>
+          <v-btn
+            block
+            depressed
+            color="light-blue white--text"
+            :to="getFactorTransactionLink(factor).to"
+          >ثبت دریافت</v-btn>
 
+          <v-btn
+            v-if="!isFullDelivery"
+            block
+            depressed
+            color="light-blue white--text"
+            class="mt-1"
+            :to="getReverseFactorLink(factor).to"
+          >ثبت برگشت از فروش</v-btn>
+
+          <v-btn block depressed color="light-blue white--text" class="mt-1">نسیه</v-btn>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -173,12 +167,13 @@ import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import mtime from "@/components/mcomponents/cleave/Time";
 import FormsMixin from "@/mixin/forms";
+import FactorMixin from "@/views/panel/factor/mixin";
 import TreeSelect from "@/components/selects/TreeSelect";
 import { PathLevels, VisitorLevels } from "@/variables";
 
 export default {
   name: "DistributionForm",
-  mixins: [MFormMixin, DistributionApiMixin, FormsMixin],
+  mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
   components: { mtime, TreeSelect },
   props: {
     id: {},
@@ -197,6 +192,8 @@ export default {
       },
       factors: [],
       factor: null,
+      isFullDelivery: null,
+      dialog: false,
       PathLevels,
       VisitorLevels,
     };
@@ -250,6 +247,11 @@ export default {
     },
   },
   methods: {
+    openDialog(factor, isFullDelivery) {
+      this.factor = factor;
+      this.isFullDelivery = isFullDelivery;
+      this.dialog = true;
+    },
     getItemTemplate() {
       return {
         factors: [],
