@@ -694,6 +694,7 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
 import DistributionApiMixin from "@/modules/distribution/api";
+import FactorMixin from "@/views/panel/factor/mixin";
 
 import formComputed from "./formComputed.js";
 import formMethods from "./formMethods.js";
@@ -711,6 +712,7 @@ export default {
     formComputed,
     formMethods,
     DistributionApiMixin,
+    FactorMixin,
   ],
   props: {
     type: {

@@ -170,33 +170,7 @@ export default {
     },
     transactionType() {},
     transactionLink() {
-      let label;
-      let type;
-      if (["buy", "backFromSale"].includes(this.type)) {
-        type = "payment";
-        label = "پرداخت";
-      } else {
-        type = "receive";
-        label = "دریافت";
-      }
-
-      let to = {
-        name: 'TransactionForm',
-        params: {
-          type: type,
-        },
-        query: {
-          'item.account': this.item.account.id,
-          'item.floatAccount': this.item.floatAccount && this.item.floatAccount.id,
-          'item.costCenter': this.item.costCenter && this.item.costCenter.id,
-          'factorIds': String(this.id)
-        }
-      }
-      return {
-        label,
-        to
-      };
-
+      return this.getFactorTransactionLink(this.item)
     },
     factorExpenseType() {
       if (this.isBuy || this.isBackFromSale) return 'buy'
@@ -242,7 +216,6 @@ export default {
     },
 
     factorVisitors() {
-      console.log('ha');
       let visitors = this.visitors.filter(o => o.level == 3)
       let userVisitor = visitors.find(o => o.user.id == this.user.id);
       if (userVisitor) {

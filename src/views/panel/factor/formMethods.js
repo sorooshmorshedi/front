@@ -87,13 +87,6 @@ export default {
       });
       window.open(routeData.href, "_blank");
     },
-    reverseType(type) {
-      let factorReverseTypes = {
-        sale: "backFromSale",
-        buy: "backFromBuy"
-      }
-      return factorReverseTypes[type]
-    },
     getSerialized() {
       let factor = this.copy(this.item);
       factor = this.extractIds(factor);
@@ -301,17 +294,8 @@ export default {
     reverseFactor() {
       let rows = this.copy(this.rows);
 
-      this.$router.push({
-        name: 'FactorForm',
-        params: {
-          type: this.reverseType(this.type),
-          id: this.item.backFactor ? this.item.backFactor.id : null
-        },
-        query: {
-          'item.account': this.item.account.id,
-          'item.backFrom': this.id
-        }
-      })
+      this.$router.push(this.getReverseFactorLink(this.item).to)
+
       this.$nextTick(() => {
         this.rows = [];
         for (const row of rows) {
@@ -321,10 +305,7 @@ export default {
           });
         }
       });
-
-
     },
-
     showPrices(ware) {
       this.priceWare = ware;
       if (this.item.account) {
