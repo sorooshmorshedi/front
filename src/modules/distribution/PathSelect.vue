@@ -107,7 +107,6 @@ export default {
       for (let j = i + 1; j < 5; j++) {
         this.pathLevels[j] = null;
       }
-      console.log(i, this.pathLevels, this.getPathItems(i + 1));
     },
     emit(level) {
       this.clearPathLevels(level);

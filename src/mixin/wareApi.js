@@ -124,7 +124,6 @@ export default {
       })
     },
     getWareUnits(ware) {
-      console.log(ware);
       let unitIds = ware.salePrices.map(o => o.unit)
       let wareUnits = this.units.filter(o => unitIds.includes(o.id))
       return wareUnits
