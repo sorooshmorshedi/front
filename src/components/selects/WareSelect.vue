@@ -186,7 +186,7 @@ export default {
           this.ware = this.value;
         } else {
           this.ware = this.wares.find((o) => o.id == this.value);
-          this.$emit("input", ware);
+          this.$emit("input", this.ware);
         }
         if (this.ware) {
           this.pricesFilters.ware = this.ware.id;
