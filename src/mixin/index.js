@@ -26,7 +26,7 @@ Vue.mixin({
     ...mapState({
       user: state => state.user,
       financialYear: state => state.user ? state.user.active_financial_year || null : null,
-      isAdvari: state => state.user ? state.user.active_financial_year.warehouse_system == 'a' || null : null,
+      isAdvari: state => state.user && state.user.active_financial_year ? state.user.active_financial_year.warehouse_system == 'a' || null : null,
       company: state => state.user ? state.user.active_company || null : null,
       systemOptions: state => state.options,
       OGR: state => state.OGR,
@@ -244,7 +244,7 @@ Vue.mixin({
     }
   },
   filters: {
-    toJalali(date, format='jYYYY/jMM/jDD') {
+    toJalali(date, format = 'jYYYY/jMM/jDD') {
       return moment(date).format(format);
     },
     toMoney(value, decimalScale = 2) {
