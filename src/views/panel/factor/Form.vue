@@ -123,7 +123,7 @@
               v-model="item.visitor"
               item-text="user.name"
               item-value="id"
-              :disabled="!isEditing"
+              :disabled="!isEditing || backFrom != null || item.backFrom != null"
             />
           </v-col>
           <v-col cols="12" md="4">
@@ -132,7 +132,7 @@
               :itemsType="accountType"
               :visitor="item.visitor"
               v-model="item.account"
-              :disabled="!isEditing  || item.backFrom != null"
+              :disabled="!isEditing  || backFrom != null || item.backFrom != null"
               :floatAccount="item.floatAccount"
               @update:floatAccount="v => item.floatAccount = v"
               :costCenter="item.costCenter"
@@ -203,7 +203,7 @@
                   <td class="tr-ware">
                     <ware-select
                       v-model="rows[i].ware"
-                      :disabled="!isEditing || item.backFrom != null"
+                      :disabled="!isEditing"
                       :factorType="type"
                       :show-main-unit="false"
                     />
@@ -721,7 +721,7 @@ export default {
     id: {
       default: false,
     },
-    fromId: {
+    backFrom: {
       default: null,
     },
   },

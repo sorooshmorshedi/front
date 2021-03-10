@@ -182,8 +182,6 @@ export default {
         {
           text: "نام",
           value: "name",
-          type: "text",
-          filters: ["name"],
         },
       ],
     };
@@ -255,17 +253,40 @@ export default {
         { name: "warehouseHandling", label: "انبارگردانی" },
         { name: "report", label: "گزارش ها" },
         { name: "exportVerifier", label: "تایید کنندگان خروجی" },
-        { name: "driver", label: "راننده" },
-        { name: "car", label: "ماشین" },
-        { name: "driving", label: "انتصاب راننده به ماشین" },
-        { name: "association", label: "انجمن" },
-        { name: "remittance", label: "حواله" },
-        { name: "ladingBillSeries", label: "سری بارگیری" },
-        { name: "ladingBillNumber", label: "کد بارگیری" },
-        { name: "lading", label: "بارگیری" },
-        { name: "oilCompanyLading", label: "بارگیری شرکت نفت" },
-        { name: "otherDriverPayment", label: "پرداخت رانندگان متفرقه" },
-      ].filter((o) => o.label.includes(this.modelSearch));
+      ];
+      if (this.hasModule("dashtbashi")) {
+        let dashtbashiModels = [
+          { name: "driver", label: "راننده" },
+          { name: "car", label: "ماشین" },
+          { name: "driving", label: "انتصاب راننده به ماشین" },
+          { name: "association", label: "انجمن" },
+          { name: "remittance", label: "حواله" },
+          { name: "ladingBillSeries", label: "سری بارگیری" },
+          { name: "ladingBillNumber", label: "کد بارگیری" },
+          { name: "lading", label: "بارگیری" },
+          { name: "oilCompanyLading", label: "بارگیری شرکت نفت" },
+          { name: "otherDriverPayment", label: "پرداخت رانندگان متفرقه" },
+        ];
+        dashtbashiModels.map((o) => {
+          o.app = "_dashtbashi";
+          return o;
+        });
+        models.push(...dashtbashiModels);
+      }
+      if (this.hasModule("distribution")) {
+        models.push(
+          ...[
+            { name: "path", label: "مسیر ها" },
+            { name: "car", label: "ماشین" },
+            { name: "visitor", label: "ویزیتور ها" },
+            { name: "commissionRange", label: "بازه کمیسیون" },
+            { name: "distributor", label: "موزع" },
+            { name: "driver", label: "راننده" },
+            { name: "distribution", label: "تحویل فاکتور جهت توزیع" },
+          ]
+        );
+      }
+      models = models.filter((o) => o.label.includes(this.modelSearch));
 
       return models.filter((o) => this.showModelPermissions(o));
     },
@@ -279,7 +300,9 @@ export default {
           model.name.toLowerCase().includes(permission.contentType.model) ||
           permission.codename.includes(model.name)
         ) {
-          show |= this.item.permissions[permission.id];
+          if (!model.app || model.app == permission.contentType.app_label) {
+            show |= this.item.permissions[permission.id];
+          }
         }
       }
       return show;
@@ -441,6 +464,7 @@ export default {
       this.getPermissions();
     },
     setRoles(data) {
+      this.modelSearch = "";
       this.items = data;
     },
     getPermissions() {

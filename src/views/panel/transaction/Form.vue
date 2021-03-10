@@ -213,6 +213,8 @@
                 <th>توضیحات</th>
                 <th>تاریخ</th>
                 <th>جمع فاکتور</th>
+                <th>جمع برگشتی</th>
+                <th>مبلغ خالص</th>
                 <th>پرداختی قبلی</th>
                 <th v-if="!isEditing">پرداختی فعلی</th>
                 <th>مانده</th>
@@ -227,6 +229,8 @@
                 <td>{{ f.explanation }}</td>
                 <td>{{ f.date }}</td>
                 <td>{{ f.total_sum | toMoney }}</td>
+                <td>{{ f.back_total_sum | toMoney }}</td>
+                <td>{{ f.total_sum - f.back_total_sum | toMoney }}</td>
                 <td>{{ f.previous_paid_value | toMoney }}</td>
                 <td v-if="!isEditing">{{ f.payment.value | toMoney }}</td>
                 <td>{{ f.remain | toMoney }}</td>

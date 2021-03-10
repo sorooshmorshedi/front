@@ -204,21 +204,17 @@ export default {
     }),
   },
   created() {
-    if (!this.isDev) {
-      this.request({
-        url: "/configs.json",
-        method: "get",
-        token: false,
-        success: (data) => {
-          let serverUrl = data.serverUrl;
-          localStorage.setItem("serverUrl", serverUrl);
-          this.log(`server url is : ${serverUrl}`);
-          this.getDateTime();
-        },
-      });
-    } else {
-      this.getDateTime();
-    }
+    this.request({
+      url: "/configs.json",
+      method: "get",
+      token: false,
+      success: (data) => {
+        let serverUrl = data.serverUrl;
+        localStorage.setItem("serverUrl", serverUrl);
+        this.log(`server url is : ${serverUrl}`);
+        this.getDateTime();
+      },
+    });
   },
   methods: {
     routeClick(routeName) {

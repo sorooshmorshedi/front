@@ -73,22 +73,38 @@
             :items="item.factors"
             ref="datatable"
           >
+            <template #item.payable_value="{ item }">{{ getFactorPayableValue(item) | toMoney }}</template>
+
             <template #item.operations="{ item }">
+              <div class="pa-1">
+                <v-btn
+                  x-small
+                  depressed
+                  color="green white--text"
+                  block
+                  :to="getFactorTransactionLink(item).to"
+                >ثبت دریافت</v-btn>
+
+                <v-btn
+                  depressed
+                  block
+                  color="orange white--text"
+                  class="mt-1"
+                  :to="getReverseFactorLink(item).to"
+                >ثبت برگشت از فروش</v-btn>
+              </div>
+            </template>
+
+            <template #item.status="{ item }">
               <v-btn
+                :disabled="item.backFactor != null"
+                block
                 x-small
                 depressed
-                color="green white--text"
-                @click="openDialog(item, true)"
-              >تحویل کامل</v-btn>
-
-              <v-btn
-                depressed
-                color="orange white--text"
-                class="mr-1"
-                @click="openDialog(item, false)"
-              >تحویل ناقص</v-btn>
-
-              <v-btn x-small depressed color="red white--text" class="mr-1">مرجوع</v-btn>
+                color="red white--text"
+                class
+              >مرجوع کامل</v-btn>
+              <v-btn block x-small depressed color="blue white--text" class="mt-1">تحویل شد</v-btn>
             </template>
           </m-datatable>
         </v-col>
@@ -128,37 +144,6 @@
         </template>
       </v-row>
     </template>
-
-    <v-dialog v-model="dialog" scrollable max-width="300px" transition="dialog-transition">
-      <v-card v-if="factor">
-        <v-card-title>
-          فاکتور شماره
-          <span class="px-1">{{ factor.code }}</span>
-          برای
-          <span class="px-1">{{ factor.account.name }}</span>
-        </v-card-title>
-
-        <v-card-text>
-          <v-btn
-            block
-            depressed
-            color="light-blue white--text"
-            :to="getFactorTransactionLink(factor).to"
-          >ثبت دریافت</v-btn>
-
-          <v-btn
-            v-if="!isFullDelivery"
-            block
-            depressed
-            color="light-blue white--text"
-            class="mt-1"
-            :to="getReverseFactorLink(factor).to"
-          >ثبت برگشت از فروش</v-btn>
-
-          <v-btn block depressed color="light-blue white--text" class="mt-1">نسیه</v-btn>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </m-form>
 </template>
 
@@ -193,7 +178,6 @@ export default {
       factors: [],
       factor: null,
       isFullDelivery: null,
-      dialog: false,
       PathLevels,
       VisitorLevels,
     };
@@ -224,6 +208,20 @@ export default {
           type: "numeric",
         },
         {
+          text: "مبلغ برگشتی",
+          value: "backFactor.total_sum",
+          type: "numeric",
+        },
+        {
+          text: "مبلغ دریافت شده",
+          value: "paidValue",
+          type: "numeric",
+        },
+        {
+          text: "مبلغ قابل دریافت",
+          value: "payable_value",
+        },
+        {
           text: "ویزیتور",
           value: "visitor",
           items: this.visitors
@@ -243,15 +241,14 @@ export default {
           text: "عملیات ها",
           value: "operations",
         },
+        {
+          text: "ثبت وضعیت",
+          value: "status",
+        },
       ];
     },
   },
   methods: {
-    openDialog(factor, isFullDelivery) {
-      this.factor = factor;
-      this.isFullDelivery = isFullDelivery;
-      this.dialog = true;
-    },
     getItemTemplate() {
       return {
         factors: [],

@@ -5,8 +5,8 @@ export default {
       this.getFactorExpenses();
       if (this.isFpi) {
         this.getFirstPeriodInventory();
-      } else if (this.fromId) {
-        this.getFactor(this.fromId);
+      } else if (this.backFrom) {
+        this.getFactor(this.backFrom);
       }
     },
     getFirstPeriodInventory() {
@@ -183,22 +183,47 @@ export default {
       this.submit(clearForm);
     },
     setItem(item) {
-      this.item = item;
-      this.itemsToDelete = [];
       this.rows = item.items.sort((a, b) => a.order - b.order);
-      this.rows.push(this.getRowTemplate());
 
-      if (this.fromId) {
-        delete this.item.id;
+      if (this.backFrom && item.backFrom != this.backFrom) {
+        let keysToCopy = [
+          'account',
+          'floatAccount',
+          'costCenter',
+          'date',
+          'time',
+          'discountValue',
+          'discountPercent',
+          'has_tax',
+          'taxValue',
+          'taxPercent',
+          'visitor',
+          'path',
+        ]
+
+        for (let key of keysToCopy) {
+          this.$set(this.item, key, item[key])
+        }
+        this.item.type = this.type
+        this.item.backFrom = this.backFrom
+
         this.rows.map(row => {
-          if (row.id) delete row.id;
+          delete row.id;
+          delete row.factor;
+          return row
         });
         this.item.expenses.map(expense => {
-          if (expense.id) delete expense.id;
+          delete expense.id;
+          delete expense.factor;
+          return expense
         });
+      } else {
+        this.item = item;
+        this.changeRouteTo(item.id);
       }
 
-      this.changeRouteTo(item.id);
+      this.rows.push(this.getRowTemplate());
+      this.itemsToDelete = [];
     },
     deleteItemRow(index) {
       if (index == -1) {

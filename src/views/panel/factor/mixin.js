@@ -19,7 +19,7 @@ export default {
           type: transactionType,
         },
         query: {
-          'item.account': factor.account.id,
+          'item.account': factor.account && factor.account.id,
           'item.floatAccount': factor.floatAccount && factor.floatAccount.id,
           'item.costCenter': factor.costCenter && factor.costCenter.id,
           'factorIds': String(factor.id)
@@ -40,24 +40,33 @@ export default {
       return factorReverseTypes[type]
     },
     getReverseFactorLink(factor) {
+      let query = {};
+      if (!factor.backFactor) {
+        query = {
+          backFrom: factor.id
+        }
+      }
       let to = {
         name: 'FactorForm',
         params: {
           type: this.getReverseType(factor.type),
           id: factor.backFactor ? factor.backFactor.id : null
         },
-        query: {
-          'item.account': factor.account.id,
-          'item.floatAccount': factor.floatAccount && factor.floatAccount.id,
-          'item.costCenter': factor.costCenter && factor.costCenter.id,
-          'item.backFrom': this.id
-        }
+        query: query
       }
 
       return {
         to
       }
     },
+    getFactorPayableValue(factor) {
+
+      let backTotalSum = 0
+      if (factor.backFactor) backTotalSum = factor.backFactor.total_sum
+      let payableValue = factor.total_sum - backTotalSum - factor.paidValue;
+      return payableValue
+
+    }
   },
   computed: {}
 }
