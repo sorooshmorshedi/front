@@ -11,6 +11,7 @@
     </template>
 
     <template v-if="apiData.previous" v-slot:body.prepend="{ headers }">
+
       <tr class="text-center">
         <td :colspan="colspan"></td>
         <td>منقول از صفحه قبل</td>
@@ -23,7 +24,9 @@
           <td>{{ previousLastItem.remain_type }}</td>
         </template>
       </tr>
+
     </template>
+
     <template v-else-if="showPreviousRemain && lastItem" v-slot:body.prepend="{ headers }">
       <tr class="text-center">
         <td :colspan="colspan"></td>
@@ -52,7 +55,7 @@
           <td>{{ lastItem.remain_type | toMoney }}</td>
         </template>
       </tr>
-      <tr v-if="!apiData.next" class="text-center">
+      <tr  class="text-center">
         <td :colspan="colspan"></td>
         <td>جمع تا این صفحه</td>
         <td v-if="showAccountInTable" colspan="2"></td>
