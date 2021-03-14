@@ -4,7 +4,10 @@ export default {
   mixins: [FillStore],
   methods: {
     getServerUrl() {
-      let serverUrl = localStorage.getItem('serverUrl');
+      let serverUrl = 'https://api.app.sobhan.net/'
+      if (this.isDev) {
+        serverUrl = localStorage.getItem('serverUrl');
+      }
       return serverUrl
     },
     endpoint(url) {

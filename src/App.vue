@@ -153,7 +153,14 @@
         <v-card-text>
           <v-row>
             <v-col cols="12">
-              <v-text-field class="ltr" label="Server Url" v-model="serverUrl" />
+              <v-text-field
+                class="ltr"
+                label="Server Url"
+                v-model="serverUrl"
+                hint="http://localhost:8001/"
+                :hide-details="false"
+                persistent-hint
+              />
             </v-col>
           </v-row>
         </v-card-text>
@@ -204,17 +211,8 @@ export default {
     }),
   },
   created() {
-    this.request({
-      url: "/configs.json",
-      method: "get",
-      token: false,
-      success: (data) => {
-        let serverUrl = data.serverUrl;
-        localStorage.setItem("serverUrl", serverUrl);
-        this.log(`server url is : ${serverUrl}`);
-        this.getDateTime();
-      },
-    });
+    this.log(`server url is : ${this.getServerUrl()}`);
+    this.getDateTime();
   },
   methods: {
     routeClick(routeName) {
