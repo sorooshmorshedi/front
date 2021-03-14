@@ -19,7 +19,7 @@
     <template>
       <v-row>
         <v-col cols="12" md="2">
-          <v-text-field label="شماره انتقال" disabled v-model="item.code" />
+          <v-text-field label="شماره" disabled v-model="item.code" />
         </v-col>
         <v-col cols="12" md="2">
           <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
@@ -58,6 +58,7 @@
               <tr>
                 <th>#</th>
                 <th>* نام/کد کالا</th>
+                <th>* واحد</th>
                 <th>* انبار</th>
                 <th>* تعداد</th>
                 <th>توضیحات</th>
@@ -68,8 +69,26 @@
               <tr v-for="(row,i) in rows" :key="i">
                 <td class="tr-counter">{{ i+1 }}</td>
                 <td class="tr-ware">
-                  <ware-select v-model="rows[i].ware" :disabled="!isEditing" />
+                  <ware-select
+                    v-model="rows[i].ware"
+                    :disabled="!isEditing"
+                    :show-main-unit="false"
+                  />
                 </td>
+                <td style="max-width:100px">
+                  <v-autocomplete
+                    v-if="rows[i].ware"
+                    :items="getWareUnits(row.ware)"
+                    v-model="rows[i].unit"
+                    :title="rows[i].unit?rows[i].unit.title:''"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    :return-object="true"
+                    :suffix="getUnitSuffix(row.ware, row.unit)"
+                  ></v-autocomplete>
+                </td>
+
                 <td class="tr-warehouse">
                   <v-autocomplete
                     :return-object="true"
@@ -83,7 +102,7 @@
                   <span v-else>-</span>
                 </td>
                 <td>
-                  <money v-model="rows[i].count" :disabled="!isEditing" />
+                  <money v-model="rows[i].unit_count" :disabled="!isEditing" />
                 </td>
                 <td>
                   <row-textarea
@@ -106,7 +125,7 @@
                 </td>
               </tr>
               <tr class="bg-info text-white">
-                <td colspan="2"></td>
+                <td colspan="3"></td>
                 <td>جمع</td>
                 <td>{{ sum | toMoney }}</td>
                 <td colspan="1"></td>
@@ -174,6 +193,7 @@ export default {
     },
     getData() {
       this.getWarehouses();
+      this.getUnits();
     },
     validate(clearForm = false) {
       let isValid = true;
@@ -183,7 +203,7 @@ export default {
       }
       this.rows.forEach((r, i) => {
         if (i == this.rows.length - 1) return;
-        if (!r.count || r.count == 0) {
+        if (!r.unit_count || r.unit_count == 0) {
           this.notify(`لطفا تعداد ردیف ${i + 1} را وارد کنید`, "danger");
           isValid = false;
         }
@@ -194,7 +214,14 @@ export default {
     getSerialized() {
       let item = this.extractIds(this.item);
       let items = this.rows.slice(0, this.rows.length - 1);
-      items = items.map(this.extractIds);
+      items = items.map((o) => {
+        o.count = this.convertToMainUnit(
+          o.ware,
+          o.unit_count,
+          o.unit
+        );
+        return this.extractIds(o);
+      });
       item.items = items;
       item.type = this.type;
       return {
@@ -217,7 +244,7 @@ export default {
     sum() {
       let res = 0;
       this.rows.forEach((row) => {
-        if (row.count) res += +row.count;
+        if (row.unit_count) res += +row.unit_count;
       });
       return res;
     },
