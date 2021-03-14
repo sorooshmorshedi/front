@@ -197,8 +197,8 @@ export default {
           value: "count",
         },
         {
-          text: "",
-          value: "detail",
+          text: "کاردکس",
+          value: "inventory",
           sortable: false,
           filterable: false,
           hideInExport: true,
