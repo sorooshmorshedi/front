@@ -376,6 +376,7 @@ export default {
                 },
 
                 {
+                  perm: "exportVerifier",
                   to: {
                     name: "ExportVerifiers",
                   },
