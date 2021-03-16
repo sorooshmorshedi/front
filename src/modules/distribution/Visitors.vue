@@ -72,13 +72,24 @@
             :disabled="!isEditing"
           />
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" md="4">
           <account-select
             :disabled="!isEditing"
             label="* حساب شناور"
             itemsType="floatAccounts"
             :child-of="visitorsDefaultAccount"
             v-model="item.floatAccount"
+          />
+        </v-col>
+        <v-col cols="12" md="8">
+          <v-autocomplete
+            label="روش های دریافت"
+            :disabled="!isEditing"
+            :items="receiveTypes"
+            v-model="item.defaultAccounts"
+            item-text="name"
+            item-value="id"
+            :multiple="true"
           />
         </v-col>
       </v-row>
@@ -158,6 +169,12 @@ export default {
         return defaultAccount.account.floatAccountGroup.id;
       }
       return null;
+    },
+    receiveTypes() {
+      let type = "receive";
+      return this.defaultAccounts.filter(
+        (o) => o.usage && o.usage.toLowerCase().includes(type)
+      );
     },
   },
   methods: {

@@ -15,7 +15,7 @@
   >
     <template #default>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" md="4">
           <v-autocomplete
             label="* کاربر"
             v-model="item.user"
@@ -23,6 +23,18 @@
             item-text="name"
             item-value="id"
             :disabled="!isEditing"
+          />
+        </v-col>
+
+        <v-col cols="12" md="8">
+          <v-autocomplete
+            label="روش های دریافت"
+            :disabled="!isEditing"
+            :items="receiveTypes"
+            v-model="item.defaultAccounts"
+            item-text="name"
+            item-value="id"
+            :multiple="true"
           />
         </v-col>
       </v-row>
@@ -33,9 +45,10 @@
 import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import UserApiMixin from "@/views/panel/user/api";
+import accountApiMixin from "@/mixin/accountMixin";
 
 export default {
-  mixins: [MFormMixin, DistributionApiMixin, UserApiMixin],
+  mixins: [MFormMixin, DistributionApiMixin, UserApiMixin, accountApiMixin],
   data() {
     return {
       item: {},
@@ -54,11 +67,18 @@ export default {
     items() {
       return this.$store.state.distributors;
     },
+    receiveTypes() {
+      let type = "receive";
+      return this.defaultAccounts.filter(
+        (o) => o.usage && o.usage.toLowerCase().includes(type)
+      );
+    },
   },
   methods: {
     getData() {
-      this.getDistributors(true);
+      this.getDefaultAccounts();
       this.getUsers();
+      this.getDistributors(true);
     },
   },
 };
