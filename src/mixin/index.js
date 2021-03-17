@@ -134,15 +134,20 @@ Vue.mixin({
         text: msg
       });
     },
-    hasPerm(operation, basename = '', object = null) {
+    hasPerm(operation = '', basename = '', object = null) {
       if (this.user.is_superuser) return true
+
       let roles = this.user.roles.filter(o => this.company && o.company == this.company.id);
       for (let role of roles) {
         for (let permission of role.permissions) {
-          let codename = permission.codename
-          if (codename.startsWith(operation) && codename.endsWith(basename)) {
-            if (codename.includes('Own')) {
-              if (object.created_by == this.user.id) return true
+          let codename = permission.codename.split('.')
+          if (codename[0].startsWith(operation) && codename[1].startsWith(basename)) {
+            if (object && codename.includes('Own')) {
+              if (object.created_by == this.user.id) {
+                return true
+              } else {
+                return false
+              }
             } else {
               return true
             }

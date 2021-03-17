@@ -402,7 +402,7 @@ export default {
               title: "لیست اسناد",
               children: [
                 {
-                  perm: "get.sanad",
+                  perm: "sanad",
                   to: {
                     name: "SanadsList",
                     params: {
@@ -412,7 +412,7 @@ export default {
                   title: "تمامی اسناد",
                 },
                 {
-                  perm: "get.sanad",
+                  perm: "sanad",
                   to: {
                     name: "SanadsList",
                     params: {
@@ -422,7 +422,7 @@ export default {
                   title: "اسناد نامتوازن",
                 },
                 {
-                  perm: "get.sanad",
+                  perm: "sanad",
                   to: {
                     name: "SanadsList",
                     params: {
@@ -432,7 +432,7 @@ export default {
                   title: "اسناد خالی",
                 },
                 {
-                  perm: "get.sanad",
+                  perm: "sanad",
                   to: {
                     name: "SanadItemsList",
                   },
@@ -442,7 +442,7 @@ export default {
             },
 
             {
-              perm: "close.financialYear",
+              perm: "financialYear",
               to: {
                 name: "Closing",
               },
@@ -459,7 +459,7 @@ export default {
               title: "دریافت",
               children: [
                 {
-                  perm: "create.receiveTransaction",
+                  perm: "receiveTransaction",
                   to: {
                     name: "TransactionForm",
                     params: {
@@ -469,7 +469,7 @@ export default {
                   title: "ثبت دریافت",
                 },
                 {
-                  perm: "get.receiveTransaction",
+                  perm: "receiveTransaction",
                   to: {
                     name: "TransactionsList",
                     params: {
@@ -479,7 +479,7 @@ export default {
                   title: "لیست دریافت ها",
                 },
                 {
-                  perm: "submit.receivedCheque",
+                  perm: "receivedCheque",
                   to: {
                     name: "ChequeForm",
                     params: {
@@ -489,7 +489,7 @@ export default {
                   title: "ثبت چک دریافتنی",
                 },
                 {
-                  perm: "get.receivedCheque",
+                  perm: "receivedCheque",
                   to: {
                     name: "ChequesList",
                     params: {
@@ -499,7 +499,7 @@ export default {
                   title: "لیست چک های دریافتی",
                 },
                 {
-                  perm: "get.receivedCheque",
+                  perm: "receivedCheque",
                   to: {
                     name: "ChequesList",
                     params: {
@@ -518,7 +518,7 @@ export default {
               title: "پرداخت",
               children: [
                 {
-                  perm: "create.paymentTransaction",
+                  perm: "paymentTransaction",
                   to: {
                     name: "TransactionForm",
                     params: {
@@ -528,7 +528,7 @@ export default {
                   title: "ثبت پرداخت",
                 },
                 {
-                  perm: "get.paymentTransaction",
+                  perm: "paymentTransaction",
                   to: {
                     name: "TransactionsList",
                     params: {
@@ -538,7 +538,7 @@ export default {
                   title: "لیست پرداخت ها",
                 },
                 {
-                  perm: "submit.paidCheque",
+                  perm: "paidCheque",
                   to: {
                     name: "ChequeForm",
                     params: {
@@ -548,7 +548,7 @@ export default {
                   title: "ثبت چک پرداختنی",
                 },
                 {
-                  perm: "get.paidCheque",
+                  perm: "paidCheque",
                   to: {
                     name: "ChequesList",
                     params: {
@@ -558,7 +558,7 @@ export default {
                   title: "لیست چک های پرداختنی",
                 },
                 {
-                  perm: "get.paidCheque",
+                  perm: "paidCheque",
                   to: {
                     name: "ChequesList",
                     params: {
@@ -585,7 +585,7 @@ export default {
               title: "تنخواه",
               children: [
                 {
-                  perm: "create.imprestTransaction",
+                  perm: "imprestTransaction",
                   title: "پرداخت تنخواه",
                   to: {
                     name: "TransactionForm",
@@ -595,7 +595,7 @@ export default {
                   },
                 },
                 {
-                  perm: "get.imprestTransaction",
+                  perm: "imprestTransaction",
                   to: {
                     name: "TransactionsList",
                     params: {
@@ -628,7 +628,7 @@ export default {
               children: [
                 {
                   title: "ثبت فاکتور خرید",
-                  perm: "create.buyFactor",
+                  perm: "buyFactor",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -637,7 +637,7 @@ export default {
                   },
                 },
                 {
-                  perm: "get.buyFactor",
+                  perm: "buyFactor",
                   to: {
                     name: "FactorsList",
                     params: {
@@ -652,7 +652,7 @@ export default {
               title: "فاکتور فروش",
               children: [
                 {
-                  perm: "create.saleFactor",
+                  perm: "saleFactor",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -662,7 +662,7 @@ export default {
                   title: "ثبت فاکتور فروش",
                 },
                 {
-                  perm: "get.saleFactor",
+                  perm: "saleFactor",
                   to: {
                     name: "FactorsList",
                     params: {
@@ -677,7 +677,7 @@ export default {
               title: "برگشت از خرید",
               children: [
                 {
-                  perm: "create.backFromBuyFactor",
+                  perm: "backFromBuyFactor",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -687,7 +687,7 @@ export default {
                   title: "ثبت برگشت از خرید",
                 },
                 {
-                  perm: "get.backFromBuyFactor",
+                  perm: "backFromBuyFactor",
                   to: {
                     name: "FactorsList",
                     params: {
@@ -702,7 +702,7 @@ export default {
               title: "برگشت از فروش",
               children: [
                 {
-                  perm: "create.backFromSaleFactor",
+                  perm: "backFromSaleFactor",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -712,7 +712,7 @@ export default {
                   title: "ثبت برگشت از فروش",
                 },
                 {
-                  perm: "get.backFromSaleFactor",
+                  perm: "backFromSaleFactor",
                   to: {
                     name: "FactorsList",
                     params: {
@@ -734,14 +734,14 @@ export default {
               title: "انتقال",
               children: [
                 {
-                  perm: "create.transfer",
+                  perm: "transfer",
                   to: {
                     name: "TransferForm",
                   },
                   title: "ثبت انتقال",
                 },
                 {
-                  perm: "get.transfer",
+                  perm: "transfer",
                   to: {
                     name: "TransfersList",
                   },
@@ -754,7 +754,7 @@ export default {
               children: [
                 {
                   title: "رسید تعدیل انبار",
-                  perm: "create.adjustment",
+                  perm: "adjustment",
                   to: {
                     name: "AdjustmentForm",
                     params: {
@@ -763,7 +763,7 @@ export default {
                   },
                 },
                 {
-                  perm: "get.adjustment",
+                  perm: "adjustment",
                   to: {
                     name: "AdjustmentsList",
                     params: {
@@ -774,7 +774,7 @@ export default {
                 },
                 {
                   title: "حواله تعدیل انبار",
-                  perm: "create.adjustment",
+                  perm: "adjustment",
                   to: {
                     name: "AdjustmentForm",
                     params: {
@@ -783,7 +783,7 @@ export default {
                   },
                 },
                 {
-                  perm: "get.adjustment",
+                  perm: "adjustment",
                   to: {
                     name: "AdjustmentsList",
                     params: {
@@ -799,7 +799,7 @@ export default {
               hide: this.isAdvari,
               children: [
                 {
-                  perm: "create.consumptionWareFactor",
+                  perm: "consumptionWareFactor",
                   to: {
                     name: "FactorForm",
                     params: {
@@ -809,7 +809,7 @@ export default {
                   title: "ثبت حواله کالای مصرفی",
                 },
                 {
-                  perm: "get.consumptionWareFactor",
+                  perm: "consumptionWareFactor",
                   to: {
                     name: "FactorsList",
                     params: {
@@ -824,14 +824,14 @@ export default {
               title: "انبارگردانی",
               children: [
                 {
-                  perm: "create.warehouseHandling",
+                  perm: "warehouseHandling",
                   to: {
                     name: "WarehouseHandlingForm",
                   },
                   title: "ثبت انبارگردانی",
                 },
                 {
-                  perm: "get.warehouseHandling",
+                  perm: "warehouseHandling",
                   to: {
                     name: "WarehouseHandlingList",
                   },
@@ -1295,7 +1295,7 @@ export default {
                   },
                 },
                 {
-                  perm: "revoke.ladingBillNumber",
+                  perm: "ladingBillNumber",
                   title: "ابطال شماره بارنامه",
                   to: {
                     name: "RevokeLadingBillNumber",
@@ -1464,6 +1464,7 @@ export default {
           visible = false;
         } else if (route.perm) {
           visible = this.hasPerm("", route.perm);
+          console.log(route, visible);
         } else if (route.children) {
           for (let child of route.children) {
             visible |= setVisibility(child);
