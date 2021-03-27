@@ -62,51 +62,53 @@ export default {
           },
         },
         {
-          title: "تعاریف",
+          title: "اطلاعات پایه",
           icon: "fa-database",
           children: [
             {
-              title: "اطلاعات پایه",
-              children: [
-                {
-                  to: {
-                    name: "Users",
-                  },
-                  title: "کاربران",
-                  perm: "user",
-                },
-                {
-                  to: {
-                    name: "Roles",
-                  },
-                  title: "نقش ها",
-                  perm: "role",
-                },
-                {
-                  title: "شرکت ها",
-                  to: {
-                    name: "Companies",
-                  },
-                  perm: "company",
-                },
-                {
-                  title: "سال های مالی",
-                  to: {
-                    name: "FinancialYears",
-                  },
-                  perm: "financialYear",
-                },
-                {
-                  to: {
-                    name: "Cities",
-                  },
-                  title: "شهر ها",
-                  perm: "city",
-                },
-              ],
+              to: {
+                name: "Users",
+              },
+              title: "کاربران",
+              perm: "user",
             },
             {
-              title: "حساب",
+              to: {
+                name: "Roles",
+              },
+              title: "نقش ها",
+              perm: "role",
+            },
+            {
+              title: "شرکت ها",
+              to: {
+                name: "Companies",
+              },
+              perm: "company",
+            },
+            {
+              title: "سال های مالی",
+              to: {
+                name: "FinancialYears",
+              },
+              perm: "financialYear",
+            },
+            {
+              perm: "exportVerifier",
+              to: {
+                name: "ExportVerifiers",
+              },
+              title: "تایید کنندگان خروجی",
+            },
+          ],
+        },
+        {
+          title: "حسابداری",
+          icon: "fa-wallet",
+          module: "sanads",
+          children: [
+            {
+              title: "تعریف حساب",
               children: [
                 {
                   to: {
@@ -180,7 +182,7 @@ export default {
               ],
             },
             {
-              title: "شناور و مراکز",
+              title: "تعریف شناور و مراکز",
               children: [
                 {
                   perm: "floatAccountGroup",
@@ -219,178 +221,25 @@ export default {
               ],
             },
             {
-              title: "کالا",
-              children: [
-                {
-                  perm: "ware",
-                  to: {
-                    name: "Wares",
-                    params: {
-                      level: 0,
-                    },
-                  },
-                  title: "ماهیت",
+              perm: "defaultAccounts",
+              to: {
+                name: "DefaultAccounts",
+                params: {
+                  usage: "closeAccounts",
                 },
-                {
-                  perm: "ware",
-                  to: {
-                    name: "Wares",
-                    params: {
-                      level: 1,
-                    },
-                  },
-                  title: "گروه",
-                },
-                {
-                  perm: "ware",
-                  to: {
-                    name: "Wares",
-                    params: {
-                      level: 2,
-                    },
-                  },
-                  title: "دسته بندی",
-                },
-                {
-                  perm: "ware",
-                  to: {
-                    name: "Wares",
-                    params: {
-                      level: 3,
-                    },
-                  },
-                  title: "کالا",
-                },
-                {
-                  perm: "ware",
-                  to: {
-                    name: "WaresTree",
-                  },
-                  title: "نمودار درختی کالا ها",
-                },
-                {
-                  perm: "salePriceType",
-                  to: {
-                    name: "SalePriceTypes",
-                  },
-                  title: "انواع نرخ های فروش",
-                },
-                {
-                  perm: "warehouse",
-                  to: {
-                    name: "Warehouses",
-                  },
-                  title: "انبار",
-                },
-                {
-                  perm: "unit",
-                  to: {
-                    name: "Units",
-                  },
-                  title: "واحد",
-                },
-                {
-                  perm: "firstPeriodInventory",
-                  to: {
-                    name: "FactorForm",
-                    params: {
-                      type: "fpi",
-                    },
-                  },
-                  title: "ثبت موجودی اول دوره",
-                },
-              ],
+              },
+              title: "حساب های بستن",
             },
             {
-              title: "پیشفرض ها",
-              children: [
-                {
-                  perm: "defaultAccount",
-                  to: {
-                    name: "DefaultAccounts",
-                    params: {
-                      usage: "receive",
-                    },
-                  },
-                  title: "حساب های دریافت",
+              perm: "defaultAccounts",
+              to: {
+                name: "DefaultAccounts",
+                params: {
+                  usage: "other",
                 },
-                {
-                  perm: "defaultAccount",
-                  to: {
-                    name: "DefaultAccounts",
-                    params: {
-                      usage: "payment",
-                    },
-                  },
-                  title: "حساب های پرداخت",
-                },
-                {
-                  perm: "defaultAccount",
-                  to: {
-                    name: "DefaultAccounts",
-                    params: {
-                      usage: "factor",
-                    },
-                  },
-                  title: "حساب های فاکتور",
-                },
-                {
-                  perm: "factorExpenses",
-                  to: {
-                    name: "FactorExpenses",
-                    params: {
-                      factorType: "buy",
-                    },
-                  },
-                  title: "هزینه های فاکتور خرید",
-                },
-                {
-                  perm: "factorExpenses",
-                  to: {
-                    name: "FactorExpenses",
-                    params: {
-                      factorType: "sale",
-                    },
-                  },
-                  title: "هزینه های فاکتور فروش",
-                },
-                {
-                  perm: "defaultAccounts",
-                  to: {
-                    name: "DefaultAccounts",
-                    params: {
-                      usage: "closeAccounts",
-                    },
-                  },
-                  title: "حساب های بستن",
-                },
-                {
-                  perm: "defaultAccounts",
-                  to: {
-                    name: "DefaultAccounts",
-                    params: {
-                      usage: "other",
-                    },
-                  },
-                  title: "دیگر حساب ها",
-                },
-
-                {
-                  perm: "exportVerifier",
-                  to: {
-                    name: "ExportVerifiers",
-                  },
-                  title: "تایید کنندگان خروجی",
-                },
-              ],
+              },
+              title: "دیگر حساب ها",
             },
-          ],
-        },
-        {
-          title: "حسابداری",
-          icon: "fa-wallet",
-          module: "sanads",
-          children: [
             {
               perm: "create.sanad",
               to: {
@@ -459,6 +308,16 @@ export default {
               title: "دریافت",
               children: [
                 {
+                  perm: "defaultAccount",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "receive",
+                    },
+                  },
+                  title: "حساب های دریافت",
+                },
+                {
                   perm: "receiveTransaction",
                   to: {
                     name: "TransactionForm",
@@ -517,6 +376,16 @@ export default {
             {
               title: "پرداخت",
               children: [
+                {
+                  perm: "defaultAccount",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "payment",
+                    },
+                  },
+                  title: "حساب های پرداخت",
+                },
                 {
                   perm: "paymentTransaction",
                   to: {
@@ -624,8 +493,111 @@ export default {
           module: "factors",
           children: [
             {
+              perm: "defaultAccount",
+              to: {
+                name: "DefaultAccounts",
+                params: {
+                  usage: "factor",
+                },
+              },
+              title: "حساب های فاکتور",
+            },
+            {
+              title: "تعریف کالا",
+              children: [
+                {
+                  perm: "ware",
+                  to: {
+                    name: "Wares",
+                    params: {
+                      level: 0,
+                    },
+                  },
+                  title: "ماهیت",
+                },
+                {
+                  perm: "ware",
+                  to: {
+                    name: "Wares",
+                    params: {
+                      level: 1,
+                    },
+                  },
+                  title: "گروه",
+                },
+                {
+                  perm: "ware",
+                  to: {
+                    name: "Wares",
+                    params: {
+                      level: 2,
+                    },
+                  },
+                  title: "دسته بندی",
+                },
+                {
+                  perm: "ware",
+                  to: {
+                    name: "Wares",
+                    params: {
+                      level: 3,
+                    },
+                  },
+                  title: "کالا",
+                },
+                {
+                  perm: "ware",
+                  to: {
+                    name: "WaresTree",
+                  },
+                  title: "نمودار درختی کالا ها",
+                },
+                {
+                  perm: "salePriceType",
+                  to: {
+                    name: "SalePriceTypes",
+                  },
+                  title: "انواع نرخ های فروش",
+                },
+                {
+                  perm: "warehouse",
+                  to: {
+                    name: "Warehouses",
+                  },
+                  title: "انبار",
+                },
+                {
+                  perm: "unit",
+                  to: {
+                    name: "Units",
+                  },
+                  title: "واحد",
+                },
+                {
+                  perm: "firstPeriodInventory",
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      type: "fpi",
+                    },
+                  },
+                  title: "ثبت موجودی اول دوره",
+                },
+              ],
+            },
+            {
               title: "فاکتور خرید",
               children: [
+                {
+                  perm: "factorExpenses",
+                  to: {
+                    name: "FactorExpenses",
+                    params: {
+                      factorType: "buy",
+                    },
+                  },
+                  title: "هزینه های فاکتور خرید",
+                },
                 {
                   title: "ثبت فاکتور خرید",
                   perm: "buyFactor",
@@ -651,6 +623,16 @@ export default {
             {
               title: "فاکتور فروش",
               children: [
+                {
+                  perm: "factorExpenses",
+                  to: {
+                    name: "FactorExpenses",
+                    params: {
+                      factorType: "sale",
+                    },
+                  },
+                  title: "هزینه های فاکتور فروش",
+                },
                 {
                   perm: "saleFactor",
                   to: {
@@ -1221,7 +1203,6 @@ export default {
             },
           ],
         },
-
         {
           title: "حمل و نقل",
           icon: "$transportationIcon",
@@ -1246,6 +1227,13 @@ export default {
                     },
                   },
                   title: "حساب های پیشفرض",
+                },
+                {
+                  to: {
+                    name: "Cities",
+                  },
+                  title: "شهر ها",
+                  perm: "city",
                 },
                 {
                   perm: "car",
