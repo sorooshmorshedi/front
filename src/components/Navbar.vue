@@ -221,26 +221,6 @@ export default {
               ],
             },
             {
-              perm: "defaultAccounts",
-              to: {
-                name: "DefaultAccounts",
-                params: {
-                  usage: "closeAccounts",
-                },
-              },
-              title: "حساب های بستن",
-            },
-            {
-              perm: "defaultAccounts",
-              to: {
-                name: "DefaultAccounts",
-                params: {
-                  usage: "other",
-                },
-              },
-              title: "دیگر حساب ها",
-            },
-            {
               perm: "create.sanad",
               to: {
                 name: "SanadForm",
@@ -297,6 +277,31 @@ export default {
               },
               title: "عملیات بستن و انتقال",
             },
+            {
+              title: "حساب های پیش فرض",
+              children: [
+                {
+                  perm: "defaultAccounts",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "closeAccounts",
+                    },
+                  },
+                  title: "حساب های بستن",
+                },
+                {
+                  perm: "defaultAccounts",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "other",
+                    },
+                  },
+                  title: "سایر حساب ها",
+                },
+              ],
+            },
           ],
         },
         {
@@ -307,16 +312,6 @@ export default {
             {
               title: "دریافت",
               children: [
-                {
-                  perm: "defaultAccount",
-                  to: {
-                    name: "DefaultAccounts",
-                    params: {
-                      usage: "receive",
-                    },
-                  },
-                  title: "حساب های دریافت",
-                },
                 {
                   perm: "receiveTransaction",
                   to: {
@@ -371,21 +366,21 @@ export default {
                   },
                   title: "لیست چک های دریافتی پاس نشده و برگشتی سررسید گذشته",
                 },
-              ],
-            },
-            {
-              title: "پرداخت",
-              children: [
                 {
                   perm: "defaultAccount",
                   to: {
                     name: "DefaultAccounts",
                     params: {
-                      usage: "payment",
+                      usage: "receive",
                     },
                   },
-                  title: "حساب های پرداخت",
+                  title: "حساب های پیش فرض دریافت",
                 },
+              ],
+            },
+            {
+              title: "پرداخت",
+              children: [
                 {
                   perm: "paymentTransaction",
                   to: {
@@ -448,6 +443,16 @@ export default {
                   },
                   title: "ثبت دسته چک",
                 },
+                {
+                  perm: "defaultAccount",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "payment",
+                    },
+                  },
+                  title: "حساب های پیش فرض پرداخت",
+                },
               ],
             },
             {
@@ -500,7 +505,7 @@ export default {
                   usage: "factor",
                 },
               },
-              title: "حساب های فاکتور",
+              title: "حساب های پیش فرض فاکتور",
             },
             {
               title: "تعریف کالا",
