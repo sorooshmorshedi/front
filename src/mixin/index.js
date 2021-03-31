@@ -135,15 +135,16 @@ Vue.mixin({
       });
     },
     hasPerm(operation = '', basename = '', object = null) {
-      if (this.user.is_superuser) return true
+      let user = this.$store.state.user
+      if (user.is_superuser) return true
 
-      let roles = this.user.roles.filter(o => this.company && o.company == this.company.id);
+      let roles = user.roles.filter(o => this.company && o.company == this.company.id);
       for (let role of roles) {
         for (let permission of role.permissions) {
           let codename = permission.codename.split('.')
           if (codename[0].startsWith(operation) && codename[1].startsWith(basename)) {
             if (object && codename.includes('Own')) {
-              if (object.created_by == this.user.id) {
+              if (object.created_by == user.id) {
                 return true
               } else {
                 return false
@@ -157,7 +158,8 @@ Vue.mixin({
       return false
     },
     hasModule(moduleName) {
-      return this.user && (this.user.is_staff || this.user.modules.includes(moduleName));
+      let user = this.$store.state.user
+      return user && (user.is_staff || user.modules.includes(moduleName));
     },
     goTo(selector) {
       $('body,html')

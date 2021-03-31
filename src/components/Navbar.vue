@@ -1477,8 +1477,9 @@ export default {
       return routes;
     },
     username() {
-      if (this.user.username.includes("manager")) return "manager";
-      return this.user.username;
+      let user = this.$store.state.user;
+      if (user.username.includes("manager")) return "manager";
+      return user.username;
     },
   },
 };
