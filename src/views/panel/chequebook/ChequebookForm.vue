@@ -8,6 +8,7 @@
     :canDelete="canDelete"
     :is-editing.sync="isEditing"
     :showListBtn="false"
+    apiUrl="reports/lists/chequebooks"
     :show-navigation-btns="false"
     @click:row="setItem"
     @clearForm="clearForm"

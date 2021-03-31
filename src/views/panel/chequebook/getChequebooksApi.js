@@ -10,7 +10,7 @@ export default {
     getChequebooks(reload = false) {
       if (!reload && this.chequebooks.length) return;
       return this.request({
-        url: this.endpoint(`cheques/chequebooks/`),
+        url: this.endpoint(`reports/lists/chequebooks`),
         method: 'get',
         success: data => {
           this.$store.commit('setChequebooks', data);
