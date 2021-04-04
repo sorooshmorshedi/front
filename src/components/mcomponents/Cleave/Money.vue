@@ -8,7 +8,7 @@
     v-model="formattedAmount"
     class="currency-input"
     :smaller-font="formattedAmount.length > 14"
-    style="min-width: 90px;"
+    style="min-width: 80px;"
     v-bind="$attrs"
     v-on="listeners"
     autocomplete="off"
