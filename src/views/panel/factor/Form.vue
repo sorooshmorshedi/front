@@ -165,32 +165,33 @@
 
         <v-row>
           <v-col cols="12">
-            <input-table v-model="rows">
+            <input-table v-model="rows" id="input-table">
               <template #thead>
                 <tr>
-                  <th>#</th>
-                  <th>* نام کالا</th>
-                  <th></th>
-                  <th>واحد</th>
-                  <th class="tr-warehouse">* انبار</th>
-                  <th>* تعداد</th>
+                  <th style="width: 32px">#</th>
+                  <th style="width: 200px">* نام کالا</th>
+                  <th style="width: 32px"></th>
+                  <th style="width: 100px">واحد</th>
+                  <th style="width: 100px">* انبار</th>
+                  <th style="width: 80px">* تعداد</th>
 
                   <template v-if="!isCw">
-                    <th>* قیمت واحد</th>
-                    <th>مبلغ کل</th>
+                    <th style="width: 75px">* قیمت واحد</th>
+                    <th style="width: 80px">مبلغ کل</th>
                   </template>
 
-                  <th v-if="showDiscount">تخفیف (مبلغ)</th>
-                  <th v-if="showDiscount">تخفیف (درصد)</th>
-                  <th v-if="showDiscount">جمع کل پس از تخفیف</th>
+                  <th v-if="showDiscount" style="width: 75px">تخفیف (مبلغ)</th>
+                  <th v-if="showDiscount" style="width: 50px;">تخفیف (درصد)</th>
+                  <th v-if="showDiscount" style="width: 80px">جمع کل پس از تخفیف</th>
 
                   <template v-if="showTax && item.has_tax">
-                    <th>مالیات</th>
-                    <th>جمع مبلغ کل و مالیات</th>
+                    <th style="width: 80px">مالیات (مبلغ)</th>
+                    <th style="width: 50px">مالیات (درصد)</th>
+                    <th style="width: 80px">جمع مبلغ کل و مالیات</th>
                   </template>
 
-                  <th>توضیحات</th>
-                  <th class="d-print-none"></th>
+                  <th style="width: 100px">توضیحات</th>
+                  <th style="width: 32px" class="d-print-none"></th>
                 </tr>
               </template>
               <template #tbody>
@@ -297,30 +298,50 @@
                       <money :value="rowSum(rows[i])" disabled :decimalScale="0" />
                     </td>
                   </template>
-                  <td v-if="showDiscount">
-                    <money
-                      :disabled="!isEditing || hasValue(rows[i].discountPercent)"
-                      v-model="rows[i].discountValue"
-                    />
-                  </td>
-                  <td v-if="showDiscount">
-                    <v-text-field
-                      :disabled="!isEditing || (hasValue(rows[i].discountValue) && !hasValue(rows[i].discountPercent))"
-                      type="number"
-                      min="0"
-                      max="100"
-                      v-model="rows[i].discountPercent"
-                    />
-                  </td>
-                  <td v-if="showDiscount">
-                    <money :value="rowSumAfterDiscount(row)" :decimalScale="0" disabled />
-                  </td>
-                  <td v-if="item.has_tax">
-                    <money :value="rowTax(row)" disabled :decimalScale="0" />
-                  </td>
-                  <td v-if="item.has_tax">
-                    <money :decimalScale="0" :value="rowSumAfterTax(row)" disabled />
-                  </td>
+
+                  <template v-if="showDiscount">
+                    <td>
+                      <money
+                        style="width: 70px !important"
+                        :disabled="!isEditing || hasValue(rows[i].discountPercent)"
+                        v-model="rows[i].discountValue"
+                      />
+                    </td>
+                    <td>
+                      <v-text-field
+                        :disabled="!isEditing || (hasValue(rows[i].discountValue) && !hasValue(rows[i].discountPercent))"
+                        type="number"
+                        min="0"
+                        max="100"
+                        v-model="rows[i].discountPercent"
+                      />
+                    </td>
+                    <td>
+                      <money :value="rowSumAfterDiscount(row)" :decimalScale="0" disabled />
+                    </td>
+                  </template>
+
+                  <template v-if="item.has_tax">
+                    <td>
+                      <money
+                        :disabled="!isEditing || hasValue(rows[i].tax_percent)"
+                        v-model="rows[i].tax_value"
+                      />
+                    </td>
+                    <td>
+                      <v-text-field
+                        :disabled="!isEditing || (hasValue(rows[i].tax_value) && !hasValue(rows[i].tax_percent))"
+                        type="number"
+                        min="0"
+                        max="100"
+                        v-model="rows[i].tax_percent"
+                      />
+                    </td>
+                    <td>
+                      <money :decimalScale="0" :value="rowSumAfterTax(row)" disabled />
+                    </td>
+                  </template>
+
                   <td>
                     <row-textarea
                       style="width: 150px"
@@ -355,7 +376,7 @@
 
                   <td></td>
                   <td v-if="showDiscount" colspan="4"></td>
-                  <td v-if="showTax && item.has_tax" colspan="2"></td>
+                  <td v-if="showTax && item.has_tax" colspan="3"></td>
                   <td>
                     <v-btn @click="deleteItemRow(-1)" icon class="red--text" :disabled="!isEditing">
                       <v-icon>delete_sweep</v-icon>
@@ -452,23 +473,8 @@
                 </tr>
                 <tr v-if="item.has_tax">
                   <td>مالیات</td>
-                  <td>
-                    <money
-                      v-if="!(!isEditing || hasValue(item.taxPercent))"
-                      v-model="item.taxValue"
-                      :value="sum.tax"
-                    />
-                    <money v-else :disabled="true" :value="sum.tax" :decimalScale="0" />
-                  </td>
-                  <td>
-                    <v-text-field
-                      :disabled="!isEditing || hasValue(item.taxValue)"
-                      type="number"
-                      min="0"
-                      max="100"
-                      v-model="item.taxPercent"
-                      placeholder="درصد"
-                    />
+                  <td colspan="2">
+                    <money v-if="isEditing" v-model="item.taxValue" placeholder="مبلغ" />
                   </td>
                 </tr>
                 <tr>
@@ -842,3 +848,13 @@ export default {
 }
 </style>
 
+<style lang="scss">
+#input-table {
+  table {
+    table-layout: fixed;
+    th {
+      padding: 0;
+    }
+  }
+}
+</style>

@@ -25,7 +25,6 @@ export default {
       return {
         account: {},
         hax_tax: false,
-        taxPercent: "",
         taxValue: "",
         discountPercent: "",
         discountValue: "",
@@ -41,6 +40,8 @@ export default {
       return {
         discountValue: "",
         discountPercent: "",
+        tax_value: "",
+        tax_percent: "",
         fee: "",
         ware: null,
         warehouse: null,
@@ -98,7 +99,7 @@ export default {
         let item = this.copy(row);
         item.count = this.convertToMainUnit(item.ware, item.unit_count, item.unit)
         item = this.extractIds(item);
-        ["discountPercent", "discountValue"].forEach(
+        ["discountPercent", "discountValue", "tax_value", "tax_percent"].forEach(
           k => {
             if (item[k] == "") item[k] = 0;
           }
@@ -261,11 +262,13 @@ export default {
     },
     rowTax(row) {
       if (!this.rowSumAfterDiscount(row)) return 0;
-      if (!this.item.taxPercent) return 0;
-      return +(
-        (this.rowSumAfterDiscount(row) * +this.item.taxPercent) /
-        100
-      ).toFixed(2);
+      if (
+        !this.hasValue(row.tax_value) &&
+        !this.hasValue(row.tax_percent)
+      )
+        return 0;
+      if (this.hasValue(row.tax_value)) return +row.tax_value;
+      else return +((this.rowSumAfterDiscount(row) * +row.tax_percent) / 100).toFixed(2);
     },
     rowSumAfterTax(row) {
       if (!this.rowTax(row)) return this.rowSumAfterDiscount(row);

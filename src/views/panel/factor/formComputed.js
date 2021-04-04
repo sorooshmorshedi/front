@@ -118,18 +118,13 @@ export default {
       let res = {
         sum: 0,
         afterDiscount: 0,
-        tax: 0,
         discount: 0,
         afterTax: 0,
         total: 0,
         expenses: 0
       };
       this.rows.forEach(r => {
-        res.sum += this.rowSumAfterDiscount(r);
-        res.afterDiscount += this.rowSumAfterDiscount(r);
-        res.tax += this.rowTax(r);
-        res.afterTax += this.rowSumAfterTax(r);
-        res.total += this.rowSumAfterTax(r);
+        res.sum += this.rowSumAfterTax(r);
       });
       this.item.expenses.forEach(e => {
         res.expenses += +e.value;
@@ -138,21 +133,11 @@ export default {
       let overallDiscount = 0;
       if (this.hasValue(this.item.discountValue)) {
         overallDiscount = +this.item.discountValue;
-        // res.afterDiscount -= +this.item.discountValue;
       } else {
-        overallDiscount =
-          (res.afterDiscount * +this.item.discountPercent) / 100;
-        // res.afterDiscount = (res.afterDiscount * (100 - +this.item.discountPercent)) / 100;
+        overallDiscount = (res.sum * +this.item.discountPercent) / 100;
       }
-      res.afterDiscount -= overallDiscount;
-      res.afterTax -= overallDiscount;
-      res.total -= overallDiscount;
-
-      if (this.hasValue(this.item.taxValue)) {
-        res.afterTax += +this.item.taxValue;
-        res.tax += +this.item.taxValue;
-        res.total += +this.item.taxValue;
-      }
+      res.afterDiscount = res.sum - overallDiscount;
+      res.total = res.afterDiscount + +this.item.taxValue;
 
       return res;
     },
