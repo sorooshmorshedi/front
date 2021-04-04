@@ -8,7 +8,7 @@
       <div class="d-flex">
         <open-ledger-btn
           v-if="showLedgerBtn && hasLedger && item"
-          :query="{account: item.id, level: `level${item.level}`}"
+          :query="{'ledger.account': item.id, 'ledger.level': `level${item.level}`}"
           class="mr-2"
         />
         <v-icon v-if="hasLedger" @click="openBalanceDialog" color="cyan" class="pl-2 mr-3">fa-wallet</v-icon>
