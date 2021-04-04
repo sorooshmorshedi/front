@@ -43,8 +43,8 @@ export default {
   },
   computed: {
     listeners() {
-      let listeners = {...this.$listeners};
-      delete listeners.input
+      let listeners = { ...this.$listeners };
+      delete listeners.input;
       return listeners;
     },
   },
@@ -84,7 +84,12 @@ export default {
       if (valueParts.length == 2) {
         return `${valueParts[0]}.${valueParts[1].substr(0, 6)}`;
       }
-      return valueParts[0];
+      let value = valueParts[0];
+      if (value == "") {
+        return null;
+      } else {
+        return +value;
+      }
     },
     change(newValue) {
       this.setAmount(newValue);

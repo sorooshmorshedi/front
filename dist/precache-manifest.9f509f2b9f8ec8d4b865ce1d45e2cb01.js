@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/configs.sample.json"
   },
   {
-    "revision": "f7ff21a3132eaa1f41f3",
+    "revision": "4f581a7725ead1f3e8a2",
     "url": "/css/app.4cf64d92.css"
   },
   {
@@ -296,12 +296,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/fa-solid-900.8e39d5d5.svg"
   },
   {
-    "revision": "69b88a073054ce1cc76d5aa3f263b728",
+    "revision": "8c1bf9f9a04ef53c8befe329116c8737",
     "url": "/index.html"
   },
   {
-    "revision": "f7ff21a3132eaa1f41f3",
-    "url": "/js/app.e0d2c293.js"
+    "revision": "4f581a7725ead1f3e8a2",
+    "url": "/js/app.25ff0b9b.js"
   },
   {
     "revision": "3c13e53edd24b843f3c9",
