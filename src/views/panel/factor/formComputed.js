@@ -143,7 +143,7 @@ export default {
     },
     accountName() {
       if (this.isCw || this.isFpi) return "حساب"
-      if (["buy", "backFromSale"].includes(this.type)) {
+      if (["buy", "backFromBuy"].includes(this.type)) {
         return "فروشنده";
       } else {
         return "مشتری";
