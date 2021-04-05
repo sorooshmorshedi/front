@@ -236,6 +236,7 @@ export default {
         { name: "unit", label: "واحد ها" },
         { name: "warehouse", label: "انبار ها" },
         { name: "ware", label: "کالا و سطوح کالا" },
+        { name: "salePriceType", label: "انواع نرخ های فروش" },
         { name: "sanad", label: "اسناد" },
         { name: "receiveTransaction", label: "دریافت" },
         { name: "paymentTransaction", label: "پرداخت" },
