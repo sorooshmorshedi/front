@@ -474,7 +474,7 @@
                 <tr v-if="item.has_tax">
                   <td>مالیات</td>
                   <td colspan="2">
-                    <money v-if="isEditing" v-model="item.taxValue" placeholder="مبلغ" />
+                    <money :disabled="!isEditing" v-model="item.taxValue" placeholder="مبلغ" />
                   </td>
                 </tr>
                 <tr>
