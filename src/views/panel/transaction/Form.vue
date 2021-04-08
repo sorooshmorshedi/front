@@ -33,7 +33,7 @@
           v-if="!isImprest"
           @click="factorsDialog = true"
           class="teal white--text mr-1 mt-1 mt-md-0"
-        >پرداخت شده برای فاکتور های</v-btn>
+        >بابت فاکتور های</v-btn>
       </template>
 
       <template>
