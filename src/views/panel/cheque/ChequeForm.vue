@@ -281,6 +281,8 @@ export default {
         floatAccount: null,
         costCenter: null,
         received_or_paid: this.receivedOrPaid,
+        due: null,
+        date: null,
       };
     },
     getItemByPosition(pos) {

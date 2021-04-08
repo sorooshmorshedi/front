@@ -34,7 +34,8 @@ export default new Vuex.Store({
       units: [],
       salePriceTypes: [],
     },
-    factorExpenses: []
+    factorExpenses: [],
+    chequebooks: []
   },
   mutations: {
     ...DashbashiStore.mutations,

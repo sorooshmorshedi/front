@@ -1457,7 +1457,6 @@ export default {
           visible = false;
         } else if (route.perm) {
           visible = this.hasPerm("", route.perm);
-          console.log(route, visible);
         } else if (route.children) {
           for (let child of route.children) {
             visible |= setVisibility(child);
