@@ -29,7 +29,9 @@ export default {
         discountPercent: "",
         discountValue: "",
         backFrom: null,
-        expenses: []
+        expenses: [],
+        date: undefined,
+        time: undefined,
       }
     },
     getRowTemplate() {

@@ -34,7 +34,7 @@ export default {
     value() {
       this.localValue = this.value;
 
-      if (this.localValue == undefined && !this.isDirty) {
+      if (this.localValue == undefined) {
         this.setToday();
       }
     },

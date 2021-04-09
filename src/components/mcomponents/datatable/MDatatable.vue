@@ -183,7 +183,7 @@
 
         <!-- boolean -->
         <template v-else-if="isBoolean(header)">
-          <v-icon v-if="item[header.value]">fa-check</v-icon>
+          <v-icon v-if="getItemValue(item, header.value)">fa-check</v-icon>
           <v-icon v-else>fa-times</v-icon>
         </template>
 

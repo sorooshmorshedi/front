@@ -253,6 +253,14 @@ export default {
           show: this.showRemain,
         },
         {
+          text: "سند سیستمی",
+          value: "sanad.is_auto_created",
+          type: "boolean",
+          sortable: false,
+          filterable: false,
+          align: "center",
+        },
+        {
           text: "مشاهده سند",
           value: "detail",
           sortable: false,
