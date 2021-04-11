@@ -52,6 +52,8 @@ import Closing from '../views/panel/closing/Closing.vue';
 
 import ImprestSettlement from '@/views/panel/imprestSettlement/ImprestSettlement';
 
+import DefaultTexts from '@/views/panel/defaultTexts/DefaultTexts';
+
 import DashtbashiRoutes from '@/modules/dashtbashi/Routes';
 import DistributionRoutes from '@/modules/distribution/Routes';
 
@@ -256,6 +258,13 @@ export default [{
       name: 'Closing',
       path: 'closing',
       component: Closing,
+    },
+
+    {
+      name: 'DefaultTexts',
+      path: 'defaultTexts/:usage',
+      component: DefaultTexts,
+      props: true
     }
 
   ]

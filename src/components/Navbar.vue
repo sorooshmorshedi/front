@@ -498,14 +498,29 @@ export default {
           module: "factors",
           children: [
             {
-              perm: "defaultAccount",
-              to: {
-                name: "DefaultAccounts",
-                params: {
-                  usage: "factor",
+              title: "پیشفرض های فاکتور",
+              children: [
+                {
+                  perm: "defaultAccount",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "factor",
+                    },
+                  },
+                  title: "حساب ها",
                 },
-              },
-              title: "حساب های پیش فرض فاکتور",
+                {
+                  perm: "defaultTexts",
+                  to: {
+                    name: "DefaultTexts",
+                    params: {
+                      usage: "factor",
+                    },
+                  },
+                  title: "متون",
+                },
+              ],
             },
             {
               title: "تعریف کالا",

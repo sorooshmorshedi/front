@@ -301,6 +301,10 @@ export default {
     },
     id: {},
     accountId: {},
+
+    /*
+      rather than submiting the transaction, `submit` event will be emitted 
+    */
     modalMode: {
       default: false,
     },

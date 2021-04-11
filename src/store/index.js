@@ -35,7 +35,8 @@ export default new Vuex.Store({
       salePriceTypes: [],
     },
     factorExpenses: [],
-    chequebooks: []
+    chequebooks: [],
+    defaultTexts: []
   },
   mutations: {
     ...DashbashiStore.mutations,
@@ -99,6 +100,9 @@ export default new Vuex.Store({
     },
     setFactorExpenses(state, data) {
       state.factorExpenses = data;
+    },
+    setDefaultTexts(state, data) {
+      state.defaultTexts = data;
     },
   }
 })
