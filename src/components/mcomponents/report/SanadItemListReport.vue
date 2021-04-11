@@ -10,8 +10,17 @@
       <detail-link :to="to(item.sanad)" :new-tab="true" />
     </template>
 
-    <template v-if="apiData.previous" v-slot:body.prepend="{ headers }">
+    <template #item.sanad_form="{ item }">
+      <v-btn
+        v-if="getRelatedForm(item.sanad)"
+        class="blue--text"
+        text
+        outlined
+        :to="getRelatedForm(item.sanad).to"
+      >{{ getRelatedForm(item.sanad).title }}</v-btn>
+    </template>
 
+    <template v-if="apiData.previous" v-slot:body.prepend="{ headers }">
       <tr class="text-center">
         <td :colspan="colspan"></td>
         <td>منقول از صفحه قبل</td>
@@ -55,7 +64,7 @@
           <td>{{ lastItem.remain_type | toMoney }}</td>
         </template>
       </tr>
-      <tr  class="text-center">
+      <tr class="text-center">
         <td :colspan="colspan"></td>
         <td>جمع تا این صفحه</td>
         <td v-if="showAccountInTable" colspan="2"></td>
@@ -112,8 +121,8 @@ export default {
       required: true,
     },
     colspan: {
-      default: 4
-    }
+      default: 4,
+    },
   },
   data() {
     return {
@@ -261,6 +270,13 @@ export default {
           align: "center",
         },
         {
+          text: "فرم",
+          value: "sanad_form",
+          sortable: false,
+          filterable: false,
+          align: "center",
+        },
+        {
           text: "مشاهده سند",
           value: "detail",
           sortable: false,
@@ -280,6 +296,50 @@ export default {
           id: item.id,
         },
       };
+    },
+    getRelatedForm(sanad) {
+      // not working for chequeStatusChange
+      let forms = [
+        { name: "factor", title: "فاکتور", routeName: "FactorForm" },
+        { name: "adjustment", title: "تعدیل", routeName: "AdjustmentForm" },
+        { name: "lading", title: "بارگیری", routeName: "Lading" },
+        {
+          name: "oilCompanyLading",
+          title: "بارگیری شرکت نفت",
+          routeName: "OilCompanyLading",
+        },
+        {
+          name: "statusChange",
+          title: "چک",
+          routeName: "ChequeDetail",
+        },
+        {
+          name: "transaction",
+          title: "دریافت/پرداخت",
+          routeName: "TransactionForm",
+        },
+        {
+          name: "imprestSettlement",
+          title: "تسویه تنخواه",
+          routeName: "ImprestSettlement",
+        },
+      ];
+      for (let form of forms) {
+        let formObj = sanad[form["name"]];
+        if (formObj) {
+          return {
+            title: form.title,
+            to: {
+              name: form.routeName,
+              params: {
+                id: formObj.id,
+                type: formObj.type,
+              },
+            },
+          };
+        }
+      }
+      return null;
     },
   },
 };
