@@ -20,7 +20,7 @@
           <v-text-field label="عنوان" v-model="item.name" disabled />
         </v-col>
         <v-col cols="12">
-          <v-text-field label="متن" v-model="item.value" :disabled="!isEditing" />
+          <v-textarea label="متن" v-model="item.value" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>
