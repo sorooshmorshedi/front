@@ -25,6 +25,8 @@
       :disabled="disabled"
       :return-object="true"
       :suffix="getSuffix()"
+      v-bind="$attrs"
+      v-on="$listeners"
     ></v-autocomplete>
 
     <v-dialog v-if="inventories.length" v-model="dialog" scrollable max-width="500px">

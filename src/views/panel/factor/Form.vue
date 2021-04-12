@@ -207,6 +207,7 @@
                       :disabled="!isEditing"
                       :factorType="type"
                       :show-main-unit="false"
+                      @change="clearRow(i)"
                     />
                   </td>
                   <td>

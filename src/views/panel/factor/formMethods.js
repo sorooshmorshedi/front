@@ -45,7 +45,10 @@ export default {
         tax_value: "",
         tax_percent: "",
         fee: "",
+        count: null,
+        unit_count: null,
         ware: null,
+        unit: null,
         warehouse: null,
         explanation: explanation
       }
@@ -402,5 +405,12 @@ export default {
       if (price) return price.name
       return undefined
     },
+    clearRow(i) {
+      let template = this.getRowTemplate()
+      Object.keys(template).forEach(key => {
+        if (key == 'ware') return;
+        this.rows[i][key] = template[key]
+      })
+    }
   }
 }
