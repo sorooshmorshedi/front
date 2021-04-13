@@ -5,6 +5,7 @@ const Drivers = () => import( /* wepackChunkName: "distribution" */ "@/modules/d
 const Distributors = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/Distributors")
 const Cars = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/Cars")
 const DistributionForm = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/DistributionForm")
+const DistributionRemittance = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/DistributionRemittance")
 
 const DistributionsList = () => import( /* wepackChunkName: "distribution" */ "@/modules/distribution/DistributionsList")
 
@@ -40,6 +41,12 @@ export default [{
     name: 'DistributionForm',
     path: 'distribution/:id?',
     component: DistributionForm,
+    props: true
+  },
+  {
+    name: 'DistributionRemittance',
+    path: 'distributionRemittance/:id',
+    component: DistributionRemittance,
     props: true
   }, {
     name: 'DistributionsList',

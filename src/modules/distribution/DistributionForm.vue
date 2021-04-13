@@ -19,7 +19,13 @@
     @delete="deleteItem"
     @clearForm="clearForm()"
   >
-    <template #header-btns></template>
+    <template #header-btns>
+      <v-btn
+        color="blue white--text"
+        class="mr-1 "
+        :to="{name:'DistributionRemittance', params: {id: id}}"
+      >حواله توزیع</v-btn>
+    </template>
 
     <template>
       <v-row>
