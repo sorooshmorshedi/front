@@ -16,8 +16,16 @@
     >
       <template #default>
         <v-row>
-          <v-col cols="12">
+          <v-col cols="12" md="8">
             <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="4">
+            <m-file-input
+              label="لوگو"
+              :disabled="!isEditing"
+              v-model="item.logo"
+              :delete-attachment.sync="item.delete_logo"
+            />
           </v-col>
           <v-col cols="12" md="6">
             <v-textarea rows="3" label="آدرس 1" v-model="item.address1" :disabled="!isEditing" />
@@ -133,6 +141,17 @@ export default {
           this.items = data;
         },
       });
+    },
+    getSerialized() {
+      let item = this.copy(this.item);
+
+      delete item["financial_years"];
+
+      if (typeof item["logo"] == typeof "") {
+        delete item["logo"];
+      }
+
+      return this.jsonToFormData(item);
     },
     activeCompany(item) {
       this.request({
