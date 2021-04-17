@@ -177,11 +177,9 @@ export default {
         this.changeRouteTo(item.id);
       }
     },
-    changeRouteTo(id) {
-      let params = {
-        ...this.$route.params,
-        id: id
-      }
+    changeRouteTo(id, params = null) {
+      if (!params) params = this.$route.params
+      params.id = id
 
       let isDuplicate = true;
       Object.keys(params).forEach(key => {

@@ -33,7 +33,7 @@
                 color="blue"
                 icon
                 rounded
-                :to="{name: 'FactorForm', params: {id: item.factor.id, type: item.factor.type}}"
+                :to="{name: 'FactorForm', params: {id: item.factor.id, type: item.factor.type, isPreFactor: item.factor.is_pre_factor}}"
               >{{item.factor.code}}</v-btn>
             </template>
           </m-datatable>

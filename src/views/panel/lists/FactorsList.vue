@@ -20,6 +20,7 @@ export default {
   name: "FactorsList",
   props: {
     type: {},
+    isPreFactor: {},
   },
   data() {
     return {
@@ -29,24 +30,35 @@ export default {
   },
   computed: {
     title() {
+      let title = "";
       switch (this.type) {
         case "buy":
-          return "فاکتور های خرید";
+          title = "فاکتور های خرید";
+          break;
         case "backFromBuy":
-          return "فاکتور های برگشت از خرید";
+          title = "فاکتور های برگشت از خرید";
+          break;
         case "sale":
-          return "فاکتور های فروش";
+          title = "فاکتور های فروش";
+          break;
         case "backFromSale":
-          return "فاکتور های برگشت از فروش";
+          title = "فاکتور های برگشت از فروش";
+          break;
         case "cw":
-          return "حواله های کالای مصرفی";
+          title = "حواله های کالای مصرفی";
       }
+
+      if (this.isPreFactor) {
+        title = "پیش " + title;
+      }
+
+      return title;
     },
     headers() {
       let headers = [
         {
           text: "شماره",
-          value: "code",
+          value: "temporary_code",
         },
         {
           text: "تاریخ",
@@ -77,7 +89,7 @@ export default {
         },
       ];
 
-      if (this.type != 'cw') {
+      if (this.type != "cw") {
         headers.push({
           text: "مالیات ",
           value: "has_tax",
@@ -97,11 +109,13 @@ export default {
   },
   created() {
     this.filters.type = this.type;
+    this.filters.is_pre_factor = this.isPreFactor;
   },
   watch: {
     $route() {
-      this.$refs.datatable.getDataFromApi();
       this.filters.type = this.type;
+      this.filters.is_pre_factor = this.isPreFactor;
+      this.$refs.datatable.getDataFromApi();
     },
   },
   methods: {
@@ -109,6 +123,7 @@ export default {
       return {
         name: "FactorForm",
         params: {
+          isPreFactor: item.is_pre_factor,
           type: this.type,
           id: item.id,
         },

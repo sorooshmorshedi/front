@@ -49,6 +49,7 @@ export default {
       let to = {
         name: 'FactorForm',
         params: {
+          isPreFactor: factor.is_pre_factor,
           type: this.getReverseType(factor.type),
           id: factor.backFactor ? factor.backFactor.id : null
         },

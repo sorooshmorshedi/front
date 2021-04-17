@@ -187,14 +187,15 @@ export default [{
       component: Factor,
       children: [{
           name: 'FactorForm',
-          path: 'form/:type/:id?',
+          path: 'form/:isPreFactor/:type/:id?',
           component: FactorForm,
           props: (route) => {
+            let isPreFactor = route.params.isPreFactor == 'true'
             return {
               ...route.query,
-              ...route.params
+              ...route.params,
+              isPreFactor: isPreFactor
             }
-
           }
         },
         {

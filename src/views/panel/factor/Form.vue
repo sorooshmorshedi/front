@@ -29,16 +29,22 @@
         <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
 
         <v-btn
-          v-if="id && !isFpi && !isCw"
+          v-if="id && !isFpi && !isCw && !isPreFactor"
           @click="transactionsDialog = true"
           class="light-blue white--text mr-1 mt-1 mt-md-0"
         >مشاهده {{ transactionLink.label }} ها</v-btn>
         <v-btn
-          v-if="id && canSubmitTransaction"
+          v-if="preFactor != null"
+          class="light-blue white--text mr-1 mt-1 mt-md-0"
+          target="_blank"
+          :to="{name: 'FactorForm', params: {type: type, isPreFactor: true, id: preFactor.factor_id}}"
+        >مشاهده پیش فاکتور</v-btn>
+        <v-btn
+          v-if="canSubmitTransaction"
           class="teal white--text mr-1 mt-1 mt-md-0"
           :to="transactionLink.to"
         >ثبت {{ transactionLink.label }}</v-btn>
-        <v-menu bottom offset-y v-if="id && !isFpi && !isCw">
+        <v-menu bottom offset-y v-if="id && !isFpi && !isCw && !isPreFactor">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               color="teal white--text mr-1 mt-1 mt-md-0"
@@ -65,7 +71,7 @@
         </v-menu>
 
         <v-btn
-          v-if="id && !isBack && !isFpi && !isCw"
+          v-if="id && !isBack && !isFpi && !isCw && !isPreFactor"
           class="teal white--text mr-1 mt-1 mt-md-0"
           @click="reverseFactor"
         >
@@ -86,19 +92,27 @@
 
       <template>
         <v-row>
-          <v-col cols="12" md="2" v-if="!isFpi">
-            <v-text-field label="شماره موقت" disabled :value="item.temporary_code" />
-          </v-col>
-          <v-col cols="12" md="2" v-if="!isFpi">
-            <v-text-field label="شماره قطعی" disabled v-model="item.code" />
-          </v-col>
+          <template v-if="isPreFactor">
+            <v-col cols="12" md="4">
+              <v-text-field label="شماره " disabled :value="item.temporary_code" />
+            </v-col>
+          </template>
+          <template v-else>
+            <v-col cols="12" md="2" v-if="!isFpi">
+              <v-text-field label="شماره موقت" disabled :value="item.temporary_code" />
+            </v-col>
+            <v-col cols="12" md="2" v-if="!isFpi">
+              <v-text-field label="شماره قطعی" disabled v-model="item.code" />
+            </v-col>
+          </template>
+
           <v-col cols="12" md="2">
             <date
               label=" * تاریخ"
               required
               v-model="item.date"
               :default="true"
-              :disabled="!isEditing"
+              :disabled="!isEditing || isConverted"
             />
           </v-col>
           <v-col cols="12" md="2">
@@ -107,13 +121,13 @@
               required
               v-model="item.time"
               :default="true"
-              :disabled="!isEditing"
+              :disabled="!isEditing || isConverted"
             />
           </v-col>
           <v-col cols="12" md="2" v-if="hasBijak">
-            <v-text-field label="بیجک" v-model="item.bijak" :disabled="!isEditing" />
+            <v-text-field label="بیجک" v-model="item.bijak" :disabled="!isEditing || isConverted" />
           </v-col>
-          <v-col cols="12" md="2" v-if="!isFpi">
+          <v-col cols="12" md="2" v-if="!isFpi & !isPreFactor">
             <v-text-field label="نوع" disabled :value="item.is_definite?'قطعی':'موقت'" />
           </v-col>
           <v-col cols="12" md="2" v-if="(isSale || isBackFromSale) && hasModule('distribution')">
@@ -123,7 +137,7 @@
               v-model="item.visitor"
               item-text="user.name"
               item-value="id"
-              :disabled="!isEditing || backFrom != null || item.backFrom != null"
+              :disabled="!isEditing || backFrom != null || item.backFrom != null || isConverted"
             />
           </v-col>
           <v-col cols="12" md="4">
@@ -132,7 +146,7 @@
               :itemsType="accountType"
               :visitor="item.visitor"
               v-model="item.account"
-              :disabled="!isEditing  || backFrom != null || item.backFrom != null"
+              :disabled="!isEditing  || backFrom != null || item.backFrom != null || isConverted"
               :floatAccount="item.floatAccount"
               @update:floatAccount="v => item.floatAccount = v"
               :costCenter="item.costCenter"
@@ -144,7 +158,7 @@
             <v-textarea
               label="شرح"
               v-model="item.explanation"
-              :disabled="!isEditing"
+              :disabled="!isEditing || isConverted"
               @keyup.enter.stop
             ></v-textarea>
           </v-col>
@@ -159,7 +173,11 @@
           </v-col>
 
           <v-col cols="12" md="2" v-if="showTax">
-            <v-switch label="فاکتور مالیات دارد" v-model="item.has_tax" :disabled="!isEditing"></v-switch>
+            <v-switch
+              label="فاکتور مالیات دارد"
+              v-model="item.has_tax"
+              :disabled="!isEditing || isConverted"
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -168,6 +186,7 @@
             <input-table v-model="rows" id="input-table">
               <template #thead>
                 <tr>
+                  <th v-if="hasSelect" style="width: 24px"></th>
                   <th style="width: 32px">#</th>
                   <th style="width: 200px">* نام کالا</th>
                   <th style="width: 32px"></th>
@@ -200,11 +219,25 @@
                   :key="i"
                   :class="{'d-print-none': i == rows.length-1,'draggable': i != rows.length-1 && isEditing}"
                 >
+                  <td v-if="hasSelect">
+                    <v-btn
+                      v-if="row.factorItem"
+                      color="blue"
+                      class="mx-1"
+                      dir="ltr"
+                      :title="getFactorItemLink(row).title"
+                      icon
+                      outlined
+                      :to="getFactorItemLink(row).to"
+                      target="_blank"
+                    >{{ getFactorItemLink(row).text }}</v-btn>
+                    <v-checkbox v-else v-model="row.is_selected" class="mr-1" :disabled="isEditing"></v-checkbox>
+                  </td>
                   <td class="tr-counter">{{ i+1 }}</td>
                   <td class="tr-ware">
                     <ware-select
                       v-model="rows[i].ware"
-                      :disabled="!isEditing"
+                      :disabled="!isEditing || row.factorItem"
                       :factorType="type"
                       :show-main-unit="false"
                       @change="clearRow(i)"
@@ -229,7 +262,7 @@
                       @change="updateRowFee(rows[i])"
                       item-text="name"
                       item-value="id"
-                      :disabled="!isEditing"
+                      :disabled="!isEditing || row.factorItem"
                       :return-object="true"
                       :suffix="getUnitSuffix(row.ware, row.unit)"
                     ></v-autocomplete>
@@ -239,7 +272,7 @@
                       :return-object="true"
                       v-if="rows[i].ware && !rows[i].ware.isService"
                       v-model="rows[i].warehouse"
-                      :disabled="!isEditing"
+                      :disabled="!isEditing || row.factorItem"
                       :items="warehouses"
                       item-text="name"
                       item-value="id"
@@ -247,7 +280,7 @@
                     <span v-else>-</span>
                   </td>
                   <td>
-                    <money v-model="rows[i].unit_count" :disabled="!isEditing" />
+                    <money v-model="rows[i].unit_count" :disabled="!isEditing || row.factorItem" />
                   </td>
                   <template v-if="!isCw">
                     <td>
@@ -262,7 +295,7 @@
                           <div class="d-flex flex-row">
                             <money
                               v-model="rows[i].fee"
-                              :disabled="!isEditing"
+                              :disabled="!isEditing || row.factorItem"
                               v-bind="attrs"
                               v-on="on"
                               @click:suffix="priceMenus[i] = true"
@@ -293,7 +326,7 @@
                           </v-list-item>
                         </v-list>
                       </v-menu>
-                      <money v-else v-model="rows[i].fee" :disabled="!isEditing" />
+                      <money v-else v-model="rows[i].fee" :disabled="!isEditing || row.factorItem" />
                     </td>
                     <td dir="ltr">
                       <money :value="rowSum(rows[i])" disabled :decimalScale="0" />
@@ -304,13 +337,13 @@
                     <td>
                       <money
                         style="width: 70px !important"
-                        :disabled="!isEditing || hasValue(rows[i].discountPercent)"
+                        :disabled="!isEditing || hasValue(rows[i].discountPercent) || row.factorItem"
                         v-model="rows[i].discountValue"
                       />
                     </td>
                     <td>
                       <v-text-field
-                        :disabled="!isEditing || (hasValue(rows[i].discountValue) && !hasValue(rows[i].discountPercent))"
+                        :disabled="!isEditing || (hasValue(rows[i].discountValue) && !hasValue(rows[i].discountPercent)) || row.factorItem"
                         type="number"
                         min="0"
                         max="100"
@@ -325,13 +358,13 @@
                   <template v-if="item.has_tax">
                     <td>
                       <money
-                        :disabled="!isEditing || hasValue(rows[i].tax_percent)"
+                        :disabled="!isEditing || hasValue(rows[i].tax_percent) || row.factorItem"
                         v-model="rows[i].tax_value"
                       />
                     </td>
                     <td>
                       <v-text-field
-                        :disabled="!isEditing || (hasValue(rows[i].tax_value) && !hasValue(rows[i].tax_percent))"
+                        :disabled="!isEditing || (hasValue(rows[i].tax_value) && !hasValue(rows[i].tax_percent)) || row.factorItem"
                         type="number"
                         min="0"
                         max="100"
@@ -347,7 +380,7 @@
                     <row-textarea
                       style="width: 150px"
                       v-model="rows[i].explanation"
-                      :disabled="!isEditing"
+                      :disabled="!isEditing || row.factorItem"
                       :i="i"
                       @updateRowsExplanation="updateRowsExplanation"
                     />
@@ -358,13 +391,14 @@
                       @click="deleteItemRow(i)"
                       class="red--text"
                       icon
-                      :disabled="!isEditing"
+                      :disabled="!isEditing || row.factorItem"
                     >
                       <v-icon>delete</v-icon>
                     </v-btn>
                   </td>
                 </tr>
                 <tr class="grey lighten-3 text-white">
+                  <td v-if="hasSelect"></td>
                   <td colspan="4"></td>
 
                   <td v-if="isFpi">{{ rowsSum('count') | toMoney(0) }}</td>
@@ -389,9 +423,9 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="showFactorExpenses">
+        <v-row>
           <v-col cols="12" md="8" class>
-            <div class="pa-3 ml-md-5" style="border: 1px dashed #9e9e9e">
+            <div v-if="showFactorExpenses" class="pa-3 ml-md-5" style="border: 1px dashed #9e9e9e">
               <div class="d-flex">
                 <h3>هزینه های فاکتور</h3>
                 <v-spacer></v-spacer>
@@ -663,11 +697,16 @@
 
       <template #footer-outside-btns>
         <v-btn
-          v-if="id && !isFpi"
+          v-if="id && !isFpi && !isPreFactor"
           @click="definiteFactor"
           :disabled="item.is_definite"
           class="blue white--text mr-1"
         >قطعی کردن فاکتور</v-btn>
+        <v-btn
+          v-if="isPreFactor && !isEditing"
+          @click="convertToFactor"
+          class="blue white--text mr-1"
+        >تبدیل به فاکتور</v-btn>
       </template>
     </m-form>
 
@@ -693,140 +732,11 @@
 </template>
 
 <script>
-import accountApiMixin from "@/mixin/accountMixin";
-import getFactorExpensesApi from "./getFactorExpensesApi";
-import wareApiMixin from "@/mixin/wareApi";
-import formsMixin from "@/mixin/forms";
-import money from "@/components/mcomponents/cleave/Money";
-import date from "@/components/mcomponents/cleave/Date";
-import mtime from "@/components/mcomponents/cleave/Time";
-import DistributionApiMixin from "@/modules/distribution/api";
-import FactorMixin from "@/views/panel/factor/mixin";
-
-import formComputed from "./formComputed.js";
-import formMethods from "./formMethods.js";
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import FormLogic from "./FormLogic";
 
 export default {
   name: "Form",
-  components: { money, date, mtime },
-  mixins: [
-    MFormMixin,
-    formsMixin,
-    accountApiMixin,
-    wareApiMixin,
-    getFactorExpensesApi,
-    formComputed,
-    formMethods,
-    DistributionApiMixin,
-    FactorMixin,
-  ],
-  props: {
-    type: {
-      required: true,
-    },
-    id: {
-      default: false,
-    },
-    backFrom: {
-      default: null,
-    },
-  },
-  data() {
-    return {
-      hasList: false,
-      transactionsDialog: false,
-      baseUrl: "factors/factors",
-      appendSlash: true,
-      rowKey: "ware",
-      hasIdProp: true,
-
-      exportsDialog: false,
-      factorExpensesDialog: false,
-      factorExpensesCopy: [{}],
-      expensesToDelete: [],
-      exportOptions: {
-        summarized: false,
-        hide_expenses: false,
-        hide_remain: false,
-      },
-
-      pricesDialog: false,
-      priceWare: null,
-      pricesFilters: {
-        ware: null,
-        factor__account: null,
-        factor__floatAccount: null,
-        factor__costCenter: null,
-        factor__type__in: null,
-      },
-
-      priceMenus: {},
-
-      pricesHeaders: [
-        {
-          text: "شماره فاکتور",
-          value: "factor.code",
-        },
-        {
-          text: "تاریخ",
-          value: "factor.date",
-          type: "date",
-        },
-        {
-          text: "تعداد",
-          value: "count",
-          type: "numeric",
-        },
-        {
-          text: "واحد",
-          value: "unit.name",
-        },
-        {
-          text: "فی",
-          value: "fee",
-          type: "numeric",
-          sortable: false,
-        },
-        {
-          text: "مبلغ کل",
-          value: "total_value",
-          type: "numeric",
-          sortable: false,
-        },
-      ],
-    };
-  },
-  watch: {
-    rows: {
-      handler(newRows, oldRows) {
-        this.setDefaultValues();
-      },
-      deep: true,
-    },
-    factorExpensesCopy: {
-      handler() {
-        let expense = this.factorExpensesCopy[
-          this.factorExpensesCopy.length - 1
-        ];
-        if (expense && expense.expense) {
-          this.factorExpensesCopy.push({});
-        }
-      },
-      deep: true,
-    },
-    "item.has_tax"() {
-      if (this.item.has_tax == false) {
-        this.item.taxPercent = 0;
-        this.item.taxValue = 0;
-      }
-    },
-  },
-  mounted() {
-    this.getVisitors();
-    this.getUnits();
-    this.getSalePriceTypes();
-  },
+  mixins: [FormLogic],
 };
 </script>
 

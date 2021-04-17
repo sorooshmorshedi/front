@@ -47,7 +47,7 @@
             <template #item.factor_item_order="{ item }">{{ +item.factor_item_order + 1 }}</template>
             <template #item.factor.code="{ item }">
               <v-btn
-                :to="{name: 'FactorForm', params: {id: item.factor.id, type: item.factor.type}}"
+                :to="{name: 'FactorForm', params: {id: item.factor.id, type: item.factor.type, isPreFactor: item.factor.is_pre_factor}}"
                 rounded
                 outlined
                 color="blue white--text"

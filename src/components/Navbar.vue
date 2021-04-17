@@ -598,6 +598,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
+                      isPreFactor: false,
                       type: "fpi",
                     },
                   },
@@ -605,6 +606,57 @@ export default {
                 },
               ],
             },
+
+            {
+              title: "پیش فاکتور",
+              children: [
+                {
+                  title: "ثبت پیش فاکتور فروش",
+                  perm: "saleFactor",
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      isPreFactor: true,
+                      type: "sale",
+                    },
+                  },
+                },
+                {
+                  title: "لیست پیش فاکتور های فروش",
+                  perm: "buyFactor",
+                  to: {
+                    name: "FactorsList",
+                    params: {
+                      isPreFactor: true,
+                      type: "sale",
+                    },
+                  },
+                },
+                {
+                  title: "ثبت پیش فاکتور خرید",
+                  perm: "buyFactor",
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      isPreFactor: true,
+                      type: "buy",
+                    },
+                  },
+                },
+                {
+                  title: "لیست پیش فاکتور های خرید",
+                  perm: "buyFactor",
+                  to: {
+                    name: "FactorsList",
+                    params: {
+                      isPreFactor: true,
+                      type: "buy",
+                    },
+                  },
+                },
+              ],
+            },
+
             {
               title: "فاکتور خرید",
               children: [
@@ -624,6 +676,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
+                      isPreFactor: false,
                       type: "buy",
                     },
                   },
@@ -633,10 +686,11 @@ export default {
                   to: {
                     name: "FactorsList",
                     params: {
+                      isPreFactor: false,
                       type: "buy",
                     },
                   },
-                  title: "لیست خرید",
+                  title: "لیست فاکتور های خرید",
                 },
               ],
             },
@@ -658,6 +712,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
+                      isPreFactor: false,
                       type: "sale",
                     },
                   },
@@ -668,6 +723,7 @@ export default {
                   to: {
                     name: "FactorsList",
                     params: {
+                      isPreFactor: false,
                       type: "sale",
                     },
                   },
@@ -683,6 +739,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
+                      isPreFactor: false,
                       type: "backFromBuy",
                     },
                   },
@@ -693,6 +750,7 @@ export default {
                   to: {
                     name: "FactorsList",
                     params: {
+                      isPreFactor: false,
                       type: "backFromBuy",
                     },
                   },
@@ -708,6 +766,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
+                      isPreFactor: false,
                       type: "backFromSale",
                     },
                   },
@@ -718,6 +777,7 @@ export default {
                   to: {
                     name: "FactorsList",
                     params: {
+                      isPreFactor: false,
                       type: "backFromSale",
                     },
                   },
@@ -805,6 +865,7 @@ export default {
                   to: {
                     name: "FactorForm",
                     params: {
+                      isPreFactor: false,
                       type: "cw",
                     },
                   },
@@ -815,6 +876,7 @@ export default {
                   to: {
                     name: "FactorsList",
                     params: {
+                      isPreFactor: false,
                       type: "cw",
                     },
                   },

@@ -50,7 +50,7 @@ export default [{
     },
     {
       name: 'FactorsList',
-      path: 'lists/factors/:type',
+      path: 'lists/factors/:type/:isPreFactor',
       component: FactorsList,
       props: true
     },

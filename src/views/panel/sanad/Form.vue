@@ -211,7 +211,12 @@ export default {
     relatedForm() {
       // not working for chequeStatusChange
       let forms = [
-        { name: "factor", title: "فاکتور", routeName: "FactorForm" },
+        {
+          name: "factor",
+          title: "فاکتور",
+          routeName: "FactorForm",
+          params: { isPreFactor: true },
+        },
         { name: "adjustment", title: "تعدیل", routeName: "AdjustmentForm" },
         { name: "lading", title: "بارگیری", routeName: "Lading" },
         {
@@ -238,6 +243,7 @@ export default {
       for (let form of forms) {
         let formObj = this.item[form["name"]];
         if (formObj) {
+          let params = form.params ? form.params : {};
           return {
             title: form.title,
             to: {
@@ -245,6 +251,7 @@ export default {
               params: {
                 id: formObj.id,
                 type: formObj.type,
+                ...params,
               },
             },
           };

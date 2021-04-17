@@ -65,13 +65,13 @@
         <v-btn
           v-if="hasPerm('create', 'buyFactor') && hasModule('factors')"
           class="blue white--text mr-1"
-          :to="{name: 'FactorForm', params: { type: 'buy' } }"
+          :to="{name: 'FactorForm', params: {isPreFactor: false, type: 'buy' } }"
           @click="routeClick('FactorForm')"
         >فاکتور خرید</v-btn>
         <v-btn
           v-if="hasPerm('create', 'saleFactor')  && hasModule('factors')"
           class="blue white--text mr-1"
-          :to="{name: 'FactorForm', params: { type: 'sale' } }"
+          :to="{name: 'FactorForm', params: {isPreFactor: false, type: 'sale' } }"
           @click="routeClick('FactorForm')"
         >فاکتور فروش</v-btn>
         <v-btn
