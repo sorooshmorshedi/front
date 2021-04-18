@@ -46,6 +46,13 @@ export default {
           break;
         case "cw":
           title = "حواله های کالای مصرفی";
+          break;
+        case "rc":
+          title = "رسید ها";
+          break;
+        case "rm":
+          title = "حواله ها";
+          break;
       }
 
       if (this.isPreFactor) {

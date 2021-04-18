@@ -33,12 +33,14 @@
           @click="transactionsDialog = true"
           class="light-blue white--text mr-1 mt-1 mt-md-0"
         >مشاهده {{ transactionLink.label }} ها</v-btn>
+
         <v-btn
           v-if="preFactor != null"
           class="light-blue white--text mr-1 mt-1 mt-md-0"
           target="_blank"
-          :to="{name: 'FactorForm', params: {type: type, isPreFactor: true, id: preFactor.factor_id}}"
-        >مشاهده پیش فاکتور</v-btn>
+          :to="{name: 'FactorForm', params: {type: preFactor.type, isPreFactor: preFactor.isPreFactor, id: preFactor.id}}"
+        >مشاهده {{ preFactor.label }}</v-btn>
+
         <v-btn
           v-if="canSubmitTransaction"
           class="teal white--text mr-1 mt-1 mt-md-0"
@@ -92,7 +94,7 @@
 
       <template>
         <v-row>
-          <template v-if="isPreFactor">
+          <template v-if="isPreFactor || isRoR">
             <v-col cols="12" md="4">
               <v-text-field label="شماره " disabled :value="item.temporary_code" />
             </v-col>
@@ -127,7 +129,7 @@
           <v-col cols="12" md="2" v-if="hasBijak">
             <v-text-field label="بیجک" v-model="item.bijak" :disabled="!isEditing || isConverted" />
           </v-col>
-          <v-col cols="12" md="2" v-if="!isFpi & !isPreFactor">
+          <v-col cols="12" md="2" v-if="!isFpi & !isPreFactor & !isRoR">
             <v-text-field label="نوع" disabled :value="item.is_definite?'قطعی':'موقت'" />
           </v-col>
           <v-col cols="12" md="2" v-if="(isSale || isBackFromSale) && hasModule('distribution')">
@@ -190,26 +192,26 @@
                   <th style="width: 32px">#</th>
                   <th style="width: 200px">* نام کالا</th>
                   <th style="width: 32px"></th>
-                  <th style="width: 100px">واحد</th>
-                  <th style="width: 100px">* انبار</th>
-                  <th style="width: 80px">* تعداد</th>
+                  <th>واحد</th>
+                  <th>* انبار</th>
+                  <th>* تعداد</th>
 
-                  <template v-if="!isCw">
-                    <th style="width: 75px">* قیمت واحد</th>
-                    <th style="width: 80px">مبلغ کل</th>
+                  <template v-if="!isCw && !isRoR">
+                    <th>* قیمت واحد</th>
+                    <th>مبلغ کل</th>
                   </template>
 
-                  <th v-if="showDiscount" style="width: 75px">تخفیف (مبلغ)</th>
-                  <th v-if="showDiscount" style="width: 50px;">تخفیف (درصد)</th>
-                  <th v-if="showDiscount" style="width: 80px">جمع کل پس از تخفیف</th>
+                  <th v-if="showDiscount">تخفیف (مبلغ)</th>
+                  <th v-if="showDiscount">تخفیف (درصد)</th>
+                  <th v-if="showDiscount">جمع کل پس از تخفیف</th>
 
                   <template v-if="showTax && item.has_tax">
-                    <th style="width: 80px">مالیات (مبلغ)</th>
-                    <th style="width: 50px">مالیات (درصد)</th>
-                    <th style="width: 80px">جمع مبلغ کل و مالیات</th>
+                    <th>مالیات (مبلغ)</th>
+                    <th>مالیات (درصد)</th>
+                    <th>جمع مبلغ کل و مالیات</th>
                   </template>
 
-                  <th style="width: 100px">توضیحات</th>
+                  <th>توضیحات</th>
                   <th style="width: 32px" class="d-print-none"></th>
                 </tr>
               </template>
@@ -234,7 +236,7 @@
                     <v-checkbox v-else v-model="row.is_selected" class="mr-1" :disabled="isEditing"></v-checkbox>
                   </td>
                   <td class="tr-counter">{{ i+1 }}</td>
-                  <td class="tr-ware">
+                  <td style="width: 200px">
                     <ware-select
                       v-model="rows[i].ware"
                       :disabled="!isEditing || row.factorItem"
@@ -282,7 +284,7 @@
                   <td>
                     <money v-model="rows[i].unit_count" :disabled="!isEditing || row.factorItem" />
                   </td>
-                  <template v-if="!isCw">
+                  <template v-if="!isCw && !isRoR">
                     <td>
                       <v-menu
                         bottom
@@ -336,7 +338,6 @@
                   <template v-if="showDiscount">
                     <td>
                       <money
-                        style="width: 70px !important"
                         :disabled="!isEditing || hasValue(rows[i].discountPercent) || row.factorItem"
                         v-model="rows[i].discountValue"
                       />
@@ -378,7 +379,6 @@
 
                   <td>
                     <row-textarea
-                      style="width: 150px"
                       v-model="rows[i].explanation"
                       :disabled="!isEditing || row.factorItem"
                       :i="i"
@@ -404,7 +404,7 @@
                   <td v-if="isFpi">{{ rowsSum('count') | toMoney(0) }}</td>
                   <td v-else></td>
 
-                  <td></td>
+                  <td v-if="!isCw && !isRoR"></td>
 
                   <td v-if="isFpi">{{ sum.sum | toMoney(0) }}</td>
                   <td v-else></td>
@@ -423,8 +423,8 @@
           </v-col>
         </v-row>
 
-        <v-row>
-          <v-col cols="12" md="8" class>
+        <v-row v-if="!isCw && !isRoR">
+          <v-col cols="12" md="8">
             <div v-if="showFactorExpenses" class="pa-3 ml-md-5" style="border: 1px dashed #9e9e9e">
               <div class="d-flex">
                 <h3>هزینه های فاکتور</h3>
@@ -697,16 +697,28 @@
 
       <template #footer-outside-btns>
         <v-btn
-          v-if="id && !isFpi && !isPreFactor"
+          v-if="id && !isFpi && !isPreFactor && !isRoR"
           @click="definiteFactor"
           :disabled="item.is_definite"
           class="blue white--text mr-1"
         >قطعی کردن فاکتور</v-btn>
+
         <v-btn
           v-if="isPreFactor && !isEditing"
-          @click="convertToFactor"
+          @click="convertPreFactorToFactor"
           class="blue white--text mr-1"
         >تبدیل به فاکتور</v-btn>
+
+        <template v-if="isRoR && !isEditing">
+          <v-btn
+            @click="convertRoRToFactor(RoRFactorTypes[type].factor.type)"
+            class="blue white--text mr-1"
+          >تبدیل به فاکتور {{ RoRFactorTypes[type].factor.label }}</v-btn>
+          <v-btn
+            @click="convertRoRToFactor(RoRFactorTypes[type].backFactor.type)"
+            class="blue white--text mr-1"
+          >تبدیل به فاکتور {{ RoRFactorTypes[type].backFactor.label }}</v-btn>
+        </template>
       </template>
     </m-form>
 

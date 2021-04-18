@@ -793,6 +793,61 @@ export default {
           module: "warehouses",
           children: [
             {
+              title: "رسید",
+              children: [
+                {
+                  perm: "receipt",
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      type: "rc",
+                      isPreFactor: false,
+                    },
+                  },
+                  title: "ثبت رسید",
+                },
+                {
+                  perm: "receipt",
+                  to: {
+                    name: "FactorsList",
+                    params: {
+                      type: "rc",
+                      isPreFactor: false,
+                    },
+                  },
+                  title: "لیست رسید ها",
+                },
+              ],
+            },
+            {
+              title: "حواله",
+              children: [
+                {
+                  perm: "remittance",
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      type: "rm",
+                      isPreFactor: false,
+                    },
+                  },
+                  title: "ثبت حواله",
+                },
+                {
+                  perm: "remittance",
+                  to: {
+                    name: "FactorsList",
+                    params: {
+                      type: "rm",
+                      isPreFactor: false,
+                    },
+                  },
+                  title: "لیست حواله ها",
+                },
+              ],
+            },
+
+            {
               title: "انتقال",
               children: [
                 {

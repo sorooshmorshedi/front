@@ -103,9 +103,48 @@ export default {
     };
   },
   computed: {
+    RoRFactorTypes() {
+      return {
+        rc: {
+          factor: {
+            label: "خرید",
+            type: "buy",
+          },
+          backFactor: {
+            label: "برگشت از فروش",
+            type: "backFromSale",
+          },
+        },
+        rm: {
+          factor: {
+            label: "فروش",
+            type: "sale",
+          },
+          backFactor: {
+            label: "برگشت از خرید",
+            type: "backFromBuy",
+          },
+        },
+      };
+    },
     preFactor() {
       for (let row of this.rows) {
-        if (row.id && row.preFactorItem) return row.preFactorItem;
+        if (row.id && row.preFactorItem) {
+          let isPreFactor = row.preFactorItem.factor__is_pre_factor;
+          let factorType = row.preFactorItem.factor__type;
+
+          let label = "";
+          if (isPreFactor) label = "پیش فاکتور";
+          else if (factorType == "rm") label = "حواله";
+          else if (factorType == "rc") label = "رسید";
+
+          return {
+            label: label,
+            id: row.preFactorItem.factor__id,
+            isPreFactor: isPreFactor,
+            type: factorType,
+          };
+        }
       }
       return null;
     },
@@ -194,6 +233,13 @@ export default {
           break;
         case "cw":
           title = "حواله ی کالای مصرفی";
+          break;
+        case "rc":
+          title = "رسید";
+          break;
+        case "rm":
+          title = "حواله";
+          break;
       }
 
       if (this.isPreFactor) {
@@ -203,13 +249,13 @@ export default {
       return title;
     },
     showDiscount() {
-      return !this.isFpi && !this.isCw;
+      return !this.isFpi && !this.isCw && !this.isRoR;
     },
     showTax() {
-      return !this.isFpi && !this.isCw;
+      return !this.isFpi && !this.isCw && !this.isRoR;
     },
     showFactorExpenses() {
-      return !this.isFpi && !this.isCw && !this.isPreFactor;
+      return !this.isFpi && !this.isPreFactor;
     },
     hasBijak() {
       return ["buy", "backFromBuy"].includes(this.type) || this.isFpi;
@@ -232,7 +278,8 @@ export default {
       return sum;
     },
     canSubmitTransaction() {
-      if (!this.id || this.isFpi || this.isCw || this.isPreFactor) return false;
+      if (!this.id || this.isFpi || this.isCw || this.isPreFactor || this.isRoR)
+        return false;
       return this.item.paidValue < this.sum.total;
     },
     exportLinks() {
@@ -295,7 +342,7 @@ export default {
       return res;
     },
     accountName() {
-      if (this.isCw || this.isFpi) return "حساب";
+      if (this.isCw || this.isFpi || this.isRoR) return "حساب";
       if (["buy", "backFromBuy"].includes(this.type)) {
         return "فروشنده";
       } else {
@@ -553,7 +600,7 @@ export default {
           isValid = false;
         }
         if (r.fee == undefined || r.fee == "") {
-          if (this.isCw) r.fee = 0;
+          if (this.isCw || this.isRoR) r.fee = 0;
           else {
             this.notify(`لطفا قیمت واحد ردیف ${i + 1} را وارد کنید`, "danger");
             isValid = false;
@@ -815,7 +862,7 @@ export default {
         this.rows[i][key] = template[key];
       });
     },
-    convertToFactor() {
+    convertPreFactorToFactor() {
       this.rows = this.rows.filter(
         (o) => o.id && o.preFactorItem == null && o.is_selected
       );
@@ -855,6 +902,44 @@ export default {
         title,
         text,
       };
+    },
+    convertRoRToFactor(factorType) {
+      let rows = this.rows.filter(
+        (o) => o.id && o.preFactorItem == null && o.is_selected
+      );
+
+      rows = rows.map((o) => {
+        o.preFactorItem = o.id;
+        o.id = null;
+        return o;
+      });
+
+      let item = this.copy(this.item);
+      item.id = null;
+      item.temporary_code = null;
+      item.factorType = factorType;
+
+      this.$router.push({
+        to: "FactorForm",
+        params: {
+          id: null,
+          type: factorType,
+          isPreFactor: false,
+        },
+      });
+
+      this.$nextTick(() => {
+        this.item = item;
+
+        this.rows = [];
+        console.log(rows);
+        for (const row of rows) {
+          console.log(row);
+          this.rows.push({
+            ...row,
+          });
+        }
+      });
     },
   },
 };

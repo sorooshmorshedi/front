@@ -114,7 +114,7 @@ export default {
     rows: {
       handler() {
         if (!this.rowKey) return;
-        if (this.rows[this.rows.length - 1][this.rowKey]) {
+        if (this.rows.length > 0 && this.rows[this.rows.length - 1][this.rowKey]) {
           this.rows.push(this.getRowTemplate());
         }
       },
