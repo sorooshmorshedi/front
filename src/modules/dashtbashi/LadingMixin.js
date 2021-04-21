@@ -11,6 +11,7 @@ export default {
       return value;
     },
     getCargoDebt(item) {
+      if (item.receive_type != 'cr') return 0
       let value = +item.association_price + +item.bill_price + +item.cargo_tip_price;
       item.cargo_debt = value;
       return value;

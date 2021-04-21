@@ -7,6 +7,7 @@
     :canDelete="canDelete"
     :canSubmit="canSubmit"
     :confirmBtnText="confirmBtnText"
+    :canEdit="!item.is_paid"
     :cancelConfirmBtnText="cancelConfirmBtnText"
     :canConfirm="canConfirm"
     :canCancelConfirm="canCancelConfirm"

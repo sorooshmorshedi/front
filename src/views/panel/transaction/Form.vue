@@ -9,6 +9,7 @@
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
       :canDelete="canDelete"
+      :canEdit="!item.is_auto_created"
       :canSubmit="canSubmit"
       :isEditing.sync="isEditing"
       :confirmBtnText="confirmBtnText"

@@ -11,6 +11,7 @@
     :cancelConfirmBtnText="cancelConfirmBtnText"
     :canConfirm="canConfirm"
     :canCancelConfirm="canCancelConfirm"
+    :canEdit="!item.is_auto_created"
     :showClearBtn="false"
     :showListBtn="false"
     @cancelConfirm="cancelConfirm"
