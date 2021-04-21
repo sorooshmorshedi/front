@@ -178,7 +178,7 @@ export default {
       }
     },
     changeRouteTo(id, params = null) {
-      if (!params) params = this.$route.params
+      if (!params) params = this.copy(this.$route.params)
       params.id = id
 
       let isDuplicate = true;
