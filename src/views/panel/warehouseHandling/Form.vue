@@ -35,7 +35,7 @@
         </span>
       </template>
 
-      <template v-if="$refs.mForm">
+      <template v-if="$refs.mForm && id">
         <span>
           <v-btn
             :block="isXs"
