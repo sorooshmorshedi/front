@@ -146,6 +146,14 @@
         </v-dialog>
       </v-row>
     </template>
+
+    <template #footer-btns>
+      <v-btn
+        @click="settleDriverImprests"
+        v-if="item.driving"
+        class="ml-1 blue white--text mt-1 mt-md-0"
+      >تسویه تنخواه های انتخاب شده</v-btn>
+    </template>
   </m-form>
 </template>
 
@@ -335,6 +343,23 @@ export default {
       }
 
       this.submit(this.performClearForm);
+    },
+
+    settleDriverImprests() {
+      this.request({
+        url: this.endpoint("dashtbashi/settleDriverImprests"),
+        data: {
+          car: this.item.driving.car.id,
+          driver: this.item.driving.driver.id,
+          date: this.item.date,
+          imprests: this.selectedImprests.map((o) => o.id),
+        },
+        method: "post",
+        success: (data) => {
+          this.successNotify();
+          this.getDriverNotSettledImprests(this.item.driving);
+        },
+      });
     },
 
     getDriverNotSettledImprests(driving) {
