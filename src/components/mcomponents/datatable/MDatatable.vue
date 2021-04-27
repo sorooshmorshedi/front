@@ -22,6 +22,17 @@
         </v-col>
       </v-row>
     </v-card-title>
+    <div>
+      <v-card-subtitle>فیلتر های اعمال شده</v-card-subtitle>
+      <div class="mx-4 mb-4">
+        <span v-for="(filter, i) in appliedFilters" :key="i" class="ml-6">
+          {{ filter['text'] }}
+          <span v-if="filter['typeText']">({{ filter['typeText'] }})</span>
+          :
+          {{ filter['value'] }}
+        </span>
+      </div>
+    </div>
     <v-data-table
       :id="'datatable-' + _uid"
       ref="datatable"
@@ -357,6 +368,52 @@ export default {
     serverExport() {
       return this.exportUrl != null;
     },
+    appliedFilters() {
+      let appliedFilters = [];
+      for (let header of this.headers) {
+        Object.keys(this.filters)
+          .filter((key) => key.startsWith(header.value))
+          .forEach((key) => {
+            let value = this.filters[key];
+
+            if ([null, undefined, ""].includes(value)) return;
+
+            let filterTypesTexts = {
+              "": null,
+              icontains: "شامل",
+              gte: "از",
+              lte: "تا",
+            };
+
+            let filterType = key.split("__");
+            let filterTypeText = null;
+            if (filterType.length == 2)
+              filterTypeText = filterTypesTexts[filterType[1]];
+
+            if (this.isNumber(header)) value = this.toMoney(value);
+
+            if (this.isSelect(header)) {
+              value = header.items.find((o) => o.value == value).text;
+            }
+            if (this.isDate(header))
+              value = String(value).split("-").reverse().join("-");
+
+            if (this.isBoolean(header)) {
+              value = this.getBooleanFilterItems(header).find(
+                (o) => o.value == value
+              ).text;
+            }
+
+            appliedFilters.push({
+              text: header.text,
+              typeText: filterTypeText,
+              value: value,
+            });
+          });
+      }
+
+      return appliedFilters;
+    },
   },
   watch: {
     items() {
@@ -577,6 +634,7 @@ export default {
             url += `headers=${JSON.stringify(
               this.headers.filter((o) => o.hideInExport != true)
             )}&`;
+            url += `applied_filters=${JSON.stringify(this.appliedFilters)}&`;
           }
           if (url[url.length - 1] != "&") url += "&";
           url += "token=" + this.token;
