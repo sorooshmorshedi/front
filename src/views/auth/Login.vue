@@ -9,7 +9,7 @@
           src="/img/SobhanAccountingLogo.png"
         ></v-img>
 
-        <v-card-text class="text--primary">
+        <v-card-text class="text--primary" @keyup.enter="login">
           <v-card-title class="d-block text-center">حسابداری آنلاین سبحان</v-card-title>
 
           <v-text-field
@@ -34,7 +34,7 @@
         <v-card-actions class="pb-3 flex-column flex-md-row">
           <v-btn text :to="{name: 'ForgetPassword'}">رمز عبور خود را فراموش کرده اید؟</v-btn>
           <v-spacer></v-spacer>
-          <v-btn @keyup.enter="login" @click="login" class="blue white--text mr-2 w-100px">ورود</v-btn>
+          <v-btn @click="login" class="blue white--text mr-2 w-100px">ورود</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
