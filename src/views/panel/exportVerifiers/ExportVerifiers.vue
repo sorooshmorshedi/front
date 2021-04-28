@@ -40,6 +40,10 @@ export default {
   data() {
     let forms = [
       { text: "سند", value: "s" },
+      { text: "رسید", value: "frc" },
+      { text: "حواله", value: "frm" },
+      { text: "پیش فاکتور خرید", value: "pfs" },
+      { text: "پیش فاکتور فروش", value: "frb" },
       { text: "فاکتور خرید", value: "fb" },
       { text: "فاکتور فروش", value: "fs" },
       { text: "فاکتور برگشت از خرید", value: "fbfb" },
