@@ -190,7 +190,7 @@ export default [{
           path: 'form/:isPreFactor/:type/:id?',
           component: FactorForm,
           props: (route) => {
-            let isPreFactor = route.params.isPreFactor == 'true'
+            let isPreFactor = [true, 'true'].includes(route.params.isPreFactor)
             return {
               ...route.query,
               ...route.params,
