@@ -171,7 +171,7 @@ export default {
         ].includes(value);
       },
     },
-    visitor: {
+    visitorId: {
       default: null,
     },
     childOf: {
@@ -284,12 +284,12 @@ export default {
         });
       }
 
-      if (this.visitor) {
+      if (this.visitorId) {
         items = items.filter((item) => {
           let path = this.paths.find((o) => o.id == item.path);
           if (path) {
             parent = this.paths.find((o) => o.id == path.parent);
-            return parent.visitors.includes(this.visitor.id);
+            return parent.visitors.includes(this.visitorId);
           } else {
             return false;
           }

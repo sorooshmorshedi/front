@@ -146,7 +146,7 @@
             <account-select
               :label="' * ' + accountName"
               :itemsType="accountType"
-              :visitor="item.visitor"
+              :visitorId="item.visitor"
               v-model="item.account"
               :disabled="!isEditing  || backFrom != null || item.backFrom != null || isConverted"
               :floatAccount="item.floatAccount"
