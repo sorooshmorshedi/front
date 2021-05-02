@@ -67,6 +67,26 @@ export default {
       let payableValue = factor.total_sum - backTotalSum - factor.paidValue;
       return payableValue
 
+    },
+    getFactorTitle(type, isPreFactor) {
+      let titles = {
+        sale: "فاکتور فروش",
+        backFromSale: "فاکتور برگشت از فروش",
+        buy: "فاکتور خرید",
+        backFromBuy: "فاکتور برگشت از خرید",
+        fpi: "موجودی اول دوره",
+        cw: "حواله ی کالای مصرفی",
+        rc: "رسید",
+        rm: "حواله",
+        p: "تولید",
+      };
+      let title = titles[type];
+
+      if (isPreFactor) {
+        title = "پیش " + title;
+      }
+
+      return title;
     }
   },
   computed: {}

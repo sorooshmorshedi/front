@@ -29,7 +29,7 @@
         <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
 
         <v-btn
-          v-if="id && !isFpi && !isCw && !isPreFactor"
+          v-if="hasTransaction"
           @click="transactionsDialog = true"
           class="light-blue white--text mr-1 mt-1 mt-md-0"
         >مشاهده {{ transactionLink.label }} ها</v-btn>
@@ -42,11 +42,12 @@
         >مشاهده {{ preFactor.label }}</v-btn>
 
         <v-btn
-          v-if="canSubmitTransaction"
+          v-if="hasTransaction && canSubmitTransaction"
           class="teal white--text mr-1 mt-1 mt-md-0"
           :to="transactionLink.to"
         >ثبت {{ transactionLink.label }}</v-btn>
-        <v-menu bottom offset-y v-if="id && !isFpi && !isCw && !isPreFactor">
+
+        <v-menu bottom offset-y v-if="hasTransaction">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               color="teal white--text mr-1 mt-1 mt-md-0"
@@ -73,7 +74,7 @@
         </v-menu>
 
         <v-btn
-          v-if="id && !isBack && !isFpi && !isCw && !isPreFactor"
+          v-if="hasReverseFactor"
           class="teal white--text mr-1 mt-1 mt-md-0"
           @click="reverseFactor"
         >
@@ -142,7 +143,7 @@
               :disabled="!isEditing || backFrom != null || item.backFrom != null || isConverted"
             />
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="4" v-if="!isProduction">
             <account-select
               :label="' * ' + accountName"
               :itemsType="accountType"
@@ -409,6 +410,8 @@
                   <td v-if="isFpi">{{ sum.sum | toMoney(0) }}</td>
                   <td v-else></td>
 
+                  <td v-if="isProduction"></td>
+
                   <td></td>
                   <td v-if="showDiscount" colspan="4"></td>
                   <td v-if="showTax && item.has_tax" colspan="3"></td>
@@ -478,11 +481,11 @@
           <v-col cols="12" md="4">
             <v-simple-table bordered class="finals">
               <tbody>
-                <tr>
+                <tr v-if="showDiscount || showTax">
                   <td>جمع:</td>
                   <td colspan="2">{{ sum.sum | toMoney(0) }} ریال</td>
                 </tr>
-                <tr>
+                <tr v-if="showDiscount">
                   <td>تخفیف</td>
                   <td>
                     <money
@@ -502,7 +505,7 @@
                     />
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="showDiscount">
                   <td>مبلغ فاکتور پس از تخفیف:</td>
                   <td colspan="2">{{ sum.afterDiscount | toMoney(0) }} ریال</td>
                 </tr>

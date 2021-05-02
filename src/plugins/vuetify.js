@@ -79,6 +79,9 @@ export default new Vuetify({
       curvedArrowLeftIcon: {
         component: () => import('@/icons/CurvedArrowLeft.vue')
       },
+      costAccountingIcon: {
+        component: () => import('@/icons/CostAccountingIcon.vue')
+      },
     }
   },
 });

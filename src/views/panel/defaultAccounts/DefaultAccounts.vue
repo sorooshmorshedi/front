@@ -92,6 +92,7 @@ export default {
       if (this.usage == "closeAccounts") return title + "بستن";
       if (this.usage == "imprest") return title + "تنخواه";
       if (this.usage == "other") return title  = "دیگر حساب های پیشفرض";
+      if (this.usage == "costAccounting") return title  = "بهای تمام شده";
     },
     accountLevel() {
       if (this.usage == "imprest") return "level2";

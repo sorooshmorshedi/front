@@ -174,11 +174,12 @@ export default {
         cw: "consumptionWareFactor",
         rc: "receipt",
         rm: "remittance",
+        p: "production",
       };
       return basenames[this.type];
     },
     accountType() {
-      if (this.isCw || this.isFpi) return "level3";
+      if (this.isCw || this.isFpi || this.isProduction) return "level3";
       else return "persons";
     },
     createUrl() {
@@ -221,60 +222,42 @@ export default {
     isBackFromSale() {
       return this.type == "backFromSale";
     },
+    isProduction() {
+      return this.type == "p";
+    },
     title() {
-      let title = "";
-      switch (this.type) {
-        case "sale":
-          title = "فاکتور فروش";
-          break;
-        case "backFromSale":
-          title = "فاکتور برگشت از فروش";
-          break;
-        case "buy":
-          title = "فاکتور خرید";
-          break;
-        case "backFromBuy":
-          title = "فاکتور برگشت از خرید";
-          break;
-        case "fpi":
-          title = "موجودی اول دوره";
-          break;
-        case "cw":
-          title = "حواله ی کالای مصرفی";
-          break;
-        case "rc":
-          title = "رسید";
-          break;
-        case "rm":
-          title = "حواله";
-          break;
-      }
-
-      if (this.isPreFactor) {
-        title = "پیش " + title;
-      }
-
-      return title;
+      return this.getFactorTitle(this.type, this.isPreFactor);
     },
     showDiscount() {
-      return !this.isFpi && !this.isCw && !this.isRoR;
+      return !this.isFpi && !this.isCw && !this.isRoR && !this.isProduction;
     },
     showTax() {
-      return !this.isFpi && !this.isCw && !this.isRoR;
+      return !this.isFpi && !this.isCw && !this.isRoR && !this.isProduction;
     },
     showFactorExpenses() {
-      return !this.isFpi && !this.isPreFactor;
+      return !this.isFpi && !this.isPreFactor && !this.isProduction;
+    },
+    hasTransaction() {
+      return (
+        this.id &&
+        !this.isFpi &&
+        !this.isCw &&
+        !this.isPreFactor &&
+        !this.isProduction
+      );
+    },
+    hasReverseFactor() {
+      return this.id && (this.isBuy || this.isSale);
     },
     hasBijak() {
       return ["buy", "backFromBuy"].includes(this.type) || this.isFpi;
     },
     reverseLabel() {
-      switch (this.type) {
-        case "sale":
-          return "فاکتور برگشت از فروش";
-        case "buy":
-          return "فاکتور برگشت از خرید";
-      }
+      let labels = {
+        salereturn: "فاکتور برگشت از فروش",
+        buyreturn: "فاکتور برگشت از خرید",
+      };
+      return labels[this.type];
     },
     paymentsSum() {
       let sum = 0;
@@ -286,7 +269,14 @@ export default {
       return sum;
     },
     canSubmitTransaction() {
-      if (!this.id || this.isFpi || this.isCw || this.isPreFactor || this.isRoR)
+      if (
+        !this.id ||
+        this.isFpi ||
+        this.isCw ||
+        this.isPreFactor ||
+        this.isRoR ||
+        this.isProduction
+      )
         return false;
       return this.item.paidValue < this.sum.total;
     },
@@ -350,7 +340,8 @@ export default {
       return res;
     },
     accountName() {
-      if (this.isCw || this.isFpi || this.isRoR) return "حساب";
+      if (this.isCw || this.isFpi || this.isRoR || this.isProduction)
+        return "حساب";
       if (["buy", "backFromBuy"].includes(this.type)) {
         return "فروشنده";
       } else {
@@ -520,6 +511,14 @@ export default {
         },
       });
     },
+    setProductionAccount() {
+      let defaultAccount = this.getDefaultAccount("producedWareAccount");
+      if (defaultAccount) {
+        this.$set(this.item, "account", defaultAccount.account);
+        this.$set(this.item, "floatAccount", defaultAccount.floatAccount);
+        this.$set(this.item, "costCenter", defaultAccount.costCenter);
+      }
+    },
     openTransaction(transaction) {
       let routeData = this.$router.resolve({
         name: "TransactionForm",
@@ -531,6 +530,10 @@ export default {
       window.open(routeData.href, "_blank");
     },
     getSerialized() {
+      if (this.isProduction) {
+        this.setProductionAccount();
+      }
+
       let factor = this.copy(this.item);
       factor = this.extractIds(factor);
       factor.path = this.item.account.path;
@@ -940,9 +943,7 @@ export default {
         this.item = item;
 
         this.rows = [];
-        console.log(rows);
         for (const row of rows) {
-          console.log(row);
           this.rows.push({
             ...row,
           });

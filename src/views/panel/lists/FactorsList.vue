@@ -16,8 +16,10 @@
 </template>
 
 <script>
+import FactorMixin from "@/views/panel/factor/mixin";
 export default {
   name: "FactorsList",
+  mixins: [FactorMixin],
   props: {
     type: {},
     isPreFactor: {},
@@ -30,36 +32,7 @@ export default {
   },
   computed: {
     title() {
-      let title = "";
-      switch (this.type) {
-        case "buy":
-          title = "فاکتور های خرید";
-          break;
-        case "backFromBuy":
-          title = "فاکتور های برگشت از خرید";
-          break;
-        case "sale":
-          title = "فاکتور های فروش";
-          break;
-        case "backFromSale":
-          title = "فاکتور های برگشت از فروش";
-          break;
-        case "cw":
-          title = "حواله های کالای مصرفی";
-          break;
-        case "rc":
-          title = "رسید ها";
-          break;
-        case "rm":
-          title = "حواله ها";
-          break;
-      }
-
-      if (this.isPreFactor) {
-        title = "پیش " + title;
-      }
-
-      return title;
+      return "لیست " + this.getFactorTitle(this.type, this.isPreFactor);
     },
     headers() {
       let headers = [

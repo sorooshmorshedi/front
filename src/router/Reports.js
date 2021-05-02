@@ -52,7 +52,13 @@ export default [{
       name: 'FactorsList',
       path: 'lists/factors/:type/:isPreFactor',
       component: FactorsList,
-      props: true
+      props: (route) => {
+        let isPreFactor = [true, 'true'].includes(route.params.isPreFactor)
+        return {
+          ...route.params,
+          isPreFactor: isPreFactor
+        }
+      }
     },
     {
       name: 'TransactionsList',

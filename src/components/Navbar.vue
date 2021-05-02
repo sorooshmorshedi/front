@@ -1341,6 +1341,55 @@ export default {
           ],
         },
         {
+          title: "بهای تمام شده",
+          module: "costAccounting",
+          icon: "$costAccountingIcon",
+          children: [
+            {
+              title: "اطلاعات پایه",
+              children: [
+                {
+                  perm: "defaultAccount",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "costAccounting",
+                    },
+                  },
+                  title: "حساب های پیشفرض",
+                },
+              ],
+            },
+            {
+              title: "تولید",
+              children: [
+                {
+                  title: "ثبت تولید",
+                  perm: "production",
+                  to: {
+                    name: "FactorForm",
+                    params: {
+                      isPreFactor: false,
+                      type: "p",
+                    },
+                  },
+                },
+                {
+                  title: "لیست تولید ها",
+                  perm: "production",
+                  to: {
+                    name: "FactorsList",
+                    params: {
+                      isPreFactor: false,
+                      type: "p",
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           title: "حمل و نقل",
           icon: "$transportationIcon",
           module: "dashtbashi",
