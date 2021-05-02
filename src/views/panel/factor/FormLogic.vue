@@ -165,9 +165,17 @@ export default {
       }
     },
     permissionBasename() {
-      if (this.isFpi) return this.type;
-      if (this.isCw) return "consumptionWareFactor";
-      return this.type + "Factor";
+      let basenames = {
+        buy: "buyFactor",
+        sale: "saleFactor",
+        backFromBuy: "backFromBuyFactor",
+        backFromSale: "backFromSaleFactor",
+        fpi: "firstPeriodInventory",
+        cw: "consumptionWareFactor",
+        rc: "receipt",
+        rm: "remittance",
+      };
+      return basenames[this.type];
     },
     accountType() {
       if (this.isCw || this.isFpi) return "level3";
