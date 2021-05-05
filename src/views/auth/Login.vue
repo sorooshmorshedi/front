@@ -29,6 +29,14 @@
             label="رمز عبور"
             v-model="password"
           />
+
+          <div class="d-flex justify-center mt-3">
+            <vue-recaptcha
+              sitekey="6Lda3sYaAAAAAKJ3kt1GnJWq5ennm3QIkz_NKNMs"
+              :loadRecaptchaScript="true"
+              @verify="response => recaptchaResponse = response"
+            ></vue-recaptcha>
+          </div>
         </v-card-text>
 
         <v-card-actions class="pb-3 flex-column flex-md-row">
@@ -42,12 +50,15 @@
 </template>
 
 <script>
+import VueRecaptcha from "vue-recaptcha";
 export default {
   name: "Login",
+  components: { VueRecaptcha },
   data() {
     return {
       username: "",
       password: "",
+      recaptchaResponse: "",
     };
   },
   mounted() {
@@ -72,6 +83,7 @@ export default {
         data: {
           username: this.username,
           password: this.password,
+          recaptchaResponse: this.recaptchaResponse,
         },
         token: false,
         success: (data) => {
