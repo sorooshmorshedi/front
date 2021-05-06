@@ -49,31 +49,21 @@
 </template>
 
 <script>
+import AuthMixin from "@/views/auth/mixin";
+
 export default {
   name: "Login",
+  mixins: [AuthMixin],
   data() {
     return {
       phone: "",
       code: "",
       newPassword: "",
-      codeSent: false
+      codeSent: false,
     };
   },
   created() {},
   methods: {
-    sendVerificationCode() {
-      this.request({
-        url: this.endpoint("users/sendVerificationCodeForForgetPassword"),
-        method: "post",
-        data: {
-          phone: this.phone
-        },
-        token: false,
-        success: data => {
-          this.codeSent = true;
-        }
-      });
-    },
     changePassword() {
       this.request({
         url: this.endpoint("users/changePasswordByVerificationCode"),
@@ -81,16 +71,16 @@ export default {
         data: {
           phone: this.phone,
           code: this.code,
-          new_password: this.newPassword
+          new_password: this.newPassword,
         },
         token: false,
-        success: data => {
+        success: (data) => {
           this.successNotify();
           this.$router.push({ name: "Login" });
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

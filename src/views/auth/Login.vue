@@ -33,7 +33,6 @@
           <div class="d-flex justify-center mt-3">
             <vue-recaptcha
               sitekey="6Lda3sYaAAAAAKJ3kt1GnJWq5ennm3QIkz_NKNMs"
-              :loadRecaptchaScript="true"
               @verify="response => recaptchaResponse = response"
             ></vue-recaptcha>
           </div>
@@ -42,6 +41,7 @@
         <v-card-actions class="pb-3 flex-column flex-md-row">
           <v-btn text :to="{name: 'ForgetPassword'}">رمز عبور خود را فراموش کرده اید؟</v-btn>
           <v-spacer></v-spacer>
+          <v-btn :to="{name: 'Register'}" outlined class="blue--text mr-2">ثبت نام</v-btn>
           <v-btn @click="login" class="blue white--text mr-2 w-100px">ورود</v-btn>
         </v-card-actions>
       </v-card>

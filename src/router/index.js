@@ -7,6 +7,7 @@ import VueRouter, {
 import PanelRoutes from './Panel';
 import ReportsRoutes from './Reports';
 import Login from '@/views/auth/Login.vue'
+import Register from '@/views/auth/Register.vue'
 import ForgetPassword from '@/views/auth/ForgetPassword.vue'
 
 import Test from '@/Test';
@@ -18,6 +19,11 @@ const routes = [{
     name: 'Login',
     component: Login,
     props: true,
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
   },
   {
     path: '/forgetPassword',

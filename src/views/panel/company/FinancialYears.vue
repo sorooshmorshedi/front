@@ -61,9 +61,10 @@
 <script>
 import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import GetUserApi from "@/views/panel/user/getUserApi.js";
+import CompanyMixin from "@/views/panel/company/mixin";
 
 export default {
-  mixins: [MFormMixin, GetUserApi],
+  mixins: [MFormMixin, GetUserApi, CompanyMixin],
   props: {},
   data() {
     let warehouseSystems = [
@@ -123,6 +124,7 @@ export default {
   methods: {
     getData() {
       this.getUser();
+      this.getFinancialYears((data) => (this.items = data));
     },
     getSerialized() {
       this.item.company = this.company.id;
@@ -141,11 +143,6 @@ export default {
           this.$store.commit("setUser", data);
         },
       });
-    },
-  },
-  watch: {
-    company() {
-      this.items = this.company.financial_years;
     },
   },
 };

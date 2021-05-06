@@ -145,8 +145,6 @@ export default {
     getSerialized() {
       let item = this.copy(this.item);
 
-      delete item["financial_years"];
-
       if (typeof item["logo"] == typeof "") {
         delete item["logo"];
       }
