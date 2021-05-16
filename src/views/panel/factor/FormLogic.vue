@@ -100,9 +100,15 @@ export default {
           sortable: false,
         },
       ],
+
+      calculatorDialog: false,
+      row: null,
     };
   },
   computed: {
+    showCalculatorBtn() {
+      return true;
+    },
     RoRFactorTypes() {
       return {
         rc: {
@@ -389,11 +395,21 @@ export default {
       let visitors = this.visitors.filter((o) => o.level == 3);
       let userVisitor = visitors.find((o) => o.user.id == this.user.id);
       if (userVisitor) {
-        this.item.visitor = userVisitor;
+        this.item.visitor = userVisitor.id;
         return [userVisitor];
       } else {
         return visitors;
       }
+    },
+    squareMetters() {
+      let data = this.row.meta;
+      return (this.row.meta.square_meters =
+        data.diameter * data.length * data.width);
+    },
+    totalSquareMetters() {
+      let data = this.row.meta;
+      return (this.row.meta.total_square_meters =
+        this.row.meta.square_meters * data.count);
     },
   },
   watch: {
@@ -480,6 +496,7 @@ export default {
         warehouse: null,
         explanation: explanation,
         is_selected: false,
+        meta: {},
       };
     },
     getFactor(factorId) {
@@ -949,6 +966,16 @@ export default {
           });
         }
       });
+    },
+    openCalculatorDialog(row) {
+      this.row = row;
+      this.calculatorDialog = true;
+    },
+    setCalculatorData() {
+      let meta = this.row.meta;
+      if (!meta.static_value) this.row.unit_count = meta.count;
+      this.row.explanation = `قطر: ${meta.diameter}، طول: ${meta.length}، عرض: ${meta.width}، تعداد: ${meta.count}، متر مربع: ${meta.square_meters}، متر مربع کل: ${meta.total_square_meters}`;
+      this.calculatorDialog = false;
     },
   },
 };

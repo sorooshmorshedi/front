@@ -135,6 +135,7 @@
           </v-col>
           <v-col cols="12" md="2" v-if="(isSale || isBackFromSale) && hasModule('distribution')">
             <v-autocomplete
+              :return-object="false"
               label="ویزیتور"
               :items="factorVisitors"
               v-model="item.visitor"
@@ -196,6 +197,7 @@
                   <th>واحد</th>
                   <th>* انبار</th>
                   <th>* تعداد</th>
+                  <th v-if="showCalculatorBtn" style="width: 30px !important"></th>
 
                   <template v-if="!isCw && !isRoR">
                     <th>* قیمت واحد</th>
@@ -284,6 +286,11 @@
                   </td>
                   <td>
                     <money v-model="rows[i].unit_count" :disabled="!isEditing || row.factorItem" />
+                  </td>
+                  <td v-if="showCalculatorBtn">
+                    <v-btn icon @click="openCalculatorDialog(row)">
+                      <v-icon>fa-calculator</v-icon>
+                    </v-btn>
                   </td>
                   <template v-if="!isCw && !isRoR">
                     <td>
@@ -741,6 +748,47 @@
             </v-col>
           </v-row>
         </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="calculatorDialog" max-width="500px" transition="dialog-transition">
+      <v-card>
+        <v-card-title>ورود طول و عرض و ارتفاع</v-card-title>
+
+        <v-card-text v-if="row">
+          <v-row>
+            <v-col cols="12" md="4">
+              <money label="قطر" v-model="row.meta.diameter" class="text-field-ltr" />
+            </v-col>
+            <v-col cols="12" md="4">
+              <money label="طول" v-model="row.meta.length" class="text-field-ltr" />
+            </v-col>
+            <v-col cols="12" md="4">
+              <money label="عرض" v-model="row.meta.width" class="text-field-ltr" />
+            </v-col>
+            <v-col cols="12" md="8">
+              <money label="تعداد" v-model="row.meta.count" class="text-field-ltr" />
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-switch label="مقدار ثابت" v-model="row.meta.static_value"></v-switch>
+            </v-col>
+            <v-col cols="12" md="6">
+              <money label="متر مربع" :value="squareMetters" class="text-field-ltr" disabled />
+            </v-col>
+            <v-col cols="12" md="6">
+              <money
+                label="متر مربع کل"
+                :value="totalSquareMetters"
+                class="text-field-ltr"
+                disabled
+              />
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="setCalculatorData(row)" class="blue white--text w-100px">تایید</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
