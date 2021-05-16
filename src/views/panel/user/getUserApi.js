@@ -7,7 +7,7 @@ export default {
         success: data => {
           this.$store.commit("setUser", data);
           if (!this.company) {
-            if (this.$route && !['Companies'].includes(this.$route.name)) {
+            if (this.$route && !['Companies', 'Profile'].includes(this.$route.name)) {
               this.$router.push({
                 name: 'Companies'
               });

@@ -67,6 +67,13 @@ export default {
           children: [
             {
               to: {
+                name: "UserInvitations",
+              },
+              title: "دعوت نامه ها",
+              perm: "user",
+            },
+            {
+              to: {
                 name: "Users",
               },
               title: "کاربران",

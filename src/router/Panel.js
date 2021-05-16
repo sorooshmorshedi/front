@@ -1,11 +1,14 @@
 import Panel from '@/views/panel/Panel.vue';
 
+import Profile from '@/views/auth/Profile.vue';
+
 import Home from '@/views/panel/Home.vue';
 
 import Companies from '@/views/panel/company/Companies.vue';
 import FinancialYears from '@/views/panel/company/FinancialYears.vue';
 
 import Users from '@/views/panel/user/Users';
+import UserInvitations from '@/views/panel/user/UserInvitations';
 import Roles from '@/views/panel/role/Roles';
 import Cities from '@/views/panel/city/Cities';
 
@@ -65,6 +68,11 @@ export default [{
     ...DashtbashiRoutes,
     ...DistributionRoutes,
     {
+      name: 'Profile',
+      path: 'profile',
+      component: Profile,
+    },
+    {
       name: 'Home',
       path: 'home',
       component: Home,
@@ -73,8 +81,13 @@ export default [{
       name: 'Users',
       path: 'users/:id?',
       component: Users,
-      props: true
-    }, {
+    },
+    {
+      name: 'UserInvitations',
+      path: 'userInvitations',
+      component: UserInvitations,
+    },
+    {
       name: 'Roles',
       path: 'roles',
       component: Roles,

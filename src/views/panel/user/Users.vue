@@ -1,45 +1,70 @@
 <template>
   <div class="rtl">
     <m-form
-      title="کاربر"
+      :title="title"
       :items="users"
       :cols="cols"
       :isEditing.sync="isEditing"
       :canDelete="canDelete"
-      :canSubmit="canSubmit"
+      :canSubmit="canSubmit && item.id"
       :show-navigation-btns="false"
       :showListBtn="false"
+      :showClearBtn="false"
       @click:row="setItem"
       @clearForm="clearForm"
       @submit="submit"
       @delete="deleteItem"
     >
+      <template #header-btns>
+        <v-btn
+          class="blue white--text mr-1 mt-1 mt-md-0"
+          :to="{name: 'UserInvitations'}"
+        >افزودن کاربر</v-btn>
+      </template>
+
       <template #default>
         <v-row>
           <v-col cols="12" md="6">
-            <v-text-field label=" * نام" v-model="item.first_name" :disabled="!isEditing" />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field label="* نام خانوادگی" v-model="item.last_name" :disabled="!isEditing" />
-          </v-col>
-
-          <v-col cols="12" md="6">
             <v-text-field
-              class="ltr"
-              type="number"
-              label="* شماره موبایل"
-              v-model="item.phone"
-              required
-              :disabled="!isEditing"
+              class="text-field-ltr"
+              label=" * کد ملی"
+              v-model="item.username"
+              :disabled="true"
             />
           </v-col>
-          <v-col cols="12" md="6">
-            <label></label>
-            <v-text-field label=" * نام کاربری" v-model="item.username" :disabled="!isEditing" />
+
+          <template>
+            <v-col cols="12" md="6">
+              <v-text-field
+                class="text-field-ltr"
+                type="number"
+                label="شماره موبایل"
+                v-model="item.phone"
+                required
+                :disabled="true"
+              />
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field label="نام" v-model="item.first_name" :disabled="true" />
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field label="نام خانوادگی" v-model="item.last_name" :disabled="true" />
+            </v-col>
+          </template>
+
+          <v-col cols="12">
+            <v-autocomplete
+              :return-object="false"
+              label="سال های مالی"
+              :items="financialYears"
+              v-model="item.financialYears"
+              :disabled="!isEditing"
+              item-text="name"
+              item-value="id"
+              multiple
+            ></v-autocomplete>
           </v-col>
-          <v-col cols="12" md="12" v-if="!item.id">
-            <v-text-field label=" * کلمه عبور" v-model="item.password" :disabled="!isEditing" />
-          </v-col>
+
           <v-col cols="12">
             <v-autocomplete
               :return-object="true"
@@ -57,44 +82,22 @@
           </v-col>
         </v-row>
       </template>
-      <template #footer-btns>
-        <v-btn
-          :disabled="!isEditing"
-          v-if="item.id && hasPerm('changePassword', 'user', item)"
-          @click=" showChangePasswordDialog = true "
-          class="blue white--text mr-1"
-        >تغیر کلمه عبور</v-btn>
-      </template>
     </m-form>
-
-    <v-dialog v-model="showChangePasswordDialog" max-width="500px">
-      <v-card>
-        <v-card-title>تغیر کلمه عبور</v-card-title>
-        <v-card-text>
-          <v-text-field label="کلمه عبور جدید" v-model="newPassword" />
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="changePassword" class="w-100px green white--text">ثبت</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 <script>
 import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
 import getRolesApi from "../role/getRolesApi";
 import UserApi from "@/views/panel/user/api";
+import CompanyMixin from "@/views/panel/company/mixin";
 
 export default {
-  mixins: [MFormMixin, getRolesApi, UserApi],
-  props: {},
+  mixins: [MFormMixin, getRolesApi, UserApi, CompanyMixin],
   data() {
     return {
       baseUrl: "users/list",
       roles: [],
-      newPassword: "",
-      showChangePasswordDialog: false,
+      financialYears: [],
       permissionBasename: "user",
       cols: [
         {
@@ -119,6 +122,9 @@ export default {
     };
   },
   computed: {
+    title() {
+      return "کاربران";
+    },
     createUrl() {
       return "users/create";
     },
@@ -132,31 +138,19 @@ export default {
   methods: {
     getItemTemplate() {
       return {
+        id: null,
         roles: [],
+        financialYears: [],
         is_active: true,
       };
     },
     getData() {
       this.getUsers();
       this.getRoles(this.setRoles);
+      this.getFinancialYears((data) => (this.financialYears = data));
     },
     setRoles(data) {
       this.roles = data;
-    },
-    changePassword() {
-      this.request({
-        url: this.endpoint(`users/changePassword`),
-        method: "post",
-        data: {
-          user: this.item.id,
-          password: this.newPassword,
-        },
-        success: (data) => {
-          this.newPassword = "";
-          this.successNotify();
-          this.showChangePasswordDialog = false;
-        },
-      });
     },
     getSerialized() {
       let user = { ...this.item };

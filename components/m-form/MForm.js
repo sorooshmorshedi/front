@@ -36,6 +36,13 @@ export default {
     };
   },
   computed: {
+    rules() {
+      return {
+        required: [
+          (value) => !["", null, undefined].includes(value) || "این فیلد اجباری می باشد",
+        ]
+      }
+    },
     createUrl() {
       return this.baseUrl + (this.appendSlash ? "/" : "")
     },

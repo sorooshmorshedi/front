@@ -135,7 +135,7 @@ export default {
     },
     getCompanies() {
       this.request({
-        url: this.endpoint("companies/"),
+        url: this.endpoint("companies/list"),
         method: "get",
         success: (data) => {
           this.items = data;

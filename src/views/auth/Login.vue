@@ -13,7 +13,7 @@
           <v-card-title class="d-block text-center">حسابداری آنلاین سبحان</v-card-title>
 
           <v-text-field
-            class="mt-4 ltr"
+            class="mt-4 text-field-ltr"
             dense
             outlined
             hide-details
@@ -23,7 +23,7 @@
           <v-text-field
             dense
             type="password"
-            class="mt-3 ltr"
+            class="mt-3 text-field-ltr"
             outlined
             hide-details
             label="رمز عبور"

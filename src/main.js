@@ -44,6 +44,12 @@ Vue.component('OpenSanadBtn', OpenSanadBtn);
 import DetailLink from "@/components/list/DetailLink";
 Vue.component('DetailLink', DetailLink);
 
+import PhoneField from "@/components/fields/PhoneField";
+Vue.component('MPhoneField', PhoneField);
+
+import NationalCode from "@/components/fields/NationalCode";
+Vue.component('MNationalCode', NationalCode);
+
 import _ from 'lodash'
 window._ = _
 

@@ -8,37 +8,29 @@
           <v-form ref="form">
             <v-row>
               <v-col cols="12" md="6">
-                <v-text-field label=" * نام" v-model="item.first_name" :disabled="!isEditing" />
+                <v-text-field
+                  label=" * نام"
+                  v-model="item.first_name"
+                  :disabled="!isEditing"
+                  :rules="rules.required"
+                  :hide-details="false"
+                />
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
                   label="* نام خانوادگی"
                   v-model="item.last_name"
                   :disabled="!isEditing"
+                  :rules="rules.required"
+                  :hide-details="false"
                 />
               </v-col>
 
               <v-col cols="12" md="6">
-                <v-text-field
-                  class="text-field-ltr"
-                  type="number"
-                  label="* شماره موبایل "
-                  v-model="item.phone"
-                  required
-                  :disabled="!isEditing"
-                />
+                <m-phone-field label="* شماره موبایل " v-model="item.phone" :disabled="!isEditing" />
               </v-col>
               <v-col cols="12" md="6">
-                <label></label>
-                <v-text-field
-                  class="text-field-ltr"
-                  type="number"
-                  label="* کد ملی "
-                  v-model="item.username"
-                  :rules="usernameRules"
-                  :disabled="!isEditing"
-                  :hide-details="false"
-                />
+                <m-national-code label="* کد ملی " v-model="item.username" :disabled="!isEditing" />
               </v-col>
               <v-col cols="12" md="12" v-if="!item.id">
                 <v-text-field
@@ -103,48 +95,31 @@ export default {
     return {
       item: {},
       phoneVerificationDialog: false,
+      requiredRule: [
+        (value) =>
+          !["", null, undefined].includes(value) || "این فیلد اجباری می باشد",
+      ],
     };
   },
   computed: {
-    passwordRules() {
-      return [
-        (value) =>
-          /(?=.{8,})/.test(value) ||
-          "طول کلمه عبور باید بیشتر از 8 کاراکتر باشد",
-        (value) => /(?=.*[0-9])/.test(value) || "حداقل از یک عدد استفاده کنید",
-        (value) =>
-          /(?=.*[!@#$%^&*])/.test(value) ||
-          "حداقل از یکی از کاراکتر های ! @ # $ % ^ & * استفاده کنید",
-        (value) =>
-          /(?=.*[A-Z])/.test(value) || "حداقل از یک حرف بزرگ استفاده کنید",
-      ];
-    },
-    usernameRules() {
-      function isValidIranianNationalCode(input) {
-        if (!/^\d{10}$/.test(input)) return false;
-        const check = +input[9];
-        const sum =
-          Array.from({ length: 9 })
-            .map((_, i) => +input[i] * (10 - i))
-            .reduce((x, y) => x + y) % 11;
-        return sum < 2 ? check == sum : check + sum == 11;
-      }
-
-      return [
-        (value) => {
-          return isValidIranianNationalCode(value) || "کد ملی صحیح نمی باشد";
-        },
-      ];
-    },
   },
   methods: {
+    getItemTemplate() {
+      return {
+        first_name: "محمد",
+        last_name: "مصطفائی",
+        phone: "09307468674",
+        username: "2540118755",
+        password: "Mmd2Sobhan!",
+      };
+    },
     register() {
-      if (true || this.$refs.form.validate()) {
+      if (this.$refs.form.validate()) {
         this.verifyPhone();
       }
     },
     verifyPhone() {
-      this.sendVerificationCode();
+      this.sendVerificationCode(this.item.phone);
       this.phoneVerificationDialog = true;
     },
     createUser() {
@@ -153,6 +128,7 @@ export default {
         method: "post",
         data: this.item,
         success: (data) => {
+          console.log(data);
           this.successNotify();
           this.setToken(data.token);
           this.$router.push({ name: "Home" });

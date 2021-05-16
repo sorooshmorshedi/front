@@ -26,13 +26,10 @@
       <v-app-bar app clipped-right class="indigo darken-1 app-bar" v-if="user" v-show="!isPrinting">
         <v-app-bar-nav-icon v-if="isXs" @click="showDrawer = !showDrawer" class="white--text ml-4" />
 
-        <v-btn
-          v-if="company"
-          :to="{name: 'Companies'}"
-          depressed
-          class="white"
-          :title="company.id"
-        >{{ company.name }}</v-btn>
+        <v-btn :to="{name: 'Companies'}" depressed class="white" :title="company && company.id">
+          <span v-if="company">{{ company.name }}</span>
+          <span v-else>انتخاب شرکت</span>
+        </v-btn>
         <v-btn
           v-if="financialYear"
           :to="{name: 'FinancialYears'}"
@@ -97,9 +94,8 @@
 
         <v-spacer></v-spacer>
 
-        <span class="white--text mr-3" :title="user.id">
-          <span>{{ user.name }}</span>
-        </span>
+        <v-btn :to="{name:'Profile'}" depressed class="white mx-3">{{ user.name }}</v-btn>
+
         <span class="ml-3">
           <v-btn text icon color="white" class="rotate-180" @click="logout">
             <v-icon>logout</v-icon>

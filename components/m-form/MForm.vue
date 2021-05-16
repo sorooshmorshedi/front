@@ -277,7 +277,7 @@ export default {
       return listeners;
     },
     hasFinancialYear() {
-      let financialYearSafeRoutes = ["Companies", "FinancialYears", "Cities"];
+      let financialYearSafeRoutes = ["Companies", "FinancialYears", "Cities", "Profile"];
       if (financialYearSafeRoutes.includes(this.$route.name)) return true;
       return this.financialYear && !this.financialYear.is_closed;
     },

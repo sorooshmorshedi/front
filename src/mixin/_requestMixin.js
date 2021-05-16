@@ -7,6 +7,7 @@ export default {
       let serverUrl = 'https://api.app.sobhan.net/'
       if (this.isDev) {
         serverUrl = localStorage.getItem('serverUrl');
+        if(!serverUrl) serverUrl = 'http://localhost:7000/'
       }
       return serverUrl
     },

@@ -11,6 +11,15 @@ export default {
           callback(data)
         },
       });
+    },
+    getCompanyUserInvitations(callback) {
+      this.request({
+        url: this.endpoint("companies/companyUserInvitations/"),
+        method: "get",
+        success: (data) => {
+          callback(data)
+        },
+      });
     }
-  },
+  }
 }
