@@ -55,7 +55,6 @@
 
     <v-dialog
       v-model="phoneVerificationDialog"
-      persistent
       max-width="500px"
       transition="dialog-transition"
     >
@@ -105,13 +104,7 @@ export default {
   },
   methods: {
     getItemTemplate() {
-      return {
-        first_name: "محمد",
-        last_name: "مصطفائی",
-        phone: "09307468674",
-        username: "2540118755",
-        password: "Mmd2Sobhan!",
-      };
+      return {};
     },
     register() {
       if (this.$refs.form.validate()) {
@@ -128,10 +121,9 @@ export default {
         method: "post",
         data: this.item,
         success: (data) => {
-          console.log(data);
           this.successNotify();
           this.setToken(data.token);
-          this.$router.push({ name: "Home" });
+          this.$router.push({ name: "Profile" });
         },
       });
     },
