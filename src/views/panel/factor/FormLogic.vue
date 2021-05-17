@@ -403,8 +403,7 @@ export default {
     },
     squareMetters() {
       let data = this.row.meta;
-      return (this.row.meta.square_meters =
-        data.diameter * data.length * data.width);
+      return (this.row.meta.square_meters = data.length * data.width);
     },
     totalSquareMetters() {
       let data = this.row.meta;
