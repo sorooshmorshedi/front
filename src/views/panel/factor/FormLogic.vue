@@ -403,12 +403,15 @@ export default {
     },
     squareMetters() {
       let data = this.row.meta;
-      return (this.row.meta.square_meters = data.length * data.width);
+      return (this.row.meta.square_meters = +(data.length * data.width).toFixed(
+        6
+      ));
     },
     totalSquareMetters() {
       let data = this.row.meta;
-      return (this.row.meta.total_square_meters =
-        this.row.meta.square_meters * data.count);
+      return (this.row.meta.total_square_meters = +(
+        this.row.meta.square_meters * data.count
+      ).toFixed(6));
     },
   },
   watch: {
@@ -972,7 +975,7 @@ export default {
     },
     setCalculatorData() {
       let meta = this.row.meta;
-      if (!meta.static_value) this.row.unit_count = meta.count;
+      if (!meta.static_value) this.row.unit_count = meta.total_square_meters;
       this.row.explanation = `قطر: ${meta.diameter}، طول: ${meta.length}، عرض: ${meta.width}، تعداد: ${meta.count}، متر مربع: ${meta.square_meters}، متر مربع کل: ${meta.total_square_meters}`;
       this.calculatorDialog = false;
     },
