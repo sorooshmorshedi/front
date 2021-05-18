@@ -42,7 +42,11 @@
               >انتخاب همه</v-btn>
             </div>
             <v-expansion-panels multiple class="mt-3">
-              <v-expansion-panel v-for="(model, i) in models" :key="i">
+              <v-expansion-panel
+                v-for="(model, i) in filteredModels"
+                :key="i"
+                v-show="showModelPermissions(model)"
+              >
                 <v-expansion-panel-header>
                   <v-row no-gutters>
                     <v-col>{{ model.label }}</v-col>
@@ -75,13 +79,12 @@
                   </v-row>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <v-row v-if="Object.keys(item.permissions).length == rawPermissions.length">
-                    <v-col cols="12" v-if="hasShortcutPerms(model.name)">
+                  <v-row>
+                    <v-col cols="12" v-if="hasShortcutPerms(model)">
                       <v-row no-gutters>
                         <v-col cols="12" class="pb-0">
                           <v-btn-toggle
-                            v-model="item.localPerms[model.name]"
-                            @change="setCRUDPermissions(model)"
+                            v-model="item[model.modelKey]"
                             background-color="white"
                             multiple
                             color="green"
@@ -95,6 +98,7 @@
                                   tile
                                   v-bind="attrs"
                                   v-on="on"
+                                  :value="btn.value"
                                 >
                                   <v-icon>{{ btn.icon }}</v-icon>
                                 </v-btn>
@@ -105,8 +109,7 @@
                         </v-col>
                         <v-col cols="12" class="pt-0">
                           <v-btn-toggle
-                            v-model="item.localOwnPerms[model.name]"
-                            @change="setCRUDPermissions(model, true)"
+                            v-model="item[model.ownModelKey]"
                             background-color="white"
                             multiple
                             color="lime"
@@ -114,13 +117,14 @@
                             borderless
                           >
                             <template v-for="(btn, i) in getPermissionBtns(model)">
-                              <v-tooltip bottom v-if="btn.hasOwn">
+                              <v-tooltip bottom v-if="btn.ownValue">
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-btn
                                     :style="(getPermissionBtns(model).length != i-1)?'border-left: 1px solid black':''"
                                     tile
                                     v-bind="attrs"
                                     v-on="on"
+                                    :value="btn.ownValue"
                                   >
                                     <v-icon>fa-user-shield</v-icon>
                                   </v-btn>
@@ -139,10 +143,10 @@
                     </v-col>
                     <v-col cols="12">
                       <v-switch
-                        v-for="(permission, i) in getModelPermissions(model.name)"
+                        v-for="(permission, i) in model.permissions"
                         :key="i"
                         :label="permission.name"
-                        v-model="item.permissions[permission.id]"
+                        v-model="item[model.otherModelKey][permission.id]"
                         :disabled="!isEditing"
                       ></v-switch>
                     </v-col>
@@ -170,14 +174,7 @@ export default {
       items: [],
       modelSearch: "",
       rawPermissions: [],
-      operations: [
-        "get",
-        "create",
-        "update",
-        "delete",
-        "firstConfirm",
-        "secondConfirm",
-      ],
+      operations: ["get", "create", "update", "delete"],
       cols: [
         {
           text: "نام",
@@ -196,16 +193,7 @@ export default {
     deleteUrl() {
       return this.item.id && `users/roles/delete/${this.item.id}`;
     },
-    modelPermissions() {
-      return this.permissionsData;
-      let models = this.models;
-      let result = {};
-      for (let model of models) {
-        result[model.name] = this.permissionsData[model.name];
-      }
-      return result;
-    },
-    permissions() {
+    otherPermissions() {
       return this.rawPermissions.filter((o) => {
         let codename = o.codename;
         let f =
@@ -214,204 +202,216 @@ export default {
           (!codename.startsWith("get") &&
             !codename.startsWith("create") &&
             !codename.startsWith("update") &&
-            !codename.startsWith("firstConfirm") &&
-            !codename.startsWith("secondConfirm") &&
             !codename.startsWith("delete"));
         return f;
       });
     },
     models() {
       let models = [
-        { name: "role", label: "نقش ها" },
-        { name: "user", label: "کاربران" },
-        { name: "company", label: "شرکت ها" },
-        { name: "financialYear", label: "سال های مالی" },
+        { app: "users", name: "role", label: "نقش ها" },
+        { app: "users", name: "user", label: "کاربران" },
+        { app: "companies", name: "company", label: "شرکت ها" },
+        { app: "companies", name: "financialYear", label: "سال های مالی" },
         {
+          app: "accounts",
           name: "floatAccountGroup",
           label: "گروه حساب شناور و مرکز هزینه و درآمد",
         },
-        { name: "floatAccount", label: "حساب شناور و مرکز هزینه و درآمد" },
-        { name: "account", label: "حساب ها" },
-        { name: "defaultAccount", label: "حساب های پیشفرض" },
-        { name: "unit", label: "واحد ها" },
-        { name: "warehouse", label: "انبار ها" },
-        { name: "ware", label: "کالا و سطوح کالا" },
-        { name: "salePriceType", label: "انواع نرخ های فروش" },
-        { name: "sanad", label: "اسناد" },
-        { name: "receiveTransaction", label: "دریافت" },
-        { name: "paymentTransaction", label: "پرداخت" },
-        { name: "chequebook", label: "دسته چک" },
-        { name: "cheque", label: "چک" },
-        { name: "statusChange", label: "تغییر وضعیت چک" },
-        { name: "expense", label: "هزینه های فاکتور" },
-        { name: "receipt", label: "رسید" },
-        { name: "remittance", label: "حواله" },
-        { name: "buyPreFactor", label: "پیش فاکتور خرید" },
-        { name: "salePreFactor", label: "پیش فاکتور فروش" },
-        { name: "buyFactor", label: "فاکتور خرید" },
-        { name: "saleFactor", label: "فاکتور فروش" },
-        { name: "backFromBuyFactor", label: "فاکتور برگشت از خرید" },
-        { name: "backFromSaleFactor", label: "فاکتور برگشت از فروش" },
-        { name: "firstPeriodInventory", label: "موجودی اول دوره" },
-        { name: "consumptionWareFactor", label: "حواله کالای مصرفی" },
-        { name: "transfer", label: "انتقال" },
-        { name: "warehouseHandling", label: "انبارگردانی" },
-        { name: "report", label: "گزارش ها" },
-        { name: "exportVerifier", label: "تایید کنندگان خروجی" },
+        {
+          app: "accounts",
+          name: "floatAccount",
+          label: "حساب شناور و مرکز هزینه و درآمد",
+        },
+        { app: "accounts", name: "account", label: "حساب ها" },
+        { app: "accounts", name: "defaultAccount", label: "حساب های پیشفرض" },
+        { app: "wares", name: "unit", label: "واحد ها" },
+        { app: "wares", name: "warehouse", label: "انبار ها" },
+        { app: "wares", name: "ware", label: "کالا و سطوح کالا" },
+        { app: "wares", name: "salePriceType", label: "انواع نرخ های فروش" },
+        { app: "sanads", name: "sanad", label: "اسناد" },
+        { app: "transactions", name: "receiveTransaction", label: "دریافت" },
+        { app: "transactions", name: "paymentTransaction", label: "پرداخت" },
+        { app: "cheques", name: "chequebook", label: "دسته چک" },
+        { app: "cheques", name: "cheque", label: "چک" },
+        { app: "cheques", name: "statusChange", label: "تغییر وضعیت چک" },
+        { app: "factors", name: "expense", label: "هزینه های فاکتور" },
+        { app: "factors", name: "receipt", label: "رسید" },
+        { app: "factors", name: "remittance", label: "حواله" },
+        { app: "factors", name: "buyPreFactor", label: "پیش فاکتور خرید" },
+        { app: "factors", name: "salePreFactor", label: "پیش فاکتور فروش" },
+        { app: "factors", name: "buyFactor", label: "فاکتور خرید" },
+        { app: "factors", name: "saleFactor", label: "فاکتور فروش" },
+        {
+          app: "factors",
+          name: "backFromBuyFactor",
+          label: "فاکتور برگشت از خرید",
+        },
+        {
+          app: "factors",
+          name: "backFromSaleFactor",
+          label: "فاکتور برگشت از فروش",
+        },
+        {
+          app: "factors",
+          name: "firstPeriodInventory",
+          label: "موجودی اول دوره",
+        },
+        {
+          app: "factors",
+          name: "consumptionWareFactor",
+          label: "حواله کالای مصرفی",
+        },
+        { app: "factors", name: "transfer", label: "انتقال" },
+        { app: "factors", name: "warehouseHandling", label: "انبارگردانی" },
+        { app: "reports", name: "report", label: "گزارش ها" },
+        {
+          app: "reports",
+          name: "exportVerifier",
+          label: "تایید کنندگان خروجی",
+        },
       ];
       if (this.hasModule("dashtbashi")) {
-        let dashtbashiModels = [
-          { name: "driver", label: "راننده" },
-          { name: "car", label: "ماشین" },
-          { name: "driving", label: "انتصاب راننده به ماشین" },
-          { name: "association", label: "انجمن" },
-          { name: "remittance", label: "حواله حمل و نقل" },
-          { name: "ladingBillSeries", label: "سری بارگیری" },
-          { name: "ladingBillNumber", label: "کد بارگیری" },
-          { name: "lading", label: "بارگیری" },
-          { name: "oilCompanyLading", label: "بارگیری شرکت نفت" },
-          { name: "otherDriverPayment", label: "پرداخت رانندگان متفرقه" },
-        ];
-        dashtbashiModels.map((o) => {
-          o.app = "_dashtbashi";
-          return o;
-        });
-        models.push(...dashtbashiModels);
+        models.push(
+          ...[
+            { app: "_dashtbashi", name: "driver", label: "راننده" },
+            { app: "_dashtbashi", name: "car", label: "ماشین" },
+            {
+              app: "_dashtbashi",
+              name: "driving",
+              label: "انتصاب راننده به ماشین",
+            },
+            { app: "_dashtbashi", name: "association", label: "انجمن" },
+            {
+              app: "_dashtbashi",
+              name: "remittance",
+              label: "حواله حمل و نقل",
+            },
+            {
+              app: "_dashtbashi",
+              name: "ladingBillSeries",
+              label: "سری بارگیری",
+            },
+            {
+              app: "_dashtbashi",
+              name: "ladingBillNumber",
+              label: "کد بارگیری",
+            },
+            { app: "_dashtbashi", name: "lading", label: "بارگیری" },
+            {
+              app: "_dashtbashi",
+              name: "oilCompanyLading",
+              label: "بارگیری شرکت نفت",
+            },
+            {
+              app: "_dashtbashi",
+              name: "otherDriverPayment",
+              label: "پرداخت رانندگان متفرقه",
+            },
+          ]
+        );
       }
       if (this.hasModule("distribution")) {
         models.push(
           ...[
-            { name: "path", label: "مسیر ها" },
-            { name: "car", label: "ماشین" },
-            { name: "visitor", label: "ویزیتور ها" },
-            { name: "commissionRange", label: "بازه کمیسیون" },
-            { name: "distributor", label: "موزع" },
-            { name: "driver", label: "راننده" },
-            { name: "distribution", label: "تحویل فاکتور جهت توزیع" },
+            { app: "distributions", name: "path", label: "مسیر ها" },
+            { app: "distributions", name: "car", label: "ماشین" },
+            { app: "distributions", name: "visitor", label: "ویزیتور ها" },
+            {
+              app: "distributions",
+              name: "commissionRange",
+              label: "بازه کمیسیون",
+            },
+            { app: "distributions", name: "distributor", label: "موزع" },
+            { app: "distributions", name: "driver", label: "راننده" },
+            {
+              app: "distributions",
+              name: "distribution",
+              label: "تحویل فاکتور جهت توزیع",
+            },
           ]
         );
       }
-      models = models.filter((o) => o.label.includes(this.modelSearch));
 
-      return models.filter((o) => this.showModelPermissions(o));
+      models.map((o) => {
+        o.permissions = this.getModelOtherPermissions(o);
+        o.modelKey = `${o.app}.${o.name}`;
+        o.ownModelKey = `${o.modelKey}.own`;
+        o.otherModelKey = `${o.modelKey}.other`;
+        return o;
+      });
+
+      return models;
+    },
+    filteredModels() {
+      return this.models.filter((o) => {
+        return o.label.includes(this.modelSearch);
+      });
     },
   },
   methods: {
     showModelPermissions(model) {
       if (!this.item || !this.item.id || this.isEditing) return true;
       let show = false;
-      for (let permission of this.rawPermissions) {
-        if (
-          model.name.toLowerCase().includes(permission.contentType.model) ||
-          permission.codename.includes(model.name)
-        ) {
-          if (!model.app || model.app == permission.contentType.app_label) {
-            show |= this.item.permissions[permission.id];
-          }
-        }
-      }
-      return show;
+      return (
+        this.item[model.modelKey].length ||
+        this.item[model.ownModelKey].length ||
+        Object.keys(this.item[model.otherModelKey]).length
+      );
     },
     getPermissionBtns(model) {
       let permissionBtns = [
         {
           icon: "fa-eye",
           tootltip: "مشاهده",
-          hasOwn: true,
+          value: `get.${model.name}`,
+          ownValue: `getOwn.${model.name}`,
         },
         {
           icon: "fa-plus",
           tootltip: "تعریف",
-          hasOwn: false,
+          value: `create.${model.name}`,
         },
         {
           icon: "fa-edit",
           tootltip: "ویرایش",
-          hasOwn: true,
+          value: `update.${model.name}`,
+          ownValue: `updateOwn.${model.name}`,
         },
         {
           icon: "fa-trash-alt",
           tootltip: "حذف",
-          hasOwn: true,
+          value: `delete.${model.name}`,
+          ownValue: `deleteOwn.${model.name}`,
         },
       ];
-      if (this.hasConfirmPermission(model)) {
-        permissionBtns.push(
-          { icon: "fa-check", tootltip: "تایید اول", hasOwn: true },
-          { icon: "fa-check-double", tootltip: "تایید دوم", hasOwn: true }
-        );
-      }
-
       return permissionBtns;
-    },
-    hasConfirmPermission(model) {
-      return (
-        this.rawPermissions.filter(
-          (o) => o.codename == `firstConfirm.${model.name}`
-        ).length != 0
-      );
     },
     getPermissionByCodename(codename) {
       let results = this.rawPermissions.filter((o) => o.codename == codename);
       if (results.length) return results[0];
       return null;
     },
-    setCRUDPermissions(model, isOwnChanged) {
-      let modelPermissions = this.item.localPerms[model.name];
-      let modelOwnPermissions = this.item.localOwnPerms[model.name];
-
-      for (let i = 0; i < this.operations.length; i++) {
-        let codename = `${this.operations[i]}.${model.name}`;
-        let permission = this.getPermissionByCodename(codename);
-
-        let ownCodename = `${this.operations[i]}Own.${model.name}`;
-        let ownPermission = this.getPermissionByCodename(ownCodename);
-
-        let hasPerm = modelPermissions.includes(i);
-        let hasOwnPerm = modelOwnPermissions.includes(i);
-
-        if (hasPerm && !isOwnChanged) {
-          this.item.permissions[permission.id] = true;
-          ownPermission && (this.item.permissions[ownPermission.id] = false);
-          hasOwnPerm &&
-            modelOwnPermissions.splice(modelOwnPermissions.indexOf(i), 1);
-          hasOwnPerm = false;
-        }
-        if (hasOwnPerm) {
-          this.item.permissions[permission.id] = false;
-          ownPermission && (this.item.permissions[ownPermission.id] = true);
-          hasPerm && modelPermissions.splice(modelPermissions.indexOf(i), 1);
-        }
-        if (!hasPerm && !hasOwnPerm) {
-          permission && (this.item.permissions[permission.id] = false);
-          ownPermission && (this.item.permissions[ownPermission.id] = false);
-        }
-      }
-
-      for (const i of modelPermissions) {
-        let codename = `${this.operations[i]}.${model}`;
-        let permission = this.getPermissionByCodename(codename);
-      }
-    },
     hasShortcutPerms(model) {
-      return !["firstPeriodInventory", "report"].includes(model);
+      return !["firstPeriodInventory", "report"].includes(model.name);
     },
-    getModelPermissions(model) {
-      return this.permissions.filter((o) =>
-        o.codename.toLowerCase().includes(model.toLowerCase())
+    getModelOtherPermissions(model) {
+      return this.otherPermissions.filter((o) => {
+        return this.isModelPermission(model, o);
+      });
+    },
+    isModelPermission(model, permission) {
+      return (
+        permission.contentType.app_label == model.app &&
+        permission.codename.split(".")[1] == model.name
       );
     },
     getItemTemplate() {
-      let item = {
-        name: "",
-        permissions: {},
-        localPerms: {},
-        localOwnPerms: {},
-      };
+      let item = {};
 
       for (const model of this.models) {
-        item.localPerms[model.name] = [];
-        item.localOwnPerms[model.name] = [];
+        item[model.modelKey] = [];
+        item[model.ownModelKey] = [];
+        item[model.otherModelKey] = {};
       }
 
       return item;
@@ -429,37 +429,31 @@ export default {
       return permissions;
     },
     setItem(item) {
-      this.item = {
+      item = {
         ...this.getItemTemplate(),
         ...item,
       };
-
-      let permissions = {};
-      for (const permission of this.rawPermissions) {
-        permissions[permission.id] = false;
-      }
-      for (const permissionId of item.permissions) {
-        permissions[permissionId] = true;
-      }
-      this.item.permissions = permissions;
+      item.permissionObjects = item.permissions.map((permissionId) => {
+        return this.rawPermissions.find((o) => o.id == permissionId);
+      });
 
       for (const model of this.models) {
-        for (let i = 0; i < this.operations.length; i++) {
-          let codename = `${this.operations[i]}.${model.name}`;
-          let ownCodename = `${this.operations[i]}Own.${model.name}`;
-
-          let permission = this.getPermissionByCodename(codename);
-          let ownPermission = this.getPermissionByCodename(ownCodename);
-
-          if (permission && this.item.permissions[permission.id]) {
-            this.item.localPerms[model.name].push(i);
-          }
-
-          if (ownPermission && this.item.permissions[ownPermission.id]) {
-            this.item.localOwnPerms[model.name].push(i);
+        for (const permission of item.permissionObjects) {
+          if (this.isModelPermission(model, permission)) {
+            if (
+              this.otherPermissions.map((o) => o.id).includes(permission.id)
+            ) {
+              item[model.otherModelKey][permission.id] = true;
+            } else if (permission.codename.includes("Own")) {
+              item[model.ownModelKey].push(permission.codename);
+            } else {
+              item[model.modelKey].push(permission.codename);
+            }
           }
         }
       }
+
+      this.item = item;
     },
     isCheckedPermission(permission) {
       return this.item.permissions.filter((id) => id == permission.id).length;
@@ -478,9 +472,6 @@ export default {
         method: "get",
         success: (data) => {
           this.rawPermissions = data;
-          for (let permission of this.rawPermissions) {
-            this.getItemTemplate().permissions[permission.id] = false;
-          }
           this.clearForm();
         },
       });
@@ -521,15 +512,36 @@ export default {
       }
     },
     getSerialized() {
-      let item = this.item;
+      let item = this.copy(this.item);
+      delete item.permissionObjects;
+
       let permissions = [];
-      Object.keys(item.permissions).forEach((permissionId) => {
-        if (item.permissions[permissionId]) permissions.push(permissionId);
-      });
+      for (const model of this.models) {
+        permissions.push(
+          ...this.rawPermissions
+            .filter(
+              (o) =>
+                this.isModelPermission(model, o) &&
+                (item[model.modelKey].includes(o.codename) ||
+                  item[model.ownModelKey].includes(o.codename))
+            )
+            .map((o) => o.id)
+        );
+
+        permissions.push(
+          ...Object.keys(item[model.otherModelKey]).filter(
+            (key) => item[model.otherModelKey][key]
+          )
+        );
+
+        delete item[model.modelKey];
+        delete item[model.ownModelKey];
+        delete item[model.otherModelKey];
+      }
+
       item.permissions = permissions;
       return item;
     },
   },
-  filters: {},
 };
 </script>
