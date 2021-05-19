@@ -106,19 +106,6 @@
                     @click="submit(true)"
                     class="ml-1 mt-1 mt-md-0 green white--text"
                   >ثبت و صدور جدید</v-btn>
-                  <v-btn
-                    v-if="canCancelConfirm"
-                    outlined
-                    @click="cancelConfirm()"
-                    color="red"
-                    class="mt-1 mt-md-0 ml-1"
-                  >{{ cancelConfirmBtnText }}</v-btn>
-                  <v-btn
-                    v-if="canConfirm"
-                    @click="confirm()"
-                    color="blue white--text"
-                    class="mt-1 mt-md-0"
-                  >{{ confirmBtnText }}</v-btn>
                   <slot name="footer-btns"></slot>
                 </template>
                 <v-btn
@@ -239,19 +226,6 @@ export default {
       default: true,
     },
 
-    canConfirm: {
-      default: false,
-    },
-    canCancelConfirm: {
-      default: false,
-    },
-    confirmBtnText: {
-      default: "تایید",
-    },
-    cancelConfirmBtnText: {
-      default: "لغو تایید",
-    },
-
     fullWidth: {
       default: false,
     },
@@ -277,7 +251,12 @@ export default {
       return listeners;
     },
     hasFinancialYear() {
-      let financialYearSafeRoutes = ["Companies", "FinancialYears", "Cities", "Profile"];
+      let financialYearSafeRoutes = [
+        "Companies",
+        "FinancialYears",
+        "Cities",
+        "Profile",
+      ];
       if (financialYearSafeRoutes.includes(this.$route.name)) return true;
       return this.financialYear && !this.financialYear.is_closed;
     },
@@ -323,12 +302,6 @@ export default {
     },
     edit() {
       this.$emit("update:is-editing", true);
-    },
-    confirm() {
-      this.$emit("confirm");
-    },
-    cancelConfirm() {
-      this.$emit("cancelConfirm");
     },
     goToForm(pos) {
       this.$emit("goToForm", pos);

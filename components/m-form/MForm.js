@@ -53,10 +53,6 @@ export default {
       let id = this.item.id || this.id || null;
       return id && `${this.baseUrl}/${id}${this.appendSlash ? "/" : ""}`;
     },
-    confirmUrl() {
-      let id = this.item.id || this.id || null;
-      return id && `${this.baseUrl}/${id}/confirm` + (this.appendSlash ? "/" : "")
-    },
     deleteUrl() {
       return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.appendSlash ? "/" : "")
     },
@@ -73,42 +69,6 @@ export default {
     canDelete() {
       return this.item.id != undefined && this.hasPerm('delete', this.permissionBasename, this.item)
     },
-    canConfirm() {
-      let hasPerm = this.item.id != undefined;
-      if (!this.item.first_confirmed_at) {
-        hasPerm &= this.hasPerm('firstConfirm', this.permissionBasename, this.item);
-      } else if (!this.item.second_confirmed_at) {
-        hasPerm &= this.hasPerm('secondConfirm', this.permissionBasename, this.item);
-      } else {
-        return false;
-      }
-      return hasPerm
-    },
-    canCancelConfirm() {
-      let hasPerm = this.item.id != undefined;
-      if (this.item.first_confirmed_at) {
-        hasPerm &= this.hasPerm('firstConfirm', this.permissionBasename, this.item);
-      } else if (this.item.second_confirmed_at) {
-        hasPerm &= this.hasPerm('secondConfirm', this.permissionBasename, this.item);
-      } else {
-        return false;
-      }
-      return hasPerm
-    },
-    confirmBtnText() {
-      if (!this.item.first_confirmed_at) {
-        return "تایید اول"
-      } else {
-        return "تایید دوم"
-      }
-    },
-    cancelConfirmBtnText() {
-      if (this.item.first_confirmed_at && !this.item.second_confirmed_at) {
-        return "لفو تایید اول"
-      } else {
-        return "لفو تایید دوم"
-      }
-    }
   },
   watch: {
     $route(newRoute, oldRoute) {
@@ -281,23 +241,6 @@ export default {
           this.successResponse(data, true)
         }
       });
-    },
-    confirm(cancel = false) {
-      this.request({
-        url: this.endpoint(this.confirmUrl),
-        method: "put",
-        data: {
-          cancel: cancel
-        },
-        success: data => {
-          this.getItem();
-          this.isEditing = false;
-          this.successNotify();
-        }
-      });
-    },
-    cancelConfirm() {
-      this.confirm(true)
     },
     successResponse(data, clearForm) {
       if (clearForm) {
