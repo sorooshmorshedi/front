@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 
 import accountApiMixin from "@/mixin/accountMixin";
 import money from "@/components/mcomponents/cleave/Money";

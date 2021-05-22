@@ -296,7 +296,7 @@
 <script>
 import AccountApiMixin from "@/mixin/accountMixin";
 import wareApiMixin from "@/mixin/wareApi";
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import { PathLevels, getText } from "@/variables";
 

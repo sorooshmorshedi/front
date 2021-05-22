@@ -71,7 +71,7 @@
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import { PathLevels, VisitorLevels } from "@/variables";
 

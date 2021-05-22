@@ -6,11 +6,11 @@
           <v-toolbar-title>تنظیمات کاربری</v-toolbar-title>
         </v-toolbar>
         <v-tabs vertical>
-          <v-tab class="start">
+          <v-tab>
             <v-icon class="ml-4">fa-user</v-icon>
             <span>مشخصات کاربری</span>
           </v-tab>
-          <v-tab class="start">
+          <v-tab>
             <v-icon class="ml-4">fa-key</v-icon>
             <span>تغییر کلمه عبور</span>
           </v-tab>
@@ -18,7 +18,7 @@
             <v-icon class="ml-4">fa-envelope-open-text</v-icon>
             <span>لیست دعوت ها</span>
           </v-tab>
-          <v-tab disabled>
+          <v-tab @click="getSecretKey">
             <v-icon class="ml-4">fa-shield-alt</v-icon>
             <span class>ورود دوعاملی</span>
           </v-tab>
@@ -63,6 +63,7 @@
               </v-card-actions>
             </v-card>
           </v-tab-item>
+
           <v-tab-item>
             <v-card flat>
               <v-card-text>
@@ -83,6 +84,7 @@
               </v-card-actions>
             </v-card>
           </v-tab-item>
+
           <v-tab-item>
             <v-card flat>
               <v-card-text>
@@ -105,9 +107,84 @@
               </v-card-text>
             </v-card>
           </v-tab-item>
+
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text>
+                <v-row>
+                  <v-col cols="12" md="8">
+                    <p>توسط ورود دوعاملی امنیت داده های خود را در سامانه حسابداری سبحان چند برابر کنید</p>
+                    <p>با فعال سازی ورود دو عاملی هنگام ورود به سامانه علاوه بر نام کاربری و کلمه عبور باید کد تایید نیز وارد نمایید</p>
+                    <p>کد تایید هر 30 ثاینه یک بار عوض می شود</p>
+                    <p>برای فعال سازی مراحل زیر را طی کنید:</p>
+                    <ul class="mr-4 mb-2" v-if="!user.has_two_factor_authentication">
+                      <li>نرم افزار Google Authenticator را دانلود و نصب نمایید</li>
+                      <li>کد رو به رو را در نرم افزار Google Authenticator اسکن کنید</li>
+                      <li>کد تولید شده توسط نرم افزار را وارد کنید و روی دکمه تایید کلید نمایید</li>
+                    </ul>
+                    <v-btn
+                      color="red white--text"
+                      v-if="user.has_two_factor_authentication"
+                      @click="removeSecretKeyDialog = true"
+                    >غیر فعال سازی ورود دو عاملی</v-btn>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-row
+                      class
+                      no-gutters
+                      v-if="secretKey.qr_code && !user.has_two_factor_authentication"
+                    >
+                      <v-col class="d-flex justify-center">
+                        <vue-qrcode :value="secretKey.qr_code" :options="{ width: 300 }"></vue-qrcode>
+                      </v-col>
+                      <v-col cols="12" md="8" offset-md="1">
+                        <v-text-field
+                          label="کد تایید"
+                          class="text-field-ltr"
+                          v-model="secretKey.code"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" md="2">
+                        <v-btn
+                          @click="setSecretKey"
+                          block
+                          class="mt-3 mt-md-1 mr-md-2"
+                          color="blue white--text"
+                        >تایید</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
         </v-tabs>
       </v-card>
     </v-col>
+    <v-dialog v-model="removeSecretKeyDialog" max-width="400px" transition="dialog-transition">
+      <v-card>
+        <v-card-title>غیر فعال سازی ورود دو عاملی</v-card-title>
+
+        <v-card-text>
+          <v-row>
+            <v-col cols="12">
+              <p>برای غیر فعال سازی ورود دو عاملی کد تایید را وارد کنید</p>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field label="کد تایید" class="text-field-ltr" v-model="secretKey.code"></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6" offset-md="3">
+              <v-btn
+                @click="removeSecretKey"
+                block
+                class="mt-3 mt-md-1 mr-md-2"
+                color="red white--text"
+              >غیر فعال سازی</v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <v-dialog
       v-model="confirmInvitationDialog"
@@ -138,15 +215,17 @@
   </v-row>
 </template>
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import UserApi from "@/views/panel/user/api";
+import GetUserApi from "@/views/panel/user/getUserApi";
 import AuthMixin from "@/views/auth/mixin";
-import MDatatable from "@/components/mcomponents/datatable/MDatatable.vue";
+import MDatatable from "@/components/m-datatable";
+import VueQrcode from "@chenfengyuan/vue-qrcode";
 
 export default {
-  components: { MDatatable },
+  components: { MDatatable, VueQrcode },
   name: "Register",
-  mixins: [AuthMixin, MFormMixin, UserApi],
+  mixins: [AuthMixin, MFormMixin, UserApi, GetUserApi],
   props: {},
   data() {
     return {
@@ -158,6 +237,9 @@ export default {
       invitation: null,
       confirmInvitationDialog: false,
       confirmationCode: null,
+
+      secretKey: {},
+      removeSecretKeyDialog: false,
     };
   },
   computed: {
@@ -186,6 +268,45 @@ export default {
     this.getInvitations();
   },
   methods: {
+    setSecretKey() {
+      this.request({
+        url: this.endpoint(`users/secretKey`),
+        method: "put",
+        data: {
+          secret_key: this.secretKey.secret_key,
+          code: this.secretKey.code,
+        },
+        success: (data) => {
+          this.secretKey.code = null;
+          this.successNotify();
+          this.getUser();
+        },
+      });
+    },
+    removeSecretKey() {
+      this.request({
+        url: this.endpoint(`users/secretKey`),
+        method: "delete",
+        data: {
+          code: this.secretKey.code,
+        },
+        success: () => {
+          this.removeSecretKeyDialog = false;
+          this.successNotify();
+          this.getSecretKey();
+          this.getUser();
+        },
+      });
+    },
+    getSecretKey() {
+      this.request({
+        url: this.endpoint(`users/secretKey`),
+        method: "get",
+        success: (data) => {
+          this.secretKey = data;
+        },
+      });
+    },
     updateProfile() {},
     changePassword() {
       return;

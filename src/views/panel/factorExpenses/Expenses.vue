@@ -38,7 +38,7 @@
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import GetFactorExpensesApi from "@/views/panel/factorExpenses/getFactorExpensesApi";
 
 export default {

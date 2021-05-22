@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import getCitiesApi from "./getCitiesApi";
 
 export default {

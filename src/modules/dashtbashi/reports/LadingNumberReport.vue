@@ -18,7 +18,7 @@
 
 <script>
 import GetApi from "../GetApi";
-import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
+import queryBinding from "@/components/m-query-binding";
 
 export default {
   name: "Form",

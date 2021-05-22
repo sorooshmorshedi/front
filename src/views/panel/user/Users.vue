@@ -86,7 +86,7 @@
   </div>
 </template>
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import getRolesApi from "../role/getRolesApi";
 import UserApi from "@/views/panel/user/api";
 import CompanyMixin from "@/views/panel/company/mixin";

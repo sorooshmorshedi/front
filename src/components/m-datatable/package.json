@@ -1,0 +1,13 @@
+{
+  "name": "@/components/m-datatable",
+  "version": "1.0.4",
+  "homepage": "https://bit.dev/mmd-mostafaee/vue/m-datatable",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "license": "SEE LICENSE IN LICENSE",
+  "bit": {
+    "env": {}
+  }
+}

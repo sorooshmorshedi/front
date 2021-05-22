@@ -26,7 +26,7 @@
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import GetOptionsApi from "@/views/panel/options/getOptionsApi";
 
 export default {

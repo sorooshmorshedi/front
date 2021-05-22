@@ -27,7 +27,7 @@
 </template>
 <script>
 import AccountApiMixin from "@/mixin/accountMixin";
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 
 export default {
   mixins: [MFormMixin, AccountApiMixin],

@@ -29,7 +29,7 @@
 
 <script>
 import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
-import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
+import queryBinding from "@/components/m-query-binding";
 import AccountMixin from "@/mixin/accountMixin";
 export default {
   name: "SanadItemsList",

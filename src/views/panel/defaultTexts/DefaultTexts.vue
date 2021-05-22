@@ -27,7 +27,7 @@
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import DefaultTextApiMixin from "@/views/panel/defaultTexts/api";
 
 export default {

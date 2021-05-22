@@ -82,7 +82,7 @@
   </v-row>
 </template>
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import UserApi from "@/views/panel/user/api";
 import AuthMixin from "@/views/auth/mixin";
 

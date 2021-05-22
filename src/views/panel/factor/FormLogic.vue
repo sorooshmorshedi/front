@@ -9,7 +9,7 @@ import mtime from "@/components/mcomponents/cleave/Time";
 import DistributionApiMixin from "@/modules/distribution/api";
 import FactorMixin from "@/views/panel/factor/mixin";
 
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 
 export default {
   components: { money, date, mtime },

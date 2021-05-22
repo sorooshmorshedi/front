@@ -67,7 +67,7 @@
 <script>
 import _ from "lodash";
 import wareApiMixin from "@/mixin/wareApi";
-import MDatatable from "@/components/mcomponents/datatable/MDatatable.vue";
+import MDatatable from "@/components/m-datatable";
 import OpenInventoryBtn from "@/components/btns/OpenInventoryBtn";
 import { FactorTypes } from "@/variables";
 export default {

@@ -158,7 +158,7 @@ import date from "@/components/mcomponents/cleave/Date";
 
 import GetApi from "./GetApi";
 import LadingMixin from "./LadingMixin";
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 

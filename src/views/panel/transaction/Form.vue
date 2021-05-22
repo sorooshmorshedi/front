@@ -279,7 +279,7 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import _ from "lodash";

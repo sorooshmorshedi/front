@@ -145,7 +145,7 @@ import getChequeApiMixin from "./getChequeApi.js";
 import ChequesList from "@/views/panel/lists/ChequesList";
 import formsMixin from "@/mixin/forms";
 import GetChequebooksApi from "@/views/panel/chequebook/getChequebooksApi";
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 
 export default {
   name: "ChequeForm",

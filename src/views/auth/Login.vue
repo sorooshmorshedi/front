@@ -34,7 +34,7 @@
             <vue-recaptcha
               sitekey="6Lda3sYaAAAAAKJ3kt1GnJWq5ennm3QIkz_NKNMs"
               @verify="response => recaptchaResponse = response"
-            ></vue-recaptcha>
+            />
           </div>
         </v-card-text>
 
@@ -46,6 +46,32 @@
         </v-card-actions>
       </v-card>
     </v-col>
+
+    <v-dialog
+      v-model="twoFactorAuthenticationDialog"
+      max-width="400px"
+      transition="dialog-transition"
+    >
+      <v-card>
+        <v-card-title>کد ورود دو عاملی را وارد کنید</v-card-title>
+
+        <v-card-text>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field label="کد" class="text-field-ltr" v-model="twoFactorAuthenticationCode"></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6" offset-md="3">
+              <v-btn
+                @click="login"
+                block
+                class="mt-3 mt-md-1 mr-md-2"
+                color="blue white--text"
+              >تایید</v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -58,7 +84,11 @@ export default {
     return {
       username: "",
       password: "",
+
       recaptchaResponse: "",
+
+      twoFactorAuthenticationDialog: "",
+      twoFactorAuthenticationCode: "",
     };
   },
   mounted() {
@@ -84,11 +114,17 @@ export default {
           username: this.username,
           password: this.password,
           recaptchaResponse: this.recaptchaResponse,
+          code: this.twoFactorAuthenticationCode,
         },
         token: false,
         success: (data) => {
-          this.setToken(data.token);
-          this.redirect();
+          if (data.need_two_factor_authentication) {
+            this.twoFactorAuthenticationDialog = true;
+          } else {
+            this.twoFactorAuthenticationDialog = false;
+            this.setToken(data.token);
+            this.redirect();
+          }
         },
       });
     },

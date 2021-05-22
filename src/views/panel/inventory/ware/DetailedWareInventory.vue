@@ -45,7 +45,7 @@
 
 <script>
 import _ from "lodash";
-import queryBinding from "@bit/mmd-mostafaee.vue.query-binding";
+import queryBinding from "@/components/m-query-binding";
 import wareApiMixin from "@/mixin/wareApi";
 import Template from "@/views/Template.vue";
 export default {

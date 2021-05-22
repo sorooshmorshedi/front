@@ -12,12 +12,12 @@ import 'cleave.js'
 import Chart from 'chart.js'
 Chart.defaults.global.defaultFontFamily = 'IRANSans';
 
-import MDatatable from "@bit/mmd-mostafaee.vue.m-datatable";
+import MDatatable from "@/components/m-datatable";
 Vue.component('MDatatable', MDatatable);
 
 import {
   MForm
-} from "@bit/mmd-mostafaee.vue.m-form";
+} from "@/components/m-form";
 Vue.component('MForm', MForm);
 
 import WareSelect from '@/components/selects/WareSelect.vue';

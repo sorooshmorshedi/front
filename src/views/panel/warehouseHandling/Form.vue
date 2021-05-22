@@ -184,7 +184,7 @@ import money from "@/components/mcomponents/cleave/Money";
 import mtime from "@/components/mcomponents/cleave/Time";
 import date from "@/components/mcomponents/cleave/Date";
 import wareApiMixin from "@/mixin/wareApi";
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 
 export default {
   name: "Form",

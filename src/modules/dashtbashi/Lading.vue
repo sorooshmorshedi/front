@@ -359,7 +359,7 @@
 
 <script>
 import formsMixin from "@/mixin/forms";
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import GetApi from "./GetApi";
 export default {
   props: {

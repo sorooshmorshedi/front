@@ -39,7 +39,7 @@
 </template>
 <script>
 import { fromCodeFilter, toCodeFilter } from "@/mixin/accountMixin.js";
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import GetFactorExpenseApi from "./getFactorExpensesApi";
 
 export default {

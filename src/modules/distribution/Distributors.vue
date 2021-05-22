@@ -42,7 +42,7 @@
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@bit/mmd-mostafaee.vue.m-form";
+import { MFormMixin } from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import UserApiMixin from "@/views/panel/user/api";
 import accountApiMixin from "@/mixin/accountMixin";

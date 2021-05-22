@@ -1,0 +1,13 @@
+{
+  "name": "@/components/query-binding",
+  "version": "1.0.2",
+  "homepage": "https://bit.dev/mmd-mostafaee/vue/query-binding",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "license": "SEE LICENSE IN LICENSE",
+  "bit": {
+    "env": {}
+  }
+}
