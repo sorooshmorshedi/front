@@ -13,6 +13,7 @@
                 v-model="bill.account"
                 :floatAccount.sync="bill.floatAccount"
                 :costCenter.sync="bill.costCenter"
+                @input="setAccount"
               />
             </v-col>
             <v-col cols="12" md="4">
@@ -83,6 +84,7 @@ export default {
   },
   methods: {
     setAccount(account) {
+      console.log(account);
       if (account) {
         this.filters.account = account.id;
         this.filters.account_title = account.title;
