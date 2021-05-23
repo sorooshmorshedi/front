@@ -19,7 +19,6 @@ export default {
     this.EventBus.$on('get:accounts', () => this.setDefaults(this.urlQuery))
     this.EventBus.$on('get:wares', () => this.setDefaults(this.urlQuery))
   },
-
   mounted() {
     this.setDefaults(this.urlQuery)
   },
@@ -34,26 +33,19 @@ export default {
           this.item = this.itemObject;
         }
         for (let key in data) {
+          if (!key.includes('.')) continue
           let path = key.split('.')
           let lastObject = path.slice(0, path.length - 1).reduce((o, i) => o[i], this)
           let lastKey = path[path.length - 1];
+          let value = data[key]
 
-          switch (lastKey) {
-            case 'account':
-              lastObject[lastKey] = this.accounts.filter(o => o.id == data[key])[0];
-              break
-            case 'floatAccount':
-              lastObject[lastKey] = this.floatAccounts.filter(o => o.id == data[key])[0];
-              break
-            case 'costCenters':
-              lastObject[lastKey] = this.costCenters.filter(o => o.id == data[key])[0];
-              break
-            case 'ware':
-              lastObject[lastKey] = this.wares.filter(o => o.id == data[key])[0];
-              break
-            default:
-              lastObject[lastKey] = data[key]
+          if (isNaN(value) || value == null) {
+            this.$set(lastObject, lastKey, value)
+          } else {
+            value = Number(value)
+            this.$set(lastObject, lastKey, value)
           }
+          this.EventBus.$emit(`set:${key}`, value)
         }
       })
     },

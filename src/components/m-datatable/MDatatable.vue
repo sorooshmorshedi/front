@@ -1,42 +1,56 @@
 <template>
   <v-card>
-    <v-card-title v-show="!isPrinting">
-      <v-row>
-        <v-col cols="12" md="4">
+    <v-card-title v-show="!isPrinting" v-if="showExportBtns">
+      <v-row no-gutters>
+        <v-col
+          cols="12"
+          class="mt-1 text-left d-flex flex-column flex-md-row justify-end"
+          v-if="showExportBtns"
+        >
           <v-text-field
             v-if="searchable && false"
             v-model="search"
             max-width="300px"
             append-icon="search"
-            label="جستوجو"
+            label="جستجو"
             single-line
             hide-details
           />
-        </v-col>
-        <v-col cols="12" md="8" class="mt-1 text-left" v-if="showExportBtns">
-          <v-btn @click="exportTo('html')" class="export-btn">چاپ</v-btn>
-          <v-btn @click="exportTo('pdf')" class="export-btn mr-1">خروجی PDF</v-btn>
-          <v-btn @click="exportTo('xlsx')" class="export-btn mr-1">خروجی اکسل</v-btn>
+          <v-btn @click="exportTo('html')" class="export-btn block">چاپ</v-btn>
+          <v-btn @click="exportTo('pdf')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی PDF</v-btn>
+          <v-btn @click="exportTo('xlsx')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی اکسل</v-btn>
         </v-col>
       </v-row>
     </v-card-title>
+    <div>
+      <v-card-subtitle>فیلتر های اعمال شده</v-card-subtitle>
+      <div class="mx-4 mb-4">
+        <span v-for="(filter, i) in appliedFilters" :key="i" class="ml-6">
+          {{ filter['text'] }}
+          <span v-if="filter['typeText']">({{ filter['typeText'] }})</span>
+          :
+          {{ filter['value'] }}
+        </span>
+      </div>
+    </div>
     <v-data-table
-      id="datatable"
+      :id="'datatable-' + _uid"
       ref="datatable"
-      v-bind="$attrs"
       :show-select="!isPrinting"
       :headers="headersWithFilter"
       :items="tableItems"
       :options.sync="options"
       :server-items-length="totalItems"
       :loading="loading"
-      v-model="selectedItems"
+      @input="v => selectedItems = v"
       :search="search"
       :disable-pagination="isPrinting"
       :disable-sort="isPrinting"
       :hide-default-footer="isPrinting"
       :footer-props="{ showFirstLastPage: true }"
       v-on="$listeners"
+      v-bind="$attrs"
+      :mobile-breakpoint="0"
     >
       <!-- Add row number field -->
       <template #item.rowNumber="{ item }">{{ getRowNumber(item) }}</template>
@@ -92,7 +106,7 @@
                   <v-col cols="12">
                     <component
                       :is="getFilterField(header)"
-                      :label="`جستوجو${serverProcessing?'ی دقیق':''}`"
+                      :label="`جستجو${serverProcessing?'ی دقیق':''}`"
                       :value="filters[`${header.value}`]"
                       @input="emitFilter(`${header.value}`, $event)"
                       clearable
@@ -103,7 +117,7 @@
                     <v-col cols="12">
                       <component
                         :is="getFilterField(header)"
-                        label="جستوجو"
+                        label="جستجو"
                         :value="filters[`${header.value}__icontains`]"
                         @input="emitFilter(`${header.value}__icontains`, $event)"
                         clearable
@@ -159,7 +173,8 @@
       </template>
 
       <template #header.rowNumber>
-        <v-btn @click="clearAllFilters" icon title="خالی کردن فیلتر ها">
+        <span v-if="isPrinting">#</span>
+        <v-btn v-else @click="clearAllFilters" icon title="خالی کردن فیلتر ها">
           <v-icon class>$clearFiltersIcon</v-icon>
         </v-btn>
       </template>
@@ -167,19 +182,31 @@
       <!-- Mask Data -->
       <template v-for="header in headers" v-slot:[getItemSlot(header.value)]="{ item }">
         <!-- numeric -->
-        <template v-if="isNumber(header)">{{ getItemValue(item, header.value) | toMoney }}</template>
+        <template v-if="isNumber(header)">
+          <span
+            dir="ltr"
+            :class="getNumericClasses(item, header.value)"
+          >{{ getItemValue(item, header.value) | toMoney }}</span>
+        </template>
 
         <!-- select -->
         <template v-else-if="isSelect(header)">{{ getSelectItemValue(header, item) }}</template>
 
         <!-- boolean -->
         <template v-else-if="isBoolean(header)">
-          <v-icon v-if="item[header.value]">fa-check</v-icon>
+          <v-icon v-if="getItemValue(item, header.value)">fa-check</v-icon>
           <v-icon v-else>fa-times</v-icon>
         </template>
 
+        <!-- date -->
+        <template v-else-if="isDate(header)">
+          <span class="nowrap">{{ getItemValue(item, header.value) }}</span>
+        </template>
+
         <!-- other-->
-        <template v-else>{{ getItemValue(item, header.value) }}</template>
+        <template v-else>
+          <truncate :value="getItemValue(item, header.value)" />
+        </template>
       </template>
 
       <template v-if="apiResponse" v-slot:body.append="{ headers }">
@@ -206,9 +233,14 @@
 <script>
 import XLSX from "xlsx";
 import { jsPDF } from "jspdf";
+import _ from "lodash";
+import Truncate from "./Truncate";
 
 export default {
   props: {
+    isDialog: {
+      default: false,
+    },
     apiUrl: {
       default: null,
     },
@@ -241,6 +273,9 @@ export default {
       },
     },
   },
+  components: {
+    Truncate,
+  },
   data() {
     return {
       filterMenus: {},
@@ -254,6 +289,8 @@ export default {
 
       numericValues: ["bed", "bes", "value", "fee", "price", "count"],
       booleanValues: ["is_auto_created"],
+
+      d: {},
     };
   },
   computed: {
@@ -290,7 +327,11 @@ export default {
         };
       };
 
-      let headers = this.headers.filter((h) => h.show != false);
+      let headers = this.headers.filter((h) => {
+        if (h.show == false) return false;
+        if (this.isPrinting && h.hideInExport == true) return false;
+        return true;
+      });
 
       headers = [
         {
@@ -327,33 +368,82 @@ export default {
     serverExport() {
       return this.exportUrl != null;
     },
+    appliedFilters() {
+      let appliedFilters = [];
+      for (let header of this.headers) {
+        Object.keys(this.filters)
+          .filter((key) => key.startsWith(header.value))
+          .forEach((key) => {
+            let value = this.filters[key];
+
+            if ([null, undefined, ""].includes(value)) return;
+
+            let filterTypesTexts = {
+              "": null,
+              icontains: "شامل",
+              gte: "از",
+              lte: "تا",
+            };
+
+            let filterType = key.split("__");
+            let filterTypeText = null;
+            if (filterType.length == 2)
+              filterTypeText = filterTypesTexts[filterType[1]];
+
+            if (this.isNumber(header)) value = this.toMoney(value);
+
+            if (this.isSelect(header)) {
+              value = header.items.find((o) => o.value == value).text;
+            }
+            if (this.isDate(header))
+              value = String(value).split("-").reverse().join("-");
+
+            if (this.isBoolean(header)) {
+              value = this.getBooleanFilterItems(header).find(
+                (o) => o.value == value
+              ).text;
+            }
+
+            appliedFilters.push({
+              text: header.text,
+              typeText: filterTypeText,
+              value: value,
+            });
+          });
+      }
+
+      return appliedFilters;
+    },
   },
   watch: {
     items() {
       this.tableItems = this.items;
     },
     apiUrl() {
-      if (this.serverProcessing) this.getDataFromApi();
+      if (this.serverProcessing) this.d.getDataFromApi();
     },
     options: {
       handler() {
-        if (this.serverProcessing) this.getDataFromApi();
+        if (this.serverProcessing) this.d.getDataFromApi();
       },
       deep: true,
     },
     filters: {
       handler() {
         this.options.page = 1;
-        if (this.serverProcessing) this.getDataFromApi();
+        if (this.serverProcessing) this.d.getDataFromApi();
       },
       deep: true,
     },
     search() {
-      if (this.serverProcessing) this.getDataFromApi();
+      if (this.serverProcessing) this.d.getDataFromApi();
     },
   },
+  created() {
+    this.d.getDataFromApi = _.debounce(this.getDataFromApi, 500);
+  },
   mounted() {
-    if (this.serverProcessing) this.getDataFromApi();
+    if (this.serverProcessing) this.d.getDataFromApi();
   },
   methods: {
     getBooleanFilterItems(header) {
@@ -397,10 +487,17 @@ export default {
       this.$emit("update:filters", newFilters);
     },
     print() {
+      if (this.isDialog) {
+        $(".v-application--wrap")[0].style.display = "none";
+      }
+
       this.$store.commit("setIsPrinting", true);
       this.$nextTick(() => {
         print();
         this.$store.commit("setIsPrinting", false);
+        if (this.isDialog) {
+          $(".v-application--wrap")[0].style.display = "block";
+        }
       });
     },
     clearFilters(header) {
@@ -423,7 +520,7 @@ export default {
       return "v-text-field";
     },
     isDate(header) {
-      return header.value.includes("date");
+      return header.type == "date" || header.value.includes("date");
     },
     isSelect(header) {
       return header.items != undefined;
@@ -434,6 +531,11 @@ export default {
       else flag = this.numericValues.includes(header.value);
       if (flag) header.align = "center";
       return flag;
+    },
+    getNumericClasses(item, valueKey) {
+      let value = this.getItemValue(item, valueKey);
+      if (value < 0) return "red--text";
+      return "";
     },
     isBoolean(header) {
       let flag = false;
@@ -506,9 +608,10 @@ export default {
       if (exportUrl.includes("?")) {
         url = exportUrl.replace("?", `/${outputFormat}?`);
       } else {
-        url = `${exportUrl}/${outputFormat}?`;
+        url = `${exportUrl}${
+          exportUrl.endsWith("/") ? "" : "/"
+        }${outputFormat}?`;
       }
-      url += `headers=${JSON.stringify(this.headers)}&`;
       url = this.endpoint(url);
       return url;
     },
@@ -525,8 +628,13 @@ export default {
               search: this.search,
             };
             Object.keys(filters).forEach((k) => {
-              if (this.filters[k]) url += k + "=" + this.filters[k] + "&";
+              if (this.filters[k] != undefined)
+                url += k.replaceAll(".", "__") + "=" + this.filters[k] + "&";
             });
+            url += `headers=${JSON.stringify(
+              this.headers.filter((o) => o.hideInExport != true)
+            )}&`;
+            url += `applied_filters=${JSON.stringify(this.appliedFilters)}&`;
           }
           if (url[url.length - 1] != "&") url += "&";
           url += "token=" + this.token;
@@ -534,6 +642,8 @@ export default {
           this.downloadUrl(url);
         } else {
           if (outputFormat == "html") {
+            this.print();
+          } else if (outputFormat == "pdf") {
             this.print();
             return;
             let doc = new jsPDF();
@@ -544,11 +654,8 @@ export default {
                 doc.save();
               },
             });
-            // this.print();
           } else if (outputFormat == "xlsx") {
-            let workbook = XLSX.utils.table_to_book(
-              document.getElementById("datatable")
-            );
+            let workbook = XLSX.utils.table_to_book(this.$refs.datatable.$el);
             let wb = workbook;
 
             if (!wb.Workbook) wb.Workbook = {};
@@ -562,10 +669,12 @@ export default {
       });
     },
     getItemValue(item, dotNotationString) {
-      return dotNotationString.split(".").reduce((o, i) => {
+      let value = dotNotationString.split(".").reduce((o, i) => {
         if (o) return o[i];
         return null;
       }, item);
+
+      return value;
     },
   },
 };
@@ -588,5 +697,8 @@ tfoot {
 @page {
   size: auto;
   margin: 0mm;
+}
+.nowrap {
+  white-space: nowrap;
 }
 </style>
