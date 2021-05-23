@@ -508,6 +508,7 @@ export default {
       } else {
         url = `${exportUrl}/${outputFormat}?`;
       }
+      url += `headers=${JSON.stringify(this.headers)}&`;
       url = this.endpoint(url);
       return url;
     },
