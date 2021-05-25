@@ -82,6 +82,33 @@ export default new Vuetify({
       costAccountingIcon: {
         component: () => import('@/icons/CostAccountingIcon.vue')
       },
+      sanadIcon: {
+        component: () => import('@/icons/SanadIcon.vue')
+      },
+      accountsTreeIcon: {
+        component: () => import('@/icons/AccountsTreeIcon.vue')
+      },
+      accountIcon: {
+        component: () => import('@/icons/AccountIcon.vue')
+      },
+      balanceReportIcon: {
+        component: () => import('@/icons/BalanceReportIcon.vue')
+      },
+      ledgerReportIcon: {
+        component: () => import('@/icons/LedgerReportIcon.vue')
+      },
+      inputFactorIcon: {
+        component: () => import('@/icons/InputFactorIcon.vue')
+      },
+      outputFactorIcon: {
+        component: () => import('@/icons/OutputFactorIcon.vue')
+      },
+      receiveTransactionIcon: {
+        component: () => import('@/icons/ReceiveTransactionIcon.vue')
+      },
+      paymentTransactionIcon: {
+        component: () => import('@/icons/PaymentTransactionIcon.vue')
+      },
     }
   },
 });

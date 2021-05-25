@@ -43,54 +43,91 @@
 
         <v-btn
           v-if="hasPerm('create', 'sanad') && hasModule('sanads')"
-          class="blue white--text mr-3"
+          class="blue white--text mr-3 app-bar-btn"
           :to="{name: 'SanadForm' }"
           @click="routeClick('SanadForm')"
-        >سند</v-btn>
+          icon
+          large
+          title="سند"
+        >
+          <v-icon large>$sanadIcon</v-icon>
+        </v-btn>
         <v-btn
           v-if="hasPerm('create', 'receiveTransaction') && hasModule('transactions')"
-          class="blue white--text mr-1"
+          class="blue white--text  app-bar-btn"
           :to="{ name: 'TransactionForm', params: { type: 'receive' } }"
           @click="routeClick('TransactionForm')"
-        >دریافت</v-btn>
+          icon
+          title="دریافت"
+        >
+          <v-icon>$receiveTransactionIcon</v-icon>
+        </v-btn>
         <v-btn
           v-if="hasPerm('create', 'paymentTransaction') && hasModule('transactions')"
-          class="blue white--text mr-1"
+          class="blue white--text  app-bar-btn"
           :to="{ name: 'TransactionForm', params: { type: 'payment' } }"
           @click="routeClick('TransactionForm')"
-        >پرداخت</v-btn>
+          icon
+          title="پرداخت"
+        >
+          <v-icon>$paymentTransactionIcon</v-icon>
+        </v-btn>
         <v-btn
-          v-if="hasPerm('create', 'buyFactor') && hasModule('factors')"
-          class="blue white--text mr-1"
-          :to="{name: 'FactorForm', params: {isPreFactor: false, type: 'buy' } }"
-          @click="routeClick('FactorForm')"
-        >فاکتور خرید</v-btn>
-        <v-btn
-          v-if="hasPerm('create', 'saleFactor')  && hasModule('factors')"
-          class="blue white--text mr-1"
+          v-if="hasPerm('create', 'saleFactor') && hasModule('factors')"
+          class="blue white--text  app-bar-btn"
           :to="{name: 'FactorForm', params: {isPreFactor: false, type: 'sale' } }"
           @click="routeClick('FactorForm')"
-        >فاکتور فروش</v-btn>
+          icon
+          title="فاکتور فروش"
+        >
+          <v-icon>$outputFactorIcon</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="hasPerm('create', 'buyFactor') && hasModule('factors')"
+          class="blue white--text  app-bar-btn"
+          :to="{name: 'FactorForm', params: {isPreFactor: false, type: 'buy' } }"
+          @click="routeClick('FactorForm')"
+          icon
+          title="فاکتور خرید"
+        >
+          <v-icon>$inputFactorIcon</v-icon>
+        </v-btn>
         <v-btn
           v-if="hasPerm('get', 'sanadItemsReport')"
-          class="blue white--text mr-1"
+          class="blue white--text  app-bar-btn"
           :to="{name: 'LedgerReport', params: { level: 'level3' }}"
-        >گردش حساب</v-btn>
+          icon
+          title="گردش حساب"
+        >
+          <v-icon>$ledgerReportIcon</v-icon>
+        </v-btn>
         <v-btn
           v-if="hasPerm('get', 'accountBalanceReport')"
-          class="blue white--text mr-1"
+          class="blue white--text  app-bar-btn"
           :to="{name: 'AccountsBalanceReport' }"
-        >تراز حساب ها</v-btn>
+          icon
+          title="تراز حساب ها"
+        >
+          <v-icon>$balanceReportIcon</v-icon>
+        </v-btn>
         <v-btn
           v-if="hasPerm('get', 'account')"
-          class="blue white--text mr-1"
+          class="blue white--text app-bar-btn"
           :to="{name: 'Accounts', params: {level: 3} }"
-        >تعریف حساب</v-btn>
+          icon
+          title="تعریف حساب"
+        >
+          <v-icon>$accountIcon</v-icon>
+        </v-btn>
         <v-btn
           v-if="hasPerm('get', 'account')"
-          class="blue white--text mr-1"
+          class="blue white--text  app-bar-btn"
           :to="{name: 'AccountsTree' }"
-        >نمودار درختی</v-btn>
+          title="نمودار درختی"
+          icon
+        >
+          <v-icon>$accountsTreeIcon</v-icon>
+        </v-btn>
 
         <v-spacer></v-spacer>
 
@@ -257,6 +294,18 @@ export default {
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+.app-bar-btn {
+  width: 40px !important;
+  height: 40px !important;
+  margin-right: 10px;
+
+  .v-icon,
+  .v-image {
+    width: 20px !important;
+    height: 20px !important;
   }
 }
 </style>
