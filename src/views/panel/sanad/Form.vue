@@ -80,6 +80,72 @@
         </v-col>
 
         <v-col cols="12">
+          <m-datatable
+            :headers="headers"
+            :items="rows"
+            :showExportBtns="false"
+            :showAppliedFilters="false"
+            :showClearFiltersBtn="true"
+            :showSelect="false"
+            :filters.sync="filters"
+          >
+            <template
+              #item.account.title="{ item }"
+              v-tooltip="accountParentsName(item.account).join(' > ')"
+            >
+              <account-select
+                :horizontal="true"
+                items-type="level3"
+                v-model="item.account"
+                :disabled="!isEditing"
+                :floatAccount="item.floatAccount"
+                @update:floatAccount="v => item.floatAccount = v"
+                :costCenter="item.costCenter"
+                @update:costCenter="v => item.costCenter = v"
+              />
+            </template>
+            <template #item.explanation="{ item }">
+              <row-textarea
+                v-model="item.explanation"
+                :disabled="!isEditing"
+                :i="rows.indexOf(item)"
+                @updateRowsExplanation="updateRowsExplanation"
+              />
+            </template>
+            <template style="width: 150px" #item.bed="{ item }">
+              <money :disabled="!isEditing || item.bes != 0" v-model="item.bed" />
+            </template>
+            <template #item.swap="{ item }">
+              <a
+                @click.prevent="exchangeValue(item)"
+                href
+                v-if="rows.indexOf(item) != rows.length-1"
+              >
+                <i class="fas fa-exchange-alt"></i>
+              </a>
+            </template>
+            <template style="width: 150px" #item.bes="{ item }">
+              <money
+                :disabled="!isEditing || item.bed != 0"
+                class="form-control"
+                v-model="item.bes"
+              />
+            </template>
+            <template #item.deleteRow="{ item }">
+              <v-btn
+                v-if="rows.indexOf(item) != rows.length-1"
+                @click="deleteRow(rows.indexOf(item))"
+                class="red--text"
+                icon
+                :disabled="!isEditing"
+              >
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </template>
+          </m-datatable>
+        </v-col>
+
+        <v-col cols="12" v-if="false">
           <input-table v-model="rows">
             <template #thead>
               <tr>
@@ -87,7 +153,7 @@
                 <th class="tr-account">* کد و نام حساب</th>
                 <th>شرح ردیف</th>
                 <th>بدهکار</th>
-                <th class="d-print-none">
+                <th>
                   <a @click.prevent="exchangeValue()" href>
                     <i class="fas fa-exchange-alt"></i>
                   </a>
@@ -199,6 +265,55 @@ export default {
       hasList: false,
       hasIdProp: true,
       rowKey: "account",
+      filters: {},
+      headers: [
+        {
+          text: "* کد و نام حساب",
+          value: "account.title",
+          align: "center",
+          sortable: false,
+          filterable: true,
+        },
+        {
+          text: "شرح ردیف",
+          value: "explanation",
+          align: "center",
+          sortable: false,
+          filterable: false,
+        },
+        {
+          text: "بدهکار",
+          value: "bed",
+          align: "center",
+          sortable: false,
+          filterable: false,
+          width: "150px",
+        },
+        {
+          text: "",
+          value: "swap",
+          align: "center",
+          sortable: false,
+          filterable: false,
+          width: "40px",
+        },
+        {
+          text: "بستانکار",
+          value: "bes",
+          align: "center",
+          sortable: false,
+          filterable: false,
+          width: "150px",
+        },
+        {
+          text: "",
+          value: "deleteRow",
+          align: "center",
+          sortable: false,
+          filterable: false,
+          width: "40px",
+        },
+      ],
     };
   },
   computed: {

@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0b8eb5"],{3178:function(n,a,e){"use strict";e.r(a);var t=function(){var n=this,a=n.$createElement,e=n._self._c||a;return e("v-img",{attrs:{src:"/img/icons/sanad.png"}})},s=[],c=e("2877"),r=e("6544"),u=e.n(r),i=e("adda"),l={},o=Object(c["a"])(l,t,s,!1,null,null,null);a["default"]=o.exports;u()(o,{VImg:i["a"]})}}]);
+//# sourceMappingURL=chunk-2d0b8eb5.6e5c3385.js.map

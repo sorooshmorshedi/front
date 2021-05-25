@@ -22,7 +22,7 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <div>
+    <div v-if="showAppliedFilters">
       <v-card-subtitle>فیلتر های اعمال شده</v-card-subtitle>
       <div class="mx-4 mb-4">
         <span v-for="(filter, i) in appliedFilters" :key="i" class="ml-6">
@@ -36,7 +36,7 @@
     <v-data-table
       :id="'datatable-' + _uid"
       ref="datatable"
-      :show-select="!isPrinting"
+      :show-select="!isPrinting && showSelect"
       :headers="headersWithFilter"
       :items="tableItems"
       :options.sync="options"
@@ -172,7 +172,7 @@
         {{ header.text }}
       </template>
 
-      <template #header.rowNumber>
+      <template #header.rowNumber v-if="showClearFiltersBtn">
         <span v-if="isPrinting">#</span>
         <v-btn v-else @click="clearAllFilters" icon title="خالی کردن فیلتر ها">
           <v-icon class>$clearFiltersIcon</v-icon>
@@ -253,10 +253,19 @@ export default {
     headers: {
       required: true,
     },
+    showSelect: {
+      default: true,
+    },
     filters: {
       default() {
         return {};
       },
+    },
+    showAppliedFilters: {
+      default: true,
+    },
+    showClearFiltersBtn: {
+      default: true,
     },
     searchable: {
       default: true,
@@ -337,6 +346,8 @@ export default {
         {
           text: "#",
           value: "rowNumber",
+          width: "20px",
+          align: 'center',
           sortable: false,
           filterable: false,
         },
