@@ -4,9 +4,11 @@
     :class="btnClasses"
     v-bind="$attrs"
     :outlined="tableStyle"
-    class="mt-1 mt-md-0"
+    class="mt-1 mt-md-0 elevation-0"
+    title="مشاهده سند"
+    rounded
   >
-    مشاهده سند
+    <v-icon>$sanadIcon</v-icon>
     <v-chip class="app-background-color mr-2" x-small>{{ sanad.code }}</v-chip>
   </v-btn>
 </template>

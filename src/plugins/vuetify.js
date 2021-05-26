@@ -97,6 +97,9 @@ export default new Vuetify({
       ledgerReportIcon: {
         component: () => import('@/icons/LedgerReportIcon.vue')
       },
+      factorIcon: {
+        component: () => import('@/icons/FactorIcon.vue')
+      },
       inputFactorIcon: {
         component: () => import('@/icons/InputFactorIcon.vue')
       },

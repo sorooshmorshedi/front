@@ -23,12 +23,20 @@
           v-if="isImprest && id != undefined && hasPerm('', 'imprestSettlement')"
           class="blue white--text mr-1 mt-1 mt-md-0"
           :to="{name: 'ImprestSettlement', params: {id: item.id}}"
-        >تسویه تنخواه</v-btn>
+          title="تسویه تنخواه"
+          icon
+        >
+          <v-icon>$receiveTransactionIcon</v-icon>
+        </v-btn>
         <v-btn
           v-if="!isImprest"
           @click="factorsDialog = true"
           class="teal white--text mr-1 mt-1 mt-md-0"
-        >بابت فاکتور های</v-btn>
+          title="بابت فاکتور های"
+          icon
+        >
+          <v-icon>$factorIcon</v-icon>
+        </v-btn>
       </template>
 
       <template>
