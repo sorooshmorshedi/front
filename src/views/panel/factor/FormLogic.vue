@@ -260,8 +260,8 @@ export default {
     },
     reverseLabel() {
       let labels = {
-        salereturn: "فاکتور برگشت از فروش",
-        buyreturn: "فاکتور برگشت از خرید",
+        sale: "فاکتور برگشت از فروش ",
+        buy: "فاکتور برگشت از خرید ",
       };
       return labels[this.type];
     },

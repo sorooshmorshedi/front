@@ -26,7 +26,11 @@
           v-if="hasTransaction"
           @click="transactionsDialog = true"
           class="light-blue white--text mr-1 mt-1 mt-md-0"
-        >مشاهده {{ transactionLink.label }} ها</v-btn>
+          :title="'مشاهده ' + transactionLink.label + ' ها'"
+          icon
+        >
+          <v-icon>fa-stream</v-icon>
+        </v-btn>
 
         <v-btn
           v-if="preFactor != null"
@@ -39,7 +43,12 @@
           v-if="hasTransaction && canSubmitTransaction"
           class="teal white--text mr-1 mt-1 mt-md-0"
           :to="transactionLink.to"
-        >ثبت {{ transactionLink.label }}</v-btn>
+          :title="'ثبت ' +  transactionLink.label"
+          icon
+        >
+          <v-icon v-if="transactionLink.type == 'receive'">$receiveTransactionIcon</v-icon>
+          <v-icon v-else>$paymentTransactionIcon</v-icon>
+        </v-btn>
 
         <v-menu bottom offset-y v-if="hasTransaction">
           <template v-slot:activator="{ on, attrs }">
@@ -47,7 +56,11 @@
               color="teal white--text mr-1 mt-1 mt-md-0"
               v-bind="attrs"
               v-on="on"
-            >ثبت {{ transactionLink.label }} سریع</v-btn>
+              :title="'ثبت ' +  transactionLink.label + ' سریع'"
+              rounded
+            >
+              <v-icon>fa-money-bill-wave</v-icon>
+            </v-btn>
           </template>
 
           <v-list class="pa-0 pt-1">
@@ -71,20 +84,30 @@
           v-if="hasReverseFactor"
           class="teal white--text mr-1 mt-1 mt-md-0"
           @click="reverseFactor"
+          :title="'ثبت ' + reverseLabel"
+          icon
         >
-          ثبت
-          <span v-html="reverseLabel"></span>
+          <v-icon v-if="type.includes('sale')">$inputFactorIcon</v-icon>
+          <v-icon v-else>$outputFactorIcon</v-icon>
         </v-btn>
         <v-btn
           v-if="!isFpi && !isCw"
           class="teal lue white--text mr-1 mt-1 mt-md-0"
           :to="{name: 'Accounts', params: {level: 3, accountType: 'p'}, query: {showForm: true}}"
-        >تعریف حساب اشخاص</v-btn>
+          title="تعریف حساب اشخاص"
+          icon
+        >
+          <v-icon>fa-users</v-icon>
+        </v-btn>
         <v-btn
           v-if="!isFpi && !isCw && id != false"
           @click="exportsDialog = true"
           class="export-btn mr-1 mt-1 mt-md-0"
-        >خروجی</v-btn>
+          title="خروجی"
+          icon
+        >
+          <v-icon>fa-cloud-download-alt</v-icon>
+        </v-btn>
       </template>
 
       <template>

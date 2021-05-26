@@ -26,6 +26,7 @@ export default {
         }
       }
       return {
+        type: transactionType,
         label: transactionLabel,
         to
       };
