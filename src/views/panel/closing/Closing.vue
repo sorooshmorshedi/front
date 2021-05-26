@@ -37,20 +37,25 @@
   </v-card>
 </template>
 <script>
+import CompanyMixin from "@/views/panel/company/mixin";
 export default {
-  props: {},
+  mixins: [CompanyMixin],
   data() {
     return {
-      targetFinancialYear: null
+      targetFinancialYear: null,
+      financialYears: [],
     };
   },
   computed: {
     financialYears() {
       if (!this.user || !this.user.active_company) return [];
       return this.user.active_company.financial_years.filter(
-        o => o.id != this.user.active_financial_year.id
+        (o) => o.id != this.user.active_financial_year.id
       );
-    }
+    },
+  },
+  mounted() {
+    this.getFinancialYears((data) => (this.financialYears = data));
   },
   methods: {
     close() {
@@ -58,12 +63,12 @@ export default {
         url: this.endpoint("companies/closeFinancialYear"),
         method: "post",
         data: {
-          target_financial_year: this.targetFinancialYear.id
+          target_financial_year: this.targetFinancialYear.id,
         },
-        success: data => {
+        success: (data) => {
           this.successNotify();
           this.$store.commit("setUser", data);
-        }
+        },
       });
     },
     move() {
@@ -71,24 +76,24 @@ export default {
         url: this.endpoint("companies/moveFinancialYear"),
         method: "post",
         data: {
-          target_financial_year: this.targetFinancialYear.id
+          target_financial_year: this.targetFinancialYear.id,
         },
-        success: data => {
+        success: (data) => {
           this.successNotify();
           this.$store.commit("setUser", data);
-        }
+        },
       });
     },
     cancelClosing() {
       this.request({
         url: this.endpoint("companies/cancelFinancialYearClosing"),
         method: "post",
-        success: data => {
+        success: (data) => {
           this.successNotify();
           this.$store.commit("setUser", data);
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
