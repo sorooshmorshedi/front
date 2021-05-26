@@ -209,6 +209,7 @@ export default {
           value: "sanad.code",
           sortable: this.sortable,
           filterable: this.filterable,
+          showRangeFilter: true
         },
         {
           text: "شرح",
