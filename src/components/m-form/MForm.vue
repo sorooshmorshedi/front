@@ -13,13 +13,22 @@
               href="#/"
               outlined
               class="teal--text mt-1 mt-md-0"
-            >جدید</v-btn>
+              icon
+              title="جدید"
+            >
+              <v-icon>fa-eraser</v-icon>
+            </v-btn>
             <v-btn
               small
               v-if="showListBtn"
               class="light-blue white--text mr-1 mt-1 mt-md-0"
               :to="listRoute"
-            >لیست</v-btn>
+              icon
+              outlined
+              title="لیست"
+            >
+              <v-icon>fa-th-list</v-icon>
+            </v-btn>
             <slot name="header-btns"></slot>
             <template v-if="hasExport">
               <span>
@@ -29,18 +38,30 @@
                   :href="printUrl"
                   target="_blank"
                   rel="noopener noreferrer"
-                >چاپ</v-btn>
+                  title="چاپ"
+                  icon
+                >
+                  <v-icon>fa-print</v-icon>
+                </v-btn>
                 <v-btn
                   small
                   class="export-btn mr-1 mt-1 mt-md-0"
                   :href="pdfUrl"
                   rel="noopener noreferrer"
-                >PDF</v-btn>
+                  title="PDF"
+                  icon
+                >
+                  <v-icon>fa-file-pdf</v-icon>
+                </v-btn>
                 <v-btn
                   small
                   class="export-btn mr-1 mt-1 mt-md-0"
                   @click="downloadUrl(excelUrl)"
-                >اکسل</v-btn>
+                  title="اکسل"
+                  icon
+                >
+                  <v-icon>fa-table</v-icon>
+                </v-btn>
               </span>
             </template>
           </div>

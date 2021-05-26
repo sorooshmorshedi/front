@@ -25,7 +25,10 @@
         small
         @click="copySanadToNewSanad"
         class="teal white--text mr-1 mt-1 mt-md-0"
-      >کپی سند به سند جدید</v-btn>
+        title="کپی سند به سند جدید"
+        icon
+        outlined
+      ><v-icon>fa-clone</v-icon></v-btn>
     </template>
 
     <template>
