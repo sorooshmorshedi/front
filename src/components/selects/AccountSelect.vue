@@ -327,7 +327,7 @@ export default {
     this.getAccounts(false, () => this.setItem());
     this.getFloatAccounts(false, () => this.setItem());
     this.getFloatAccountGroups(false, () => this.setItem());
-    this.getPaths();
+    this.visitorId && this.getPaths();
 
     this.setItem();
   },
@@ -416,6 +416,9 @@ export default {
     localCostCenter() {
       this.$emit("update:costCenter", this.localCostCenter);
       this.emitChange();
+    },
+    visitorId() {
+      this.visitorId && this.getPaths();
     },
   },
 };
