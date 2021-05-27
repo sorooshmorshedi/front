@@ -60,7 +60,7 @@
                   title="اکسل"
                   icon
                 >
-                  <v-icon>fa-table</v-icon>
+                  <v-icon>fa-file-excel</v-icon>
                 </v-btn>
               </span>
             </template>
