@@ -19,7 +19,11 @@
         v-if="relatedForm"
         class="light-blue white--text mr-1 mt-1 mt-md-0"
         :to="relatedForm.to"
-      >{{ relatedForm.title }}</v-btn>
+        rounded
+      >
+      <v-icon class="ml-1">fa-external-link-square-alt</v-icon>
+      {{ relatedForm.title }}
+      </v-btn>
 
       <v-btn
         small
@@ -28,7 +32,9 @@
         title="کپی سند به سند جدید"
         icon
         outlined
-      ><v-icon>fa-clone</v-icon></v-btn>
+      >
+        <v-icon>fa-clone</v-icon>
+      </v-btn>
     </template>
 
     <template>
@@ -144,6 +150,25 @@
               >
                 <v-icon>delete</v-icon>
               </v-btn>
+            </template>
+
+            <template #body.append="{ headers }">
+              <tr class="grey lighten-3 text-white" key="last-row">
+                <td colspan="2">
+                  <span
+                    v-if="bedSum != besSum"
+                  >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}</span>
+                </td>
+                <td class="text-left">مجموع:</td>
+                <td class>{{ bedSum | toMoney }}</td>
+                <td class="d-print-none"></td>
+                <td class>{{ besSum | toMoney }}</td>
+                <td class="d-print-none">
+                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
+                    <v-icon>delete_sweep</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
             </template>
           </m-datatable>
         </v-col>
