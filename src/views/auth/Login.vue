@@ -1,6 +1,10 @@
 <template>
   <v-row class="mt-md-8">
-    <v-col cols="12" md="4" class="d-flex flex-column justify-center align-right pr-8">
+    <v-col
+      cols="12"
+      md="4"
+      class="d-flex order-1 order-md-0 flex-row flex-md-column justify-space-around justify-md-center align-right pr-8"
+    >
       <v-btn
         target="_blank"
         href="https://www.instagram.com/sobhan.accounting/"
@@ -9,7 +13,13 @@
       >
         <v-icon>fab fa-instagram</v-icon>
       </v-btn>
-      <v-btn target="_blank" href="https://wa.me/989917484755" fab color="light-green white--text" class="mt-3">
+      <v-btn
+        target="_blank"
+        href="https://wa.me/989917484755"
+        fab
+        color="light-green white--text"
+        class="mt-md-3"
+      >
         <v-icon>fab fa-whatsapp</v-icon>
       </v-btn>
       <v-btn
@@ -17,25 +27,33 @@
         href="http://sobhan.net/"
         fab
         color="light-blue white--text"
-        class="mt-3"
+        class="mt-md-3"
       >
         <v-icon>fab fa-edge-legacy</v-icon>
       </v-btn>
-      <v-btn
-        target="_blank"
-        href="tel:987191002520"
-        fab
-        color="orange white--text"
-        class="mt-3"
-      >
-        <v-icon>fa-phone</v-icon>
-      </v-btn>
+
+      <v-tooltip left>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            :target="(isXs || isSm)?'_blank':null"
+            :href="(isXs || isSm)?'tel:07191002520':null"
+            fab
+            color="orange white--text"
+            class="mt-md-3"
+            v-bind="!(isXs || isSm)?attrs:{}"
+            v-on="!(isXs || isSm)?on:{}"
+          >
+            <v-icon>fa-phone</v-icon>
+          </v-btn>
+        </template>
+        <span>07191002520</span>
+      </v-tooltip>
     </v-col>
-    <v-col cols="12" sm="12" md="4">
+    <v-col cols="12" md="4" class="pt-0">
       <v-card class="elevation-3">
         <v-img
           class="white--text align-end"
-          height="200px"
+          :height="isXs?'150px':'200px'"
           contain
           src="/img/SobhanAccountingLogo.png"
         ></v-img>
@@ -69,11 +87,11 @@
           </div>
         </v-card-text>
 
-        <v-card-actions class="pb-3 flex-column flex-md-row">
-          <v-btn text :to="{name: 'ForgetPassword'}">رمز عبور خود را فراموش کرده اید؟</v-btn>
+        <v-card-actions class="pb-3 flex-row flex-md-row">
+          <v-btn class text :to="{name: 'ForgetPassword'}">رمز عبور خود را فراموش کرده اید؟</v-btn>
           <v-spacer></v-spacer>
           <v-btn :to="{name: 'Register'}" outlined class="blue--text mr-2">ثبت نام</v-btn>
-          <v-btn @click="login" class="blue white--text mr-2 w-100px">ورود</v-btn>
+          <v-btn @click="login" class="blue white--text mr-2" :class="{'w-100px': !isXs}">ورود</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
