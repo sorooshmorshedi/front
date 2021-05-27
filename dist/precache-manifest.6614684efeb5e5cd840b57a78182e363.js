@@ -284,7 +284,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/fonts/fa-solid-900.56df75b6.woff"
   },
   {
-    "revision": "e0368223b39cea56e9f47b7aae2bf8ac",
+    "revision": "89d0791bf41ae24f99dadc8c74808d8a",
     "url": "/img/SobhanAccountingLogo.png"
   },
   {
