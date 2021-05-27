@@ -54,7 +54,7 @@
         </v-btn>
         <v-btn
           v-if="hasPerm('create', 'receiveTransaction') && hasModule('transactions')"
-          class="blue white--text  app-bar-btn"
+          class="blue white--text app-bar-btn"
           :to="{ name: 'TransactionForm', params: { type: 'receive' } }"
           @click="routeClick('TransactionForm')"
           icon
@@ -64,7 +64,7 @@
         </v-btn>
         <v-btn
           v-if="hasPerm('create', 'paymentTransaction') && hasModule('transactions')"
-          class="blue white--text  app-bar-btn"
+          class="blue white--text app-bar-btn"
           :to="{ name: 'TransactionForm', params: { type: 'payment' } }"
           @click="routeClick('TransactionForm')"
           icon
@@ -74,7 +74,7 @@
         </v-btn>
         <v-btn
           v-if="hasPerm('create', 'saleFactor') && hasModule('factors')"
-          class="blue white--text  app-bar-btn"
+          class="blue white--text app-bar-btn"
           :to="{name: 'FactorForm', params: {isPreFactor: false, type: 'sale' } }"
           @click="routeClick('FactorForm')"
           icon
@@ -84,7 +84,7 @@
         </v-btn>
         <v-btn
           v-if="hasPerm('create', 'buyFactor') && hasModule('factors')"
-          class="blue white--text  app-bar-btn"
+          class="blue white--text app-bar-btn"
           :to="{name: 'FactorForm', params: {isPreFactor: false, type: 'buy' } }"
           @click="routeClick('FactorForm')"
           icon
@@ -94,7 +94,7 @@
         </v-btn>
         <v-btn
           v-if="hasPerm('get', 'sanadItemsReport')"
-          class="blue white--text  app-bar-btn"
+          class="blue white--text app-bar-btn"
           :to="{name: 'LedgerReport', params: { level: 'level3' }}"
           icon
           title="گردش حساب"
@@ -103,7 +103,7 @@
         </v-btn>
         <v-btn
           v-if="hasPerm('get', 'accountBalanceReport')"
-          class="blue white--text  app-bar-btn"
+          class="blue white--text app-bar-btn"
           :to="{name: 'AccountsBalanceReport' }"
           icon
           title="تراز حساب ها"
@@ -120,13 +120,30 @@
           <v-icon>$accountIcon</v-icon>
         </v-btn>
         <v-btn
+          class="blue white--text app-bar-btn"
+          :to="{name: 'Accounts', params: {level: 3, accountType: 'p'}, query: {showForm: true}}"
+          title="تعریف حساب اشخاص"
+          icon
+        >
+          <v-icon>fa-users</v-icon>
+        </v-btn>
+        <v-btn
           v-if="hasPerm('get', 'account')"
-          class="blue white--text  app-bar-btn"
+          class="blue white--text app-bar-btn"
           :to="{name: 'AccountsTree' }"
           title="نمودار درختی"
           icon
         >
           <v-icon>$accountsTreeIcon</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="hasPerm('get', 'wareInventoryReport')"
+          class="blue white--text app-bar-btn"
+          :to="{name: 'DetailedWareInventoryReport' }"
+          title="کاردکس کالا"
+          icon
+        >
+          <v-icon>fa-boxes</v-icon>
         </v-btn>
 
         <v-spacer></v-spacer>
