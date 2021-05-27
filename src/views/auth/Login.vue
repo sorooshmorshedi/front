@@ -1,7 +1,38 @@
 <template>
-  <v-row class="d-flex justify-center mt-md-8">
+  <v-row class="mt-md-8">
+    <v-col cols="12" md="4" class="d-flex flex-column justify-center align-right pr-8">
+      <v-btn
+        target="_blank"
+        href="https://www.instagram.com/sobhan.accounting/"
+        fab
+        color="red white--text"
+      >
+        <v-icon>fab fa-instagram</v-icon>
+      </v-btn>
+      <v-btn target="_blank" href="https://wa.me/989917484755" fab color="light-green white--text" class="mt-3">
+        <v-icon>fab fa-whatsapp</v-icon>
+      </v-btn>
+      <v-btn
+        target="_blank"
+        href="http://sobhan.net/"
+        fab
+        color="light-blue white--text"
+        class="mt-3"
+      >
+        <v-icon>fab fa-edge-legacy</v-icon>
+      </v-btn>
+      <v-btn
+        target="_blank"
+        href="tel:987191002520"
+        fab
+        color="orange white--text"
+        class="mt-3"
+      >
+        <v-icon>fa-phone</v-icon>
+      </v-btn>
+    </v-col>
     <v-col cols="12" sm="12" md="4">
-      <v-card>
+      <v-card class="elevation-3">
         <v-img
           class="white--text align-end"
           height="200px"
