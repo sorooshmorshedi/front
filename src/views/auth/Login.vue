@@ -46,7 +46,7 @@
             <v-icon>fa-phone</v-icon>
           </v-btn>
         </template>
-        <span>07191002520</span>
+        <span dir="ltr">071 - 9100 25 20</span>
       </v-tooltip>
     </v-col>
     <v-col cols="12" md="4" class="pt-0">

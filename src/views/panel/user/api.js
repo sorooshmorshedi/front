@@ -5,8 +5,8 @@ export default {
   methods: {
     getUsers(reload, callback) {
       this.fillStore({
-        url: 'users/list',
-        storeKey: 'users',
+        url: 'companies/companyUsers/',
+        storeKey: 'companyUsers',
         reload: reload,
         callback: callback
       })
@@ -14,7 +14,10 @@ export default {
   },
   computed: {
     ...mapState([
-      'users',
+      'companyUsers',
     ]),
+    users() {
+      return this.companyUsers.map(o => o.user);
+    },
   }
 }

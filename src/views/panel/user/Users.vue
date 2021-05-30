@@ -2,7 +2,7 @@
   <div class="rtl">
     <m-form
       :title="title"
-      :items="users"
+      :items="companyUsers"
       :cols="cols"
       :isEditing.sync="isEditing"
       :canDelete="canDelete"
@@ -28,7 +28,7 @@
             <v-text-field
               class="text-field-ltr"
               label=" * کد ملی"
-              v-model="item.username"
+              v-model="item.user.username"
               :disabled="true"
             />
           </v-col>
@@ -39,16 +39,16 @@
                 class="text-field-ltr"
                 type="number"
                 label="شماره موبایل"
-                v-model="item.phone"
+                v-model="item.user.phone"
                 required
                 :disabled="true"
               />
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="نام" v-model="item.first_name" :disabled="true" />
+              <v-text-field label="نام" v-model="item.user.first_name" :disabled="true" />
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="نام خانوادگی" v-model="item.last_name" :disabled="true" />
+              <v-text-field label="نام خانوادگی" v-model="item.user.last_name" :disabled="true" />
             </v-col>
           </template>
 
@@ -78,7 +78,7 @@
             ></v-autocomplete>
           </v-col>
           <v-col cols="12">
-            <v-switch label="فعال" v-model="item.is_active" :disabled="!isEditing"></v-switch>
+            <v-switch label="فعال" v-model="item.user.is_active" :disabled="!isEditing"></v-switch>
           </v-col>
         </v-row>
       </template>
@@ -95,28 +95,23 @@ export default {
   mixins: [MFormMixin, getRolesApi, UserApi, CompanyMixin],
   data() {
     return {
-      baseUrl: "users/list",
+      baseUrl: "companies/companyUsers",
+      appendSlash: true,
       roles: [],
       financialYears: [],
       permissionBasename: "user",
       cols: [
         {
           text: "نام",
-          value: "first_name",
-          type: "text",
-          filters: ["first_name"],
+          value: "user.first_name",
         },
         {
           text: "نام خانوادگی",
-          value: "last_name",
-          type: "text",
-          filters: ["last_name"],
+          value: "user.last_name",
         },
         {
           text: "نام کاربری",
-          value: "username",
-          type: "text",
-          filters: ["username"],
+          value: "user.username",
         },
       ],
     };
@@ -125,15 +120,15 @@ export default {
     title() {
       return "کاربران";
     },
-    createUrl() {
-      return "users/create";
-    },
-    updateUrl() {
-      return this.item.id && `users/update/${this.item.id}`;
-    },
-    deleteUrl() {
-      return this.item.id && `users/delete/${this.item.id}`;
-    },
+    // createUrl() {
+    //   return "users/create";
+    // },
+    // updateUrl() {
+    //   return this.item.id && `users/update/${this.item.id}`;
+    // },
+    // deleteUrl() {
+    //   return this.item.id && `users/delete/${this.item.id}`;
+    // },
   },
   methods: {
     getItemTemplate() {
@@ -142,6 +137,7 @@ export default {
         roles: [],
         financialYears: [],
         is_active: true,
+        user: {}
       };
     },
     getData() {
@@ -153,9 +149,9 @@ export default {
       this.roles = data;
     },
     getSerialized() {
-      let user = { ...this.item };
-      user.roles = this.item.roles.map((o) => o.id);
-      return user;
+      let item = { ...this.item };
+      item.roles = this.item.roles.map((o) => o.id);
+      return item;
     },
   },
 };

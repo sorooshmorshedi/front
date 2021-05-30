@@ -20,7 +20,7 @@ export default new Vuex.Store({
       text: '',
       color: ''
     },
-    users: [],
+    companyUsers: [],
     options: null,
     cities: [],
     accounts: [],
@@ -68,8 +68,8 @@ export default new Vuex.Store({
     setUser(state, user) {
       state.user = user;
     },
-    setUsers(state, users) {
-      state.users = users;
+    setCompanyUsers(state, companyUsers) {
+      state.companyUsers = companyUsers;
     },
     setCities(state, data) {
       state.cities = data;
