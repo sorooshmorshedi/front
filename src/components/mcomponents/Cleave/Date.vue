@@ -1,33 +1,45 @@
 <template>
-  <v-text-field
-    v-model="localValue"
-    @input="change"
-    dir="ltr"
-    :label="label"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    append-icon="fa-calendar-day"
-    @click:append="setToday"
-    clearable
-    style="min-width: 140px"
-    v-bind="$attrs"
-    @click:clear="isDirty = true"
-  />
+  <span>
+    <v-text-field
+      v-model="localValue"
+      @input="change"
+      dir="ltr"
+      :label="label"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      append-icon="fa-calendar-day"
+      @click:append="$refs.datepicker.visible = true"
+      clearable
+      style="min-width: 140px"
+      v-bind="$attrs"
+      @click:clear="isDirty = true"
+      :id="id"
+    />
+    <vue-persian-datetime-picker
+      v-model="localValue"
+      @input="change"
+      ref="datepicker"
+      :element="id"
+      :editable="true"
+      format="jYYYY-jMM-jDD"
+    />
+  </span>
 </template>
 
 <script>
-import Cleave from "cleave.js";
-import moment from "moment-jalaali";
 import IMask from "imask";
+import VuePersianDatetimePicker from "vue-persian-datetime-picker";
 
 export default {
   name: "Date",
-  props: ["value", "id", "default", "disabled", "placeholder", "label"],
+  props: ["value", "default", "disabled", "placeholder", "label"],
+  components: { VuePersianDatetimePicker },
   data() {
     return {
       localValue: null,
       mask: null,
       isDirty: false,
+      id: "date" + (Math.random() * 100000).toFixed(0),
     };
   },
   watch: {
@@ -82,7 +94,7 @@ export default {
     },
     setToday() {
       this.isDirty = true;
-      this.localValue = this.now.format("jYYYY-jMM-jDD");
+      this.localValue = this.serverNow.format("jYYYY-jMM-jDD");
       this.change();
       this.$emit("input", this.mask.value);
     },

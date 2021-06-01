@@ -30,7 +30,7 @@ Vue.mixin({
       company: state => state.user ? state.user.active_company || null : null,
       systemOptions: state => state.options,
       OGR: state => state.OGR,
-      now: state => state.now,
+      serverNow: state => state.serverNow,
       isPrinting: state => state.isPrinting
     }),
     isDev() {

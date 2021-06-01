@@ -23,8 +23,8 @@ export default {
   },
   methods: {
     updateTime() {
-      this.systemBarDate = this.now.format("jYYYY/jMM/jDD");
-      this.systemBarTime = this.now.format("HH:mm");
+      this.systemBarDate = this.serverNow.format("jYYYY/jMM/jDD");
+      this.systemBarTime = this.serverNow.format("HH:mm");
     }
   }
 };

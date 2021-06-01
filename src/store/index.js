@@ -60,7 +60,7 @@ export default new Vuex.Store({
       state.snackbar = snackbar;
     },
     setTime(state, time) {
-      state.now = time;
+      state.serverNow = time;
     },
     setOptions(state, data) {
       state.options = data;

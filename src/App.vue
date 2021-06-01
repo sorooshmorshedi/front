@@ -281,7 +281,7 @@ export default {
           this.isAppReady = true;
 
           this.timeInterval = window.setInterval(() => {
-            this.$store.commit("setTime", this.now.add(1, "second"));
+            this.$store.commit("setTime", this.serverNow.add(1, "second"));
           }, 1000);
         },
       });

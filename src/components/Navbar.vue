@@ -368,7 +368,7 @@ export default {
                     },
                     query: {
                       status__in: "notPassed,bounced",
-                      due__lt: this.now ? this.now.format("jYYYY-jMM-jDD") : "",
+                      due__lt: this.serverNow ? this.serverNow.format("jYYYY-jMM-jDD") : "",
                     },
                   },
                   title: "لیست چک های دریافتی پاس نشده و برگشتی سررسید گذشته",
@@ -437,7 +437,7 @@ export default {
                     },
                     query: {
                       status__in: "notPassed,bounced",
-                      due__lt: this.now ? this.now.format("jYYYY-jMM-jDD") : "",
+                      due__lt: this.serverNow ? this.serverNow.format("jYYYY-jMM-jDD") : "",
                     },
                   },
                   title: "لیست چک های پرداختی پاس نشده و برگشتی سررسید گذشته",
