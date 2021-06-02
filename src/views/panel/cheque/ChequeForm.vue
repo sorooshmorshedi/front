@@ -9,6 +9,7 @@
       :showSubmitAndClearForm="!modalMode"
       :canDelete="canDelete"
       :canSubmit="canSubmit"
+      :canEdit="canEdit"
       :isEditing.sync="isEditing"
       @clearForm="clearForm"
       @goToForm="getItemByPosition"
@@ -27,7 +28,12 @@
         <v-row>
           <template v-if="isPaidCheque">
             <v-col cols="12" md="3">
-              <account-select itemsType="banks" label="* بانک" v-model="bank" />
+              <account-select
+                itemsType="banks"
+                label="* بانک"
+                v-model="bank"
+                :disabled="!isEditing"
+              />
             </v-col>
             <v-col cols="12" md="3">
               <v-autocomplete
@@ -213,6 +219,9 @@ export default {
     },
     canSubmit() {
       return this.hasPerm("submit", this.permissionBasename, this.item);
+    },
+    canEdit() {
+      return this.item.status != 'revoked';
     },
     isPaidCheque() {
       return this.receivedOrPaid == "p";

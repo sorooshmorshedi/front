@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0c0634"],{4222:function(n,e,t){"use strict";t.r(e);var a=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("v-img",{attrs:{src:"/img/icons/balance-report.png"}})},c=[],r=t("2877"),s=t("6544"),l=t.n(s),u=t("adda"),i={},o=Object(r["a"])(i,a,c,!1,null,null,null);e["default"]=o.exports;l()(o,{VImg:u["a"]})}}]);
+//# sourceMappingURL=chunk-2d0c0634.a34882e2.js.map

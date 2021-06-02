@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0abca9"],{"177d":function(n,e,t){"use strict";t.r(e);var a=function(){var n=this,e=n.$createElement,t=n._self._c||e;return t("v-img",{attrs:{src:"/img/icons/ledger-report.png"}})},r=[],c=t("2877"),s=t("6544"),l=t.n(s),u=t("adda"),i={},o=Object(c["a"])(i,a,r,!1,null,null,null);e["default"]=o.exports;l()(o,{VImg:u["a"]})}}]);
+//# sourceMappingURL=chunk-2d0abca9.85ef9915.js.map

@@ -89,6 +89,11 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
+          v-if="canSubmitCheque && isPaidCheque && cheque.status == 'blank'"
+          class="red white--text"
+          @click="showRevokeDialog = true"
+        >باطل کردن</v-btn>
+        <v-btn
           v-if="canSubmitCheque"
           class="green white--text w-100px"
           :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
@@ -157,7 +162,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
-          @click="showChangeChequeStatusDialog()"
+          @click="showChangeChequeStatusDialog"
           :disabled="!canChangeStatus"
           class="blue white--text mr-1"
         >تغییر وضعیت چک</v-btn>
@@ -169,6 +174,27 @@
         ref="changeChequeStatusComponent"
       />
     </v-card>
+
+    <v-dialog v-model="showRevokeDialog" max-width="300px" transition="dialog-transition">
+      <v-card>
+        <v-card-title>باطل کردن چک</v-card-title>
+
+        <v-card-text>
+          <v-row>
+            <v-col cols="12">
+              <date label=" * تاریخ" v-model="revokeData.date" :default="true" />
+            </v-col>
+            <v-col cols="12">
+              <v-textarea label="* توضیحات" v-model="revokeData.explanation" />
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="revokeCheque" class="red white--text w-100px">ابطال</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -183,12 +209,14 @@ export default {
   mixins: [getChequeApiMixin],
   props: {
     id: {
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      cheque: null
+      cheque: null,
+      showRevokeDialog: false,
+      revokeData: {},
     };
   },
   computed: {
@@ -203,7 +231,7 @@ export default {
       return this.statusChanges.length == 0 && !this.financialYear.is_closed;
     },
     canEditCheque() {
-      return this.statusChanges.length <= 1 && !this.financialYear.is_closed;
+      return this.statusChanges.length <= 1 && !this.financialYear.is_closed && this.cheque.status != 'revoked';
     },
     canChangeStatus() {
       if (this.financialYear.is_closed) return false;
@@ -212,12 +240,27 @@ export default {
       if (["passed", "cashed", "revoked", "transferred", "blank"].includes(s))
         return false;
       return true;
-    }
+    },
   },
   created() {
     this.getCheque(this.id);
   },
   methods: {
+    revokeCheque() {
+      this.request({
+        url: this.endpoint(`cheques/changeStatus/revokeBlankPaidCheque/`),
+        method: "post",
+        data: {
+          ...this.revokeData,
+          cheque: this.id,
+        },
+        success: (data) => {
+          this.getCheque(this.id);
+          this.successNotify();
+          this.showRevokeDialog = false
+        },
+      });
+    },
     showChangeChequeStatusDialog() {
       this.$refs.changeChequeStatusComponent.dialog = true;
     },
@@ -230,21 +273,21 @@ export default {
       this.request({
         url: this.endpoint(`cheques/statusChange/${sc.id}/`),
         method: "delete",
-        success: data => {
+        success: (data) => {
           this.getCheque(this.id);
           this.successNotify();
-        }
+        },
       });
     },
     setItem(cheque) {
       this.$router.push({
         name: "ChequeDetail",
         params: {
-          id: cheque.id
-        }
+          id: cheque.id,
+        },
       });
       this.cheque = cheque;
-    }
+    },
   },
   filters: {
     chequeStatuses(val) {
@@ -266,8 +309,8 @@ export default {
         case "transferred":
           return "انتقالی";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
