@@ -21,8 +21,8 @@
         :to="relatedForm.to"
         rounded
       >
-      <v-icon class="ml-1">fa-external-link-square-alt</v-icon>
-      {{ relatedForm.title }}
+        <v-icon class="ml-1">fa-external-link-square-alt</v-icon>
+        {{ relatedForm.title }}
       </v-btn>
 
       <v-btn
@@ -56,21 +56,30 @@
                 :disabled="!isEditing"
               />
             </v-col>
+            <v-col cols="12" md="3">
+              <v-select
+                :disabled="!isEditing"
+                :items="sanadTypes"
+                v-model="item.type"
+                label="نوع سند"
+                :return-object="false"
+              />
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-select
+                v-if="item.created_by"
+                disabled
+                :items="[{text: 'دستی', value: false}, {text: 'سیستمی', value: true}]"
+                v-model="item.is_auto_created"
+                label="نوع ثبت"
+              />
+            </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 v-if="item.created_by"
                 label="کاربر"
                 disabled
                 v-model="item.created_by.name"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-select
-                v-if="item.created_by"
-                disabled
-                :items="[{text: 'دستی', value: false}, {text: 'سیستمی', value: true}]"
-                v-model="item.is_auto_created"
-                label="نوع سند"
               />
             </v-col>
           </v-row>
@@ -294,6 +303,20 @@ export default {
       hasIdProp: true,
       rowKey: "account",
       filters: {},
+      sanadTypes: [
+        {
+          text: "افتتاحیه",
+          value: "o",
+        },
+        {
+          text: "اختتامیه",
+          value: "c",
+        },
+        {
+          text: "عادی",
+          value: "n",
+        },
+      ],
       headers: [
         {
           text: "* کد و نام حساب",
@@ -418,7 +441,7 @@ export default {
   methods: {
     getItemTemplate() {
       return {
-        type: "temporary",
+        type: "n",
       };
     },
     getRowTemplate() {
