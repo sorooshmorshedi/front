@@ -46,18 +46,13 @@ export default {
       financialYears: [],
     };
   },
-  computed: {
-    financialYears() {
-      if (!this.user || !this.user.active_company) return [];
-      return this.user.active_company.financial_years.filter(
-        (o) => o.id != this.user.active_financial_year.id
-      );
-    },
-  },
   mounted() {
-    this.getFinancialYears((data) => (this.financialYears = data));
+    this.getData();
   },
   methods: {
+    getData() {
+      this.getFinancialYears((data) => (this.financialYears = data));
+    },
     close() {
       this.request({
         url: this.endpoint("companies/closeFinancialYear"),
@@ -68,6 +63,7 @@ export default {
         success: (data) => {
           this.successNotify();
           this.$store.commit("setUser", data);
+          this.getData();
         },
       });
     },
@@ -91,6 +87,7 @@ export default {
         success: (data) => {
           this.successNotify();
           this.$store.commit("setUser", data);
+          this.getData();
         },
       });
     },
