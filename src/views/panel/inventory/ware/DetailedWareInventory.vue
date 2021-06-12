@@ -26,14 +26,14 @@
             :headers="headers"
             :filters.sync="filters"
           >
-            <template #item.factor.code="{ item }">
+            <template #item.code="{ item }">
               <v-btn
                 v-if="item.factor.code"
                 text
                 color="blue"
                 icon
                 rounded
-                :to="{name: 'FactorForm', params: {id: item.factor.id, type: item.factor.type, isPreFactor: item.factor.is_pre_factor}}"
+                :to="getDetailLink(item)"
               >{{item.factor.code}}</v-btn>
             </template>
           </m-datatable>
@@ -117,8 +117,8 @@ export default {
           ],
         },
         {
-          text: "شماره فاکتور",
-          value: "factor.code",
+          text: "شماره",
+          value: "code",
           type: "number",
           sortable: false,
           filterable: false,
@@ -217,6 +217,34 @@ export default {
   methods: {
     setWarehouse(ware) {
       if (ware) this.filters.warehouse = ware.warehouse.id;
+    },
+    getDetailLink(item) {
+      let factor = item.factor
+      let type = factor.type;
+      if (["it", "ot"].includes(type)) {
+        return {
+          name: "TransferForm",
+          params: {
+            id: factor.input_transfer[0] || factor.output_transfer[0],
+          },
+        };
+      } else if (["ia", "oa"].includes(type)) {
+        return {
+          name: "AdjustmentForm",
+          params: {
+            id: factor.adjustment[0],
+          },
+        };
+      }
+
+      return {
+        name: "FactorForm",
+        params: {
+          id: factor.id,
+          type: factor.type,
+          isPreFactor: factor.is_pre_factor,
+        },
+      };
     },
   },
   watch: {

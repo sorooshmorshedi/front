@@ -143,7 +143,7 @@
           title="کاردکس کالا"
           icon
         >
-          <v-icon>fa-boxes</v-icon>
+          <v-icon>fa-pallet</v-icon>
         </v-btn>
 
         <v-spacer></v-spacer>
