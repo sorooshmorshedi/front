@@ -200,7 +200,7 @@
 
         <!-- date -->
         <template v-else-if="isDate(header)">
-          <span class="nowrap">{{ getItemValue(item, header.value) }}</span>
+          <span class="nowrap" dir="ltr">{{ getItemValue(item, header.value) }}</span>
         </template>
 
         <!-- other-->
@@ -347,7 +347,7 @@ export default {
           text: "#",
           value: "rowNumber",
           width: "20px",
-          align: 'center',
+          align: "center",
           sortable: false,
           filterable: false,
         },

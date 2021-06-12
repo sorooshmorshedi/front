@@ -268,7 +268,8 @@ export default {
 
     listeners() {
       let listeners = this.$listeners;
-      listeners["click:row"] = this.rowClick;
+      if (Object.keys(listeners).includes("click:row"))
+        listeners["click:row"] = this.rowClick;
       return listeners;
     },
     hasFinancialYear() {
