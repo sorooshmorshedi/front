@@ -74,8 +74,8 @@ export default {
           type: this.type == "p" ? "paid" : "received",
         },
         query: {
-          status__in: "notPassed",
-          due__lte: this.limit,
+          "filters.status__in": "notPassed",
+          "filters.ordering": "due",
         },
       };
     },
@@ -85,11 +85,12 @@ export default {
       url: this.endpoint("reports/lists/cheques"),
       method: "get",
       params: {
-        limit: 7,
+        limit: 3,
         offset: 0,
         status: "notPassed",
         received_or_paid: this.type,
         due__lte: this.limit,
+        ordering: "due",
       },
       success: (data) => {
         this.items = data.results;

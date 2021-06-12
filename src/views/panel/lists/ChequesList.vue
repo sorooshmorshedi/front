@@ -16,8 +16,10 @@
 </template>
 
 <script>
+import QueryBinding from "@/components/m-query-binding";
 export default {
   name: "ChequesList",
+  mixins: [QueryBinding],
   props: {
     type: {},
   },
@@ -30,9 +32,9 @@ export default {
   computed: {
     title() {
       switch (this.type) {
-        case "r":
+        case "received":
           return "چک های دریافتنی";
-        case "p":
+        case "paid":
           return "چک های پرداختنی";
       }
     },
@@ -119,7 +121,7 @@ export default {
     },
   },
   created() {
-    this.filters.received_or_paid = this.type;
+    this.filters.received_or_paid = this.type == "paid" ? "p" : "r";
   },
   watch: {
     $route() {
