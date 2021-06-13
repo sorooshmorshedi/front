@@ -7,6 +7,7 @@ import Home from '@/views/panel/Home.vue';
 import Companies from '@/views/panel/company/Companies.vue';
 import FinancialYears from '@/views/panel/company/FinancialYears.vue';
 
+import Notifications from '@/views/panel/user/Notifications';
 import Users from '@/views/panel/user/Users';
 import UserInvitations from '@/views/panel/user/UserInvitations';
 import Roles from '@/views/panel/role/Roles';
@@ -76,6 +77,11 @@ export default [{
       name: 'Home',
       path: 'home',
       component: Home,
+    },
+    {
+      name: 'Notifications',
+      path: 'notifications/:id?',
+      component: Notifications,
     },
     {
       name: 'Users',

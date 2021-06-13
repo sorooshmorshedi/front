@@ -148,9 +148,25 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn :to="{name:'Profile'}" depressed class="white mx-3">{{ user.name }}</v-btn>
+        <v-chip
+          :to="{name:'Notifications'}"
+          class="mr-1"
+          color="white"
+          :small="false"
+          title="اعلان ها"
+        >
+          <v-avatar
+            v-if="user.unread_notifications_count != 0"
+            x-small
+            left
+            class="blue white--text"
+          >{{ user.unread_notifications_count }}</v-avatar>
+          <v-icon>far fa-bell</v-icon>
+        </v-chip>
 
-        <span class="ml-3">
+        <v-btn :to="{name:'Profile'}" depressed class="white mr-2">{{ user.name }}</v-btn>
+
+        <span class="mx-3">
           <v-btn text icon color="white" class="rotate-180" @click="logout">
             <v-icon>logout</v-icon>
           </v-btn>
