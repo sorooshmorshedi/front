@@ -11,34 +11,52 @@
 
         <v-card-title class="d-block text-center">فراموشی رمز عبور</v-card-title>
 
-        <v-card-text class="text--primary">
-          <v-row class="mt-2">
+        <v-card-text class="text--primary mb-2">
+          <v-row>
             <v-col cols="12" md="12">
-              <v-text-field class="ltr" label="شماره موبایل" v-model="phone" :disabled="codeSent" />
-            </v-col>
-            <template v-if="codeSent">
-              <v-col cols="12" md="4">
-                <v-text-field class="ltr" label="کد دریافت شده" v-model="code" />
-              </v-col>
-              <v-col cols="12" md="8">
-                <v-text-field
-                  class="ltr"
-                  type="password"
-                  label="رمز عبور جدید"
-                  v-model="newPassword"
+              <v-form ref="phoneForm">
+                <m-phone-field
+                  label="شماره موبایل"
+                  v-model="phone"
+                  :disabled="codeSent"
+                  :rules="rules.required"
                 />
-              </v-col>
-            </template>
+              </v-form>
+            </v-col>
           </v-row>
+          <v-form ref="verifyForm">
+            <v-row>
+              <template v-if="codeSent">
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    class="text-field-ltr"
+                    label="کد دریافت شده"
+                    v-model="code"
+                    :rules="rules.required"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    class="text-field-ltr"
+                    type="password"
+                    label="رمز عبور جدید"
+                    v-model="newPassword"
+                    :rules="passwordRules"
+                    :hide-details="false"
+                  />
+                </v-col>
+              </template>
+            </v-row>
+          </v-form>
         </v-card-text>
 
         <v-card-actions class>
           <template v-if="!codeSent">
             <v-spacer></v-spacer>
-            <v-btn @click="sendVerificationCode" class="blue white--text w-100px">ارسال کد تایید</v-btn>
+            <v-btn @click="sendCode" class="blue white--text w-100px">ارسال کد تایید</v-btn>
           </template>
           <template v-else>
-            <v-btn @click="sendVerificationCode" text>ارسال دوباره کد</v-btn>
+            <v-btn @click="sendVerificationCode(phone)" text>ارسال دوباره کد</v-btn>
             <v-spacer></v-spacer>
             <v-btn @click="changePassword" class="green white--text">ثبت رمز عبور جدید</v-btn>
           </template>
@@ -50,10 +68,11 @@
 
 <script>
 import AuthMixin from "@/views/auth/mixin";
+import { MFormMixin } from "@/components/m-form";
 
 export default {
   name: "Login",
-  mixins: [AuthMixin],
+  mixins: [AuthMixin, MFormMixin],
   data() {
     return {
       phone: "",
@@ -64,21 +83,28 @@ export default {
   },
   created() {},
   methods: {
+    sendCode() {
+      if (this.$refs.phoneForm.validate()) {
+        this.sendVerificationCode(this.phone, () => (this.codeSent = true));
+      }
+    },
     changePassword() {
-      this.request({
-        url: this.endpoint("users/changePasswordByVerificationCode"),
-        method: "post",
-        data: {
-          phone: this.phone,
-          code: this.code,
-          new_password: this.newPassword,
-        },
-        token: false,
-        success: (data) => {
-          this.successNotify();
-          this.$router.push({ name: "Login" });
-        },
-      });
+      if (this.$refs.verifyForm.validate()) {
+        this.request({
+          url: this.endpoint("users/changePasswordByVerificationCode"),
+          method: "post",
+          data: {
+            phone: this.phone,
+            code: this.code,
+            new_password: this.newPassword,
+          },
+          token: false,
+          success: (data) => {
+            this.successNotify();
+            this.$router.push({ name: "Login" });
+          },
+        });
+      }
     },
   },
 };
