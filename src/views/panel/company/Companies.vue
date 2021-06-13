@@ -4,7 +4,7 @@
       title="شرکت"
       :items="items"
       :cols="cols"
-      :canSubmit="canSubmit"
+      :canSubmit="true"
       :canDelete="canDelete"
       :is-editing.sync="isEditing"
       :showListBtn="false"
