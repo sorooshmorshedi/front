@@ -61,6 +61,15 @@ Vue.mixin({
   },
   mounted() {},
   methods: {
+    tabEmit(eventName, data = null) {
+      let broadcastChannel = new BroadcastChannel(eventName)
+      broadcastChannel.postMessage(data)
+    },
+    tabOn(eventName, handler) {
+      let broadcastChannel = new BroadcastChannel(eventName)
+      broadcastChannel.onmessage = handler
+    },
+
     canGet(name) {
       let flag = this.$store.state.isGetting[name]
       if (!flag) {
