@@ -16,29 +16,19 @@
       ></m-datatable>
     </v-card-text>
 
-    <v-dialog
-      v-model="detailDialog"
-      max-width="600px"
-      transition="dialog-transition"
-    >
-      <v-card v-if="item">
-        <v-card-title class="grey lighten-3">
-          {{ item.title }}
-          <v-spacer></v-spacer>
-          <span dir="ltr" class="font-weight-light subtitle-1">{{ item.created_at }}</span>
-        </v-card-title>
-
-        <v-card-text class="py-3">
-          <p> <pre>{{ item.explanation }}</pre> </p>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <notification-dialog
+      :item="item"
+      :detailDialog.sync="detailDialog"
+      @statusChanged="$refs.datatable.getDataFromApi()"
+    />
   </v-card>
 </template>
 
 <script>
+import NotificationDialog from "./NotificationDialog.vue";
 export default {
   name: "Notifications",
+  components: { NotificationDialog },
   data() {
     return {
       filters: {},
@@ -76,31 +66,12 @@ export default {
   },
   methods: {
     openDetailDialog(item) {
-      this.changeStatus(item, "r");
       this.item = item;
       this.detailDialog = true;
     },
     getItemClass(item) {
       if (item.status_codename == "ur") return "grey lighten-3 clickable";
       return "white clickable";
-    },
-    changeStatus(item, status_codename) {
-      if (item.status_codename == status_codename) return;
-      this.request({
-        url: this.endpoint("users/notifications/changeStatus"),
-        method: "post",
-        loading: false,
-        data: {
-          id: item.id,
-          new_status: status_codename,
-        },
-        success: (data) => {
-          this.$refs.datatable.getDataFromApi();
-          let user = this.user
-          user.unread_notifications_count -= 1
-          this.$store.commit("setUser", user);
-        },
-      });
     },
   },
 };
@@ -109,9 +80,5 @@ export default {
 <style lang="scss">
 .clickable {
   cursor: pointer;
-}
-pre {
-  font-family: IRANSans !important;
-  font-weight: normal;
 }
 </style>
