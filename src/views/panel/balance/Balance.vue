@@ -7,7 +7,7 @@
         <v-col cols="12" md="12">
           <v-row>
             <v-col cols="12" md="3">
-              <v-select label="تعداد ستون ها" v-model="filters.cols_count" :items="[2, 4]"></v-select>
+              <v-select label="تعداد ستون ها" v-model="filters.cols_count" :items="[2, 4, 6, 8]"></v-select>
 
               <v-select
                 class="mt-3"
@@ -74,7 +74,9 @@
 
             <v-col cols="12" md="2">
               <date label="از تاریخ" v-model="filters.from_date" />
-              <date label="تا تاریخ" v-model="filters.to_date" class="mt-3" />
+              <div class="mt-3">
+                <date label="تا تاریخ" v-model="filters.to_date" />
+              </div>
             </v-col>
             <v-col cols="12" md="2">
               <v-text-field label="از شماره سند" type="number" v-model="filters.from_code" />
@@ -102,6 +104,13 @@
             show-expand
             :expanded.sync="items"
           >
+            <template
+              #item.bed_sum="{ item }"
+            >{{ item.bed_sum - (filters.cols_count == 8?item.opening_bed_sum:0) | toMoney }}</template>
+            <template
+              #item.bes_sum="{ item }"
+            >{{ item.bes_sum - (filters.cols_count == 8?item.opening_bes_sum:0) | toMoney }}</template>
+
             <template #item.data-table-expand></template>
 
             <template
@@ -158,12 +167,20 @@
               <tr class="text-center">
                 <td :colspan="2 + cols.cols.length"></td>
                 <td>جمع کل</td>
-                <td>{{ sum['bed'] | toMoney }}</td>
-                <td>{{ sum['bes'] | toMoney }}</td>
-                <template v-if="hiddenCols.length == 0">
-                  <td>{{ sum['bedRemain'] | toMoney }}</td>
-                  <td>{{ sum['besRemain'] | toMoney }}</td>
+                <template v-if="filters.cols_count > 6">
+                  <td>{{ sum['openingBed'] | toMoney }}</td>
+                  <td>{{ sum['openingBes'] | toMoney }}</td>
                 </template>
+                <template v-if="filters.cols_count > 4">
+                  <td>{{ sum['openingBed'] | toMoney }}</td>
+                  <td>{{ sum['previousBes'] | toMoney }}</td>
+                </template>
+                <template v-if="filters.cols_count > 2">
+                  <td>{{ sum['bed'] | toMoney }}</td>
+                  <td>{{ sum['bes'] | toMoney }}</td>
+                </template>
+                <td>{{ sum['bedRemain'] | toMoney }}</td>
+                <td>{{ sum['besRemain'] | toMoney }}</td>
               </tr>
             </template>
 
@@ -245,29 +262,62 @@ export default {
   computed: {
     sum() {
       let bed = 0,
-        bes = 0;
+        bes = 0,
+        openingBed = 0,
+        openingBes = 0,
+        previousBed = 0,
+        previousBes = 0;
       for (const account of this.items) {
         if (this.filters.level == null && account.level != undefined) {
           if (account.level == 0) {
             bed += +account.bed_sum;
             bes += +account.bes_sum;
+            previousBed += +account.previous_bed_sum;
+            previousBes += +account.previous_bes_sum;
+            openingBed += +account.opening_bed_sum;
+            openingBes += +account.opening_bes_sum;
           }
         } else {
           bed += +account.bed_sum;
           bes += +account.bes_sum;
+          previousBed += +account.previous_bed_sum;
+          previousBes += +account.previous_bes_sum;
+          openingBed += +account.opening_bed_sum;
+          openingBes += +account.opening_bes_sum;
         }
       }
 
       return {
-        bed: bed,
-        bes: bes,
+        bed,
+        bes,
         bedRemain: Math.max(bed - bes),
         besRemain: Math.max(bes - bed),
+        previousBed,
+        previousBes,
+        openingBed,
+        openingBes,
       };
     },
     hiddenCols() {
-      if (this.filters.cols_count == 4) return [];
-      return ["bed_sum", "bes_sum"];
+      if (this.filters.cols_count == 6)
+        return ["opening_bed_sum", "opening_bes_sum"];
+      if (this.filters.cols_count == 4)
+        return [
+          "opening_bed_sum",
+          "opening_bes_sum",
+          "previous_bed_sum",
+          "previous_bes_sum",
+        ];
+      if (this.filters.cols_count == 2)
+        return [
+          "bed_sum",
+          "bes_sum",
+          "opening_bed_sum",
+          "opening_bes_sum",
+          "previous_bed_sum",
+          "previous_bes_sum",
+        ];
+      return [];
     },
     headers() {
       let cols = [...this.cols.cols, ...datatableBaseCols.cols];

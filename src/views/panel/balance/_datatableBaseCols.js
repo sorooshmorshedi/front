@@ -1,5 +1,25 @@
 export default {
   cols: [{
+      text: "گردش بدهکار اول دوره",
+      value: "opening_bed_sum",
+      type: "numeric",
+    },
+    {
+      text: "گردش بستانکار اول دوره",
+      value: "opening_bes_sum",
+      type: "numeric",
+    },
+    {
+      text: "گردش بدهکار از قبل",
+      value: "previous_bed_sum",
+      type: "numeric",
+    },
+    {
+      text: "گردش بستانکار از قبل",
+      value: "previous_bes_sum",
+      type: "numeric",
+    },
+    {
       text: "گردش بدهکار",
       value: "bed_sum",
       type: "numeric",
