@@ -4,6 +4,8 @@
     @click:outside="closeDetailDialog"
     max-width="600px"
     transition="dialog-transition"
+    :v-bind="$attrs"
+    :v-on="$listeners"
   >
     <v-card v-if="item">
       <v-card-title class="grey lighten-3">
@@ -65,6 +67,7 @@ export default {
       }
     },
     closeDetailDialog() {
+      this.$emit('click:outside')
       this.$emit("update:detailDialog", false);
     },
   },
