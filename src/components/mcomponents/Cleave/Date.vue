@@ -46,7 +46,7 @@ export default {
     value() {
       this.localValue = this.value;
 
-      if (this.localValue == undefined) {
+      if (this.localValue == undefined && this.default && !this.isDirty) {
         this.setToday();
       }
     },
@@ -102,7 +102,7 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="css">
 input {
   direction: ltr;
 }

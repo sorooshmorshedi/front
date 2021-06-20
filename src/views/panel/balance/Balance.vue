@@ -7,7 +7,12 @@
         <v-col cols="12" md="12">
           <v-row>
             <v-col cols="12" md="3">
-              <v-select label="تعداد ستون ها" v-model="filters.cols_count" :items="[2, 4, 6, 8]"></v-select>
+              <v-select
+                label="نوع تراز"
+                v-model="filters.cols_count"
+                :items="balanceTypes"
+                :return-object="false"
+              />
 
               <v-select
                 class="mt-3"
@@ -18,7 +23,7 @@
 
               <v-switch
                 class="mt-3"
-                label="نمایش مغایرت حساب ها"
+                label="نمایش مغایرت ماهیت حساب ها"
                 v-model="filters.show_differences"
               />
             </v-col>
@@ -73,9 +78,9 @@
             </template>
 
             <v-col cols="12" md="2">
-              <date label="از تاریخ" v-model="filters.from_date" />
+              <date label="از تاریخ" v-model="filters.from_date" :defualt="false" />
               <div class="mt-3">
-                <date label="تا تاریخ" v-model="filters.to_date" />
+                <date label="تا تاریخ" v-model="filters.to_date" :defualt="false" />
               </div>
             </v-col>
             <v-col cols="12" md="2">
@@ -103,14 +108,10 @@
             :filters.sync="filters"
             show-expand
             :expanded.sync="items"
+            :show-select="false"
+            :additionalAppliedFilters="additionalAppliedFilters"
+            @update:options="setShowSum"
           >
-            <template
-              #item.bed_sum="{ item }"
-            >{{ item.bed_sum - (filters.cols_count == 8?item.opening_bed_sum:0) | toMoney }}</template>
-            <template
-              #item.bes_sum="{ item }"
-            >{{ item.bes_sum - (filters.cols_count == 8?item.opening_bes_sum:0) | toMoney }}</template>
-
             <template #item.data-table-expand></template>
 
             <template
@@ -163,9 +164,9 @@
               </template>
             </template>
 
-            <template v-slot:body.append="{ headers }">
+            <template v-slot:body.append="{ headers }" v-if="showSum">
               <tr class="text-center">
-                <td :colspan="2 + cols.cols.length"></td>
+                <td :colspan="1 + cols.cols.length"></td>
                 <td>جمع کل</td>
                 <template v-if="filters.cols_count > 6">
                   <td>{{ sum['openingBed'] | toMoney }}</td>
@@ -181,6 +182,7 @@
                 </template>
                 <td>{{ sum['bedRemain'] | toMoney }}</td>
                 <td>{{ sum['besRemain'] | toMoney }}</td>
+                <td></td>
               </tr>
             </template>
 
@@ -199,6 +201,7 @@ import datatableBaseCols from "./_datatableBaseCols";
 import AccountApiMixin from "@/mixin/accountMixin";
 import _ from "lodash";
 import OpenLedgerBtn from "@/components/btns/OpenLedgerBtn.vue";
+import { AcroFormTextField } from "jspdf";
 export default {
   name: "Balance",
   mixins: [AccountApiMixin],
@@ -230,11 +233,31 @@ export default {
 
       filters: {},
 
+      showSum: false,
+
       allAccounts: [],
       items: [],
       debouncedGetData: null,
       debouncedFilterAccounts: null,
 
+      balanceTypes: [
+        {
+          text: "2 ستونی",
+          value: 2,
+        },
+        {
+          text: "4 ستونی",
+          value: 4,
+        },
+        {
+          text: "6 ستونی",
+          value: 6,
+        },
+        {
+          text: "8 ستونی",
+          value: 8,
+        },
+      ],
       accountLevels: [
         { value: null, text: "همه" },
         { value: 0, text: "گروه" },
@@ -263,6 +286,8 @@ export default {
     sum() {
       let bed = 0,
         bes = 0,
+        bedRemain = 0,
+        besRemain = 0,
         openingBed = 0,
         openingBes = 0,
         previousBed = 0,
@@ -272,6 +297,8 @@ export default {
           if (account.level == 0) {
             bed += +account.bed_sum;
             bes += +account.bes_sum;
+            bedRemain += +account.bed_remain;
+            besRemain += +account.bes_remain;
             previousBed += +account.previous_bed_sum;
             previousBes += +account.previous_bes_sum;
             openingBed += +account.opening_bed_sum;
@@ -280,6 +307,8 @@ export default {
         } else {
           bed += +account.bed_sum;
           bes += +account.bes_sum;
+          bedRemain += +account.bed_remain;
+          besRemain += +account.bes_remain;
           previousBed += +account.previous_bed_sum;
           previousBes += +account.previous_bes_sum;
           openingBed += +account.opening_bed_sum;
@@ -290,8 +319,8 @@ export default {
       return {
         bed,
         bes,
-        bedRemain: Math.max(bed - bes),
-        besRemain: Math.max(bes - bed),
+        bedRemain,
+        besRemain,
         previousBed,
         previousBes,
         openingBed,
@@ -324,6 +353,98 @@ export default {
       cols = cols.filter((o) => !this.hiddenCols.includes(o.value));
       return cols;
     },
+    additionalAppliedFilters() {
+      let appliedFilters = [];
+
+      const selectFilters = [
+        {
+          text: "سطح حساب",
+          value: this.filters.level,
+          items: this.accountLevels,
+        },
+        {
+          text: "وضعیت حساب",
+          value: this.filters.balance_status,
+          items: this.accountStatuses,
+        },
+        {
+          text: "حساب های خاص",
+          value: this.filters.account_type,
+          items: this.specialAccounts,
+        },
+      ];
+
+      for (const filter of selectFilters) {
+        if (filter.value) {
+          appliedFilters.push({
+            text: filter.text,
+            value: filter.items.find((o) => o.value == filter.value).text,
+          });
+        }
+      }
+
+      const switchFilters = [
+        {
+          text: "نمایش مغایرت ماهیت حساب ها",
+          value: this.filters.show_differences,
+        },
+        {
+          text: "نمایش حساب های تفضیلی شناور",
+          value: this.filters.show_float_accounts,
+        },
+        {
+          text: "نمایش مرکز هزینه و درآمد",
+          value: this.filters.show_cost_centers,
+        },
+      ];
+
+      for (const filter of switchFilters) {
+        if (filter.value) {
+          appliedFilters.push({
+            text: filter.text,
+            value: "بله",
+          });
+        }
+      }
+
+      const textFilters = [
+        {
+          text: "از کد حساب",
+          value: this.filters.account__code__gte,
+        },
+        {
+          text: "تا کد حساب",
+          value: this.filters.account__code__lte,
+        },
+        {
+          text: "از تاریخ",
+          value: this.filters.from_date,
+        },
+        {
+          text: "تا تاریخ",
+          value: this.filters.to_date,
+        },
+        {
+          text: "از شماره سند",
+          value: this.filters.from_code,
+        },
+        {
+          text: "تا شماره سند",
+          value: this.filters.to_code,
+        },
+      ];
+
+      for (const filter of textFilters) {
+        if (filter.value) {
+          appliedFilters.push({
+            text: filter.text,
+            value: filter.value,
+          });
+        }
+      }
+
+      return appliedFilters;
+    },
   },
   created() {
     this.debouncedGetData = _.debounce(this.getData, 1000);
@@ -342,6 +463,14 @@ export default {
     },
   },
   methods: {
+    setShowSum(options) {
+      let { page, itemsPerPage } = options;
+      if (page == Math.ceil(this.items.length / itemsPerPage)) {
+        this.showSum = true;
+      } else {
+        this.showSum = false;
+      }
+    },
     hasSubAccount(item) {
       return (
         (item.floatAccounts_data && item.floatAccounts_data.length) ||
@@ -420,5 +549,9 @@ export default {
 <style lang="scss">
 .v-data-table tbody tr.v-data-table__expanded__content {
   box-shadow: none !important;
+}
+
+.theme--light.v-label {
+  color: #212121 !important;
 }
 </style>

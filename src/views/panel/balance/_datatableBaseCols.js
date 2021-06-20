@@ -40,7 +40,7 @@ export default {
       type: "numeric",
     },
     {
-      text: "تراز",
+      text: "گردش",
       value: "ledger",
       sortable: false,
       filterable: false,

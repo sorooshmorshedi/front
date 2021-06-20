@@ -276,6 +276,9 @@ export default {
     currentApiData: {
       default: null,
     },
+    additionalAppliedFilters: {
+      default: null,
+    },
     items: {
       default() {
         return [];
@@ -381,6 +384,11 @@ export default {
     },
     appliedFilters() {
       let appliedFilters = [];
+
+      if (this.additionalAppliedFilters) {
+        appliedFilters.push(...this.additionalAppliedFilters);
+      }
+
       for (let header of this.headers) {
         Object.keys(this.filters)
           .filter((key) => key.startsWith(header.value))
@@ -435,6 +443,7 @@ export default {
     },
     options: {
       handler() {
+        this.$emit("update:options", this.options);
         if (this.serverProcessing) this.d.getDataFromApi();
       },
       deep: true,
