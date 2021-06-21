@@ -10,7 +10,7 @@
           <v-switch
             class="mr-md-3 mt-3 mt-md-1"
             label="در نظر نگرفتن سند بستن"
-            v-model="filters.skipClosingSanad"
+            v-model="filters.skip_closing_sanads"
           ></v-switch>
           <v-btn
             :block="isXs"
