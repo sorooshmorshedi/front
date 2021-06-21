@@ -173,7 +173,7 @@
                   <td>{{ sum['openingBes'] | toMoney }}</td>
                 </template>
                 <template v-if="filters.cols_count > 4">
-                  <td>{{ sum['openingBed'] | toMoney }}</td>
+                  <td>{{ sum['previousBed'] | toMoney }}</td>
                   <td>{{ sum['previousBes'] | toMoney }}</td>
                 </template>
                 <template v-if="filters.cols_count > 2">
@@ -465,7 +465,10 @@ export default {
   methods: {
     setShowSum(options) {
       let { page, itemsPerPage } = options;
-      if (page == Math.ceil(this.items.length / itemsPerPage)) {
+      if (
+        itemsPerPage == -1 ||
+        page == Math.ceil(this.items.length / itemsPerPage)
+      ) {
         this.showSum = true;
       } else {
         this.showSum = false;
@@ -551,7 +554,7 @@ export default {
   box-shadow: none !important;
 }
 
-.theme--light.v-label {
+.theme--light.v-label, .v-data-table-header th {
   color: #212121 !important;
 }
 </style>
