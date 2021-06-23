@@ -149,7 +149,7 @@
         <v-spacer></v-spacer>
 
         <v-chip
-          :to="{name:'Notifications'}"
+          :to="{name:'NotificationsList'}"
           class="mr-1"
           color="white"
           :small="false"
