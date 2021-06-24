@@ -8,6 +8,8 @@ import Companies from '@/views/panel/company/Companies.vue';
 import FinancialYears from '@/views/panel/company/FinancialYears.vue';
 
 import NotificationsList from '@/views/panel/user/NotificationsList';
+import NotificationForm from '@/views/panel/user/NotificationForm';
+
 import Users from '@/views/panel/user/Users';
 import UserInvitations from '@/views/panel/user/UserInvitations';
 import Roles from '@/views/panel/role/Roles';
@@ -79,8 +81,14 @@ export default [{
       component: Home,
     },
     {
+      name: 'NotificationForm',
+      path: 'notificationForm/:type',
+      component: NotificationForm,
+      props: true,
+    },
+    {
       name: 'NotificationsList',
-      path: 'notificationsList/:id?',
+      path: 'notificationsList',
       component: NotificationsList,
     },
     {
