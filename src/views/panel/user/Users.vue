@@ -67,7 +67,7 @@
 
           <v-col cols="12">
             <v-autocomplete
-              :return-object="true"
+              :return-object="false"
               label="نقش ها"
               :items="roles"
               v-model="item.roles"
@@ -150,7 +150,6 @@ export default {
     },
     getSerialized() {
       let item = { ...this.item };
-      item.roles = this.item.roles.map((o) => o.id);
       return item;
     },
   },
