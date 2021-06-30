@@ -210,6 +210,7 @@ export default {
       let models = [
         { app: "users", name: "role", label: "نقش ها" },
         { app: "users", name: "user", label: "کاربران" },
+        { app: "users", name: "notification", label: "اعلان" },
         { app: "companies", name: "company", label: "شرکت ها" },
         { app: "companies", name: "financialYear", label: "سال های مالی" },
         {

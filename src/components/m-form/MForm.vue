@@ -155,6 +155,7 @@
             v-on="listeners"
             v-bind="$attrs"
             :filters.sync="filters"
+            ref="datatable"
           >
             <!-- Pass user templates to m-data-table -->
             <template v-for="(index, name) in $slots" v-slot:[name]>

@@ -1,10 +1,13 @@
 <template>
   <m-form
+    ref="form"
     :title="title"
     :cols="cols"
     :is-editing.sync="isEditing"
     :showListBtn="false"
     :show-navigation-btns="false"
+    :api-url="baseUrl + '/'"
+    :serverProcessing="serverProcessing"
     @click:row="setItem"
     @clearForm="clearForm"
     @submit="submit"
@@ -18,7 +21,7 @@
         <v-col cols="12">
           <v-textarea label="* توضیحات" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" v-if="!isReminder">
           <v-autocomplete
             label="* دریافت کننده ها"
             v-model="item.receivers"
@@ -26,13 +29,14 @@
             item-text="name"
             item-value="id"
             :disabled="!isEditing"
+            :multiple="true"
           />
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" v-if="!isReminder">
           <v-switch label="ارسال زماندار" v-model="item.has_schedule" :disabled="!isEditing"></v-switch>
         </v-col>
 
-        <template v-if="item.has_schedule">
+        <template v-if="item.has_schedule || isReminder">
           <v-col cols="6">
             <date
               label=" * تاریخ"
@@ -74,23 +78,9 @@ export default {
   data() {
     return {
       item: {},
-      baseUrl: "users/notifications",
+      appendSlash: true,
       permissionBasename: "",
-      cols: [
-        {
-          text: "عنوان",
-          value: "title",
-        },
-        {
-          text: "توضیحات",
-          value: "explanation",
-        },
-        {
-          text: "تاریخ",
-          value: "created_at",
-          type: "date",
-        },
-      ],
+      serverProcessing: true,
     };
   },
   computed: {
@@ -103,6 +93,42 @@ export default {
     },
     isReminder() {
       return this.type == "reminder";
+    },
+    baseUrl() {
+      if (this.isReminder) return "users/reminderNotification";
+      else return "users/sendNotification";
+    },
+    cols() {
+      let cols = [
+        {
+          text: "عنوان",
+          value: "title",
+        },
+        {
+          text: "توضیحات",
+          value: "explanation",
+        },
+      ];
+      if (this.isReminder) {
+        cols.push(
+          {
+            text: "تاریخ",
+            value: "send_date",
+            type: "date",
+          },
+          {
+            text: "ساعت",
+            value: "send_time",
+          }
+        );
+      } else {
+        cols.push({
+          text: "تاریخ",
+          value: "created_at",
+          type: "date",
+        });
+      }
+      return cols;
     },
   },
   methods: {

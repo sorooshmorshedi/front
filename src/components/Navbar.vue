@@ -66,6 +66,25 @@ export default {
           icon: "fa-database",
           children: [
             {
+              title: "یاداور",
+              to: {
+                name: "NotificationForm",
+                params: {
+                  type: "reminder",
+                },
+              },
+            },
+            {
+              title: "ارسال اعلان",
+              perm: "send.notification",
+              to: {
+                name: "NotificationForm",
+                params: {
+                  type: "send",
+                },
+              },
+            },
+            {
               to: {
                 name: "UserInvitations",
               },
@@ -368,7 +387,9 @@ export default {
                     },
                     query: {
                       status__in: "notPassed,bounced",
-                      due__lt: this.serverNow ? this.serverNow.format("jYYYY-jMM-jDD") : "",
+                      due__lt: this.serverNow
+                        ? this.serverNow.format("jYYYY-jMM-jDD")
+                        : "",
                     },
                   },
                   title: "لیست چک های دریافتی پاس نشده و برگشتی سررسید گذشته",
@@ -437,7 +458,9 @@ export default {
                     },
                     query: {
                       status__in: "notPassed,bounced",
-                      due__lt: this.serverNow ? this.serverNow.format("jYYYY-jMM-jDD") : "",
+                      due__lt: this.serverNow
+                        ? this.serverNow.format("jYYYY-jMM-jDD")
+                        : "",
                     },
                   },
                   title: "لیست چک های پرداختی پاس نشده و برگشتی سررسید گذشته",

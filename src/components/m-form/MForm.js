@@ -251,6 +251,9 @@ export default {
       }
       if (this.hasList) {
         this.getData();
+        if (this.serverProcessing) {
+          this.$refs.form.$refs.datatable.getDataFromApi();
+        }
       }
       this.successNotify();
     },
