@@ -280,6 +280,12 @@ export default {
     this.log(`server url is : ${this.getServerUrl()}`);
     this.getDateTime();
   },
+  mounted() {
+    this.tabOn("change:activeFinancialYear", () => {
+      console.log('haaa');
+      window.close();
+    });
+  },
   methods: {
     routeClick(routeName) {
       if (this.$route.name == routeName) {

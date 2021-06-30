@@ -131,18 +131,24 @@ export default {
       return this.item;
     },
     activeFinancialYear(item) {
-      this.request({
-        url: this.endpoint("users/setActiveFinancialYear"),
-        method: "post",
-        data: {
-          financial_year: item.id,
-        },
-        success: (data) => {
-          this.successNotify();
-          window.location.reload();
-          this.$store.commit("setUser", data);
-        },
-      });
+      if (
+        confirm(
+          "با تغییر سال مالی سایر تب های سامانه بسته می شوند، میخواهید ادامه دهید؟"
+        )
+      ) {
+        this.request({
+          url: this.endpoint("users/setActiveFinancialYear"),
+          method: "post",
+          data: {
+            financial_year: item.id,
+          },
+          success: (data) => {
+            this.tabEmit("change:activeFinancialYear");
+            this.successNotify();
+            window.location.reload();
+          },
+        });
+      }
     },
   },
 };
