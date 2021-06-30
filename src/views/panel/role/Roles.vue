@@ -53,14 +53,14 @@
                     <v-spacer></v-spacer>
                     <v-col class="text-left pl-6 d-flex justify-end">
                       <v-btn
-                        @click.stop="setAll({model: model.name, value:false})"
+                        @click.stop="setAll({model: model, value:false})"
                         icon
                         :disabled="!isEditing"
                       >
                         <v-icon>fa-times</v-icon>
                       </v-btn>
                       <v-btn
-                        @click.stop="setAll({model: model.name, value:true})"
+                        @click.stop="setAll({model: model, value:true})"
                         icon
                         class="mr-1"
                         :disabled="!isEditing"
@@ -68,7 +68,7 @@
                         <v-icon>fa-check-double</v-icon>
                       </v-btn>
                       <v-btn
-                        @click.stop="setAll({model: model.name, value:true, justOwn: true})"
+                        @click.stop="setAll({model: model, value:true, justOwn: true})"
                         icon
                         class="mr-1"
                         :disabled="!isEditing"
@@ -478,38 +478,36 @@ export default {
       });
     },
     setAll({ model = null, value, justOwn = false }) {
-      for (let permission of this.rawPermissions) {
-        if (
-          !model ||
-          model.toLowerCase().includes(permission.contentType.model)
-        ) {
-          if (justOwn && !permission.codename.includes("Own")) {
-            continue;
-          }
-          this.item.permissions[permission.id] = value;
+
+      if(!model){
+        for(const model of this.filteredModels) {
+          this.setAll({model:model, value:value, justOwn: justOwn})
+        }
+        return;
+      }
+
+      let permissionBtns = this.getPermissionBtns(model);
+
+      this.item[model.modelKey] = [];
+      this.item[model.ownModelKey] = [];
+      this.item[model.otherModelKey] = {};
+
+      if (value) {
+        if (justOwn) {
+          this.item[model.ownModelKey] = permissionBtns.map((o) => o.ownValue);
+        } else {
+          this.item[model.modelKey] = permissionBtns.map((o) => o.value);
         }
       }
 
-      if (model) {
-        if (value) {
-          if (justOwn) {
-            this.item.localOwnPerms[model] = [0, 1, 2, 3, 4, 5];
-          } else {
-            this.item.localPerms[model] = [0, 1, 2, 3, 4, 5];
+      for (const permission of model.permissions) {
+        if (justOwn) {
+          if (permission.codename.toLowerCase().includes("own")) {
+            this.item[model.otherModelKey][permission.id] = value;
           }
         } else {
-          this.item.localPerms[model] = [];
-          this.item.localOwnPerms[model] = [];
+          this.item[model.otherModelKey][permission.id] = value;
         }
-      } else {
-        Object.keys(this.item.localPerms).forEach((key) => {
-          if (value) {
-            this.item.localPerms[key] = [0, 1, 2, 3, 4, 5];
-          } else {
-            this.item.localPerms[key] = [];
-          }
-          this.item.localOwnPerms[key] = [];
-        });
       }
     },
     getSerialized() {
