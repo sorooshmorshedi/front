@@ -138,7 +138,7 @@
                 <v-btn
                   v-if="isDefinable"
                   @click="emitDefine(false)"
-                  :disabled="!canDefine"
+                  :disabled=" !canDefine"
                   class="blue white--text mr-1"
                 >قطعی کردن</v-btn>
 
@@ -314,7 +314,7 @@ export default {
       return this.endpoint(path);
     },
     isDefinable() {
-      return this.$parent.isDefinable && this.$parent.item.id;
+      return this.canEdit &&  this.$parent.isDefinable && this.$parent.item.id;
     },
     canDefine() {
       return !this.$parent.item.is_defined;

@@ -16,9 +16,10 @@
       @goToForm="getItemByPosition"
       @submit="validate"
       @delete="deleteItem"
+      @define="defineItem"
     >
       <template #header-btns>
-        <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
+        <open-sanad-btn v-if="item.is_defined" :sanad="item.sanad" />
         <v-btn
           v-if="isImprest && id != undefined && hasPerm('', 'imprestSettlement')"
           class="blue white--text mr-1 mt-1 mt-md-0"
@@ -41,38 +42,58 @@
 
       <template>
         <v-row v-if="!modalMode">
-          <v-col cols="12" md="2">
-            <v-text-field label="شماره" disabled v-model="item.code" />
-          </v-col>
-          <v-col cols="12" md="2">
-            <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
-          </v-col>
-          <v-col cols="12" md="2">
-            <date v-if="type == 'payment'" placeholder="تاریخ راس" disabled />
+          <v-col cols="12" md="6">
+            <v-row>
+              <v-col cols="12" md="2">
+                <v-text-field label="شماره" disabled v-model="item.code" />
+              </v-col>
+              <v-col cols="12" md="3">
+                <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
+              </v-col>
+
+              <v-col cols="12" md="3" v-if="type == 'payment'">
+                <date placeholder="تاریخ راس" disabled />
+              </v-col>
+
+              <v-col cols="12" md="3">
+                <v-switch v-if="id" label="قطعی شده" v-model="item.is_defined" disabled />
+              </v-col>
+
+              <v-col cols="12" md="8">
+                <account-select
+                  :label="accountLabel"
+                  :itemsType="accountsType"
+                  v-model="item.account"
+                  :disabled="modalMode || !isEditing"
+                  required
+                  :floatAccount="item.floatAccount"
+                  @update:floatAccount="v => item.floatAccount = v"
+                  :costCenter="item.costCenter"
+                  @update:costCenter="v => item.costCenter = v"
+                />
+              </v-col>
+
+              <v-col cols="12" md="4">
+                <v-text-field
+                  v-if="item.created_by"
+                  label="کاربر"
+                  disabled
+                  v-model="item.created_by.name"
+                />
+              </v-col>
+            </v-row>
           </v-col>
           <v-col cols="12" md="6">
-            <account-select
-              :label="accountLabel"
-              :itemsType="accountsType"
-              v-model="item.account"
-              :disabled="modalMode || !isEditing"
-              required
-              :floatAccount="item.floatAccount"
-              @update:floatAccount="v => item.floatAccount = v"
-              :costCenter="item.costCenter"
-              @update:costCenter="v => item.costCenter = v"
-            />
-          </v-col>
-          <v-col cols="12" md="8">
-            <v-textarea label="شرح" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field
-              v-if="item.created_by"
-              label="کاربر"
-              disabled
-              v-model="item.created_by.name"
-            />
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  label="شرح"
+                  v-model="item.explanation"
+                  :disabled="!isEditing"
+                  height="105"
+                />
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
 
@@ -316,6 +337,7 @@ export default {
     return {
       baseUrl: "transactions",
       appendSlash: true,
+      isDefinable: true,
       hasList: false,
       hasIdProp: true,
       rowKey: "type",
@@ -629,6 +651,7 @@ export default {
         costCenter: null,
         imprestSettlement: {},
         factorPayments: [],
+        is_defined: false,
       };
     },
     splitValue(reverse = false) {
