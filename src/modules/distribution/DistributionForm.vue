@@ -172,7 +172,7 @@ export default {
       hasIdProp: true,
       filters: {
         type: "sale",
-        is_definite: true,
+        is_defined: true,
         is_loaded: false,
       },
       factors: [],

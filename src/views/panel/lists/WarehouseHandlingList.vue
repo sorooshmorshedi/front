@@ -52,7 +52,7 @@ export default {
         },
         {
           text: "قطعی",
-          value: "is_definite",
+          value: "is_defined",
           type: "boolean",
         },
         {

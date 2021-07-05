@@ -15,7 +15,7 @@
     ref="mForm"
   >
     <template #header-btns>
-      <template v-if="item.is_definite">
+      <template v-if="item.is_defined">
         <span>
           <v-btn
             :to="{name: 'AdjustmentForm', params: {id:item.inputAdjustment, type: 'ia'}}"
@@ -172,7 +172,7 @@
       <v-btn
         v-if="id"
         @click="definite"
-        :disabled="item.is_definite"
+        :disabled="item.is_defined"
         class="blue white--text mr-1"
       >ثبت نهایی</v-btn>
     </template>
@@ -267,7 +267,7 @@ export default {
       };
     },
     getSystemRemain(row) {
-      if (this.item.is_definite) {
+      if (this.item.is_defined) {
         return row.system_remain;
       } else {
         return this.inventory.filter((o) => o.id == row.ware.id)[0]["remain"];

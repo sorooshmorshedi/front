@@ -134,6 +134,14 @@
                   @click="edit()"
                   class="submit amber w-100px mt-1 mt-md-0"
                 >ویرایش</v-btn>
+
+                <v-btn
+                  v-if="isDefinable"
+                  @click="emitDefine(false)"
+                  :disabled="!canDefine"
+                  class="blue white--text mr-1"
+                >قطعی کردن</v-btn>
+
                 <span class="mt-1 mt-md-0">
                   <slot name="footer-outside-btns"></slot>
                 </span>
@@ -266,7 +274,6 @@ export default {
       if (this.fullWidth) return 12;
       return 6;
     },
-
     listeners() {
       let listeners = this.$listeners;
       if (Object.keys(listeners).includes("click:row"))
@@ -306,6 +313,12 @@ export default {
       path = this.addParams(path);
       return this.endpoint(path);
     },
+    isDefinable() {
+      return this.$parent.isDefinable && this.$parent.item.id;
+    },
+    canDefine() {
+      return !this.$parent.item.is_defined;
+    },
   },
   methods: {
     emit(event) {
@@ -334,6 +347,9 @@ export default {
     },
     emitDelete() {
       this.$emit("delete");
+    },
+    emitDefine(indefine) {
+      this.$emit("define");
     },
     rowClick(item) {
       this.$emit("update:is-editing", false);

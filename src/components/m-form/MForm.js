@@ -32,7 +32,9 @@ export default {
       isEditing: true,
       rowKey: null,
       rows: [],
-      itemsToDelete: []
+      itemsToDelete: [],
+      isDefinable: false,
+
     };
   },
   computed: {
@@ -55,6 +57,9 @@ export default {
     },
     deleteUrl() {
       return this.item.id && `${this.baseUrl}/${this.item.id}` + (this.appendSlash ? "/" : "")
+    },
+    defineUrl() {
+      return this.item.id && `${this.baseUrl}/define` + (this.appendSlash ? "/" : "")
     },
     canSubmit() {
       if (!this.permissionBasename) {
@@ -239,6 +244,19 @@ export default {
         method: "delete",
         success: data => {
           this.successResponse(data, true)
+        }
+      });
+    },
+    defineItem(indefine) {
+      this.request({
+        url: this.endpoint(this.defineUrl),
+        method: "post",
+        data: {
+          item: this.item.id,
+          indefine: indefine
+        },
+        success: data => {
+          this.successResponse(data, false)
         }
       });
     },

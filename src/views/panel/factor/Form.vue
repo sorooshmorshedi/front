@@ -148,7 +148,7 @@
             <v-text-field label="بیجک" v-model="item.bijak" :disabled="!isEditing || isConverted" />
           </v-col>
           <v-col cols="12" md="2" v-if="!isFpi & !isPreFactor & !isRoR">
-            <v-text-field label="نوع" disabled :value="item.is_definite?'قطعی':'موقت'" />
+            <v-text-field label="نوع" disabled :value="item.is_defined?'قطعی':'موقت'" />
           </v-col>
           <v-col cols="12" md="2" v-if="(isSale || isBackFromSale) && hasModule('distribution')">
             <v-autocomplete
@@ -726,7 +726,7 @@
         <v-btn
           v-if="id && !isFpi && !isPreFactor && !isRoR"
           @click="definiteFactor"
-          :disabled="item.is_definite"
+          :disabled="item.is_defined"
           class="blue white--text mr-1"
         >قطعی کردن فاکتور</v-btn>
 

@@ -5,14 +5,17 @@
     :listRoute="{name:'SanadsList'}"
     exportBaseUrl="reports/lists/sanads"
     :exportParams="{id: this.id}"
-    :canEdit="canEdit"
+
     :canDelete="false"
+    :canEdit="canEdit"
     :canSubmit="canSubmit"
     :isEditing.sync="isEditing"
+
     @goToForm="getItemByPosition"
     @submit="submit"
     @delete="deleteItem"
     @clearForm="clearForm()"
+    @define="defineItem"
   >
     <template #header-btns>
       <v-btn
@@ -47,7 +50,7 @@
             <v-col cols="12" md="3">
               <v-text-field disabled label="شماره سند" v-model="item.code" background-color="white"></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="3">
               <date
                 class="form-control"
                 v-model="item.date"
@@ -81,6 +84,9 @@
                 disabled
                 v-model="item.created_by.name"
               />
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-switch v-if="item.id" label="قطعی شده" :value="item.is_defined" disabled />
             </v-col>
           </v-row>
         </v-col>
@@ -301,6 +307,7 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
+      isDefinable: true,
       rowKey: "account",
       filters: {},
       sanadTypes: [

@@ -8,16 +8,6 @@
   text-align: right;
 }
 
-.ltr {
-  direction: ltr;
-}
-
-.text-field-ltr {
-  input {
-    direction: ltr;
-  }
-
-}
 
 
 .v-application--is-rtl .v-list-item__action:first-child,
@@ -41,4 +31,22 @@
 
 .v-list .v-list-item--active .v-icon {
   fill: currentColor;
+}
+
+.v-text-field__slot,
+.v-select__slot {
+  input {
+    text-align: right;
+  }
+}
+
+.text-field-ltr {
+  input {
+    direction: ltr !important;
+    text-align: left !important;
+  }
+}
+
+.ltr {
+  direction: ltr !important;
 }
