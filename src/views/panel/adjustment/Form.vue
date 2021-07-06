@@ -12,42 +12,54 @@
     @goToForm="getItemByPosition"
     @submit="validate"
     @delete="deleteItem"
+    @define="defineItem"
   >
     <template #header-btns>
       <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
     </template>
     <template>
       <v-row>
-        <v-col cols="12" md="2">
-          <v-text-field label="شماره" disabled v-model="item.code" />
+        <v-col cols="8">
+          <v-row>
+            <v-col cols="12" md="2">
+              <v-text-field label="شماره" disabled v-model="item.code" />
+            </v-col>
+            <v-col cols="12" md="2">
+              <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
+            </v-col>
+            <v-col cols="12" md="2">
+              <mtime
+                label=" * ساعت"
+                required
+                v-model="item.time"
+                :default="true"
+                :disabled="!isEditing"
+              />
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-text-field
+                v-if="item.created_by"
+                label="کاربر"
+                disabled
+                v-model="item.created_by.name"
+              />
+            </v-col>
+            <v-col cols="12" md="3">
+              <v-switch v-if="item.id" label="قطعی شده" v-model="item.is_defined" disabled />
+            </v-col>
+          </v-row>
         </v-col>
-        <v-col cols="12" md="2">
-          <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
-        </v-col>
-        <v-col cols="12" md="2">
-          <mtime
-            label=" * ساعت"
-            required
-            v-model="item.time"
-            :default="true"
-            :disabled="!isEditing"
-          />
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-textarea
-            label="توضیحات"
-            class="form-control"
-            v-model="item.explanation"
-            :disabled="!isEditing"
-          />
-        </v-col>
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-if="item.created_by"
-            label="کاربر"
-            disabled
-            v-model="item.created_by.name"
-          />
+        <v-col cols="12" md="4">
+          <v-row>
+            <v-col cols="12">
+              <v-textarea
+                label="توضیحات"
+                class="form-control"
+                v-model="item.explanation"
+                :disabled="!isEditing"
+              />
+            </v-col>
+          </v-row>
         </v-col>
       </v-row>
 
@@ -170,6 +182,7 @@ export default {
       rowKey: "ware",
       hasList: false,
       hasIdProp: true,
+      isDefinable: true,
       inventory: {
         ware: null,
         warehouses: [],
@@ -215,11 +228,7 @@ export default {
       let item = this.extractIds(this.item);
       let items = this.rows.slice(0, this.rows.length - 1);
       items = items.map((o) => {
-        o.count = this.convertToMainUnit(
-          o.ware,
-          o.unit_count,
-          o.unit
-        );
+        o.count = this.convertToMainUnit(o.ware, o.unit_count, o.unit);
         return this.extractIds(o);
       });
       item.items = items;
