@@ -198,6 +198,7 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
+      hasLock: true,
       filters: {},
       inventory: [],
       rows: [],

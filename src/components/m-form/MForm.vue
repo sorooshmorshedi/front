@@ -137,10 +137,22 @@
 
                 <v-btn
                   v-if="isDefinable"
-                  @click="emitDefine(false)"
+                  @click="parentCall('defineItem', [false])"
                   :disabled=" !canDefine"
                   class="blue white--text mr-1"
                 >قطعی کردن</v-btn>
+
+                <v-btn
+                  v-if="hasLock"
+                  @click="parentCall('toggleItemLock')"
+                  class="white--text mr-1"
+                  :class="isLocked?'red':'green'"
+                  icon
+                  :title="isLocked?'باز کردن قفل':'قفل کردن'"
+                >
+                  <v-icon v-if="isLocked">fa-unlock</v-icon>
+                  <v-icon v-else>fa-lock</v-icon>
+                </v-btn>
 
                 <span class="mt-1 mt-md-0">
                   <slot name="footer-outside-btns"></slot>
@@ -314,12 +326,25 @@ export default {
       return this.endpoint(path);
     },
     isDefinable() {
-      return this.canEdit &&  this.$parent.isDefinable && this.$parent.item.id;
+      return this.canEdit && this.$parent.isDefinable && this.$parent.item.id;
     },
     canDefine() {
       return !this.$parent.item.is_defined;
     },
+    hasLock() {
+      return this.canEdit && this.$parent.hasLock && this.$parent.item.id;
+    },
+    isLocked() {
+      return this.$parent.item.is_locked;
+    },
+    parent() {
+      return this.$parent;
+    },
   },
+  mounted() {
+    console.log(this.$parent);
+  },
+
   methods: {
     emit(event) {
       this.$emit(event);
@@ -350,10 +375,14 @@ export default {
     },
     emitDefine(indefine) {
       this.$emit("define");
+      this.$parent.defineItem;
     },
     rowClick(item) {
       this.$emit("update:is-editing", false);
       this.$emit("click:row", item);
+    },
+    parentCall(methodName, params = []) {
+      this.$parent[methodName](...params);
     },
   },
 };

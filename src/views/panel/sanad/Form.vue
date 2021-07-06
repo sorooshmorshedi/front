@@ -13,7 +13,6 @@
     @submit="submit"
     @delete="deleteItem"
     @clearForm="clearForm()"
-    @define="defineItem"
   >
     <template #header-btns>
       <v-btn
@@ -306,6 +305,7 @@ export default {
       hasList: false,
       hasIdProp: true,
       isDefinable: true,
+      hasLock: true,
       rowKey: "account",
       filters: {},
       sanadTypes: [
@@ -377,50 +377,54 @@ export default {
       // not working for chequeStatusChange
       let forms = [
         {
-          name: "factor",
+          name: "factors.factor",
           title: "فاکتور",
           routeName: "FactorForm",
-          params: { isPreFactor: true },
+          params: { isPreFactor: false },
         },
-        { name: "adjustment", title: "تعدیل", routeName: "AdjustmentForm" },
-        { name: "lading", title: "بارگیری", routeName: "Lading" },
         {
-          name: "oilCompanyLading",
+          name: "factors.adjustment",
+          title: "تعدیل",
+          routeName: "AdjustmentForm",
+        },
+        { name: "_dashtbahsi.lading", title: "بارگیری", routeName: "Lading" },
+        {
+          name: "_dashtbahsi.oilcompanylading",
           title: "بارگیری شرکت نفت",
           routeName: "OilCompanyLading",
         },
         {
-          name: "statusChange",
+          name: "cheques.statuschange",
           title: "چک",
           routeName: "ChequeDetail",
         },
         {
-          name: "transaction",
+          name: "transactions.transaction",
           title: "دریافت/پرداخت",
           routeName: "TransactionForm",
         },
         {
-          name: "imprestSettlement",
+          name: "imprests.imprestsettlement",
           title: "تسویه تنخواه",
           routeName: "ImprestSettlement",
         },
       ];
-      for (let form of forms) {
-        let formObj = this.item[form["name"]];
-        if (formObj) {
-          let params = form.params ? form.params : {};
-          return {
-            title: form.title,
-            to: {
-              name: form.routeName,
-              params: {
-                id: formObj.id,
-                type: formObj.type,
-                ...params,
-              },
+      let origin = this.item.origin;
+      if (origin) {
+        let form = forms.find((o) => o.name == origin.name);
+        let params = form.params ? form.params : {};
+        return {
+          title: form.title,
+          to: {
+            name: form.routeName,
+            params: {
+              id: origin.id,
+              type: origin.type,
+              code: origin.code,
+              ...params,
             },
-          };
-        }
+          },
+        };
       }
       return null;
     },

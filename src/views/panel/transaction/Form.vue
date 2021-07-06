@@ -340,6 +340,7 @@ export default {
       isDefinable: true,
       hasList: false,
       hasIdProp: true,
+      hasLock: true,
       rowKey: "type",
       factorsDialog: false,
       submitChequeDialog: false,

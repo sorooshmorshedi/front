@@ -183,6 +183,7 @@ export default {
       hasList: false,
       hasIdProp: true,
       isDefinable: true,
+      hasLock: true,
       inventory: {
         ware: null,
         warehouses: [],

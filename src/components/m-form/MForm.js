@@ -34,7 +34,7 @@ export default {
       rows: [],
       itemsToDelete: [],
       isDefinable: false,
-
+      hasLock: false
     };
   },
   computed: {
@@ -60,6 +60,9 @@ export default {
     },
     defineUrl() {
       return this.item.id && `${this.baseUrl}/define` + (this.appendSlash ? "/" : "")
+    },
+    toggleLockUrl() {
+      return this.item.id && `${this.baseUrl}/toggleLock` + (this.appendSlash ? "/" : "")
     },
     canSubmit() {
       if (!this.permissionBasename) {
@@ -254,6 +257,18 @@ export default {
         data: {
           item: this.item.id,
           indefine: indefine
+        },
+        success: data => {
+          this.successResponse(data, false)
+        }
+      });
+    },
+    toggleItemLock() {
+      this.request({
+        url: this.endpoint(this.toggleLockUrl),
+        method: "post",
+        data: {
+          item: this.item.id
         },
         success: data => {
           this.successResponse(data, false)

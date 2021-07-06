@@ -45,6 +45,7 @@ export default {
       appendSlash: true,
       rowKey: "ware",
       hasIdProp: true,
+      hasLock: true,
 
       exportsDialog: false,
       factorExpensesDialog: false,
@@ -423,9 +424,8 @@ export default {
     },
     factorExpensesCopy: {
       handler() {
-        let expense = this.factorExpensesCopy[
-          this.factorExpensesCopy.length - 1
-        ];
+        let expense =
+          this.factorExpensesCopy[this.factorExpensesCopy.length - 1];
         if (expense && expense.expense) {
           this.factorExpensesCopy.push({});
         }
