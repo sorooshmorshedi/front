@@ -84,7 +84,6 @@ export default {
   },
   methods: {
     setAccount(account) {
-      console.log(account);
       if (account) {
         this.filters.account = account.id;
         this.filters.account_title = account.title;

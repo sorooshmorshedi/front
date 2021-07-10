@@ -341,9 +341,6 @@ export default {
       return this.$parent;
     },
   },
-  mounted() {
-    console.log(this.$parent);
-  },
 
   methods: {
     emit(event) {

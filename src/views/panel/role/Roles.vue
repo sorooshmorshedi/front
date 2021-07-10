@@ -197,7 +197,7 @@ export default {
       return this.rawPermissions.filter((o) => {
         let codename = o.codename;
         let f =
-          o.contentType.model == "report" ||
+          o.contentType.model == "reportspermissions" ||
           o.codename.includes("firstPeriodInventory") ||
           (!codename.startsWith("get") &&
             !codename.startsWith("create") &&
@@ -264,7 +264,7 @@ export default {
         },
         { app: "factors", name: "transfer", label: "انتقال" },
         { app: "factors", name: "warehouseHandling", label: "انبارگردانی" },
-        { app: "reports", name: "report", label: "گزارش ها" },
+        { app: "reports", name: "reports", label: "گزارش ها" },
         {
           app: "reports",
           name: "exportVerifier",
@@ -393,7 +393,7 @@ export default {
       return null;
     },
     hasShortcutPerms(model) {
-      return !["firstPeriodInventory", "report"].includes(model.name);
+      return !["firstPeriodInventory", "reports"].includes(model.name);
     },
     getModelOtherPermissions(model) {
       return this.otherPermissions.filter((o) => {
@@ -401,6 +401,13 @@ export default {
       });
     },
     isModelPermission(model, permission) {
+      if (
+        model.app == "reports" &&
+        model.name == "reports" &&
+        permission.codename.endsWith("Report")
+      ) {
+        return true;
+      }
       return (
         permission.contentType.app_label == model.app &&
         permission.codename.split(".")[1] == model.name
@@ -478,10 +485,9 @@ export default {
       });
     },
     setAll({ model = null, value, justOwn = false }) {
-
-      if(!model){
-        for(const model of this.filteredModels) {
-          this.setAll({model:model, value:value, justOwn: justOwn})
+      if (!model) {
+        for (const model of this.filteredModels) {
+          this.setAll({ model: model, value: value, justOwn: justOwn });
         }
         return;
       }

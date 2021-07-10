@@ -315,7 +315,6 @@ export default {
         method: "post",
         data: this.item,
         success: (data) => {
-          console.log(data);
           this.successNotify();
           this.setToken(data.token);
           this.$router.push({ name: "Home" });
@@ -348,7 +347,6 @@ export default {
         url: this.endpoint(`users/invitations`),
         method: "get",
         success: (data) => {
-          console.log(data);
           this.invitations = data;
         },
       });

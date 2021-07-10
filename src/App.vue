@@ -282,7 +282,6 @@ export default {
   },
   mounted() {
     this.tabOn("change:activeFinancialYear", () => {
-      console.log('haaa');
       window.close();
     });
   },

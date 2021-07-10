@@ -387,9 +387,9 @@ export default {
           title: "تعدیل",
           routeName: "AdjustmentForm",
         },
-        { name: "_dashtbahsi.lading", title: "بارگیری", routeName: "Lading" },
+        { name: "_dashtbashi.lading", title: "بارگیری", routeName: "Lading" },
         {
-          name: "_dashtbahsi.oilcompanylading",
+          name: "_dashtbashi.oilcompanylading",
           title: "بارگیری شرکت نفت",
           routeName: "OilCompanyLading",
         },
