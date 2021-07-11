@@ -22,7 +22,7 @@
           <v-col cols="12">
             <v-subheader>دسترسی ها</v-subheader>
             <div class="d-flex flex-column flex-md-row">
-              <v-text-field placeholder="جستجو" v-model="modelSearch" :disabled="!isEditing" />
+              <v-text-field placeholder="جستجو" v-model="modelSearch" />
               <v-spacer></v-spacer>
               <v-btn
                 @click="setAll({value: false})"
@@ -194,9 +194,11 @@ export default {
       return this.item.id && `users/roles/delete/${this.item.id}`;
     },
     otherPermissions() {
+      let otherPermissionCodenames = ["get.account"];
       return this.rawPermissions.filter((o) => {
         let codename = o.codename;
         let f =
+          otherPermissionCodenames.includes(codename) ||
           o.contentType.model == "reportspermissions" ||
           o.codename.includes("firstPeriodInventory") ||
           (!codename.startsWith("get") &&
@@ -211,6 +213,7 @@ export default {
         { app: "users", name: "role", label: "نقش ها" },
         { app: "users", name: "user", label: "کاربران" },
         { app: "users", name: "notification", label: "اعلان" },
+        { app: "users", name: "city", label: "شهر ها" },
         { app: "companies", name: "company", label: "شرکت ها" },
         { app: "companies", name: "financialYear", label: "سال های مالی" },
         {
@@ -223,7 +226,11 @@ export default {
           name: "floatAccount",
           label: "حساب شناور و مرکز هزینه و درآمد",
         },
-        { app: "accounts", name: "account", label: "حساب ها" },
+        { app: "accounts", name: "account0", label: "گروه حساب" },
+        { app: "accounts", name: "account1", label: "حساب کل" },
+        { app: "accounts", name: "account2", label: "حساب معین" },
+        { app: "accounts", name: "account3", label: "حساب تفصیلی" },
+        { app: "accounts", name: "account", label: "مشاهده حساب ها" },
         { app: "accounts", name: "defaultAccount", label: "حساب های پیشفرض" },
         { app: "wares", name: "unit", label: "واحد ها" },
         { app: "wares", name: "warehouse", label: "انبار ها" },
@@ -393,7 +400,9 @@ export default {
       return null;
     },
     hasShortcutPerms(model) {
-      return !["firstPeriodInventory", "reports"].includes(model.name);
+      return !["firstPeriodInventory", "reports", "account"].includes(
+        model.name
+      );
     },
     getModelOtherPermissions(model) {
       return this.otherPermissions.filter((o) => {
@@ -401,10 +410,14 @@ export default {
       });
     },
     isModelPermission(model, permission) {
+      console.log(model.app, model.name, permission.codename);
       if (
-        model.app == "reports" &&
-        model.name == "reports" &&
-        permission.codename.endsWith("Report")
+        (model.app == "reports" &&
+          model.name == "reports" &&
+          permission.codename.endsWith("Report")) ||
+        (model.app == "accounts" &&
+          model.name == "account" &&
+          permission.codename == "get.account")
       ) {
         return true;
       }
