@@ -150,8 +150,8 @@
                   icon
                   :title="isLocked?'باز کردن قفل':'قفل کردن'"
                 >
-                  <v-icon v-if="isLocked">fa-unlock</v-icon>
-                  <v-icon v-else>fa-lock</v-icon>
+                  <v-icon v-if="isLocked">fa-lock</v-icon>
+                  <v-icon v-else>fa-unlock</v-icon>
                 </v-btn>
 
                 <span class="mt-1 mt-md-0">
