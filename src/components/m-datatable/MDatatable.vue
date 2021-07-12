@@ -391,7 +391,7 @@ export default {
 
       for (let header of this.headers) {
         Object.keys(this.filters)
-          .filter((key) => key.startsWith(header.value))
+          .filter((key) => key.startsWith(header.value.replaceAll(".", "__")))
           .forEach((key) => {
             let value = this.filters[key];
 
@@ -404,10 +404,9 @@ export default {
               lte: "تا",
             };
 
-            let filterType = key.split("__");
-            let filterTypeText = null;
-            if (filterType.length == 2)
-              filterTypeText = filterTypesTexts[filterType[1]];
+            let keyParts = key.split("__");
+            let filterType = keyParts[keyParts.length - 1];
+            let filterTypeText = filterTypesTexts[filterType];
 
             if (this.isNumber(header)) value = this.toMoney(value);
 
