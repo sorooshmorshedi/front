@@ -239,6 +239,8 @@ export default {
         { app: "sanads", name: "sanad", label: "اسناد" },
         { app: "transactions", name: "receiveTransaction", label: "دریافت" },
         { app: "transactions", name: "paymentTransaction", label: "پرداخت" },
+        { app: "transactions", name: "imprestTransaction", label: "پرداخت تنخواه" },
+        { app: "imprests", name: "imprestSettlement", label: "تسویه تنخواه" },
         { app: "cheques", name: "chequebook", label: "دسته چک" },
         { app: "cheques", name: "cheque", label: "چک" },
         { app: "cheques", name: "statusChange", label: "تغییر وضعیت چک" },
