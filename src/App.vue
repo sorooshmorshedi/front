@@ -164,7 +164,7 @@
           <v-icon>far fa-bell</v-icon>
         </v-chip>
 
-        <v-btn :to="{name:'Profile'}" depressed class="white mr-2">{{ user.name }}</v-btn>
+        <v-btn :to="{name:'Profile'}" depressed class="white mr-2" :title="user.id">{{ user.name }}</v-btn>
 
         <span class="mx-3">
           <v-btn text icon color="white" class="rotate-180" @click="logout">
