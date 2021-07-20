@@ -230,6 +230,7 @@ import XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import _ from "lodash";
 import Truncate from "./Truncate";
+import { VTextField } from "vuetify/lib";
 
 export default {
   props: {
@@ -282,6 +283,7 @@ export default {
   },
   components: {
     Truncate,
+    VTextField,
   },
   data() {
     return {
