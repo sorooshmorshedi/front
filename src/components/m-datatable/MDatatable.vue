@@ -7,15 +7,10 @@
           class="mt-1 text-left d-flex flex-column flex-md-row justify-end"
           v-if="showExportBtns"
         >
-          <v-text-field
-            v-if="searchable && false"
-            v-model="search"
-            max-width="300px"
-            append-icon="search"
-            label="جستجو"
-            single-line
-            hide-details
-          />
+          <v-btn v-if="serverProcessing" icon @click="getDataFromApi">
+            <v-icon>fa-sync-alt</v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
           <v-btn @click="exportTo('html')" class="export-btn block">چاپ</v-btn>
           <v-btn @click="exportTo('pdf')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی PDF</v-btn>
           <v-btn @click="exportTo('xlsx')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی اکسل</v-btn>
