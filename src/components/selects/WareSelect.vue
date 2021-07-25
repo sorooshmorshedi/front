@@ -29,7 +29,7 @@
       v-on="$listeners"
     ></v-autocomplete>
 
-    <v-dialog v-if="inventories.length" v-model="dialog" scrollable max-width="500px">
+    <v-dialog v-if="ware" v-model="dialog" scrollable max-width="500px">
       <v-card>
         <v-card-title>موجودی انبار ها برای {{ ware.name }}</v-card-title>
 

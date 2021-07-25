@@ -257,6 +257,19 @@ export default {
 
       this.changeRouteTo(transfer.id);
     },
+    defineItem(indefine) {
+      this.request({
+        url: this.endpoint(this.defineUrl),
+        method: "post",
+        data: {
+          item: this.getSerialized(),
+          indefine: indefine,
+        },
+        success: (data) => {
+          this.successResponse(data, false);
+        },
+      });
+    },
   },
   computed: {
     sum() {
