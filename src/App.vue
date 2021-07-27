@@ -311,7 +311,8 @@ export default {
       this.setToken("");
       this.$store.commit("setUser", null);
       if (this.$route.name != "Login") {
-        this.$router.push({ name: "Login" });
+        let url = this.$router.resolve({ name: "Login" });
+        window.location = url;
       }
     },
   },
