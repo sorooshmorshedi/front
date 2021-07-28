@@ -7,7 +7,7 @@ export default {
       let serverUrl = 'https://api.app.sobhan.net/'
       if (this.isDev) {
         serverUrl = localStorage.getItem('serverUrl');
-        if(!serverUrl) serverUrl = 'http://localhost:7000/'
+        if (!serverUrl) serverUrl = 'http://localhost:7000/'
       }
       return serverUrl
     },
@@ -55,7 +55,11 @@ export default {
 
       new Promise((resolve, reject) => {
 
-        axios.request({
+        axios.defaults.timeout = 300 * 100
+
+        let client = axios
+
+        client.request({
             headers: headers,
             url: options.url,
             method: options.method,
