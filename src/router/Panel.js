@@ -40,6 +40,8 @@ import Factor from '@/views/panel/factor/Factor.vue';
 import FactorForm from '@/views/panel/factor/Form.vue';
 import FactorExpenses from '@/views/panel/factor/Expenses.vue';
 
+import FactorsAggregatedSanadForm from '@/views/panel/factorsAggregatedSanad/Form';
+
 import TransferForm from '@/views/panel/transfer/Form.vue';
 
 import AdjustmentForm from '@/views/panel/adjustment/Form.vue';
@@ -230,6 +232,12 @@ export default [{
           path: 'expenses/:factorType',
           props: true,
           component: FactorExpenses
+        },
+        {
+          name: 'FactorsAggregatedSanad',
+          path: 'aggregatedSanad/:factorType/:id?',
+          props: true,
+          component: FactorsAggregatedSanadForm
         },
       ]
     },

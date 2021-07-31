@@ -194,7 +194,11 @@ export default {
       return this.item.id && `users/roles/delete/${this.item.id}`;
     },
     otherPermissions() {
-      let otherPermissionCodenames = ["get.account"];
+      let otherPermissionCodenames = [
+        "get.account",
+        "get.option",
+        "update.option",
+      ];
       return this.rawPermissions.filter((o) => {
         let codename = o.codename;
         let f =
@@ -239,7 +243,11 @@ export default {
         { app: "sanads", name: "sanad", label: "اسناد" },
         { app: "transactions", name: "receiveTransaction", label: "دریافت" },
         { app: "transactions", name: "paymentTransaction", label: "پرداخت" },
-        { app: "transactions", name: "imprestTransaction", label: "پرداخت تنخواه" },
+        {
+          app: "transactions",
+          name: "imprestTransaction",
+          label: "پرداخت تنخواه",
+        },
         { app: "imprests", name: "imprestSettlement", label: "تسویه تنخواه" },
         { app: "cheques", name: "chequebook", label: "دسته چک" },
         { app: "cheques", name: "receivedCheque", label: "چک دریافتنی" },
@@ -279,6 +287,11 @@ export default {
           app: "reports",
           name: "exportVerifier",
           label: "تایید کنندگان خروجی",
+        },
+        {
+          app: "home",
+          name: "option",
+          label: "تنظیمات",
         },
       ];
       if (this.hasModule("dashtbashi")) {
@@ -403,7 +416,7 @@ export default {
       return null;
     },
     hasShortcutPerms(model) {
-      return !["firstPeriodInventory", "reports", "account"].includes(
+      return !["firstPeriodInventory", "reports", "account", "option"].includes(
         model.name
       );
     },
@@ -413,7 +426,6 @@ export default {
       });
     },
     isModelPermission(model, permission) {
-      console.log(model.app, model.name, permission.codename);
       if (
         (model.app == "reports" &&
           model.name == "reports" &&

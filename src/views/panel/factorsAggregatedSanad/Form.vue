@@ -1,4 +1,3 @@
-
 <template>
   <m-form
     :title="title"
