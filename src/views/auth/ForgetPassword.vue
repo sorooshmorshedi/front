@@ -12,18 +12,26 @@
         <v-card-title class="d-block text-center">فراموشی رمز عبور</v-card-title>
 
         <v-card-text class="text--primary mb-2">
-          <v-row>
-            <v-col cols="12" md="12">
-              <v-form ref="phoneForm">
+          <v-form ref="profileForm">
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  label="نام کاربری"
+                  v-model="username"
+                  :disabled="codeSent"
+                  :rules="rules.required"
+                />
+              </v-col>
+              <v-col cols="12" md="6">
                 <m-phone-field
                   label="شماره موبایل"
                   v-model="phone"
                   :disabled="codeSent"
                   :rules="rules.required"
                 />
-              </v-form>
-            </v-col>
-          </v-row>
+              </v-col>
+            </v-row>
+          </v-form>
           <v-form ref="verifyForm">
             <v-row>
               <template v-if="codeSent">
@@ -76,6 +84,7 @@ export default {
   data() {
     return {
       phone: "",
+      username: "",
       code: "",
       newPassword: "",
       codeSent: false,
@@ -84,7 +93,7 @@ export default {
   created() {},
   methods: {
     sendCode() {
-      if (this.$refs.phoneForm.validate()) {
+      if (this.$refs.profileForm.validate()) {
         this.sendVerificationCode(this.phone, () => (this.codeSent = true));
       }
     },
@@ -94,6 +103,7 @@ export default {
           url: this.endpoint("users/changePasswordByVerificationCode"),
           method: "post",
           data: {
+            username: this.username,
             phone: this.phone,
             code: this.code,
             new_password: this.newPassword,
