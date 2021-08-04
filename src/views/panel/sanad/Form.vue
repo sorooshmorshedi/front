@@ -383,6 +383,11 @@ export default {
           params: { isPreFactor: false },
         },
         {
+          name: "factors.factorsaggregatedsanad",
+          title: "سند تجمیعی فاکتور",
+          routeName: "FactorsAggregatedSanadForm",
+        },
+        {
           name: "factors.adjustment",
           title: "تعدیل",
           routeName: "AdjustmentForm",

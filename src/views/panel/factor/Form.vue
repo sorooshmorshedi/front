@@ -23,6 +23,15 @@
         <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
 
         <v-btn
+          v-if="item.aggregatedSanad"
+          class="light-blue white--text mr-1 mt-1 mt-md-0"
+          :to="{name:'FactorsAggregatedSanadForm', params: {id: item.aggregatedSanad, type: item.type}}"
+          rounded
+        >
+          <v-icon class="ml-1">fa-external-link-square-alt</v-icon>سند تجمیعی
+        </v-btn>
+
+        <v-btn
           v-if="hasTransaction"
           @click="transactionsDialog = true"
           class="light-blue white--text mr-1 mt-1 mt-md-0"
@@ -112,93 +121,118 @@
 
       <template>
         <v-row>
-          <template v-if="isPreFactor || isRoR">
-            <v-col cols="12" md="4">
-              <v-text-field label="شماره " disabled :value="item.temporary_code" />
-            </v-col>
-          </template>
-          <template v-else>
-            <v-col cols="12" md="2" v-if="!isFpi">
-              <v-text-field label="شماره موقت" disabled :value="item.temporary_code" />
-            </v-col>
-            <v-col cols="12" md="2" v-if="!isFpi">
-              <v-text-field label="شماره قطعی" disabled v-model="item.code" />
-            </v-col>
-          </template>
+          <v-col cols="12" md="9">
+            <v-row>
+              <template v-if="isPreFactor || isRoR">
+                <v-col cols="12" md="4">
+                  <v-text-field label="شماره " disabled :value="item.temporary_code" />
+                </v-col>
+              </template>
+              <template v-else>
+                <v-col cols="12" md="2" v-if="!isFpi">
+                  <v-text-field label="شماره موقت" disabled :value="item.temporary_code" />
+                </v-col>
+                <v-col cols="12" md="2" v-if="!isFpi">
+                  <v-text-field label="شماره قطعی" disabled v-model="item.code" />
+                </v-col>
+              </template>
 
-          <v-col cols="12" md="2">
-            <date
-              label=" * تاریخ"
-              required
-              v-model="item.date"
-              :default="true"
-              :disabled="!isEditing || isConverted"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <mtime
-              label=" * ساعت"
-              required
-              v-model="item.time"
-              :default="true"
-              :disabled="!isEditing || isConverted"
-            />
-          </v-col>
-          <v-col cols="12" md="2" v-if="hasBijak">
-            <v-text-field label="بیجک" v-model="item.bijak" :disabled="!isEditing || isConverted" />
-          </v-col>
-          <v-col cols="12" md="2" v-if="!isFpi & !isPreFactor & !isRoR">
-            <v-text-field label="نوع" disabled :value="item.is_defined?'قطعی':'موقت'" />
-          </v-col>
-          <v-col cols="12" md="2" v-if="(isSale || isBackFromSale) && hasModule('distribution')">
-            <v-autocomplete
-              :return-object="false"
-              label="ویزیتور"
-              :items="factorVisitors"
-              v-model="item.visitor"
-              item-text="user.name"
-              item-value="id"
-              :disabled="!isEditing || backFrom != null || item.backFrom != null || isConverted"
-            />
-          </v-col>
-          <v-col cols="12" md="4" v-if="!isProduction">
-            <account-select
-              :label="' * ' + accountName"
-              :itemsType="accountType"
-              :visitorId="item.visitor"
-              v-model="item.account"
-              :disabled="!isEditing  || backFrom != null || item.backFrom != null || isConverted"
-              :floatAccount="item.floatAccount"
-              @update:floatAccount="v => item.floatAccount = v"
-              :costCenter="item.costCenter"
-              @update:costCenter="v => item.costCenter = v"
-            />
-          </v-col>
+              <v-col cols="12" md="2">
+                <date
+                  label=" * تاریخ"
+                  required
+                  v-model="item.date"
+                  :default="true"
+                  :disabled="!isEditing || isConverted"
+                />
+              </v-col>
+              <v-col cols="12" md="2">
+                <mtime
+                  label=" * ساعت"
+                  required
+                  v-model="item.time"
+                  :default="true"
+                  :disabled="!isEditing || isConverted"
+                />
+              </v-col>
+              <v-col cols="12" md="2" v-if="hasBijak">
+                <v-text-field
+                  label="بیجک"
+                  v-model="item.bijak"
+                  :disabled="!isEditing || isConverted"
+                />
+              </v-col>
+              <v-col cols="12" md="2" v-if="!isFpi & !isPreFactor & !isRoR">
+                <v-text-field label="نوع" disabled :value="item.is_defined?'قطعی':'موقت'" />
+              </v-col>
+              <v-col
+                cols="12"
+                md="2"
+                v-if="(isSale || isBackFromSale) && hasModule('distribution')"
+              >
+                <v-autocomplete
+                  :return-object="false"
+                  label="ویزیتور"
+                  :items="factorVisitors"
+                  v-model="item.visitor"
+                  item-text="user.name"
+                  item-value="id"
+                  :disabled="!isEditing || backFrom != null || item.backFrom != null || isConverted"
+                />
+              </v-col>
+              <v-col cols="12" md="4" v-if="!isProduction">
+                <account-select
+                  :label="' * ' + accountName"
+                  :itemsType="accountType"
+                  :visitorId="item.visitor"
+                  v-model="item.account"
+                  :disabled="!isEditing  || backFrom != null || item.backFrom != null || isConverted"
+                  :floatAccount="item.floatAccount"
+                  @update:floatAccount="v => item.floatAccount = v"
+                  :costCenter="item.costCenter"
+                  @update:costCenter="v => item.costCenter = v"
+                />
+              </v-col>
 
-          <v-col cols="12" md="4">
-            <v-textarea
-              label="شرح"
-              v-model="item.explanation"
-              :disabled="!isEditing || isConverted"
-              @keyup.enter.stop
-            ></v-textarea>
-          </v-col>
+              <v-col cols="12" md="2">
+                <v-text-field
+                  v-if="item.created_by"
+                  label="کاربر"
+                  disabled
+                  v-model="item.created_by.name"
+                />
+              </v-col>
 
-          <v-col cols="12" md="2">
-            <v-text-field
-              v-if="item.created_by"
-              label="کاربر"
-              disabled
-              v-model="item.created_by.name"
-            />
-          </v-col>
+              <v-col cols="12" md="2" v-if="showTax">
+                <v-switch
+                  label="فاکتور مالیات دارد"
+                  v-model="item.has_tax"
+                  :disabled="!isEditing || isConverted"
+                ></v-switch>
+              </v-col>
 
-          <v-col cols="12" md="2" v-if="showTax">
-            <v-switch
-              label="فاکتور مالیات دارد"
-              v-model="item.has_tax"
-              :disabled="!isEditing || isConverted"
-            ></v-switch>
+              <v-col cols="12" md="2" v-if="showTax">
+                <v-switch
+                  label="سند خودکار"
+                  v-model="item.has_auto_sanad"
+                  :disabled="!isEditing || item.sanad != null"
+                ></v-switch>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-row>
+              <v-col cols="12">
+                <v-textarea
+                  label="شرح"
+                  v-model="item.explanation"
+                  :disabled="!isEditing || isConverted"
+                  @keyup.enter.stop
+                  rows="4"
+                  :auto-grow="true"
+                ></v-textarea>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
 

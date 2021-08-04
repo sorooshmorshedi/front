@@ -234,8 +234,8 @@ export default [{
           component: FactorExpenses
         },
         {
-          name: 'FactorsAggregatedSanad',
-          path: 'aggregatedSanad/:factorType/:id?',
+          name: 'FactorsAggregatedSanadForm',
+          path: 'aggregatedSanadForm/:type/:id?',
           props: true,
           component: FactorsAggregatedSanadForm
         },

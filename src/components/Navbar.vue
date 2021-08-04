@@ -722,6 +722,26 @@ export default {
                   },
                   title: "لیست فاکتور های خرید",
                 },
+                {
+                  title: "ثبت سند تجمیعی فاکتور خرید",
+                  perm: "buyFactorsAggregatedSanad",
+                  to: {
+                    name: "FactorsAggregatedSanadForm",
+                    params: {
+                      type: "buy",
+                    },
+                  },
+                },
+                {
+                  title: "لیست اسناد تجمیعی فاکتور خرید",
+                  perm: "buyFactorsAggregatedSanad",
+                  to: {
+                    name: "FactorsAggregatedSanadsList",
+                    params: {
+                      type: "buy",
+                    },
+                  },
+                },
               ],
             },
             {
@@ -758,6 +778,26 @@ export default {
                     },
                   },
                   title: "لیست فروش",
+                },
+                {
+                  title: "ثبت سند تجمیعی فاکتور فروش",
+                  perm: "saleFactorsAggregatedSanad",
+                  to: {
+                    name: "FactorsAggregatedSanadForm",
+                    params: {
+                      type: "sale",
+                    },
+                  },
+                },
+                {
+                  title: "لیست اسناد تجمیعی فاکتور فروش",
+                  perm: "saleFactorsAggregatedSanad",
+                  to: {
+                    name: "FactorsAggregatedSanadsList",
+                    params: {
+                      type: "sale",
+                    },
+                  },
                 },
               ],
             },

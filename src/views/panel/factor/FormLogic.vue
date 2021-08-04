@@ -478,6 +478,7 @@ export default {
         date: undefined,
         time: undefined,
         is_pre_factor: this.isPreFactor,
+        has_auto_sanad: true,
       };
     },
     getRowTemplate() {

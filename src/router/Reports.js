@@ -2,6 +2,7 @@ import Panel from '@/views/panel/Panel.vue';
 
 import TransactionsList from '@/views/panel/lists/TransactionsList.vue';
 import FactorsList from '@/views/panel/lists/FactorsList.vue';
+import FactorsAggregatedSanadsList from '@/views/panel/lists/FactorsAggregatedSanadsList.vue';
 import SanadsList from '@/views/panel/lists/SanadsList.vue';
 import SanadItemsList from '@/views/panel/lists/SanadItemsList.vue';
 import TransfersList from '@/views/panel/lists/TransfersList.vue';
@@ -47,6 +48,12 @@ export default [{
       name: 'SanadItemsList',
       path: 'lists/sanadItems',
       component: SanadItemsList,
+    },
+    {
+      name: 'FactorsAggregatedSanadsList',
+      path: 'lists/factors/aggregatedSanads/:type',
+      component: FactorsAggregatedSanadsList,
+      props: true
     },
     {
       name: 'FactorsList',

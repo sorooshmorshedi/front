@@ -2,7 +2,7 @@
   <m-form
     :title="title"
     :showList="false"
-    :listRoute="{name:'FactorsAggregatedSanadList'}"
+    :listRoute="{name:'FactorsAggregatedSanadsList'}"
     exportBaseUrl="reports/lists/factorsAggregatedSanad"
     :exportParams="{id: this.id}"
     :canDelete="canDelete"
@@ -51,6 +51,9 @@
             ref="datatable"
           >
             <template #item.payable_value="{ item }">{{ getFactorPayableValue(item) | toMoney }}</template>
+            <template #item.detail="{ item }">
+              <detail-link :to="to(item)" />
+            </template>
           </m-datatable>
         </v-col>
 
@@ -66,7 +69,11 @@
               :showExportBtns="false"
               apiUrl="reports/lists/factors"
               ref="datatable"
-            ></m-datatable>
+            >
+              <template #item.detail="{ item }">
+                <detail-link :to="to(item)" />
+              </template>
+            </m-datatable>
           </v-col>
         </template>
       </v-row>
@@ -83,7 +90,7 @@ export default {
   name: "DistributionForm",
   mixins: [MFormMixin, FormsMixin, FactorMixin],
   props: {
-    factorType: {
+    type: {
       required: true,
     },
   },
@@ -95,9 +102,10 @@ export default {
       hasIdProp: true,
 
       filters: {
-        type: this.factorType,
+        type: this.type,
         is_defined: true,
-        has_aggregated_sanad: true,
+        has_auto_sanad: false,
+        aggregatedSanad__isnull: true,
       },
 
       factors: [],
@@ -106,7 +114,7 @@ export default {
   },
   computed: {
     title() {
-      return "سند تجمیعی " + this.getFactorTitle(this.factorType, false);
+      return "سند تجمیعی " + this.getFactorTitle(this.type, false);
     },
     permissionBasename() {
       let basenames = {
@@ -145,6 +153,12 @@ export default {
           value: "total_sum",
           type: "numeric",
         },
+        {
+          text: "مشاهده فاکتور",
+          value: "detail",
+          sortable: false,
+          filterable: false,
+        },
       ];
     },
   },
@@ -175,7 +189,7 @@ export default {
     },
     getSerialized() {
       let item = this.extractIds(this.item);
-      item.type = this.factorType;
+      item.type = this.type;
       item.factors = this.factors.map((o) => o.id);
       return item;
     },
@@ -184,7 +198,7 @@ export default {
         url: this.endpoint("factors/factorsAggregatedSanads/byPosition"),
         method: "get",
         params: {
-          type: this.factorType,
+          type: this.type,
           id: this.item.id,
           position: pos,
         },
@@ -197,6 +211,22 @@ export default {
           }
         },
       });
+    },
+    to(item) {
+      return {
+        name: "FactorForm",
+        params: {
+          isPreFactor: item.is_pre_factor,
+          type: item.type,
+          id: item.id,
+        },
+      };
+    },
+    clearForm() {
+      this.isEditing = true;
+      this.item = this.getItemTemplate();
+      this.factors = [];
+      this.changeRouteTo(null);
     },
   },
 };
