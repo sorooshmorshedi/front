@@ -61,8 +61,8 @@
       <template v-for="header in headersWithFilter" v-slot:[getHeaderSlot(header.value)]="{header}">
         <template v-if="header.filterable != false && !isPrinting">
           <v-menu
+            top
             left
-            offset-x
             offset-y
             :close-on-content-click="false"
             :key="header.value"
