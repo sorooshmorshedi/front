@@ -62,6 +62,7 @@ export default {
         title: "صورت حساب تفصیلی",
         account_title: "",
         consider_previous_remain: "true",
+        sanad__type: "n",
       },
     };
   },
