@@ -1,3 +1,3 @@
 <template>
-  <v-img src="/img/icons/ledger-report.png"></v-img>
+  <v-icon color="#fafafa">fa-book-open</v-icon>
 </template>
