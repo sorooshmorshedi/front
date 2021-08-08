@@ -388,7 +388,11 @@ export default {
 
       for (let header of this.headers) {
         Object.keys(this.filters)
-          .filter((key) => key.startsWith(header.value.replaceAll(".", "__")))
+          .filter((key) =>
+            key
+              .replaceAll(".", "__")
+              .startsWith(header.value.replaceAll(".", "__"))
+          )
           .forEach((key) => {
             let value = this.filters[key];
 
