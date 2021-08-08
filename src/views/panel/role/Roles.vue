@@ -282,6 +282,7 @@ export default {
         },
         { app: "factors", name: "transfer", label: "انتقال" },
         { app: "factors", name: "warehouseHandling", label: "انبارگردانی" },
+        { app: "factors", name: "adjustment", label: "تعدیل" },
         { app: "reports", name: "reports", label: "گزارش ها" },
         {
           app: "reports",
