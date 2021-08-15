@@ -103,7 +103,7 @@ export default {
         { value: "level2", text: "معین" },
         { value: "level3", text: "تفضیلی" },
         { value: "floatAccountGroups", text: "گروه شناور" },
-        { value: "costCenterGroups", text: "مرکز هزینه و درآمد" },
+        { value: "costCenterGroups", text: "گروه مرکز هزینه و درآمد" },
         { value: "floatAccounts", text: "شناور" },
         { value: "costCenters", text: "مرکز هزینه و درآمد" },
       ],
