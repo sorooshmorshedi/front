@@ -430,6 +430,26 @@ export default {
                   title: "لیست پرداخت ها",
                 },
                 {
+                  perm: "bankTransferTransaction",
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      type: "bankTransfer",
+                    },
+                  },
+                  title: "ثبت پرداخت بین بانک ها",
+                },
+                {
+                  perm: "bankTransferTransaction",
+                  to: {
+                    name: "TransactionsList",
+                    params: {
+                      type: "bankTransfer",
+                    },
+                  },
+                  title: "لیست پرداخت های بین بانک ها",
+                },
+                {
                   perm: "paidCheque",
                   to: {
                     name: "ChequeForm",

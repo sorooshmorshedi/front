@@ -243,6 +243,7 @@ export default {
         { app: "sanads", name: "sanad", label: "اسناد" },
         { app: "transactions", name: "receiveTransaction", label: "دریافت" },
         { app: "transactions", name: "paymentTransaction", label: "پرداخت" },
+        { app: "transactions", name: "bankTransferTransaction", label: "پرداخت بین بانک ها" },
         {
           app: "transactions",
           name: "imprestTransaction",

@@ -30,7 +30,7 @@
           <v-icon>$receiveTransactionIcon</v-icon>
         </v-btn>
         <v-btn
-          v-if="!isImprest"
+          v-if="!isImprest && !isBankTransfer"
           @click="factorsDialog = true"
           class="teal white--text mr-1 mt-1 mt-md-0"
           title="بابت فاکتور های"
@@ -103,8 +103,8 @@
               <template #thead>
                 <tr>
                   <th class="tr-counter">#</th>
-                  <th>* نوع {{ title }}</th>
-                  <th>* نام حساب</th>
+                  <th v-if="!isBankTransfer">* نوع {{ title }}</th>
+                  <th>{{ rowAccountLabel }}</th>
                   <th>* مبلغ</th>
                   <th>شماره پیگیری</th>
                   <th>* تاریخ {{ title }}</th>
@@ -116,7 +116,11 @@
               <template #tbody>
                 <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
                   <td>{{ i+1 }}</td>
-                  <td style="min-width: 150px" :title="rows[i].type && rows[i].type.name">
+                  <td
+                    v-if="!isBankTransfer"
+                    style="min-width: 150px"
+                    :title="rows[i].type.id && rows[i].type.name"
+                  >
                     <v-autocomplete
                       :return-object="true"
                       :disabled="!isEditing || hasCheque(row)"
@@ -135,12 +139,12 @@
                   </td>
                   <td class="tr-account">
                     <account-select
+                      v-if="rows[i].type.id || isBankTransfer"
                       :horizontal="true"
-                      v-if="rows[i].type"
-                      items-type="level3"
+                      :items-type="isBankTransfer?'banks':'level3'"
                       v-model="rows[i].type.account"
                       :disabled="!isEditing"
-                      :account-disabled="true"
+                      :account-disabled="!isBankTransfer"
                       :floatAccount="rows[i].floatAccount"
                       @update:floatAccount="v => rows[i].floatAccount = v"
                       :costCenter="rows[i].costCenter"
@@ -208,7 +212,8 @@
                 </tr>
                 <tr></tr>
                 <tr class="grey lighten-3 text-white">
-                  <td colspan="2"></td>
+                  <td></td>
+                  <td v-if="!isBankTransfer"></td>
                   <td class="text-left">مجموع:</td>
                   <td class>{{ rowsSum('value') | toMoney }}</td>
                   <td colspan="5"></td>
@@ -341,7 +346,6 @@ export default {
       hasList: false,
       hasIdProp: true,
       hasLock: true,
-      rowKey: "type",
       factorsDialog: false,
       submitChequeDialog: false,
       item: {},
@@ -363,6 +367,7 @@ export default {
   computed: {
     accountsType() {
       if (this.isImprest) return "imprests";
+      if (this.isBankTransfer) return "banks";
       return "level3";
     },
     title() {
@@ -372,6 +377,8 @@ export default {
         return "پرداخت";
       } else if (this.isImprest) {
         return "پرداخت تنخواه";
+      } else if (this.isBankTransfer) {
+        return "پرداخت بین بانک ها";
       }
     },
     permissionBasename() {
@@ -380,8 +387,16 @@ export default {
     isImprest() {
       return this.type == "imprest";
     },
+    isBankTransfer() {
+      return this.type == "bankTransfer";
+    },
     accountLabel() {
       if (this.isImprest) return "* تنخواه گردان";
+      if (this.isBankTransfer) return "* برداشت از حساب";
+      return " * کد - نام حساب";
+    },
+    rowAccountLabel() {
+      if (this.isBankTransfer) return "* واریز به حساب";
       return " * کد - نام حساب";
     },
     itemPaymentMethods() {
@@ -391,7 +406,11 @@ export default {
       );
     },
     itemAccounts() {
-      return this.accountsSelectValues.levels[3];
+      if (this.isBankTransfer) {
+        return this.accountsSelectValues.banks;
+      } else {
+        return this.accountsSelectValues.levels[3];
+      }
     },
     isPaymentsValid() {
       let sum = 0;
@@ -404,6 +423,18 @@ export default {
   watch: {
     "item.account"() {
       if (this.item.account && this.item.account.id) this.getNotPaidFactors();
+    },
+    rows: {
+      handler() {
+        let hasValue = this.rows[this.rows.length - 1]["type"]["id"];
+        if (this.isBankTransfer) {
+          hasValue = this.rows[this.rows.length - 1]["type"]["account"];
+        }
+        if (this.rows.length > 0 && hasValue) {
+          this.rows.push(this.getRowTemplate());
+        }
+      },
+      deep: true,
     },
   },
   methods: {
@@ -557,6 +588,10 @@ export default {
           item.cheque = this.extractIds(item.cheque);
         }
 
+        if (this.isBankTransfer) {
+          item.type = null;
+        }
+
         data.items.items.push(this.extractIds(item, "cheque"));
       });
 
@@ -577,13 +612,13 @@ export default {
     },
     hasBank(row) {
       if (this.isChequeType(row)) return false;
-      if (row.type && row.type.codename == "cash") return false;
+      if (row.type.id && row.type.codename == "cash") return false;
       return true;
     },
 
     isChequeType(row) {
       return (
-        row.type && row.type.codename && row.type.codename.includes("Cheque")
+        row.type.id && row.type.codename && row.type.codename.includes("Cheque")
       );
     },
     hasCheque(row) {
@@ -677,9 +712,12 @@ export default {
       }
     },
     getRowTemplate() {
-      return {
+      let template = {
         value: 0,
+        type: {},
       };
+
+      return template;
     },
     setItem(item) {
       this.rows = [];
@@ -688,7 +726,13 @@ export default {
       item.items
         .sort((a, b) => a.order - b.order)
         .forEach((item) => {
-          this.rows.push(this.copy(item));
+          item = this.copy(item);
+          if (item.type == null) {
+            item.type = {
+              account: item.account,
+            };
+          }
+          this.rows.push(item);
         });
       this.rows.push(this.getRowTemplate());
 

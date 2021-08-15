@@ -30,7 +30,10 @@ export default {
       formData: false,
       hasList: true,
       isEditing: true,
-      rowKey: null,
+
+      // can be comptued
+      // rowKey: null,
+
       rows: [],
       itemsToDelete: [],
       isDefinable: false,
