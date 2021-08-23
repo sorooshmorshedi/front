@@ -194,7 +194,7 @@
                   </td>
                   <td class="d-print-none">
                     <v-btn
-                      v-if="i != rows.length-1 && !hasCheque(row)"
+                      v-if="i != rows.length-1 && (!hasCheque(row) || !row.id)"
                       :disabled="!isEditing"
                       @click="deleteRow(i)"
                       class="red--text"
@@ -298,11 +298,8 @@
         <v-card-text>
           <cheque-form
             ref="chequeForm"
-            :receivedOrPaid="type[0]"
             :modalMode="true"
-            :account="item.account"
-            :floatAccount="item.floatAccount"
-            :costCenter="item.costCenter"
+            :itemObject="{'received_or_paid': type[0], 'account': item.account, 'floatAccount': item.floatAccount, 'costCenter': item.costCenter}"
             @submit="addCheque"
           />
         </v-card-text>

@@ -329,6 +329,10 @@ export default {
       }
       this.getPaidCheques();
       this.isEditing = false;
+
+      if (this.$refs.formList) {
+        this.$refs.formList.$refs.datatable.getDataFromApi();
+      }
     },
     getPaidCheques() {
       this.loading.getPaidCheques = true;

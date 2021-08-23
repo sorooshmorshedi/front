@@ -133,7 +133,7 @@
               <td>{{ sc.fromStatus | chequeStatuses }}</td>
               <td>{{ sc.toStatus | chequeStatuses }}</td>
               <td>{{ sc.date }}</td>
-              <template v-if="sc.sanad && sc.sanad.items.length">
+              <template v-if="sc.sanad && sc.sanad.items && sc.sanad.items.length">
                 <td>{{ sc.sanad.items[0].account.name }}</td>
                 <td>{{ sc.sanad.items[1].account.name }}</td>
               </template>
