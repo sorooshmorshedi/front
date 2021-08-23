@@ -56,11 +56,13 @@
                 required
                 :disabled="!chequebook || !isEditing"
                 label=" * چک"
-                :items="paidCheques.filter(o => o.chequebook.id == item.chequebook.id)"
+                :items="paidCheques"
+                :search-input.sync="paidChequeSearch"
                 v-model="item"
                 @change="item && (item.account = null)"
                 item-text="serial"
                 item-value="id"
+                :loading="loading.getPaidCheques"
               />
             </v-col>
           </template>
@@ -184,7 +186,10 @@ export default {
         received_or_paid: this.receivedOrPaid,
         account: null,
       },
+      d: {},
+      loading: {},
       paidCheques: [],
+      paidChequeSearch: "",
       bank: null,
       chequeTypes: [
         {
@@ -221,7 +226,7 @@ export default {
       return this.hasPerm("submit", this.permissionBasename, this.item);
     },
     canEdit() {
-      return this.item.status != 'revoked';
+      return this.item.status != "revoked";
     },
     isPaidCheque() {
       return this.receivedOrPaid == "p";
@@ -256,6 +261,7 @@ export default {
     },
   },
   created() {
+    this.d.getPaidCheques = _.debounce(this.getPaidCheques, 1000);
     this.getAccounts();
     if (this.id) {
       this.getCheque(this.id);
@@ -264,6 +270,12 @@ export default {
     if (this.isPaidCheque) {
       this.getChequebooks();
     }
+  },
+  watch: {
+    paidChequeSearch() {
+      this.loading.getPaidCheques = true;
+      this.d.getPaidCheques();
+    },
   },
   methods: {
     getData() {
@@ -319,11 +331,14 @@ export default {
       this.isEditing = false;
     },
     getPaidCheques() {
+      this.loading.getPaidCheques = true;
       this.paidCheques = [];
 
       let params = {
+        limit: 50,
         chequebook__id: this.chequebook.id,
         received_or_paid: "p",
+        serial__icontains: this.paidChequeSearch,
       };
       if (this.id == undefined) {
         params["status"] = "blank";
@@ -335,7 +350,8 @@ export default {
         loading: false,
         params: params,
         success: (data) => {
-          this.paidCheques = data;
+          this.paidCheques = data.results;
+          this.loading.getPaidCheques = false;
         },
       });
     },
