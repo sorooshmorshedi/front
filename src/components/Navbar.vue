@@ -540,6 +540,13 @@ export default {
                 },
               ],
             },
+            {
+              title: "عملیات های بین بانکی",
+              perm: "bankingOperation",
+              to: {
+                name: "BankingOperations",
+              },
+            },
           ],
         },
         {

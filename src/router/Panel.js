@@ -34,7 +34,7 @@ import SanadForm from '@/views/panel/sanad/Form.vue';
 
 import Transaction from '@/views/panel/transaction/Transaction.vue';
 import TransactionForm from '@/views/panel/transaction/Form.vue';
-
+import BankingOperations from '@/views/panel/transaction/BankingOperations.vue';
 
 import Factor from '@/views/panel/factor/Factor.vue';
 import FactorForm from '@/views/panel/factor/Form.vue';
@@ -182,16 +182,22 @@ export default [{
       path: 'transaction',
       component: Transaction,
       children: [{
-        name: 'TransactionForm',
-        path: ':type/:id?',
-        component: TransactionForm,
-        props: (route) => {
-          return {
-            accountId: route.query.accountId,
-            ...route.params,
-          };
+          name: 'BankingOperations',
+          path: 'bankingOperations',
+          component: BankingOperations,
         },
-      }]
+        {
+          name: 'TransactionForm',
+          path: ':type/:id?',
+          component: TransactionForm,
+          props: (route) => {
+            return {
+              accountId: route.query.accountId,
+              ...route.params,
+            };
+          },
+        },
+      ]
     },
     {
       name: 'ImprestSettlement',

@@ -36,7 +36,8 @@ export default new Vuex.Store({
     },
     factorExpenses: [],
     chequebooks: [],
-    defaultTexts: []
+    defaultTexts: [],
+    bankingOperations: []
   },
   mutations: {
     ...DashbashiStore.mutations,
@@ -103,6 +104,9 @@ export default new Vuex.Store({
     },
     setDefaultTexts(state, data) {
       state.defaultTexts = data;
+    },
+    setBankingOperations(state, data) {
+      state.bankingOperations = data;
     },
   }
 })

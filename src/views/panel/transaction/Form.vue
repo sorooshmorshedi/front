@@ -111,6 +111,11 @@
                   <th>سررسید</th>
                   <th>نام بانک</th>
                   <th>شرح ردیف</th>
+                  <template v-if="!isReceive">
+                    <th>نوع عملیات بانکی</th>
+                    <th>مبلغ هزینه بانکی</th>
+                  </template>
+                  <th></th>
                 </tr>
               </template>
               <template #tbody>
@@ -192,6 +197,24 @@
                       @updateRowsExplanation="updateRowsExplanation"
                     />
                   </td>
+                  <template v-if="!isReceive">
+                    <td>
+                      <v-autocomplete
+                        :return-object="false"
+                        :disabled="!isEditing || hasCheque(row)"
+                        :items="bankingOperations"
+                        v-model="rows[i].bankingOperation"
+                        item-text="name"
+                        item-value="id"
+                      />
+                    </td>
+                    <td>
+                      <money
+                        :disabled="!isEditing || hasCheque(row)"
+                        v-model="rows[i].banking_operation_value"
+                      />
+                    </td>
+                  </template>
                   <td class="d-print-none">
                     <v-btn
                       v-if="i != rows.length-1 && (!hasCheque(row) || !row.id)"
@@ -217,6 +240,10 @@
                   <td class="text-left">مجموع:</td>
                   <td class>{{ rowsSum('value') | toMoney }}</td>
                   <td colspan="5"></td>
+                  <template v-if="!isReceive">
+                    <td></td>
+                    <td>{{ rowsSum('banking_operation_value') | toMoney }}</td>
+                  </template>
                   <td class="d-print-none">
                     <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
                       <v-icon>delete_sweep</v-icon>
@@ -314,13 +341,13 @@ import { MFormMixin } from "@/components/m-form";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import _ from "lodash";
-
 import ChequeForm from "../cheque/ChequeForm.vue";
+import TransactionMixin from "@/views/panel/transaction/mixin";
 
 export default {
   name: "TransactionForm",
   components: { ChequeForm, money, date },
-  mixins: [MFormMixin, accountApiMixin],
+  mixins: [MFormMixin, accountApiMixin, TransactionMixin],
   props: {
     type: {
       required: true,
@@ -360,6 +387,7 @@ export default {
   },
   created() {
     this.getDefaultAccounts();
+    this.getBankingOperations();
   },
   computed: {
     accountsType() {
@@ -380,6 +408,9 @@ export default {
     },
     permissionBasename() {
       return `${this.type}Transaction`;
+    },
+    isReceive() {
+      return this.type == "receive";
     },
     isImprest() {
       return this.type == "imprest";
