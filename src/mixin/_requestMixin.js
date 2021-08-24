@@ -55,7 +55,7 @@ export default {
 
       new Promise((resolve, reject) => {
 
-        axios.defaults.timeout = 300 * 100
+        axios.defaults.timeout = 600 * 100 * 5
 
         let client = axios
 
