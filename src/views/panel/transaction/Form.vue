@@ -326,6 +326,7 @@
           <cheque-form
             ref="chequeForm"
             :modalMode="true"
+            :receivedOrPaid="type[0]"
             :itemObject="{'received_or_paid': type[0], 'account': item.account, 'floatAccount': item.floatAccount, 'costCenter': item.costCenter}"
             @submit="addCheque"
           />
