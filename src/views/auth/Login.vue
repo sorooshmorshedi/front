@@ -75,12 +75,13 @@
             class="mt-3 text-field-ltr"
             outlined
             hide-details
-            label="رمز عبور"
+            label="کلمه عبور"
             v-model="password"
           />
 
           <div class="d-flex justify-center mt-3">
             <vue-recaptcha
+              ref="recaptcha"
               sitekey="6Lda3sYaAAAAAKJ3kt1GnJWq5ennm3QIkz_NKNMs"
               @verify="response => recaptchaResponse = response"
             />
@@ -88,7 +89,7 @@
         </v-card-text>
 
         <v-card-actions class="pb-3 flex-row flex-md-row">
-          <v-btn class text :to="{name: 'ForgetPassword'}">رمز عبور خود را فراموش کرده اید؟</v-btn>
+          <v-btn class text :to="{name: 'ForgetPassword'}">کلمه عبور خود را فراموش کرده اید؟</v-btn>
           <v-spacer></v-spacer>
           <v-btn :to="{name: 'Register'}" outlined class="blue--text mr-2">ثبت نام</v-btn>
           <v-btn @click="login" class="blue white--text mr-2" :class="{'w-100px': !isXs}">ورود</v-btn>
@@ -125,16 +126,15 @@
 </template>
 
 <script>
-import VueRecaptcha from "vue-recaptcha";
+import AuthMixin from "@/views/auth/mixin";
+
 export default {
   name: "Login",
-  components: { VueRecaptcha },
+  mixins: [AuthMixin],
   data() {
     return {
       username: "",
       password: "",
-
-      recaptchaResponse: "",
 
       twoFactorAuthenticationDialog: "",
       twoFactorAuthenticationCode: "",

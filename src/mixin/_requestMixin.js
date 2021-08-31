@@ -81,20 +81,25 @@ export default {
 
             if (options.error) {
               options.error(error);
-            } else if (error.response) {
-              let statusCode = error.response.status
-              if (statusCode == 401) this.handle_401(error);
-              else if (statusCode == 403) this.handle_403(error);
-              else if (statusCode == 400) this.handle_400(error);
-              else if (statusCode == 404) this.handle_404(error, options);
-              else if (statusCode == 406) this.handle_406(error, options);
-              else if (statusCode == 429) this.handle_429(error, options);
             } else {
-              this.handle_noResponse(error, options);
+              this.handleError(error, options);
             }
           });
 
       })
+    },
+    handleError(error, options) {
+      if (error.response) {
+        let statusCode = error.response.status
+        if (statusCode == 401) this.handle_401(error);
+        else if (statusCode == 403) this.handle_403(error);
+        else if (statusCode == 400) this.handle_400(error);
+        else if (statusCode == 404) this.handle_404(error, options);
+        else if (statusCode == 406) this.handle_406(error, options);
+        else if (statusCode == 429) this.handle_429(error, options);
+      } else {
+        this.handle_noResponse(error, options);
+      }
     },
     appendToken(headers) {
       if (!this.token) {

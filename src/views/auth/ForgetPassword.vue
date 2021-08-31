@@ -9,7 +9,7 @@
           src="/img/SobhanAccountingLogo.png"
         ></v-img>
 
-        <v-card-title class="d-block text-center">فراموشی رمز عبور</v-card-title>
+        <v-card-title class="d-block text-center">فراموشی کلمه عبور</v-card-title>
 
         <v-card-text class="text--primary mb-2">
           <v-form ref="profileForm">
@@ -19,7 +19,9 @@
                   label="نام کاربری"
                   v-model="username"
                   :disabled="codeSent"
+                  class="text-field-ltr"
                   :rules="rules.required"
+                  :hide-details="false"
                 />
               </v-col>
               <v-col cols="12" md="6">
@@ -35,7 +37,7 @@
           <v-form ref="verifyForm">
             <v-row>
               <template v-if="codeSent">
-                <v-col cols="12" md="6">
+                <v-col cols="12" md="12">
                   <v-text-field
                     class="text-field-ltr"
                     label="کد دریافت شده"
@@ -47,15 +49,36 @@
                   <v-text-field
                     class="text-field-ltr"
                     type="password"
-                    label="رمز عبور جدید"
+                    label="کلمه عبور جدید"
                     v-model="newPassword"
                     :rules="passwordRules"
+                    :hide-details="false"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    class="text-field-ltr"
+                    type="password"
+                    label="تکرار کلمه عبور جدید"
+                    v-model="newPasswordRepeat"
+                    :rules="rules.required"
                     :hide-details="false"
                   />
                 </v-col>
               </template>
             </v-row>
           </v-form>
+          <v-row>
+            <v-col cols="12">
+              <div class="d-flex justify-center mt-0">
+                <vue-recaptcha
+                  ref="recaptcha"
+                  sitekey="6Lda3sYaAAAAAKJ3kt1GnJWq5ennm3QIkz_NKNMs"
+                  @verify="response => recaptchaResponse = response"
+                />
+              </div>
+            </v-col>
+          </v-row>
         </v-card-text>
 
         <v-card-actions class>
@@ -64,9 +87,12 @@
             <v-btn @click="sendCode" class="blue white--text w-100px">ارسال کد تایید</v-btn>
           </template>
           <template v-else>
-            <v-btn @click="sendVerificationCode(phone)" text>ارسال دوباره کد</v-btn>
+            <v-btn
+              @click="sendVerificationCode({phone, username, recaptchaResponse})"
+              text
+            >ارسال دوباره کد</v-btn>
             <v-spacer></v-spacer>
-            <v-btn @click="changePassword" class="green white--text">ثبت رمز عبور جدید</v-btn>
+            <v-btn @click="changePassword" class="green white--text">ثبت کلمه عبور جدید</v-btn>
           </template>
         </v-card-actions>
       </v-card>
@@ -87,6 +113,7 @@ export default {
       username: "",
       code: "",
       newPassword: "",
+      newPasswordRepeat: "",
       codeSent: false,
     };
   },
@@ -94,11 +121,22 @@ export default {
   methods: {
     sendCode() {
       if (this.$refs.profileForm.validate()) {
-        this.sendVerificationCode(this.phone, () => (this.codeSent = true));
+        this.sendVerificationCode(
+          {
+            phone: this.phone,
+            username: this.username,
+            recaptchaResponse: this.recaptchaResponse,
+          },
+          () => (this.codeSent = true)
+        );
       }
     },
     changePassword() {
       if (this.$refs.verifyForm.validate()) {
+        if (this.newPassword != this.newPasswordRepeat) {
+          this.notify("کلمه عبور و تکرار آن یکسان نیستند", "danger");
+          return;
+        }
         this.request({
           url: this.endpoint("users/changePasswordByVerificationCode"),
           method: "post",
@@ -107,11 +145,16 @@ export default {
             phone: this.phone,
             code: this.code,
             new_password: this.newPassword,
+            recaptchaResponse: this.recaptchaResponse,
           },
           token: false,
           success: (data) => {
             this.successNotify();
             this.$router.push({ name: "Login" });
+          },
+          error: (error) => {
+            this.recaptcha.reset();
+            this.handleError(error, {});
           },
         });
       }

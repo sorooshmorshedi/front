@@ -30,9 +30,14 @@
                 <m-phone-field label="* شماره موبایل " v-model="item.phone" :disabled="!isEditing" />
               </v-col>
               <v-col cols="12" md="6">
-                <m-national-code label="* کد ملی " v-model="item.username" :disabled="!isEditing" />
+                <m-national-code
+                  label="* کد ملی "
+                  v-model="item.username"
+                  :disabled="!isEditing"
+                  class="text-field_ltr"
+                />
               </v-col>
-              <v-col cols="12" md="12" v-if="!item.id">
+              <v-col cols="12" md="6">
                 <v-text-field
                   class="text-field-ltr"
                   label=" * کلمه عبور"
@@ -43,8 +48,31 @@
                   :hide-details="false"
                 />
               </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field
+                  class="text-field-ltr"
+                  label=" * تکرار کلمه عبور"
+                  type="password"
+                  v-model="item.passwordRepeat"
+                  :disabled="!isEditing"
+                  :rules="rules.required"
+                  :hide-details="false"
+                />
+              </v-col>
             </v-row>
           </v-form>
+
+          <v-row>
+            <v-col cols="12">
+              <div class="d-flex justify-center mt-0">
+                <vue-recaptcha
+                  ref="recaptcha"
+                  sitekey="6Lda3sYaAAAAAKJ3kt1GnJWq5ennm3QIkz_NKNMs"
+                  @verify="response => recaptchaResponse = response"
+                />
+              </div>
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -53,11 +81,7 @@
       </v-card>
     </v-col>
 
-    <v-dialog
-      v-model="phoneVerificationDialog"
-      max-width="500px"
-      transition="dialog-transition"
-    >
+    <v-dialog v-model="phoneVerificationDialog" max-width="500px" transition="dialog-transition">
       <v-card>
         <v-card-title>تایید شماره موبایل</v-card-title>
         <v-card-subtitle class="mt-n1">
@@ -74,7 +98,11 @@
         <v-card-actions>
           <v-btn @click="phoneVerificationDialog = false" text color="warning">تغییر شماره موبایل</v-btn>
           <v-spacer></v-spacer>
-          <v-btn @click="sendVerificationCode(item.phone)" outlined color="blue">ارسال دوباره</v-btn>
+          <v-btn
+            @click="sendVerificationCode({phone: item.phone, recaptchaResponse})"
+            outlined
+            color="blue"
+          >ارسال دوباره</v-btn>
           <v-btn @click="createUser" color="blue white--text w-100px">تایید</v-btn>
         </v-card-actions>
       </v-card>
@@ -100,8 +128,7 @@ export default {
       ],
     };
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     getItemTemplate() {
       return {};
@@ -112,7 +139,14 @@ export default {
       }
     },
     verifyPhone() {
-      this.sendVerificationCode(this.item.phone);
+      if (this.item.password != this.item.passwordRepeat) {
+        this.notify("کلمه عبور و تکرار آن یکسان نیستند", "danger");
+        return;
+      }
+      this.sendVerificationCode({
+        phone: this.item.phone,
+        recaptchaResponse: this.recaptchaResponse,
+      });
       this.phoneVerificationDialog = true;
     },
     createUser() {

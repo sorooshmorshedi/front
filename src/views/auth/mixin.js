@@ -1,6 +1,12 @@
+import VueRecaptcha from "vue-recaptcha";
 export default {
+  components: {
+    VueRecaptcha
+  },
   data() {
-    return {}
+    return {
+      recaptchaResponse: "",
+    }
   },
   computed: {
     UserInvitationStatuses() {
@@ -32,16 +38,19 @@ export default {
     },
   },
   methods: {
-    sendVerificationCode(phone, callback = null) {
+    sendVerificationCode(data, callback = null) {
       this.request({
         url: this.endpoint("users/sendVerificationCode"),
         method: "post",
-        data: {
-          phone: phone
-        },
+        data: data,
         token: false,
         success: data => {
+          this.$refs.recaptcha.reset();
           callback && callback(data)
+        },
+        error: (error) => {
+          this.$refs.recaptcha.reset();
+          this.handleError(error, {});
         }
       });
     },
