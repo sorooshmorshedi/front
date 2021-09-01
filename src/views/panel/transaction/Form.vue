@@ -327,7 +327,7 @@
             ref="chequeForm"
             :modalMode="true"
             :receivedOrPaid="type[0]"
-            :itemObject="{'received_or_paid': type[0], 'account': item.account, 'floatAccount': item.floatAccount, 'costCenter': item.costCenter}"
+            :selectedAccount="{'account': item.account, 'floatAccount': item.floatAccount, 'costCenter': item.costCenter}"
             @submit="addCheque"
           />
         </v-card-text>
@@ -672,9 +672,7 @@ export default {
       this.submitChequeDialog = true;
 
       this.$nextTick(() => {
-        this.$refs.chequeForm.setDefaults({
-          "item.account": this.item.account.id,
-        });
+        this.$refs.chequeForm.clearForm();
       });
     },
     addCheque(cheque) {
