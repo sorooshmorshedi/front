@@ -137,6 +137,12 @@ export default {
           sortable: false,
           filterable: false,
         },
+        // {
+        //   text: "نام انبار",
+        //   value: "warehouse_name",
+        //   sortable: false,
+        //   filterable: false,
+        // },
         {
           text: "مقدار وارده",
           value: "input.count",
@@ -219,20 +225,20 @@ export default {
       if (ware) this.filters.warehouse = ware.warehouse.id;
     },
     getDetailLink(item) {
-      let factor = item.factor
+      let factor = item.factor;
       let type = factor.type;
       if (["it", "ot"].includes(type)) {
         return {
           name: "TransferForm",
           params: {
-            id: factor.input_transfer[0] || factor.output_transfer[0],
+            id: item.origin.id,
           },
         };
       } else if (["ia", "oa"].includes(type)) {
         return {
           name: "AdjustmentForm",
           params: {
-            id: factor.adjustment[0],
+            id: item.origin.id,
           },
         };
       }
