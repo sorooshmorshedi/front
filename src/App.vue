@@ -220,10 +220,10 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                class="ltr"
+                class="text-field-ltr"
                 label="Server Url"
                 v-model="serverUrl"
-                hint="http://localhost:8001/"
+                hint="http://localhost:7000/"
                 :hide-details="false"
                 persistent-hint
               />

@@ -80,7 +80,7 @@
               type="password"
               class="mt-3 text-field-ltr"
               hide-details
-              label="رمز عبور"
+              label="کلمه عبور"
               v-model="password"
             />
           </v-card-text>

@@ -33,6 +33,7 @@
                 label="* بانک"
                 v-model="bank"
                 :disabled="!isEditing"
+                clearable
               />
             </v-col>
             <v-col cols="12" md="3">
@@ -47,6 +48,7 @@
                 v-model="item.chequebook"
                 :disabled="id != null || !isEditing"
                 @change="getPaidCheques"
+                clearable
               />
             </v-col>
             <v-col cols="12" md="3">
@@ -57,9 +59,8 @@
                 :disabled="!chequebook || !isEditing"
                 label=" * چک"
                 :items="paidCheques"
-                :search-input.sync="paidChequeSearch"
+                :search-input="paidChequeSearch"
                 v-model="item"
-                @change="item && (item.account = null)"
                 item-text="serial"
                 item-value="id"
                 :loading="loading.getPaidCheques"
@@ -78,12 +79,12 @@
             <account-select
               label="* کد و نام مشتری"
               items-type="level3"
-              v-model="item.account"
+              v-model="itemAccount"
               :disabled="modalMode || !isEditing"
-              :floatAccount="item.floatAccount"
-              @update:floatAccount="v => item.floatAccount = v"
-              :costCenter="item.costCenter"
-              @update:costCenter="v => item.costCenter = v"
+              :floatAccount="itemFloatAccount"
+              @update:floatAccount="v => itemFloatAccount = v"
+              :costCenter="itemCostCenter"
+              @update:costCenter="v => itemCostCenter = v"
             />
           </v-col>
           <v-col cols="12" md="2">
@@ -167,6 +168,9 @@ export default {
     modalMode: {
       default: false,
     },
+    selectedAccount: {
+      default: null,
+    },
   },
   components: { money, date, ChequesList },
   mixins: [
@@ -186,6 +190,9 @@ export default {
         received_or_paid: this.receivedOrPaid,
         account: null,
       },
+      itemAccount: null,
+      itemFloatAccount: null,
+      itemCostCenter: null,
       d: {},
       loading: {},
       paidCheques: [],
@@ -272,7 +279,7 @@ export default {
     }
   },
   watch: {
-    paidChequeSearch() {
+    paidChequeSearch(o, n) {
       this.loading.getPaidCheques = true;
       this.d.getPaidCheques();
     },
@@ -285,13 +292,13 @@ export default {
     },
     validate(clearForm) {
       if (this.modalMode) {
-        this.$emit("submit", this.extractIds(this.item));
+        this.$emit("submit", this.getSerialized());
       } else {
         this.submit(clearForm);
       }
     },
     getItemTemplate() {
-      return {
+      let template = {
         account: null,
         floatAccount: null,
         costCenter: null,
@@ -299,6 +306,27 @@ export default {
         due: null,
         date: null,
       };
+
+      if (this.selectedAccount) {
+        this.itemAccount = this.selectedAccount.account;
+        this.itemFloatAccount = this.selectedAccount.floatAccount;
+        this.itemCostCenter = this.selectedAccount.costCenter;
+      }
+
+      return template;
+    },
+    getSerialized() {
+      this.item.account = this.itemAccount;
+      this.item.floatAccount = this.itemFloatAccount;
+      this.item.costCenter = this.itemCostCenter;
+
+      let data = this.extractIds(this.item);
+
+      this.removeAttachmentUrls(data);
+      if (this.formData) {
+        data = this.jsonToFormData(data);
+      }
+      return data;
     },
     getItemByPosition(pos) {
       return this.request({
@@ -354,7 +382,10 @@ export default {
         loading: false,
         params: params,
         success: (data) => {
-          this.paidCheques = data.results;
+          this.paidCheques = data.results.map((o) => {
+            o.serial = String(o.serial);
+            return o;
+          });
           this.loading.getPaidCheques = false;
         },
       });

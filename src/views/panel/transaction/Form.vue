@@ -651,7 +651,7 @@ export default {
       );
     },
     hasCheque(row) {
-      return row.cheque;
+      return this.hasValue(row.cheque);
     },
     openSubmitChequeDialog(row, i) {
       let account = this.item.account;

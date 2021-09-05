@@ -34,7 +34,7 @@
                 icon
                 rounded
                 :to="getDetailLink(item)"
-              >{{item.factor.code}}</v-btn>
+              >{{ item.origin.code }}</v-btn>
             </template>
           </m-datatable>
         </v-col>
@@ -234,7 +234,7 @@ export default {
             id: item.origin.id,
           },
         };
-      } else if (["ia", "oa"].includes(type)) {
+      } else if (["ia", "oa"].includes(origin.type)) {
         return {
           name: "AdjustmentForm",
           params: {
@@ -246,12 +246,15 @@ export default {
       return {
         name: "FactorForm",
         params: {
-          id: factor.id,
-          type: factor.type,
+          id: origin.id,
+          type: origin.type,
           isPreFactor: factor.is_pre_factor,
         },
       };
     },
+    getItemCode(item) {
+
+    }
   },
   watch: {
     "inventory.ware": {
