@@ -5,7 +5,7 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="8">
-          <ware-select label="کالا" v-model="filters.ware" :return-object="false" />
+          <ware-select label="کالا" @change="o => filters.ware = o.id" />
         </v-col>
         <v-col cols="12" md="4">
           <v-autocomplete
@@ -20,7 +20,7 @@
         </v-col>
         <v-col cols="12">
           <m-datatable
-            v-if="this.filters.ware"
+            v-if="filters.ware"
             :api-url="url"
             :headers="headers"
             :filters.sync="filters"
