@@ -227,18 +227,19 @@ export default {
     getDetailLink(item) {
       let factor = item.factor;
       let type = factor.type;
+      let origin = item.origin
       if (["it", "ot"].includes(type)) {
         return {
           name: "TransferForm",
           params: {
-            id: item.origin.id,
+            id: origin.id,
           },
         };
       } else if (["ia", "oa"].includes(origin.type)) {
         return {
           name: "AdjustmentForm",
           params: {
-            id: item.origin.id,
+            id: origin.id,
           },
         };
       }
