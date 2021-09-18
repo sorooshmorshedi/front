@@ -244,6 +244,8 @@ export default {
         { app: "transactions", name: "receiveTransaction", label: "دریافت" },
         { app: "transactions", name: "paymentTransaction", label: "پرداخت" },
         { app: "transactions", name: "bankTransferTransaction", label: "پرداخت بین بانک ها" },
+        { app: "transactions", name: "receivedGuaranteeTransaction", label: "اسناد ضمانتی دریافتی" },
+        { app: "transactions", name: "paymentGuaranteeTransaction", label: "اسناد ضمانتی پرداختی" },
         { app: "transactions", name: "bankingOperation", label: "عملیات های بانکی" },
         {
           app: "transactions",

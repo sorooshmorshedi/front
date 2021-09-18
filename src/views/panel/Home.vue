@@ -32,10 +32,10 @@
     </v-row>
     <v-row>
       <v-col cols="12" md="6">
-        <recent-cheques-widget type="p" />
+        <recent-cheques-widget type="c" :isPaid="true" />
       </v-col>
       <v-col cols="12" md="6">
-        <recent-cheques-widget type="r" />
+        <recent-cheques-widget type="c" :isPaid="false" />
       </v-col>
     </v-row>
   </div>

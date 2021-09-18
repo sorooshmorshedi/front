@@ -3,6 +3,9 @@ import {
 } from "vuex";
 
 export default {
+  data() {
+    return {}
+  },
   methods: {
     getBankingOperations(reload, callback) {
       this.fillStore({

@@ -336,6 +336,48 @@ export default {
           module: "transactions",
           children: [
             {
+              title: "اطلاعات پایه",
+              children: [
+                {
+                  perm: "chequebook",
+                  to: {
+                    name: "ChequebookForm",
+                  },
+                  title: "ثبت دسته چک",
+                },
+                {
+                  perm: "defaultAccount",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "receive",
+                    },
+                  },
+                  title: "حساب های پیش فرض دریافت",
+                },
+                {
+                  perm: "defaultAccount",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "payment",
+                    },
+                  },
+                  title: "حساب های پیش فرض پرداخت",
+                },
+                {
+                  perm: "defaultAccount",
+                  to: {
+                    name: "DefaultAccounts",
+                    params: {
+                      usage: "guarantee",
+                    },
+                  },
+                  title: "پیشفرض های حساب های انتظامی",
+                },
+              ]
+            },
+            {
               title: "دریافت",
               children: [
                 {
@@ -358,12 +400,34 @@ export default {
                   },
                   title: "لیست دریافت ها",
                 },
+
+                {
+                  perm: "receivedGuaranteeTransaction",
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      type: "receivedGuarantee",
+                    },
+                  },
+                  title: "ثبت اسناد ضمانتی دریافتی",
+                },
+                {
+                  perm: "receivedGuaranteeTransaction",
+                  to: {
+                    name: "TransactionsList",
+                    params: {
+                      type: "receivedGuarantee",
+                    },
+                  },
+                  title: "لیست اسناد ضمانتی دریافتی",
+                },
                 {
                   perm: "receivedCheque",
                   to: {
                     name: "ChequeForm",
                     params: {
-                      receivedOrPaid: "r",
+                      type: "c",
+                      isPaid: false
                     },
                   },
                   title: "ثبت چک دریافتنی",
@@ -394,16 +458,6 @@ export default {
                   },
                   title: "لیست چک های دریافتی پاس نشده و برگشتی سررسید گذشته",
                 },
-                {
-                  perm: "defaultAccount",
-                  to: {
-                    name: "DefaultAccounts",
-                    params: {
-                      usage: "receive",
-                    },
-                  },
-                  title: "حساب های پیش فرض دریافت",
-                },
               ],
             },
             {
@@ -429,6 +483,28 @@ export default {
                   },
                   title: "لیست پرداخت ها",
                 },
+
+                {
+                  perm: "paymentGuaranteeTransaction",
+                  to: {
+                    name: "TransactionForm",
+                    params: {
+                      type: "paymentGuarantee",
+                    },
+                  },
+                  title: "ثبت اسناد ضمانتی پرداختی",
+                },
+                {
+                  perm: "paymentGuaranteeTransaction",
+                  to: {
+                    name: "TransactionsList",
+                    params: {
+                      type: "paymentGuarantee",
+                    },
+                  },
+                  title: "لیست اسناد ضمانتی پرداختی",
+                },
+
                 {
                   perm: "bankTransferTransaction",
                   to: {
@@ -454,7 +530,8 @@ export default {
                   to: {
                     name: "ChequeForm",
                     params: {
-                      receivedOrPaid: "p",
+                      type: 'c',
+                      isPaid: true
                     },
                   },
                   title: "ثبت چک پرداختنی",
@@ -486,23 +563,6 @@ export default {
                   title: "لیست چک های پرداختی پاس نشده و برگشتی سررسید گذشته",
                 },
 
-                {
-                  perm: "chequebook",
-                  to: {
-                    name: "ChequebookForm",
-                  },
-                  title: "ثبت دسته چک",
-                },
-                {
-                  perm: "defaultAccount",
-                  to: {
-                    name: "DefaultAccounts",
-                    params: {
-                      usage: "payment",
-                    },
-                  },
-                  title: "حساب های پیش فرض پرداخت",
-                },
               ],
             },
             {

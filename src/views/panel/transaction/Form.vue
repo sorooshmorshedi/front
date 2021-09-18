@@ -131,6 +131,7 @@
                       :disabled="!isEditing || hasCheque(row)"
                       :items="itemPaymentMethods"
                       v-model="rows[i].type"
+                      @change="openSubmitChequeDialog(row, i)"
                       item-text="name"
                       item-value="id"
                     />
@@ -140,7 +141,10 @@
                       class="blue white--text mt-1"
                       block
                       :disabled="!isEditing"
-                    >ثبت چک</v-btn>
+                    >
+                      ثبت
+                      {{ rows[i].type.name }}
+                    </v-btn>
                   </td>
                   <td class="tr-account">
                     <account-select
@@ -326,7 +330,8 @@
           <cheque-form
             ref="chequeForm"
             :modalMode="true"
-            :receivedOrPaid="type[0]"
+            :isPaid="type[0] == 'p'"
+            :type="chequeType"
             :selectedAccount="{'account': item.account, 'floatAccount': item.floatAccount, 'costCenter': item.costCenter}"
             @submit="addCheque"
           />
@@ -343,12 +348,13 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import _ from "lodash";
 import ChequeForm from "../cheque/ChequeForm.vue";
+import ChequeMixin from "@/views/panel/cheque/mixin";
 import TransactionMixin from "@/views/panel/transaction/mixin";
 
 export default {
   name: "TransactionForm",
   components: { ChequeForm, money, date },
-  mixins: [MFormMixin, accountApiMixin, TransactionMixin],
+  mixins: [MFormMixin, accountApiMixin, TransactionMixin, ChequeMixin],
   props: {
     type: {
       required: true,
@@ -377,6 +383,7 @@ export default {
       rows: [],
       itemsToDelete: [],
       chequeRowIndex: null,
+      chequeType: "c",
       factors: [],
       factorTypes: {
         buy: "خرید",
@@ -405,6 +412,10 @@ export default {
         return "پرداخت تنخواه";
       } else if (this.isBankTransfer) {
         return "پرداخت بین بانک ها";
+      } else if (this.type == "receivedGuarantee") {
+        return "اسناد ضمانتی دریافتی";
+      } else if (this.type == "paymentGuarantee") {
+        return "اسناد ضمانتی پرداختی";
       }
     },
     permissionBasename() {
@@ -419,6 +430,9 @@ export default {
     isBankTransfer() {
       return this.type == "bankTransfer";
     },
+    isGuarantee() {
+      return this.type.includes("Guarantee");
+    },
     accountLabel() {
       if (this.isImprest) return "* تنخواه گردان";
       if (this.isBankTransfer) return "* برداشت از حساب";
@@ -429,10 +443,14 @@ export default {
       return " * کد - نام حساب";
     },
     itemPaymentMethods() {
-      let type = this.type == "receive" ? "receive" : "payment";
-      return this.defaultAccounts.filter(
-        (o) => o.usage && o.usage.toLowerCase().includes(type)
-      );
+      if (this.isGuarantee) {
+        return this.ChequeTypes;
+      } else {
+        let type = this.type == "receive" ? "receive" : "payment";
+        return this.defaultAccounts.filter(
+          (o) => o.usage && o.usage.toLowerCase().includes(type)
+        );
+      }
     },
     itemAccounts() {
       if (this.isBankTransfer) {
@@ -646,9 +664,16 @@ export default {
     },
 
     isChequeType(row) {
-      return (
-        row.type.id && row.type.codename && row.type.codename.includes("Cheque")
-      );
+      if (row.type.id) {
+        let isCheque = row.type.codename.includes("Cheque");
+        let isGuarantee =
+          this.ChequeTypes.find((o) => o.codename == row.type.codename) !=
+          undefined;
+
+        return isCheque || isGuarantee;
+      } else {
+        return false;
+      }
     },
     hasCheque(row) {
       return this.hasValue(row.cheque);
@@ -669,6 +694,11 @@ export default {
       }
 
       this.chequeRowIndex = i;
+      if (this.isGuarantee) {
+        this.chequeType = row.type.codename;
+      } else {
+        this.chequeType = "c";
+      }
       this.submitChequeDialog = true;
 
       this.$nextTick(() => {

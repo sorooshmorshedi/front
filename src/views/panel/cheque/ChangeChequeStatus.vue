@@ -27,7 +27,7 @@
                 <account-select
                   required
                   :label="' * ' + accountLabel(newStatus) "
-                  :disabled="isPaidCheque?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
+                  :disabled="cheque.is_paid?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
                   track-by="id"
                   :itemsType="newStatusAccountsType"
                   v-model="statusChange.account"
@@ -56,7 +56,7 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
-import getChequeApiMixin from "./getChequeApi.js";
+import ChequeMixin from "./mixin.js";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 export default {
@@ -67,7 +67,7 @@ export default {
     }
   },
   components: { money, date },
-  mixins: [accountApiMixin, getChequeApiMixin],
+  mixins: [accountApiMixin, ChequeMixin],
   data() {
     return {
       dialog: false,
@@ -76,9 +76,6 @@ export default {
     };
   },
   computed: {
-    isPaidCheque() {
-      return this.cheque.received_or_paid == "p";
-    },
     newStatusAccountsType() {
       let name = this.newStatus.name;
       if (name == "passed") {
@@ -127,7 +124,7 @@ export default {
       ];
       let res = [];
       statuses.forEach(s => {
-        if (this.isPaidCheque) {
+        if (this.cheque.is_paid) {
           if (["inFlow", "revertInFlow", "transferred"].includes(s.name)) {
             return;
           }
@@ -151,7 +148,7 @@ export default {
       return this.cheque.chequebook;
     },
     chequeLabel() {
-      return this.isPaidCheque ? "پرداختنی" : "دریافتنی";
+      return this.cheque.is_paid ? "پرداختنی" : "دریافتنی";
     }
   },
   created() {
@@ -220,7 +217,7 @@ export default {
     },
     accountLabel(status) {
       if (status.accountLabel) return status.accountLabel;
-      if (this.isPaidCheque) return status.paidAccountLabel;
+      if (this.cheque.is_paid) return status.paidAccountLabel;
       else return status.receivedAccountLabel;
     },
     clearStatusChange() {

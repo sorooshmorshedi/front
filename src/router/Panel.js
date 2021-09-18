@@ -277,9 +277,14 @@ export default [{
         },
         {
           name: 'ChequeForm',
-          path: 'form/:receivedOrPaid/:id?',
+          path: 'form/:type/:isPaid/:id?',
           component: ChequeForm,
-          props: true,
+          props: (route) => {
+            return {
+              ...route.params,
+              isPaid: route.params.isPaid == 'true'
+            }
+          },
         },
       ]
     },

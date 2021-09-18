@@ -96,12 +96,12 @@
         <v-btn
           v-if="canSubmitCheque"
           class="green white--text w-100px"
-          :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
+          :to="{name: 'ChequeForm', params: {type: 'c', isPaid: cheque.is_paid, id: id} }"
         >ثبت</v-btn>
         <v-btn
           v-else-if="canEditCheque"
           class="amber w-100px"
-          :to="{name: 'ChequeForm', params: {receivedOrPaid: cheque.received_or_paid, id: id} }"
+          :to="{name: 'ChequeForm', params: {type: 'c', isPaid: cheque.is_paid, id: id} }"
         >ویرایش</v-btn>
       </v-card-actions>
     </v-card>
@@ -202,11 +202,11 @@
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import changeChequeStatus from "./ChangeChequeStatus";
-import getChequeApiMixin from "./getChequeApi.js";
+import ChequeMixin from "./mixin.js";
 import OpenSanadBtn from "@/components/btns/OpenSanadBtn";
 export default {
   components: { money, date, changeChequeStatus, OpenSanadBtn },
-  mixins: [getChequeApiMixin],
+  mixins: [ChequeMixin],
   props: {
     id: {
       required: true,
@@ -220,9 +220,6 @@ export default {
     };
   },
   computed: {
-    isPaidCheque() {
-      return this.cheque.received_or_paid == "p";
-    },
     statusChanges() {
       if (this.cheque) return this.cheque.statusChanges;
       return [];

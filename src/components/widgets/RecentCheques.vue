@@ -24,6 +24,9 @@ export default {
     type: {
       required: true,
     },
+    isPaid: {
+      required: true,
+    },
   },
   data() {
     return {
@@ -88,7 +91,8 @@ export default {
         limit: 3,
         offset: 0,
         status: "notPassed",
-        received_or_paid: this.type,
+        is_paid: this.isPaid,
+        type: this.type,
         due__lte: this.limit,
         ordering: "due",
       },

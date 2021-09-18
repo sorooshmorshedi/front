@@ -21,7 +21,12 @@ export default {
   name: "ChequesList",
   mixins: [QueryBinding],
   props: {
-    type: {},
+    type: {
+      require: true,
+    },
+    isPaid: {
+      require: true,
+    },
   },
   data() {
     return {
@@ -31,10 +36,10 @@ export default {
   },
   computed: {
     title() {
-      switch (this.type) {
-        case "received":
+      switch (this.isPaid) {
+        case false:
           return "چک های دریافتنی";
-        case "paid":
+        case true:
           return "چک های پرداختنی";
       }
     },
@@ -105,8 +110,6 @@ export default {
         {
           text: "نام بانک",
           value: "bankName",
-          type: "text",
-          filters: ["bankName__icontains"],
         },
       ];
 
@@ -121,11 +124,13 @@ export default {
     },
   },
   created() {
-    this.filters.received_or_paid = this.type == "paid" ? "p" : "r";
+    this.filters.is_paid = this.isPaid;
+    this.filters.type = this.type;
   },
   watch: {
     $route() {
-      this.filters.received_or_paid = this.type;
+      this.filters.is_paid = this.isPaid;
+      this.filters.type = this.type;
       this.$refs.datatable.getDataFromApi();
     },
   },
