@@ -3,9 +3,9 @@
     <m-form
       :title="title"
       :showList="false"
-      :listRoute="{name:'TransactionsList', params: {type: type}}"
+      :listRoute="{ name: 'TransactionsList', params: { type: type } }"
       exportBaseUrl="reports/lists/transactions"
-      :exportParams="{id: id}"
+      :exportParams="{ id: id }"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
       :canDelete="canDelete"
@@ -21,9 +21,11 @@
       <template #header-btns>
         <open-sanad-btn v-if="item.is_defined" :sanad="item.sanad" />
         <v-btn
-          v-if="isImprest && id != undefined && hasPerm('', 'imprestSettlement')"
+          v-if="
+            isImprest && id != undefined && hasPerm('', 'imprestSettlement')
+          "
           class="blue white--text mr-1 mt-1 mt-md-0"
-          :to="{name: 'ImprestSettlement', params: {id: item.id}}"
+          :to="{ name: 'ImprestSettlement', params: { id: item.id } }"
           title="تسویه تنخواه"
           icon
         >
@@ -48,7 +50,12 @@
                 <v-text-field label="شماره" disabled v-model="item.code" />
               </v-col>
               <v-col cols="12" md="3">
-                <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
+                <date
+                  label=" * تاریخ"
+                  v-model="item.date"
+                  :default="true"
+                  :disabled="!isEditing"
+                />
               </v-col>
 
               <v-col cols="12" md="3" v-if="type == 'payment'">
@@ -56,7 +63,12 @@
               </v-col>
 
               <v-col cols="12" md="3">
-                <v-switch v-if="id" label="قطعی شده" v-model="item.is_defined" disabled />
+                <v-switch
+                  v-if="id"
+                  label="قطعی شده"
+                  v-model="item.is_defined"
+                  disabled
+                />
               </v-col>
 
               <v-col cols="12" md="8">
@@ -67,9 +79,9 @@
                   :disabled="modalMode || !isEditing"
                   required
                   :floatAccount="item.floatAccount"
-                  @update:floatAccount="v => item.floatAccount = v"
+                  @update:floatAccount="(v) => (item.floatAccount = v)"
                   :costCenter="item.costCenter"
-                  @update:costCenter="v => item.costCenter = v"
+                  @update:costCenter="(v) => (item.costCenter = v)"
                 />
               </v-col>
 
@@ -119,8 +131,12 @@
                 </tr>
               </template>
               <template #tbody>
-                <tr v-for="(row,i) in rows" :key="i" :class="{'d-print-none': i == rows.length-1}">
-                  <td>{{ i+1 }}</td>
+                <tr
+                  v-for="(row, i) in rows"
+                  :key="i"
+                  :class="{ 'd-print-none': i == rows.length - 1 }"
+                >
+                  <td>{{ i + 1 }}</td>
                   <td
                     v-if="!isBankTransfer"
                     style="min-width: 150px"
@@ -131,7 +147,7 @@
                       :disabled="!isEditing || hasCheque(row)"
                       :items="itemPaymentMethods"
                       v-model="rows[i].type"
-                      @change="openSubmitChequeDialog(row, i)"
+                      @change="isChequeType(row) && openSubmitChequeDialog(row, i)"
                       item-text="name"
                       item-value="id"
                     />
@@ -150,14 +166,14 @@
                     <account-select
                       v-if="rows[i].type.id || isBankTransfer"
                       :horizontal="true"
-                      :items-type="isBankTransfer?'banks':'level3'"
+                      :items-type="isBankTransfer ? 'banks' : 'level3'"
                       v-model="rows[i].type.account"
                       :disabled="!isEditing"
                       :account-disabled="!isBankTransfer"
                       :floatAccount="rows[i].floatAccount"
-                      @update:floatAccount="v => rows[i].floatAccount = v"
+                      @update:floatAccount="(v) => (rows[i].floatAccount = v)"
                       :costCenter="rows[i].costCenter"
-                      @update:costCenter="v => rows[i].costCenter = v"
+                      @update:costCenter="(v) => (rows[i].costCenter = v)"
                     />
                   </td>
                   <td>
@@ -221,7 +237,9 @@
                   </template>
                   <td class="d-print-none">
                     <v-btn
-                      v-if="i != rows.length-1 && (!hasCheque(row) || !row.id)"
+                      v-if="
+                        i != rows.length - 1 && (!hasCheque(row) || !row.id)
+                      "
                       :disabled="!isEditing"
                       @click="deleteRow(i)"
                       class="red--text"
@@ -231,10 +249,15 @@
                     </v-btn>
                     <router-link
                       v-if="hasCheque(row) && row.cheque.id"
-                      class="btn btn-sm btn-info"
-                      :to="{name:'ChequeDetail', params:{id: row.cheque.id}}"
+                      :to="{
+                        name: 'ChequeDetail',
+                        params: { id: row.cheque.id },
+                      }"
                       target="_blank"
-                    >مشاهده جزئیات چک</router-link>
+                      icon
+                    >
+                      <v-icon>fa-external-link-alt</v-icon>
+                    </router-link>
                   </td>
                 </tr>
                 <tr></tr>
@@ -242,14 +265,19 @@
                   <td></td>
                   <td v-if="!isBankTransfer"></td>
                   <td class="text-left">مجموع:</td>
-                  <td class>{{ rowsSum('value') | toMoney }}</td>
+                  <td class>{{ rowsSum("value") | toMoney }}</td>
                   <td colspan="5"></td>
                   <template v-if="!isReceive">
                     <td></td>
-                    <td>{{ rowsSum('banking_operation_value') | toMoney }}</td>
+                    <td>{{ rowsSum("banking_operation_value") | toMoney }}</td>
                   </template>
                   <td class="d-print-none">
-                    <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
+                    <v-btn
+                      @click="deleteRow(-1)"
+                      icon
+                      class="red--text"
+                      :disabled="!isEditing"
+                    >
                       <v-icon>delete_sweep</v-icon>
                     </v-btn>
                   </td>
@@ -261,7 +289,12 @@
       </template>
     </m-form>
 
-    <v-dialog v-model="factorsDialog" scrollable max-width="1200px" :persistent="isEditing">
+    <v-dialog
+      v-model="factorsDialog"
+      scrollable
+      max-width="1200px"
+      :persistent="isEditing"
+    >
       <v-card>
         <v-card-title>فاکتور های پرداخت نشده</v-card-title>
         <v-card-text>
@@ -283,14 +316,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(f,i) in factors" :key="i">
+              <tr v-for="(f, i) in factors" :key="i">
                 <td>{{ f.code }}</td>
                 <td>{{ factorTypes[f.type] }}</td>
                 <td>{{ f.explanation }}</td>
                 <td>{{ f.date }}</td>
                 <td>{{ f.total_sum | toMoney }}</td>
                 <td>{{ f.back_total_sum | toMoney }}</td>
-                <td>{{ f.total_sum - f.back_total_sum | toMoney }}</td>
+                <td>{{ (f.total_sum - f.back_total_sum) | toMoney }}</td>
                 <td>{{ f.previous_paid_value | toMoney }}</td>
                 <td v-if="!isEditing">{{ f.payment.value | toMoney }}</td>
                 <td>{{ f.remain | toMoney }}</td>
@@ -300,7 +333,9 @@
                 <td>
                   <v-btn @click="openFactor(f)" class="blue white--text">
                     مشاهده فاکتور
-                    <v-chip class="app-background-color mr-2" x-small>{{ f.code }}</v-chip>
+                    <v-chip class="app-background-color mr-2" x-small>{{
+                      f.code
+                    }}</v-chip>
                   </v-btn>
                 </td>
               </tr>
@@ -313,13 +348,17 @@
             @click="splitValue(true)"
             :disabled="!isEditing"
             class="blue white--text"
-          >سرشکن کردن از پایین</v-btn>
+            >سرشکن کردن از پایین</v-btn
+          >
           <v-btn
             @click="splitValue()"
             :disabled="!isEditing"
             class="blue white--text"
-          >سرشکن کردن از بالا</v-btn>
-          <v-btn @click="validatePaidValues" class="green white--text w-100px">تایید</v-btn>
+            >سرشکن کردن از بالا</v-btn
+          >
+          <v-btn @click="validatePaidValues" class="green white--text w-100px"
+            >تایید</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -332,7 +371,11 @@
             :modalMode="true"
             :isPaid="type[0] == 'p'"
             :type="chequeType"
-            :selectedAccount="{'account': item.account, 'floatAccount': item.floatAccount, 'costCenter': item.costCenter}"
+            :selectedAccount="{
+              account: item.account,
+              floatAccount: item.floatAccount,
+              costCenter: item.costCenter,
+            }"
             @submit="addCheque"
           />
         </v-card-text>
@@ -664,7 +707,7 @@ export default {
     },
 
     isChequeType(row) {
-      if (row.type.id) {
+      if (row.type.id && row.type.codename) {
         let isCheque = row.type.codename.includes("Cheque");
         let isGuarantee =
           this.ChequeTypes.find((o) => o.codename == row.type.codename) !=
@@ -707,15 +750,15 @@ export default {
     },
     addCheque(cheque) {
       if (!this.hasValue(cheque.serial)) {
-        this.notify("لطفا سریال چک را وارد کنید", "danger");
+        this.notify("لطفا سریال را وارد کنید", "danger");
         return;
       }
       if (!this.hasValue(cheque.value)) {
-        this.notify("لطفا مبلغ چک را وارد کنید", "danger");
+        this.notify("لطفا مبلغ را وارد کنید", "danger");
         return;
       }
       if (cheque.date.length != 10 || cheque.due.length != 10) {
-        this.notify("لطفا تاریخ های چک را به صورت صحیح وارد کنید", "danger");
+        this.notify("لطفا تاریخ های را به صورت صحیح وارد کنید", "danger");
         return;
       }
       let row = this.rows[this.chequeRowIndex];

@@ -4,7 +4,7 @@
       :title="title"
       :showListBtn="false"
       :showList="false"
-      :listRoute="{name: 'ChequesList', params:{type: this.type == 'paid'?'paid':'received'}}"
+      :listRoute="{ name: 'ChequesList', params: { type: type } }"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
       :canDelete="canDelete"
@@ -20,8 +20,9 @@
         <v-btn
           v-if="id"
           class="blue white--text mr-1 mt-1 mt-md-0"
-          :to="{ name: 'ChequeDetail', id: id, }"
-        >مشاهده جزئیات {{ typeName }}</v-btn>
+          :to="{ name: 'ChequeDetail', id: id }"
+          >مشاهده جزئیات {{ typeName }}</v-btn
+        >
       </template>
 
       <template>
@@ -42,7 +43,7 @@
                 :return-object="true"
                 required
                 label=" * سری دسته چک"
-                :items="chequebooks.filter(o => o.account.id == bank.id)"
+                :items="chequebooks.filter((o) => o.account.id == bank.id)"
                 item-text="serial"
                 item-value="id"
                 v-model="item.chequebook"
@@ -70,7 +71,7 @@
           <v-col cols="12" md="3" v-else>
             <v-text-field
               required
-              label=" * سریال چک"
+              label=" * سریال"
               v-model="item.serial"
               :disabled="isPaid || !isEditing"
             />
@@ -82,15 +83,34 @@
               v-model="itemAccount"
               :disabled="modalMode || !isEditing"
               :floatAccount="itemFloatAccount"
-              @update:floatAccount="v => itemFloatAccount = v"
+              @update:floatAccount="(v) => (itemFloatAccount = v)"
               :costCenter="itemCostCenter"
-              @update:costCenter="v => itemCostCenter = v"
+              @update:costCenter="(v) => (itemCostCenter = v)"
             />
           </v-col>
           <v-col cols="12" md="2">
-            <money label=" * مبلغ" v-model="item.value" :disabled="!isEditing" />
+            <money
+              label=" * مبلغ"
+              v-model="item.value"
+              :disabled="!isEditing"
+            />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="3" v-if="type == 'bg'">
+            <v-text-field
+              label="شماره سپام"
+              v-model="item.accountNumber"
+              :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2" v-if="type == 'bg'">
+            <date
+              label=" * تاریخ اعتبار"
+              v-model="item.due"
+              :default="false"
+              :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2" v-else>
             <date
               label=" * تاریخ سررسید"
               v-model="item.due"
@@ -99,15 +119,28 @@
             />
           </v-col>
           <v-col cols="12" md="2">
-            <date label="* تاریخ ثبت" v-model="item.date" :default="true" :disabled="!isEditing" />
+            <date
+              label="* تاریخ ثبت"
+              v-model="item.date"
+              :default="true"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="2" v-if="canSetSanadCode">
-            <v-text-field label="شماره سند" v-model="item.sanad_code" :disabled="!isEditing" />
+            <v-text-field
+              label="شماره سند"
+              v-model="item.sanad_code"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="4">
-            <v-textarea label="شرح " v-model="item.explanation" :disabled="!isEditing" />
+            <v-textarea
+              label="شرح "
+              v-model="item.explanation"
+              :disabled="!isEditing"
+            />
           </v-col>
-          <v-col cols="12" md="12" v-if="!isPaid">
+          <v-col cols="12" md="12" v-if="type == 'c' && !isPaid">
             <v-select
               label=" * نوع چک"
               :items="chequeOwnerTypes"
@@ -120,6 +153,7 @@
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field
+              v-if="type != 'pn'"
               label="نام بانک"
               v-model="item.bankName"
               :disabled="isPaid || !isEditing"
@@ -127,6 +161,7 @@
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field
+              v-if="type != 'pn'"
               label="نام شعبه"
               v-model="item.branchName"
               :disabled="isPaid || !isEditing"
@@ -134,7 +169,8 @@
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field
-              label="شماره حساب چک"
+              v-if="type == 'c'"
+              label="شماره حساب"
               v-model="item.accountNumber"
               :disabled="isPaid || !isEditing"
             />
@@ -142,7 +178,13 @@
         </v-row>
       </template>
     </m-form>
-    <cheques-list class="mt-3" form="cheque" :type="type" :isPaid="isPaid" ref="formList" />
+    <cheques-list
+      class="mt-3"
+      form="cheque"
+      :type="type"
+      :isPaid="isPaid"
+      ref="formList"
+    />
   </div>
 </template>
 
@@ -239,7 +281,7 @@ export default {
       return this.item.status != "revoked";
     },
     typeName() {
-      return this.ChequeTypes.find((o) => o.codename == this.type).name;
+      return this.getTypeName(this.type);
     },
     title() {
       let title = this.typeName;
@@ -288,6 +330,13 @@ export default {
     },
   },
   methods: {
+    clearForm() {
+      this.isEditing = true;
+      this.item = this.getItemTemplate();
+      if (!this.modalMode) {
+        this.changeRouteTo(null);
+      }
+    },
     getData() {
       if (this.$refs.formList) {
         this.$refs.formList.$refs.datatable.getData();
@@ -302,6 +351,7 @@ export default {
     },
     getItemTemplate() {
       let template = {
+        type: this.type,
         account: null,
         floatAccount: null,
         costCenter: null,
@@ -346,7 +396,7 @@ export default {
         },
         error: (error) => {
           if (error.response.status == 404) {
-            this.notify("چک وجود ندارد", "warning");
+            this.notify("مورد وجود ندارد", "warning");
           }
         },
       });

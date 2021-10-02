@@ -2,7 +2,7 @@
   <div>
     <v-card v-if="cheque">
       <v-card-title>
-        جزئیات چک
+        {{ title }}
         <v-spacer></v-spacer>
       </v-card-title>
 
@@ -12,7 +12,7 @@
             <v-simple-table dense class="detail-table">
               <tbody>
                 <tr>
-                  <th>سریال چک:</th>
+                  <th>سریال :</th>
                   <td>{{ cheque.serial }}</td>
                 </tr>
                 <tr>
@@ -24,7 +24,7 @@
                   <td>{{ cheque.branchName }}</td>
                 </tr>
                 <tr>
-                  <th>شماره حساب چک:</th>
+                  <th>شماره حساب :</th>
                   <td>{{ cheque.accountNumber }}</td>
                 </tr>
               </tbody>
@@ -42,7 +42,7 @@
                   <td>{{ cheque.due }}</td>
                 </tr>
                 <tr>
-                  <th>شرح چک:</th>
+                  <th>شرح :</th>
                   <td>{{ cheque.explanation }}</td>
                 </tr>
                 <tr>
@@ -69,11 +69,11 @@
                   <td>{{ cheque.floatAccount.name }}</td>
                 </tr>
                 <tr v-if="isPaidCheque">
-                  <th>حساب چک:</th>
+                  <th>حساب :</th>
                   <td>{{ cheque.chequebook.account.title }}</td>
                 </tr>
                 <tr v-if="!isPaidCheque">
-                  <th>نوع چک:</th>
+                  <th>نوع :</th>
                   <td></td>
                 </tr>
 
@@ -92,23 +92,32 @@
           v-if="canSubmitCheque && isPaidCheque && cheque.status == 'blank'"
           class="red white--text"
           @click="showRevokeDialog = true"
-        >باطل کردن</v-btn>
+          >باطل کردن</v-btn
+        >
         <v-btn
           v-if="canSubmitCheque"
           class="green white--text w-100px"
-          :to="{name: 'ChequeForm', params: {type: 'c', isPaid: cheque.is_paid, id: id} }"
-        >ثبت</v-btn>
+          :to="{
+            name: 'ChequeForm',
+            params: { type: 'c', isPaid: cheque.is_paid, id: id },
+          }"
+          >ثبت</v-btn
+        >
         <v-btn
           v-else-if="canEditCheque"
           class="amber w-100px"
-          :to="{name: 'ChequeForm', params: {type: 'c', isPaid: cheque.is_paid, id: id} }"
-        >ویرایش</v-btn>
+          :to="{
+            name: 'ChequeForm',
+            params: { type: 'c', isPaid: cheque.is_paid, id: id },
+          }"
+          >ویرایش</v-btn
+        >
       </v-card-actions>
     </v-card>
 
     <v-card v-if="cheque" class="mt-3">
       <v-card-title>
-        تغییر وضعیت های چک
+        تغییر وضعیت ها
         <v-spacer></v-spacer>
       </v-card-title>
 
@@ -129,11 +138,13 @@
           </thead>
           <tbody>
             <tr v-for="(sc, i) in statusChanges" :key="i">
-              <td>{{ i+1 }}</td>
+              <td>{{ i + 1 }}</td>
               <td>{{ sc.fromStatus | chequeStatuses }}</td>
               <td>{{ sc.toStatus | chequeStatuses }}</td>
               <td>{{ sc.date }}</td>
-              <template v-if="sc.sanad && sc.sanad.items && sc.sanad.items.length">
+              <template
+                v-if="sc.sanad && sc.sanad.items && sc.sanad.items.length"
+              >
                 <td>{{ sc.sanad.items[0].account.name }}</td>
                 <td>{{ sc.sanad.items[1].account.name }}</td>
               </template>
@@ -143,11 +154,19 @@
               </template>
               <td>{{ sc.explanation }}</td>
               <td>
-                <open-sanad-btn v-if="sc.sanad" :sanad="sc.sanad" :table-style="true" />
+                <open-sanad-btn
+                  v-if="sc.sanad"
+                  :sanad="sc.sanad"
+                  :table-style="true"
+                />
               </td>
               <td>
                 <v-btn
-                  v-if="i == statusChanges.length-1 && (isPaidCheque || i != 0) && !financialYear.is_closed"
+                  v-if="
+                    i == statusChanges.length - 1 &&
+                    (isPaidCheque || i != 0) &&
+                    !financialYear.is_closed
+                  "
                   @click.prevent="deleteStatusChange(sc)"
                   class="red--text"
                   icon
@@ -165,7 +184,8 @@
           @click="showChangeChequeStatusDialog"
           :disabled="!canChangeStatus"
           class="blue white--text mr-1"
-        >تغییر وضعیت چک</v-btn>
+          >تغییر وضعیت
+        </v-btn>
       </v-card-actions>
 
       <change-cheque-status
@@ -175,14 +195,22 @@
       />
     </v-card>
 
-    <v-dialog v-model="showRevokeDialog" max-width="300px" transition="dialog-transition">
+    <v-dialog
+      v-model="showRevokeDialog"
+      max-width="300px"
+      transition="dialog-transition"
+    >
       <v-card>
-        <v-card-title>باطل کردن چک</v-card-title>
+        <v-card-title>باطل کردن </v-card-title>
 
         <v-card-text>
           <v-row>
             <v-col cols="12">
-              <date label=" * تاریخ" v-model="revokeData.date" :default="true" />
+              <date
+                label=" * تاریخ"
+                v-model="revokeData.date"
+                :default="true"
+              />
             </v-col>
             <v-col cols="12">
               <v-textarea label="* توضیحات" v-model="revokeData.explanation" />
@@ -191,7 +219,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="revokeCheque" class="red white--text w-100px">ابطال</v-btn>
+          <v-btn @click="revokeCheque" class="red white--text w-100px"
+            >ابطال</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -220,6 +250,16 @@ export default {
     };
   },
   computed: {
+    title() {
+      if (this.cheque) {
+        return "جزئیات " + this.getTypeName(this.cheque.type);
+      } else {
+        return "";
+      }
+    },
+    isPaidCheque() {
+      return this.cheque && this.cheque.is_paid;
+    },
     statusChanges() {
       if (this.cheque) return this.cheque.statusChanges;
       return [];
@@ -228,7 +268,11 @@ export default {
       return this.statusChanges.length == 0 && !this.financialYear.is_closed;
     },
     canEditCheque() {
-      return this.statusChanges.length <= 1 && !this.financialYear.is_closed && this.cheque.status != 'revoked';
+      return (
+        this.statusChanges.length <= 1 &&
+        !this.financialYear.is_closed &&
+        this.cheque.status != "revoked"
+      );
     },
     canChangeStatus() {
       if (this.financialYear.is_closed) return false;
@@ -254,7 +298,7 @@ export default {
         success: (data) => {
           this.getCheque(this.id);
           this.successNotify();
-          this.showRevokeDialog = false
+          this.showRevokeDialog = false;
         },
       });
     },

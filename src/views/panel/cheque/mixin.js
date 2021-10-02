@@ -27,6 +27,9 @@ export default {
     }
   },
   methods: {
+    getTypeName(codename){
+      return this.ChequeTypes.find((o) => o.codename == codename).name;
+    },
     getCheque(id) {
       return this.request({
         url: this.endpoint(`cheques/cheques/${id}`),
