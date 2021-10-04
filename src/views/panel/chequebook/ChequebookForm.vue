@@ -19,7 +19,7 @@
       <v-btn
         v-if="item.id"
         class="blue white--text mr-1 mt-1 mt-md-0"
-        :to="{name: 'ChequesList', params: {type: 'p'}, query: {filters: JSON.stringify({chequebook__id: item.id})}}"
+        :to="{name: 'ChequesList', params: {type: 'c', isPaid: true}, query: {filters: JSON.stringify({chequebook__id: item.id})}}"
       >مشاهده چک ها</v-btn>
     </template>
     <template #default>

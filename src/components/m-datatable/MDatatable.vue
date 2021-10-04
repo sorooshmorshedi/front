@@ -570,10 +570,8 @@ export default {
     getHeaderSlot(value) {
       return `header.${value}`;
     },
-    getDataFromApi() {
-      this.loading = true;
-      const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
+    getOrdering(){
+      const { sortBy, sortDesc } = this.options;
       let ordering;
       if (sortBy && sortBy.length === 1 && sortDesc.length === 1) {
         ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replaceAll(
@@ -581,6 +579,14 @@ export default {
           "__"
         )}`;
       }
+
+      return ordering;
+
+    },
+    getDataFromApi() {
+      this.loading = true;
+      const { page, itemsPerPage } = this.options;
+
 
       let limit = itemsPerPage;
       let offset = itemsPerPage * (page - 1);
@@ -596,7 +602,7 @@ export default {
         params: {
           limit: limit,
           offset: offset,
-          ordering: ordering,
+          ordering: this.getOrdering(),
           search: this.search,
           ...this.getFilters(),
         },
@@ -646,10 +652,13 @@ export default {
             let filters = {
               ...this.filters,
               search: this.search,
+              ordering: this.getOrdering()
             };
+            
             Object.keys(filters).forEach((k) => {
-              if (this.filters[k] != undefined)
-                url += k.replaceAll(".", "__") + "=" + this.filters[k] + "&";
+              if (filters[k] != undefined) {
+                url += k.replaceAll(".", "__") + "=" + filters[k] + "&";
+              }
             });
             url += `headers=${JSON.stringify(
               this.headers.filter((o) => o.hideInExport != true)

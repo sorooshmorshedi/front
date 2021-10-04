@@ -437,7 +437,8 @@ export default {
                   to: {
                     name: "ChequesList",
                     params: {
-                      type: "r",
+                      type: "c",
+                      isPaid: false,
                     },
                   },
                   title: "لیست چک های دریافتی",
@@ -447,7 +448,8 @@ export default {
                   to: {
                     name: "ChequesList",
                     params: {
-                      type: "r",
+                      type: "c",
+                      isPaid: false
                     },
                     query: {
                       status__in: "notPassed,bounced",
@@ -541,7 +543,8 @@ export default {
                   to: {
                     name: "ChequesList",
                     params: {
-                      type: "p",
+                      type: "c",
+                      isPaid: true
                     },
                   },
                   title: "لیست چک های پرداختنی",
@@ -551,7 +554,8 @@ export default {
                   to: {
                     name: "ChequesList",
                     params: {
-                      type: "p",
+                      type: "c",
+                      isPaid:true
                     },
                     query: {
                       status__in: "notPassed,bounced",

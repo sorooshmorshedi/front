@@ -4,7 +4,7 @@
       :title="title"
       :showListBtn="false"
       :showList="false"
-      :listRoute="{ name: 'ChequesList', params: { type: type } }"
+      :listRoute="{ name: 'ChequesList', params: { type, isPaid } }"
       :showNavigationButtons="!modalMode"
       :showSubmitAndClearForm="!modalMode"
       :canDelete="canDelete"

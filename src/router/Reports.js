@@ -75,7 +75,7 @@ export default [{
     },
     {
       name: 'ChequesList',
-      path: 'lists/cheques/:type',
+      path: 'lists/cheques/:type/:isPaid',
       component: ChequesList,
       props: true
     },

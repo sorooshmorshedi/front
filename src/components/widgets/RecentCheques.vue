@@ -74,7 +74,8 @@ export default {
       return {
         name: "ChequesList",
         params: {
-          type: this.type == "p" ? "paid" : "received",
+          type: this.type,
+          isPaid: this.isPaid
         },
         query: {
           "filters.status__in": "notPassed",
