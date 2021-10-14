@@ -20,17 +20,18 @@
                 <sanad-item-list-report
                   :filters.sync="filters"
                   :showAccountInTable="true"
-                  :sortable="true"
-                  :filterable="true"
+                  :sortable="sortable"
+                  :filterable="filterable"
+                  :headers="headers"
                   :showRemain="false"
                   :showPreviousRemain="false"
                 >
-                  <template
+                  <!-- <template
                     #item.account.name="{ item }"
                   >{{ item.account[journal.level + '_name'] }}</template>
                   <template
                     #item.account.code="{ item }"
-                  >{{ item.account[journal.level + '_code'] }}</template>
+                  >{{ item.account[journal.level + '_code'] }}</template> -->
                 </sanad-item-list-report>
               </v-col>
             </template>
@@ -55,6 +56,8 @@ export default {
         financial_year: null,
         title: "دفتر روزنامه",
       },
+      sortable: true,
+      filterable: true,
       accountLevels: [
         { value: "level0", text: "گروه" },
         { value: "level1", text: "کل" },
@@ -62,6 +65,107 @@ export default {
         { value: "level3", text: "تفضیلی" },
       ],
     };
+  },
+  computed: {
+    headers(){
+      return [
+        {
+          text: "سال مالی",
+          value: "financial_year.name",
+          sortable: this.sortable,
+          filterable: this.filterable,
+          show: this.showFinancialYear,
+        },
+        {
+          text: "تاریخ",
+          value: "sanad.date",
+          type: "date",
+          sortable: this.sortable,
+          filterable: this.filterable,
+        },
+        {
+          text: "شماره سند",
+          value: "sanad.code",
+          sortable: this.sortable,
+          filterable: this.filterable,
+          showRangeFilter: true
+        },
+        {
+          text: "شرح",
+          value: "explanation",
+          sortable: this.sortable,
+          filterable: this.filterable,
+        },
+        {
+          text: "کد حساب",
+          value: 'account.' + this.journal.level + '_code',
+          showRangeFilter: true,
+          sortable: false,
+          show: this.showAccountInTable,
+        },
+        {
+          text: "نام حساب",
+          value: 'account.' + this.journal.level + '_name',
+          sortable: false,
+          show: this.showAccountInTable,
+        },
+        {
+          text: "بدهکار",
+          value: "bed",
+          type: "numeric",
+          sortable: this.sortable,
+          filterable: this.filterable,
+        },
+        {
+          text: "بستانکار",
+          value: "bes",
+          type: "numeric",
+          sortable: this.sortable,
+          filterable: this.filterable,
+        },
+        {
+          text: "مانده",
+          value: "remain",
+          type: "numeric",
+          sortable: false,
+          filterable: false,
+          align: "center",
+          show: this.showRemain,
+        },
+        {
+          text: "تشخیص",
+          value: "remain_type",
+          sortable: false,
+          filterable: false,
+          align: "center",
+          show: this.showRemain,
+        },
+        {
+          text: "سند سیستمی",
+          value: "sanad.is_auto_created",
+          type: "boolean",
+          sortable: false,
+          filterable: false,
+          align: "center",
+        },
+        {
+          text: "فرم",
+          value: "sanad_form",
+          sortable: false,
+          filterable: false,
+          align: "center",
+        },
+        {
+          text: "مشاهده سند",
+          value: "detail",
+          sortable: false,
+          filterable: false,
+          align: "left",
+          hideInExport: true,
+          show: this.showLink,
+        },
+      ];
+    }
   },
   created() {
     this.filters.financial_year = this.financialYear.id;
