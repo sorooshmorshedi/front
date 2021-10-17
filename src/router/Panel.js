@@ -282,7 +282,7 @@ export default [{
           props: (route) => {
             return {
               ...route.params,
-              isPaid: route.params.isPaid == 'true'
+              isPaid: [true, 'true'].includes(route.params.isPaid)
             }
           },
         },
