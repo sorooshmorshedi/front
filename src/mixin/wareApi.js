@@ -129,9 +129,9 @@ export default {
       return wareUnits
     },
     getUnitSuffix(ware, unit) {
-      if (unit && ware) {
-        let conversionFactor = ware.salePrices.find(o => o.unit == unit.id)['conversion_factor']
-        if (conversionFactor != 1) {
+      if (unit && ware && ware.salePrices) {
+        let salePrice = ware.salePrices.find(o => o.unit == unit.id)
+        if (salePrice && salePrice['conversion_factor'] != 1) {
           return `برابر ${conversionFactor} ${ware.main_unit_name}`
         }
       }

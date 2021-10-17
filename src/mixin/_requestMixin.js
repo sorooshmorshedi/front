@@ -6,7 +6,7 @@ export default {
     getServerUrl() {
       let serverUrl = 'https://api.app.sobhan.net/'
       if(window.location.hostname == '5.182.44.120') {
-        serverUrl = "http://5.182.44.120:7272/"
+        serverUrl = "http://5.182.44.120:8082/"
       }
       if (this.isDev) {
         serverUrl = localStorage.getItem('serverUrl');
