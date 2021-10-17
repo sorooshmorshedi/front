@@ -2,9 +2,9 @@
   <m-form
     title="انبار گردانی"
     :showList="false"
-    :listRoute="{name:'WarehouseHandlingList'}"
+    :listRoute="{ name: 'WarehouseHandlingList' }"
     exportBaseUrl="reports/lists/warehouseHandlings"
-    :exportParams="{id: this.id}"
+    :exportParams="{ id: this.id }"
     :canDelete="canDelete"
     :canSubmit="canSubmit"
     :isEditing.sync="isEditing"
@@ -18,14 +18,22 @@
       <template v-if="item.is_defined">
         <span>
           <v-btn
-            :to="{name: 'AdjustmentForm', params: {id:item.inputAdjustment, type: 'ia'}}"
+            :to="{
+              name: 'AdjustmentForm',
+              params: { id: item.inputAdjustment, type: 'ia' },
+            }"
             class="blue white--text mr-1 mt-1 mt-md-0"
-          >مشاهده حواله</v-btn>
+            >مشاهده رسید</v-btn
+          >
 
           <v-btn
-            :to="{name: 'AdjustmentForm', params: {id:item.outputAdjustment, type: 'oa'}}"
+            :to="{
+              name: 'AdjustmentForm',
+              params: { id: item.outputAdjustment, type: 'oa' },
+            }"
             class="blue white--text mr-1 mt-1 mt-md-0"
-          >مشاهده رسید</v-btn>
+            >مشاهده حواله</v-btn
+          >
         </span>
       </template>
 
@@ -38,18 +46,21 @@
             :href="$refs.mForm.printUrl + '&hide_remains=true'"
             target="_blank"
             rel="noopener noreferrer"
-          >چاپ بدون مانده</v-btn>
+            >چاپ بدون مانده</v-btn
+          >
           <v-btn
             small
             class="export-btn mr-1 mt-1 mt-md-0"
             :href="$refs.mForm.pdfUrl + '&hide_remains=true'"
             rel="noopener noreferrer"
-          >PDF بدون مانده</v-btn>
+            >PDF بدون مانده</v-btn
+          >
           <v-btn
             small
             class="export-btn mr-1 mt-1 mt-md-0"
             @click="downloadUrl($refs.mForm.excelUrl + '&hide_remains=true')"
-          >اکسل بدون مانده</v-btn>
+            >اکسل بدون مانده</v-btn
+          >
         </span>
       </template>
     </template>
@@ -92,7 +103,11 @@
           />
         </v-col>
         <v-col cols="12" md="2">
-          <v-text-field label="* انبار گردان" v-model="item.handler" :disabled="!isEditing" />
+          <v-text-field
+            label="* انبار گردان"
+            v-model="item.handler"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="3">
           <v-autocomplete
@@ -114,7 +129,11 @@
           />
         </v-col>
         <v-col cols="12" md="3">
-          <v-textarea label="شرح" v-model="item.explanation" :disabled="!isEditing" />
+          <v-textarea
+            label="شرح"
+            v-model="item.explanation"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="3">
           <v-text-field
@@ -141,18 +160,20 @@
             </template>
             <template #tbody v-if="inventory.length">
               <tr v-for="(row, i) in rows" :key="i">
-                <td class="tr-counter">{{ i+1 }}</td>
+                <td class="tr-counter">{{ i + 1 }}</td>
                 <td>{{ row.ware.code }}</td>
                 <td>{{ row.ware.name }}</td>
                 <td>{{ row.unit }}</td>
                 <td>
-                  <money v-model="row.warehouse_remain" :disabled="!isEditing" />
+                  <money
+                    v-model="row.warehouse_remain"
+                    :disabled="!isEditing"
+                  />
                 </td>
                 <td>{{ getSystemRemain(row) | toMoney }}</td>
-                <td
-                  dir="ltr"
-                  :class="getContradictionStyle(row)"
-                >{{ getContradiction(row) | toMoney }}</td>
+                <td dir="ltr" :class="getContradictionStyle(row)">
+                  {{ getContradiction(row) | toMoney }}
+                </td>
                 <td>
                   <row-textarea
                     v-model="row.explanation"
@@ -174,7 +195,8 @@
         @click="definite"
         :disabled="item.is_defined"
         class="blue white--text mr-1"
-      >ثبت نهایی</v-btn>
+        >ثبت نهایی</v-btn
+      >
     </template>
   </m-form>
 </template>
