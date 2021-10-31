@@ -11,7 +11,6 @@
             :items="$store.state.dashtbashiCars"
             item-text="car_number_str"
             item-value="id"
-
           />
         </v-col>
         <v-col cols="12" class="text-center">
@@ -19,7 +18,9 @@
             :headers="headers"
             api-url="dashtbashi/report/ladings/"
             :filters.sync="filters"
-            @detail="(item) => newTab({name: 'Lading', params: {id: item.id}})"
+            @detail="
+              (item) => newTab({ name: 'Lading', params: { id: item.id } })
+            "
           ></m-datatable>
         </v-col>
       </v-row>
@@ -41,6 +42,7 @@ export default {
         {
           text: "عطف",
           value: "local_id",
+          type: "numeric",
         },
         {
           text: "شماره حواله",
