@@ -94,6 +94,11 @@ export default {
           type: "boolean",
         },
         {
+          text: "قطعی",
+          value: "is_defined",
+          type: "boolean",
+        },
+        {
           text: "توضیحات",
           value: "explanation",
         },
