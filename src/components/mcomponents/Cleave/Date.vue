@@ -7,14 +7,21 @@
       :label="label"
       :placeholder="placeholder"
       :disabled="disabled"
-      append-icon="fa-calendar-day"
-      @click:append="$refs.datepicker.visible = true"
       clearable
       style="min-width: 140px"
       v-bind="$attrs"
       @click:clear="isDirty = true"
       :id="id"
-    />
+    >
+      <template #append>
+        <v-icon
+          class="mt-1"
+          @click="$refs.datepicker.visible = true"
+          @contextmenu.prevent="setToday"
+          >fa-calendar-day</v-icon
+        >
+      </template>
+    </v-text-field>
     <vue-persian-datetime-picker
       v-model="localValue"
       @input="change"
@@ -82,7 +89,7 @@ export default {
   methods: {
     change() {
       this.isDirty = true;
-      if (this.localValue != this.mask.value) {
+      if (this.localValue != this.value) {
         this.mask.resolve(String(this.localValue));
         this.$nextTick(() => {
           let maskedValue = this.mask.value;

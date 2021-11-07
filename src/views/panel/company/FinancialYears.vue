@@ -25,7 +25,7 @@
               label="* سیستم انبار"
               v-model="item.warehouse_system"
               :items="warehouseSystems"
-              :disabled="item.id != undefined"
+              :disabled="item.id != undefined && item.warehouse_system != ''"
               :return-object="false"
             />
           </v-col>
