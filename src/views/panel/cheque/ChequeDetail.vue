@@ -284,6 +284,7 @@ export default {
     },
   },
   created() {
+    this.getChequeMeta();
     this.getCheque(this.id);
   },
   methods: {
@@ -349,6 +350,10 @@ export default {
           return "باطل شده";
         case "transferred":
           return "انتقالی";
+        case "guarantee":
+          return "ضمانتی";
+        case "extended":
+          return "تمدید شده";
       }
     },
   },

@@ -37,7 +37,14 @@ export default new Vuex.Store({
     factorExpenses: [],
     chequebooks: [],
     defaultTexts: [],
-    bankingOperations: []
+    bankingOperations: [],
+    chequeMeta: {
+      types: [],
+      guarantee_types: [],
+      owner_types: [],
+      statuses: [],
+      tree: {}
+    }
   },
   mutations: {
     ...DashbashiStore.mutations,
@@ -107,6 +114,9 @@ export default new Vuex.Store({
     },
     setBankingOperations(state, data) {
       state.bankingOperations = data;
+    },
+    setChequeMeta(state, data) {
+      state.chequeMeta = data;
     },
   }
 })

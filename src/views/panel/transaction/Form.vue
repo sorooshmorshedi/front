@@ -437,6 +437,7 @@ export default {
     };
   },
   created() {
+    this.getChequeMeta();
     this.getDefaultAccounts();
     this.getBankingOperations();
   },
@@ -487,7 +488,7 @@ export default {
     },
     itemPaymentMethods() {
       if (this.isGuarantee) {
-        return this.ChequeTypes;
+        return this.GuaranteeTypes;
       } else {
         let type = this.type == "receive" ? "receive" : "payment";
         return this.defaultAccounts.filter(
@@ -710,7 +711,7 @@ export default {
       if (row.type.id && row.type.codename) {
         let isCheque = row.type.codename.includes("Cheque");
         let isGuarantee =
-          this.ChequeTypes.find((o) => o.codename == row.type.codename) !=
+          this.GuaranteeTypes.find((o) => o.codename == row.type.codename) !=
           undefined;
 
         return isCheque || isGuarantee;

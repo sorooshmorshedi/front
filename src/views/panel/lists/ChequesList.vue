@@ -17,9 +17,10 @@
 
 <script>
 import QueryBinding from "@/components/m-query-binding";
+import ChequeMixin from "@/views/panel/cheque/mixin";
 export default {
   name: "ChequesList",
-  mixins: [QueryBinding],
+  mixins: [QueryBinding, ChequeMixin],
   props: {
     type: {
       require: true,
@@ -72,40 +73,7 @@ export default {
         {
           text: "وضعیت",
           value: "status",
-          items: [
-            {
-              text: "سفید",
-              value: "blank",
-            },
-            {
-              text: "پاس نشده",
-              value: "notPassed",
-            },
-            {
-              text: "در جریان",
-              value: "inFlow",
-            },
-            {
-              text: "پاس شده",
-              value: "passed",
-            },
-            {
-              text: "برگشتی",
-              value: "bounced",
-            },
-            {
-              text: "نقدی",
-              value: "cashed",
-            },
-            {
-              text: "باطل شده",
-              value: "revoked",
-            },
-            {
-              text: "انتقالی",
-              value: "transferred",
-            },
-          ],
+          items: this.chequeStatuses,
         },
         {
           text: "نام بانک",
@@ -124,6 +92,7 @@ export default {
     },
   },
   created() {
+    this.getChequeStatuses();
     this.filters.is_paid = this.isPaid;
     this.filters.type = this.type;
   },

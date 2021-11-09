@@ -20,26 +20,37 @@
           </v-col>
           <template v-if="newStatus">
             <v-col cols="12">
-              <v-text-field label="شماره سند" v-model="statusChange.sanad_code" />
+              <v-text-field
+                label="شماره سند"
+                v-model="statusChange.sanad_code"
+              />
             </v-col>
             <template v-if="newStatus.hasAccount">
               <v-col cols="12">
                 <account-select
                   required
-                  :label="' * ' + accountLabel(newStatus) "
-                  :disabled="cheque.is_paid?newStatus.paidAccountDisable:newStatus.receivedAccountDisable"
+                  :label="' * ' + accountLabel(newStatus)"
+                  :disabled="
+                    cheque.is_paid
+                      ? newStatus.paidAccountDisable
+                      : newStatus.receivedAccountDisable
+                  "
                   track-by="id"
                   :itemsType="newStatusAccountsType"
                   v-model="statusChange.account"
                   :floatAccount="statusChange.floatAccount"
-                  @update:floatAccount="v => statusChange.floatAccount = v"
+                  @update:floatAccount="(v) => (statusChange.floatAccount = v)"
                   :costCenter="statusChange.costCenter"
-                  @update:costCenter="v => statusChange.costCenter = v"
+                  @update:costCenter="(v) => (statusChange.costCenter = v)"
                 />
               </v-col>
             </template>
             <v-col cols="12">
-              <date placeholder=" * تاریخ" v-model="statusChange.date" :default="true" />
+              <date
+                placeholder=" * تاریخ"
+                v-model="statusChange.date"
+                :default="true"
+              />
             </v-col>
             <v-col cols="12">
               <v-textarea label="توضیحات" v-model="statusChange.explanation" />
@@ -48,7 +59,9 @@
         </v-row>
       </v-card-text>
       <v-card-actions>
-        <v-btn @click="submitCheque()" class="green white--text w-100px">ثبت</v-btn>
+        <v-btn @click="submitCheque()" class="green white--text w-100px"
+          >ثبت</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -63,8 +76,8 @@ export default {
   name: "ChangeChequeStatus",
   props: {
     cheque: {
-      required: true
-    }
+      required: true,
+    },
   },
   components: { money, date },
   mixins: [accountApiMixin, ChequeMixin],
@@ -72,7 +85,7 @@ export default {
     return {
       dialog: false,
       statusChange: {},
-      newStatus: null
+      newStatus: null,
     };
   },
   computed: {
@@ -91,13 +104,13 @@ export default {
           hasAccount: true,
           paidAccountDisable: true,
           receivedAccountLabel: "حساب وصول چک",
-          paidAccountLabel: "حساب پرداخت کننده چک"
+          paidAccountLabel: "حساب پرداخت کننده چک",
         },
         {
           name: "transferred",
           label: "انتقالی",
           hasAccount: true,
-          accountLabel: "حساب گیرنده چک"
+          accountLabel: "حساب گیرنده چک",
         },
         { name: "bounced", label: "برگشتی", hasAccount: false },
         {
@@ -106,7 +119,7 @@ export default {
           hasAccount: true,
           receivedAccountLabel: "حساب دریافت کننده وجه چک",
           paidAccountLabel: "حساب پرداخت کننده چک",
-          defaultAccount: null
+          defaultAccount: null,
         },
         { name: "revoked", label: "باطل شده", hasAccount: false },
         {
@@ -114,42 +127,45 @@ export default {
           label: "در جریان",
           hasAccount: true,
           accountLabel: "حساب در جریان",
-          defaultAccount: null
+          defaultAccount: null,
         },
         {
           name: "revertInFlow",
           label: "ابطال وضعیت  در جریان وصول",
-          hasAccount: false
-        }
+          hasAccount: false,
+        },
+
+        {
+          name: "extended",
+          label: "تمدید شده",
+          hasAccount: false,
+        },
+
+        {
+          name: "guarantee",
+          label: "ضمانتی",
+          hasAccount: false,
+        },
       ];
-      let res = [];
-      statuses.forEach(s => {
-        if (this.cheque.is_paid) {
-          if (["inFlow", "revertInFlow", "transferred"].includes(s.name)) {
-            return;
-          }
+      let validStatuses = this.chequeStatusTree[
+        this.cheque.is_paid == true ? "p" : "r"
+      ][this.cheque.status];
+
+      let result = []
+      if (validStatuses) {
+        result = statuses.filter((o) => validStatuses.includes(o.name));
+        if(this.cheque.type != 'bg') {
+          result = result.filter(o => o.name != 'extended');
         }
-        if (this.cheque.status == "inFlow") {
-          if (!["passed", "bounced", "revertInFlow"].includes(s.name)) return;
-        }
-        if (this.cheque.status == "bounced") {
-          if (!["transferred", "inFlow", "cashed", "passed"].includes(s.name))
-            return;
-        }
-        if (this.cheque.status == "notPassed") {
-          if (["revertInFlow"].includes(s.name)) return;
-        }
-        if (this.cheque.status == s.name) return;
-        res.push(s);
-      });
-      return res;
+      } 
+      return result;
     },
     chequebook() {
       return this.cheque.chequebook;
     },
     chequeLabel() {
       return this.cheque.is_paid ? "پرداختنی" : "دریافتنی";
-    }
+    },
   },
   created() {
     this.getAccounts();
@@ -162,17 +178,17 @@ export default {
       let acc = null;
       if (name == "inFlow") {
         acc = this.defaultAccounts.filter(
-          o => o.codename == "inFlowDocuments"
+          (o) => o.codename == "inFlowDocuments"
         )[0];
       }
       if (name == "cashed") {
-        acc = this.defaultAccounts.filter(o => o.codename == "cash")[0];
+        acc = this.defaultAccounts.filter((o) => o.codename == "cash")[0];
       }
       if (name == "passed" && this.chequebook) {
         acc = { account: this.chequebook.account };
       }
       if (acc) this.statusChange.account = acc.account;
-    }
+    },
   },
   methods: {
     clearForm() {
@@ -191,12 +207,12 @@ export default {
         url: this.endpoint("cheques/cheques/changeStatus/" + this.cheque.id),
         data: payload,
         method: "post",
-        success: data => {
+        success: (data) => {
           this.dialog = false;
           this.$emit("statusChange");
           this.successNotify();
           this.clearStatusChange();
-        }
+        },
       });
     },
     revertInFlow() {
@@ -207,12 +223,12 @@ export default {
         method: "post",
         data: {
           date: this.statusChange.date,
-          explanation: this.statusChange.explanation
+          explanation: this.statusChange.explanation,
         },
-        success: data => {
+        success: (data) => {
           this.dialog = false;
           this.successNotify();
-        }
+        },
       });
     },
     accountLabel(status) {
@@ -222,11 +238,9 @@ export default {
     },
     clearStatusChange() {
       this.statusChange = {};
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style scoped lang="scss">
-</style>
-
+<style scoped lang="scss"></style>

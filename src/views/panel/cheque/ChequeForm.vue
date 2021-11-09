@@ -144,8 +144,6 @@
             <v-select
               label=" * نوع چک"
               :items="chequeOwnerTypes"
-              item-text="label"
-              item-value="value"
               :return-object="false"
               v-model="item.owner_type"
               :disabled="!isEditing"
@@ -243,24 +241,6 @@ export default {
       paidCheques: [],
       paidChequeSearch: "",
       bank: null,
-      chequeOwnerTypes: [
-        {
-          label: "شخصی",
-          value: "p",
-        },
-        {
-          label: "شخصی سایرین",
-          value: "op",
-        },
-        {
-          label: "شرکت",
-          value: "c",
-        },
-        {
-          label: "شرکت سایرین",
-          value: "oc",
-        },
-      ],
     };
   },
   computed: {
