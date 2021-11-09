@@ -1,17 +1,26 @@
 <template>
   <v-row
     no-gutters
-    :class="{'flex-row': horizontal, 'flex-column': !horizontal}"
+    :class="{ 'flex-row': horizontal, 'flex-column': !horizontal }"
     :title="item && item.title"
   >
-    <v-col :cols="horizontal && hasDeepSelect?6:12">
+    <v-col :cols="horizontal && hasDeepSelect ? 6 : 12">
       <div class="d-flex">
         <open-ledger-btn
           v-if="showLedgerBtn && hasLedger && item"
-          :query="{'ledger.account': item.id, 'ledger.level': `level${item.level}`}"
+          :query="{
+            'ledger.account': item.id,
+            'ledger.level': `level${item.level}`,
+          }"
           class="mr-2"
         />
-        <v-icon v-if="hasLedger" @click="openBalanceDialog" color="cyan" class="pl-2 mr-3">fa-wallet</v-icon>
+        <v-icon
+          v-if="hasLedger"
+          @click="openBalanceDialog"
+          color="cyan"
+          class="pl-2 mr-3"
+          >fa-wallet</v-icon
+        >
         <v-autocomplete
           :items="items"
           v-model="item"
@@ -38,7 +47,11 @@
           item-text="name"
           item-value="id"
           :showLedgerBtn="false"
-          :class="{'': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          :class="{
+            '': showLedgerBtn && !horizontal,
+            'mr-1': horizontal,
+            'mt-1': !horizontal,
+          }"
           v-bind="$attrs"
         />
         <account-select
@@ -51,11 +64,19 @@
           item-text="name"
           item-value="id"
           :showLedgerBtn="false"
-          :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          :class="{
+            'mr-7': showLedgerBtn && !horizontal,
+            'mr-1': horizontal,
+            'mt-1': !horizontal,
+          }"
           v-bind="$attrs"
         />
       </v-col>
-      <v-col v-if="item.costCenterGroup || (item.floatAccounts && item.is_cost_center)">
+      <v-col
+        v-if="
+          item.costCenterGroup || (item.floatAccounts && item.is_cost_center)
+        "
+      >
         <account-select
           v-if="item.costCenterGroup"
           :child-of="item.costCenterGroup.id"
@@ -66,7 +87,11 @@
           item-text="name"
           item-value="id"
           :showLedgerBtn="false"
-          :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          :class="{
+            'mr-7': showLedgerBtn && !horizontal,
+            'mr-1': horizontal,
+            'mt-1': !horizontal,
+          }"
           v-bind="$attrs"
         />
         <account-select
@@ -79,13 +104,21 @@
           item-text="name"
           item-value="id"
           :showLedgerBtn="false"
-          :class="{'mr-7': showLedgerBtn && !horizontal, 'mr-1': horizontal, 'mt-1': !horizontal}"
+          :class="{
+            'mr-7': showLedgerBtn && !horizontal,
+            'mr-1': horizontal,
+            'mt-1': !horizontal,
+          }"
           v-bind="$attrs"
         />
       </v-col>
     </template>
 
-    <v-dialog v-model="balanceDialog" max-width="500px" v-if="item && item.balance">
+    <v-dialog
+      v-model="balanceDialog"
+      max-width="500px"
+      v-if="item && item.balance"
+    >
       <v-card>
         <v-card-title>مانده حساب {{ item.name }}</v-card-title>
 
@@ -102,9 +135,9 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{{ item.balance.bed | toMoney}}</td>
-                    <td>{{ item.balance.bes | toMoney}}</td>
-                    <td>{{ item.balance.remain | toMoney}}</td>
+                    <td>{{ item.balance.bed | toMoney }}</td>
+                    <td>{{ item.balance.bes | toMoney }}</td>
+                    <td>{{ item.balance.remain | toMoney }}</td>
                   </tr>
                 </tbody>
               </v-simple-table>
@@ -343,13 +376,14 @@ export default {
       });
     },
     setItem() {
+      let emitChanges = false;
       if (this.value != this.item) {
         if (isNaN(this.value)) {
           this.item = this.value;
         } else {
           this.item = this.items.find((o) => o.id == this.value);
           this.$emit("input", this.item);
-          this.emitChange();
+          emitChanges = true;
         }
       }
 
@@ -361,20 +395,24 @@ export default {
           if (isNaN(this.floatAccount)) {
             this.localFloatAccount = this.floatAccount;
           } else {
-            this.item = this.floatAccounts.find(
+            this.localFloatAccount = this.floatAccounts.find(
               (o) => o.id == this.floatAccount
             );
-            this.emitChange();
+            emitChanges = true;
           }
         }
         if (this.costCenter != this.localCostCenter) {
           if (isNaN(this.costCenter)) {
             this.localCostCenter = this.costCenter;
           } else {
-            this.item = this.floatAccounts.find((o) => o.id == this.costCenter);
-            this.emitChange();
+            this.localCostCenter = this.floatAccounts.find((o) => o.id == this.costCenter);
+            emitChanges = true;
           }
         }
+      }
+
+      if (emitChanges) {
+        this.emitChange();
       }
     },
     emitChange() {
@@ -433,11 +471,7 @@ export default {
 }
 </style>
 
-// --- Document
-// The itemsType item uses v-model, but floatAccount & costCenters must hanle like this:
-// 
-//   :floatAccount="item.floatAccount"
-//   @update:floatAccount="v => item.floatAccount = v"
-// 
-//   :costCenter="item.costCenter"
-//   @update:costCenter="v => item.costCenter = v"
+// --- Document // The itemsType item uses v-model, but floatAccount &
+costCenters must hanle like this: // // :floatAccount="item.floatAccount" //
+@update:floatAccount="v => item.floatAccount = v" // //
+:costCenter="item.costCenter" // @update:costCenter="v => item.costCenter = v"
