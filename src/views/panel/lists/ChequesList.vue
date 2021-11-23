@@ -31,7 +31,10 @@ export default {
   },
   data() {
     return {
-      filters: {},
+      filters: {
+        type: this.type,
+        is_paid: this.isPaid,
+      },
       url: "reports/lists/cheques",
     };
   },
@@ -92,7 +95,7 @@ export default {
     },
   },
   created() {
-    this.getChequeStatuses();
+    this.getChequeMeta();
     this.filters.is_paid = this.isPaid;
     this.filters.type = this.type;
   },

@@ -108,7 +108,7 @@
           class="amber w-100px"
           :to="{
             name: 'ChequeForm',
-            params: { type: 'c', isPaid: cheque.is_paid, id: id },
+            params: { type: cheque.type, isPaid: cheque.is_paid, id: id },
           }"
           >ویرایش</v-btn
         >
