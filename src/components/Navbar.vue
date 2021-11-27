@@ -289,6 +289,16 @@ export default {
                 {
                   perm: "sanad",
                   to: {
+                    name: "SanadsList",
+                    params: {
+                      type: "notDefined",
+                    },
+                  },
+                  title: "اسناد غیر قطعی",
+                },
+                {
+                  perm: "sanad",
+                  to: {
                     name: "SanadItemsList",
                   },
                   title: "جزئیات اسناد",

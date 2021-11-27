@@ -47,6 +47,7 @@ export default {
   },
   computed: {
     url() {
+      this.filters = {}
       switch (this.type) {
         case "all":
           return "reports/lists/sanads";
@@ -54,6 +55,9 @@ export default {
           return "reports/lists/sanads/unbalanced";
         case "empty":
           return "reports/lists/sanads/empty";
+        case "notDefined":
+          this.filters = {is_defined: false}
+          return "reports/lists/sanads";
       }
     },
     title() {
@@ -64,6 +68,8 @@ export default {
           return "لیست اسناد نامتوازن";
         case "empty":
           return "لیست اسناد خالی";
+        case "notDefined":
+          return "لیست اسناد غیر قطعی";
       }
     },
     headers() {
