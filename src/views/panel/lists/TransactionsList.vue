@@ -2,10 +2,19 @@
   <v-card>
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
-      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
-        <template #item.remain="{ item }">{{ getRemain(item) | toMoney}}</template>
+      <m-datatable
+        :headers="headers"
+        :apiUrl="url"
+        :filters.sync="filters"
+        ref="datatable"
+      >
+        <template #item.remain="{ item }">{{
+          getRemain(item) | toMoney
+        }}</template>
         <template #item.settle="{ item }">
-          <v-btn color="light-blue white--text" :to="toSettle(item)" text>تسویه</v-btn>
+          <v-btn color="light-blue white--text" :to="toSettle(item)" text
+            >تسویه</v-btn
+          >
         </template>
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
@@ -108,9 +117,12 @@ export default {
   },
   methods: {
     getRemain(item) {
-      let remain = item.sanad.bed;
-      if (item.imprestSettlement) {
-        remain -= item.imprestSettlement.settled_value;
+      let remain = 0;
+      if (item.sanad) {
+        remain = item.sanad.bed;
+        if (item.imprestSettlement) {
+          remain -= item.imprestSettlement.settled_value;
+        }
       }
       return remain;
     },
@@ -136,5 +148,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
