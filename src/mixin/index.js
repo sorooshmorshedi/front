@@ -146,7 +146,7 @@ Vue.mixin({
     hasPerm(operation = '', basename = '', object = null) {
       let user = this.$store.state.user
       if (user.is_superuser) return true
-      if (user.id = this.company.superuser) return true
+      if (this.company && user.id == this.company.superuser) return true
 
       let roles = user.roles.filter(o => this.company && o.company == this.company.id);
       for (let role of roles) {
