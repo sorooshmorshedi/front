@@ -45,11 +45,11 @@ export default {
         data: data,
         token: false,
         success: data => {
-          this.$refs.recaptcha.reset();
+          this.$refs.recaptcha && this.$refs.recaptcha.reset();
           callback && callback(data)
         },
         error: (error) => {
-          this.$refs.recaptcha.reset();
+          this.$refs.recaptcha && this.$refs.recaptcha.reset();
           this.handleError(error, {});
         }
       });
