@@ -23,16 +23,31 @@
         <m-navbar @logout="logout" />
       </v-navigation-drawer>
 
-      <v-app-bar app clipped-right class="indigo darken-1 app-bar" v-if="user" v-show="!isPrinting">
-        <v-app-bar-nav-icon v-if="isXs" @click="showDrawer = !showDrawer" class="white--text ml-4" />
+      <v-app-bar
+        app
+        clipped-right
+        class="indigo darken-1 app-bar"
+        v-if="user"
+        v-show="!isPrinting"
+      >
+        <v-app-bar-nav-icon
+          v-if="isXs"
+          @click="showDrawer = !showDrawer"
+          class="white--text ml-4"
+        />
 
-        <v-btn :to="{name: 'Companies'}" depressed class="white" :title="company && company.id">
+        <v-btn
+          :to="{ name: 'Companies' }"
+          depressed
+          class="white"
+          :title="company && company.id"
+        >
           <span v-if="company">{{ company.name }}</span>
           <span v-else>انتخاب شرکت</span>
         </v-btn>
         <v-btn
           v-if="financialYear"
-          :to="{name: 'FinancialYears'}"
+          :to="{ name: 'FinancialYears' }"
           depressed
           class="text-right white mr-1"
           :title="financialYear.id"
@@ -44,7 +59,7 @@
         <v-btn
           v-if="hasPerm('create', 'sanad') && hasModule('sanads')"
           class="blue white--text mr-3 app-bar-btn"
-          :to="{name: 'SanadForm' }"
+          :to="{ name: 'SanadForm' }"
           @click="routeClick('SanadForm')"
           icon
           large
@@ -53,7 +68,9 @@
           <v-icon large>$sanadIcon</v-icon>
         </v-btn>
         <v-btn
-          v-if="hasPerm('create', 'receiveTransaction') && hasModule('transactions')"
+          v-if="
+            hasPerm('create', 'receiveTransaction') && hasModule('transactions')
+          "
           class="blue white--text app-bar-btn"
           :to="{ name: 'TransactionForm', params: { type: 'receive' } }"
           @click="routeClick('TransactionForm')"
@@ -63,7 +80,9 @@
           <v-icon>$receiveTransactionIcon</v-icon>
         </v-btn>
         <v-btn
-          v-if="hasPerm('create', 'paymentTransaction') && hasModule('transactions')"
+          v-if="
+            hasPerm('create', 'paymentTransaction') && hasModule('transactions')
+          "
           class="blue white--text app-bar-btn"
           :to="{ name: 'TransactionForm', params: { type: 'payment' } }"
           @click="routeClick('TransactionForm')"
@@ -75,7 +94,10 @@
         <v-btn
           v-if="hasPerm('create', 'saleFactor') && hasModule('factors')"
           class="blue white--text app-bar-btn"
-          :to="{name: 'FactorForm', params: {isPreFactor: false, type: 'sale' } }"
+          :to="{
+            name: 'FactorForm',
+            params: { isPreFactor: false, type: 'sale' },
+          }"
           @click="routeClick('FactorForm')"
           icon
           title="فاکتور فروش"
@@ -85,7 +107,10 @@
         <v-btn
           v-if="hasPerm('create', 'buyFactor') && hasModule('factors')"
           class="blue white--text app-bar-btn"
-          :to="{name: 'FactorForm', params: {isPreFactor: false, type: 'buy' } }"
+          :to="{
+            name: 'FactorForm',
+            params: { isPreFactor: false, type: 'buy' },
+          }"
           @click="routeClick('FactorForm')"
           icon
           title="فاکتور خرید"
@@ -95,7 +120,7 @@
         <v-btn
           v-if="hasPerm('get', 'sanadItemsReport')"
           class="blue white--text app-bar-btn"
-          :to="{name: 'LedgerReport', params: { level: 'level3' }}"
+          :to="{ name: 'LedgerReport', params: { level: 'level3' } }"
           icon
           title="گردش حساب"
         >
@@ -104,7 +129,7 @@
         <v-btn
           v-if="hasPerm('get', 'accountBalanceReport')"
           class="blue white--text app-bar-btn"
-          :to="{name: 'AccountsBalanceReport' }"
+          :to="{ name: 'AccountsBalanceReport' }"
           icon
           title="تراز حساب ها"
         >
@@ -113,7 +138,7 @@
         <v-btn
           v-if="hasPerm('get', 'account')"
           class="blue white--text app-bar-btn"
-          :to="{name: 'Accounts', params: {level: 3} }"
+          :to="{ name: 'Accounts', params: { level: 3 } }"
           icon
           title="تعریف حساب"
         >
@@ -121,7 +146,11 @@
         </v-btn>
         <v-btn
           class="blue white--text app-bar-btn"
-          :to="{name: 'Accounts', params: {level: 3, accountType: 'p'}, query: {showForm: true}}"
+          :to="{
+            name: 'Accounts',
+            params: { level: 3, accountType: 'p' },
+            query: { showForm: true },
+          }"
           title="تعریف حساب اشخاص"
           icon
         >
@@ -130,7 +159,7 @@
         <v-btn
           v-if="hasPerm('get', 'account')"
           class="blue white--text app-bar-btn"
-          :to="{name: 'AccountsTree' }"
+          :to="{ name: 'AccountsTree' }"
           title="نمودار درختی"
           icon
         >
@@ -139,7 +168,7 @@
         <v-btn
           v-if="hasPerm('get', 'wareInventoryReport')"
           class="blue white--text app-bar-btn"
-          :to="{name: 'DetailedWareInventoryReport' }"
+          :to="{ name: 'DetailedWareInventoryReport' }"
           title="کاردکس کالا"
           icon
         >
@@ -149,7 +178,7 @@
         <v-spacer></v-spacer>
 
         <v-chip
-          :to="{name:'NotificationsList'}"
+          :to="{ name: 'NotificationsList' }"
           class="mr-1"
           color="white"
           :small="false"
@@ -160,11 +189,18 @@
             x-small
             left
             class="blue white--text"
-          >{{ user.unread_notifications_count }}</v-avatar>
+            >{{ user.unread_notifications_count }}</v-avatar
+          >
           <v-icon>far fa-bell</v-icon>
         </v-chip>
 
-        <v-btn :to="{name:'Profile'}" depressed class="white mr-2" :title="user.id">{{ user.name }}</v-btn>
+        <v-btn
+          :to="{ name: 'Profile' }"
+          depressed
+          class="white mr-2"
+          :title="user.id"
+          >{{ user.name }}</v-btn
+        >
 
         <span class="mx-3">
           <v-btn text icon color="white" class="rotate-180" @click="logout">
@@ -172,13 +208,15 @@
           </v-btn>
         </span>
         <span class="white pa-1 rounded">
-          <v-img
-            style="border-radius: 30%"
-            contain
-            max-height="50"
-            max-width="50"
-            src="/img/SobhanAccountingLogo.png"
-          />
+          <a href="https://sobhan.net">
+            <v-img
+              style="border-radius: 30%"
+              contain
+              max-height="50"
+              max-width="50"
+              src="/img/SobhanAccountingLogo.png"
+            />
+          </a>
         </span>
       </v-app-bar>
 
@@ -194,14 +232,18 @@
 
       <v-snackbar
         :value="snackbar.show"
-        @input="$store.commit('setSnackbar', {show:false})"
+        @input="$store.commit('setSnackbar', { show: false })"
         :color="snackbar.color"
         :left="true"
         :outlined="false"
         top
       >
         <!-- <v-btn color="white" outlined @click="$store.commit('setSnackbar', {show:false})">بستن</v-btn> -->
-        <v-btn color="white" icon @click="$store.commit('setSnackbar', {show:false})">
+        <v-btn
+          color="white"
+          icon
+          @click="$store.commit('setSnackbar', { show: false })"
+        >
           <v-icon>fa-times</v-icon>
         </v-btn>
         {{ snackbar.text }}
@@ -348,4 +390,3 @@ export default {
   }
 }
 </style>
-
