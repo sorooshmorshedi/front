@@ -22,24 +22,40 @@
                 :items-type="ledger.level"
                 v-model="ledger.account"
                 :floatAccount="ledger.floatAccount"
-                @update:floatAccount="v => ledger.floatAccount = v"
+                @update:floatAccount="(v) => (ledger.floatAccount = v)"
                 :costCenter="ledger.costCenter"
-                @update:costCenter="v => ledger.costCenter = v"
+                @update:costCenter="(v) => (ledger.costCenter = v)"
                 :showLedgerBtn="false"
               />
             </v-col>
             <template v-if="ledger.account">
               <v-col cols="12" md="2">
-                <date label="از تاریخ" v-model="filters.sanad__date__gte" clearable />
+                <date
+                  label="از تاریخ"
+                  v-model="filters.sanad__date__gte"
+                  clearable
+                />
               </v-col>
               <v-col cols="12" md="2">
-                <date label="تا تاریخ" v-model="filters.sanad__date__lte" clearable />
+                <date
+                  label="تا تاریخ"
+                  v-model="filters.sanad__date__lte"
+                  clearable
+                />
               </v-col>
               <v-col cols="12" md="2">
-                <money label="از شماره" v-model="filters.sanad__code__gte" clearable />
+                <money
+                  label="از شماره"
+                  v-model="filters.sanad__code__gte"
+                  clearable
+                />
               </v-col>
               <v-col cols="12" md="2">
-                <money label="تا شماره" v-model="filters.sanad__code__lte" clearable />
+                <money
+                  label="تا شماره"
+                  v-model="filters.sanad__code__lte"
+                  clearable
+                />
               </v-col>
               <v-col cols="12" md="4">
                 <v-radio-group v-model="filters.order_sanads_by" row>
@@ -126,6 +142,8 @@ export default {
       return {
         financial_year: this.financialYear.id,
         account_title: "",
+        float_account_title: "",
+        cost_center_title: "",
         account__code__startswith: "",
         order_sanads_by: "code",
         floatAccount: null,
@@ -190,15 +208,24 @@ export default {
       this.filters["floatAccount"] = this.ledger.floatAccount
         ? this.ledger.floatAccount.id
         : null;
+
+      if (this.ledger.floatAccount) {
+        this.filters.float_account_title =
+          this.ledger.floatAccount.title || this.ledger.floatAccount.name;
+      }
     },
     "ledger.costCenter"() {
       this.filters["costCenter"] = this.ledger.costCenter
         ? this.ledger.costCenter.id
         : null;
+
+      if (this.ledger.costCenter) {
+        this.filters.cost_center_title =
+          this.ledger.costCenter.title || this.ledger.costCenter.name;
+      }
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
