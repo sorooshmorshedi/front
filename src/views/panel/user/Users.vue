@@ -78,7 +78,7 @@
             ></v-autocomplete>
           </v-col>
           <v-col cols="12">
-            <v-switch label="فعال" v-model="item.user.is_active" :disabled="!isEditing"></v-switch>
+            <v-switch label="فعال" v-model="item.is_active" :disabled="!isEditing"></v-switch>
           </v-col>
         </v-row>
       </template>
@@ -112,6 +112,11 @@ export default {
         {
           text: "نام کاربری",
           value: "user.username",
+        },
+        {
+          text: "فعال",
+          value: "is_active",
+          type: 'boolean'
         },
       ],
     };
