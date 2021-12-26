@@ -205,6 +205,7 @@ export default {
           otherPermissionCodenames.includes(codename) ||
           o.contentType.model == "reportspermissions" ||
           o.codename.includes("firstPeriodInventory") ||
+          o.codename.includes("userInvitation") ||
           (!codename.startsWith("get") &&
             !codename.startsWith("create") &&
             !codename.startsWith("update") &&
@@ -216,6 +217,7 @@ export default {
       let models = [
         { app: "users", name: "role", label: "نقش ها" },
         { app: "users", name: "user", label: "کاربران" },
+        { app: "companies", name: "userInvitation", label: "دعوت نامه " },
         { app: "users", name: "notification", label: "اعلان" },
         { app: "users", name: "city", label: "شهر ها" },
         { app: "companies", name: "company", label: "شرکت ها" },
@@ -421,7 +423,7 @@ export default {
       return null;
     },
     hasShortcutPerms(model) {
-      return !["firstPeriodInventory", "reports", "account", "option"].includes(
+      return !["firstPeriodInventory", "reports", "account", "option", "userInvitation"].includes(
         model.name
       );
     },
