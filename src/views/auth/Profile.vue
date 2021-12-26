@@ -440,7 +440,7 @@ export default {
           },
           success: (data) => {
             this.successNotify();
-            this.phone = this.newPhone;
+            this.item.phone = this.newPhone;
             this.changePhoneDialog = false;
             this.newPhone = undefined;
             this.phoneVerificationCode = undefined;
