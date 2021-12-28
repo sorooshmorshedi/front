@@ -423,7 +423,7 @@ export default {
       return null;
     },
     hasShortcutPerms(model) {
-      return !["firstPeriodInventory", "reports", "account", "option", "userInvitation"].includes(
+      return !["firstPeriodInventory", "reports", "account", "option", "userInvitation", "notification"].includes(
         model.name
       );
     },
