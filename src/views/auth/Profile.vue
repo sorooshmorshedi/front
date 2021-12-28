@@ -315,10 +315,10 @@
         <v-card-text>
           <v-form ref="changePhoneForm">
             <v-row>
-              <v-col cols="12" md="8">
+              <v-col cols="12" :md="codeSent ? 12 : 8">
                 <m-phone-field label="* شماره موبایل جدید" v-model="newPhone" />
               </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="4" v-if="!codeSent">
                 <v-btn
                   block
                   color="blue white--text"
@@ -340,11 +340,14 @@
           </v-form>
         </v-card-text>
         <v-card-actions v-if="codeSent">
-          <v-btn
-            @click="sendVerificationCode({ newPhone, user: user.username })"
-            text
-            >ارسال دوباره کد</v-btn
-          >
+          <v-btn @click="sendCode" text :disabled="!canResend">
+            <span v-if="canResend">
+              ارسال دوباره کد
+            </span>
+            <span v-else>
+              {{ timer }}
+            </span>
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn @click="changePhone" color="blue white--text w-100px"
             >تایید</v-btn
@@ -389,6 +392,9 @@ export default {
       newPhone: "",
       phoneVerificationCode: null,
       codeSent: false,
+
+      canResend: false,
+      timer: 0,
     };
   },
   computed: {
@@ -427,6 +433,16 @@ export default {
           },
           () => (this.codeSent = true)
         );
+        this.canResend = false;
+        this.timer = 120;
+        this.timerInterval = setInterval(() => {
+          if (this.timer == 0) {
+            clearInterval(this.timerInterval);
+            this.canResend = true;
+          } else {
+            this.timer -= 1;
+          }
+        }, 1000);
       }
     },
     changePhone() {
