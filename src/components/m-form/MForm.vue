@@ -1,5 +1,8 @@
 <template>
-  <v-row :class="{'is-editing': isEditing}">
+  <v-row
+    :class="{ 'is-editing': isEditing }"
+    @keyup.enter="isEditing && submit(false)"
+  >
     <v-col cols="12" :md="formWidth">
       <v-card>
         <v-card-title v-if="showHeader">
@@ -73,9 +76,18 @@
 
         <v-card-actions v-if="showActions">
           <v-row no-gutters class="d-flex flex-column-reverse flex-md-row mb-1">
-            <v-col cols="12" md="6" class="d-flex justify-center justify-md-start mt-2 mt-md-0">
+            <v-col
+              cols="12"
+              md="6"
+              class="d-flex justify-center justify-md-start mt-2 mt-md-0"
+            >
               <template v-if="showNavigationBtns">
-                <v-btn @click="goToForm('first')" :disabled="!hasFirst" title="اولین" icon>
+                <v-btn
+                  @click="goToForm('first')"
+                  :disabled="!hasFirst"
+                  title="اولین"
+                  icon
+                >
                   <v-icon>fa-fast-forward</v-icon>
                 </v-btn>
                 <v-btn
@@ -107,8 +119,15 @@
                 </v-btn>
               </template>
             </v-col>
-            <v-col cols="12" md="6" class="d-flex justify-center justify-md-end">
-              <div v-if="hasFinancialYear" class="d-flex flex-wrap justify-center">
+            <v-col
+              cols="12"
+              md="6"
+              class="d-flex justify-center justify-md-end"
+            >
+              <div
+                v-if="hasFinancialYear"
+                class="d-flex flex-wrap justify-center"
+              >
                 <template v-if="isEditing">
                   <v-btn
                     @click="emitDelete"
@@ -116,39 +135,44 @@
                     color="red"
                     outlined
                     class="mt-1 mt-md-0 ml-1"
-                  >حذف</v-btn>
+                    >حذف</v-btn
+                  >
                   <v-btn
                     @click="submit(false)"
                     v-if="canSubmit"
                     class="w-100px ml-1 green white--text mt-1 mt-md-0"
-                  >ثبت</v-btn>
+                    >ثبت</v-btn
+                  >
                   <v-btn
                     v-if="showSubmitAndClearBtn && canSubmit"
                     @click="submit(true)"
                     class="ml-1 mt-1 mt-md-0 green white--text"
-                  >ثبت و صدور جدید</v-btn>
+                    >ثبت و صدور جدید</v-btn
+                  >
                   <slot name="footer-btns"></slot>
                 </template>
                 <v-btn
                   v-else-if="canEdit"
                   @click="edit()"
                   class="submit amber w-100px mt-1 mt-md-0"
-                >ویرایش</v-btn>
+                  >ویرایش</v-btn
+                >
 
                 <v-btn
                   v-if="isDefinable"
                   @click="parentCall('defineItem', [false])"
-                  :disabled=" !canDefine"
+                  :disabled="!canDefine"
                   class="blue white--text mr-1"
-                >قطعی کردن</v-btn>
+                  >قطعی کردن</v-btn
+                >
 
                 <v-btn
                   v-if="hasLock"
                   @click="parentCall('toggleItemLock')"
                   class="white--text mr-1"
-                  :class="isLocked?'red':'green'"
+                  :class="isLocked ? 'red' : 'green'"
                   icon
-                  :title="isLocked?'باز کردن قفل':'قفل کردن'"
+                  :title="isLocked ? 'باز کردن قفل' : 'قفل کردن'"
                 >
                   <v-icon v-if="isLocked">fa-lock</v-icon>
                   <v-icon v-else>fa-unlock</v-icon>
@@ -181,7 +205,10 @@
             <template v-for="(index, name) in $slots" v-slot:[name]>
               <slot :name="name" />
             </template>
-            <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
+            <template
+              v-for="(index, name) in $scopedSlots"
+              v-slot:[name]="data"
+            >
               <slot :name="name" v-bind="data"></slot>
             </template>
           </m-datatable>
@@ -475,4 +502,3 @@ export default {
   }
 }
 </style>
-
