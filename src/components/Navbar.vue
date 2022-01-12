@@ -76,7 +76,7 @@ export default {
             },
             {
               title: "ارسال اعلان",
-              perm: "send.notification",
+              perm: "notification",
               to: {
                 name: "NotificationForm",
                 params: {
