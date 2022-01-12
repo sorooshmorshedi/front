@@ -8,22 +8,31 @@
         small
         @click="reorderSanads('date')"
         class="teal white--text mr-md-1"
-      >مرتب کردن کد اسناد بر اساس تاریخ</v-btn>
+        >مرتب کردن کد اسناد بر اساس تاریخ</v-btn
+      >
       <v-btn
         :block="isXs"
         small
         @click="reorderSanads('local_id')"
         class="teal white--text mr-md-1 mt-1 mt-md-0"
-      >مرتب کردن کد اسناد بر اساس عطف</v-btn>
+        >مرتب کردن کد اسناد بر اساس عطف</v-btn
+      >
       <v-btn
         :block="isXs"
         small
         @click="reorderSanads(null)"
         class="teal white--text mr-md-1 mt-1 mt-md-0"
-      >بازگردانی کد اسناد به حالت اولیه</v-btn>
+        >بازگردانی کد اسناد به حالت اولیه</v-btn
+      >
     </v-card-title>
     <v-card-text>
-      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
+      <m-datatable
+        :headers="headers"
+        :apiUrl="url"
+        :filters.sync="filters"
+        @dblclick:row="(e, row) => $router.push(to(row.item))"
+        ref="datatable"
+      >
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
@@ -47,7 +56,7 @@ export default {
   },
   computed: {
     url() {
-      this.filters = {}
+      this.filters = {};
       switch (this.type) {
         case "all":
           return "reports/lists/sanads";
@@ -56,7 +65,7 @@ export default {
         case "empty":
           return "reports/lists/sanads/empty";
         case "notDefined":
-          this.filters = {is_defined: false}
+          this.filters = { is_defined: false };
           return "reports/lists/sanads";
       }
     },
@@ -125,6 +134,9 @@ export default {
     },
   },
   methods: {
+    cl(e, row) {
+      console.log(this.to(row.item));
+    },
     to(item) {
       return {
         name: "SanadForm",
@@ -165,5 +177,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

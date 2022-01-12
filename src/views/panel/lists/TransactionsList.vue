@@ -6,6 +6,7 @@
         :headers="headers"
         :apiUrl="url"
         :filters.sync="filters"
+        @dblclick:row="(e, row) => $router.push(to(row.item))"
         ref="datatable"
       >
         <template #item.remain="{ item }">{{

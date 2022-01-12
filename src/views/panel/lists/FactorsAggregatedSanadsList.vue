@@ -2,7 +2,13 @@
   <v-card>
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
-      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
+      <m-datatable
+        :headers="headers"
+        :apiUrl="url"
+        :filters.sync="filters"
+        @dblclick:row="(e, row) => $router.push(to(row.item))"
+        ref="datatable"
+      >
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
@@ -79,5 +85,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

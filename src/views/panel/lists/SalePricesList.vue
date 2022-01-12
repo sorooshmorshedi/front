@@ -7,15 +7,22 @@
           <v-btn
             @click="changeSalePricesDialog = true"
             color="light-blue white--text"
-          >تغییر قیمت موارد فیلتر شده</v-btn>
+            >تغییر قیمت موارد فیلتر شده</v-btn
+          >
           <v-btn
             @click="salePriceChangesDialog = true"
             color="light-blue white--text"
             class="mr-1 mt-1 mt-md-0"
-          >تاریخچه تغییر قیمت کالاها</v-btn>
+            >تاریخچه تغییر قیمت کالاها</v-btn
+          >
         </v-col>
         <v-col cols="12">
-          <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable"></m-datatable>
+          <m-datatable
+            :headers="headers"
+            :apiUrl="url"
+            :filters.sync="filters"
+            ref="datatable"
+          />
         </v-col>
       </v-row>
     </v-card-text>
@@ -38,11 +45,13 @@
                 :filters.sync="salePriceChangesFilters"
                 ref="salePriceChangesDatatable"
               >
-                <template
-                  #item.created_at="{ item }"
-                >{{ item.date | toJalali('jYYYY/jMM/jDD HH:mm') }}</template>
+                <template #item.created_at="{ item }">{{
+                  item.date | toJalali("jYYYY/jMM/jDD HH:mm")
+                }}</template>
                 <template #item.detail="{ item }">
-                  <v-btn @click="showWareSalePriceChanges(item)" color="info">جزئیات</v-btn>
+                  <v-btn @click="showWareSalePriceChanges(item)" color="info"
+                    >جزئیات</v-btn
+                  >
                 </template>
               </m-datatable>
             </v-col>
@@ -106,14 +115,19 @@
             </v-col>
             <money
               v-if="item.is_percent != undefined"
-              :label="item.is_percent?'درصد':'مبلغ'"
+              :label="item.is_percent ? 'درصد' : 'مبلغ'"
               v-model="item.rate"
             />
           </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="submitChangeSalePrice" class="w-100px" color="green white--text">ثبت</v-btn>
+          <v-btn
+            @click="submitChangeSalePrice"
+            class="w-100px"
+            color="green white--text"
+            >ثبت</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -306,5 +320,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

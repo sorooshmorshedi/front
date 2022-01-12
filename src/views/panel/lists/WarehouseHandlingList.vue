@@ -2,7 +2,13 @@
   <v-card>
     <v-card-title>لیست انبار گردانی ها</v-card-title>
     <v-card-text>
-      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
+      <m-datatable
+        :headers="headers"
+        :apiUrl="url"
+        :filters.sync="filters"
+        ref="datatable"
+        @dblclick:row="(e, row) => $router.push(to(row.item))"
+      >
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
@@ -93,5 +99,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
