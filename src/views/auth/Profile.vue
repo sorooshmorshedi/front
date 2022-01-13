@@ -340,11 +340,11 @@
           </v-form>
         </v-card-text>
         <v-card-actions v-if="codeSent">
-          <v-btn @click="sendCode" text :disabled="!canResend">
+          <v-btn @click="sendCode" :disabled="!canResend" outlined >
             <span v-if="canResend">
               ارسال دوباره کد
             </span>
-            <span v-else>
+            <span v-else class="black--text">
               {{ timer }}
             </span>
           </v-btn>
