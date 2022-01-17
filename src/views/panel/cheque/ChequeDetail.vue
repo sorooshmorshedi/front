@@ -142,30 +142,21 @@
               <td>{{ sc.fromStatus | chequeStatuses }}</td>
               <td>{{ sc.toStatus | chequeStatuses }}</td>
               <td>{{ sc.date }}</td>
-              <template
-                v-if="sc.sanad && sc.sanad.items && sc.sanad.items.length"
-              >
-                <td>{{ sc.sanad.items[0].account.name }}</td>
-                <td>{{ sc.sanad.items[1].account.name }}</td>
-              </template>
-              <template v-else>
-                <td>-</td>
-                <td>-</td>
-              </template>
+              <td>{{ sc.bedAccount.name | '-' }}</td>
+              <td>{{ sc.besAccount.name | '-' }}</td>
               <td>{{ sc.explanation }}</td>
               <td>
                 <open-sanad-btn
                   v-if="sc.sanad"
                   :sanad="sc.sanad"
-                  :table-style="true"
                 />
               </td>
               <td>
                 <v-btn
                   v-if="
                     i == statusChanges.length - 1 &&
-                    (isPaidCheque || i != 0) &&
-                    !financialYear.is_closed
+                      (isPaidCheque || i != 0) &&
+                      !financialYear.is_closed
                   "
                   @click.prevent="deleteStatusChange(sc)"
                   class="red--text"
@@ -386,4 +377,3 @@ export default {
   }
 }
 </style>
-
