@@ -2,6 +2,29 @@ import _ from 'lodash'
 export default {
   data() {
     return {
+      owners: [
+        {
+          text: "حاج رحمان",
+          value: "rn",
+        },
+        {
+          text: "حاج رحیم",
+          value: "rm",
+        },
+        {
+          text: "حاج ابراهیم",
+          value: "e",
+        },
+        {
+          text: "شراکتی",
+          value: "p",
+        },
+        {
+          text: "دیگر",
+          value: "o",
+        },
+      ],
+
       months: [{
           text: "فروردین",
           value: "1",

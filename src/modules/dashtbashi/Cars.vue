@@ -138,8 +138,6 @@
             label=" * مالک"
             v-model="item.owner"
             :items="owners"
-            item-text="text"
-            item-value="id"
             :disabled="item.id"
             :return-object="true"
           />
@@ -209,28 +207,6 @@ export default {
         },
         {
           text: "شرکت نفت",
-          id: "o",
-        },
-      ],
-      owners: [
-        {
-          text: "حاج رحمان",
-          id: "rn",
-        },
-        {
-          text: "حاج رحیم",
-          id: "rm",
-        },
-        {
-          text: "حاج ابراهیم",
-          id: "e",
-        },
-        {
-          text: "شراکتی",
-          id: "p",
-        },
-        {
-          text: "دیگر",
           id: "o",
         },
       ],

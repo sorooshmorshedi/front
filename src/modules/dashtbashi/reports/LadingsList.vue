@@ -18,6 +18,10 @@
             :headers="headers"
             api-url="dashtbashi/report/ladings/"
             :filters.sync="filters"
+            @dblclick:row="
+              (e, row) =>
+                newTab({ name: 'Lading', params: { id: row.item.id } })
+            "
             @detail="
               (item) => newTab({ name: 'Lading', params: { id: item.id } })
             "
@@ -38,7 +42,11 @@ export default {
       filters: {
         title: "لیست بارگیری های حمل و نقل",
       },
-      headers: [
+    };
+  },
+  computed: {
+    headers() {
+      return [
         {
           text: "عطف",
           value: "local_id",
@@ -98,6 +106,12 @@ export default {
           sortable: false,
         },
         {
+          text: "مالک",
+          value: "driving.car.owner",
+          type: "select",
+          items: this.owners,
+        },
+        {
           text: "شماره بارنامه",
           value: "billNumber.number",
         },
@@ -116,8 +130,8 @@ export default {
           value: "lading_bill_total_value",
           type: "numeric",
         },
-      ],
-    };
+      ];
+    },
   },
   mounted() {
     this.getCars();
@@ -126,4 +140,3 @@ export default {
 </script>
 
 <style scoped lang="scss"></style>
-

@@ -3,8 +3,8 @@
     title="پرداخت رانندگان متفرقه"
     formName="پرداخت رانندگان متفرقه"
     exportBaseUrl="dashtbashi/export/otherDriverPayments"
-    :listRoute="{name:'OtherDriverPaymentsList'}"
-    :exportParams="{id: id}"
+    :listRoute="{ name: 'OtherDriverPaymentsList' }"
+    :exportParams="{ id: id }"
     :isEditing.sync="isEditing"
     :deletable="true"
     :showList="false"
@@ -19,11 +19,16 @@
       <v-btn
         v-if="id"
         target="_blank"
-        :to="{name:'TransactionForm', params: {type: 'payment', id: item.payment.id}}"
+        :to="{
+          name: 'TransactionForm',
+          params: { type: 'payment', id: item.payment.id },
+        }"
         class="blue white--text mr-1"
       >
         مشاهده دریافت
-        <v-chip class="app-background-color mr-2" x-small>{{ item.payment.code }}</v-chip>
+        <v-chip class="app-background-color mr-2" x-small>{{
+          item.payment.code
+        }}</v-chip>
       </v-btn>
     </template>
     <template>
@@ -36,7 +41,7 @@
           <v-autocomplete
             label="حمل کننده"
             v-model="item.driving"
-            :items="$store.state.drivings.filter(o => o.car.owner == 'o')"
+            :items="$store.state.drivings.filter((o) => o.car.owner == 'o')"
             item-text="title"
             item-value="id"
             :disabled="this.id != undefined"
@@ -46,7 +51,12 @@
         </v-col>
 
         <v-col cols="12" md="2">
-          <date v-model="item.date" label="تاریخ" :default="true" :disabled="this.id != undefined" />
+          <date
+            v-model="item.date"
+            label="تاریخ"
+            :default="true"
+            :disabled="this.id != undefined"
+          />
         </v-col>
 
         <v-col cols="2">
@@ -58,7 +68,11 @@
           />
         </v-col>
         <v-col cols="12" md="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="this.id != undefined"></v-textarea>
+          <v-textarea
+            label="توضیحات"
+            v-model="item.explanation"
+            :disabled="this.id != undefined"
+          ></v-textarea>
         </v-col>
 
         <v-col cols="12">
@@ -73,14 +87,22 @@
             :hide-default-footer="true"
             :show-export-btns="false"
           >
-            <template #item.tipPrice="{ item }">{{ item.driver_tip_price | toMoney}}</template>
-            <template #item.carIncome="{ item }">{{ getCarIncome(item) | toMoney}}</template>
-            <template #item.sum="{ item }">{{ getLadingSum(item) | toMoney }}</template>
-            <template #item.cargoDebt="{ item }">{{ getCargoDebt(item) | toMoney }}</template>
+            <template #item.carIncome="{ item }">{{
+              getCarIncome(item) | toMoney
+            }}</template>
+            <template #item.ladingDifference="{ item }">{{
+              getLadingDifference(item) | toMoney
+            }}</template>
+            <template #item.payableAmount="{ item }">{{
+              getPayableAmount(item) | toMoney
+            }}</template>
+            <template #item.remainAmount="{ item }">{{
+              getRemainAmount(item) | toMoney
+            }}</template>
           </m-datatable>
         </v-col>
 
-        <v-col cols="12">
+        <v-col cols="12" v-if="false">
           <div class="mb-1 mr-1">تنخواه ها</div>
           <m-datatable
             :headers="imprestHeaders"
@@ -92,9 +114,15 @@
             :hide-default-footer="true"
             :show-export-btns="false"
           >
-            <template #item.paidValue="{ item }">{{ item.sanad.bed | toMoney }}</template>
-            <template #item.receivedValue="{ item }">{{ getImprestSettledValue(item) | toMoney }}</template>
-            <template #item.remain="{ item }">{{ getImprestNotSettledValue(item) | toMoney}}</template>
+            <template #item.paidValue="{ item }">{{
+              item.sanad.bed | toMoney
+            }}</template>
+            <template #item.receivedValue="{ item }">{{
+              getImprestSettledValue(item) | toMoney
+            }}</template>
+            <template #item.remain="{ item }">{{
+              getImprestNotSettledValue(item) | toMoney
+            }}</template>
           </m-datatable>
         </v-col>
 
@@ -102,7 +130,7 @@
           <v-simple-table class="sum-table">
             <tbody>
               <tr>
-                <td>جمع انعام</td>
+                <!-- <td>جمع انعام</td>
                 <td class="ltr">{{ tipsSum | toMoney }}</td>
               </tr>
               <tr>
@@ -120,7 +148,9 @@
               <tr>
                 <td>مجموع تنخواه</td>
                 <td class="ltr">{{ imprestsSum | toMoney }}</td>
+              </tr> -->
               </tr>
+
               <tr>
                 <td class="text--bold">مبلغ قابل پرداخت</td>
                 <td class="ltr">{{ payableValue | toMoney }}</td>
@@ -142,11 +172,12 @@
     </template>
 
     <template #footer-btns>
-      <v-btn
+      <!-- <v-btn
         @click="settleDriverImprests"
         v-if="item.driving"
         class="ml-1 blue white--text mt-1 mt-md-0"
-      >تسویه تنخواه های انتخاب شده</v-btn>
+        >تسویه تنخواه های انتخاب شده</v-btn
+      > -->
     </template>
   </m-form>
 </template>
@@ -183,12 +214,16 @@ export default {
           value: "remittance.code",
         },
         {
-          text: "تاریخ بارگیری",
-          value: "lading_date",
+          text: "عطف بارگیری",
+          value: "local_id",
         },
         {
-          text: "تاریخ بارنامه",
-          value: "bill_date",
+          text: "شماره بارگیری",
+          value: "lading_number",
+        },
+        {
+          text: "تاریخ بارگیری",
+          value: "lading_date",
         },
         {
           text: "نام پیمانکار",
@@ -196,16 +231,32 @@ export default {
         },
         {
           text: "انعام",
-          value: "tipPrice",
+          value: "driver_tip_price",
+          type: "numeric",
         },
 
         {
-          text: "درآمد ماشین",
+          text: "مبلغ کرایه",
           value: "carIncome",
+          type: "numeric",
         },
         {
-          text: "بدهی باربری",
-          value: "cargoDebt",
+          text: "اختلاف بارنامه",
+          value: "ladingDifference",
+        },
+        {
+          text: "مبلغ قابل پرداخت اولیه",
+          value: "payableAmount",
+        },
+        {
+          text: "خرج سرویس",
+          value: "service_cost",
+          type: "numeric",
+        },
+        {
+          text: "مانده قابل پرداخت به راننده",
+          value: "remainAmount",
+          type: "numeric",
         },
       ],
       ladings: [],
@@ -264,10 +315,30 @@ export default {
       );
     },
     payableValue() {
-      return this.ladingsSum - this.cargoDebtsSum - this.imprestsSum;
+      return this.selectedLadings.reduce(
+        (v, o) => v + +this.getRemainAmount(o),
+        0
+      );
     },
   },
   methods: {
+    getPayableAmount(item) {
+      return (
+        +item.driver_tip_price +
+        this.getLadingDifference(item) +
+        this.getCarIncome(item)
+      );
+    },
+    getRemainAmount(item) {
+      return this.getPayableAmount(item) - +item.service_cost;
+    },
+    getLadingDifference(item) {
+      if (item.lading_bill_difference_receiver == "drvr") {
+        return +item.lading_bill_difference;
+      } else {
+        return 0;
+      }
+    },
     getImprestSettledValue(imprest) {
       let imprestSettlement = imprest.imprestSettlement;
       if (imprestSettlement) return +imprestSettlement.settled_value;
@@ -483,4 +554,3 @@ export default {
   }
 }
 </style>
-

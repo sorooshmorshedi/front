@@ -3,7 +3,7 @@
     title
     :showList="false"
     :isEditing.sync="isEditing"
-    :listRoute="{name:'LadingsReport'}"
+    :listRoute="{ name: 'LadingsList' }"
     :canDelete="canDelete"
     :canSubmit="canSubmit"
     :canEdit="!item.is_paid"
@@ -87,7 +87,11 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <ware-select label="کالا" v-model="item.ware" :disabled="!isEditing" />
+            <ware-select
+              label="کالا"
+              v-model="item.ware"
+              :disabled="!isEditing"
+            />
           </v-col>
 
           <v-col cols="12" md="3">
@@ -106,7 +110,11 @@
             />
           </v-col>
           <v-col cols="12" md="2">
-            <money label="نرخ کرایه" v-model="item.fare_price" :disabled="!isEditing" />
+            <money
+              label="نرخ کرایه"
+              v-model="item.fare_price"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="2">
             <money
@@ -116,7 +124,11 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <money label="انعام راننده" v-model="item.driver_tip_price" :disabled="!isEditing" />
+            <money
+              label="انعام راننده"
+              v-model="item.driver_tip_price"
+              :disabled="!isEditing"
+            />
           </v-col>
 
           <v-col cols="12" md="2">
@@ -166,7 +178,11 @@
               label="مقدار بارنامه مبدا"
               v-model="item.origin_amount"
               :disabled="!isEditing"
-              @input="!is_destination_amount_dirty?item.destination_amount = item.origin_amount:''"
+              @input="
+                !is_destination_amount_dirty
+                  ? (item.destination_amount = item.origin_amount)
+                  : ''
+              "
             />
           </v-col>
           <v-col cols="12" md="2">
@@ -178,10 +194,18 @@
             />
           </v-col>
           <v-col cols="12" md="2">
-            <city-select label="مبدا" v-model="item.origin" :disabled="!isEditing" />
+            <city-select
+              label="مبدا"
+              v-model="item.origin"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="2">
-            <city-select label="مقصد" v-model="item.destination" :disabled="!isEditing" />
+            <city-select
+              label="مقصد"
+              v-model="item.destination"
+              :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="2">
             <m-file-input
@@ -225,6 +249,38 @@
             />
           </v-col>
 
+          <template v-if="item.driving.car.owner == 'o'">
+            <v-col cols="12" md="2">
+              <money
+                label="خرج سرویس"
+                v-model="item.service_cost"
+                :disabled="!isEditing"
+              />
+            </v-col>
+
+            <v-col cols="12" md="2">
+              <v-autocomplete
+                :return-object="true"
+                label="پرداخت کننده خرج سرویس"
+                v-model="item.service_cost_payer"
+                :items="tipPayers"
+                :disabled="!isEditing"
+                item-text="title"
+                item-value="id"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4">
+              <account-select
+                v-if="item.service_cost_payer && ([item.service_cost_payer.id, item.service_cost_payer].includes('cmp'))"
+                label="حساب پرداخت کننده خرج سرویس"
+                v-model="item.service_cost_payer_account"
+                :disabled="!isEditing"
+                items-type="level3"
+              />
+            </v-col>
+          </template>
+
           <v-col cols="12" md="6">
             <v-textarea
               label="توضیحات بارگیری"
@@ -238,14 +294,21 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
-                :label="'درآمد کمسیون ' + (item.driving.car.owner == 'o'?'متفرقه': 'شرکت')"
+                :label="
+                  'درآمد کمسیون ' +
+                    (item.driving.car.owner == 'o' ? 'متفرقه' : 'شرکت')
+                "
                 :value="companyCommissionIncome"
                 disabled
               />
             </v-col>
             <v-col cols="12" md="2">
               <money
-                :label="item.driving.car.owner == 'o'?'حساب پرداختنی راننده متفرقه':'درآمد ماشین'"
+                :label="
+                  item.driving.car.owner == 'o'
+                    ? 'حساب پرداختنی راننده متفرقه'
+                    : 'درآمد ماشین'
+                "
                 :value="carIncome"
                 disabled
               />
@@ -272,7 +335,12 @@
             no-filter
             :search-input.sync="ladingBillSearchInput"
             :disabled="!isEditing"
-            @change="ladingBillSeries && (item.billNumber = ladingBillSeries.numbers.filter(o=> !o.is_revoked)[0])"
+            @change="
+              ladingBillSeries &&
+                (item.billNumber = ladingBillSeries.numbers.filter(
+                  (o) => !o.is_revoked
+                )[0])
+            "
             clearable
           ></v-autocomplete>
         </v-col>
@@ -280,7 +348,11 @@
           <v-autocomplete
             :return-object="true"
             label="شماره بارنامه"
-            :items="ladingBillSeries?ladingBillSeries.numbers.filter(o => !o.is_revoked):[]"
+            :items="
+              ladingBillSeries
+                ? ladingBillSeries.numbers.filter((o) => !o.is_revoked)
+                : []
+            "
             v-model="item.billNumber"
             item-text="number"
             item-value="id"
@@ -296,11 +368,19 @@
           />
         </v-col>
         <v-col cols="12" md="2">
-          <money label="مبلغ بارنامه" v-model="item.bill_price" :disabled="!isEditing" />
+          <money
+            label="مبلغ بارنامه"
+            v-model="item.bill_price"
+            :disabled="!isEditing"
+          />
         </v-col>
 
         <v-col cols="12" md="2">
-          <money label="انعام باربری" v-model="item.cargo_tip_price" :disabled="!isEditing" />
+          <money
+            label="انعام باربری"
+            v-model="item.cargo_tip_price"
+            :disabled="!isEditing"
+          />
         </v-col>
 
         <v-col cols="12" md="2">
@@ -316,7 +396,11 @@
           />
         </v-col>
         <v-col cols="12" md="2">
-          <money label="مبلغ انجمن" v-model="item.association_price" :disabled="!isEditing" />
+          <money
+            label="مبلغ انجمن"
+            v-model="item.association_price"
+            :disabled="!isEditing"
+          />
         </v-col>
 
         <v-col cols="12" md="2">
@@ -538,6 +622,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
-
+<style scoped lang="scss"></style>
