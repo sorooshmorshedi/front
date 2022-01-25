@@ -1,8 +1,5 @@
 <template>
-  <v-row
-    :class="{ 'is-editing': isEditing }"
-    @keyup.enter="isEditing && submit(false)"
-  >
+  <v-row :class="{ 'is-editing': isEditing }">
     <v-col cols="12" :md="formWidth">
       <v-card>
         <v-card-title v-if="showHeader">
@@ -368,7 +365,13 @@ export default {
       return this.$parent;
     },
   },
-
+  mounted() {
+    window.addEventListener("keyup", (event) => {
+      if (this.isEditing && event.key == "Enter") {
+        this.submit(false);
+      }
+    });
+  },
   methods: {
     emit(event) {
       this.$emit(event);
