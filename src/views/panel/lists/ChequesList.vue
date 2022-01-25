@@ -60,8 +60,12 @@ export default {
     headers() {
       let headers = [
         {
-          text: "شماره",
+          text: "شماره چک",
           value: "serial",
+        },
+        {
+          text: "شماره سری",
+          value: "chequebook.serial",
         },
         {
           text: "شرح",
