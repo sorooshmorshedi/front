@@ -188,7 +188,7 @@
             v-if="user.unread_notifications_count != 0"
             x-small
             left
-            class="blue white--text"
+            class="red white--text"
             >{{ user.unread_notifications_count }}</v-avatar
           >
           <v-icon>far fa-bell</v-icon>

@@ -143,47 +143,99 @@
           />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="نام مالک" v-model="item.owner_name" :disabled="!isEditing" />
+          <v-text-field
+            label="نام مالک"
+            v-model="item.owner_name"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="کد ملی مالک" v-model="item.owner_melli_code" :disabled="!isEditing" />
+          <v-text-field
+            label="کد ملی مالک"
+            v-model="item.owner_melli_code"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field label="VIN" v-model="item.vin" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="نوع" v-model="item.car_type" :disabled="!isEditing" />
+          <v-text-field
+            label="نوع"
+            v-model="item.car_type"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="سیستم" v-model="item.system" :disabled="!isEditing" />
+          <v-text-field
+            label="سیستم"
+            v-model="item.system"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="تیپ" v-model="item.model" :disabled="!isEditing" />
+          <v-text-field
+            label="تیپ"
+            v-model="item.model"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="ظرفیت" v-model="item.capacity" :disabled="!isEditing" />
+          <v-text-field
+            label="ظرفیت"
+            v-model="item.capacity"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="سوخت" v-model="item.fuel" :disabled="!isEditing" />
+          <v-text-field
+            label="سوخت"
+            v-model="item.fuel"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="رنگ" v-model="item.color" :disabled="!isEditing" />
+          <v-text-field
+            label="رنگ"
+            v-model="item.color"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="موتور" v-model="item.engine" :disabled="!isEditing" />
+          <v-text-field
+            label="موتور"
+            v-model="item.engine"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="شاسی" v-model="item.chassis" :disabled="!isEditing" />
+          <v-text-field
+            label="شاسی"
+            v-model="item.chassis"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="اتاق" v-model="item.room" :disabled="!isEditing" />
+          <v-text-field
+            label="اتاق"
+            v-model="item.room"
+            :disabled="!isEditing"
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field label="شماره مسلسل" v-model="item.serial_number" :disabled="!isEditing" />
+          <v-text-field
+            label="شماره مسلسل"
+            v-model="item.serial_number"
+            :disabled="!isEditing"
+          />
         </v-col>
 
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
+          <v-textarea
+            label="توضیحات"
+            v-model="item.explanation"
+            :disabled="!isEditing"
+          />
         </v-col>
       </v-row>
     </template>
@@ -250,6 +302,7 @@ export default {
     },
     getSerialized() {
       let item = this.extractIds(this.item);
+      item.owner = this.item.owner.value;
       return item;
     },
   },

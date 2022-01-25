@@ -109,11 +109,11 @@ export default {
   mixins: [AuthMixin, MFormMixin],
   data() {
     return {
-      phone: "",
-      username: "",
+      phone: "09307468674",
+      username: "2540118755",
       code: "",
-      newPassword: "",
-      newPasswordRepeat: "",
+      newPassword: "Mmd2Sobhan!",
+      newPasswordRepeat: "Mmd2Sobhan!",
       codeSent: false,
     };
   },
@@ -153,7 +153,7 @@ export default {
             this.$router.push({ name: "Login" });
           },
           error: (error) => {
-            this.recaptcha.reset();
+            this.$refs.recaptcha.reset();
             this.handleError(error, {});
           },
         });
