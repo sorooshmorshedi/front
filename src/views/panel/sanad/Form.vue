@@ -392,6 +392,11 @@ export default {
           title: "تعدیل",
           routeName: "AdjustmentForm",
         },
+        {
+          name: "factors.transfer",
+          title: "انتقال",
+          routeName: "TransferForm",
+        },
         { name: "_dashtbashi.lading", title: "بارگیری", routeName: "Lading" },
         {
           name: "_dashtbashi.oilcompanylading",

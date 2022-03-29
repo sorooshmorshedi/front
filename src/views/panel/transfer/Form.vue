@@ -1,10 +1,10 @@
 <template>
   <m-form
     title="انتقال بین انبار ها"
-    :listRoute="{name:'TransfersList'}"
+    :listRoute="{ name: 'TransfersList' }"
     :showList="false"
     exportBaseUrl="reports/lists/transfers"
-    :exportParams="{id: this.id}"
+    :exportParams="{ id: this.id }"
     :isEditing.sync="isEditing"
     :canDelete="canDelete"
     :canSubmit="canSubmit"
@@ -14,6 +14,9 @@
     @delete="deleteItem"
     @define="defineItem"
   >
+    <template #header-btns>
+      <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
+    </template>
     <template>
       <v-row>
         <v-col cols="12" md="8">
@@ -25,22 +28,11 @@
               <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
             </v-col>
             <v-col cols="12" md="2">
-              <mtime
-                label=" * ساعت"
-                required
-                v-model="item.time"
-                :default="true"
-                :disabled="!isEditing"
-              />
+              <mtime label=" * ساعت" required v-model="item.time" :default="true" :disabled="!isEditing" />
             </v-col>
 
             <v-col cols="12" md="3">
-              <v-text-field
-                v-if="item.created_by"
-                label="کاربر"
-                disabled
-                v-model="item.created_by.name"
-              />
+              <v-text-field v-if="item.created_by" label="کاربر" disabled v-model="item.created_by.name" />
             </v-col>
 
             <v-col cols="12" md="3">
@@ -51,12 +43,7 @@
         <v-col cols="12" md="4">
           <v-row>
             <v-col cols="12">
-              <v-textarea
-                label="توضیحات"
-                class="form-control"
-                v-model="item.explanation"
-                :disabled="!isEditing"
-              />
+              <v-textarea label="توضیحات" class="form-control" v-model="item.explanation" :disabled="!isEditing" />
             </v-col>
           </v-row>
         </v-col>
@@ -78,21 +65,17 @@
               </tr>
             </template>
             <template #tbody>
-              <tr v-for="(row,i) in rows" :key="i">
-                <td class="tr-counter">{{ i+1 }}</td>
+              <tr v-for="(row, i) in rows" :key="i">
+                <td class="tr-counter">{{ i + 1 }}</td>
                 <td class="tr-ware">
-                  <ware-select
-                    v-model="rows[i].ware"
-                    :disabled="!isEditing"
-                    :show-main-unit="false"
-                  />
+                  <ware-select v-model="rows[i].ware" :disabled="!isEditing" :show-main-unit="false" />
                 </td>
                 <td>
                   <v-autocomplete
                     v-if="rows[i].ware"
                     :items="getWareUnits(row.ware)"
                     v-model="rows[i].unit"
-                    :title="rows[i].unit?rows[i].unit.title:''"
+                    :title="rows[i].unit ? rows[i].unit.title : ''"
                     item-text="name"
                     item-value="id"
                     :disabled="!isEditing"
@@ -138,7 +121,7 @@
                 </td>
                 <td class="d-print-none">
                   <v-btn
-                    v-if="i != rows.length-1"
+                    v-if="i != rows.length - 1"
                     @click="deleteRow(i)"
                     class="red--text"
                     icon
@@ -217,17 +200,11 @@ export default {
           isValid = false;
         }
         if (!r.input_warehouse || !r.output_warehouse) {
-          this.notify(
-            `لطفا انبار ورودی و خروجی ردیف ${i + 1} را وارد کنید`,
-            "danger"
-          );
+          this.notify(`لطفا انبار ورودی و خروجی ردیف ${i + 1} را وارد کنید`, "danger");
           isValid = false;
         }
         if (r.input_warehouse == r.output_warehouse) {
-          this.notify(
-            `لطفا انبار ورودی و خروجی ردیف ${i + 1} نمی تواند یکی باشد`,
-            "danger"
-          );
+          this.notify(`لطفا انبار ورودی و خروجی ردیف ${i + 1} نمی تواند یکی باشد`, "danger");
           isValid = false;
         }
       });
@@ -239,11 +216,7 @@ export default {
       let items = this.rows.slice(0, this.rows.length - 1);
 
       items = items.map((item) => {
-        item.count = this.convertToMainUnit(
-          item.ware,
-          item.unit_count,
-          item.unit
-        );
+        item.count = this.convertToMainUnit(item.ware, item.unit_count, item.unit);
         item = this.extractIds(item);
         return item;
       });
@@ -284,4 +257,3 @@ export default {
 </script>
 
 <style scoped lang="scss"></style>
-
