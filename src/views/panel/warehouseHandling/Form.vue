@@ -71,43 +71,19 @@
           <v-text-field disabled label="شماره" v-model="item.code" />
         </v-col>
         <v-col cols="12" md="2">
-          <date
-            v-model="item.start_date"
-            label=" * تاریخ آغاز"
-            :default="true"
-            :disabled="!isEditing"
-          />
+          <date v-model="item.start_date" label=" * تاریخ آغاز" :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="2">
-          <date
-            v-model="item.counting_date"
-            label=" * تاریخ شمارش"
-            :default="true"
-            :disabled="!isEditing"
-          />
+          <date v-model="item.counting_date" label=" * تاریخ شمارش" :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="2">
-          <date
-            v-model="item.submit_date"
-            label=" * تاریخ ثبت انبار گردانی"
-            :default="true"
-            :disabled="!isEditing"
-          />
+          <date v-model="item.submit_date" label=" * تاریخ ثبت انبار گردانی" :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="2">
-          <mtime
-            label="* ساعت ثبت انبار گردانی"
-            v-model="item.submit_time"
-            :default="true"
-            :disabled="!isEditing"
-          />
+          <mtime label="* ساعت ثبت انبار گردانی" v-model="item.submit_time" :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="2">
-          <v-text-field
-            label="* انبار گردان"
-            v-model="item.handler"
-            :disabled="!isEditing"
-          />
+          <v-text-field label="* انبار گردان" v-model="item.handler" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
           <v-autocomplete
@@ -121,27 +97,13 @@
           />
         </v-col>
         <v-col cols="12" md="3">
-          <v-select
-            :items="waresStatuses"
-            v-model="filters.status"
-            label="وضعیت کالا"
-            :disabled="id != undefined"
-          />
+          <v-select :items="waresStatuses" v-model="filters.status" label="وضعیت کالا" :disabled="id != undefined" />
         </v-col>
         <v-col cols="12" md="3">
-          <v-textarea
-            label="شرح"
-            v-model="item.explanation"
-            :disabled="!isEditing"
-          />
+          <v-textarea label="شرح" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
-          <v-text-field
-            v-if="item.created_by"
-            label="کاربر"
-            disabled
-            v-model="item.created_by.name"
-          />
+          <v-text-field v-if="item.created_by" label="کاربر" disabled v-model="item.created_by.name" />
         </v-col>
 
         <v-col cols="12">
@@ -165,10 +127,7 @@
                 <td>{{ row.ware.name }}</td>
                 <td>{{ row.unit }}</td>
                 <td>
-                  <money
-                    v-model="row.warehouse_remain"
-                    :disabled="!isEditing"
-                  />
+                  <money v-model="row.warehouse_remain" :disabled="!isEditing" />
                 </td>
                 <td>{{ getSystemRemain(row) | toMoney }}</td>
                 <td dir="ltr" :class="getContradictionStyle(row)">
@@ -190,13 +149,7 @@
     </template>
 
     <template #footer-outside-btns>
-      <v-btn
-        v-if="id"
-        @click="definite"
-        :disabled="item.is_defined"
-        class="blue white--text mr-1"
-        >ثبت نهایی</v-btn
-      >
+      <v-btn v-if="id" @click="definite" :disabled="item.is_defined" class="blue white--text mr-1">ثبت نهایی</v-btn>
     </template>
   </m-form>
 </template>
@@ -297,7 +250,7 @@ export default {
       }
     },
     getContradiction(row) {
-      if (!row.warehouse_remain) return "-";
+      if (!row.warehouse_remain && row.warehouse_remain != 0) return "-";
       row.contradiction = row.warehouse_remain - this.getSystemRemain(row) || 0;
       return row.contradiction;
     },
@@ -345,4 +298,3 @@ export default {
 </script>
 
 <style scoped lang="scss"></style>
-
