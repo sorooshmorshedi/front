@@ -1,82 +1,87 @@
 <template>
-  <m-form
-      title="ثبت مناقصه"
-      :showList="false"
-      :listRoute="{name:'،TendersList'}"
-      exportBaseUrl="reports/lists/tender"
-      :exportParams="{id: this.id}"
-      :canDelete="false"
-      :canSubmit="canSubmit"
-      :isEditing.sync="isEditing"
-      @submit="submit"
-      @delete="deleteItem"
-      @clearForm="clear()"
-  >
+  <div>
+    <m-form
+        title="ثبت مناقصه"
+        :showList="false"
+        :listRoute="{name:'،TendersList'}"
+        exportBaseUrl="reports/lists/tender"
+        :exportParams="{id: this.id}"
+        :canDelete="false"
+        :canSubmit="canSubmit"
+        :isEditing.sync="isEditing"
+        @submit="submit"
+        @delete="deleteItem"
+        @clearForm="clear()"
+    >
 
-    <template>
-      <v-row>
-        <v-col cols="12" md="2">
-          <v-text-field label="شماره مناقصه" v-model="code" background-color="white"/>
-        </v-col>
-        <v-col cols="12" md="2">
-          <v-text-field label="عنوان مناقصه" v-model="title" background-color="white"/>
-        </v-col>
-        <v-col cols="12" md="8">
-          <v-textarea label="شرح مناقصه" v-model="explanation" :disabled="!isEditing"></v-textarea>
-        </v-col>
-        <v-col cols="12" md="2">
-          <CitySelect label="استان محل اجرا" v-model="province"  />
-        </v-col>
-        <v-col cols="12" md="2">
-          <CitySelect label="شهر محل اجرا" v-model="city"  />
-        </v-col>
-        <v-col cols="12" md="4">
-          <v-autocomplete
-              label="طبقه بندی موضوعی"
-              :items="classification"
-              v-model="myClass"
-              item-text="name"
-              item-value="value"
-              :disabled="!isEditing"
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="2">
-          <v-text-field label="مناقصه گزار" v-model="bidder" background-color="white"/>
-        </v-col>
-        <v-col cols="12" md="2">
-          <v-text-field label="کد پستی مناقصه گزار" v-model="bidder_post" background-color="white"/>
-        </v-col>
-        <v-col cols="12" md="8">
-          <v-textarea label="آدرس مناقصه گزار" v-model="bidder_address" :disabled="!isEditing"></v-textarea>
-        </v-col>
+      <template>
+        <v-row>
+          <v-col cols="12" md="2">
+            <v-text-field label="شماره مناقصه" v-model="code" background-color="white"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-text-field label="عنوان مناقصه" v-model="title" background-color="white"/>
+          </v-col>
+          <v-col cols="12" md="8">
+            <v-textarea label="شرح مناقصه" v-model="explanation" :disabled="!isEditing"></v-textarea>
+          </v-col>
+          <v-col cols="12" md="2">
+            <CitySelect label="استان محل اجرا" v-model="province"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <CitySelect label="شهر محل اجرا" v-model="city"/>
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-autocomplete
+                label="طبقه بندی موضوعی"
+                :items="classification"
+                v-model="myClass"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="2">
+            <v-text-field label="مناقصه گزار" v-model="bidder" background-color="white"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-text-field label="کد پستی مناقصه گزار" v-model="bidder_post" background-color="white"/>
+          </v-col>
+          <v-col cols="12" md="8">
+            <v-textarea label="آدرس مناقصه گزار" v-model="bidder_address" :disabled="!isEditing"></v-textarea>
+          </v-col>
 
-        <v-col cols="12" md="2">
-          <date v-model="received_deadline" label="مهلت دریافت اسناد" :default="true" :disabled="!isEditing"/>
-        </v-col>
-        <v-col cols="12" md="2">
-          <date v-model="send_offer_deadline" label="مهلت ارسال پاکت های پیشنهاد" :default="true" :disabled="!isEditing"/>
-        </v-col>
-        <v-col cols="12" md="2">
-          <date v-model="opening_date" label="زمان بازگشایی پاکت ها" :default="true" :disabled="!isEditing"/>
-        </v-col>
-        <v-col cols="12" md="2">
-          <date v-model="offer_expiration" label="زمان اعتبار پیشنهاد" :default="true" :disabled="!isEditing"/>
-        </v-col>
-      </v-row>
-      <v-btn
-          large
-          class="float-left ma-1"
-          color="green"
-          @click="saveTender"
-      >ثبت
-      </v-btn>
-    </template>
-  </m-form>
+          <v-col cols="12" md="2">
+            <date v-model="received_deadline" label="مهلت دریافت اسناد" :default="true" :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <date v-model="send_offer_deadline" label="مهلت ارسال پاکت های پیشنهاد" :default="true"
+                  :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <date v-model="opening_date" label="زمان بازگشایی پاکت ها" :default="true" :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <date v-model="offer_expiration" label="زمان اعتبار پیشنهاد" :default="true" :disabled="!isEditing"/>
+          </v-col>
+        </v-row>
+        <v-btn
+            large
+            class="float-left ma-1"
+            color="green"
+            @click="saveTender"
+        >ثبت
+        </v-btn>
+      </template>
+    </m-form>
+    <TenderList/>
+  </div>
 </template>
 
 <script>
+import TenderList from "@/modules/contracting/Tender/TenderList";
 import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import mtime from "@/components/mcomponents/cleave/Time";
@@ -91,17 +96,17 @@ import citySelect from "@/components/selects/CitySelect";
 
 export default {
   name: "TenderForm",
-  mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect},
+  mixins: [MFormMixin, FormsMixin, FactorMixin],
+  components: {mtime, TreeSelect, citySelect, TenderList},
   props: {
     id: {},
   },
   data() {
     return {
-      offer_expiration:'',
-      opening_date:'',
-      send_offer_deadline:'',
-      received_deadline:'',
+      offer_expiration: '',
+      opening_date: '',
+      send_offer_deadline: '',
+      received_deadline: '',
       classification: [
         {name: 'کالا', value: 'w'},
         {name: 'خدمات با فهرست بها', value: 'spl'},
@@ -109,21 +114,21 @@ export default {
         {name: 'مشاوره', value: 'c'},
         {name: 'سایر', value: 'o'},
       ],
-      code:'',
-      title:'',
-      explanation:'',
-      province:'',
-      city:'',
-      bidder:'',
-      bidder_post:'',
-      bidder_address:'',
+      code: '',
+      title: '',
+      explanation: '',
+      province: '',
+      city: '',
+      bidder: '',
+      bidder_post: '',
+      bidder_address: '',
 
       baseUrl: "contracting/tender",
       permissionBasename: "tender",
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      myClass:'',
+      myClass: '',
       factors: [],
       PathLevels,
       VisitorLevels,
@@ -198,14 +203,14 @@ export default {
     },
   },
   methods: {
-    clear(){
+    clear() {
       console.log('clear')
       this.code = ''
       this.explanation = ''
       this.city = ''
       this.province = ''
       this.title = ''
-      this.bidder =''
+      this.bidder = ''
       this.bidder_post = ''
       this.bidder_address = ''
       this.received_deadline = ''
@@ -214,11 +219,11 @@ export default {
       this.offer_expiration = ''
       this.myClass = ''
     },
-    saveTender(){
+    saveTender() {
       this.request({
         url: this.endpoint(`contracting/tender/`),
         method: "post",
-        data:{
+        data: {
           code: this.code,
           explanation: this.explanation,
           city: this.city,

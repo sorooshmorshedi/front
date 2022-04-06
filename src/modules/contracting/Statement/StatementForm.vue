@@ -1,89 +1,93 @@
 <template>
-  <m-form
-      title="صورت وضییت"
-      :showList="false"
-      :listRoute="{name:'،ُStatementList'}"
-      exportBaseUrl="reports/lists/statement"
-      :exportParams="{id: this.id}"
-      :canDelete="false"
-      :canSubmit="canSubmit"
-      :isEditing.sync="isEditing"
-      @goToForm="getItemByPosition"
-      @submit="submit"
-      @delete="deleteItem"
-      @clearForm="clear"
-  >
+  <div>
+    <m-form
+        title="صورت وضییت"
+        :showList="false"
+        :listRoute="{name:'،ُStatementList'}"
+        exportBaseUrl="reports/lists/statement"
+        :exportParams="{id: this.id}"
+        :canDelete="false"
+        :canSubmit="canSubmit"
+        :isEditing.sync="isEditing"
+        @goToForm="getItemByPosition"
+        @submit="submit"
+        @delete="deleteItem"
+        @clearForm="clear"
+    >
 
-    <template>
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-autocomplete
-              label="قرارداد"
-              :items="contracts"
-              v-model="contract"
-              item-text="name"
-              item-value="id"
-              :disabled="!isEditing"
-              @change="setValues"
-          />
-        </v-col>
+      <template>
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-autocomplete
+                label="قرارداد"
+                :items="contracts"
+                v-model="contract"
+                item-text="name"
+                item-value="id"
+                :disabled="!isEditing"
+                @change="setValues"
+            />
+          </v-col>
 
-        <v-col cols="12" md="3">
-          <v-autocomplete
-              label="دسته بندی"
-              :items="type"
-              v-model="types"
-              item-text="name"
-              item-value="value"
-              :disabled="!isEditing"
-          />
-        </v-col>
+          <v-col cols="12" md="3">
+            <v-autocomplete
+                label="دسته بندی"
+                :items="type"
+                v-model="types"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
 
-        <v-col cols="12" md="2">
-          <money
-              label=" مبلغ ناخالص کارکرد این صورت وضعیت "
-              v-model="value"
-              background-color="white"
-              :disabled="!isEditing"
-              @change="present_statement_value = previous_statement_value + value"
+          <v-col cols="12" md="2">
+            <money
+                label=" مبلغ ناخالص کارکرد این صورت وضعیت "
+                v-model="value"
+                background-color="white"
+                :disabled="!isEditing"
+                @change="present_statement_value = previous_statement_value + value"
 
-          />
-        </v-col>
+            />
+          </v-col>
 
-        <v-col cols="12" md="2">
-          <v-text-field disabled label="مبلغ ناخالص کارکرد تا صورت وضعیت قبلی" v-model="previous_statement_value"
-                        background-color="white"/>
-        </v-col>
-        <v-col cols="12" md="2">
-          <v-text-field disabled label="مبلغ ناخالص کارکرد تا این صورت وضعیت " v-model="present_statement_value"
-                        background-color="white"/>
-        </v-col>
-      </v-row>
-      <v-row>
+          <v-col cols="12" md="2">
+            <v-text-field disabled label="مبلغ ناخالص کارکرد تا صورت وضعیت قبلی" v-model="previous_statement_value"
+                          background-color="white"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-text-field disabled label="مبلغ ناخالص کارکرد تا این صورت وضعیت " v-model="present_statement_value"
+                          background-color="white"/>
+          </v-col>
+        </v-row>
+        <v-row>
 
-        <v-col cols="12" md="2">
-          <v-text-field label="شماره" v-model="code" background-color="white"/>
-        </v-col>
-        <v-col cols="12" md="2">
-          <date v-model="date" label="تاریخ" :default="true" :disabled="!isEditing"/>
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-textarea label="توضیحات" v-model="explanation" :disabled="!isEditing"></v-textarea>
-        </v-col>
-      </v-row>
-      <v-btn
-          large
-          class="float-left ma-1"
-          color="green"
-          @click="saveStatement"
-      >ثبت
-      </v-btn>
+          <v-col cols="12" md="2">
+            <v-text-field label="شماره" v-model="code" background-color="white"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <date v-model="date" label="تاریخ" :default="true" :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-textarea label="توضیحات" v-model="explanation" :disabled="!isEditing"></v-textarea>
+          </v-col>
+        </v-row>
+        <v-btn
+            large
+            class="float-left ma-1"
+            color="green"
+            @click="saveStatement"
+        >ثبت
+        </v-btn>
 
-    </template>
-  </m-form>
+      </template>
+    </m-form>
+    <StatementList/>
+  </div>
 </template>
 
 <script>
+import StatementList from "@/modules/contracting/Statement/StatementList";
 import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import mtime from "@/components/mcomponents/cleave/Time";
@@ -98,19 +102,19 @@ import date from "@/components/mcomponents/cleave/Date";
 export default {
   name: "DistributionForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect},
+  components: {mtime, TreeSelect, StatementList},
   props: {
     id: {},
   },
   data() {
     return {
-      contracts:[],
-      contract:'',
-      code:'',
+      contracts: [],
+      contract: '',
+      code: '',
       types: '',
       value: '',
       date: '',
-      explanation:'',
+      explanation: '',
       previous_statement_value: '',
       present_statement_value: '',
       type: [
@@ -170,7 +174,7 @@ export default {
       ];
     },
   },
-  mounted(){
+  mounted() {
     this.request({
       url: this.endpoint(`contracting/contract/`),
       method: "get",
@@ -191,17 +195,17 @@ export default {
   },
 
   methods: {
-    saveStatement(){
+    saveStatement() {
       this.request({
         url: this.endpoint(`contracting/statement/`),
         method: "post",
-        data:{
+        data: {
           contract: this.contract,
           title: this.title,
           serial: this.code,
           value: this.value,
           date: this.date,
-          explanation : this.explanation,
+          explanation: this.explanation,
           type: this.types,
         },
         success: data => {
@@ -210,7 +214,7 @@ export default {
       })
 
     },
-    setValues(){
+    setValues() {
       this.request({
         url: this.endpoint(`contracting/supplement/previous/` + this.contract + '/'),
         method: "get",
@@ -221,7 +225,7 @@ export default {
       })
 
     },
-    clear(){
+    clear() {
       console.log('clear')
       this.code = ''
       this.title = ''

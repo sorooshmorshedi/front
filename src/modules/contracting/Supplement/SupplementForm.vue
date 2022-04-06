@@ -1,88 +1,92 @@
 <template>
-  <m-form
-      title="الحاقیه"
-      :showList="false"
-      :listRoute="{name:'،ُSupplementList'}"
-      exportBaseUrl="reports/lists/Supplement"
-      :exportParams="{id: this.id}"
-      :canDelete="false"
-      :canSubmit="canSubmit"
-      :isEditing.sync="isEditing"
-      @goToForm="getItemByPosition"
-      @submit="submit"
-      @delete="deleteItem"
-      @clearForm="clear()"
-  >
-    <template>
-      <v-row>
-        <v-col cols="12" md="3">
-          <v-autocomplete
-              label="قرارداد"
-              :items="contracts"
-              v-model="contract"
-              item-text="name"
-              item-value="id"
-              :disabled="!isEditing"
-              @change="setValues"
-          />
-        </v-col>
+  <div>
+    <m-form
+        title="الحاقیه"
+        :showList="false"
+        :listRoute="{name:'،ُSupplementList'}"
+        exportBaseUrl="reports/lists/Supplement"
+        :exportParams="{id: this.id}"
+        :canDelete="false"
+        :canSubmit="canSubmit"
+        :isEditing.sync="isEditing"
+        @goToForm="getItemByPosition"
+        @submit="submit"
+        @delete="deleteItem"
+        @clearForm="clear()"
+    >
+      <template>
+        <v-row>
+          <v-col cols="12" md="3">
+            <v-autocomplete
+                label="قرارداد"
+                :items="contracts"
+                v-model="contract"
+                item-text="name"
+                item-value="id"
+                :disabled="!isEditing"
+                @change="setValues"
+            />
+          </v-col>
 
-        <v-col cols="12" md="1">
-          <v-text-field disabled label="حداکثر" v-model="min"
-                        background-color="white"/>
-        </v-col>
-        <v-col cols="12" md="1">
-          <v-text-field disabled label="حداقل " v-model="max"
-                        background-color="white"/>
-        </v-col>
-        <v-col cols="12" md="2">
-          <money
-              label=" مبلغ تغییر"
-              v-model="value"
-              background-color="white"
-              :rules="rules1"
-              :disabled="!isEditing"
-          />
-        </v-col>
+          <v-col cols="12" md="1">
+            <v-text-field disabled label="حداکثر" v-model="min"
+                          background-color="white"/>
+          </v-col>
+          <v-col cols="12" md="1">
+            <v-text-field disabled label="حداقل " v-model="max"
+                          background-color="white"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <money
+                label=" مبلغ تغییر"
+                v-model="value"
+                background-color="white"
+                :rules="rules1"
+                :disabled="!isEditing"
+            />
+          </v-col>
 
-        <v-col cols="12" md="2">
-          <v-switch
-              @click="setSts"
-              v-model="switch1"
-              :label=status
-          ></v-switch>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="2">
-          <date v-model="new_date" label="تاریخ جدید قرارداد" :default="true" :disabled="!isEditing"/>
-        </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                @click="setSts"
+                v-model="switch1"
+                :label=status
+            ></v-switch>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="2">
+            <date v-model="new_date" label="تاریخ جدید قرارداد" :default="true" :disabled="!isEditing"/>
+          </v-col>
 
 
-        <v-col cols="12" md="3">
-          <v-textarea label="توضیحات" v-model="explanation" :disabled="!isEditing"></v-textarea>
-        </v-col>
+          <v-col cols="12" md="3">
+            <v-textarea label="توضیحات" v-model="explanation" :disabled="!isEditing"></v-textarea>
+          </v-col>
 
-        <v-col cols="12" md="2">
-          <date v-model="date" label="تاریخ" :default="true" :disabled="!isEditing"/>
-        </v-col>
-        <v-col cols="12" md="2">
-          <v-text-field label="شماره سریال " v-model="code" background-color="white"/>
-        </v-col>
+          <v-col cols="12" md="2">
+            <date v-model="date" label="تاریخ" :default="true" :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-text-field label="شماره سریال " v-model="code" background-color="white"/>
+          </v-col>
 
-      </v-row>
-      <v-btn
-          large
-          class="float-left ma-1"
-          color="green"
-          @click="saveSupplement"
-      >ثبت
-      </v-btn>
-    </template>
-  </m-form>
+        </v-row>
+        <v-btn
+            large
+            class="float-left ma-1"
+            color="green"
+            @click="saveSupplement"
+        >ثبت
+        </v-btn>
+      </template>
+    </m-form>
+    <SupplementList/>
+  </div>
 </template>
 
 <script>
+import SupplementList from "@/modules/contracting/Supplement/SupplementList";
 import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import mtime from "@/components/mcomponents/cleave/Time";
@@ -97,22 +101,22 @@ import date from "@/components/mcomponents/cleave/Date";
 export default {
   name: "DistributionForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, money},
+  components: {mtime, TreeSelect, money, SupplementList},
   props: {
     id: {},
   },
   data() {
     return {
-      contracts:[],
-      contract:'',
+      contracts: [],
+      contract: '',
       new_date: '',
-      date :'',
+      date: '',
       code: '',
-      explanation:'',
-      value:'',
+      explanation: '',
+      value: '',
 
       switch1: false,
-      status : 'کاهش',
+      status: 'کاهش',
       type: [
         {name: 'معمولی', value: 'n'},
         {name: 'تعدیل', value: 'a'},
@@ -130,12 +134,12 @@ export default {
         is_loaded: false,
       },
       isFullDelivery: null,
-      min : null,
+      min: null,
       max: null,
       rules1: [v => v <= this.max && v >= this.min],
     };
   },
-  mounted(){
+  mounted() {
     this.request({
       url: this.endpoint(`contracting/contract/`),
       method: "get",
@@ -161,38 +165,30 @@ export default {
         {
           text: "شماره",
           value: "code",
+          type: "numeric",
+        },
+
+        {
+          text: "قرارداد",
+          value: "contract",
         },
         {
-          text: "تاریخ",
-          value: "date",
+          text: "تاریخ جدید قرارداد",
+          value: "new_conteract_date",
           type: "date",
-        },
-        {
-          text: "خریدار",
-          value: "account.name",
         },
         {
           text: "شرح",
           value: "explanation",
         },
         {
-          text: "مبلغ کل فاکتور",
-          value: "total_sum",
-          type: "numeric",
+          text: "مبلغ",
+          value: "value",
         },
         {
-          text: "مبلغ برگشتی",
-          value: "backFactor.total_sum",
-          type: "numeric",
-        },
-        {
-          text: "مبلغ دریافت شده",
-          value: "paidValue",
-          type: "numeric",
-        },
-        {
-          text: "مبلغ قابل دریافت",
-          value: "payable_value",
+          text: "تاریخ",
+          value: "date",
+          type: "date",
         },
 
       ];
@@ -200,7 +196,7 @@ export default {
 
   },
   methods: {
-    clear(){
+    clear() {
       this.contract = ''
       this.max = ''
       this.min = ''
@@ -214,24 +210,23 @@ export default {
 
     },
 
-    setSts(){
-      if(this.switch1==true){
+    setSts() {
+      if (this.switch1 == true) {
         this.status = 'افزایش'
-      }
-      else {
+      } else {
         this.status = 'کاهش'
       }
     },
-    saveSupplement(){
+    saveSupplement() {
       this.request({
         url: this.endpoint(`contracting/supplement/`),
         method: "post",
-        data:{
+        data: {
           contract: this.contract,
           new_conteract_date: this.new_date,
           date: this.date,
           increase: this.switch1,
-          value : this.value,
+          value: this.value,
           code: this.code,
         },
         success: data => {
