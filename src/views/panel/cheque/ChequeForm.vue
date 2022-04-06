@@ -88,13 +88,6 @@
               @update:costCenter="(v) => (itemCostCenter = v)"
             />
           </v-col>
-          <v-col cols="12" md="2">
-            <money
-              label=" * مبلغ"
-              v-model="item.value"
-              :disabled="!isEditing"
-            />
-          </v-col>
           <v-col cols="12" md="3" v-if="type == 'bg'">
             <v-text-field
               label="شماره سپام"

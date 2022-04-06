@@ -65,6 +65,11 @@ import DefaultTexts from '@/views/panel/defaultTexts/DefaultTexts';
 import DashtbashiRoutes from '@/modules/dashtbashi/Routes';
 import DistributionRoutes from '@/modules/distribution/Routes';
 
+import TenderForm from "@/modules/contracting/Tender/TenderForm";
+import ContractForm from "@/modules/contracting/Contract/ContractForm";
+import StatementForm from "@/modules/contracting/Statement/StatementForm";
+import SupplementForm from "@/modules/contracting/Supplement/SupplementForm";
+
 export default [{
   name: 'Panel',
   path: '/panel',
@@ -312,7 +317,31 @@ export default [{
       path: 'defaultTexts/:usage',
       component: DefaultTexts,
       props: true
-    }
+    },
+    {
+      name: 'TenderForm',
+      path: 'tender',
+      component: TenderForm,
+    },
+    {
+      name: 'ContractForm',
+      path: 'contract',
+      component: ContractForm,
+    },
+
+    {
+      name: 'StatementForm',
+      path: 'statement',
+      component: StatementForm,
+    },
+
+    {
+      name: 'SupplementForm',
+      path: 'supplement',
+      component: SupplementForm,
+    },
+
+
 
   ]
 }]
