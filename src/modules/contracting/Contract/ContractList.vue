@@ -28,6 +28,10 @@ export default {
           text: "عنوان",
           value: "title",
         },
+        {
+          text: "مناقصه",
+          value: "tender",
+        },
 
         {
           text: "شماره",
@@ -64,13 +68,13 @@ export default {
         },
 
         {
-          text: "ثبت قرارداد",
+          text: "تاریخ ثبت قرارداد",
           value: "registration",
           type: "date",
         },
 
         {
-          text: "شروع قرارداد",
+          text: "تاریخ شروع قرارداد",
           value: "inception",
           type: "date",
         },

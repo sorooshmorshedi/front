@@ -53,7 +53,7 @@ export default {
         },
         {
           text: "کد پستی مناقصه گزار",
-          value: "bidder_post",
+          value: "bidder_postal_code",
           type: "numeric",
 
         },

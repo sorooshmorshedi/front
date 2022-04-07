@@ -43,7 +43,7 @@
             />
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="حداکثر میزان تغییر مبلغ قرارداد" v-model="max_change_amount" background-color="white"/>
+            <v-text-field label="حداکثر میزان تغییر مبلغ قرارداد (درصد)" v-model="max_change_amount" background-color="white"/>
           </v-col>
         </v-row>
         <v-row>
@@ -85,6 +85,13 @@
             class="float-left ma-1"
             color="green"
             @click="saveContract"
+        >ثبت و صدور جدید
+        </v-btn>
+        <v-btn
+            large
+            class="float-left ma-1"
+            color="green"
+            @click="saveContractAndReload"
         >ثبت
         </v-btn>
 
@@ -105,10 +112,11 @@ import TreeSelect from "@/components/selects/TreeSelect";
 import {PathLevels, VisitorLevels} from "@/variables";
 import date from "@/components/mcomponents/cleave/Date";
 import accountSelect from "@/components/selects/AccountSelect";
+import accountMixin from "@/mixin/accountMixin";
 
 export default {
   name: "ContractForm",
-  mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
+  mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin, accountMixin],
   components: {mtime, TreeSelect, accountSelect, ContractList},
   props: {
     id: {},
@@ -154,6 +162,10 @@ export default {
           text: "عنوان",
           value: "title",
         },
+        {
+          text: "مناقصه",
+          value: "tender",
+        },
 
         {
           text: "شماره",
@@ -190,13 +202,13 @@ export default {
         },
 
         {
-          text: "ثبت قرارداد",
+          text: "تاریخ ثبت قرارداد",
           value: "registration",
           type: "date",
         },
 
         {
-          text: "شروع قرارداد",
+          text: "تاریخ شروع قرارداد",
           value: "inception",
           type: "date",
         },
@@ -261,10 +273,37 @@ export default {
 
         },
         success: data => {
-          console.log('ok');
+          this.notify(' قرارداد ثبت شد' , 'success')
+          this.clear()        }
+      })
+    },
+    saveContractAndReload() {
+      this.request({
+        url: this.endpoint(`contracting/contract/`),
+        method: "post",
+        data: {
+          tender: this.tender,
+          title: this.title,
+          code: this.code,
+          amount: this.value,
+          max_change_amount: this.max_change_amount,
+          contractor: this.contractor,
+          from_date: this.from_date,
+          to_date: this.to_date,
+          registration: this.save_date,
+          inception: this.start_date,
+          doing_job_well: this.doing_job_well,
+          insurance_payment: this.insurance_payment,
+          other: this.other,
+
+        },
+        success: data => {
+          this.notify(' قرارداد ثبت شد' , 'success')
+          this.$router.go()
         }
       })
     },
+
     clear() {
       console.log('clear')
       this.code = ''

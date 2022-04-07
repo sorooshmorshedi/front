@@ -38,7 +38,7 @@ export default {
           },
           {
             text: "تاریخ جدید قرارداد",
-            value: "new_conteract_date",
+            value: "new_contract_date",
             type: "date",
           },
           {

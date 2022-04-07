@@ -3,7 +3,7 @@
     <m-form
         title="ثبت مناقصه"
         :showList="false"
-        :listRoute="{name:'،TendersList'}"
+        :listRoute="{name:'TenderList'}"
         exportBaseUrl="reports/lists/tender"
         :exportParams="{id: this.id}"
         :canDelete="false"
@@ -22,9 +22,11 @@
           <v-col cols="12" md="2">
             <v-text-field label="عنوان مناقصه" v-model="title" background-color="white"/>
           </v-col>
-          <v-col cols="12" md="8">
+          <v-col cols="12" md="6">
             <v-textarea label="شرح مناقصه" v-model="explanation" :disabled="!isEditing"></v-textarea>
           </v-col>
+        </v-row>
+        <v-row>
           <v-col cols="12" md="2">
             <CitySelect label="استان محل اجرا" v-model="province"/>
           </v-col>
@@ -49,9 +51,11 @@
           <v-col cols="12" md="2">
             <v-text-field label="کد پستی مناقصه گزار" v-model="bidder_post" background-color="white"/>
           </v-col>
-          <v-col cols="12" md="8">
+          <v-col cols="12" md="6">
             <v-textarea label="آدرس مناقصه گزار" v-model="bidder_address" :disabled="!isEditing"></v-textarea>
           </v-col>
+        </v-row>
+        <v-row>
 
           <v-col cols="12" md="2">
             <date v-model="received_deadline" label="مهلت دریافت اسناد" :default="true" :disabled="!isEditing"/>
@@ -72,8 +76,17 @@
             class="float-left ma-1"
             color="green"
             @click="saveTender"
+        > ثبت و صدور جدید
+        </v-btn>
+        <v-btn
+            large
+            class="float-left ma-1"
+            color="green"
+            @click="saveTenderAndReload"
         >ثبت
         </v-btn>
+
+
       </template>
     </m-form>
     <TenderList/>
@@ -83,7 +96,6 @@
 <script>
 import TenderList from "@/modules/contracting/Tender/TenderList";
 import {MFormMixin} from "@/components/m-form";
-import DistributionApiMixin from "@/modules/distribution/api";
 import mtime from "@/components/mcomponents/cleave/Time";
 import FormsMixin from "@/mixin/forms";
 import FactorMixin from "@/views/panel/factor/mixin";
@@ -133,6 +145,8 @@ export default {
       PathLevels,
       VisitorLevels,
     };
+  },
+  mounted(){
   },
   computed: {
     headers() {
@@ -241,7 +255,35 @@ export default {
 
         },
         success: data => {
-          console.log(data);
+          this.notify(' مناقصه ثبت شد' , 'success')
+          this.clear()
+        }
+      })
+    },
+    saveTenderAndReload() {
+      this.request({
+        url: this.endpoint(`contracting/tender/`),
+        method: "post",
+        data: {
+          code: this.code,
+          explanation: this.explanation,
+          city: this.city,
+          province: this.province,
+          title: this.title,
+          bidder: this.bidder,
+          bidder_postal_code: this.bidder_post,
+          bidder_address: this.bidder_address,
+          received_deadline: this.received_deadline,
+          send_offer_deadline: this.send_offer_deadline,
+          opening_date: this.opening_date,
+          offer_expiration: this.offer_expiration,
+          classification: this.myClass
+
+
+        },
+        success: data => {
+          this.notify(' مناقصه ثبت شد' , 'success')
+          this.$router.go()
         }
       })
     }

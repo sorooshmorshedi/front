@@ -26,7 +26,7 @@ export default {
       return [
 
         {
-          text: "سریال",
+          text: "شماره",
           value: "code",
           type: "numeric"
         },
@@ -44,18 +44,36 @@ export default {
           value: "explanation",
         },
         {
-          text: "مبلغ",
+          text: "سریال",
+          value: "serial",
+          type: "numeric"
+        },
+        {
+          text: "دسته بندی",
+          value: "type",
+        },
+
+        {
+          text: "مبلغ ناخالص کارکرد این صورت وضعیت",
           value: "value",
           type: "numeric",
         },
         {
-          text: "دسته بندی",
-          value: "type.",
+          text: "مبلغ ناخالص کارکرد تا صورت وضعیت قبلی",
+          value: "previous_statement_value",
+          type: "numeric",
         },
+        {
+          text: "مبلغ ناخالص کارکرد تا این صورت وضعیت",
+          value: "present_statement_value",
+          type: "numeric",
+        },
+
 
       ];
     },
-  },  mounted() {
+  },
+  mounted() {
   },
   methods: {
   },

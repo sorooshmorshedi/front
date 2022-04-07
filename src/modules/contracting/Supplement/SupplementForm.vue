@@ -65,7 +65,7 @@
           </v-col>
 
           <v-col cols="12" md="2">
-            <date v-model="date" label="تاریخ" :default="true" :disabled="!isEditing"/>
+            <date v-model="date" label="تاریخ ثبت الحاقیه" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
             <v-text-field label="شماره سریال " v-model="code" background-color="white"/>
@@ -77,6 +77,14 @@
             class="float-left ma-1"
             color="green"
             @click="saveSupplement"
+        >ثبت و صدور جدید
+        </v-btn>
+
+        <v-btn
+            large
+            class="float-left ma-1"
+            color="green"
+            @click="saveSupplementAndReload"
         >ثبت
         </v-btn>
       </template>
@@ -99,7 +107,7 @@ import date from "@/components/mcomponents/cleave/Date";
 
 
 export default {
-  name: "DistributionForm",
+  name: "SupplementForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
   components: {mtime, TreeSelect, money, SupplementList},
   props: {
@@ -174,7 +182,7 @@ export default {
         },
         {
           text: "تاریخ جدید قرارداد",
-          value: "new_conteract_date",
+          value: "new_contract_date",
           type: "date",
         },
         {
@@ -217,25 +225,47 @@ export default {
         this.status = 'کاهش'
       }
     },
+
     saveSupplement() {
       this.request({
         url: this.endpoint(`contracting/supplement/`),
         method: "post",
         data: {
           contract: this.contract,
-          new_conteract_date: this.new_date,
+          new_contract_date: this.new_date,
           date: this.date,
           increase: this.switch1,
           value: this.value,
           code: this.code,
+          explanation: this.explanation
         },
         success: data => {
-          console.log(data);
+          this.notify(' الحاقیه ثبت شد' , 'success')
+          this.clear()
         }
       })
-
-
     },
+
+    saveSupplementAndReload() {
+      this.request({
+        url: this.endpoint(`contracting/supplement/`),
+        method: "post",
+        data: {
+          contract: this.contract,
+          new_contract_date: this.new_date,
+          date: this.date,
+          increase: this.switch1,
+          value: this.value,
+          code: this.code,
+          explanation: this.explanation
+        },
+        success: data => {
+          this.notify(' الحاقیه ثبت شد' , 'success')
+          this.$router.go()
+        }
+      })
+    },
+
     setValues() {
       this.request({
         url: this.endpoint(`contracting/contract/change/` + this.contract + '/'),
@@ -247,7 +277,6 @@ export default {
         }
       })
     }
-
   },
 };
 </script>

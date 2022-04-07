@@ -77,6 +77,13 @@
             class="float-left ma-1"
             color="green"
             @click="saveStatement"
+        >ثبت و صدور جدید
+        </v-btn>
+        <v-btn
+            large
+            class="float-left ma-1"
+            color="green"
+            @click="saveStatementAndReload"
         >ثبت
         </v-btn>
 
@@ -143,8 +150,9 @@ export default {
   computed: {
     headers() {
       return [
+
         {
-          text: "سریال",
+          text: "شماره",
           value: "code",
           type: "numeric"
         },
@@ -162,14 +170,31 @@ export default {
           value: "explanation",
         },
         {
-          text: "مبلغ",
-          value: "value",
-          type: "numeric",
+          text: "سریال",
+          value: "serial",
+          type: "numeric"
         },
         {
           text: "دسته بندی",
           value: "type",
         },
+
+        {
+          text: "مبلغ ناخالص کارکرد این صورت وضعیت",
+          value: "value",
+          type: "numeric",
+        },
+        {
+          text: "مبلغ ناخالص کارکرد تا صورت وضعیت قبلی",
+          value: "previous_statement_value",
+          type: "numeric",
+        },
+        {
+          text: "مبلغ ناخالص کارکرد تا این صورت وضعیت",
+          value: "present_statement_value",
+          type: "numeric",
+        },
+
 
       ];
     },
@@ -187,7 +212,6 @@ export default {
             'id': data[t].id,
           })
         }
-        console.log(this.contracts)
 
       }
     })
@@ -209,11 +233,33 @@ export default {
           type: this.types,
         },
         success: data => {
-          console.log(data);
+          this.notify(' صورت وضییت ثبت شد' , 'success')
+          this.clear()
         }
       })
 
     },
+    saveStatementAndReload() {
+      this.request({
+        url: this.endpoint(`contracting/statement/`),
+        method: "post",
+        data: {
+          contract: this.contract,
+          title: this.title,
+          serial: this.code,
+          value: this.value,
+          date: this.date,
+          explanation: this.explanation,
+          type: this.types,
+        },
+        success: data => {
+          this.notify(' صورت وضییت ثبت شد' , 'success')
+          this.$router.go()
+        }
+      })
+
+    },
+
     setValues() {
       this.request({
         url: this.endpoint(`contracting/supplement/previous/` + this.contract + '/'),
