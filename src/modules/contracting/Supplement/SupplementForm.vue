@@ -3,7 +3,7 @@
     <m-form
         title="الحاقیه"
         :showList="false"
-        :listRoute="{name:'،ُSupplementList'}"
+        :listRoute="{name:'ُSupplementList'}"
         exportBaseUrl="reports/lists/Supplement"
         :exportParams="{id: this.id}"
         :canDelete="false"
@@ -12,7 +12,7 @@
         @goToForm="getItemByPosition"
         @submit="submit"
         @delete="deleteItem"
-        @clearForm="clear()"
+        @clearForm="clearForm() "
     >
       <template>
         <v-row>
@@ -20,11 +20,11 @@
             <v-autocomplete
                 label="قرارداد"
                 :items="contracts"
-                v-model="contract"
+                v-model="item.contract"
                 item-text="name"
                 item-value="id"
                 :disabled="!isEditing"
-                @change="setValues"
+                @change="setValues(item.contract)"
             />
           </v-col>
 
@@ -39,7 +39,7 @@
           <v-col cols="12" md="2">
             <money
                 label=" مبلغ تغییر"
-                v-model="value"
+                v-model="item.value"
                 background-color="white"
                 :rules="rules1"
                 :disabled="!isEditing"
@@ -49,47 +49,32 @@
           <v-col cols="12" md="2">
             <v-switch
                 @click="setSts"
-                v-model="switch1"
+                v-model="item.increase"
                 :label=status
+                :disabled="!isEditing"
             ></v-switch>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" md="2">
-            <date v-model="new_date" label="تاریخ جدید قرارداد" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.new_contract_date" label="تاریخ جدید قرارداد" :default="true" :disabled="!isEditing"/>
           </v-col>
 
 
           <v-col cols="12" md="3">
-            <v-textarea label="توضیحات" v-model="explanation" :disabled="!isEditing"></v-textarea>
+            <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
           </v-col>
 
           <v-col cols="12" md="2">
-            <date v-model="date" label="تاریخ ثبت الحاقیه" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.date" label="تاریخ ثبت الحاقیه" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="شماره سریال " v-model="code" background-color="white"/>
+            <v-text-field label="شماره سریال " v-model="item.code" background-color="white" :disabled="!isEditing"/>
           </v-col>
 
         </v-row>
-        <v-btn
-            large
-            class="float-left ma-1"
-            color="green"
-            @click="saveSupplement"
-        >ثبت و صدور جدید
-        </v-btn>
-
-        <v-btn
-            large
-            class="float-left ma-1"
-            color="green"
-            @click="saveSupplementAndReload"
-        >ثبت
-        </v-btn>
       </template>
     </m-form>
-    <SupplementList/>
   </div>
 </template>
 
@@ -131,8 +116,8 @@ export default {
         {name: 'تحویل موقت', value: 'td'},
         {name: 'مشاوره', value: 'dd'},
       ],
-      baseUrl: "contracting/tender",
-      permissionBasename: "tender",
+      baseUrl: "contracting/supplement",
+      permissionBasename: "Supplement",
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
@@ -266,9 +251,9 @@ export default {
       })
     },
 
-    setValues() {
+    setValues(id) {
       this.request({
-        url: this.endpoint(`contracting/contract/change/` + this.contract + '/'),
+        url: this.endpoint(`contracting/contract/change/` + id + '/'),
         method: "get",
         success: data => {
           this.min = data.min

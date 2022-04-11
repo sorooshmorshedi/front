@@ -1,9 +1,10 @@
 <template>
+
   <div>
     <m-form
         title="ثبت قرارداد"
         :showList="false"
-        :listRoute="{name:'،ContractsList'}"
+        :listRoute="{name:'ContractList'}"
         exportBaseUrl="reports/lists/contract"
         :exportParams="{id: this.id}"
         :canDelete="false"
@@ -12,7 +13,7 @@
         @goToForm="getItemByPosition"
         @submit="submit"
         @delete="deleteItem"
-        @clearForm="clear"
+        @clearForm="clearForm()"
     >
 
       <template>
@@ -21,83 +22,68 @@
             <v-autocomplete
                 label="مناقصه"
                 :items="tenders"
-                v-model="tender"
+                v-model="item.tender"
                 item-text="name"
                 item-value="id"
                 :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="عنوان قرارداد" v-model="title" background-color="white"/>
+            <v-text-field label="عنوان قرارداد" v-model="item.title" background-color="white" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="شماره قرارداد" v-model="code" background-color="white"/>
+            <v-text-field label="شماره قرارداد" v-model="item.code" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
             <money
                 label=" مبلغ قرارداد"
-                v-model="value"
+                v-model="item.amount"
                 background-color="white"
                 :disabled="!isEditing"
 
             />
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="حداکثر میزان تغییر مبلغ قرارداد (درصد)" v-model="max_change_amount" background-color="white"/>
+            <v-text-field label="حداکثر میزان تغییر مبلغ قرارداد (درصد)" v-model="item.max_change_amount" background-color="white" :disabled="!isEditing"/>
           </v-col>
         </v-row>
         <v-row>
 
           <v-col cols="12" md="2">
-            <account-select label="پیمانکار" v-model="contractor"/>
+            <account-select label="پیمانکار" v-model="item.contractor" :disabled="!isEditing"/>
           </v-col>
 
           <v-col cols="12" md="2">
-            <date v-model="from_date" label="از تاریخ" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.from_date" label="از تاریخ" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <date v-model="to_date" label="تا تاریخ" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.to_date" label="تا تاریخ" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <date v-model="save_date" label="تاریخ ثبت" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.registration" label="تاریخ ثبت" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <date v-model="start_date" label="تاریخ شروع" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.inception" label="تاریخ شروع" :default="true" :disabled="!isEditing"/>
           </v-col>
 
         </v-row>
         <v-row>
 
           <v-col cols="12" md="2">
-            <v-text-field label="حسن انجام کار" v-model="doing_job_well" background-color="white"/>
+            <v-text-field label="حسن انجام کار" v-model="item.doing_job_well" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="علی الحساب بیمه" v-model="insurance_payment" background-color="white"/>
+            <v-text-field label="علی الحساب بیمه" v-model="item.insurance_payment" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="سایر" v-model="other" background-color="white"/>
+            <v-text-field label="سایر" v-model="item.other"  background-color="white" :disabled="!isEditing"/>
           </v-col>
 
 
         </v-row>
-        <v-btn
-            large
-            class="float-left ma-1"
-            color="green"
-            @click="saveContract"
-        >ثبت و صدور جدید
-        </v-btn>
-        <v-btn
-            large
-            class="float-left ma-1"
-            color="green"
-            @click="saveContractAndReload"
-        >ثبت
-        </v-btn>
 
       </template>
     </m-form>
-    <ContractList/>
   </div>
 </template>
 

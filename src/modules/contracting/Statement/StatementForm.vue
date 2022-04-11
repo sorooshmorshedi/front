@@ -1,9 +1,9 @@
 <template>
   <div>
     <m-form
-        title="صورت وضییت"
+        title="صورت وضعیت"
         :showList="false"
-        :listRoute="{name:'،ُStatementList'}"
+        :listRoute="{name:'StatementList'}"
         exportBaseUrl="reports/lists/statement"
         :exportParams="{id: this.id}"
         :canDelete="false"
@@ -12,7 +12,7 @@
         @goToForm="getItemByPosition"
         @submit="submit"
         @delete="deleteItem"
-        @clearForm="clear"
+        @clearForm="clearForm()"
     >
 
       <template>
@@ -21,11 +21,11 @@
             <v-autocomplete
                 label="قرارداد"
                 :items="contracts"
-                v-model="contract"
+                v-model="item.contract"
                 item-text="name"
                 item-value="id"
                 :disabled="!isEditing"
-                @change="setValues"
+                @change="setValues(item.contract)"
             />
           </v-col>
 
@@ -33,7 +33,7 @@
             <v-autocomplete
                 label="دسته بندی"
                 :items="type"
-                v-model="types"
+                v-model="item.type"
                 item-text="name"
                 item-value="value"
                 :disabled="!isEditing"
@@ -43,10 +43,10 @@
           <v-col cols="12" md="2">
             <money
                 label=" مبلغ ناخالص کارکرد این صورت وضعیت "
-                v-model="value"
+                v-model="item.value"
                 background-color="white"
                 :disabled="!isEditing"
-                @change="present_statement_value = previous_statement_value + value"
+                @change="present_statement_value = previous_statement_value + item.value"
 
             />
           </v-col>
@@ -57,39 +57,23 @@
           </v-col>
           <v-col cols="12" md="2">
             <v-text-field disabled label="مبلغ ناخالص کارکرد تا این صورت وضعیت " v-model="present_statement_value"
-                          background-color="white"/>
+                          background-color="white" />
           </v-col>
         </v-row>
         <v-row>
 
           <v-col cols="12" md="2">
-            <v-text-field label="شماره" v-model="code" background-color="white"/>
+            <v-text-field label="شماره" v-model="item.serial" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <date v-model="date" label="تاریخ" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.date" label="تاریخ" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="6">
-            <v-textarea label="توضیحات" v-model="explanation" :disabled="!isEditing"></v-textarea>
+            <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
           </v-col>
         </v-row>
-        <v-btn
-            large
-            class="float-left ma-1"
-            color="green"
-            @click="saveStatement"
-        >ثبت و صدور جدید
-        </v-btn>
-        <v-btn
-            large
-            class="float-left ma-1"
-            color="green"
-            @click="saveStatementAndReload"
-        >ثبت
-        </v-btn>
-
       </template>
     </m-form>
-    <StatementList/>
   </div>
 </template>
 
@@ -128,10 +112,10 @@ export default {
         {name: 'معمولی', value: 'n'},
         {name: 'تعدیل', value: 'a'},
         {name: 'تحویل موقت', value: 'td'},
-        {name: 'مشاوره', value: 'dd'},
+        {name: 'تحویل قطعی', value: 'dd'},
       ],
       baseUrl: "contracting/statement",
-      permissionBasename: "statement",
+      permissionBasename: "Statement",
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
@@ -260,9 +244,9 @@ export default {
 
     },
 
-    setValues() {
+    setValues(id) {
       this.request({
-        url: this.endpoint(`contracting/supplement/previous/` + this.contract + '/'),
+        url: this.endpoint(`contracting/supplement/previous/` + id + '/'),
         method: "get",
         success: data => {
           this.previous_statement_value = data

@@ -11,33 +11,33 @@
         :isEditing.sync="isEditing"
         @submit="submit"
         @delete="deleteItem"
-        @clearForm="clear()"
+        @clearForm="clearForm()"
     >
 
       <template>
         <v-row>
           <v-col cols="12" md="2">
-            <v-text-field label="شماره مناقصه" v-model="code" background-color="white"/>
+            <v-text-field label="شماره مناقصه" v-model="item.code" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="عنوان مناقصه" v-model="title" background-color="white"/>
+            <v-text-field label="عنوان مناقصه" v-model="item.title" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="6">
-            <v-textarea label="شرح مناقصه" v-model="explanation" :disabled="!isEditing"></v-textarea>
+            <v-textarea label="شرح مناقصه" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" md="2">
-            <CitySelect label="استان محل اجرا" v-model="province"/>
+            <CitySelect label="استان محل اجرا" v-model="item.province" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <CitySelect label="شهر محل اجرا" v-model="city"/>
+            <CitySelect label="شهر محل اجرا" v-model="item.city" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="4">
             <v-autocomplete
                 label="طبقه بندی موضوعی"
                 :items="classification"
-                v-model="myClass"
+                v-model="item.classification"
                 item-text="name"
                 item-value="value"
                 :disabled="!isEditing"
@@ -46,50 +46,35 @@
         </v-row>
         <v-row>
           <v-col cols="12" md="2">
-            <v-text-field label="مناقصه گزار" v-model="bidder" background-color="white"/>
+            <v-text-field label="مناقصه گزار" v-model="item.bidder" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="کد پستی مناقصه گزار" v-model="bidder_post" background-color="white"/>
+            <v-text-field label="کد پستی مناقصه گزار" v-model="item.bidder_postal_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="6">
-            <v-textarea label="آدرس مناقصه گزار" v-model="bidder_address" :disabled="!isEditing"></v-textarea>
+            <v-textarea label="آدرس مناقصه گزار" v-model="item.bidder_address" :disabled="!isEditing"></v-textarea>
           </v-col>
         </v-row>
         <v-row>
 
           <v-col cols="12" md="2">
-            <date v-model="received_deadline" label="مهلت دریافت اسناد" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.received_deadline" label="مهلت دریافت اسناد" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <date v-model="send_offer_deadline" label="مهلت ارسال پاکت های پیشنهاد" :default="true"
+            <date v-model="item.send_offer_deadline" label="مهلت ارسال پاکت های پیشنهاد" :default="true"
                   :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <date v-model="opening_date" label="زمان بازگشایی پاکت ها" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.opening_date" label="زمان بازگشایی پاکت ها" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <date v-model="offer_expiration" label="زمان اعتبار پیشنهاد" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.offer_expiration" label="زمان اعتبار پیشنهاد" :default="true" :disabled="!isEditing"/>
           </v-col>
         </v-row>
-        <v-btn
-            large
-            class="float-left ma-1"
-            color="green"
-            @click="saveTender"
-        > ثبت و صدور جدید
-        </v-btn>
-        <v-btn
-            large
-            class="float-left ma-1"
-            color="green"
-            @click="saveTenderAndReload"
-        >ثبت
-        </v-btn>
 
 
       </template>
     </m-form>
-    <TenderList/>
   </div>
 </template>
 

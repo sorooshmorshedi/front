@@ -1798,6 +1798,37 @@ export default {
             },
           ],
         },
+        {
+          title: "مناقصه",
+          icon: "fa-handshake",
+          children: [
+            {
+              title: "مناقصه",
+              to: {
+                name: "Tender",
+              },
+            },
+            {
+              title: "قرارداد",
+              to: {
+                name: "Contract",
+              },
+            },
+            {
+              to: {
+                name: "Statement",
+              },
+              title: "صورت وضعیت",
+            },
+            {
+              to: {
+                name: "Supplement",
+              },
+              title: "الحاقیه",
+              perm: "user",
+            },
+          ],
+        },
       ];
     },
     routes() {
