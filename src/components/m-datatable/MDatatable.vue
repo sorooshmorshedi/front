@@ -272,6 +272,7 @@ export default {
     currentApiData: {
       default: null,
     },
+
     additionalAppliedFilters: {
       default: null,
     },
@@ -287,6 +288,7 @@ export default {
   },
   data() {
     return {
+      mydata:'',
       filterMenus: {},
       search: "",
       totalItems: -1,
@@ -607,8 +609,10 @@ export default {
           ...this.getFilters(),
         },
         success: (data) => {
+          this.mydata = data.results;
           this.$emit("update:previousApiData", this.currentApiData);
           this.$emit("update:currentApiData", data);
+          this.$emit("mydata", this.mydata);
 
           if (this.serverProcessing) {
             this.totalItems = data.count;

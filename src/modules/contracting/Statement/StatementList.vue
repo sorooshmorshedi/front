@@ -2,21 +2,42 @@
   <v-card>
     <v-card-title>لیست صورت وضییت ها</v-card-title>
     <v-card-text>
-      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
+      <m-datatable @mydata="get_sum($event)" :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
+        <template  v-slot:body.append="{ headers }">
+          <tr class="text-center">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td ></td>
+            <td>جمع </td>
+            <td>{{sumOfAmounts}}</td>
+          </tr>
+        </template>
+
       </m-datatable>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import MDatatable from "@/components/m-datatable/MDatatable";
+
 export default {
   name: "StatementList",
+  component:{
+    MDatatable
+  },
+
   props: {},
   data() {
     return {
+      sumOfAmounts: 0,
       url: "reports/statement/all",
       filters: {},
     };
@@ -54,7 +75,7 @@ export default {
         },
 
         {
-          text: "مبلغ ناخالص کارکرد این صورت وضعیت",
+          text: "مبلغ ناخالص کارکرد",
           value: "value",
           type: "numeric",
         },
@@ -76,6 +97,13 @@ export default {
   mounted() {
   },
   methods: {
+    get_sum(statements){
+      let sum = 0
+      for (let statement of statements){
+        sum += parseFloat(statement.value)
+      }
+      this.sumOfAmounts = sum
+    },
   },
 };
 </script>

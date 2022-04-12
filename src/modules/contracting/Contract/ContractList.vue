@@ -2,22 +2,43 @@
   <v-card>
     <v-card-title>لیست قرارداد ها</v-card-title>
     <v-card-text>
-      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
+      <m-datatable
+          @mydata="get_sum($event)" :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable" >
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
+        <template  v-slot:body.append="{ headers }">
+          <tr class="text-center">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td ></td>
+            <td>جمع </td>
+            <td>{{sumOfAmounts}}</td>
+          </tr>
+        </template>
+
       </m-datatable>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import MDatatable from "@/components/m-datatable/MDatatable";
+
 export default {
   name: "ContractList",
+
+  component:{
+    MDatatable
+  },
   props: {},
   data() {
     return {
-      url: "reports/contract/all",
+      sumOfAmounts: 0,
+      localFilters: this.filters,
+      previousApiData: null,
+    url: "reports/contract/all",
       filters: {},
     };
   },
@@ -99,8 +120,16 @@ export default {
 
   },
   mounted() {
+
   },
   methods: {
+    get_sum(contracts){
+      let sum = 0
+      for (let contract of contracts){
+        sum += parseFloat(contract.amount)
+      }
+      this.sumOfAmounts = sum
+    },
   },
 };
 </script>
