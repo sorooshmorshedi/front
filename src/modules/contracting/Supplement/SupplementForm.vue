@@ -18,6 +18,7 @@
         <v-row>
           <v-col cols="12" md="3">
             <v-autocomplete
+                v-if="!modalMode"
                 label="قرارداد"
                 :items="contracts"
                 v-model="item.contract"
@@ -26,15 +27,37 @@
                 :disabled="!isEditing"
                 @change="setValues(item.contract)"
             />
+            <v-text-field
+                v-if="modalMode"
+                label="قرارداد"
+                disabled="true"
+                v-model="item.contract = contract"
+
+            ></v-text-field>
+
           </v-col>
 
           <v-col cols="12" md="1">
-            <v-text-field disabled label="حداکثر" v-model="min"
+            <v-text-field disabled label="حداقل" v-model="min" v-if="!modalMode"
                           background-color="white"/>
+            <v-text-field
+                label="حداقل"
+                v-if="modalMode"
+                disabled="true"
+                v-model="Dmin"
+            ></v-text-field>
+
           </v-col>
           <v-col cols="12" md="1">
-            <v-text-field disabled label="حداقل " v-model="max"
+            <v-text-field disabled label="حداکثر " v-model="max" v-if="!modalMode"
                           background-color="white"/>
+            <v-text-field
+                label="حداکثر"
+                v-if="modalMode"
+                disabled="true"
+                v-model="Dmax"
+            ></v-text-field>
+
           </v-col>
           <v-col cols="12" md="2">
             <money
@@ -59,17 +82,16 @@
           <v-col cols="12" md="2">
             <date v-model="item.new_contract_date" label="تاریخ جدید قرارداد" :default="true" :disabled="!isEditing"/>
           </v-col>
-
-
-          <v-col cols="12" md="3">
-            <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
-          </v-col>
-
           <v-col cols="12" md="2">
             <date v-model="item.date" label="تاریخ ثبت الحاقیه" :default="true" :disabled="!isEditing"/>
           </v-col>
+        </v-row>
+        <v-row>
           <v-col cols="12" md="2">
             <v-text-field label="شماره سریال " v-model="item.code" background-color="white" :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="5">
+            <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
           </v-col>
 
         </v-row>
@@ -97,6 +119,13 @@ export default {
   components: {mtime, TreeSelect, money, SupplementList},
   props: {
     id: {},
+    modalMode: {
+      default: false,
+    },
+    contract: {},
+    Dmax: {},
+    Dmin: {},
+
   },
   data() {
     return {
@@ -107,6 +136,7 @@ export default {
       code: '',
       explanation: '',
       value: '',
+      modalMode: false,
 
       switch1: false,
       status: 'کاهش',

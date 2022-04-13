@@ -14,12 +14,14 @@
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
+
     >
 
       <template>
         <v-row>
           <v-col cols="12" md="2">
             <v-autocomplete
+                v-if="!this.tender"
                 label="مناقصه"
                 :items="tenders"
                 v-model="item.tender"
@@ -27,7 +29,15 @@
                 item-value="id"
                 :disabled="!isEditing"
             />
+            <v-text-field
+                label="مناقصه"
+                v-if="this.tender"
+                disabled="true"
+                v-model="item.tender = this.tender"
+
+            ></v-text-field>
           </v-col>
+
           <v-col cols="12" md="2">
             <v-text-field label="عنوان قرارداد" v-model="item.title" background-color="white" :disabled="!isEditing" />
           </v-col>
@@ -83,11 +93,49 @@
         </v-row>
 
       </template>
+      <v-btn @click="$router.push('/panel/statement/?contract=' + item.id )" v-if="item.id" class="accent darken-3 mt-6 mr-2 float-left">ثبت صورت وضعیت</v-btn>
+      <v-btn @click="Dialog = true" v-if="item.id" class="accent darken-3 mt-6 mr-2 float-left">ثبت الحاقیه</v-btn>
+      <v-btn class="red mt-6  mr-2 float-left" color="primary" v-if="item.id" @click="paymentDialog = true">ثبت سند ضمانتی
+        پرداخت
+      </v-btn>
+      <v-btn class="red mt-6 mr-6  float-left" color="primary" v-if="item.id" @click="receivedDialog = true">ثبت سند ضمانتی
+        دریافت
+      </v-btn>
+      <v-dialog v-model="Dialog">
+        <supplement-form
+            :modal-mode="true"
+            :contract="item.id"
+            :dmax="parseFloat(item.amount) + (parseFloat(item.amount) / 100 * parseFloat(item.max_change_amount))"
+            :dmin="parseFloat(item.amount) - (parseFloat(item.amount) / 100 * parseFloat(item.max_change_amount))"
+        />
+      </v-dialog>
+
     </m-form>
+    <v-dialog v-model="paymentDialog">
+      <transaction-form
+          type="paymentGuarantee"
+          :modal-mode="true"
+          :id="item.id"
+          @submit="submit"
+          ref="transactionForm"
+      />
+    </v-dialog>
+    <v-dialog v-model="receivedDialog">
+      <transaction-form
+          type="receivedGuarantee"
+          :modal-mode="true"
+          :id="item.id"
+          @submit="submit"
+          ref="transactionForm"
+      />
+    </v-dialog>
+
+
   </div>
 </template>
 
 <script>
+import SupplementForm from "@/modules/contracting/Supplement/SupplementForm";
 import ContractList from "@/modules/contracting/Contract/ContractList";
 import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
@@ -99,18 +147,23 @@ import {PathLevels, VisitorLevels} from "@/variables";
 import date from "@/components/mcomponents/cleave/Date";
 import accountSelect from "@/components/selects/AccountSelect";
 import accountMixin from "@/mixin/accountMixin";
+import TransactionForm from "@/views/panel/transaction/Form";
 
 export default {
   name: "ContractForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin, accountMixin],
-  components: {mtime, TreeSelect, accountSelect, ContractList},
+  components: {mtime, TreeSelect, accountSelect, ContractList, SupplementForm,TransactionForm},
   props: {
     id: {},
+
   },
   data() {
     return {
+      paymentDialog: false,
+      receivedDialog: false,
+      Dialog: false,
       insurance_payment: 5,
-      tender: null,
+      tender: this.$route.query.tender,
       title: '',
       code: '',
       value: '',
@@ -121,6 +174,8 @@ export default {
       to_date: '',
       from_date: '',
       save_date: '',
+      modalMode: true,
+
       doing_job_well: 10,
       other: 2,
       accounts: [],
@@ -219,6 +274,8 @@ export default {
 
   },
   mounted() {
+    if (this.tender){
+    }
     this.request({
       url: this.endpoint(`contracting/tender/`),
       method: "get",
@@ -238,6 +295,7 @@ export default {
 
   },
   methods: {
+    t(){console.log('ok')},
     saveContract() {
       this.request({
         url: this.endpoint(`contracting/contract/`),

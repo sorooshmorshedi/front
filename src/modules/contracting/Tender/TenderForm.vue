@@ -12,6 +12,7 @@
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
+
     >
 
       <template>
@@ -31,7 +32,7 @@
             <CitySelect label="استان محل اجرا" v-model="item.province" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <CitySelect label="شهر محل اجرا" v-model="item.city" :disabled="!isEditing" />
+            <CitySelect label="شهر محل اجرا" v-model="item.city" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="4">
             <v-autocomplete
@@ -49,7 +50,8 @@
             <v-text-field label="مناقصه گزار" v-model="item.bidder" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="کد پستی مناقصه گزار" v-model="item.bidder_postal_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="کد پستی مناقصه گزار" v-model="item.bidder_postal_code" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="6">
             <v-textarea label="آدرس مناقصه گزار" v-model="item.bidder_address" :disabled="!isEditing"></v-textarea>
@@ -70,15 +72,36 @@
           <v-col cols="12" md="2">
             <date v-model="item.offer_expiration" label="زمان اعتبار پیشنهاد" :default="true" :disabled="!isEditing"/>
           </v-col>
+
         </v-row>
+        <v-dialog v-model="paymentDialog">
+          <transaction-form
+              type="paymentGuarantee"
+              :modal-mode="true"
+              :id="item.id"
+              @submit="submit"
+              ref="transactionForm"
+          />
+        </v-dialog>
 
 
       </template>
+
+      <v-btn @click="confirmed(item)" v-if="item.id" class="green mt-6 mr-2 float-left">تایید</v-btn>
+      <v-btn @click="clearForm" v-if="item.id" class="red mt-6  mr-4 float-left">رد</v-btn>
+      <v-btn class="red mt-6  float-left" color="primary" v-if="item.id" @click="paymentDialog = true">ثبت سند ضمانتی
+        پرداخت
+      </v-btn>
+
     </m-form>
+
   </div>
+
 </template>
 
 <script>
+import Transaction from '@/views/panel/transaction/Transaction.vue';
+
 import TenderList from "@/modules/contracting/Tender/TenderList";
 import {MFormMixin} from "@/components/m-form";
 import mtime from "@/components/mcomponents/cleave/Time";
@@ -86,15 +109,22 @@ import FormsMixin from "@/mixin/forms";
 import FactorMixin from "@/views/panel/factor/mixin";
 import TreeSelect from "@/components/selects/TreeSelect";
 import {PathLevels, VisitorLevels} from "@/variables";
-import money from "@/components/mcomponents/cleave/Money";
-import date from "@/components/mcomponents/cleave/Date";
 import axios from "axios";
 import citySelect from "@/components/selects/CitySelect";
+import MDatatable from "@/components/m-datatable";
+import formsMixin from "@/mixin/forms";
+import money from "@/components/mcomponents/cleave/Money";
+import date from "@/components/mcomponents/cleave/Date";
+
+
+import TransactionForm from "@/views/panel/transaction/Form";
+import LadingMixin from "@/modules/dashtbashi/LadingMixin";
+
 
 export default {
   name: "TenderForm",
-  mixins: [MFormMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList},
+  mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
+  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm},
   props: {
     id: {},
   },
@@ -129,9 +159,97 @@ export default {
       factors: [],
       PathLevels,
       VisitorLevels,
+      paymentDialog: false,
+      payment: {},
+      performClearForm: true,
+      ladingHeaders: [
+        {
+          text: "شماره حواله",
+          value: "remittance.code",
+        },
+        {
+          text: "عطف بارگیری",
+          value: "local_id",
+        },
+        {
+          text: "شماره بارگیری",
+          value: "lading_number",
+        },
+        {
+          text: "تاریخ بارگیری",
+          value: "lading_date",
+        },
+        {
+          text: "نام پیمانکار",
+          value: "contractor.name",
+        },
+        {
+          text: "انعام",
+          value: "driver_tip_price",
+          type: "numeric",
+        },
+
+        {
+          text: "مبلغ کرایه",
+          value: "carIncome",
+          type: "numeric",
+        },
+        {
+          text: "اختلاف بارنامه",
+          value: "ladingDifference",
+        },
+        {
+          text: "مبلغ قابل پرداخت اولیه",
+          value: "payableAmount",
+        },
+        {
+          text: "خرج سرویس",
+          value: "service_cost",
+          type: "numeric",
+        },
+        {
+          text: "مانده قابل پرداخت به راننده",
+          value: "remainAmount",
+          type: "numeric",
+        },
+      ],
+      ladings: [],
+      selectedLadings: [],
+      imprestHeaders: [
+        {
+          text: "شماره",
+          value: "code",
+        },
+        {
+          text: "حساب",
+          value: "account.name",
+        },
+        {
+          text: "شناور",
+          value: "floatAccount.name",
+        },
+        {
+          text: "تاریخ",
+          value: "date",
+        },
+        {
+          text: "مبلغ پرداختی",
+          value: "paidValue",
+        },
+        {
+          text: "مبلغ دریافتی",
+          value: "receivedValue",
+        },
+        {
+          text: "مانده پرداخت نشده",
+          value: "remain",
+        },
+      ],
+      imprests: [],
+      selectedImprests: [],
     };
   },
-  mounted(){
+  mounted() {
   },
   computed: {
     headers() {
@@ -202,6 +320,21 @@ export default {
     },
   },
   methods: {
+    confirmed(item) {
+      this.request({
+        url: this.endpoint(`contracting/tender/confirmed/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data)
+          this.notify(' مناقصه تایید شد', 'success')
+          this.$router.push('/panel/contract/' + '?tender=' + item.id)
+
+        }
+      })
+    },
+    unConfirmed() {
+      this.$router.push('d')
+    },
     clear() {
       console.log('clear')
       this.code = ''
@@ -240,7 +373,7 @@ export default {
 
         },
         success: data => {
-          this.notify(' مناقصه ثبت شد' , 'success')
+          this.notify(' مناقصه ثبت شد', 'success')
           this.clear()
         }
       })
@@ -267,13 +400,14 @@ export default {
 
         },
         success: data => {
-          this.notify(' مناقصه ثبت شد' , 'success')
+          this.notify(' مناقصه ثبت شد', 'success')
           this.$router.go()
         }
       })
     }
-  }
-};
+
+  }}
+  ;
 </script>
 
 <style scoped lang="scss"></style>

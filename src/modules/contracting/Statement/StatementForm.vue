@@ -19,6 +19,7 @@
         <v-row>
           <v-col cols="12" md="3">
             <v-autocomplete
+                v-if="!this.contract"
                 label="قرارداد"
                 :items="contracts"
                 v-model="item.contract"
@@ -27,6 +28,14 @@
                 :disabled="!isEditing"
                 @change="setValues(item.contract)"
             />
+            <v-text-field
+                label="قرارداد"
+                v-if="this.contract"
+                disabled="true"
+                v-model="item.contract = this.contract"
+
+            ></v-text-field>
+
           </v-col>
 
           <v-col cols="12" md="3">
@@ -75,6 +84,7 @@
       </template>
     </m-form>
   </div>
+
 </template>
 
 <script>
@@ -100,7 +110,7 @@ export default {
   data() {
     return {
       contracts: [],
-      contract: '',
+      contract: this.$route.query.contract,
       code: '',
       types: '',
       value: '',
