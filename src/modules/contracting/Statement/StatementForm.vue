@@ -194,6 +194,9 @@ export default {
     },
   },
   mounted() {
+    if(this.contract){
+      this.setValues(this.contract)
+    }
     this.request({
       url: this.endpoint(`contracting/contract/`),
       method: "get",

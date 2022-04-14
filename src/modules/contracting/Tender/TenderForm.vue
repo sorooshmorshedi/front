@@ -76,9 +76,8 @@
         </v-row>
         <v-dialog v-model="paymentDialog">
           <transaction-form
-              type="paymentGuarantee"
-              :modal-mode="true"
-              :id="item.id"
+              type="receivedGuarantee"
+              :modal-mode="false"
               @submit="submit"
               ref="transactionForm"
           />
@@ -89,8 +88,7 @@
 
       <v-btn @click="confirmed(item)" v-if="item.id" class="green mt-6 mr-2 float-left">تایید</v-btn>
       <v-btn @click="clearForm" v-if="item.id" class="red mt-6  mr-4 float-left">رد</v-btn>
-      <v-btn class="red mt-6  float-left" color="primary" v-if="item.id" @click="paymentDialog = true">ثبت سند ضمانتی
-        پرداخت
+      <v-btn class="red mt-6  float-left" color="primary" v-if="item.id" @click="paymentDialog = true">ثبت اسناد ضمانتی دریافتی
       </v-btn>
 
     </m-form>
@@ -100,7 +98,6 @@
 </template>
 
 <script>
-import Transaction from '@/views/panel/transaction/Transaction.vue';
 
 import TenderList from "@/modules/contracting/Tender/TenderList";
 import {MFormMixin} from "@/components/m-form";
@@ -162,91 +159,7 @@ export default {
       paymentDialog: false,
       payment: {},
       performClearForm: true,
-      ladingHeaders: [
-        {
-          text: "شماره حواله",
-          value: "remittance.code",
-        },
-        {
-          text: "عطف بارگیری",
-          value: "local_id",
-        },
-        {
-          text: "شماره بارگیری",
-          value: "lading_number",
-        },
-        {
-          text: "تاریخ بارگیری",
-          value: "lading_date",
-        },
-        {
-          text: "نام پیمانکار",
-          value: "contractor.name",
-        },
-        {
-          text: "انعام",
-          value: "driver_tip_price",
-          type: "numeric",
-        },
 
-        {
-          text: "مبلغ کرایه",
-          value: "carIncome",
-          type: "numeric",
-        },
-        {
-          text: "اختلاف بارنامه",
-          value: "ladingDifference",
-        },
-        {
-          text: "مبلغ قابل پرداخت اولیه",
-          value: "payableAmount",
-        },
-        {
-          text: "خرج سرویس",
-          value: "service_cost",
-          type: "numeric",
-        },
-        {
-          text: "مانده قابل پرداخت به راننده",
-          value: "remainAmount",
-          type: "numeric",
-        },
-      ],
-      ladings: [],
-      selectedLadings: [],
-      imprestHeaders: [
-        {
-          text: "شماره",
-          value: "code",
-        },
-        {
-          text: "حساب",
-          value: "account.name",
-        },
-        {
-          text: "شناور",
-          value: "floatAccount.name",
-        },
-        {
-          text: "تاریخ",
-          value: "date",
-        },
-        {
-          text: "مبلغ پرداختی",
-          value: "paidValue",
-        },
-        {
-          text: "مبلغ دریافتی",
-          value: "receivedValue",
-        },
-        {
-          text: "مانده پرداخت نشده",
-          value: "remain",
-        },
-      ],
-      imprests: [],
-      selectedImprests: [],
     };
   },
   mounted() {

@@ -1806,12 +1806,14 @@ export default {
               title: "مناقصه",
               to: {
                 name: "Tender",
+                perm: "user",
               },
             },
             {
               title: "قرارداد",
               to: {
                 name: "Contract",
+                perm: "user",
               },
             },
             {
@@ -1819,6 +1821,8 @@ export default {
                 name: "Statement",
               },
               title: "صورت وضعیت",
+              perm: "user",
+
             },
             {
               to: {

@@ -98,7 +98,7 @@
       <v-btn class="red mt-6  mr-2 float-left" color="primary" v-if="item.id" @click="paymentDialog = true">ثبت سند ضمانتی
         پرداخت
       </v-btn>
-      <v-btn class="red mt-6 mr-6  float-left" color="primary" v-if="item.id" @click="receivedDialog = true">ثبت سند ضمانتی
+      <v-btn class="red mt-6 mr-6  float-left" color="primary" v-if="item.id" @click="receivedDialog = true">ثبت
         دریافت
       </v-btn>
       <v-dialog v-model="Dialog">
@@ -114,17 +114,17 @@
     <v-dialog v-model="paymentDialog">
       <transaction-form
           type="paymentGuarantee"
-          :modal-mode="true"
-          :id="item.id"
+          :modal-mode="false"
+          :id="payment.id"
           @submit="submit"
           ref="transactionForm"
       />
     </v-dialog>
     <v-dialog v-model="receivedDialog">
       <transaction-form
-          type="receivedGuarantee"
-          :modal-mode="true"
-          :id="item.id"
+          type="receive"
+          :modal-mode="false"
+          :id="payment.id"
           @submit="submit"
           ref="transactionForm"
       />
@@ -175,7 +175,7 @@ export default {
       from_date: '',
       save_date: '',
       modalMode: true,
-
+      payment: {},
       doing_job_well: 10,
       other: 2,
       accounts: [],

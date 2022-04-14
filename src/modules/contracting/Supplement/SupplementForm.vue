@@ -147,7 +147,7 @@ export default {
         {name: 'مشاوره', value: 'dd'},
       ],
       baseUrl: "contracting/supplement",
-      permissionBasename: "Supplement",
+      permissionBasename: "supplement",
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
