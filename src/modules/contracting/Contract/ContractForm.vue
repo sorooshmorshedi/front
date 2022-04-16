@@ -14,6 +14,7 @@
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
+        ref="contractForm"
 
     >
 
@@ -88,17 +89,14 @@
           <v-col cols="12" md="2">
             <v-text-field label="سایر" v-model="item.other"  background-color="white" :disabled="!isEditing"/>
           </v-col>
-
-
         </v-row>
-
       </template>
       <v-btn @click="$router.push('/panel/statement/?contract=' + item.id )" v-if="item.id" class="accent darken-3 mt-6 mr-2 float-left">ثبت صورت وضعیت</v-btn>
       <v-btn @click="Dialog = true" v-if="item.id" class="accent darken-3 mt-6 mr-2 float-left">ثبت الحاقیه</v-btn>
-      <v-btn class="red mt-6  mr-2 float-left" color="primary" v-if="item.id" @click="paymentDialog = true">ثبت سند ضمانتی
+      <v-btn class="red mt-6  mr-2 float-left" color="primary" v-if="item.id" @click="setPayment(item)">ثبت سند ضمانتی
         پرداخت
       </v-btn>
-      <v-btn class="red mt-6 mr-6  float-left" color="primary" v-if="item.id" @click="receivedDialog = true">ثبت
+      <v-btn class="red mt-6 mr-6  float-left" color="primary" v-if="item.id" @click="setReceive(item)">ثبت
         دریافت
       </v-btn>
       <v-dialog v-model="Dialog">
@@ -117,7 +115,7 @@
           :modal-mode="false"
           :id="payment.id"
           @submit="submit"
-          ref="transactionForm"
+          ref="transactionPForm"
       />
     </v-dialog>
     <v-dialog v-model="receivedDialog">
@@ -126,7 +124,8 @@
           :modal-mode="false"
           :id="payment.id"
           @submit="submit"
-          ref="transactionForm"
+          @
+          ref="transactionRForm"
       />
     </v-dialog>
 
@@ -159,6 +158,7 @@ export default {
   },
   data() {
     return {
+      cId : null,
       paymentDialog: false,
       receivedDialog: false,
       Dialog: false,
@@ -273,9 +273,8 @@ export default {
     },
 
   },
+
   mounted() {
-    if (this.tender){
-    }
     this.request({
       url: this.endpoint(`contracting/tender/`),
       method: "get",
@@ -289,13 +288,43 @@ export default {
           })
         }
         console.log(this.tenders)
-
       }
     })
 
   },
+  beforeDestroy(){
+    if(this.$refs.transactionRForm.item.id){
+      this.request({
+        url: this.endpoint(`contracting/contract/received/` + this.cId + '/' + this.$refs.transactionRForm.item.id + '/'),
+        method: "get",
+        success: data => {
+          this.notify(' سند ثبت شد', 'success')
+        }
+      })
+    }
+    if(this.$refs.transactionPForm.item.id){
+      this.request({
+        url: this.endpoint(`contracting/contract/payment/` + this.cId + '/' + this.$refs.transactionPForm.item.id + '/'),
+        method: "get",
+        success: data => {
+          this.notify(' سند ثبت شد', 'success')
+        }
+      })
+    }
+  },
+
+
   methods: {
-    t(){console.log('ok')},
+    setReceive(item){
+      this.cId = item.id
+      this.receivedDialog = true
+    },
+
+    setPayment(item){
+      this.cId = item.id
+      this.paymentDialog = true
+    },
+
     saveContract() {
       this.request({
         url: this.endpoint(`contracting/contract/`),

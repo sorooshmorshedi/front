@@ -82,12 +82,10 @@
               ref="transactionForm"
           />
         </v-dialog>
-
-
       </template>
 
       <v-btn @click="confirmed(item)" v-if="item.id" class="green mt-6 mr-2 float-left">تایید</v-btn>
-      <v-btn @click="clearForm" v-if="item.id" class="red mt-6  mr-4 float-left">رد</v-btn>
+      <v-btn @click="unConfirm(item)" v-if="item.id" class="red mt-6  mr-4 float-left">رد</v-btn>
       <v-btn class="red mt-6  float-left" color="primary" v-if="item.id" @click="paymentDialog = true">ثبت اسناد ضمانتی دریافتی
       </v-btn>
 
@@ -157,7 +155,7 @@ export default {
       PathLevels,
       VisitorLevels,
       paymentDialog: false,
-      payment: {},
+      payment: '',
       performClearForm: true,
 
     };
@@ -233,7 +231,33 @@ export default {
     },
   },
   methods: {
+    unConfirm(item){
+      if(this.$refs.transactionForm.item.id){
+        this.request({
+          url: this.endpoint(`contracting/tender/transaction/` + item.id + '/' + this.$refs.transactionForm.item.id + '/'),
+          method: "get",
+          success: data => {
+            console.log(data)
+            this.notify(' سند ثبت شد', 'success')
+          }
+        })
+      }
+      this.$router.go()
+      this.notify(' مناقصه رد شد', 'success')
+
+
+    },
     confirmed(item) {
+      if(this.$refs.transactionForm.item.id){
+        this.request({
+          url: this.endpoint(`contracting/tender/transaction/` + item.id + '/' + this.$refs.transactionForm.item.id + '/'),
+          method: "get",
+          success: data => {
+            console.log(data)
+            this.notify(' سند ثبت شد', 'success')
+          }
+        })
+      }
       this.request({
         url: this.endpoint(`contracting/tender/confirmed/` + item.id + '/'),
         method: "get",
@@ -244,9 +268,6 @@ export default {
 
         }
       })
-    },
-    unConfirmed() {
-      this.$router.push('d')
     },
     clear() {
       console.log('clear')
