@@ -10,7 +10,6 @@ import Login from '@/views/auth/Login.vue'
 import Register from '@/views/auth/Register.vue'
 import ForgetPassword from '@/views/auth/ForgetPassword.vue'
 
-
 import Test from '@/Test';
 
 Vue.use(VueRouter)

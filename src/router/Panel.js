@@ -66,6 +66,7 @@ import DashtbashiRoutes from '@/modules/dashtbashi/Routes';
 import DistributionRoutes from '@/modules/distribution/Routes';
 import ContractingRoutes from '@/modules/contracting/Routes'
 
+
 export default [{
   name: 'Panel',
   path: '/panel',
@@ -314,8 +315,7 @@ export default [{
       path: 'defaultTexts/:usage',
       component: DefaultTexts,
       props: true
-    },
-
+    }
 
   ]
 }]

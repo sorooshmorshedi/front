@@ -86,7 +86,7 @@
 
       <v-btn @click="confirmed(item)" v-if="item.id" class="green mt-6 mr-2 float-left">تایید</v-btn>
       <v-btn @click="unConfirm(item)" v-if="item.id" class="red mt-6  mr-4 float-left">رد</v-btn>
-      <v-btn class="red mt-6  float-left" color="primary" v-if="item.id" @click="paymentDialog = true">ثبت اسناد ضمانتی دریافتی
+      <v-btn class="red mt-6  float-left" color="primary" v-if="item.id" @click="settID(item)">ثبت اسناد ضمانتی دریافتی
       </v-btn>
 
     </m-form>
@@ -125,6 +125,7 @@ export default {
   },
   data() {
     return {
+      tId: 0,
       offer_expiration: '',
       opening_date: '',
       send_offer_deadline: '',
@@ -230,39 +231,37 @@ export default {
       ];
     },
   },
+  beforeDestroy() {
+    if (this.$refs.transactionForm.item.id) {
+      this.request({
+        url: this.endpoint(`contracting/tender/transaction/` + this.tId + '/' + this.$refs.transactionForm.item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data)
+          this.notify(' سند ثبت شد', 'success')
+        }
+      })
+    }
+  },
+
   methods: {
-    unConfirm(item){
-      if(this.$refs.transactionForm.item.id){
-        this.request({
-          url: this.endpoint(`contracting/tender/transaction/` + item.id + '/' + this.$refs.transactionForm.item.id + '/'),
-          method: "get",
-          success: data => {
-            console.log(data)
-            this.notify(' سند ثبت شد', 'success')
-          }
-        })
-      }
+    unConfirm(item) {
       this.$router.go()
-      this.notify(' مناقصه رد شد', 'success')
+      this.notify(' مناقصه رد شد', 'warning')
+    },
 
-
+    settID(item) {
+      this.tId = item.id
+      this.paymentDialog = true
+      console.log(this.tId)
     },
     confirmed(item) {
-      if(this.$refs.transactionForm.item.id){
-        this.request({
-          url: this.endpoint(`contracting/tender/transaction/` + item.id + '/' + this.$refs.transactionForm.item.id + '/'),
-          method: "get",
-          success: data => {
-            console.log(data)
-            this.notify(' سند ثبت شد', 'success')
-          }
-        })
-      }
       this.request({
         url: this.endpoint(`contracting/tender/confirmed/` + item.id + '/'),
         method: "get",
         success: data => {
           console.log(data)
+          console.log('ok')
           this.notify(' مناقصه تایید شد', 'success')
           this.$router.push('/panel/contract/' + '?tender=' + item.id)
 
@@ -340,8 +339,9 @@ export default {
       })
     }
 
-  }}
-  ;
+  }
+}
+;
 </script>
 
 <style scoped lang="scss"></style>
