@@ -367,7 +367,7 @@ export default {
   methods: {
     openBalanceDialog() {
       this.request({
-        url: this.endpoint(`accounts/accounts/${this.item.id}`),
+        url: this.endpoint(`accounts/accounts/${this.item.id} `),
         method: "get",
         success: (data) => {
           this.item = data;
