@@ -151,6 +151,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
+      hasLock: true,
+      isDefinable: true,
       myClass: '',
       factors: [],
       PathLevels,

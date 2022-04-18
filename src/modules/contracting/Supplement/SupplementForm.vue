@@ -134,6 +134,8 @@ export default {
       new_date: '',
       date: '',
       code: '',
+      hasLock: true,
+      isDefinable: true,
       explanation: '',
       value: '',
       modalMode: false,

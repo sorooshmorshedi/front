@@ -114,6 +114,8 @@ export default {
       code: '',
       types: '',
       value: '',
+      hasLock: true,
+      isDefinable: true,
       date: '',
       explanation: '',
       previous_statement_value: '',

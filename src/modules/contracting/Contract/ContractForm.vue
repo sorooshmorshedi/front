@@ -167,6 +167,8 @@ export default {
       title: '',
       code: '',
       value: '',
+      hasLock: true,
+      isDefinable: true,
       max_change_amount: '',
       contractor: '',
       start_date: '',
