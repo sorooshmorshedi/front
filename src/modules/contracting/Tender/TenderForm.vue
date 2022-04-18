@@ -4,7 +4,7 @@
         title="ثبت مناقصه"
         :showList="false"
         :listRoute="{name:'TenderList'}"
-        exportBaseUrl="reports/lists/tender"
+        :exportBaseUrl="printUrl"
         :exportParams="{id: this.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
@@ -84,9 +84,12 @@
         </v-dialog>
       </template>
 
-      <v-btn @click="confirmed(item)" v-if="item.id" class="green mt-6 mr-2 float-left">تایید</v-btn>
-      <v-btn @click="unConfirm(item)" v-if="item.id" class="red mt-6  mr-4 float-left">رد</v-btn>
-      <v-btn class="red mt-6  float-left" color="primary" v-if="item.id" @click="settID(item)">ثبت اسناد ضمانتی دریافتی
+      <v-btn @click="confirmed(item)"  v-if="item.id && !item.is_confirmed && !isTenderConfirmed " class="green mt-6 mr-2 float-left">تایید</v-btn>
+      <v-btn @click="unConfirm(item)" v-if="item.id && !item.is_confirmed && !isTenderConfirmed" class="red mt-6  mr-4 float-left">رد</v-btn>
+      <v-btn class="red mt-6 ml-2 float-left" color="blue" v-if="item.is_confirmed || isTenderConfirmed" @click="addContract(item)">ثبت قرارداد
+      </v-btn>
+
+      <v-btn class="red mt-6 ml-2 float-left" color="primary" v-if="item.is_confirmed || isTenderConfirmed" @click="settID(item)">ثبت اسناد ضمانتی دریافتی
       </v-btn>
 
     </m-form>
@@ -125,6 +128,8 @@ export default {
   },
   data() {
     return {
+      printUrl: 'reports/tender/all',
+      isTenderConfirmed : false,
       tId: 0,
       offer_expiration: '',
       opening_date: '',
@@ -164,6 +169,7 @@ export default {
     };
   },
   mounted() {
+
   },
   computed: {
     headers() {
@@ -247,9 +253,22 @@ export default {
   },
 
   methods: {
+    to(item) {
+      return {
+        name: 'TenderDetail',
+        params: {
+          id: item.id,
+        },
+      };
+    },
+
     unConfirm(item) {
       this.$router.go()
       this.notify(' مناقصه رد شد', 'warning')
+    },
+    addContract(item) {
+      this.$router.push('/panel/contract/' + '?tender=' + item.id)
+
     },
 
     settID(item) {
@@ -265,8 +284,7 @@ export default {
           console.log(data)
           console.log('ok')
           this.notify(' مناقصه تایید شد', 'success')
-          this.$router.push('/panel/contract/' + '?tender=' + item.id)
-
+          this.isTenderConfirmed = true
         }
       })
     },
@@ -341,7 +359,8 @@ export default {
       })
     }
 
-  }
+  },
+
 }
 ;
 </script>

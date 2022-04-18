@@ -17,6 +17,10 @@
             <td>{{sumOfAmounts}}</td>
           </tr>
         </template>
+        <template #item.detail="{ item }">
+          <detail-link :to="to(item)" />
+        </template>
+
 
       </m-datatable>
     </v-card-text>
@@ -115,6 +119,14 @@ export default {
           value: "other",
           type: "numeric",
         },
+        {
+          text: "جزئیات",
+          value: "detail",
+          sortable: false,
+          filterable: false,
+        }
+
+
       ];
     },
 
@@ -123,6 +135,15 @@ export default {
 
   },
   methods: {
+    to(item) {
+      return {
+        name: 'ContractDetail',
+        params: {
+          id: item.id,
+        },
+      };
+    },
+
     get_sum(contracts){
       let sum = 0
       for (let contract of contracts){
@@ -131,6 +152,9 @@ export default {
       this.sumOfAmounts = sum
     },
   },
+
+
+
 };
 </script>
 

@@ -2,10 +2,12 @@
   <v-card>
     <v-card-title>لیست مناقصه ها</v-card-title>
     <v-card-text>
-      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
+      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
+                   ref="datatable">
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
+
       </m-datatable>
     </v-card-text>
   </v-card>
@@ -85,6 +87,12 @@ export default {
           value: "offer_expiration",
           type: "date",
         },
+        {
+          text: "جزئیات",
+          value: "detail",
+          sortable: false,
+          filterable: false,
+        }
 
       ];
     },
@@ -92,6 +100,15 @@ export default {
   mounted() {
   },
   methods: {
+    to(item) {
+      return {
+        name: "TenderDetail",
+        params: {
+          id: item.id,
+        },
+      };
+    },
+
   },
 };
 </script>

@@ -19,6 +19,9 @@
             <td>{{sumOfAmounts}}</td>
           </tr>
         </template>
+        <template #item.detail="{ item }">
+          <detail-link :to="to(item)" />
+        </template>
 
       </m-datatable>
     </v-card-text>
@@ -89,6 +92,12 @@ export default {
           value: "present_statement_value",
           type: "numeric",
         },
+        {
+          text: "جزئیات",
+          value: "detail",
+          sortable: false,
+          filterable: false,
+        }
 
 
       ];
@@ -97,6 +106,16 @@ export default {
   mounted() {
   },
   methods: {
+    to(item) {
+      return {
+        name: 'StatementDetail',
+        params: {
+          id: item.id,
+        },
+      };
+    },
+
+
     get_sum(statements){
       let sum = 0
       for (let statement of statements){

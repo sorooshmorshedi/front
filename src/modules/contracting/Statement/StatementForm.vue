@@ -4,7 +4,7 @@
         title="صورت وضعیت"
         :showList="false"
         :listRoute="{name:'StatementList'}"
-        exportBaseUrl="reports/lists/statement"
+        exportBaseUrl="reports/statement/all"
         :exportParams="{id: this.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
@@ -101,7 +101,7 @@ import date from "@/components/mcomponents/cleave/Date";
 
 
 export default {
-  name: "DistributionForm",
+  name: "StatementForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
   components: {mtime, TreeSelect, StatementList},
   props: {

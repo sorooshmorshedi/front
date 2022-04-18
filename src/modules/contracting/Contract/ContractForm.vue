@@ -5,7 +5,7 @@
         title="ثبت قرارداد"
         :showList="false"
         :listRoute="{name:'ContractList'}"
-        exportBaseUrl="reports/lists/contract"
+        exportBaseUrl="reports/contract/all"
         :exportParams="{id: this.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
