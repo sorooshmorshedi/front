@@ -91,12 +91,12 @@
           </v-col>
         </v-row>
       </template>
-      <v-btn @click="$router.push('/panel/statement/?contract=' + item.id )" v-if="item.id" class="accent darken-3 mt-6 mr-2 float-left">ثبت صورت وضعیت</v-btn>
-      <v-btn @click="Dialog = true" v-if="item.id" class="accent darken-3 mt-6 mr-2 float-left">ثبت الحاقیه</v-btn>
-      <v-btn class="red mt-6  mr-2 float-left" color="primary" v-if="item.id" @click="setPayment(item)">ثبت سند ضمانتی
+      <v-btn @click="$router.push('/panel/statement/?contract=' + item.id )" v-if="item.id && item.is_defined" class="accent darken-3 mt-6 mr-2 float-left">ثبت صورت وضعیت</v-btn>
+      <v-btn @click="Dialog = true" v-if="item.id && item.is_defined" class="accent darken-3 mt-6 mr-2 float-left">ثبت الحاقیه</v-btn>
+      <v-btn class="red mt-6  mr-2 float-left" color="primary" v-if="item.id && item.is_defined" @click="setPayment(item)">ثبت سند ضمانتی
         پرداخت
       </v-btn>
-      <v-btn class="red mt-6 mr-6  float-left" color="primary" v-if="item.id" @click="setReceive(item)">ثبت
+      <v-btn class="red mt-6 mr-6  float-left" color="primary" v-if="item.id && item.is_defined" @click="setReceive(item)">ثبت
         دریافت
       </v-btn>
       <v-dialog v-model="Dialog">

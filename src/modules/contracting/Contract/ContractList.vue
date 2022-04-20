@@ -9,10 +9,7 @@
         </template>
         <template  v-slot:body.append="{ headers }">
           <tr class="text-center">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td ></td>
+            <td colspan="4"></td>
             <td>جمع </td>
             <td>{{sumOfAmounts}}</td>
           </tr>

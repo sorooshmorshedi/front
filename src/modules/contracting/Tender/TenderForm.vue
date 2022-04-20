@@ -84,12 +84,12 @@
         </v-dialog>
       </template>
 
-      <v-btn @click="confirmed(item)"  v-if="item.id && !item.is_confirmed && !isTenderConfirmed " class="green mt-6 mr-2 float-left">تایید</v-btn>
-      <v-btn @click="unConfirm(item)" v-if="item.id && !item.is_confirmed && !isTenderConfirmed" class="red mt-6  mr-4 float-left">رد</v-btn>
-      <v-btn class="red mt-6 ml-2 float-left" color="blue" v-if="item.is_confirmed || isTenderConfirmed" @click="addContract(item)">ثبت قرارداد
+      <v-btn @click="confirmed(item)"  v-if="item.id && !item.is_confirmed && !isTenderConfirmed && item.is_defined " class="green mt-6 mr-2 float-left">تایید</v-btn>
+      <v-btn @click="unConfirm(item)" v-if="item.id && !item.is_confirmed && !isTenderConfirmed && item.is_defined" class="red mt-6  mr-4 float-left">رد</v-btn>
+      <v-btn class="red mt-6 ml-2 float-left" color="blue" v-if="item.is_confirmed || isTenderConfirmed && item.is_defined" @click="addContract(item)">ثبت قرارداد
       </v-btn>
 
-      <v-btn class="red mt-6 ml-2 float-left" color="primary" v-if="item.is_confirmed || isTenderConfirmed" @click="settID(item)">ثبت اسناد ضمانتی دریافتی
+      <v-btn class="red mt-6 ml-2 float-left" color="primary" v-if="item.is_confirmed || isTenderConfirmed && item.is_defined" @click="settID(item)">ثبت اسناد ضمانتی دریافتی
       </v-btn>
 
     </m-form>

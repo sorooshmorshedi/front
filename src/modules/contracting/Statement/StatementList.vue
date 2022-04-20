@@ -8,20 +8,12 @@
         </template>
         <template  v-slot:body.append="{ headers }">
           <tr class="text-center">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td ></td>
+            <td colspan="7"></td>
             <td>جمع </td>
             <td>{{sumOfAmounts}}</td>
           </tr>
         </template>
-        <template #item.detail="{ item }">
-          <detail-link :to="to(item)" />
-        </template>
+
 
       </m-datatable>
     </v-card-text>

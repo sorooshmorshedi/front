@@ -3,16 +3,18 @@
     <m-form
         title="الحاقیه"
         :showList="false"
-        :listRoute="{name:'ُSupplementList'}"
-        exportBaseUrl="reports/lists/Supplement"
+        :listRoute="{name:'SupplementList'}"
+        exportBaseUrl="reports/supplement/all"
         :exportParams="{id: this.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
         :isEditing.sync="isEditing"
+        :items="item"
         @goToForm="getItemByPosition"
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm() "
+        ref="SupplementForm"
     >
       <template>
         <v-row>
@@ -177,7 +179,10 @@ export default {
             'id': data[t].id,
           })
         }
-        console.log(this.contracts)
+        console.log(this.$refs.SupplementForm)
+        if(this.$refs.SupplementForm.$props.items.contract){
+          this.setValues(this.$refs.SupplementForm.$props.items.contract)
+        }
 
       }
     })

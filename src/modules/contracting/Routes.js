@@ -4,6 +4,8 @@ import StatementList from "@/modules/contracting/Statement/StatementList";
 import TenderForm from "@/modules/contracting/Tender/TenderForm";
 import ContractForm from "@/modules/contracting/Contract/ContractForm";
 import StatementForm from "@/modules/contracting/Statement/StatementForm";
+import SupplementList from "@/modules/contracting/Supplement/SupplementList";
+import SupplementForm from "@/modules/contracting/Supplement/SupplementForm";
 
 const Tender = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/Tender/TenderForm.vue")
 const Contract = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/Contract/ContractForm.vue")
@@ -85,5 +87,22 @@ export default [
         },
     },
 
+    {
+        name: 'SupplementList',
+        path: 'supplement/list',
+        component: SupplementList,
+
+    },
+    {
+        name: 'SupplementDetail',
+        path: 'supplement/:id?',
+        component: SupplementForm,
+        props: (route) => {
+            return {
+                accountId: route.query.accountId,
+                ...route.params,
+            };
+        },
+    },
 
 ]
