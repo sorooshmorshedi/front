@@ -1,23 +1,21 @@
 <template>
-
   <div>
     <m-form
         title="ثبت قرارداد"
         :showList="false"
         :listRoute="{name:'ContractList'}"
         exportBaseUrl="reports/contract/all"
-        :exportParams="{id: this.id}"
+        :exportParams="{id: item.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
+        :items="item"
         :isEditing.sync="isEditing"
         @goToForm="getItemByPosition"
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
         ref="contractForm"
-
     >
-
       <template>
         <v-row>
           <v-col cols="12" md="2">
@@ -91,20 +89,20 @@
           </v-col>
         </v-row>
       </template>
-      <v-btn @click="$router.push('/panel/statement/?contract=' + item.id )" v-if="item.id && item.is_defined" class="accent darken-3 mt-6 mr-2 float-left">ثبت صورت وضعیت</v-btn>
-      <v-btn @click="Dialog = true" v-if="item.id && item.is_defined" class="accent darken-3 mt-6 mr-2 float-left">ثبت الحاقیه</v-btn>
-      <v-btn class="red mt-6  mr-2 float-left" color="primary" v-if="item.id && item.is_defined" @click="setPayment(item)">ثبت سند ضمانتی
+      <v-btn @click="$router.push('/panel/statement/?contract=' + item.id )" v-if="item.id && item.is_defined" class="blue white--text darken-3 mt-6 mr-2 float-left">ثبت صورت وضعیت</v-btn>
+      <v-btn @click="dialog = true" v-if="item.id && item.is_defined" class="blue white--text darken-3 mt-6 mr-2 float-left">ثبت الحاقیه</v-btn>
+      <v-btn class="light-blue white--text mt-6  mr-2 float-left"  v-if="item.id && item.is_defined" @click="setPayment(item)">ثبت سند ضمانتی
         پرداخت
       </v-btn>
-      <v-btn class="red mt-6 mr-6  float-left" color="primary" v-if="item.id && item.is_defined" @click="setReceive(item)">ثبت
+      <v-btn class="light-blue white--text mt-6 mr-6  float-left"  v-if="item.id && item.is_defined" @click="setReceive(item)">ثبت
         دریافت
       </v-btn>
-      <v-dialog v-model="Dialog">
+      <v-dialog v-model="dialog">
         <supplement-form
             :modal-mode="true"
             :contract="item.id"
-            :dmax="parseFloat(item.amount) + (parseFloat(item.amount) / 100 * parseFloat(item.max_change_amount))"
-            :dmin="parseFloat(item.amount) - (parseFloat(item.amount) / 100 * parseFloat(item.max_change_amount))"
+            :max-change="parseFloat(item.amount) + (parseFloat(item.amount) / 100 * parseFloat(item.max_change_amount))"
+            :min-change="parseFloat(item.amount) - (parseFloat(item.amount) / 100 * parseFloat(item.max_change_amount))"
         />
       </v-dialog>
 
@@ -124,18 +122,15 @@
           :modal-mode="false"
           :id="payment.id"
           @submit="submit"
-          @
           ref="transactionRForm"
       />
     </v-dialog>
-
-
   </div>
 </template>
 
 <script>
-import SupplementForm from "@/modules/contracting/Supplement/SupplementForm";
-import ContractList from "@/modules/contracting/Contract/ContractList";
+import SupplementForm from "@/modules/contracting/supplement/SupplementForm";
+import ContractList from "@/modules/contracting/contract/ContractList";
 import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import mtime from "@/components/mcomponents/cleave/Time";
@@ -158,28 +153,15 @@ export default {
   },
   data() {
     return {
-      cId : null,
+      contractId : null,
       paymentDialog: false,
       receivedDialog: false,
-      Dialog: false,
-      insurance_payment: 5,
+      dialog: false,
       tender: this.$route.query.tender,
-      title: '',
-      code: '',
-      value: '',
       hasLock: true,
       isDefinable: true,
-      max_change_amount: '',
-      contractor: '',
-      start_date: '',
-      end_date: '',
-      to_date: '',
-      from_date: '',
-      save_date: '',
       modalMode: true,
       payment: {},
-      doing_job_well: 10,
-      other: 2,
       accounts: [],
       classification: [
         {name: 'کالا', value: 'w'},
@@ -275,7 +257,6 @@ export default {
     },
 
   },
-
   mounted() {
     this.request({
       url: this.endpoint(`contracting/tender/`),
@@ -292,12 +273,11 @@ export default {
         console.log(this.tenders)
       }
     })
-
   },
   beforeDestroy(){
     if(this.$refs.transactionRForm.item.id){
       this.request({
-        url: this.endpoint(`contracting/contract/received/` + this.cId + '/' + this.$refs.transactionRForm.item.id + '/'),
+        url: this.endpoint(`contracting/contract/received/` + this.$refs.contractForm.$props.exportParams.id + '/' + this.$refs.transactionRForm.item.id + '/'),
         method: "get",
         success: data => {
           this.notify(' سند ثبت شد', 'success')
@@ -306,7 +286,7 @@ export default {
     }
     if(this.$refs.transactionPForm.item.id){
       this.request({
-        url: this.endpoint(`contracting/contract/payment/` + this.cId + '/' + this.$refs.transactionPForm.item.id + '/'),
+        url: this.endpoint(`contracting/contract/payment/` + this.$refs.contractForm.$props.exportParams.id + '/' + this.$refs.transactionPForm.item.id + '/'),
         method: "get",
         success: data => {
           this.notify(' سند ثبت شد', 'success')
@@ -315,86 +295,16 @@ export default {
     }
   },
 
-
   methods: {
     setReceive(item){
-      this.cId = item.id
+      this.contractId = item.id
       this.receivedDialog = true
     },
 
     setPayment(item){
-      this.cId = item.id
+      this.contractId = item.id
       this.paymentDialog = true
     },
-
-    saveContract() {
-      this.request({
-        url: this.endpoint(`contracting/contract/`),
-        method: "post",
-        data: {
-          tender: this.tender,
-          title: this.title,
-          code: this.code,
-          amount: this.value,
-          max_change_amount: this.max_change_amount,
-          contractor: this.contractor,
-          from_date: this.from_date,
-          to_date: this.to_date,
-          registration: this.save_date,
-          inception: this.start_date,
-          doing_job_well: this.doing_job_well,
-          insurance_payment: this.insurance_payment,
-          other: this.other,
-
-        },
-        success: data => {
-          this.notify(' قرارداد ثبت شد' , 'success')
-          this.clear()        }
-      })
-    },
-    saveContractAndReload() {
-      this.request({
-        url: this.endpoint(`contracting/contract/`),
-        method: "post",
-        data: {
-          tender: this.tender,
-          title: this.title,
-          code: this.code,
-          amount: this.value,
-          max_change_amount: this.max_change_amount,
-          contractor: this.contractor,
-          from_date: this.from_date,
-          to_date: this.to_date,
-          registration: this.save_date,
-          inception: this.start_date,
-          doing_job_well: this.doing_job_well,
-          insurance_payment: this.insurance_payment,
-          other: this.other,
-
-        },
-        success: data => {
-          this.notify(' قرارداد ثبت شد' , 'success')
-          this.$router.go()
-        }
-      })
-    },
-
-    clear() {
-      console.log('clear')
-      this.code = ''
-      this.title = ''
-      this.tender = ''
-      this.value = ''
-      this.max_change_amount = ''
-      this.contractor = ''
-      this.start_date = ''
-      this.end_date = ''
-      this.doing_job_well = 10
-      this.registration = 5
-      this.other = 2
-
-    },
-
   },
 };
 </script>

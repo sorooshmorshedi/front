@@ -5,8 +5,9 @@
         :showList="false"
         :listRoute="{name:'StatementList'}"
         exportBaseUrl="reports/statement/all"
-        :exportParams="{id: this.id}"
+        :exportParams="{id: item.id}"
         :canDelete="false"
+        :items="item"
         :canSubmit="canSubmit"
         :isEditing.sync="isEditing"
         @goToForm="getItemByPosition"
@@ -14,7 +15,6 @@
         @delete="deleteItem"
         @clearForm="clearForm()"
     >
-
       <template>
         <v-row>
           <v-col cols="12" md="3">
@@ -84,11 +84,8 @@
       </template>
     </m-form>
   </div>
-
 </template>
-
 <script>
-import StatementList from "@/modules/contracting/Statement/StatementList";
 import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import mtime from "@/components/mcomponents/cleave/Time";
@@ -103,7 +100,7 @@ import date from "@/components/mcomponents/cleave/Date";
 export default {
   name: "StatementForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, StatementList},
+  components: {mtime, TreeSelect,  money},
   props: {
     id: {},
   },
@@ -111,13 +108,9 @@ export default {
     return {
       contracts: [],
       contract: this.$route.query.contract,
-      code: '',
-      types: '',
       value: '',
       hasLock: true,
       isDefinable: true,
-      date: '',
-      explanation: '',
       previous_statement_value: '',
       present_statement_value: '',
       type: [
@@ -127,7 +120,7 @@ export default {
         {name: 'تحویل قطعی', value: 'dd'},
       ],
       baseUrl: "contracting/statement",
-      permissionBasename: "Statement",
+      permissionBasename: "statement",
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
@@ -190,8 +183,6 @@ export default {
           value: "present_statement_value",
           type: "numeric",
         },
-
-
       ];
     },
   },
@@ -211,54 +202,10 @@ export default {
             'id': data[t].id,
           })
         }
-
       }
     })
-
   },
-
   methods: {
-    saveStatement() {
-      this.request({
-        url: this.endpoint(`contracting/statement/`),
-        method: "post",
-        data: {
-          contract: this.contract,
-          title: this.title,
-          serial: this.code,
-          value: this.value,
-          date: this.date,
-          explanation: this.explanation,
-          type: this.types,
-        },
-        success: data => {
-          this.notify(' صورت وضییت ثبت شد' , 'success')
-          this.clear()
-        }
-      })
-
-    },
-    saveStatementAndReload() {
-      this.request({
-        url: this.endpoint(`contracting/statement/`),
-        method: "post",
-        data: {
-          contract: this.contract,
-          title: this.title,
-          serial: this.code,
-          value: this.value,
-          date: this.date,
-          explanation: this.explanation,
-          type: this.types,
-        },
-        success: data => {
-          this.notify(' صورت وضییت ثبت شد' , 'success')
-          this.$router.go()
-        }
-      })
-
-    },
-
     setValues(id) {
       this.request({
         url: this.endpoint(`contracting/supplement/previous/` + id + '/'),
@@ -268,21 +215,7 @@ export default {
           this.present_statement_value = data + this.value
         }
       })
-
     },
-    clear() {
-      console.log('clear')
-      this.code = ''
-      this.title = ''
-      this.contract = ''
-      this.date = ''
-      this.value = ''
-      this.explanation = ''
-      this.previous_statement_value = ''
-      this.present_statement_value = ''
-    },
-
-
   }
 };
 </script>

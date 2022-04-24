@@ -97,8 +97,6 @@ export default {
       ];
     },
   },
-  mounted() {
-  },
   methods: {
     to(item) {
       return {

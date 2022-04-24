@@ -3,7 +3,7 @@
     <v-card-title>لیست قرارداد ها</v-card-title>
     <v-card-text>
       <m-datatable
-          @mydata="get_sum($event)" :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable" >
+          @mydata="getSum($event)" :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable" >
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
@@ -17,8 +17,6 @@
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
-
-
       </m-datatable>
     </v-card-text>
   </v-card>
@@ -39,7 +37,7 @@ export default {
       sumOfAmounts: 0,
       localFilters: this.filters,
       previousApiData: null,
-    url: "reports/contract/all",
+      url: "reports/contract/all",
       filters: {},
     };
   },
@@ -122,14 +120,8 @@ export default {
           sortable: false,
           filterable: false,
         }
-
-
       ];
     },
-
-  },
-  mounted() {
-
   },
   methods: {
     to(item) {
@@ -140,8 +132,7 @@ export default {
         },
       };
     },
-
-    get_sum(contracts){
+    getSum(contracts){
       let sum = 0
       for (let contract of contracts){
         sum += parseFloat(contract.amount)

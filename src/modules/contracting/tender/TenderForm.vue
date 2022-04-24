@@ -5,13 +5,14 @@
         :showList="false"
         :listRoute="{name:'TenderList'}"
         :exportBaseUrl="printUrl"
-        :exportParams="{id: this.id}"
+        :exportParams="{id: item.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
         :isEditing.sync="isEditing"
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
+        ref="tenderFrom"
 
     >
 
@@ -84,12 +85,19 @@
         </v-dialog>
       </template>
 
-      <v-btn @click="confirmed(item)"  v-if="item.id && !item.is_confirmed && !isTenderConfirmed && item.is_defined " class="green mt-6 mr-2 float-left">تایید</v-btn>
-      <v-btn @click="unConfirm(item)" v-if="item.id && !item.is_confirmed && !isTenderConfirmed && item.is_defined" class="red mt-6  mr-4 float-left">رد</v-btn>
-      <v-btn class="red mt-6 ml-2 float-left" color="blue" v-if="item.is_confirmed || isTenderConfirmed && item.is_defined" @click="addContract(item)">ثبت قرارداد
+      <v-btn @click="confirmed(item)" v-if="item.id && !item.is_confirmed && !isTenderConfirmed && item.is_defined "
+             class="blue mt-6 mr-2 float-left">تایید
+      </v-btn>
+      <v-btn @click="unConfirm(item)" v-if="item.id && !item.is_confirmed && !isTenderConfirmed && item.is_defined"
+             class="red mt-6  mr-4 float-left">رد
+      </v-btn>
+      <v-btn class="blue white--text mt-6 ml-2 float-left"
+             v-if="item.is_confirmed || isTenderConfirmed && item.is_defined" @click="addContract(item)">ثبت قرارداد
       </v-btn>
 
-      <v-btn class="red mt-6 ml-2 float-left" color="primary" v-if="item.is_confirmed || isTenderConfirmed && item.is_defined" @click="settID(item)">ثبت اسناد ضمانتی دریافتی
+      <v-btn class="light-blue white--text mt-6 ml-2 float-left"
+             v-if="item.is_confirmed || isTenderConfirmed && item.is_defined" @click="paymentDialog = true">ثبت اسناد ضمانتی
+        دریافتی
       </v-btn>
 
     </m-form>
@@ -100,14 +108,13 @@
 
 <script>
 
-import TenderList from "@/modules/contracting/Tender/TenderList";
+import TenderList from "@/modules/contracting/tender/TenderList";
 import {MFormMixin} from "@/components/m-form";
 import mtime from "@/components/mcomponents/cleave/Time";
 import FormsMixin from "@/mixin/forms";
 import FactorMixin from "@/views/panel/factor/mixin";
 import TreeSelect from "@/components/selects/TreeSelect";
 import {PathLevels, VisitorLevels} from "@/variables";
-import axios from "axios";
 import citySelect from "@/components/selects/CitySelect";
 import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
@@ -122,19 +129,15 @@ import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 export default {
   name: "TenderForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm},
+  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
     id: {},
   },
   data() {
     return {
       printUrl: 'reports/tender/all',
-      isTenderConfirmed : false,
-      tId: 0,
-      offer_expiration: '',
-      opening_date: '',
-      send_offer_deadline: '',
-      received_deadline: '',
+      isTenderConfirmed: false,
+      tenderId: 0,
       classification: [
         {name: 'کالا', value: 'w'},
         {name: 'خدمات با فهرست بها', value: 'spl'},
@@ -142,15 +145,6 @@ export default {
         {name: 'مشاوره', value: 'c'},
         {name: 'سایر', value: 'o'},
       ],
-      code: '',
-      title: '',
-      explanation: '',
-      province: '',
-      city: '',
-      bidder: '',
-      bidder_post: '',
-      bidder_address: '',
-
       baseUrl: "contracting/tender",
       permissionBasename: "tender",
       appendSlash: true,
@@ -165,11 +159,7 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
-
     };
-  },
-  mounted() {
-
   },
   computed: {
     headers() {
@@ -242,7 +232,7 @@ export default {
   beforeDestroy() {
     if (this.$refs.transactionForm.item.id) {
       this.request({
-        url: this.endpoint(`contracting/tender/transaction/` + this.tId + '/' + this.$refs.transactionForm.item.id + '/'),
+        url: this.endpoint(`contracting/tender/transaction/` + this.$refs.tenderFrom.$props.exportParams.id + '/' + this.$refs.transactionForm.item.id + '/'),
         method: "get",
         success: data => {
           console.log(data)
@@ -270,99 +260,18 @@ export default {
       this.$router.push('/panel/contract/' + '?tender=' + item.id)
 
     },
-
-    settID(item) {
-      this.tId = item.id
-      this.paymentDialog = true
-      console.log(this.tId)
-    },
     confirmed(item) {
       this.request({
         url: this.endpoint(`contracting/tender/confirmed/` + item.id + '/'),
         method: "get",
         success: data => {
-          console.log(data)
-          console.log('ok')
           this.notify(' مناقصه تایید شد', 'success')
           this.isTenderConfirmed = true
         }
       })
     },
-    clear() {
-      console.log('clear')
-      this.code = ''
-      this.explanation = ''
-      this.city = ''
-      this.province = ''
-      this.title = ''
-      this.bidder = ''
-      this.bidder_post = ''
-      this.bidder_address = ''
-      this.received_deadline = ''
-      this.send_offer_deadline = ''
-      this.opening_date = ''
-      this.offer_expiration = ''
-      this.myClass = ''
-    },
-    saveTender() {
-      this.request({
-        url: this.endpoint(`contracting/tender/`),
-        method: "post",
-        data: {
-          code: this.code,
-          explanation: this.explanation,
-          city: this.city,
-          province: this.province,
-          title: this.title,
-          bidder: this.bidder,
-          bidder_postal_code: this.bidder_post,
-          bidder_address: this.bidder_address,
-          received_deadline: this.received_deadline,
-          send_offer_deadline: this.send_offer_deadline,
-          opening_date: this.opening_date,
-          offer_expiration: this.offer_expiration,
-          classification: this.myClass
-
-
-        },
-        success: data => {
-          this.notify(' مناقصه ثبت شد', 'success')
-          this.clear()
-        }
-      })
-    },
-    saveTenderAndReload() {
-      this.request({
-        url: this.endpoint(`contracting/tender/`),
-        method: "post",
-        data: {
-          code: this.code,
-          explanation: this.explanation,
-          city: this.city,
-          province: this.province,
-          title: this.title,
-          bidder: this.bidder,
-          bidder_postal_code: this.bidder_post,
-          bidder_address: this.bidder_address,
-          received_deadline: this.received_deadline,
-          send_offer_deadline: this.send_offer_deadline,
-          opening_date: this.opening_date,
-          offer_expiration: this.offer_expiration,
-          classification: this.myClass
-
-
-        },
-        success: data => {
-          this.notify(' مناقصه ثبت شد', 'success')
-          this.$router.go()
-        }
-      })
-    }
-
   },
-
 }
-;
 </script>
 
 <style scoped lang="scss"></style>

@@ -5,7 +5,7 @@
         :showList="false"
         :listRoute="{name:'SupplementList'}"
         exportBaseUrl="reports/supplement/all"
-        :exportParams="{id: this.id}"
+        :exportParams="{id: item.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
         :isEditing.sync="isEditing"
@@ -40,24 +40,24 @@
           </v-col>
 
           <v-col cols="12" md="1">
-            <v-text-field disabled label="حداقل" v-model="min" v-if="!modalMode"
+            <v-text-field disabled label="حداقل" v-model="minValue" v-if="!modalMode"
                           background-color="white"/>
             <v-text-field
                 label="حداقل"
                 v-if="modalMode"
                 disabled="true"
-                v-model="Dmin"
+                v-model="minChange"
             ></v-text-field>
 
           </v-col>
           <v-col cols="12" md="1">
-            <v-text-field disabled label="حداکثر " v-model="max" v-if="!modalMode"
+            <v-text-field disabled label="حداکثر " v-model="maxValue" v-if="!modalMode"
                           background-color="white"/>
             <v-text-field
                 label="حداکثر"
                 v-if="modalMode"
                 disabled="true"
-                v-model="Dmax"
+                v-model="maxChange"
             ></v-text-field>
 
           </v-col>
@@ -66,16 +66,15 @@
                 label=" مبلغ تغییر"
                 v-model="item.value"
                 background-color="white"
-                :rules="rules1"
+                :rules="changeValueRule"
                 :disabled="!isEditing"
             />
           </v-col>
 
           <v-col cols="12" md="2">
             <v-switch
-                @click="setSts"
                 v-model="item.increase"
-                :label=status
+                label= 'افزایشی'
                 :disabled="!isEditing"
             ></v-switch>
           </v-col>
@@ -103,7 +102,7 @@
 </template>
 
 <script>
-import SupplementList from "@/modules/contracting/Supplement/SupplementList";
+import SupplementList from "@/modules/contracting/supplement/SupplementList";
 import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import mtime from "@/components/mcomponents/cleave/Time";
@@ -125,25 +124,18 @@ export default {
       default: false,
     },
     contract: {},
-    Dmax: {},
-    Dmin: {},
+    maxChange: {},
+    minChange: {},
 
   },
   data() {
     return {
       contracts: [],
       contract: '',
-      new_date: '',
-      date: '',
-      code: '',
       hasLock: true,
       isDefinable: true,
-      explanation: '',
       value: '',
       modalMode: false,
-
-      switch1: false,
-      status: 'کاهش',
       type: [
         {name: 'معمولی', value: 'n'},
         {name: 'تعدیل', value: 'a'},
@@ -160,10 +152,9 @@ export default {
         is_defined: true,
         is_loaded: false,
       },
-      isFullDelivery: null,
-      min: null,
-      max: null,
-      rules1: [v => v <= this.max && v >= this.min],
+      minValue: null,
+      maxValue: null,
+      changeValueRule: [v => v <= this.maxValue && v >= this.minValue],
     };
   },
   mounted() {
@@ -179,16 +170,13 @@ export default {
             'id': data[t].id,
           })
         }
-        console.log(this.$refs.SupplementForm)
         if(this.$refs.SupplementForm.$props.items.contract){
           this.setValues(this.$refs.SupplementForm.$props.items.contract)
         }
 
       }
     })
-
   },
-
   computed: {
     headers() {
       return [
@@ -226,76 +214,13 @@ export default {
 
   },
   methods: {
-    clear() {
-      this.contract = ''
-      this.max = ''
-      this.min = ''
-      this.value = ''
-      this.explanation = ''
-      this.date = ''
-      this.new_date = ''
-      this.code = ''
-      this.switch1 = false
-
-
-    },
-
-    setSts() {
-      if (this.switch1 == true) {
-        this.status = 'افزایش'
-      } else {
-        this.status = 'کاهش'
-      }
-    },
-
-    saveSupplement() {
-      this.request({
-        url: this.endpoint(`contracting/supplement/`),
-        method: "post",
-        data: {
-          contract: this.contract,
-          new_contract_date: this.new_date,
-          date: this.date,
-          increase: this.switch1,
-          value: this.value,
-          code: this.code,
-          explanation: this.explanation
-        },
-        success: data => {
-          this.notify(' الحاقیه ثبت شد' , 'success')
-          this.clear()
-        }
-      })
-    },
-
-    saveSupplementAndReload() {
-      this.request({
-        url: this.endpoint(`contracting/supplement/`),
-        method: "post",
-        data: {
-          contract: this.contract,
-          new_contract_date: this.new_date,
-          date: this.date,
-          increase: this.switch1,
-          value: this.value,
-          code: this.code,
-          explanation: this.explanation
-        },
-        success: data => {
-          this.notify(' الحاقیه ثبت شد' , 'success')
-          this.$router.go()
-        }
-      })
-    },
-
     setValues(id) {
       this.request({
         url: this.endpoint(`contracting/contract/change/` + id + '/'),
         method: "get",
         success: data => {
-          this.min = data.min
-          this.max = data.max
-          console.log(this.min)
+          this.minValue = data.min
+          this.maxValue = data.max
         }
       })
     }

@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>لیست الحاقیه ها</v-card-title>
     <v-card-text>
-      <m-datatable @mydata="get_sum($event)" :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
+      <m-datatable @mydata="getSum($event)" :headers="headers" :apiUrl="url" :filters.sync="filters" ref="datatable">
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
@@ -13,8 +13,6 @@
             <td>{{sumOfAmounts}}</td>
           </tr>
         </template>
-
-
       </m-datatable>
     </v-card-text>
   </v-card>
@@ -31,7 +29,6 @@ export default {
       filters: {},
     };
   },
-
   computed: {
     headers() {
       return [
@@ -69,13 +66,9 @@ export default {
           sortable: false,
           filterable: false,
         }
-
-
       ];
     },
 
-  },
-  mounted() {
   },
   methods: {
     to(item) {
@@ -87,7 +80,7 @@ export default {
       };
     },
 
-    get_sum(supplements){
+    getSum(supplements){
       let sum = 0
       for (let supplement of supplements){
         sum += parseFloat(supplement.value)

@@ -1,16 +1,16 @@
-import TenderList from "@/modules/contracting/Tender/TenderList";
-import ContractList from "@/modules/contracting/Contract/ContractList";
-import StatementList from "@/modules/contracting/Statement/StatementList";
-import TenderForm from "@/modules/contracting/Tender/TenderForm";
-import ContractForm from "@/modules/contracting/Contract/ContractForm";
-import StatementForm from "@/modules/contracting/Statement/StatementForm";
-import SupplementList from "@/modules/contracting/Supplement/SupplementList";
-import SupplementForm from "@/modules/contracting/Supplement/SupplementForm";
+import TenderList from "@/modules/contracting/tender/TenderList";
+import ContractList from "@/modules/contracting/contract/ContractList";
+import StatementList from "@/modules/contracting/statement/StatementList";
+import TenderForm from "@/modules/contracting/tender/TenderForm";
+import ContractForm from "@/modules/contracting/contract/ContractForm";
+import StatementForm from "@/modules/contracting/statement/StatementForm";
+import SupplementList from "@/modules/contracting/supplement/SupplementList";
+import SupplementForm from "@/modules/contracting/supplement/SupplementForm";
 
-const Tender = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/Tender/TenderForm.vue")
-const Contract = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/Contract/ContractForm.vue")
-const Statement = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/Statement/StatementForm.vue")
-const Supplement = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/Supplement/SupplementForm.vue")
+const Tender = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/tender/TenderForm.vue")
+const Contract = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/contract/ContractForm.vue")
+const Statement = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/statement/StatementForm.vue")
+const Supplement = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/supplement/SupplementForm.vue")
 
 export default [
     {
@@ -45,12 +45,7 @@ export default [
         name: 'TenderDetail',
         path: 'tender/:id?',
         component: TenderForm,
-        props: (route) => {
-            return {
-                accountId: route.query.accountId,
-                ...route.params,
-            };
-        },
+        props: true,
     },
     {
         name: 'ContractList',
@@ -61,12 +56,7 @@ export default [
         name: 'ContractDetail',
         path: 'contract/:id?',
         component: ContractForm,
-        props: (route) => {
-            return {
-                accountId: route.query.accountId,
-                ...route.params,
-            };
-        },
+        props: true,
     },
 
     {
@@ -79,12 +69,7 @@ export default [
         name: 'StatementDetail',
         path: 'statement/:id?',
         component: StatementForm,
-        props: (route) => {
-            return {
-                accountId: route.query.accountId,
-                ...route.params,
-            };
-        },
+        props: true,
     },
 
     {
@@ -97,12 +82,7 @@ export default [
         name: 'SupplementDetail',
         path: 'supplement/:id?',
         component: SupplementForm,
-        props: (route) => {
-            return {
-                accountId: route.query.accountId,
-                ...route.params,
-            };
-        },
+        props: true,
     },
 
 ]
