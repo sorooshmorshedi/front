@@ -17,19 +17,16 @@ export default [
         name: 'Tender',
         path: 'tender',
         component: Tender,
-        props: true,
     },
     {
         name: 'Contract',
         path: 'contract',
         component: Contract,
-        props: true,
     },
     {
         name: 'Statement',
         path: 'statement',
         component: Statement,
-        props: true,
     },
     {
         name: 'Supplement',
