@@ -17,21 +17,53 @@ export default [
         name: 'Tender',
         path: 'tender',
         component: Tender,
+        props: true,
+        children : [
+            {
+                name: 'TenderDetail',
+                path: ':id',
+                component: TenderForm,
+            },
+        ]
     },
     {
         name: 'Contract',
         path: 'contract',
         component: Contract,
+        props: true,
+        children : [
+            {
+                name: 'ContractDetail',
+                path: ':id',
+                component: ContractForm,
+            },
+        ]
     },
     {
         name: 'Statement',
         path: 'statement',
         component: Statement,
+        props: true,
+        children : [
+            {
+                name: 'StatementDetail',
+                path: ':id',
+                component: StatementForm,
+            },
+        ]
     },
     {
         name: 'Supplement',
         path: 'supplement',
         component: Supplement,
+        props: true,
+        children : [
+            {
+                name: 'SupplementDetail',
+                path: ':id',
+                component: SupplementForm,
+            },
+        ]
     },
     {
         name: 'TenderList',
@@ -39,21 +71,9 @@ export default [
         component: TenderList,
     },
     {
-        name: 'TenderDetail',
-        path: 'tender/:id?',
-        component: TenderForm,
-        props: true,
-    },
-    {
         name: 'ContractList',
         path: 'contract/list',
         component: ContractList,
-    },
-    {
-        name: 'ContractDetail',
-        path: 'contract/:id?',
-        component: ContractForm,
-        props: true,
     },
 
     {
@@ -63,23 +83,9 @@ export default [
 
     },
     {
-        name: 'StatementDetail',
-        path: 'statement/:id?',
-        component: StatementForm,
-        props: true,
-    },
-
-    {
         name: 'SupplementList',
         path: 'supplement/list',
         component: SupplementList,
 
     },
-    {
-        name: 'SupplementDetail',
-        path: 'supplement/:id?',
-        component: SupplementForm,
-        props: true,
-    },
-
 ]
