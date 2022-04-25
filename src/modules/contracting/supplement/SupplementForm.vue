@@ -14,7 +14,7 @@
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm() "
-        ref="SupplementForm"
+        ref="supplementForm"
     >
       <template>
         <v-row>
@@ -97,6 +97,20 @@
 
         </v-row>
       </template>
+      <v-btn class="light-blue white--text mt-6 mr-6  float-left"  v-if="item.id && item.is_defined" @click="receivedDialog = true">ثبت
+        دریافت
+      </v-btn>
+      <v-dialog v-model="receivedDialog">
+        <transaction-form
+            type="receive"
+            :modal-mode="false"
+            :contract-modal-mode="true"
+            :id="receive.id"
+            @submit="submit"
+            ref="transactionForm"
+        />
+      </v-dialog>
+
     </m-form>
   </div>
 </template>
@@ -112,12 +126,14 @@ import TreeSelect from "@/components/selects/TreeSelect";
 import {PathLevels, VisitorLevels} from "@/variables";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import TransactionForm from "@/views/panel/transaction/Form";
+
 
 
 export default {
   name: "SupplementForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, money, SupplementList},
+  components: {mtime, TreeSelect, money, SupplementList,TransactionForm},
   props: {
     id: {},
     modalMode: {
@@ -130,6 +146,8 @@ export default {
   },
   data() {
     return {
+      receive: {},
+      receivedDialog: false,
       contracts: [],
       contract: '',
       hasLock: true,
@@ -170,8 +188,8 @@ export default {
             'id': data[t].id,
           })
         }
-        if(this.$refs.SupplementForm.$props.items.contract){
-          this.setValues(this.$refs.SupplementForm.$props.items.contract)
+        if(this.$refs.supplementForm.$props.items.contract){
+          this.setValues(this.$refs.supplementForm.$props.items.contract)
         }
 
       }
@@ -212,6 +230,17 @@ export default {
       ];
     },
 
+  },
+  beforeDestroy() {
+    if (this.$refs.transactionForm.item.id) {
+      this.request({
+        url: this.endpoint(`contracting/contract/received/` + this.$refs.supplementForm.items.contract + '/' + this.$refs.transactionForm.item.id + '/'),
+        method: "get",
+        success: data => {
+          this.notify(' سند ثبت شد', 'success')
+        }
+      })
+    }
   },
   methods: {
     setValues(id) {

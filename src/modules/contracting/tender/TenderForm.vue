@@ -79,6 +79,7 @@
           <transaction-form
               type="receivedGuarantee"
               :modal-mode="false"
+              :contract-modal-mode="true"
               @submit="submit"
               ref="transactionForm"
           />
@@ -252,7 +253,7 @@ export default {
       };
     },
 
-    unConfirm(item) {
+    unConfirm() {
       this.$router.go()
       this.notify(' مناقصه رد شد', 'warning')
     },

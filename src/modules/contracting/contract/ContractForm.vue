@@ -91,12 +91,8 @@
       </template>
       <v-btn @click="$router.push('/panel/statement/?contract=' + item.id )" v-if="item.id && item.is_defined" class="blue white--text darken-3 mt-6 mr-2 float-left">ثبت صورت وضعیت</v-btn>
       <v-btn @click="dialog = true" v-if="item.id && item.is_defined" class="blue white--text darken-3 mt-6 mr-2 float-left">ثبت الحاقیه</v-btn>
-      <v-btn class="light-blue white--text mt-6  mr-2 float-left"  v-if="item.id && item.is_defined" @click="setPayment(item)">ثبت سند ضمانتی
-        پرداخت
-      </v-btn>
-      <v-btn class="light-blue white--text mt-6 mr-6  float-left"  v-if="item.id && item.is_defined" @click="setReceive(item)">ثبت
-        دریافت
-      </v-btn>
+      <v-btn class="light-blue white--text mt-6  mr-2 float-left"  v-if="item.id && item.is_defined" @click="receivedDialog = true">ثبت سند ضمانتی پرداخت</v-btn>
+      <v-btn class="light-blue white--text mt-6 mr-6  float-left"  v-if="item.id && item.is_defined" @click="paymentDialog = true">ثبت دریافت</v-btn>
       <v-dialog v-model="dialog">
         <supplement-form
             :modal-mode="true"
@@ -120,6 +116,7 @@
       <transaction-form
           type="receive"
           :modal-mode="false"
+          :contract-modal-mode="true"
           :id="payment.id"
           @submit="submit"
           ref="transactionRForm"
@@ -153,7 +150,6 @@ export default {
   },
   data() {
     return {
-      contractId : null,
       paymentDialog: false,
       receivedDialog: false,
       dialog: false,
@@ -295,17 +291,6 @@ export default {
     }
   },
 
-  methods: {
-    setReceive(item){
-      this.contractId = item.id
-      this.receivedDialog = true
-    },
-
-    setPayment(item){
-      this.contractId = item.id
-      this.paymentDialog = true
-    },
-  },
 };
 </script>
 

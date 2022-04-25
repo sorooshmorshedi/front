@@ -411,8 +411,11 @@ export default {
     modalMode: {
       default: false,
     },
+    contractModalMode: {
+      default: false,
+    }
   },
-  data() {
+  data() {3
     return {
       baseUrl: "transactions",
       appendSlash: true,
@@ -837,7 +840,8 @@ export default {
         });
       this.rows.push(this.getRowTemplate());
 
-      if (!this.modalMode) this.changeRouteTo(item.id);
+
+      if (!this.modalMode && !this.contractModalMode) this.changeRouteTo(item.id);
     },
   },
 };
