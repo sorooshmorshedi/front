@@ -27,7 +27,9 @@ export default {
     MDatatable
   },
 
-  props: {},
+  props: {
+    contractID: {}
+  },
   data() {
     return {
       sumOfAmounts: 0,
@@ -91,6 +93,10 @@ export default {
       ];
     },
   },
+  created() {
+    this.filters.contract = this.contractID
+  },
+
   methods: {
     to(item) {
       return {
@@ -100,6 +106,7 @@ export default {
         },
       };
     },
+
 
     getSum(statements){
       let sum = 0

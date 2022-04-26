@@ -14,6 +14,7 @@
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
+        ref="statementForm"
     >
       <template>
         <v-row>
@@ -82,6 +83,19 @@
           </v-col>
         </v-row>
       </template>
+      <v-btn class="light-blue white--text mt-6 mr-6  float-left"  v-if="item.id && item.is_defined" @click="receivedDialog = true">ثبت
+        دریافت
+      </v-btn>
+      <v-dialog v-model="receivedDialog">
+        <transaction-form
+            type="receive"
+            :modal-mode="false"
+            :contract-modal-mode="true"
+            :id="receive.id"
+            @submit="submit"
+            ref="transactionForm"
+        />
+      </v-dialog>
     </m-form>
   </div>
 </template>
@@ -95,17 +109,20 @@ import TreeSelect from "@/components/selects/TreeSelect";
 import {PathLevels, VisitorLevels} from "@/variables";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import TransactionForm from "@/views/panel/transaction/Form";
 
 
 export default {
   name: "StatementForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect,  money},
+  components: {mtime, TreeSelect,  money, TransactionForm},
   props: {
     id: {},
   },
   data() {
     return {
+      receive: {},
+      receivedDialog: false,
       contracts: [],
       contract: this.$route.query.contract,
       value: '',
@@ -205,6 +222,18 @@ export default {
       }
     })
   },
+  beforeDestroy() {
+    if (this.$refs.transactionForm.item.id) {
+      this.request({
+        url: this.endpoint(`contracting/contract/received/` + this.$refs.statementForm.items.contract + '/' + this.$refs.transactionForm.item.id + '/'),
+        method: "get",
+        success: data => {
+          this.notify(' سند ثبت شد', 'success')
+        }
+      })
+    }
+  },
+
   methods: {
     setValues(id) {
       this.request({

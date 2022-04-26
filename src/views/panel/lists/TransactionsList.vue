@@ -30,6 +30,8 @@ export default {
   name: "TransactionsList",
   props: {
     type: {},
+    contract_received: {},
+    contract_guarantee: {}
   },
   data() {
     return {
@@ -44,6 +46,10 @@ export default {
           return "لیست دریافت ها";
         case "payment":
           return "لیست پرداخت ها";
+        case "receivedGuarantee":
+          return "لیست اسناد ضمانتی دریافتی";
+        case "paymentGuarantee":
+          return "لیست اسناد ضمانتی پرداختی";
         case "imprest":
           return "پرداخت های تنخواه";
       }
@@ -110,6 +116,8 @@ export default {
   },
   created() {
     this.filters.type = this.type;
+    this.filters.contract_received = this.contract_received
+    this.filters.contract_guarantee = this.contract_guarantee
   },
   watch: {
     $route() {

@@ -6,6 +6,7 @@ import ContractForm from "@/modules/contracting/contract/ContractForm";
 import StatementForm from "@/modules/contracting/statement/StatementForm";
 import SupplementList from "@/modules/contracting/supplement/SupplementList";
 import SupplementForm from "@/modules/contracting/supplement/SupplementForm";
+import ContractDetails from "@/modules/contracting/contract/ContractDetails";
 
 const Tender = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/tender/TenderForm.vue")
 const Contract = () => import( /* wepackChunkName: "contracting" */ "@/modules/contracting/contract/ContractForm.vue")
@@ -39,6 +40,14 @@ export default [
             },
         ]
     },
+    {
+        name: 'ContractAllDetails',
+        path: 'contract/details/:id?',
+        component: ContractDetails,
+        props: true,
+
+    },
+
     {
         name: 'Statement',
         path: 'statement',
