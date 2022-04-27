@@ -4,7 +4,7 @@
         title="جزییات قرارداد"
         :showList="false"
         :listRoute="{name:'ContractList'}"
-        exportBaseUrl="reports/contract/all"
+        :exportBaseUrl="'reports/contract/' + id"
         :exportParams="{id: item.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
@@ -30,7 +30,7 @@
           </v-col>
 
           <v-col cols="12" md="2">
-            <v-text-field label="عنوان قرارداد" v-model="item.title" background-color="white" :disabled="!isEditing" />
+            <v-text-field label="عنوان قرارداد" v-model="item.title" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
             <v-text-field label="شماره قرارداد" v-model="item.code" background-color="white" :disabled="!isEditing"/>
@@ -45,7 +45,8 @@
             />
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="حداکثر میزان تغییر مبلغ قرارداد (درصد)" v-model="item.max_change_amount" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="حداکثر میزان تغییر مبلغ قرارداد (درصد)" v-model="item.max_change_amount"
+                          background-color="white" :disabled="!isEditing"/>
           </v-col>
         </v-row>
         <v-row>
@@ -71,46 +72,131 @@
         <v-row>
 
           <v-col cols="12" md="2">
-            <v-text-field label="حسن انجام کار" v-model="item.doing_job_well" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="حسن انجام کار" v-model="item.doing_job_well" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="علی الحساب بیمه" v-model="item.insurance_payment" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="علی الحساب بیمه" v-model="item.insurance_payment" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="سایر" v-model="item.other"  background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="سایر" v-model="item.other" background-color="white" :disabled="!isEditing"/>
           </v-col>
         </v-row>
       </template>
-    </m-form>
-    <v-row>
-      <v-col>
-      <transactions-list
-          type="receive"
-          :contract_received="id"
+      <v-btn @click="$router.push('/panel/statement/?contract=' + item.id )" v-if="item.id && item.is_defined"
+             class="blue white--text darken-3 mt-6 mr-2 float-left">ثبت صورت وضعیت
+      </v-btn>
+      <v-btn @click="dialog = true" v-if="item.id && item.is_defined"
+             class="blue white--text darken-3 mt-6 mr-2 float-left">ثبت الحاقیه
+      </v-btn>
+      <v-btn class="light-blue white--text mt-6  mr-2 float-left" v-if="item.id && item.is_defined"
+             @click="paymentDialog = true">ثبت سند ضمانتی پرداخت
+      </v-btn>
+      <v-btn class="light-blue white--text mt-6 mr-6  float-left" v-if="item.id && item.is_defined"
+             @click="receivedDialog = true">ثبت دریافت
+      </v-btn>
+      <v-dialog v-model="dialog">
+        <supplement-form
+            :modal-mode="true"
+            :contract="item.id"
+            :max-change="parseFloat(item.amount) + (parseFloat(item.amount) / 100 * parseFloat(item.max_change_amount))"
+            :min-change="parseFloat(item.amount) - (parseFloat(item.amount) / 100 * parseFloat(item.max_change_amount))"
+        />
+      </v-dialog>
 
-      >
-      </transactions-list>
-      </v-col>
-      <v-col>
-        <transactions-list
+
+      <v-dialog v-model="paymentDialog">
+        <transaction-form
             type="paymentGuarantee"
-            :contract_guarantee="id"
+            :modal-mode="false"
+            :id="payment.id"
+            @submit="submit"
+            ref="transactionPForm"
+        />
+      </v-dialog>
+      <v-dialog v-model="receivedDialog">
+        <transaction-form
+            type="receive"
+            :modal-mode="false"
+            :contract-modal-mode="true"
+            :id="payment.id"
+            @submit="submit"
+            ref="transactionRForm"
+        />
+      </v-dialog>
+
+    </m-form>
+    <v-spacer style="height: 50px"></v-spacer>
+    <v-toolbar color="blue lighten-5" style="width: 98% ; margin: auto">
+      <v-tabs
+          color="blue"
+          slider-color="blue"
+          v-model="tabs"
+      >
+        <v-tab
+            key=1
         >
-        </transactions-list>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <supplement-list
-         :contract-i-d="id"
-        ></supplement-list>
-      </v-col>
-      <v-col>
-        <statement-list
-            :contract-i-d="id"
-        ></statement-list>
-      </v-col>
-    </v-row>
+          دریافت ها
+        </v-tab>
+        <v-tab
+            key=2
+        >
+          اسناد ضمانتی پرداختی
+        </v-tab>
+        <v-tab
+            key=3
+        >
+          الحاقیه ها
+        </v-tab>
+
+        <v-tab
+            key=4
+        >
+          صورت وضعیت ها
+        </v-tab>
+
+      </v-tabs>
+    </v-toolbar>
+
+
+    <v-tabs-items v-model="tabs">
+      <v-tab-item>
+        <v-card>
+          <transactions-list
+              type="receive"
+              :contract_received="id"
+          >
+          </transactions-list>
+
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <transactions-list
+              type="paymentGuarantee"
+              :contract_guarantee="id"
+          >
+          </transactions-list>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <supplement-list
+              :contract-i-d="id"
+          ></supplement-list>
+
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+          <statement-list
+              :contract-i-d="id"
+          ></statement-list>
+
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
   </div>
 </template>
 
@@ -135,14 +221,20 @@ import statementList from "@/modules/contracting/statement/StatementList";
 export default {
   name: "ContractForm",
   mixins: [MFormMixin, DistributionApiMixin, FormsMixin, FactorMixin, accountMixin],
-  components: {mtime, TreeSelect, accountSelect, ContractList, SupplementForm,TransactionForm,
-    TransactionsList, supplementList, statementList},
+  components: {
+    mtime, TreeSelect, accountSelect, ContractList, SupplementForm, TransactionForm,
+    TransactionsList, supplementList, statementList
+  },
   props: {
     id: {},
 
   },
   data() {
     return {
+      paymentDialog: false,
+      receivedDialog: false,
+      tabs: null,
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       dialog: false,
       hasLock: true,
       isDefinable: true,
@@ -269,9 +361,25 @@ export default {
     })
   },
   beforeDestroy(){
-
+    if(this.$refs.transactionRForm.item.id){
+      this.request({
+        url: this.endpoint(`contracting/contract/received/` + this.$refs.contractForm.$props.exportParams.id + '/' + this.$refs.transactionRForm.item.id + '/'),
+        method: "get",
+        success: data => {
+          this.notify(' سند ثبت شد', 'success')
+        }
+      })
+    }
+    if(this.$refs.transactionPForm.item.id){
+      this.request({
+        url: this.endpoint(`contracting/contract/payment/` + this.$refs.contractForm.$props.exportParams.id+ '/' + this.$refs.transactionPForm.item.id + '/'),
+        method: "get",
+        success: data => {
+          this.notify(' سند ثبت شد', 'success')
+        }
+      })
+    }
   },
-
 };
 </script>
 

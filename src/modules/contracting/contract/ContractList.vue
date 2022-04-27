@@ -126,7 +126,7 @@ export default {
   methods: {
     to(item) {
       return {
-        name: 'ContractDetail',
+        name: 'ContractAllDetails',
         params: {
           id: item.id,
         },
