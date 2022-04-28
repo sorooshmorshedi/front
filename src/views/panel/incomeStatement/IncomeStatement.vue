@@ -17,8 +17,18 @@
           <v-btn
             :href="this.endpoint('reports/incomeStatement/xlsx') + `?detailed=${detailed == true}&token=${token}`"
             target="_blank"
-            class="export-btn"
+            class="export-btn ma-2"
           >اکسل</v-btn>
+          <v-btn
+              :href="this.endpoint('reports/incomeStatement/pdf') + `?detailed=${detailed == true}&token=${token}`"
+              target="_blank"
+              class="export-btn ma-2"
+          >pdf</v-btn>
+          <v-btn
+              :href="this.endpoint('reports/incomeStatement/html') + `?detailed=${detailed == true}&token=${token}`"
+              target="_blank"
+              class="export-btn ma-2"
+          >پرینت</v-btn>
         </v-col>
         <v-col cols="12">
           <v-simple-table dense>
