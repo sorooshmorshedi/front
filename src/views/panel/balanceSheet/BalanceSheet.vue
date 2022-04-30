@@ -14,16 +14,27 @@
           ></v-switch>
           <v-btn
             :block="isXs"
-            class="blue white--text w-100px mt-3 mr-md-5 mt-md-0"
+            class="blue white--text w-100px mt-3 mr-2 md-5 mt-md-0"
             @click="getData()"
           >گزارش</v-btn>
           <v-spacer></v-spacer>
+          <v-btn
+              :href="this.endpoint('reports/balanceSheet/html') + `?detailed=${detailed == true}&token=${token}`"
+              target="_blank"
+              class="export-btn mr-1 md-3 mt-5 mt-md-0"
+          >چاپ</v-btn>
+          <v-btn
+              :href="this.endpoint('reports/balanceSheet/pdf') + `?detailed=${detailed == true}&token=${token}`"
+              target="_blank"
+              class="export-btn mr-1 md-3 mt-5 mt-md-0"
+          >خروجی PDF</v-btn>
 
           <v-btn
             :href="this.endpoint('reports/balanceSheet/xlsx') + `?detailed=${detailed == true}&token=${token}`"
             target="_blank"
-            class="export-btn mr-md-3 mt-5 mt-md-0"
-          >اکسل</v-btn>
+            class="export-btn mr-1 md-3 mt-5 mt-md-0"
+          >خروجی اکسل</v-btn>
+
         </v-col>
 
         <template v-if="!_.isEmpty(d)">

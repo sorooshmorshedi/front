@@ -15,20 +15,21 @@
         </v-col>
         <v-col cols="6" class="d-flex justify-end">
           <v-btn
-            :href="this.endpoint('reports/incomeStatement/xlsx') + `?detailed=${detailed == true}&token=${token}`"
-            target="_blank"
-            class="export-btn ma-2"
-          >اکسل</v-btn>
+              :href="this.endpoint('reports/incomeStatement/html') + `?detailed=${detailed == true}&token=${token}`"
+              target="_blank"
+              class="export-btn ma-1"
+          >چاپ</v-btn>
           <v-btn
               :href="this.endpoint('reports/incomeStatement/pdf') + `?detailed=${detailed == true}&token=${token}`"
               target="_blank"
-              class="export-btn ma-2"
-          >pdf</v-btn>
+              class="export-btn ma-1"
+          >خروجی PDF</v-btn>
           <v-btn
-              :href="this.endpoint('reports/incomeStatement/html') + `?detailed=${detailed == true}&token=${token}`"
-              target="_blank"
-              class="export-btn ma-2"
-          >پرینت</v-btn>
+            :href="this.endpoint('reports/incomeStatement/xlsx') + `?detailed=${detailed == true}&token=${token}`"
+            target="_blank"
+            class="export-btn ma-1"
+          >خروجی اکسل</v-btn>
+
         </v-col>
         <v-col cols="12">
           <v-simple-table dense>
@@ -104,6 +105,10 @@ export default {
   },
   created() {
     this.getData();
+  },
+  updated() {
+    if(this.$route.params.detailed){this.detailed = true}
+
   },
   methods: {
     getData() {
