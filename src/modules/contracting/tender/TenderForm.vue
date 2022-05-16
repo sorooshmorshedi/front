@@ -100,9 +100,7 @@
              v-if="item.is_confirmed || isTenderConfirmed && item.is_defined" @click="paymentDialog = true">ثبت اسناد ضمانتی
         دریافتی
       </v-btn>
-
     </m-form>
-
   </div>
 
 </template>
