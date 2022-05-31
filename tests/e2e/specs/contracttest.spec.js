@@ -4,10 +4,8 @@ describe('sobhan test', () => {
         cy.visit('http://localhost:8080/panel/tender');
         cy.intercept('POST', '/login').as('login')
         cy.intercept('POST', '/contracting/tender').as('tenderCreate')
-
         cy.get('input[id="input-24"]').type('soroosh')
         cy.get('input[id="input-25"]').type(`${'slowj504'}{enter}`)
-
         cy.contains('هزینه');
         cy.visit('http://localhost:8080/panel/tender');
         cy.contains('مناقصه')
@@ -20,12 +18,7 @@ describe('sobhan test', () => {
         cy.visit('http://localhost:8080/panel/tender/list');
         cy.wait('@login').its('response.statusCode').should('eq', 200)
         cy.wait('@tenderCreate').its('response.statusCode').should('eq', 201)
-
-
-
     })
-
-
     it('contract test', () => {
         cy.intercept('POST', '/login').as('login')
         cy.intercept('POST', '/contracting/contract').as('contractCreate')
@@ -48,11 +41,7 @@ describe('sobhan test', () => {
 
         cy.wait('@login').its('response.statusCode').should('eq', 200)
         cy.wait('@contractCreate').its('response.statusCode').should('eq', 201)
-
-
     })
-
-
     it('statement test', () => {
         cy.intercept('POST', '/login').as('login')
         cy.intercept('POST', '/contracting/statement').as('statementCreate')
@@ -71,16 +60,13 @@ describe('sobhan test', () => {
         cy.visit('http://localhost:8080/panel/statement')
         cy.wait('@login').its('response.statusCode').should('eq', 200)
         cy.wait('@statementCreate').its('response.statusCode').should('eq', 201)
-        cy.get('@statementCreate').should(({ request, response }) => {
+        cy.get('@statementCreate').should(({request, response}) => {
             expect(response.body, 'response body').to.include({
                 'present_statement_value': '100.000000',
                 'previous_statement_value': '0.000000',
                 'code': 1,
             })
         })
-
-
-
     })
     it('seccond statement test', () => {
         cy.intercept('POST', '/login').as('login')
@@ -100,15 +86,12 @@ describe('sobhan test', () => {
         cy.visit('http://localhost:8080/panel/statement')
         cy.wait('@login').its('response.statusCode').should('eq', 200)
         cy.wait('@statementCreate').its('response.statusCode').should('eq', 201)
-        cy.get('@statementCreate').should(({ request, response }) => {
+        cy.get('@statementCreate').should(({request, response}) => {
             expect(response.body, 'response body').to.include({
                 'present_statement_value': '200.000000',
                 'previous_statement_value': '100.000000',
                 'code': 2,
             })
         })
-
     })
-
-
 });
