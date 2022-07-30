@@ -288,6 +288,7 @@ export default {
   },
   data() {
     return {
+      list_view: false,
       mydata:'',
       filterMenus: {},
       search: "",
@@ -655,6 +656,7 @@ export default {
           } else {
             let filters = {
               ...this.filters,
+              view_list : this.list_view,
               search: this.search,
               ordering: this.getOrdering()
             };

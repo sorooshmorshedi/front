@@ -4,47 +4,63 @@
       {{ title }}
       <v-spacer></v-spacer>
       <v-btn
-        :block="isXs"
-        small
-        @click="reorderSanads('date')"
-        class="teal white--text mr-md-1"
-        >مرتب کردن کد اسناد بر اساس تاریخ</v-btn
+          :block="isXs"
+          small
+          @click="reorderSanads('date')"
+          class="teal white--text mr-md-1"
+      >مرتب کردن کد اسناد بر اساس تاریخ
+      </v-btn
       >
       <v-btn
-        :block="isXs"
-        small
-        @click="reorderSanads('local_id')"
-        class="teal white--text mr-md-1 mt-1 mt-md-0"
-        >مرتب کردن کد اسناد بر اساس عطف</v-btn
-      >
+          :block="isXs"
+          small
+          @click="reorderSanads('local_id')"
+          class="teal white--text mr-md-1 mt-1 mt-md-0"
+      >مرتب کردن کد اسناد بر اساس عطف
+      </v-btn>
       <v-btn
-        :block="isXs"
-        small
-        @click="reorderSanads(null)"
-        class="teal white--text mr-md-1 mt-1 mt-md-0"
-        >بازگردانی کد اسناد به حالت اولیه</v-btn
-      >
+          :block="isXs"
+          small
+          @click="reorderSanads(null)"
+          class="teal white--text mr-md-1 mt-1 mt-md-0"
+      >بازگردانی کد اسناد به حالت اولیه
+      </v-btn>
+      <div @mouseenter="list_export">
+        <v-btn @click="$refs.datatable.exportTo('html')" class="export-btn mr-3 block">چاپ لیست اسناد</v-btn>
+        <v-btn @click="$refs.datatable.exportTo('pdf')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی PDF لیست اسناد
+        </v-btn>
+        <v-btn @click="$refs.datatable.exportTo('xlsx')" class="export-btn mt-2 ml-4 mt-sm-0 mr-md-1">خروجی اکسل لیست
+          اسناد
+        </v-btn>
+      </div>
     </v-card-title>
+
     <v-card-text>
-      <m-datatable
-        :headers="headers"
-        :apiUrl="url"
-        :filters.sync="filters"
-        @dblclick:row="(e, row) => $router.push(to(row.item))"
-        ref="datatable"
-      >
-        <template #item.detail="{ item }">
-          <detail-link :to="to(item)" />
-        </template>
-      </m-datatable>
+      <div @mouseenter="normal_view">
+        <m-datatable
+            :headers="headers"
+            :apiUrl="url"
+            :filters.sync="filters"
+            @dblclick:row="(e, row) => $router.push(to(row.item))"
+            ref="datatable"
+        >
+          <template #item.detail="{ item }">
+            <detail-link :to="to(item)"/>
+          </template>
+        </m-datatable>
+      </div>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import {jsPDF} from "jspdf";
+import XLSX from "xlsx";
+
 export default {
   name: "SanadsList",
   props: {
+
     type: {
       default: "all",
     },
@@ -65,7 +81,7 @@ export default {
         case "empty":
           return "reports/lists/sanads/empty";
         case "notDefined":
-          this.filters = { is_defined: false };
+          this.filters = {is_defined: false};
           return "reports/lists/sanads";
       }
     },
@@ -134,6 +150,13 @@ export default {
     },
   },
   methods: {
+    list_export() {
+      this.$refs.datatable.$data.list_view = true
+    },
+    normal_view() {
+      this.$refs.datatable.$data.list_view = false
+    },
+
     cl(e, row) {
       console.log(this.to(row.item));
     },
@@ -147,9 +170,9 @@ export default {
     },
     confirm() {
       if (
-        confirm(
-          "با انجام این عملیات کد اسناد تغییر میکنند. میخواهید ادامه دهید؟"
-        )
+          confirm(
+              "با انجام این عملیات کد اسناد تغییر میکنند. میخواهید ادامه دهید؟"
+          )
       ) {
         if (confirm("از انجام این عملیات اطمینان دارید؟")) {
           return true;
@@ -174,6 +197,7 @@ export default {
       });
     },
   },
+
 };
 </script>
 
