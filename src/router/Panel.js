@@ -65,6 +65,7 @@ import DefaultTexts from '@/views/panel/defaultTexts/DefaultTexts';
 import DashtbashiRoutes from '@/modules/dashtbashi/Routes';
 import DistributionRoutes from '@/modules/distribution/Routes';
 import ContractingRoutes from '@/modules/contracting/Routes'
+import PayrollRoutes from '@/modules/payroll/Routes'
 
 export default [{
   name: 'Panel',
@@ -74,6 +75,7 @@ export default [{
     ...DashtbashiRoutes,
     ...DistributionRoutes,
     ...ContractingRoutes,
+    ...PayrollRoutes,
     {
       name: 'Profile',
       path: 'profile',
