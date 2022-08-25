@@ -1829,6 +1829,55 @@ export default {
             },
           ],
         },
+        {
+          title: "حقوق و دستمزد",
+          icon: "fa-credit-card",
+          children: [
+            {
+              title: "کارگاه",
+              to: {
+                name: "Workshop",
+              },
+            },
+            {
+              title: "پرسنل",
+              to: {
+                name: "Personnel",
+              },
+            },
+            {
+              to: {
+                name: "ContractRow",
+              },
+              title: "ردیف پیمان",
+
+            },
+            {
+              to: {
+                name: "WorkshopContract",
+              },
+              title: "قرارداد",
+            },
+            {
+              to: {
+                name: "PersonnelFamily",
+              },
+              title: "خانواده پزسنل",
+            },
+            {
+              to: {
+                name: "HRLetter",
+              },
+              title: "حکم کارگزینی",
+            },
+            {
+              to: {
+                name: "Absence",
+              },
+              title: "مرخصی یا غیبت",
+            },
+          ],
+        },
       ];
     },
     routes() {

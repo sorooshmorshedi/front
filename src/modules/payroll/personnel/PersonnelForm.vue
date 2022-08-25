@@ -174,13 +174,15 @@
             />
           </v-col>
 
-
-
-
-
         </v-row>
       </template>
+      <v-btn
+          class="light-blue white--text mt-6  mr-2 float-left"
+          @click="verifyPersonnel(item.id)"
+          v-if="item.id && !item.is_personnel_verified" >ثبت نهایی</v-btn>
+
     </m-form>
+
   </div>
 
 </template>
@@ -410,6 +412,18 @@ export default {
   },
 
   methods: {
+    verifyPersonnel(id){
+      this.request({
+        url: this.endpoint(`payroll/personnel/verify/` + id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify(' ثبت پرسنل تایید  شد', 'success')
+          window.location.reload();
+        }
+      })
+
+    },
     to(item) {
       return {
         name: 'WorkshopDetail',

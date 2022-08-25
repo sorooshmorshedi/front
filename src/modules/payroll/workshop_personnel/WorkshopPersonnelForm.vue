@@ -18,7 +18,7 @@
 
       <template>
         <v-row>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 v-if="!this.workshop"
                 label="کارگاه"
@@ -53,35 +53,52 @@
                 label="نام  و نام خانوادگی"
                 v-if="this.personnel"
                 disabled="true"
+                v-show="false"
                 v-model="item.personnel = this.personnel"
+
+            ></v-text-field>
+            <v-text-field
+                label="نام  و نام خانوادگی"
+                v-if="this.searchByCode"
+                disabled="true"
+                v-model="personnelName"
 
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* کد ملی" v-model="this.national_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* کد ملی" v-model="national_code" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* کد پرسنلی " v-model="this.personnel_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* کد پرسنلی " v-model="personnel_code" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
+          <v-col cols="12" md="1">
+            <v-btn   color="green" class="justify-center white--text"  @click="searchUser"> سرچ کنبد</v-btn>
+          </v-col>
+
         </v-row>
         <v-row>
           <v-col cols="12" md="1">
             <v-switch
                 class="text-center "
                 v-model="item.insurance"
-                label= 'ّبیمه میشود'
+                label='ّبیمه میشود'
                 :disabled="!isEditing"
             ></v-switch>
           </v-col>
           <v-col cols="12" md="2">
-            <date v-model="item.insurance_add_date" label="تاریخ اضافه شدن به لیست بیمه" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.insurance_add_date" label="تاریخ اضافه شدن به لیست بیمه" :default="true"
+                  :disabled="!isEditing"/>
           </v-col>
 
           <v-col cols="12" md="3">
-            <v-text-field label="* عنوان شغلی " v-model="item.work_title" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* عنوان شغلی " v-model="item.work_title" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* محل خدمت  " v-model="item.job_location" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* محل خدمت  " v-model="item.job_location" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
@@ -94,19 +111,26 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* سابقه بیمه قبلی خارج این کارگاه " v-model="item.previous_insurance_history_out_workshop" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* سابقه بیمه قبلی خارج این کارگاه "
+                          v-model="item.previous_insurance_history_out_workshop" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* سابقه بیمه قبلی در این کارگاه  " v-model="item.previous_insurance_history_in_workshop" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* سابقه بیمه قبلی در این کارگاه  "
+                          v-model="item.previous_insurance_history_in_workshop" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* سابقه بیمه جاری در این کارگاه " v-model="item.current_insurance_history_in_workshop" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* سابقه بیمه جاری در این کارگاه " v-model="item.current_insurance_history_in_workshop"
+                          background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* مجموع سوابق بیمه ای  " v-model="item.insurance_history_totality" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* مجموع سوابق بیمه ای  " v-model="item.insurance_history_totality"
+                          background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="* سمت یا شغل (دارایی)" v-model="item.job_position" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* سمت یا شغل (دارایی)" v-model="item.job_position" background-color="white"
+                          :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2">
             <v-autocomplete
@@ -154,10 +178,6 @@
           </v-col>
 
 
-
-
-
-
         </v-row>
       </template>
     </m-form>
@@ -183,6 +203,7 @@ import date from "@/components/mcomponents/cleave/Date";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
+import {toString} from "lodash";
 
 
 export default {
@@ -245,8 +266,8 @@ export default {
         {name: 'هیات علمی', value: 'ma'},
         {name: 'سایر', value: 'ot'},
       ],
-
       personnel_code: null,
+      search_code: null,
       national_code: null,
       printUrl: 'payroll/workshop/personnel/all',
       isWorkshopConfirmed: false,
@@ -267,6 +288,8 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
+      searchByCode: false,
+      personnelName: null,
     };
   },
   computed: {
@@ -341,11 +364,12 @@ export default {
     },
   },
   mounted() {
-    if(this.personnel){
+    if (this.personnel) {
+      this.searchByCode = true
       this.setValues(this.personnel)
     }
 
-    if(!this.personnel){
+    if (!this.personnel) {
       this.request({
         url: this.endpoint(`payroll/personnel/`),
         method: "get",
@@ -361,8 +385,9 @@ export default {
           }
           console.log(this.personnels)
         }
-      })}
-    if(!this.workshop){
+      })
+    }
+    if (!this.workshop) {
       this.request({
         url: this.endpoint(`payroll/workshop/`),
         method: "get",
@@ -376,10 +401,40 @@ export default {
           }
           console.log(this.workshops)
         }
-      })}
+      })
+    }
   },
 
   methods: {
+    searchUser(code) {
+      if (this.personnel_code) {
+        this.request({
+          url: this.endpoint(`payroll/personnel/search/` + this.personnel_code + '/'),
+          method: "get",
+          success: data => {
+            this.searchByCode = true
+            this.personnel_code = data.personnel_code
+            this.national_code = data.national_code
+            this.personnel = data.id
+            this.personnelName = data.name + ' ' + data.last_name
+          }
+        })
+      } else if (this.national_code) {
+        this.request({
+          url: this.endpoint(`payroll/personnel/search/` + this.national_code + '/'),
+          method: "get",
+          success: data => {
+            this.searchByCode = true
+            this.personnel_code = data.personnel_code
+            this.national_code = data.national_code
+            this.personnel = data.id
+            this.personnelName = data.name + ' ' + data.last_name
+
+          }
+        })
+      }
+
+    },
     setValues(id) {
       this.request({
         url: this.endpoint(`payroll/personnel/` + id + '/'),
@@ -387,6 +442,8 @@ export default {
         success: data => {
           this.personnel_code = data.personnel_code
           this.national_code = data.national_code
+          this.personnelName = data.name + ' ' + data.last_name
+
         }
       })
     },
@@ -399,13 +456,9 @@ export default {
         },
       };
     },
-
-    unConfirm() {
-      this.$router.go()
-      this.notify(' ثبت اعضای خانواده رد شد', 'warning')
-    },
-  },
+  }
 }
+
 </script>
 
 <style scoped lang="scss"></style>
