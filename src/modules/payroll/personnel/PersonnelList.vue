@@ -44,15 +44,15 @@ export default {
         },
         {
           text: "ملیت",
-          value: "nationality",
+          value: "nationality_display",
         },
         {
           text: "جنسیت",
-          value: "gender",
+          value: "gender_display",
         },
         {
           text: "خدمت سربازی",
-          value: "military_service",
+          value: "military_service_display",
         },
         {
           text: "شماره شناسنامه",
@@ -65,7 +65,7 @@ export default {
         },
         {
           text: "وضعیت تاهل",
-          value: "marital_status",
+          value: "marital_status_display",
         },
         {
           text: "تعداد فرزندان",
@@ -125,7 +125,7 @@ export default {
         },
         {
           text: "مدرک تحصیلی",
-          value: "degree_of_education",
+          value: "degree_education_display",
         },
         {
           text: "رشته تحصیلی",
@@ -133,7 +133,7 @@ export default {
         },
         {
           text: "نوع دانشگاه",
-          value: "university_type",
+          value: "university_type_display",
         },
         {
           text: "نام دانشگاه",

@@ -1854,6 +1854,13 @@ export default {
             },
             {
               to: {
+                name: "WorkshopPersonnel",
+              },
+              title: "پرسنل کارگاه",
+
+            },
+            {
+              to: {
                 name: "WorkshopContract",
               },
               title: "قرارداد",
@@ -1862,7 +1869,7 @@ export default {
               to: {
                 name: "PersonnelFamily",
               },
-              title: "خانواده پزسنل",
+              title: "خانواده پرسنل",
             },
             {
               to: {

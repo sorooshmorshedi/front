@@ -1,5 +1,10 @@
 import WorkshopList from "@/modules/payroll/workshop/WorkshopList";
 import PersonnelList from "@/modules/payroll/personnel/PersonnelList";
+import WorkshopContractList from "@/modules/payroll/contract/ContractList";
+import WorkshopPersonnelList from "@/modules/payroll/workshop_personnel/WorkshopPersonnelList";
+import ContractRowList from "@/modules/payroll/contract_row/ContractRowList";
+import PersonnelFamilyList from "@/modules/payroll/personnel_family/PersonnelFamilyList";
+import AbsenceList from "@/modules/payroll/absence/AbsenceList";
 import WorkshopForm from "@/modules/payroll/workshop/WorkshopForm";
 import PersonnelForm from "@/modules/payroll/personnel/PersonnelForm";
 import ContractRowForm from "@/modules/payroll/contract_row/ContractRowForm";
@@ -69,8 +74,13 @@ export default [
                 component: ContractRowForm,
             },
         ]
-
     },
+    {
+        name: 'ContractRowList',
+        path: 'contract_row/list',
+        component: ContractRowList,
+    },
+
     {
         name: 'PersonnelFamily',
         path: 'personnel_family',
@@ -83,8 +93,13 @@ export default [
                 component: PersonnelFamilyForm,
             },
         ]
-
     },
+    {
+        name: 'PersonnelFamilyList',
+        path: 'personnel_family/list',
+        component: PersonnelFamilyList,
+    },
+
     {
         name: 'WorkshopContract',
         path: 'workshop_contract',
@@ -97,8 +112,13 @@ export default [
                 component: WorkshopContractForm,
             },
         ]
-
     },
+    {
+        name: 'WorkshopContractList',
+        path: 'workshop_contract/list',
+        component: WorkshopContractList,
+    },
+
     {
         name: 'WorkshopPersonnel',
         path: 'workshop_personnel',
@@ -111,7 +131,11 @@ export default [
                 component: WorkshopPersonnelForm,
             },
         ]
-
+    },
+    {
+        name: 'WorkshopPersonnelList',
+        path: 'workshop_personnel/list',
+        component: WorkshopPersonnelList,
     },
     {
         name: 'Absence',
@@ -125,8 +149,13 @@ export default [
                 component: AbsenceForm,
             },
         ]
-
     },
+    {
+        name: 'AbsenceList',
+        path: 'absence/list',
+        component: AbsenceList,
+    },
+
     {
         name: 'HRLetter',
         path: 'hr_letter',

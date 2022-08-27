@@ -50,6 +50,9 @@
       <v-btn class="blue white--text mt-6 ml-2 float-left"
              v-if=" item.id" @click="addContractRow(item)">ثبت پیمان
       </v-btn>
+      <v-btn class="primary white--text mt-6 ml-2 float-left"
+             v-if=" item.id" @click="addPersonnel(item)">ثبت پرسنل
+      </v-btn>
     </m-form>
   </div>
 
@@ -164,6 +167,9 @@ export default {
     },
     addContractRow(item) {
       this.$router.push('/panel/contract_row' + '?workshop=' + item.id)
+    },
+    addPersonnel(item) {
+      this.$router.push('/panel/workshop_personnel' + '?workshop=' + item.id)
     },
 
     unConfirm() {

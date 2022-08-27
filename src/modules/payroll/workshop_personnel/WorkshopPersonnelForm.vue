@@ -17,7 +17,7 @@
     >
 
       <template>
-        <v-row>
+        <v-row class="mt-3">
           <v-col cols="12" md="2">
             <v-autocomplete
                 v-if="!this.workshop"
@@ -32,12 +32,19 @@
                 label="کارگاه"
                 v-if="this.workshop"
                 disabled="true"
-                v-model="item.personnel = this.personnel"
-
+                v-show="false"
+                v-model="item.workshop = this.workshop"
             ></v-text-field>
+            <v-text-field
+                label="کارگاه"
+                v-if="this.workshop"
+                disabled="true"
+                v-model="this.workshop_name "
+            ></v-text-field>
+
           </v-col>
 
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 v-if="!this.personnel"
                 label="نام  و نام خانوادگی"
@@ -65,20 +72,23 @@
 
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="3">
-            <v-text-field label="* کد ملی" v-model="national_code" background-color="white"
-                          :disabled="!isEditing"/>
+          <v-col cols="12" md="3"  @click='nationalDisplaySet(item)'>
+            <v-text-field label="* کد ملی"  v-model="national_code" background-color="white"
+                          :disabled="!isEditing || !national_code_dis || personnel"/>
           </v-col>
-          <v-col cols="12" md="3">
-            <v-text-field label="* کد پرسنلی " v-model="personnel_code" background-color="white"
-                          :disabled="!isEditing"/>
+          <v-col cols="12" md="3" @click='personnelDisplaySet(item)'>
+            <v-text-field label="* کد پرسنلی "  v-model="personnel_code" background-color="white"
+                          :disabled="!isEditing || !personnel_code_dis || personnel"/>
           </v-col>
           <v-col cols="12" md="1">
-            <v-btn   color="green" class="justify-center white--text"  @click="searchUser"> سرچ کنبد</v-btn>
+            <v-btn v-if="!personnel"  color="red" class="justify-center white--text"  @click="setNull"> خالی کردن</v-btn>
+          </v-col>          <v-col cols="12" md="1">
+            <v-btn v-if="!personnel"  color="green" class="justify-center white--text"  @click="searchUser"> سرچ کنبد</v-btn>
           </v-col>
 
         </v-row>
-        <v-row>
+
+        <v-row class="mt-16">
           <v-col cols="12" md="1">
             <v-switch
                 class="text-center "
@@ -269,6 +279,8 @@ export default {
       personnel_code: null,
       search_code: null,
       national_code: null,
+      national_code_dis: true,
+      personnel_code_dis: true,
       printUrl: 'payroll/workshop/personnel/all',
       isWorkshopConfirmed: false,
       baseUrl: "payroll/workshop/personnel",
@@ -290,6 +302,9 @@ export default {
       performClearForm: true,
       searchByCode: false,
       personnelName: null,
+      workshop_name: null,
+      selected: false,
+      cleared: false,
     };
   },
   computed: {
@@ -395,11 +410,20 @@ export default {
           console.log(data);
           for (let t in data) {
             this.workshops.push({
-              'name': data[t].name,
+              'name': data[t].name + ' ' + data[t].code,
               'id': data[t].id,
             })
           }
           console.log(this.workshops)
+        }
+      })
+    }
+    if (this.workshop) {
+      this.request({
+        url: this.endpoint(`payroll/workshop/` + this.workshop + '/'),
+        method: "get",
+        success: data => {
+          this.workshop_name = data.name + ' ' + data.code
         }
       })
     }
@@ -443,7 +467,9 @@ export default {
           this.personnel_code = data.personnel_code
           this.national_code = data.national_code
           this.personnelName = data.name + ' ' + data.last_name
-
+          this.personnel_code_dis = false
+          this.national_code_dis = false
+          this.selected = true
         }
       })
     },
@@ -455,6 +481,30 @@ export default {
           id: item.id,
         },
       };
+    },
+    personnelDisplaySet(item) {
+      if(!item.id && !this.personnel && !this.selected) {
+        this.national_code_dis = false
+        this.personnel_code_dis = true
+        this.national_code = null
+      }
+    },
+    setNull(item) {
+      if (!item.id && !this.personnel && !this.selected) {
+        this.national_code_dis = true
+        this.personnel_code_dis = true
+        this.national_code = null
+        this.personnel_code = null
+
+      }
+    },
+    nationalDisplaySet(item) {
+      if(!item.id && !this.personnel && !this.selected) {
+        console.log(this.personnel)
+        this.personnel_code_dis = false
+        this.national_code_dis = true
+        this.personnel_code = null
+      }
     },
   }
 }

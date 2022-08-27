@@ -3,7 +3,7 @@
     <m-form
         title="تعریف اعضای خانواده"
         :showList="false"
-        :listRoute="{name:'ContractRowList'}"
+        :listRoute="{name:'PersonnelFamilyList'}"
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
         :canDelete="false"
@@ -17,13 +17,14 @@
     >
 
       <template>
-        <v-row>
+        <v-row class="mt-1">
           <v-col cols="12" md="4">
             <v-autocomplete
                 v-if="!this.personnel"
                 label="پرسنل"
                 :items="personnels"
                 v-model="item.personnel"
+                @change="setFilter(item.personnel)"
                 item-text="name"
                 item-value="id"
                 :disabled="!isEditing"
@@ -32,12 +33,19 @@
                 label="پرسنل"
                 v-if="this.personnel"
                 disabled="true"
+                v-show="false"
                 v-model="item.personnel = this.personnel"
-
             ></v-text-field>
+            <v-text-field
+                label="پرسنل"
+                v-if="this.personnel"
+                disabled="true"
+                v-model="this.personnel_name"
+            ></v-text-field>
+
           </v-col>
         </v-row>
-        <v-row>
+        <v-row class="mt-15">
           <v-col cols="12" md="4">
             <v-text-field label="* نام  " v-model="item.name" background-color="white" :disabled="!isEditing"/>
           </v-col>
@@ -102,15 +110,23 @@
                 :disabled="!isEditing"
             />
           </v-col>
-
-
-
-
-
-
         </v-row>
       </template>
     </m-form>
+    <template v-if="this.personnel || item.personnel && !slug">
+      <v-card class="mt-8">
+        <v-card-title> خانواده {{personnel_name}} </v-card-title>
+        <v-card-text>
+          <m-datatable :headers="headers" :apiUrl="printUrl" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
+                       ref="familyDatatable">
+            <template #item.detail="{ item }">
+              <detail-link :to="to(item)" />
+            </template>
+
+          </m-datatable>
+        </v-card-text>
+      </v-card>
+    </template>
   </div>
 
 </template>
@@ -131,14 +147,16 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 
 
+
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
+import PersonnelFamilyList from "@/modules/payroll/personnel_family/PersonnelFamilyList";
 
 
 export default {
   name: "ContractRowFrom",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+  components: {PersonnelFamilyList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
     id: {},
   },
@@ -188,13 +206,18 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
+      personnel_name: null,
+      personnel_filter: null,
+      filters:{},
+      slug: this.$route.params.id,
+
     };
   },
   computed: {
     headers() {
       return [
         {
-          text: " پرسنل",
+          text: "پرسنل",
           value: "personnel",
         },
         {
@@ -215,29 +238,35 @@ export default {
         },
         {
           text: "نسبت",
-          value: "relative",
+          value: "relative_display",
         },
         {
           text: "وضعیت تاهل",
-          value: "marital_status",
+          value: "marital_status_display",
         },
         {
           text: "خدمت سربازی",
-          value: "military_service",
+          value: "military_service_display",
         },
-
+        {
+          text: "خدمت سربازی",
+          value: "military_service_display",
+        },
         {
           text: "وضعیت تحصیل",
-          value: "study_status",
+          value: "study_status_display",
         },
         {
           text: "وضعیت جسمی",
-          value: "physical_condition",
+          value: "physical_condition_display",
         },
+
       ];
+
     },
   },
   mounted() {
+    console.log(this.slug)
     if(!this.personnel){
       this.request({
         url: this.endpoint(`payroll/personnel/`),
@@ -253,8 +282,16 @@ export default {
           console.log(this.personnels)
         }
       })}
+    if(this.personnel){
+      this.filters['personnel'] = this.personnel
+      this.request({
+        url: this.endpoint(`payroll/personnel/` + this.personnel + '/'),
+        method: "get",
+        success: data => {
+          this.personnel_name = data.name + ' ' + data.last_name
+        }
+      })}
   },
-
   methods: {
     to(item) {
       return {
@@ -269,6 +306,11 @@ export default {
       this.$router.go()
       this.notify(' ثبت اعضای خانواده رد شد', 'warning')
     },
+    setFilter(id) {
+      this.filters['personnel'] = id
+      this.$refs.familyDatatable.getDataFromApi()
+    },
+
   },
 }
 </script>

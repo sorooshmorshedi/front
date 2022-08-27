@@ -65,23 +65,23 @@
             v-if="item.entitlement_leave_type != 'h'"
 
         >
-          <v-col cols="9" md="3">
+          <v-col cols="9" md="4">
             <date v-model="item.from_date" label="* از تاریخ" :default="true" :disabled="!isEditing"/>
           </v-col>
-          <v-col cols="9" md="3">
+          <v-col cols="9" md="4">
             <date v-model="item.to_date" label="* تا تاریخ " :default="true" :disabled="!isEditing"/>
           </v-col>
-          <v-col cols="9" md="3"
+          <v-col cols="9" md="4"
                  v-if="item.leave_type == 'i'"
           >
-            <v-text-field label="علت حادثه" v-model="item.explanation" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="علت حادثه" v-model="item.cause_of_incident" background-color="white" :disabled="!isEditing"/>
           </v-col>
         </v-row>
         <v-row
-            v-if="item.entitlement_leave_type == 'h'"
+            v-if="item.entitlement_leave_type == 'h' && item.leave_type == 'e' "
         >
           <v-col cols="12" md="4">
-            <date v-model="item.date" label="* تا تاریخ " :default="true" :disabled="!isEditing"/>
+            <date v-model="item.date" label="* تاریخ " :default="true" :disabled="!isEditing"/>
           </v-col>
 
           <v-col
@@ -97,6 +97,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
+                    :disabled="!isEditing"
                     v-model="item.from_hour"
                     label="از ساعت"
                     prepend-icon="mdi-clock-time-four-outline"
@@ -113,7 +114,7 @@
                 <v-spacer></v-spacer>
                 <v-btn
                     text
-                    color="primary"
+                    color="secondary"
                     @click="modal2 = false"
                 >
                   Cancel
@@ -141,6 +142,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
+                    :disabled="!isEditing"
                     v-model="item.to_hour"
                     label="تا ساعت"
                     prepend-icon="mdi-clock-time-four-outline"
@@ -171,6 +173,15 @@
                 </v-btn>
               </v-time-picker>
             </v-dialog>
+          </v-col>
+
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-text-field label="توضیحات" v-model="item.explanation" background-color="white" :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="2" v-if="item.id">
+            <v-text-field label="مدت مرخصی به روز" v-model="item.time_period" background-color="white" :disabled="!isEditing"/>
           </v-col>
 
         </v-row>
@@ -250,23 +261,15 @@ export default {
       return [
         {
           text: " پرسنل در کارگاه",
-          value: "workshp_personnel",
+          value: "workshop_personnel",
         },
         {
-          text: "شماره قرارداد",
-          value: "code",
+          text: "نوع",
+          value: "leave_type_display",
         },
         {
-          text: "تاریخ شروع قرارداد",
-          value: "contract_from_date",
-        },
-        {
-          text: "تاریخ پایان قرارداد",
-          value: "contract_to_date",
-        },
-        {
-          text: "تاریخ ترک کار",
-          value: "quit_job_date",
+          text: "مدت به روز",
+          value: "time_period",
         },
       ];
     },

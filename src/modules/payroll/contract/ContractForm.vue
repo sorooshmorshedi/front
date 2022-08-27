@@ -3,7 +3,7 @@
     <m-form
         title="ثبت قرارداد در کارگاه"
         :showList="false"
-        :listRoute="{name:'ContractRowList'}"
+        :listRoute="{name:'WorkshopContractList'}"
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
         :canDelete="false"
@@ -112,7 +112,7 @@ export default {
       return [
         {
           text: " پرسنل در کارگاه",
-          value: "workshp_personnel",
+          value: "workshop_personnel",
         },
         {
           text: "شماره قرارداد",

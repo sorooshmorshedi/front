@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>لیست قرارداد ها</v-card-title>
+    <v-card-title>لیست مرخصی ها</v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
@@ -15,11 +15,11 @@
 
 <script>
 export default {
-  name: "WorkshopContractList",
+  name: "AbsenceList",
   props: {},
   data() {
     return {
-      url: "payroll/contract/all",
+      url: "payroll/absence/all",
       filters: {},
     };
   },
@@ -31,29 +31,20 @@ export default {
           value: "workshop_personnel",
         },
         {
-          text: "شماره قرارداد",
-          value: "code",
+          text: "نوع",
+          value: "leave_type_display",
         },
         {
-          text: "تاریخ شروع قرارداد",
-          value: "contract_from_date",
-        },
-        {
-          text: "تاریخ پایان قرارداد",
-          value: "contract_to_date",
-        },
-        {
-          text: "تاریخ ترک کار",
-          value: "quit_job_date",
+          text: "مدت به روز",
+          value: "time_period",
         },
       ];
-
     },
   },
   methods: {
     to(item) {
       return {
-        name: "WorkshopContractDetail",
+        name: "AbsenceDetail",
         params: {
           id: item.id,
         },
