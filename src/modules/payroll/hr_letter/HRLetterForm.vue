@@ -19,23 +19,6 @@
       <template>
 
         <v-row>
-          <v-col cols="12" md="3" v-if="item.is_template != 't'">
-            <v-autocomplete
-                v-if="!this.contract"
-                label=" قرارداد در کارگاه"
-                :items="contracts"
-                v-model="item.contract"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-            <v-text-field
-                label="قرارداد در کارگاه"
-                v-if="this.contract"
-                disabled="true"
-                v-model="item.contract = this.contract"
-            ></v-text-field>
-          </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
                 v-if="!this.contract"
@@ -48,6 +31,25 @@
                 @change="show(item.is_template)"
             />
           </v-col>
+
+          <v-col cols="12" md="3" v-if="item.is_template != 't'">
+            <v-autocomplete
+                v-if="!this.contract"
+                label=" قرارداد در کارگاه"
+                :items="contracts"
+                v-model="item.contract"
+                item-text="name"
+                item-value="id"
+                @change="show(item.contract)"
+                :disabled="!isEditing"
+            />
+            <v-text-field
+                label="قرارداد در کارگاه"
+                v-if="this.contract"
+                disabled="true"
+                v-model="item.contract = this.contract"
+            ></v-text-field>
+          </v-col>
           <v-col cols="12" md="3" >
             <v-text-field
                 v-if="item.is_template == 't'"
@@ -56,14 +58,16 @@
             ></v-text-field>
 
           </v-col>
+
         </v-row>
+
 
 
         <v-row class="mt-10">
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">حقوق روزانه :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.hoghooghe_roozane_amount"
@@ -71,13 +75,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.hoghooghe_roozane_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -86,7 +90,7 @@
                 v-model="item.hoghooghe_roozane_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -96,18 +100,27 @@
                 v-model="item.hoghooghe_roozane_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.hoghooghe_roozane_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">پایه سنوات :</v-card-text>
+            <v-card-text class="text-h6">پایه سنوات روزانه:</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.paye_sanavat_amount"
@@ -115,13 +128,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.paye_sanavat_nature"
                 item-text="name"
-                item-value="id"
+                value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -130,7 +143,7 @@
                 v-model="item.paye_sanavat_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -140,9 +153,18 @@
                 v-model="item.paye_sanavat_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.paye_sanavat_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -152,7 +174,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">حق سرپرستی :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.haghe_sarparasti_amount"
@@ -160,13 +182,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.haghe_sarparasti_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -175,7 +197,7 @@
                 v-model="item.haghe_sarparasti_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -185,9 +207,18 @@
                 v-model="item.haghe_sarparasti_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.haghe_sarparasti_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -196,7 +227,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">حق مدیریت  :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.haghe_modiriyat_amount"
@@ -204,13 +235,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.haghe_modiriyat_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -219,7 +250,7 @@
                 v-model="item.haghe_modiriyat_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -229,10 +260,20 @@
                 v-model="item.haghe_modiriyat_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.haghe_modiriyat_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
 
@@ -241,7 +282,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">حق جذب  :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.haghe_jazb_amount"
@@ -249,13 +290,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.haghe_jazb_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -264,7 +305,7 @@
                 v-model="item.haghe_jazb_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -274,17 +315,27 @@
                 v-model="item.haghe_jazb_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.haghe_jazb_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">فوق العاده شغل  :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.fogholade_shoghl_amount"
@@ -292,13 +343,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.fogholade_shoghl_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -307,7 +358,7 @@
                 v-model="item.fogholade_shoghl_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -317,53 +368,73 @@
                 v-model="item.fogholade_shoghl_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.fogholade_shoghl_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">حق شیفت  :</v-card-text>
+            <v-card-text class="text-h6">حق تحصیلات  :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
-                v-model="item.haghe_shift_amount"
+                v-model="item.haghe_tahsilat_amount"
                 background-color="white"
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
-                v-model="item.haghe_shift_nature"
+                v-model="item.haghe_tahsilat_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="2">
             <v-checkbox
-                v-model="item.haghe_shift_use_insurance"
+                v-model="item.haghe_tahsilat_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
 
           <v-col cols="12" md="2">
             <v-checkbox
-                v-model="item.haghe_shift_use_tax"
+                v-model="item.haghe_tahsilat_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.haghe_tahsilat_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
 
@@ -372,7 +443,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">فوق العاده سختی کار  :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.fogholade_sakhti_kar_amount"
@@ -380,13 +451,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.fogholade_sakhti_kar_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -395,7 +466,7 @@
                 v-model="item.fogholade_sakhti_kar_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -405,105 +476,28 @@
                 v-model="item.fogholade_sakhti_kar_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.fogholade_sakhti_kar_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
 
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">فوق العاده نوبت کاری  :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.fogholade_nobat_kar_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.fogholade_nobat_kar_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.fogholade_nobat_kar_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.fogholade_nobat_kar_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">فوق العاده شب کاری  :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.fogholade_shab_kari_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.fogholade_shab_kari_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.fogholade_shab_kari_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.fogholade_shab_kari_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">حق آنکال :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.haghe_ankal_amount"
@@ -511,13 +505,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.haghe_ankal_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -526,7 +520,7 @@
                 v-model="item.haghe_ankal_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -536,9 +530,18 @@
                 v-model="item.haghe_ankal_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.haghe_ankal_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -547,7 +550,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">فوق العاده بدی هوا :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.fogholade_badi_abohava_amount"
@@ -555,13 +558,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.fogholade_badi_abohava_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -570,7 +573,7 @@
                 v-model="item.fogholade_badi_abohava_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -580,17 +583,27 @@
                 v-model="item.fogholade_badi_abohava_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.fogholade_badi_abohava_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">محرومیت از تسحیلات :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.mahroomiat_tashilat_zendegi_amount"
@@ -598,13 +611,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.mahroomiat_tashilat_zendegi_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -613,7 +626,7 @@
                 v-model="item.mahroomiat_tashilat_zendegi_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -623,17 +636,27 @@
                 v-model="item.mahroomiat_tashilat_zendegi_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.mahroomiat_tashilat_zendegi_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">فوق العاده محل خدمت :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.fogholade_mahal_khedmat_amount"
@@ -641,13 +664,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.fogholade_mahal_khedmat_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -656,7 +679,7 @@
                 v-model="item.fogholade_mahal_khedmat_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -666,17 +689,27 @@
                 v-model="item.fogholade_mahal_khedmat_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.fogholade_mahal_khedmat_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">فوق العاده محیط کار :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.fogholade_sharayet_mohit_kar_amount"
@@ -684,13 +717,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.fogholade_sharayet_mohit_kar_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -699,7 +732,7 @@
                 v-model="item.fogholade_sharayet_mohit_kar_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -709,9 +742,18 @@
                 v-model="item.fogholade_sharayet_mohit_kar_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.fogholade_sharayet_mohit_kar_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -719,7 +761,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">حق مسکن :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.haghe_maskan_amount"
@@ -727,13 +769,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.haghe_maskan_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -742,7 +784,7 @@
                 v-model="item.haghe_maskan_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -752,17 +794,27 @@
                 v-model="item.haghe_maskan_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.haghe_maskan_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">ایاب و ذهاب :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.ayabo_zahab_amount"
@@ -770,13 +822,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.ayabo_zahab_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -785,7 +837,7 @@
                 v-model="item.ayabo_zahab_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -795,9 +847,18 @@
                 v-model="item.ayabo_zahab_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.ayabo_zahab_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -806,7 +867,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">بن خار و بار :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.bon_kharo_bar_amount"
@@ -814,13 +875,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.bon_kharo_bar_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -829,7 +890,7 @@
                 v-model="item.bon_kharo_bar_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -839,10 +900,20 @@
                 v-model="item.bon_kharo_bar_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.bon_kharo_bar_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
 
@@ -850,7 +921,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">یارانه غذا :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.yarane_ghaza_amount"
@@ -858,13 +929,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.yarane_ghaza_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -873,7 +944,7 @@
                 v-model="item.yarane_ghaza_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -883,17 +954,27 @@
                 v-model="item.yarane_ghaza_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.yarane_ghaza_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">حق شیر :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.haghe_shir_amount"
@@ -901,13 +982,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.haghe_shir_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -916,7 +997,7 @@
                 v-model="item.haghe_shir_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -926,10 +1007,20 @@
                 v-model="item.haghe_shir_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.haghe_shir_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
 
@@ -937,7 +1028,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">حق تاهل :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.haghe_taahol_amount"
@@ -945,13 +1036,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.haghe_taahol_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -960,7 +1051,7 @@
                 v-model="item.haghe_taahol_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -970,312 +1061,18 @@
                 v-model="item.haghe_taahol_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
-          </v-col>
-        </v-row>
-
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">پورسانت فروش :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.poorsant_foroosh_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.poorsant_foroosh_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
           </v-col>
           <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.poorsant_foroosh_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
+            <v-switch
+                v-model="item.haghe_taahol_base"
+                label="مزد پایه"
+                color="success"
+                value= true
                 hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.poorsant_foroosh_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">افزایش بهره وری تولید :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.fogholade_afzayesh_bahrevari_tolid_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.fogholade_afzayesh_bahrevari_tolid_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.fogholade_afzayesh_bahrevari_tolid_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.fogholade_afzayesh_bahrevari_tolid_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">فوق العاده تولید :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.fogholade_tolid_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.fogholade_tolid_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.fogholade_tolid_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.fogholade_tolid_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">اضافه کاری :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.ezafe_kari_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.ezafe_kari_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.ezafe_kari_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.ezafe_kari_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">جمعه کاری :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.jome_kari_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.jome_kari_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.jome_kari_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.jome_kari_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="style=text-size:20px;">مزایای غیر نقدی پرداختی به کارگران:</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.mazaya_gheyr_naqdi_pardakhti_kargaran_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.mazaya_gheyr_naqdi_pardakhti_kargaran_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.mazaya_gheyr_naqdi_pardakhti_kargaran_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.mazaya_gheyr_naqdi_pardakhti_kargaran_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">حق لوازم تحریر :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.haghe_lavazem_tahrir_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.haghe_lavazem_tahrir_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_lavazem_tahrir_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_lavazem_tahrir_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -1283,7 +1080,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">کمک هزینه مهدکودک :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.komakhazine_mahdekoodak_amount"
@@ -1291,13 +1088,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.komakhazine_mahdekoodak_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -1306,7 +1103,7 @@
                 v-model="item.komakhazine_mahdekoodak_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1316,9 +1113,18 @@
                 v-model="item.komakhazine_mahdekoodak_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.komakhazine_mahdekoodak_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -1327,7 +1133,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">کمک هزینه ورزش :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.komakhazine_varzesh_amount"
@@ -1335,13 +1141,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.komakhazine_varzesh_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -1350,7 +1156,7 @@
                 v-model="item.komakhazine_varzesh_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1360,9 +1166,18 @@
                 v-model="item.komakhazine_varzesh_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.komakhazine_varzesh_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -1370,7 +1185,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">کمک هزینه موبایل :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.komakhazine_mobile_amount"
@@ -1378,13 +1193,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.komakhazine_mobile_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -1393,7 +1208,7 @@
                 v-model="item.komakhazine_mobile_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1403,9 +1218,18 @@
                 v-model="item.komakhazine_mobile_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.komakhazine_mobile_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
 
@@ -1413,7 +1237,7 @@
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">حق اولاد :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <money
                 label="* مبلغ "
                 v-model="item.haghe_owlad_amount"
@@ -1421,13 +1245,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
                 v-model="item.haghe_owlad_nature"
                 item-text="name"
-                item-value="id"
+                item-value="value"
                 :disabled="!isEditing"
             />
           </v-col>
@@ -1436,7 +1260,7 @@
                 v-model="item.haghe_owlad_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1446,355 +1270,62 @@
                 v-model="item.haghe_owlad_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value="indigo"
+                value= true
                 hide-details
             ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.haghe_owlad_base"
+                label="مزد پایه"
+                color="success"
+                value= true
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
-
-        <v-row >
+        <v-row v-if="item.id" class="mt-10">
           <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">حق ماموریت :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.haghe_mamooriat_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.haghe_mamooriat_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_mamooriat_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
+            <v-card-text class="text-h6">مزد مبنا :</v-card-text>
           </v-col>
 
           <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_mamooriat_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
+            <money
+                label=" مزد مبنا روزانه "
+                v-model="item.daily_pay_base"
+                background-color="white"
+                disabled=true
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <money
+                label=" مزد مبنا ماهانه "
+                v-model="item.monthly_pay_base"
+                background-color="white"
+                disabled=true
+            />
           </v-col>
         </v-row>
-
-
-        <v-row >
+        <v-row v-if="item.id" >
           <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">ذخیره ایام مرخصی :</v-card-text>
+            <v-card-text class="text-h6">مزد مبنا ساعتی :</v-card-text>
           </v-col>
-          <v-col cols="12" md="3">
+
+          <v-col cols="12" md="2">
             <money
-                label="* مبلغ "
-                v-model="item.zakhire_ayam_morakhasi_amount"
+                label=" مزد مبنا ساعتی مدل روزانه "
+                v-model="item.day_hourly_pay_base"
                 background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.zakhire_ayam_morakhasi_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
+                disabled=true
             />
           </v-col>
           <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.zakhire_ayam_morakhasi_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.zakhire_ayam_morakhasi_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">حق سنوات :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
             <money
-                label="* مبلغ "
-                v-model="item.haghe_sanavat_amount"
+                label=" مزد مبنا ساعتی مدل ماهانه "
+                v-model="item.month_hourly_pay_base"
                 background-color="white"
-                :disabled="!isEditing"
+                disabled=true
             />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.haghe_sanavat_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_sanavat_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_sanavat_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">پاداش آخر سال :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.eydi_salane_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.eydi_salane_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.eydi_salane_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.eydi_salane_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">مسکن با اثاثیه :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.maskan_ba_asasiye_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.maskan_ba_asasiye_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.maskan_ba_asasiye_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.maskan_ba_asasiye_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">مسکن بدون اثاثیه :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.maskan_bi_asasiye_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.maskan_bi_asasiye_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.maskan_bi_asasiye_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.maskan_bi_asasiye_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">اتوموبیل با راننده  :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.otomobil_shakhsi_ba_ranande_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.otomobil_shakhsi_ba_ranande_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.otomobil_shakhsi_ba_ranande_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.otomobil_shakhsi_ba_ranande_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">اتوموبیل بدون راننده  :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="3">
-            <money
-                label="* مبلغ "
-                v-model="item.otomobil_shakhsi_bi_ranande_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.otomobil_shakhsi_bi_ranande_nature"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.otomobil_shakhsi_bi_ranande_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.otomobil_shakhsi_bi_ranande_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value="indigo"
-                hide-details
-            ></v-checkbox>
           </v-col>
         </v-row>
 
@@ -1897,7 +1428,7 @@ export default {
           console.log(data);
           for (let t in data) {
             this.contracts.push({
-              'name': data[t].personnel_name + ' ' + data[t].personnel_last_name + ' in ' + data[t].workshop_name,
+              'name': data[t].personnel_name + ' ' + data[t].personnel_last_name + ' در ' + data[t].workshop_name,
               'id': data[t].id,
             })
           }

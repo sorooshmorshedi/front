@@ -13,6 +13,8 @@ import WorkshopContractForm from "@/modules/payroll/contract/ContractForm";
 import WorkshopPersonnelForm from "@/modules/payroll/workshop_personnel/WorkshopPersonnelForm";
 import AbsenceForm from "@/modules/payroll/absence/AbsenceForm";
 import HRLetterForm from "@/modules/payroll/hr_letter/HRLetterForm";
+import MissionForm from "@/modules/payroll/mission/MissionForm";
+import PaymentForm from "@/modules/payroll/payment/PaymentForm";
 
 const Workshop = () => import( /* wepackChunkName: "workshop" */ "@/modules/payroll/workshop/WorkshopForm.vue")
 const Personnel = () => import( /* wepackChunkName: "personnel" */ "@/modules/payroll/personnel/PersonnelForm.vue")
@@ -22,6 +24,8 @@ const ContractRow = () => import( /* wepackChunkName: "contract_row" */ "@/modul
 const WorkshopContract = () => import( /* wepackChunkName: "contract" */ "@/modules/payroll/contract/ContractForm.vue")
 const Absence = () => import( /* wepackChunkName: "contract" */ "@/modules/payroll/absence/AbsenceForm.vue")
 const HRLetter = () => import( /* wepackChunkName: "hr_letter" */ "@/modules/payroll/hr_letter/HRLetterForm.vue")
+const Mission = () => import( /* wepackChunkName: "mission" */ "@/modules/payroll/mission/MissionForm.vue")
+const Payment = () => import( /* wepackChunkName: "payment" */ "@/modules/payroll/payment/PaymentForm.vue")
 
 export default [
     {
@@ -169,6 +173,26 @@ export default [
             },
         ]
 
+    },
+    {
+        name: 'Mission',
+        path: 'mission',
+        component: Mission,
+        props: true,
+        children : [
+            {
+                name: 'MissionDetail',
+                path: ':id',
+                component: MissionForm,
+            },
+        ]
+
+    },
+    {
+        name: 'Payment',
+        path: 'payment',
+        component: Payment,
+        props: true,
     },
 
 

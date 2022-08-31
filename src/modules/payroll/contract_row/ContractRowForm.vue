@@ -123,7 +123,7 @@ export default {
     return {
       STATUS_TYPE: [
         {name: ' فعال', value: 'a'},
-        {name: 'راکد', value: 'n'},
+        {name: 'غیر فعال', value: 'n'},
       ],
 
       printUrl: 'payroll/conractrow/all',
@@ -145,6 +145,7 @@ export default {
       performClearForm: true,
     };
   },
+
   computed: {
     headers() {
       return [
@@ -215,7 +216,6 @@ export default {
               'id': data[t].id,
             })
           }
-          console.log(this.tenders)
         }
       })}
   },

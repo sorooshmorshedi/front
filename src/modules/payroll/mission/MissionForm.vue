@@ -1,9 +1,9 @@
 <template>
   <div>
     <m-form
-        title="ثبت مرخصی یا غیبت"
+        title="ثبت ماموریت"
         :showList="false"
-        :listRoute="{name:'AbsenceList'}"
+        :listRoute="{name:'MissionList'}"
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
         :canDelete="false"
@@ -12,8 +12,7 @@
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
-        ref="AbsenceForm"
-
+        ref="MissionForm"
     >
 
       <template>
@@ -41,28 +40,17 @@
           <v-col cols="12" md="4">
             <v-autocomplete
                 label="نوع"
-                :items="ABSENCE_TYPES"
-                v-model="item.leave_type"
+                :items="MISSION_TYPES"
+                v-model="item.mission_type"
                 item-text="name"
                 item-value="value"
                 :disabled="!isEditing"
                 @change="setValues(item)"
             />
           </v-col>
-          <v-col cols="12" md="4">
-            <v-autocomplete
-                v-if="item.leave_type == 'e'"
-                label="نوع مرخصی استحقاقی"
-                :items="ENTITLEMENT_LEAVE_TYPES"
-                v-model="item.entitlement_leave_type"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
-          </v-col>
         </v-row>
         <v-row
-            v-if="item.entitlement_leave_type != 'h'"
+            v-if="item.mission_type == 'd'"
 
         >
           <v-col cols="9" md="4">
@@ -71,14 +59,9 @@
           <v-col cols="9" md="4">
             <date v-model="item.to_date" label="* تا تاریخ " :default="true" :disabled="!isEditing"/>
           </v-col>
-          <v-col cols="9" md="4"
-                 v-if="item.leave_type == 'i'"
-          >
-            <v-text-field label="علت حادثه" v-model="item.cause_of_incident" background-color="white" :disabled="!isEditing"/>
-          </v-col>
         </v-row>
         <v-row
-            v-if="item.entitlement_leave_type == 'h' && item.leave_type == 'e' "
+            v-if="item.mission_type == 'h'"
         >
           <v-col cols="12" md="4">
             <date v-model="item.date" label="* تاریخ " :default="true" :disabled="!isEditing"/>
@@ -176,8 +159,11 @@
           </v-col>
 
         </v-row>
-        <v-row>
-          <v-col cols="12" md="8">
+        <v-row v-if="item.mission_type">
+          <v-col cols="12" md="6" >
+            <v-text-field label="مکان" v-model="item.location" background-color="white" :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="6">
             <v-text-field label="توضیحات" v-model="item.explanation" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2" v-if="item.id">
@@ -213,7 +199,7 @@ import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 
 
 export default {
-  name: "AbsenceForm",
+  name: "MissionForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
@@ -221,13 +207,7 @@ export default {
   },
   data() {
     return {
-      ABSENCE_TYPES : [
-        {name: ' استحقاقی', value: 'e'},
-        {name: 'استعلاجی', value: 'i'},
-        {name: 'بدون حقوق', value: 'w'},
-        {name: 'غیبت', value: 'a'},
-      ],
-      ENTITLEMENT_LEAVE_TYPES : [
+      MISSION_TYPES : [
         {name: ' ساعتی', value: 'h'},
         {name: 'روزانه', value: 'd'},
 
@@ -235,12 +215,12 @@ export default {
       time: null,
       menu1: false,
       modal2: false,
-      printUrl: 'payroll/absence/all',
+      printUrl: 'payroll/mission/all',
       isWorkshopConfirmed: false,
-      baseUrl: "payroll/absence",
+      baseUrl: "payroll/mission",
       type: null,
       entitlement: null,
-      permissionBasename: "absence",
+      permissionBasename: "mission",
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
@@ -301,7 +281,7 @@ export default {
 
     to(item) {
       return {
-        name: 'WorkshopContractDetail',
+        name: 'MissionDetail',
         params: {
           id: item.id,
         },
@@ -310,7 +290,7 @@ export default {
 
     unConfirm() {
       this.$router.go()
-      this.notify(' ثبت قرارداد رد شد', 'warning')
+      this.notify(' ثبت ماموریت رد شد', 'warning')
     },
   },
 }

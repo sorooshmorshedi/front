@@ -72,18 +72,19 @@
 
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="3"  @click='nationalDisplaySet(item)'>
-            <v-text-field label="* کد ملی"  v-model="national_code" background-color="white"
+          <v-col cols="12" md="3" @click='nationalDisplaySet(item)'>
+            <v-text-field label="* کد ملی" v-model="national_code" background-color="white"
                           :disabled="!isEditing || !national_code_dis || personnel"/>
           </v-col>
           <v-col cols="12" md="3" @click='personnelDisplaySet(item)'>
-            <v-text-field label="* کد پرسنلی "  v-model="personnel_code" background-color="white"
+            <v-text-field label="* کد پرسنلی " v-model="personnel_code" background-color="white"
                           :disabled="!isEditing || !personnel_code_dis || personnel"/>
           </v-col>
           <v-col cols="12" md="1">
-            <v-btn v-if="!personnel"  color="red" class="justify-center white--text"  @click="setNull"> خالی کردن</v-btn>
-          </v-col>          <v-col cols="12" md="1">
-            <v-btn v-if="!personnel"  color="green" class="justify-center white--text"  @click="searchUser"> سرچ کنبد</v-btn>
+            <v-btn v-if="!personnel" color="red" class="justify-center white--text" @click="setNull"> خالی کردن</v-btn>
+          </v-col>
+          <v-col cols="12" md="1">
+            <v-btn v-if="!personnel" color="green" class="justify-center white--text" @click="searchUser"> سرچ کنبد</v-btn>
           </v-col>
 
         </v-row>
@@ -483,7 +484,7 @@ export default {
       };
     },
     personnelDisplaySet(item) {
-      if(!item.id && !this.personnel && !this.selected) {
+      if (!item.id && !this.personnel && !this.selected) {
         this.national_code_dis = false
         this.personnel_code_dis = true
         this.national_code = null
@@ -499,7 +500,7 @@ export default {
       }
     },
     nationalDisplaySet(item) {
-      if(!item.id && !this.personnel && !this.selected) {
+      if (!item.id && !this.personnel && !this.selected) {
         console.log(this.personnel)
         this.personnel_code_dis = false
         this.national_code_dis = true
