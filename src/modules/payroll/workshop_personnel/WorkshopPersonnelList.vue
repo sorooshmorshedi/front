@@ -28,19 +28,11 @@ export default {
       return [
         {
           text: " کارگاه",
-          value: "workshop",
+          value: "workshop_name",
         },
         {
           text: " پرسنل",
-          value: "personnel",
-        },
-        {
-          text: "ّبیمه میشود",
-          value: "insurance",
-        },
-        {
-          text: "تاریخ اضافه شدن به لیست بیمه",
-          value: "insurance_add_date",
+          value: "personnel_name",
         },
         {
           text: "عنوان شغلی",
@@ -73,11 +65,11 @@ export default {
         },
         {
           text: "سمت",
-          value: "job_position_display",
+          value: "job_position",
         },
         {
           text: "رسته شغلی",
-          value: "job_group",
+          value: "job_group_display",
         },
         {
           text: "نوع استخدام",
@@ -91,6 +83,11 @@ export default {
           text: "وضعیت کارمند",
           value: "employee_status_display",
         },
+        {
+          text: "تاریخ اضافه شدن به لیست بیمه",
+          value: "insurance_add_date",
+        },
+
       ];
 
     },
@@ -98,7 +95,7 @@ export default {
   methods: {
     to(item) {
       return {
-        name: "PersonnelFamilyDetail",
+        name: "WorkshopPersonnelDetail",
         params: {
           id: item.id,
         },

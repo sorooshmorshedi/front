@@ -2,7 +2,7 @@
   <v-card class="pa-3 ma-4 m">
     <v-card-title>محاسبه حقوق</v-card-title>
     <v-row>
-      <v-col cols="12" md="3" >
+      <v-col cols="12" md="3">
         <v-autocomplete
             v-if="!this.workshop"
             label="کارگاه"
@@ -30,7 +30,7 @@
         <v-text-field
             label="سال"
             v-model="this.serverNow.format('jYYYY') "
-            disabled = true
+            disabled=true
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="3">
@@ -42,49 +42,131 @@
             item-value="value"
         />
       </v-col>
-      <v-col cols="12" md="3" class="pr-16">
-        <v-btn  color="green" class="justify-center white--text" @click="getList">لیست حقوق</v-btn>
+      <v-col cols="12" md="3" class="pr-16" v-if="!list_generated">
+        <v-btn color="green" class="justify-center white--text" @click="getList">لیست پرسنل فعال</v-btn>
       </v-col>
     </v-row>
-    <v-row v-if="list_generated" v-for="person in payList">
-      <v-col cols="12" md="1">
-        {{ person.id }}
-      </v-col>
-      <v-col cols="12" md="2">
-        {{ person.name}}
-      </v-col>
-      <v-col cols="12" md="1">
-        <v-text-field
-            disabled="true"
-            label=""
-            v-model="person.normal_work"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" md="1">
-        <v-text-field
-            disabled="true"
-            label="اضافه کاری"
-            v-model="person.real_work"
-        ></v-text-field>
+    <v-row v-if="list_generated">
+      <v-col cols="12" md="12">
+        <v-simple-table class="mt-10">
+          <template v-slot:default>
+            <thead class="style: blue lighten-4">
+            <tr>
+              <th class="text-center">
+                ردیف
+              </th>
+              <th class="text-center">
+                نام و نام خانوادگی
+              </th>
+              <th class="text-center">
+                کارکرد عادی
+              </th>
+              <th class="text-center">
+                کارکرد واقعی
+              </th>
+              <th class="text-center">
+                اضافه کاری (ساعت)
+              </th>
+              <th class="text-center">
+                تعطیل کاری (ساعت)
+              </th>
+              <th class="text-center">
+                کسر کار (ساعت)
+              </th>
+              <th class="text-center">
+                شب کاری (ساعت)
+              </th>
+              <th class="text-center">
+                نوبت کاری صبح و عصر (روز)
+              </th>
+              <th class="text-center">
+                نوبت کاری صبح و شب (روز)
+              </th>
+              <th class="text-center">
+                نوبت کاری عصر و شب (روز)
+              </th>
+              <th class="text-center">
+                 نوبت کاری صبح و عصر و شب  (روز)
+              </th>
+              <th class="text-center">
+               سایر اضافات (ریال)
+              </th>
 
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="person in payList" :key="person.id">
+              <td> * </td>
+              <td>{{ person.personnel_name }}</td>
+              <td>{{ person.normal_worktime }}</td>
+              <td>{{ person.real_worktime }}</td>
+              <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['ezafe_kari'] "
+                ></v-text-field>
+              </td>
+              <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['tatil_kari'] "
+                ></v-text-field>
+              </td>
+              <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['kasre_kar'] "
+                ></v-text-field>
+              </td>
+              <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['shab_kari'] "
+                ></v-text-field>
+              </td>
+              <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['sob_asr'] "
+                ></v-text-field>
+              </td>
+              <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['sob_shab'] "
+                ></v-text-field>
+              </td>
+              <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['asr_shab'] "
+                ></v-text-field>
+              </td>
+              <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['sob_asr_shab'] "
+                ></v-text-field>
+              </td>
+              <td>
+                <money v-model="items[person.id]['sayer_ezafat'] "
+                ></money>
+              </td>
+            </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
       </v-col>
-      <v-col cols="12" md="2">
-        <v-text-field
-            label="اضافه کاری"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" md="2">
-        <v-text-field
-            label="تعطیل کاری"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" md="2">
-        <v-text-field
-            label="کسر کار"
-        ></v-text-field>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-btn @click="calculatePayment" color="green lighten-2" class="float-left">محاسبه حقوق و دستمزد</v-btn>
+
       </v-col>
     </v-row>
   </v-card>
+
 
 </template>
 
@@ -117,6 +199,7 @@ export default {
   },
   data() {
     return {
+      items: [],
       MONTHS: [
         {name: ' فروردین', value: 'fa'},
         {name: ' اردیبهشت', value: 'or'},
@@ -203,18 +286,43 @@ export default {
       console.log(item)
     },
 
-    getList(){
+    getList() {
       this.request({
         url: this.endpoint(`payroll/payment/` + this.serverNow.format('jYYYY') + '/' + this.search_month + '/' + this.search_workshop + '/'),
         method: "get",
         success: data => {
-          console.log(data)
-          this.payList = data
+          this.payList = data.list_of_pay_item
           this.list_generated = true
+          for(let item in this.payList){
+            this.items[this.payList[item].id] = {'id': this.payList[item].id,'ezafe_kari':0, 'tatil_kari':0, 'kasre_kar':0, 'shab_kari':0, 'sob_shab':0, 'sob_asr':0, 'asr_shab':0, 'sob_asr_shab': 0, 'sayer_ezafat': 0}
+          }
         }
       })
-    }
+    },
 
+    calculatePayment() {
+      for( let payitem in this.items){
+        this.request({
+          url: this.endpoint(`payroll/paylist/item/` + payitem + '/'),
+
+          method: "put",
+          data: {
+            'ezafe_kari': this.items[payitem]['ezafe_kari'],
+            'tatil_kari': this.items[payitem]['tatil_kari'],
+            'kasre_kar': this.items[payitem]['kasre_kar'],
+            'shab_kari': this.items[payitem]['shab_kari'],
+            'nobat_kari_sob_asr': this.items[payitem]['sob_asr'],
+            'nobat_kari_sob_shab': this.items[payitem]['sob_shab'],
+            'nobat_kari_asr_shab': this.items[payitem]['asr_shab'],
+            'nobat_kari_sob_asr_shab': this.items[payitem]['sob_asr_shab'],
+            'sayer_ezafat': this.items[payitem]['sayer_ezafat'],
+          },
+          success: data => {
+          }
+        })
+
+      }
+    }
 
   },
 }

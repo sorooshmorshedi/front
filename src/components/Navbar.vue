@@ -1883,6 +1883,18 @@ export default {
               },
               title: "مرخصی یا غیبت",
             },
+            {
+              to: {
+                name: "Mission",
+              },
+              title: "ماموریت",
+            },
+            {
+              to: {
+                name: "Payment",
+              },
+              title: "لیست حقوق",
+            },
           ],
         },
       ];

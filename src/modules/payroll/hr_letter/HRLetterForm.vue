@@ -28,11 +28,22 @@
                 item-text="name"
                 item-value="value"
                 :disabled="!isEditing"
-                @change="show(item.is_template)"
+            />
+          </v-col>
+          <v-col cols="12" md="3" v-if="item.is_template == 'p' && item.is_template != 't'">
+            <v-autocomplete
+                v-if="!this.contract"
+                label=" قالب های پیشفرض"
+                :items="templates"
+                item-text="name"
+                item-value="info"
+                v-model="item"
+                @change="item.is_template = 'p' ; item.id = null ; item.name = null"
+                :disabled="!isEditing"
             />
           </v-col>
 
-          <v-col cols="12" md="3" v-if="item.is_template != 't'">
+          <v-col cols="12" md="3" v-if="item.is_template == 'p' && item.is_template != 't'">
             <v-autocomplete
                 v-if="!this.contract"
                 label=" قرارداد در کارگاه"
@@ -90,7 +101,8 @@
                 v-model="item.hoghooghe_roozane_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -100,7 +112,8 @@
                 v-model="item.hoghooghe_roozane_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -109,7 +122,8 @@
                 v-model="item.hoghooghe_roozane_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -143,7 +157,8 @@
                 v-model="item.paye_sanavat_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -153,7 +168,8 @@
                 v-model="item.paye_sanavat_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -162,7 +178,8 @@
                 v-model="item.paye_sanavat_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -197,7 +214,8 @@
                 v-model="item.haghe_sarparasti_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -207,7 +225,8 @@
                 v-model="item.haghe_sarparasti_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -216,7 +235,8 @@
                 v-model="item.haghe_sarparasti_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -250,7 +270,8 @@
                 v-model="item.haghe_modiriyat_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -260,7 +281,8 @@
                 v-model="item.haghe_modiriyat_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -269,7 +291,8 @@
                 v-model="item.haghe_modiriyat_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -305,7 +328,8 @@
                 v-model="item.haghe_jazb_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -315,7 +339,8 @@
                 v-model="item.haghe_jazb_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -324,7 +349,8 @@
                 v-model="item.haghe_jazb_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -358,7 +384,8 @@
                 v-model="item.fogholade_shoghl_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -368,7 +395,8 @@
                 v-model="item.fogholade_shoghl_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -377,7 +405,8 @@
                 v-model="item.fogholade_shoghl_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -411,7 +440,8 @@
                 v-model="item.haghe_tahsilat_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -421,7 +451,8 @@
                 v-model="item.haghe_tahsilat_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -430,7 +461,8 @@
                 v-model="item.haghe_tahsilat_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -466,7 +498,8 @@
                 v-model="item.fogholade_sakhti_kar_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -476,7 +509,8 @@
                 v-model="item.fogholade_sakhti_kar_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -485,7 +519,8 @@
                 v-model="item.fogholade_sakhti_kar_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -520,7 +555,8 @@
                 v-model="item.haghe_ankal_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -530,7 +566,8 @@
                 v-model="item.haghe_ankal_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -539,7 +576,8 @@
                 v-model="item.haghe_ankal_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -573,7 +611,8 @@
                 v-model="item.fogholade_badi_abohava_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -583,7 +622,8 @@
                 v-model="item.fogholade_badi_abohava_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -592,7 +632,8 @@
                 v-model="item.fogholade_badi_abohava_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -626,7 +667,8 @@
                 v-model="item.mahroomiat_tashilat_zendegi_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -636,7 +678,8 @@
                 v-model="item.mahroomiat_tashilat_zendegi_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -645,7 +688,8 @@
                 v-model="item.mahroomiat_tashilat_zendegi_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -679,7 +723,8 @@
                 v-model="item.fogholade_mahal_khedmat_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -689,7 +734,8 @@
                 v-model="item.fogholade_mahal_khedmat_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -698,7 +744,8 @@
                 v-model="item.fogholade_mahal_khedmat_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -732,7 +779,8 @@
                 v-model="item.fogholade_sharayet_mohit_kar_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -742,7 +790,8 @@
                 v-model="item.fogholade_sharayet_mohit_kar_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -751,7 +800,8 @@
                 v-model="item.fogholade_sharayet_mohit_kar_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -784,7 +834,8 @@
                 v-model="item.haghe_maskan_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -794,7 +845,8 @@
                 v-model="item.haghe_maskan_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -803,7 +855,8 @@
                 v-model="item.haghe_maskan_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -837,7 +890,8 @@
                 v-model="item.ayabo_zahab_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -847,7 +901,8 @@
                 v-model="item.ayabo_zahab_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -856,7 +911,8 @@
                 v-model="item.ayabo_zahab_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -890,7 +946,8 @@
                 v-model="item.bon_kharo_bar_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -900,7 +957,8 @@
                 v-model="item.bon_kharo_bar_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -909,7 +967,8 @@
                 v-model="item.bon_kharo_bar_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -944,7 +1003,8 @@
                 v-model="item.yarane_ghaza_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -954,7 +1014,8 @@
                 v-model="item.yarane_ghaza_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -963,7 +1024,8 @@
                 v-model="item.yarane_ghaza_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -997,7 +1059,8 @@
                 v-model="item.haghe_shir_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1007,7 +1070,8 @@
                 v-model="item.haghe_shir_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1016,7 +1080,8 @@
                 v-model="item.haghe_shir_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -1051,7 +1116,8 @@
                 v-model="item.haghe_taahol_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1061,7 +1127,8 @@
                 v-model="item.haghe_taahol_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1070,7 +1137,8 @@
                 v-model="item.haghe_taahol_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -1103,7 +1171,8 @@
                 v-model="item.komakhazine_mahdekoodak_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1113,7 +1182,8 @@
                 v-model="item.komakhazine_mahdekoodak_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1122,7 +1192,8 @@
                 v-model="item.komakhazine_mahdekoodak_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -1156,7 +1227,8 @@
                 v-model="item.komakhazine_varzesh_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1166,7 +1238,8 @@
                 v-model="item.komakhazine_varzesh_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1175,7 +1248,8 @@
                 v-model="item.komakhazine_varzesh_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
@@ -1208,7 +1282,8 @@
                 v-model="item.komakhazine_mobile_use_insurance"
                 label="بیمه تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1218,7 +1293,8 @@
                 v-model="item.komakhazine_mobile_use_tax"
                 label="مالیات تعلق می گیرد"
                 color="indigo"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1227,63 +1303,13 @@
                 v-model="item.komakhazine_mobile_base"
                 label="مزد پایه"
                 color="success"
-                value= true
+                :false-value="false"
+                :true-value="true"
                 hide-details
             ></v-switch>
           </v-col>
         </v-row>
 
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">حق اولاد :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="2">
-            <money
-                label="* مبلغ "
-                v-model="item.haghe_owlad_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.haghe_owlad_nature"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_owlad_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                value= true
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_owlad_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                value= true
-                hide-details
-            ></v-checkbox>
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-switch
-                v-model="item.haghe_owlad_base"
-                label="مزد پایه"
-                color="success"
-                value= true
-                hide-details
-            ></v-switch>
-          </v-col>
-        </v-row>
         <v-row v-if="item.id" class="mt-10">
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">مزد مبنا :</v-card-text>
@@ -1364,6 +1390,7 @@ export default {
   },
   data() {
     return {
+
       NATURE_TYPES: [
         {name: ' حقوق پایه', value: 'b'},
         {name: 'مستمر', value: 'p'},
@@ -1384,6 +1411,8 @@ export default {
       hasLock: true,
       isDefinable: true,
       myClass: '',
+      templates: [],
+      template: null,
       contract: this.$route.query.contract,
       contracts: [],
       PathLevels,
@@ -1395,28 +1424,6 @@ export default {
   },
   computed: {
     headers() {
-      return [
-        {
-          text: " پرسنل در کارگاه",
-          value: "workshp_personnel",
-        },
-        {
-          text: "شماره قرارداد",
-          value: "code",
-        },
-        {
-          text: "تاریخ شروع قرارداد",
-          value: "contract_from_date",
-        },
-        {
-          text: "تاریخ پایان قرارداد",
-          value: "contract_to_date",
-        },
-        {
-          text: "تاریخ ترک کار",
-          value: "quit_job_date",
-        },
-      ];
     },
   },
   mounted() {
@@ -1428,7 +1435,7 @@ export default {
           console.log(data);
           for (let t in data) {
             this.contracts.push({
-              'name': data[t].personnel_name + ' ' + data[t].personnel_last_name + ' در ' + data[t].workshop_name,
+              'name': data[t].code + ' ' + data[t].personnel_name +' در ' + data[t].workshop_name,
               'id': data[t].id,
             })
           }
@@ -1436,9 +1443,28 @@ export default {
         }
       })
     }
+    this.request({
+      url: this.endpoint(`payroll/hrletter/templates/`),
+      method: "get",
+      success: data => {
+        console.log(data);
+        for (let t in data) {
+          this.templates.push({
+            'name': data[t].name,
+            'info': data[t]
+          })
+        }
+        console.log(this.contracts)
+      }
+    })
   },
 
   methods: {
+    setInfos(){
+
+
+
+    },
     to(item) {
       return {
         name: 'HRLetterDetail',
@@ -1448,7 +1474,8 @@ export default {
       };
     },
     show(item){
-      console.log(item)
+      if (item == true){      console.log(item)
+      }
     },
     unConfirm() {
       this.$router.go()

@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "MissionList",
+  name: "SummaryMissionList",
   props: {},
   data() {
     return {
@@ -39,20 +39,8 @@ export default {
           value: "time_period",
         },
         {
-          text: " از تاریخ",
-          value: "from_date",
-        },
-        {
-          text: " تا تاریخ",
-          value: "to_date",
-        },
-        {
           text: " مکان",
           value: "location",
-        },
-        {
-          text: " موضوع",
-          value: "topic",
         },
       ];
     },

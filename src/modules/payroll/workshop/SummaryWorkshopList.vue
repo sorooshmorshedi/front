@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>لیست ماموریت ها</v-card-title>
+    <v-card-title>لیست کارگاه ها</v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
@@ -15,11 +15,11 @@
 
 <script>
 export default {
-  name: "MissionList",
+  name: "SummaryWorkshopList",
   props: {},
   data() {
     return {
-      url: "payroll/mission/all",
+      url: "payroll/workshop/all",
       filters: {},
     };
   },
@@ -27,40 +27,31 @@ export default {
     headers() {
       return [
         {
-          text: " پرسنل در کارگاه",
-          value: "workshop_personnel_display",
+          text: "کد کارگاه",
+          value: "code",
+          type: "numeric",
+
         },
         {
-          text: " نوع",
-          value: "mission_type_display",
+          text: "نام کارگاه",
+          value: "name",
         },
         {
-          text: " مدت به روز",
-          value: "time_period",
+          text: "نام کارفرما",
+          value: "employer_name",
         },
         {
-          text: " از تاریخ",
-          value: "from_date",
-        },
-        {
-          text: " تا تاریخ",
-          value: "to_date",
-        },
-        {
-          text: " مکان",
-          value: "location",
-        },
-        {
-          text: " موضوع",
-          value: "topic",
+          text: "آدرس کارگاه",
+          value: "address",
         },
       ];
+
     },
   },
   methods: {
     to(item) {
       return {
-        name: "MissionDetail",
+        name: "WorkshopDetail",
         params: {
           id: item.id,
         },

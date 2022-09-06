@@ -1,59 +1,81 @@
 <template>
   <div>
-    <m-form
-        title="ثبت قرارداد در کارگاه"
-        :showList="false"
-        :listRoute="{name:'WorkshopContractList'}"
-        :exportBaseUrl="printUrl"
-        :exportParams="{id: item.id}"
-        :canDelete="false"
-        :canSubmit="canSubmit"
-        :isEditing.sync="isEditing"
-        @submit="submit"
-        @delete="deleteItem"
-        @clearForm="clearForm()"
-        ref="workshopContractForm"
+    <v-row>
+      <v-col col="12" md="6">
 
-    >
+        <m-form
+            title="ثبت قرارداد در کارگاه"
+            :showList="false"
+            :listRoute="{name:'WorkshopContractList'}"
+            :exportBaseUrl="printUrl"
+            :exportParams="{id: item.id}"
+            :canDelete="false"
+            :canSubmit="canSubmit"
+            :isEditing.sync="isEditing"
+            @submit="submit"
+            @delete="deleteItem"
+            @clearForm="clearForm()"
+            ref="workshopContractForm"
 
-      <template>
-        <v-row>
-          <v-col cols="9" md="5">
-            <v-autocomplete
-                v-if="!this.workshopPersonnel"
-                label=" پرسنل در کارگاه"
-                :items="workshopPersonnels"
-                v-model="item.workshop_personnel"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-            <v-text-field
-                label="پرسنل در کارگاه"
-                v-if="this.workshopPersonnel"
-                disabled="true"
-                v-model="item.workshop_personnel = this.workshopPersonnel"
+        >
 
-            ></v-text-field>
-          </v-col>
-          <v-col cols="9" md="4">
-            <v-text-field label="* شماره قرارداد  " v-model="item.code" background-color="white" :disabled="!isEditing"/>
-          </v-col>
-        </v-row>
-        <v-row>
-        <v-col cols="9" md="3">
-            <date v-model="item.contract_from_date" label="* تاریخ شروع قرارداد " :default="true" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="9" md="3">
-            <date v-model="item.contract_to_date" label="* تاریخ پایان قرارداد " :default="true" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="9" md="3">
-            <date v-model="item.quit_job_date" label="تاریخ ترک کار " :default="true" :disabled="!isEditing"/>
-          </v-col>
+          <template>
+            <v-row>
+              <v-col cols="12" md="5">
+                <v-autocomplete
+                    v-if="!this.workshopPersonnel"
+                    label=" پرسنل در کارگاه"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                />
+                <v-text-field
+                    label="پرسنل در کارگاه"
+                    v-if="this.workshopPersonnel"
+                    disabled="true"
+                    v-model="item.workshop_personnel = this.workshopPersonnel"
 
-        </v-row>
-      </template>
-    </m-form>
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="5">
+                <v-text-field label="* شماره قرارداد  " v-model="item.code" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="2">
+                <v-switch
+                    class="text-center "
+                    v-model="item.insurance"
+                    label='ّبیمه میشود'
+                    :disabled="!isEditing"
+                    :value="true"
+                    @change="show(item.insurance)"
+                ></v-switch>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="4">
+                <date v-model="item.contract_from_date" label="* تاریخ شروع قرارداد " :default="true"
+                      :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <date v-model="item.contract_to_date" label="* تاریخ پایان قرارداد " :default="true"
+                      :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <date v-model="item.quit_job_date" label="تاریخ ترک کار " :default="false" :disabled="!isEditing"/>
+              </v-col>
+
+            </v-row>
+          </template>
+        </m-form>
+      </v-col>
+      <v-col cols="12" md="6">
+        <workshop-contract-list ></workshop-contract-list>
+      </v-col>
+    </v-row>
+
   </div>
 
 </template>
@@ -76,12 +98,13 @@ import date from "@/components/mcomponents/cleave/Date";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
+import WorkshopContractList from "@/modules/payroll/contract/ContractList";
 
 
 export default {
   name: "WorkshopContractForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+  components: {WorkshopContractList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
     id: {},
   },
@@ -134,7 +157,7 @@ export default {
     },
   },
   mounted() {
-    if(!this.workshopPersonnel){
+    if (!this.workshopPersonnel) {
       this.request({
         url: this.endpoint(`payroll/workshop/personnel/`),
         method: "get",
@@ -142,16 +165,20 @@ export default {
           console.log(data);
           for (let t in data) {
             this.workshopPersonnels.push({
-              'name': data[t].personnel_name + ' ' + data[t].personnel_last_name + ' in ' + data[t].workshop_name,
+              'name': data[t].personnel_name + ' ' + ' در کارگاه ' + data[t].workshop_name,
               'id': data[t].id,
             })
           }
           console.log(this.workshopPersonnels)
         }
-      })}
+      })
+    }
   },
 
   methods: {
+    show(item) {
+      console.log(item)
+    },
     to(item) {
       return {
         name: 'WorkshopContractDetail',

@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>لیست ماموریت ها</v-card-title>
+    <v-card-title>لیست مرخصی ها</v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
@@ -15,11 +15,11 @@
 
 <script>
 export default {
-  name: "MissionList",
+  name: "SummaryAbsenceList",
   props: {},
   data() {
     return {
-      url: "payroll/mission/all",
+      url: "payroll/absence/all",
       filters: {},
     };
   },
@@ -31,28 +31,12 @@ export default {
           value: "workshop_personnel_display",
         },
         {
-          text: " نوع",
-          value: "mission_type_display",
+          text: "نوع",
+          value: "leave_type_display",
         },
         {
-          text: " مدت به روز",
+          text: "مدت به روز",
           value: "time_period",
-        },
-        {
-          text: " از تاریخ",
-          value: "from_date",
-        },
-        {
-          text: " تا تاریخ",
-          value: "to_date",
-        },
-        {
-          text: " مکان",
-          value: "location",
-        },
-        {
-          text: " موضوع",
-          value: "topic",
         },
       ];
     },
@@ -60,7 +44,7 @@ export default {
   methods: {
     to(item) {
       return {
-        name: "MissionDetail",
+        name: "AbsenceDetail",
         params: {
           id: item.id,
         },

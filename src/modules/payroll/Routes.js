@@ -14,6 +14,7 @@ import WorkshopPersonnelForm from "@/modules/payroll/workshop_personnel/Workshop
 import AbsenceForm from "@/modules/payroll/absence/AbsenceForm";
 import HRLetterForm from "@/modules/payroll/hr_letter/HRLetterForm";
 import MissionForm from "@/modules/payroll/mission/MissionForm";
+import MissionList from "@/modules/payroll/mission/MissionList";
 import PaymentForm from "@/modules/payroll/payment/PaymentForm";
 
 const Workshop = () => import( /* wepackChunkName: "workshop" */ "@/modules/payroll/workshop/WorkshopForm.vue")
@@ -186,8 +187,13 @@ export default [
                 component: MissionForm,
             },
         ]
-
     },
+    {
+        name: 'MissionList',
+        path: 'mission/list',
+        component: MissionList,
+    },
+
     {
         name: 'Payment',
         path: 'payment',

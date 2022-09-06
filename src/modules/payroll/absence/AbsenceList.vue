@@ -28,7 +28,7 @@ export default {
       return [
         {
           text: " پرسنل در کارگاه",
-          value: "workshop_personnel",
+          value: "workshop_personnel_display",
         },
         {
           text: "نوع",
@@ -37,6 +37,14 @@ export default {
         {
           text: "مدت به روز",
           value: "time_period",
+        },
+        {
+          text: "از تاریخ",
+          value: "from_date",
+        },
+        {
+          text: "تا تاریخ",
+          value: "to_date",
         },
       ];
     },

@@ -1,197 +1,199 @@
 <template>
   <div>
-    <m-form
-        title="تعریف پرسنل در کارگاه"
-        :showList="false"
-        :listRoute="{name:'WorkshopPersonnelList'}"
-        :exportBaseUrl="printUrl"
-        :exportParams="{id: item.id}"
-        :canDelete="false"
-        :canSubmit="canSubmit"
-        :isEditing.sync="isEditing"
-        @submit="submit"
-        @delete="deleteItem"
-        @clearForm="clearForm()"
-        ref="WorkshopPersonnelForm"
+    <v-row>
+      <v-col cols="12" md="6">
 
-    >
+        <m-form
+            title="تعریف پرسنل در کارگاه"
+            :showList="false"
+            :listRoute="{name:'WorkshopPersonnelList'}"
+            :exportBaseUrl="printUrl"
+            :exportParams="{id: item.id}"
+            :canDelete="false"
+            :canSubmit="canSubmit"
+            :isEditing.sync="isEditing"
+            @submit="submit"
+            @delete="deleteItem"
+            @clearForm="clearForm()"
+            ref="WorkshopPersonnelForm"
 
-      <template>
-        <v-row class="mt-3">
-          <v-col cols="12" md="2">
-            <v-autocomplete
-                v-if="!this.workshop"
-                label="کارگاه"
-                :items="workshops"
-                v-model="item.workshop"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-            <v-text-field
-                label="کارگاه"
-                v-if="this.workshop"
-                disabled="true"
-                v-show="false"
-                v-model="item.workshop = this.workshop"
-            ></v-text-field>
-            <v-text-field
-                label="کارگاه"
-                v-if="this.workshop"
-                disabled="true"
-                v-model="this.workshop_name "
-            ></v-text-field>
+        >
 
-          </v-col>
+          <template>
+            <v-row class="mt-3">
+              <v-col cols="12" md="3">
+                <v-autocomplete
+                    v-if="!this.workshop"
+                    label="کارگاه"
+                    :items="workshops"
+                    v-model="item.workshop"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                />
+                <v-text-field
+                    label="کارگاه"
+                    v-if="this.workshop"
+                    disabled="true"
+                    v-show="false"
+                    v-model="item.workshop = this.workshop"
+                ></v-text-field>
+                <v-text-field
+                    label="کارگاه"
+                    v-if="this.workshop"
+                    disabled="true"
+                    v-model="this.workshop_name "
+                ></v-text-field>
 
-          <v-col cols="12" md="2">
-            <v-autocomplete
-                v-if="!this.personnel"
-                label="نام  و نام خانوادگی"
-                :items="personnels"
-                v-model="item.personnel"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-                @change="setValues(item.personnel)"
+              </v-col>
 
-            />
-            <v-text-field
-                label="نام  و نام خانوادگی"
-                v-if="this.personnel"
-                disabled="true"
-                v-show="false"
-                v-model="item.personnel = this.personnel"
+              <v-col cols="12" md="3">
+                <v-autocomplete
+                    v-if="!this.personnel"
+                    label="نام  و نام خانوادگی"
+                    :items="personnels"
+                    v-model="item.personnel"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="setValues(item.personnel)"
 
-            ></v-text-field>
-            <v-text-field
-                label="نام  و نام خانوادگی"
-                v-if="this.searchByCode"
-                disabled="true"
-                v-model="personnelName"
+                />
+                <v-text-field
+                    label="نام  و نام خانوادگی"
+                    v-if="this.personnel"
+                    disabled="true"
+                    v-show="false"
+                    v-model="item.personnel = this.personnel"
 
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="3" @click='nationalDisplaySet(item)'>
-            <v-text-field label="* کد ملی" v-model="national_code" background-color="white"
-                          :disabled="!isEditing || !national_code_dis || personnel"/>
-          </v-col>
-          <v-col cols="12" md="3" @click='personnelDisplaySet(item)'>
-            <v-text-field label="* کد پرسنلی " v-model="personnel_code" background-color="white"
-                          :disabled="!isEditing || !personnel_code_dis || personnel"/>
-          </v-col>
-          <v-col cols="12" md="1">
-            <v-btn v-if="!personnel" color="red" class="justify-center white--text" @click="setNull"> خالی کردن</v-btn>
-          </v-col>
-          <v-col cols="12" md="1">
-            <v-btn v-if="!personnel" color="green" class="justify-center white--text" @click="searchUser"> سرچ کنبد</v-btn>
-          </v-col>
+                ></v-text-field>
+                <v-text-field
+                    label="نام  و نام خانوادگی"
+                    v-if="this.searchByCode && personnelName"
+                    disabled="true"
+                    v-model="personnelName"
 
-        </v-row>
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="2" @click='nationalDisplaySet(item)'>
+                <v-text-field label="* کد ملی" v-model="national_code" background-color="white"
+                              :disabled="!isEditing || !national_code_dis || personnel"/>
+              </v-col>
+              <v-col cols="12" md="2" @click='personnelDisplaySet(item)'>
+                <v-text-field label="* کد پرسنلی " v-model="personnel_code" background-color="white"
+                              :disabled="!isEditing || !personnel_code_dis || personnel"/>
+              </v-col>
+              <v-col cols="12" md="2">
+                <v-btn v-if="!personnel" color="green" class=" white--text" @click="searchUser"> سـرچ کنبد</v-btn>
+                <v-btn v-if="!personnel" color="red" class="mt-1 white--text" @click="setNull"> خالی کردن</v-btn>
+              </v-col>
 
-        <v-row class="mt-16">
-          <v-col cols="12" md="1">
-            <v-switch
-                class="text-center "
-                v-model="item.insurance"
-                label='ّبیمه میشود'
-                :disabled="!isEditing"
-            ></v-switch>
-          </v-col>
-          <v-col cols="12" md="2">
-            <date v-model="item.insurance_add_date" label="تاریخ اضافه شدن به لیست بیمه" :default="true"
-                  :disabled="!isEditing"/>
-          </v-col>
+            </v-row>
 
-          <v-col cols="12" md="3">
-            <v-text-field label="* عنوان شغلی " v-model="item.work_title" background-color="white"
-                          :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-text-field label="* محل خدمت  " v-model="item.job_location" background-color="white"
-                          :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* وضعیت محل خدمت "
-                :items="JOB_LOCATION_STATUSES"
-                v-model="item.job_location_status"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-text-field label="* سابقه بیمه قبلی خارج این کارگاه "
-                          v-model="item.previous_insurance_history_out_workshop" background-color="white"
-                          :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-text-field label="* سابقه بیمه قبلی در این کارگاه  "
-                          v-model="item.previous_insurance_history_in_workshop" background-color="white"
-                          :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-text-field label="* سابقه بیمه جاری در این کارگاه " v-model="item.current_insurance_history_in_workshop"
-                          background-color="white" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-text-field label="* مجموع سوابق بیمه ای  " v-model="item.insurance_history_totality"
-                          background-color="white" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-text-field label="* سمت یا شغل (دارایی)" v-model="item.job_position" background-color="white"
-                          :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-autocomplete
-                label="* رسته شغلی "
-                :items="JOB_POSITIONS"
-                v-model="item.job_group"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
+            <v-row class="mt-16">
+              <v-col cols="12" md="3">
+                <v-text-field label="تاریخ اضافه شدن به لیست بیمه" v-model="item.insurance_add_date"
+                              background-color="white"
+                              disabled="true"/>
 
-          </v-col>
+              </v-col>
+
+              <v-col cols="12" md="3">
+                <v-text-field label="* عنوان شغلی " v-model="item.work_title" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field label="* محل خدمت  " v-model="item.job_location" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-autocomplete
+                    label="* وضعیت محل خدمت "
+                    :items="JOB_LOCATION_STATUSES"
+                    v-model="item.job_location_status"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field label="* سابقه بیمه قبلی خارج این کارگاه (ماه) "
+                              v-model="item.previous_insurance_history_out_workshop" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field label="* سابقه بیمه قبلی در این کارگاه (ماه)"
+                              v-model="item.previous_insurance_history_in_workshop" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field label="* سابقه بیمه جاری در این کارگاه (ماه) "
+                              v-model="item.current_insurance_history_in_workshop"
+                              background-color="white" :disabled="true"/>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field label="* مجموع سوابق بیمه ای  (ماه) " v-model="item.insurance_history_totality"
+                              background-color="white" :disabled="true"/>
+              </v-col>
+              <v-col cols="12" md="2">
+                <v-text-field label="* سمت یا شغل (دارایی)" v-model="item.job_position" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="2">
+                <v-autocomplete
+                    label="* رسته شغلی "
+                    :items="JOB_POSITIONS"
+                    v-model="item.job_group"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+
+              </v-col>
 
 
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* نوع استخدام "
-                :items="EMPLOYMENTS_TYPES"
-                v-model="item.employment_type"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
-          </v-col>
+              <v-col cols="12" md="3">
+                <v-autocomplete
+                    label="* نوع استخدام "
+                    :items="EMPLOYMENTS_TYPES"
+                    v-model="item.employment_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </v-col>
 
-          <v-col cols="12" md="2">
-            <v-autocomplete
-                label="* نوع قرارداد"
-                :items="CONTRACT_TYPES"
-                v-model="item.contract_type"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-autocomplete
-                label="* وضعیت کارمند"
-                :items="EMPLOYEE_TYPES"
-                v-model="item.employee_status"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
-          </v-col>
+              <v-col cols="12" md="2">
+                <v-autocomplete
+                    label="* نوع قرارداد"
+                    :items="CONTRACT_TYPES"
+                    v-model="item.contract_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-autocomplete
+                    label="* وضعیت کارمند"
+                    :items="EMPLOYEE_TYPES"
+                    v-model="item.employee_status"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </v-col>
 
 
-        </v-row>
-      </template>
-    </m-form>
+            </v-row>
+          </template>
+        </m-form>
+      </v-col>
+      <v-col cols="12" md="6">
+        <summary-workshop-personnel-list></summary-workshop-personnel-list>
+      </v-col>
+    </v-row>
+
   </div>
 
 </template>
@@ -215,12 +217,16 @@ import date from "@/components/mcomponents/cleave/Date";
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import {toString} from "lodash";
+import SummaryWorkshopPersonnelList from "@/modules/payroll/workshop_personnel/SummaryWorkshopPersonnelList";
 
 
 export default {
   name: "WorkshopPersonnelForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+  components: {
+    SummaryWorkshopPersonnelList,
+    mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money
+  },
   props: {
     id: {},
   },

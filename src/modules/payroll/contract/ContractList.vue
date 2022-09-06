@@ -28,7 +28,7 @@ export default {
       return [
         {
           text: " پرسنل در کارگاه",
-          value: "workshop_personnel",
+          value: "workshop_personnel_display",
         },
         {
           text: "شماره قرارداد",
