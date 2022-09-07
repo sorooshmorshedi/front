@@ -5,6 +5,7 @@ import WorkshopPersonnelList from "@/modules/payroll/workshop_personnel/Workshop
 import ContractRowList from "@/modules/payroll/contract_row/ContractRowList";
 import PersonnelFamilyList from "@/modules/payroll/personnel_family/PersonnelFamilyList";
 import AbsenceList from "@/modules/payroll/absence/AbsenceList";
+import HRLetterList from "@/modules/payroll/hr_letter/HRLetterList";
 import WorkshopForm from "@/modules/payroll/workshop/WorkshopForm";
 import PersonnelForm from "@/modules/payroll/personnel/PersonnelForm";
 import ContractRowForm from "@/modules/payroll/contract_row/ContractRowForm";
@@ -173,8 +174,13 @@ export default [
                 component: HRLetterForm,
             },
         ]
-
     },
+    {
+        name: 'HRLetterList',
+        path: 'hr_letter/list',
+        component: HRLetterList,
+    },
+
     {
         name: 'Mission',
         path: 'mission',

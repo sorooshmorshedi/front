@@ -46,7 +46,7 @@
         <v-btn color="green" class="justify-center white--text" @click="getList">لیست پرسنل فعال</v-btn>
       </v-col>
     </v-row>
-    <v-row v-if="list_generated">
+    <v-row v-if="list_generated && !calculateDone">
       <v-col cols="12" md="12">
         <v-simple-table class="mt-10">
           <template v-slot:default>
@@ -161,8 +161,186 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-btn @click="calculatePayment" color="green lighten-2" class="float-left">محاسبه حقوق و دستمزد</v-btn>
+        <v-btn v-if="list_generated && !calculateDone" @click="calculatePayment" color="green lighten-2" class="float-left">محاسبه حقوق و دستمزد</v-btn>
+      </v-col>
+    </v-row>
+    <v-row v-if="show_list_of_pay">
+      <v-col cols="12" md="12">
+        <v-simple-table class="mt-10">
+          <template v-slot:default>
+            <thead class="style: blue lighten-4 ">
+            <tr>
+              <th class="text-center">
+                ردیف
+              </th>
+              <th class="text-center">
+                نام و نام خانوادگی
+              </th>
+              <th class="text-center">
+                بیمه شود؟
+              </th>
+              <th class="text-center">
+                سابقه بیمه در کارگاه به ماه
+              </th>
+              <th class="text-center">
+                کارکرد عادی
+              </th>
+              <th class="text-center">
+                مرخصی استحقاقی
+              </th>
+              <th class="text-center">
+                مرخصی استعلاجی
+              </th>
+              <th class="text-center">
+                غیبت
+              </th>
+              <th class="text-center">
+                کارکرد واقعی
+              </th>
+              <th class="text-center">
+                مزد مبنا
+              </th>
+              <th class="text-center">
+                حقوق پایه
+              </th>
+              <th class="text-center">
+                نرخ پایه سنوات
+              </th>
+              <th class="text-center">
+                پایه سنوات ماهانه
+              </th>
+              <th class="text-center">
+                اضافه کاری
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+                تعطیل کاری
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+                کسر کار
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+                مبلغ غیبت
+              </th>
+              <th class="text-center">
+                ماموریت
+              </th>
+              <th class="text-center">
+                تعداد فرزندان
+              </th>
+              <th class="text-center">
+                عائله مندی
+              </th>
+              <th class="text-center">
+                سایر اضافات
+              </th>
+              <th class="text-center">
+                حقوق و مزایای کل ماهانه
+              </th>
 
+
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+                ساعت
+              </th>
+              <th class="text-center">
+                مبلغ
+              </th>
+              <th class="text-center">
+                ساعت
+              </th>
+              <th class="text-center">
+                مبلغ
+              </th>
+              <th class="text-center">
+                ساعت
+              </th>
+              <th class="text-center">
+                مبلغ
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+              <th class="text-center">
+              </th>
+
+
+            </tr>
+
+            <tr v-for="person in list_of_pay" :key="person.id">
+              <td> * </td>
+              <td>{{ person.personnel_name }}</td>
+              <td>{{ person.is_insurance_display }}</td>
+              <td>{{ person.insurance_workshop }}</td>
+              <td>{{ person.normal_worktime }}</td>
+              <td>{{ person.entitlement_leave_day }}</td>
+              <td>{{ person.illness_leave_day }}</td>
+              <td>{{ person.absence_day }}</td>
+              <td>{{ person.real_worktime }}</td>
+              <td><money :disabled="true" v-model="person.pay_base"></money></td>
+              <td><money :disabled="true" v-model="person.hoghoogh_roozane"></money></td>
+              <td><money :disabled="true" v-model="person.sanavat_base"></money></td>
+              <td>{{ person.sanavat_month }}</td>
+              <td>{{ person.ezafe_kari }}</td>
+              <td><money :disabled="true" v-model="person.ezafe_kari_amount"></money></td>
+              <td>{{ person.tatil_kari }}</td>
+              <td><money :disabled="true" v-model="person.tatil_kari_amount"></money></td>
+              <td>{{ person.kasre_kar }}</td>
+              <td><money :disabled="true" v-model="person.kasre_kar_amount"></money></td>
+
+              <td></td>
+              <td>{{ person.mission_day }}</td>
+              <td>{{ person.aele_mandi_child }}</td>
+              <td><money :disabled="true" v-model="person.aele_mandi"></money></td>
+              <td><money :disabled="true" v-model="person.sayer_ezafat"></money></td>
+              <td><money :disabled="true" v-model="person.total_payment"></money></td>
+            </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
       </v-col>
     </v-row>
   </v-card>
@@ -236,7 +414,10 @@ export default {
       performClearForm: true,
       workshop_name: null,
       list_generated: false,
-      payList: null
+      payList: null,
+      list_of_pay: null,
+      show_list_of_pay: false,
+      calculateDone: false,
     };
   },
   computed: {
@@ -316,12 +497,30 @@ export default {
             'nobat_kari_asr_shab': this.items[payitem]['asr_shab'],
             'nobat_kari_sob_asr_shab': this.items[payitem]['sob_asr_shab'],
             'sayer_ezafat': this.items[payitem]['sayer_ezafat'],
+            'calculate_payment': true,
           },
           success: data => {
-          }
+            console.log(data)
+            this.get_payment_list()
+          },
         })
 
       }
+    },
+
+    get_payment_list(){
+      setTimeout(1000)
+      this.request({
+        url: this.endpoint(`payroll/paylist/items/` + this.payList[0]['list_of_pay'] + '/'),
+        method: "get",
+        success: data => {
+          this.calculateDone = true
+          this.show_list_of_pay = true
+          this.list_of_pay = data
+          console.log(data)
+        }
+      })
+
     }
 
   },
