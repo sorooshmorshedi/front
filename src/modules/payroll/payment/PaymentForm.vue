@@ -325,11 +325,11 @@
               <td><money :disabled="true" v-model="person.sanavat_base"></money></td>
               <td>{{ person.sanavat_month }}</td>
               <td>{{ person.ezafe_kari }}</td>
-              <td><money :disabled="true" v-model="person.ezafe_kari_amount"></money></td>
+              <td><money :disabled="true" v-model="person.ezafe_kari_total"></money></td>
               <td>{{ person.tatil_kari }}</td>
-              <td><money :disabled="true" v-model="person.tatil_kari_amount"></money></td>
+              <td><money :disabled="true" v-model="person.tatil_kari_total"></money></td>
               <td>{{ person.kasre_kar }}</td>
-              <td><money :disabled="true" v-model="person.kasre_kar_amount"></money></td>
+              <td><money :disabled="true" v-model="person.kasre_kar_total"></money></td>
 
               <td></td>
               <td>{{ person.mission_day }}</td>
