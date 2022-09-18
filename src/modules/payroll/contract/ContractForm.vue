@@ -21,7 +21,7 @@
 
           <template>
             <v-row>
-              <v-col cols="12" md="5">
+              <v-col cols="12" md="6">
                 <v-autocomplete
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
@@ -39,19 +39,9 @@
 
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" md="5">
+              <v-col cols="12" md="6">
                 <v-text-field label="* شماره قرارداد  " v-model="item.code" background-color="white"
                               :disabled="!isEditing"/>
-              </v-col>
-              <v-col cols="12" md="2">
-                <v-switch
-                    class="text-center "
-                    v-model="item.insurance"
-                    label='ّبیمه میشود'
-                    :disabled="!isEditing"
-                    :value="true"
-                    @change="show(item.insurance)"
-                ></v-switch>
               </v-col>
             </v-row>
             <v-row>
@@ -65,6 +55,22 @@
               </v-col>
               <v-col cols="12" md="4">
                 <date v-model="item.quit_job_date" label="تاریخ ترک کار " :default="false" :disabled="!isEditing"/>
+              </v-col>
+
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="4">
+                <v-switch
+                    class="text-center pr-11"
+                    v-model="item.insurance"
+                    label='ّبیمه میشود'
+                    :disabled="!isEditing"
+                    :value="true"
+                    @change="show(item.insurance)"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" md="4" v-if="item.insurance">
+                <date v-model="item.insurance_add_date" label="تاریخ اضافه شدن به بیمه " :default="false" :disabled="!isEditing"/>
               </v-col>
 
             </v-row>

@@ -13,9 +13,7 @@
         @delete="deleteItem"
         @clearForm="clearForm()"
         ref="HRLetterFrom"
-
     >
-
       <template>
 
         <v-row>
@@ -76,7 +74,7 @@
 
         <v-row class="mt-10">
           <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">حقوق روزانه :</v-card-text>
+            <v-card-text class="text-h6">حداقل مزد روزانه :</v-card-text>
           </v-col>
           <v-col cols="12" md="2">
             <money
@@ -1310,6 +1308,327 @@
           </v-col>
         </v-row>
 
+
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">مزایای مستمر غیرنقدی :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <money
+                label="* مبلغ "
+                v-model="item.mazaya_mostamar_gheyre_naghdi_amount"
+                background-color="white"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.mazaya_mostamar_gheyre_naghdi_nature"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.mazaya_mostamar_gheyre_naghdi_use_insurance"
+                label="بیمه تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.mazaya_mostamar_gheyre_naghdi_use_tax"
+                label="مالیات تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.mazaya_mostamar_gheyre_naghdi_base"
+                label="مزد پایه"
+                color="success"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-switch>
+          </v-col>
+        </v-row>
+
+
+        <v-row class="mt-16">
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">اضافه کاری :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.ezafe_kari_nature"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.ezafe_kari_use_insurance"
+                label="بیمه تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.ezafe_kari_use_tax"
+                label="مالیات تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+          </v-col>
+        </v-row>
+
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">جمعه کاری :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.jome_kari_nature"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.jome_kari_use_insurance"
+                label="بیمه تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.jome_kari_use_tax"
+                label="مالیات تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+          </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">شب کاری :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.shab_kari_nature"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.shab_kari_use_insurance"
+                label="بیمه تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.shab_kari_use_tax"
+                label="مالیات تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+          </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">تعطیل کاری :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.tatil_kari_nature"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.tatil_kari_use_insurance"
+                label="بیمه تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.tatil_kari_use_tax"
+                label="مالیات تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+          </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">نوبت کاری :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.nobat_kari_nature"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.nobat_kari_use_insurance"
+                label="بیمه تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.nobat_kari_use_tax"
+                label="مالیات تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+          </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">حق ماموریت :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.haghe_maamooriat_nature"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.haghe_maamooriat_use_insurance"
+                label="بیمه تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.haghe_maamooriat_use_tax"
+                label="مالیات تعلق می گیرد"
+                color="indigo"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+          </v-col>
+        </v-row>
+
+
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">مسکن :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* مسکن"
+                :items="MASKAN_TYPE"
+                v-model="item.maskan"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">وسیله نقلیه :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* وسیله نقلیه"
+                :items="OTOMOBIL_TYPE"
+                v-model="item.otomobil"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+        </v-row>
+
+
+
         <v-row v-if="item.id" class="mt-10">
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">مزد مبنا :</v-card-text>
@@ -1354,6 +1673,17 @@
             />
           </v-col>
         </v-row>
+        <v-row v-if="item.id">
+          <v-col cols="12" md="2">
+            <money
+                label=" دستمزد روزانه بیمه "
+                v-model="item.insurance_pay_day"
+                background-color="white"
+                disabled=true
+            />
+          </v-col>
+
+        </v-row>
 
       </template>
     </m-form>
@@ -1392,13 +1722,21 @@ export default {
     return {
 
       NATURE_TYPES: [
-        {name: ' حقوق پایه', value: 'b'},
+        {name: ' دستمزد رورانه', value: 'b'},
         {name: 'مستمر', value: 'p'},
         {name: 'غیر مستمر', value: 'u'},
       ],
       HRLETTER_TYPES: [
         {name: ' شخصی', value: 'p'},
         {name: 'قالب', value: 't'},
+      ],
+      MASKAN_TYPE: [
+        {name: ' استفاده از مسکن ', value: true},
+        {name: 'عدم استفاده از مسکن', value: false},
+      ],
+      OTOMOBIL_TYPE: [
+        {name: ' استفاده از اتوموبیل ', value: true},
+        {name: 'عدم استفاده از اتوموبیل', value: false},
       ],
 
       printUrl: 'payroll/hrletter/all',

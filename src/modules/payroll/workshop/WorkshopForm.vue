@@ -65,7 +65,7 @@
                   <span>تنطیمات حقوق و مزایای شناور ماهیانه</span>
                 </v-card-title>
                 <v-row>
-                  <v-col cols="10" md="6">
+                  <v-col cols="12" md="6">
                     <v-autocomplete
                         label="نحوه محاسبه سنوات "
                         :items="SANAVAT_TYPES"
@@ -75,7 +75,7 @@
                         :disabled="!isEditing"
                     />
                   </v-col>
-                  <v-col cols="6" md="6">
+                  <v-col cols="12" md="6">
                     <v-autocomplete
                         label="نحوه محاسبه مزد مبنا"
                         :items="BASE_PAY_TYPES"
@@ -84,6 +84,32 @@
                         item-value="value"
                         :disabled="!isEditing"
                     />
+
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                        label="نرخ حق بیمه سهم کارفرما"
+                        class="currency-input"
+                        v-model="item.employee_insurance_nerkh"
+                    ></v-text-field>
+
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                        label="نرخ حق بیمه سهم بیمه شده"
+                        class="currency-input"
+                        v-model="item.worker_insurance_nerkh"
+                    ></v-text-field>
+
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                        label="نرخ حق بیمه سهم بیکاری"
+                        class="currency-input"
+                        v-model="item.unemployed_insurance_nerkh"
+                    ></v-text-field>
 
                   </v-col>
                 </v-row>

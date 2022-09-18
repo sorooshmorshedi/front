@@ -1,95 +1,108 @@
 <template>
   <div>
-    <m-form
-        title="ثبت پیمان"
-        :showList="false"
-        :listRoute="{name:'ContractRowList'}"
-        :exportBaseUrl="printUrl"
-        :exportParams="{id: item.id}"
-        :canDelete="false"
-        :canSubmit="canSubmit"
-        :isEditing.sync="isEditing"
-        @submit="submit"
-        @delete="deleteItem"
-        @clearForm="clearForm()"
-        ref="workshopForm"
+    <v-row>
+      <v-col cols="12" md="6">
+        <m-form
+            title="ثبت پیمان"
+            :showList="false"
+            :listRoute="{name:'ContractRowList'}"
+            :exportBaseUrl="printUrl"
+            :exportParams="{id: item.id}"
+            :canDelete="false"
+            :canSubmit="canSubmit"
+            :isEditing.sync="isEditing"
+            @submit="submit"
+            @delete="deleteItem"
+            @clearForm="clearForm()"
+            ref="workshopForm"
 
-    >
+        >
 
-      <template>
-        <v-row>
-          <v-col cols="12" md="4">
-            <v-autocomplete
-                v-if="!this.workshop"
-                label="کارگاه"
-                :items="workshops"
-                v-model="item.workshop"
-                item-text="name"
-                item-value="id"
-                :disabled="!isEditing"
-            />
-            <v-text-field
-                label="کارگاه"
-                v-if="this.workshop"
-                disabled="true"
-                v-model="item.tender = this.workshop"
+          <template>
+            <v-row>
+              <v-col cols="12" md="4">
+                <v-autocomplete
+                    v-if="!this.workshop"
+                    label="کارگاه"
+                    :items="workshops"
+                    v-model="item.workshop"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                />
+                <v-text-field
+                    label="کارگاه"
+                    v-if="this.workshop"
+                    disabled="true"
+                    v-model="item.tender = this.workshop"
 
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field label="* ردیف پیمان " v-model="item.contract_row" background-color="white" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field label="* شماره قرارداد " v-model="item.contract_number" background-color="white" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="4">
-            <date v-model="item.registration_date" label="تاریخ قرارداد" :default="true" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="4">
-            <date v-model="item.from_date" label="تاریخ شروع قرارداد" :default="true" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="4">
-            <date v-model="item.to_date" label="تاریخ پایان قرارداد" :default="true" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code" background-color="white" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field label="* نام واگذار کننده " v-model="item.assignor_name" background-color="white" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code" background-color="white" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field label=" شعبه " v-model="item.branch" background-color="white" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="4">
-            <money
-                label=" مبلغ اولیه قرارداد"
-                v-model="item.contract_initial_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="4">
-            <v-autocomplete
-                label="* وضعیت"
-                :items="STATUS_TYPE"
-                v-model="item.status"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
-          </v-col>
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field label="* شماره قرارداد " v-model="item.contract_number" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <date v-model="item.registration_date" label="تاریخ قرارداد" :default="true" :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <date v-model="item.from_date" label="تاریخ شروع قرارداد" :default="true" :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <date v-model="item.to_date" label="تاریخ پایان قرارداد" :default="true" :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
+                              background-color="white" :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field label="* نام واگذار کننده " v-model="item.assignor_name" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
+                              background-color="white" :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-text-field label=" شعبه " v-model="item.branch" background-color="white" :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <money
+                    label=" مبلغ اولیه قرارداد"
+                    v-model="item.contract_initial_amount"
+                    background-color="white"
+                    :disabled="!isEditing"
+                />
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-autocomplete
+                    label="* وضعیت"
+                    :items="STATUS_TYPE"
+                    v-model="item.status"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="12">
+                <v-text-field label=" موضوع " v-model="item.topic" background-color="white" :disabled="!isEditing"/>
+              </v-col>
+            </v-row>
+          </template>
+        </m-form>
+      </v-col>
+      <v-col cols="12" md="6">
+        <summary-contract-row-list></summary-contract-row-list>
+      </v-col>
+    </v-row>
 
-
-
-
-        </v-row>
-      </template>
-    </m-form>
   </div>
-
 </template>
 
 <script>
@@ -110,12 +123,13 @@ import date from "@/components/mcomponents/cleave/Date";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
+import SummaryContractRowList from "@/modules/payroll/contract_row/SummaryContractRowList";
 
 
 export default {
   name: "ContractRowFrom",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+  components: {SummaryContractRowList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
     id: {},
   },
@@ -203,7 +217,7 @@ export default {
     },
   },
   mounted() {
-    if(!this.workshop){
+    if (!this.workshop) {
       this.request({
         url: this.endpoint(`payroll/workshop/`),
         method: "get",
@@ -217,7 +231,8 @@ export default {
             })
           }
         }
-      })}
+      })
+    }
   },
 
   methods: {
