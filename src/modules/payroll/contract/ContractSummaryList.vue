@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "WorkshopContractList",
+  name: "WorkshopContractSummaryList",
   props: {},
   data() {
     return {
@@ -41,14 +41,6 @@ export default {
         {
           text: "تاریخ پایان قرارداد",
           value: "contract_to_date",
-        },
-        {
-          text: "تاریخ ترک کار",
-          value: "quit_job_date",
-        },
-        {
-          text: "تاریخ اضافه شدن به لیست بیمه",
-          value: "insurance_add_date",
         },
 
       ];

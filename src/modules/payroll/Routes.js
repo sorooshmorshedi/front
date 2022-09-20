@@ -7,6 +7,8 @@ import PersonnelFamilyList from "@/modules/payroll/personnel_family/PersonnelFam
 import AbsenceList from "@/modules/payroll/absence/AbsenceList";
 import HRLetterList from "@/modules/payroll/hr_letter/HRLetterList";
 import WorkshopForm from "@/modules/payroll/workshop/WorkshopForm";
+import WorkshopInfoList from "@/modules/payroll/workshop/WorkshopInfo";
+import WorkshopSettingForm from "@/modules/payroll/workshop/WorkshopSettingForm";
 import PersonnelForm from "@/modules/payroll/personnel/PersonnelForm";
 import ContractRowForm from "@/modules/payroll/contract_row/ContractRowForm";
 import PersonnelFamilyForm from "@/modules/payroll/personnel_family/PersonnelFamilyForm";
@@ -21,6 +23,8 @@ import TaxRowList from "@/modules/payroll/workshop/tax/TaxRowList";
 import TaxRowForm from "@/modules/payroll/workshop/tax/TaxRowForm";
 
 const Workshop = () => import( /* wepackChunkName: "workshop" */ "@/modules/payroll/workshop/WorkshopForm.vue")
+const WorkshopInfo = () => import( /* wepackChunkName: "workshopInfo" */ "@/modules/payroll/workshop/WorkshopInfo.vue")
+const WorkshopSetting = () => import( /* wepackChunkName: "workshop_setting" */ "@/modules/payroll/workshop/WorkshopSettingForm.vue")
 const Personnel = () => import( /* wepackChunkName: "personnel" */ "@/modules/payroll/personnel/PersonnelForm.vue")
 const PersonnelFamily = () => import( /* wepackChunkName: "personnel_family" */ "@/modules/payroll/personnel_family/PersonnelFamilyForm.vue")
 const WorkshopPersonnel = () => import( /* wepackChunkName: "workshop_personnel" */ "@/modules/payroll/workshop_personnel/WorkshopPersonnelForm.vue")
@@ -51,6 +55,20 @@ export default [
         name: 'WorkshopList',
         path: 'workshop/list',
         component: WorkshopList,
+    },
+    {
+        name: 'WorkshopSetting',
+        path: 'setting',
+        component: WorkshopSetting,
+        props: true,
+        children : [
+            {
+                name: 'WorkshopSettingDetail',
+                path: ':id',
+                component: WorkshopSettingForm,
+            },
+        ]
+
     },
     {
         name: 'Personnel',
@@ -227,6 +245,11 @@ export default [
         path: 'payment',
         component: Payment,
         props: true,
+    },
+    {
+        name: 'WorkshopInfo',
+        path: 'info/workshop',
+        component: WorkshopInfo,
     },
 
 

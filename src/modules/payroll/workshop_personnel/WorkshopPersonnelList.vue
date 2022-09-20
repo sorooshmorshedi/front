@@ -83,10 +83,6 @@ export default {
           text: "وضعیت کارمند",
           value: "employee_status_display",
         },
-        {
-          text: "تاریخ اضافه شدن به لیست بیمه",
-          value: "insurance_add_date",
-        },
 
       ];
 

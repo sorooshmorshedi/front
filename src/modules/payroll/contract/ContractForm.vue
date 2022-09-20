@@ -78,7 +78,7 @@
         </m-form>
       </v-col>
       <v-col cols="12" md="6">
-        <workshop-contract-list ></workshop-contract-list>
+        <workshop-contract-summary-list></workshop-contract-summary-list>
       </v-col>
     </v-row>
 
@@ -105,12 +105,15 @@ import date from "@/components/mcomponents/cleave/Date";
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import WorkshopContractList from "@/modules/payroll/contract/ContractList";
+import WorkshopContractSummaryList from "@/modules/payroll/contract/ContractSummaryList";
 
 
 export default {
   name: "WorkshopContractForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {WorkshopContractList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+  components: {
+    WorkshopContractSummaryList,
+    WorkshopContractList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
     id: {},
   },

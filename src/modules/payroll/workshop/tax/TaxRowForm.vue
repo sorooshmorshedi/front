@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12" md="6">
         <m-form
-            title="ثبت ردیف جدول نرخ مالیات"
+            title="ثبت  جدول معافیت مالیات و حقوق سالانه"
             :showList="false"
             :listRoute="{name:'TaxRowList'}"
             :exportBaseUrl="printUrl"
@@ -19,50 +19,147 @@
 
           <template>
             <v-row>
-              <v-col cols="12" md="3">
-                <v-autocomplete
-                    v-if="!this.workshop"
-                    label=" کارگاه"
-                    :items="workshops"
-                    v-model="item.workshop"
-                    item-text="name"
-                    item-value="id"
-                    :disabled="!isEditing"
-                />
+              <v-col cols="12" md="4">
                 <v-text-field
-                    label="کارگاه"
-                    v-if="this.workshop"
-                    disabled="true"
-                    v-model="item.workshop = this.workshop"
+                    label="نام"
+                    v-model="item.name"
 
                 ></v-text-field>
               </v-col>
+              <v-col cols="12" md="4">
+                <date v-model="item.from_date" label="از تاریخ " :default="false" :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4">
+                <date v-model="item.to_date" label="تا تاریخ " :default="false" :disabled="!isEditing"/>
+              </v-col>
 
-              <v-col cols="12" md="3">
-                <money
-                    label="*از مبلغ "
-                    v-model="item.from_amount"
-                    background-color="white"
-                    :disabled="!isEditing"
-                />
-              </v-col>
-              <v-col cols="12" md="3">
-                <money
-                    label="*تا مبلغ "
-                    v-model="item.to_amount"
-                    background-color="white"
-                    :disabled="!isEditing"
-                />
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                    label="* درصد "
+            </v-row>
+            <v-row class="mt-10 mb-10 ml-2 mr-2" v-if="item.id">
+              <v-simple-table>
+                <template v-slot:default>
+                  <thead>
+                  <tr>
+                    <th class="text-center">
+                      ردیف
+                    </th>
+                    <th class="text-center">
+                      از مبلغ (سالانه)
+                    </th>
+                    <th class="text-center">
+                      تا مبلغ (سالانه)
+                    </th>
+                    <th class="text-center">
+                      درصد
+                    </th>
+                    <th class="text-center">
+                      از مبلغ (ماهانه)
+                    </th>
+                    <th class="text-center">
+                      تا مبلغ (ماهانه)
+                    </th>
 
-                    :disabled="!isEditing"
-                    v-model="item.ratio"
-                    prepend-inner-icon="%"
-                ></v-text-field>
-              </v-col>
+                    <th class="text-center">
+
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr
+                      v-for="(row, index) in item.tax_row.slice().reverse()"
+                      :key="item.id"
+                  >
+                    <td class="text-center">{{ index + 1 }}</td>
+                    <td class="text-center">
+                      <money v-model="row.from_amount"></money>
+                    </td>
+                    <td class="text-center">
+                      <money v-model="row.to_amount , from = row.to_amount "></money>
+                    </td>
+                    <td class="text-center">
+                      <money v-if="row.ratio" v-model="row.ratio"></money>
+                      <v-text-field
+                          v-if="!row.ratio"
+                          class="currency-input"
+                          v-model="moaf"
+                          disabled="true"
+                      >
+                      </v-text-field>
+
+                    </td>
+                    <td class="text-center">
+                      <money v-if="row.from_amount_month" disabled="true" v-model="row.from_amount_month "></money>
+                      <money v-if="!row.from_amount_month" disabled="true" v-model="first "></money>
+                    </td>
+                    <td class="text-center">
+                      <money disabled="true" v-model="row.to_amount_month"></money>
+                    </td>
+
+                    <td class="text-center">
+                      <v-btn
+                          text
+                          color="error"
+                          @click="delete_row(row.id)"
+                      >
+                        حذف
+                      </v-btn>
+                    </td>
+                  </tr>
+                  </tbody>
+                  <tr class="pt-10 green lighten-4">
+                    <td class="text-center">
+                      +
+                    </td>
+                    <td class="text-center">
+                      <money v-if="item.tax_row.slice().reverse()[0]" v-model="from = item.tax_row.slice().reverse()[0].auto_from" disabled="true"></money>
+                      <v-text-field
+                          v-if="!item.tax_row.slice().reverse()[0]"
+                          class="currency-input"
+                          v-model="first"
+                          disabled="true"
+                      >
+                      </v-text-field>
+
+                    </td>
+                    <td class="text-center">
+                      <money v-model="to"></money>
+                    </td>
+                    <td class="text-center">
+                      <money
+                          v-model="ratio"
+                          v-if="item.tax_row.slice().reverse()[0]"
+                      ></money>
+                      <v-text-field
+                          v-if="!item.tax_row.slice().reverse()[0]"
+                          class="currency-input"
+                          v-model="moaf"
+                          disabled="true"
+                      >
+                      </v-text-field>
+
+                    </td>
+                    <td class="text-center" colspan="2">
+                    </td>
+                    <td class="text-center">
+                      <v-btn
+                          v-if="item.tax_row.slice().reverse()[0]"
+                          color="green darken-2 white--text"
+                          @click="add_row(item.id)"
+                      >
+                        ایجاد ردیف جدید
+                      </v-btn>
+                      <v-btn
+                          v-if="!item.tax_row.slice().reverse()[0]"
+                          color="green darken-2 white--text"
+                          @click="add_row(item.id) ; goTo(item.id)"
+                      >
+                        ایجاد ردیف جدید
+                      </v-btn>
+                    </td>
+
+                  </tr>
+
+                </template>
+              </v-simple-table>
             </v-row>
           </template>
 
@@ -70,7 +167,7 @@
       </v-col>
       <v-col cols="12" md="6">
         <tax-row-list></tax-row-list>
-       </v-col>
+      </v-col>
 
     </v-row>
   </div>
@@ -98,6 +195,7 @@ import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import WorkshopList from "@/modules/payroll/workshop/WorkshopList";
 import SummaryWorkshopList from "@/modules/payroll/workshop/SummaryWorkshopList";
 import TaxRowList from "@/modules/payroll/workshop/tax/TaxRowList";
+import {toString} from "lodash";
 
 
 export default {
@@ -109,22 +207,26 @@ export default {
   },
   data() {
     return {
+      first: '0',
+      moaf: 'معاف از مالیات',
+      from: 0,
+      to: 0,
+      ratio: 0,
       time: null,
       menu1: false,
       modal2: false,
-      printUrl: 'payroll/tax/row/all',
+      printUrl: 'payroll/tax/all',
       isWorkshopConfirmed: false,
-      baseUrl: "payroll/tax/row",
+      baseUrl: "payroll/tax",
       type: null,
       entitlement: null,
-      permissionBasename: "workshop_tax_row",
+      permissionBasename: "workshop_tax",
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
       hasLock: true,
       isDefinable: true,
       myClass: '',
-      workshop: this.$route.query.workshop,
       workshops: [],
       PathLevels,
       VisitorLevels,
@@ -136,10 +238,6 @@ export default {
   computed: {
     headers() {
       return [
-        {
-          text: " کارگاه",
-          value: "workshop",
-        },
         {
           text: "ار مبلغ",
           value: "from_amount",
@@ -156,28 +254,46 @@ export default {
     },
   },
   mounted() {
-    if (!this.workshop) {
-      this.request({
-        url: this.endpoint(`payroll/workshop/`),
-        method: "get",
-        success: data => {
-          console.log(data);
-          for (let t in data) {
-            this.workshops.push({
-              'name': data[t].name + ' ' + data[t].code,
-              'id': data[t].id,
-            })
-          }
-          console.log(this.workshops)
-        }
-      })
-    }
   },
 
   methods: {
+    goTo(item) {
+      this.$router.push('tax_row/' + toString(item) )
+    },
+    delete_row(id) {
+      this.request({
+        url: this.endpoint(`payroll/tax/row/` + id + '/'),
+        method: "delete",
+        success: data => {
+          this.notify('ردیف حذف شد', 'success')
+          setTimeout(2000)
+          this.$router.go()
+        }
+      })
+
+    },
+    add_row(item) {
+      this.request({
+        url: this.endpoint(`payroll/tax/row/`),
+        method: "post",
+        data: {
+          workshop_tax: item,
+          from_amount: this.from,
+          to_amount: this.to,
+          ratio: this.ratio
+        },
+        success: data => {
+          this.notify('ردیف ثبت شد', 'success')
+          this.$router.go()
+
+        }
+      })
+
+
+    },
     to(item) {
       return {
-        name: 'MissionDetail',
+        name: 'WorkshopTaxDetail',
         params: {
           id: item.id,
         },
@@ -193,3 +309,4 @@ export default {
 </script>
 
 <style scoped lang="scss"></style>
+

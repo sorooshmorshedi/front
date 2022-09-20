@@ -3,11 +3,11 @@
     <v-list-item class flat v-if="user && isXs">
       <span class="d-block mx-auto px-5 py-2" style="width: 100%;">
         <v-img
-          class="mx-auto"
-          style="border-radius: 30%"
-          contain
-          width="60%"
-          src="/img/SobhanAccountingLogo.png"
+            class="mx-auto"
+            style="border-radius: 30%"
+            contain
+            width="60%"
+            src="/img/SobhanAccountingLogo.png"
         />
       </span>
     </v-list-item>
@@ -27,23 +27,24 @@
     </v-list-item>
 
     <navbar-list-item
-      v-for="(route, i) in routes"
-      class="level-0"
-      :key="i"
-      :route="route"
-      :level="1"
-      v-if="route.show"
+        v-for="(route, i) in routes"
+        class="level-0"
+        :key="i"
+        :route="route"
+        :level="1"
+        v-if="route.show"
     />
   </v-list>
 </template>
 
 <script>
 import NavbarListItem from "./NavbarListItem";
-import { VisitorLevels } from "@/variables";
-import { PathLevels } from "@/variables";
+import {VisitorLevels} from "@/variables";
+import {PathLevels} from "@/variables";
+
 export default {
   name: "NavBar",
-  components: { NavbarListItem },
+  components: {NavbarListItem},
   data() {
     return {};
   },
@@ -464,8 +465,8 @@ export default {
                     query: {
                       status__in: "notPassed,bounced",
                       due__lt: this.serverNow
-                        ? this.serverNow.format("jYYYY-jMM-jDD")
-                        : "",
+                          ? this.serverNow.format("jYYYY-jMM-jDD")
+                          : "",
                     },
                   },
                   title: "لیست چک های دریافتی پاس نشده و برگشتی سررسید گذشته",
@@ -565,13 +566,13 @@ export default {
                     name: "ChequesList",
                     params: {
                       type: "c",
-                      isPaid:true
+                      isPaid: true
                     },
                     query: {
                       status__in: "notPassed,bounced",
                       due__lt: this.serverNow
-                        ? this.serverNow.format("jYYYY-jMM-jDD")
-                        : "",
+                          ? this.serverNow.format("jYYYY-jMM-jDD")
+                          : "",
                     },
                   },
                   title: "لیست چک های پرداختی پاس نشده و برگشتی سررسید گذشته",
@@ -1160,7 +1161,7 @@ export default {
                   title: "کل",
                   to: {
                     name: "LedgerReport",
-                    params: { level: "level1" },
+                    params: {level: "level1"},
                   },
                 },
                 {
@@ -1168,7 +1169,7 @@ export default {
                   title: "معین",
                   to: {
                     name: "LedgerReport",
-                    params: { level: "level2" },
+                    params: {level: "level2"},
                   },
                 },
                 {
@@ -1176,7 +1177,7 @@ export default {
                   title: "تفصیلی",
                   to: {
                     name: "LedgerReport",
-                    params: { level: "level3" },
+                    params: {level: "level3"},
                   },
                 },
                 {
@@ -1184,7 +1185,7 @@ export default {
                   title: "گروه شناور",
                   to: {
                     name: "LedgerReport",
-                    params: { level: "floatAccountGroups" },
+                    params: {level: "floatAccountGroups"},
                   },
                 },
                 {
@@ -1192,7 +1193,7 @@ export default {
                   title: "حساب شناور",
                   to: {
                     name: "LedgerReport",
-                    params: { level: "floatAccounts" },
+                    params: {level: "floatAccounts"},
                   },
                 },
                 {
@@ -1200,7 +1201,7 @@ export default {
                   title: "گروه مرکز هزینه و درآمد",
                   to: {
                     name: "LedgerReport",
-                    params: { level: "costCenterGroups" },
+                    params: {level: "costCenterGroups"},
                   },
                 },
                 {
@@ -1208,7 +1209,7 @@ export default {
                   title: "مرکز هزینه و درآمد",
                   to: {
                     name: "LedgerReport",
-                    params: { level: "costCenters" },
+                    params: {level: "costCenters"},
                   },
                 },
               ],
@@ -1737,7 +1738,7 @@ export default {
                   perm: "lading",
                   to: {
                     name: "LadingNumberReport",
-                    query: { "filters.driving__car__owner": "e" },
+                    query: {"filters.driving__car__owner": "e"},
                   },
                 },
                 {
@@ -1745,7 +1746,7 @@ export default {
                   perm: "lading",
                   to: {
                     name: "LadingNumberReport",
-                    query: { "filters.driving__car__owner": "rm" },
+                    query: {"filters.driving__car__owner": "rm"},
                   },
                 },
                 {
@@ -1753,7 +1754,7 @@ export default {
                   perm: "lading",
                   to: {
                     name: "LadingNumberReport",
-                    query: { "filters.driving__car__owner": "o" },
+                    query: {"filters.driving__car__owner": "o"},
                   },
                 },
                 {
@@ -1761,7 +1762,7 @@ export default {
                   perm: "lading",
                   to: {
                     name: "LadingNumberReport",
-                    query: { "filters.driving__car__owner": "rn" },
+                    query: {"filters.driving__car__owner": "rn"},
                   },
                 },
 
@@ -1835,65 +1836,161 @@ export default {
           children: [
             {
               title: "کارگاه",
-              to: {
-                name: "Workshop",
-              },
+              children: [
+                {
+                  title: "ثبت کارگاه",
+                  to: {
+                    name: "Workshop",
+                  },
+                },
+                {
+                  title: "لیست کارگاه",
+                  to: {
+                    name: "WorkshopList",
+                  },
+                },
+                {
+                  to: {
+                    name: "ContractRow",
+                  },
+                  title: " ثبت ردیف پیمان",
+
+                },
+                {
+                  title: "لیست ردیف پیمان",
+                  to: {
+                    name: "ContractRowList",
+                  },
+                },
+
+
+              ]
             },
+
             {
               title: "پرسنل",
-              to: {
-                name: "Personnel",
-              },
-            },
-            {
-              to: {
-                name: "ContractRow",
-              },
-              title: "ردیف پیمان",
+              children: [
+                {
+                  title: "ثبت پرسنل",
+                  to: {
+                    name: "Personnel",
+                  },
+                },
+                {
+                  title: "لیست پرسنل",
+                  to: {
+                    name: "PersonnelList",
+                  },
+                },
+                {
+                  to: {
+                    name: "PersonnelFamily",
+                  },
+                  title: " ثبت خانواده پرسنل",
+                },
+                {
+                  title: "لیست خانواده پرسنل",
+                  to: {
+                    name: "PersonnelFamilyList",
+                  },
+                },
 
+              ]
             },
+
             {
-              to: {
-                name: "WorkshopPersonnel",
-              },
               title: "پرسنل کارگاه",
+              children: [
+                {
+                  to: {
+                    name: "WorkshopPersonnel",
+                  },
+                  title: " ثبت پرسنل کارگاه",
 
+                },
+                {
+                  to: {
+                    name: "Absence",
+                  },
+                  title: "ثبت مرخصی یا غیبت",
+                },
+                {
+                  to: {
+                    name: "Mission",
+                  },
+                  title: "ثبت ماموریت",
+                },
+                {
+                  to: {
+                    name: "WorkshopPersonnelList",
+                  },
+                  title: " لیست پرسنل ها در کارگاه",
+
+                },
+                {
+                  to: {
+                    name: "AbsenceList",
+                  },
+                  title: "لیست مرخصی یا غیبت ها",
+
+                },
+                {
+                  to: {
+                    name: "MissionList",
+                  },
+                  title: " لیست ماموریت ها",
+                },
+
+
+
+              ]
             },
+
             {
-              to: {
-                name: "WorkshopContract",
-              },
               title: "قرارداد",
+              children: [
+                {
+                  to: {
+                    name: "WorkshopContract",
+                  },
+                  title: "ثبت قرارداد",
+                },
+                {
+                  to: {
+                    name: "WorkshopContractList",
+                  },
+                  title: "لیست قرارداد ها",
+                },
+                {
+                  to: {
+                    name: "HRLetter",
+                  },
+                  title: "ثبت حکم کارگزینی",
+                },
+                {
+                  to: {
+                    name: "HRLetterList",
+                  },
+                  title: "لیست حکم های کارگزینی",
+                },
+              ]
             },
             {
-              to: {
-                name: "PersonnelFamily",
-              },
-              title: "خانواده پرسنل",
-            },
-            {
-              to: {
-                name: "HRLetter",
-              },
-              title: "حکم کارگزینی",
-            },
-            {
-              to: {
-                name: "Absence",
-              },
-              title: "مرخصی یا غیبت",
-            },
-            {
-              to: {
-                name: "Mission",
-              },
-              title: "ماموریت",
-            },
-            {
-              to: {
-                name: "Payment",
-              },
               title: "لیست حقوق",
+              children: [
+                {
+                  to: {
+                    name: "Payment",
+                  },
+                  title: "لیست حقوق",
+                },
+                {
+                  to: {
+                    name: "TaxRow",
+                  },
+                  title: "معافیت مالیات ",
+                },
+                ]
             },
           ],
         },
@@ -1938,6 +2035,7 @@ export default {
 <style lang="scss">
 .navbar-list {
   border: none !important;
+
   .list-item-title {
     font-weight: 300 !important;
     font-size: 0.9rem !important;
@@ -1955,9 +2053,11 @@ export default {
     &:before {
       background-color: rgba(#fff, 0) !important;
     }
+
     background-color: rgba(#fff, 0.9) !important;
     border: none !important;
     border-radius: 4px !important;
+
     .v-list-item__title {
       color: #212121 !important;
     }

@@ -1626,10 +1626,24 @@
             />
           </v-col>
         </v-row>
+        <v-row >
+          <v-col cols="12" md="3">
+            <v-card-text class="text-h6 text-center">مشمول ماده یک تبصره 86 ق.م.م :</v-card-text>
+          </v-col>
+            <v-col cols="12" md="2" class="pt-8">
+              <v-switch
+                  v-model="item.include_made_86"
+                  color="success"
+                  :false-value="false"
+                  :true-value="true"
+                  hide-details
+              ></v-switch>
+          </v-col>
+        </v-row>
 
 
 
-        <v-row v-if="item.id" class="mt-10">
+          <v-row v-if="item.id" class="mt-10">
           <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">مزد مبنا :</v-card-text>
           </v-col>
@@ -1674,6 +1688,10 @@
           </v-col>
         </v-row>
         <v-row v-if="item.id">
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">دستمزد روزانه بیمه :</v-card-text>
+          </v-col>
+
           <v-col cols="12" md="2">
             <money
                 label=" دستمزد روزانه بیمه "

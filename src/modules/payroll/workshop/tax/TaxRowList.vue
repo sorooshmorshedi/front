@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>جدول نرخ مالیات</v-card-title>
+    <v-card-title> معافیت مالیات و حقوق سالانه</v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
@@ -19,7 +19,7 @@ export default {
   props: {},
   data() {
     return {
-      url: "payroll/tax/row/all",
+      url: "payroll/tax/all",
       filters: {},
     };
   },
@@ -27,20 +27,16 @@ export default {
     headers() {
       return [
         {
-          text: " کارگاه",
-          value: "workshop",
+          text: " اسم",
+          value: "name",
         },
         {
-          text: "ار مبلغ",
-          value: "from_amount",
+          text: "ار تاربخ",
+          value: "from_date",
         },
         {
-          text: "تا مبلغ",
-          value: "to_amount",
-        },
-        {
-          text: "درصد",
-          value: "ratio",
+          text: "تا تاربخ",
+          value: "to_date",
         },
       ];
     },
