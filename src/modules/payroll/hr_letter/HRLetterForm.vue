@@ -97,10 +97,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.hoghooghe_roozane_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -108,10 +108,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.hoghooghe_roozane_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -153,10 +153,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.paye_sanavat_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -164,10 +164,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.paye_sanavat_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -181,6 +181,117 @@
                 hide-details
             ></v-switch>
           </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">حق مسکن :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <money
+                label="* مبلغ "
+                v-model="item.haghe_maskan_amount"
+                background-color="white"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.haghe_maskan_nature"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.haghe_maskan_use_insurance"
+                label="معاف از بیمه"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.haghe_maskan_use_tax"
+                label=" معاف از مالیات"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.haghe_maskan_base"
+                label="مزد پایه"
+                color="success"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-switch>
+          </v-col>
+
+        </v-row>
+
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">بن خار و بار :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <money
+                label="* مبلغ "
+                v-model="item.bon_kharo_bar_amount"
+                background-color="white"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.bon_kharo_bar_nature"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.bon_kharo_bar_use_insurance"
+                label="معاف از بیمه"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.bon_kharo_bar_use_tax"
+                label=" معاف از مالیات"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-switch
+                v-model="item.bon_kharo_bar_base"
+                label="مزد پایه"
+                color="success"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-switch>
+          </v-col>
+
         </v-row>
 
 
@@ -210,10 +321,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_sarparasti_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -221,10 +332,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_sarparasti_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -266,10 +377,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_modiriyat_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -277,10 +388,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_modiriyat_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -324,10 +435,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_jazb_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -335,10 +446,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_jazb_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -380,10 +491,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_shoghl_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -391,10 +502,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_shoghl_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -436,10 +547,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_tahsilat_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -447,10 +558,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_tahsilat_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -494,10 +605,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_sakhti_kar_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -505,10 +616,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_sakhti_kar_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -551,10 +662,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_ankal_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -562,10 +673,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_ankal_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -607,10 +718,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_badi_abohava_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -618,10 +729,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_badi_abohava_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -663,10 +774,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.mahroomiat_tashilat_zendegi_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -674,10 +785,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.mahroomiat_tashilat_zendegi_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -719,10 +830,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_mahal_khedmat_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -730,10 +841,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_mahal_khedmat_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -775,10 +886,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_sharayet_mohit_kar_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -786,10 +897,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.fogholade_sharayet_mohit_kar_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -805,61 +916,6 @@
           </v-col>
         </v-row>
 
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">حق مسکن :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="2">
-            <money
-                label="* مبلغ "
-                v-model="item.haghe_maskan_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.haghe_maskan_nature"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_maskan_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                :false-value="false"
-                :true-value="true"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.haghe_maskan_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                :false-value="false"
-                :true-value="true"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-switch
-                v-model="item.haghe_maskan_base"
-                label="مزد پایه"
-                color="success"
-                :false-value="false"
-                :true-value="true"
-                hide-details
-            ></v-switch>
-          </v-col>
-
-        </v-row>
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
@@ -886,10 +942,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.ayabo_zahab_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -897,10 +953,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.ayabo_zahab_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -916,62 +972,6 @@
           </v-col>
         </v-row>
 
-
-        <v-row >
-          <v-col cols="12" md="2" class="text-center">
-            <v-card-text class="text-h6">بن خار و بار :</v-card-text>
-          </v-col>
-          <v-col cols="12" md="2">
-            <money
-                label="* مبلغ "
-                v-model="item.bon_kharo_bar_amount"
-                background-color="white"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-autocomplete
-                label="* ماهیت عناوین شغلی"
-                :items="NATURE_TYPES"
-                v-model="item.bon_kharo_bar_nature"
-                item-text="name"
-                item-value="value"
-                :disabled="!isEditing"
-            />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.bon_kharo_bar_use_insurance"
-                label="بیمه تعلق می گیرد"
-                color="indigo"
-                :false-value="false"
-                :true-value="true"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-
-          <v-col cols="12" md="2">
-            <v-checkbox
-                v-model="item.bon_kharo_bar_use_tax"
-                label="مالیات تعلق می گیرد"
-                color="indigo"
-                :false-value="false"
-                :true-value="true"
-                hide-details
-            ></v-checkbox>
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-switch
-                v-model="item.bon_kharo_bar_base"
-                label="مزد پایه"
-                color="success"
-                :false-value="false"
-                :true-value="true"
-                hide-details
-            ></v-switch>
-          </v-col>
-
-        </v-row>
 
 
         <v-row >
@@ -999,10 +999,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.yarane_ghaza_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1010,10 +1010,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.yarane_ghaza_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1055,10 +1055,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_shir_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1066,10 +1066,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_shir_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1112,21 +1112,20 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_taahol_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
 
           <v-col cols="12" md="2">
             <v-checkbox
-                v-model="item.haghe_taahol_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1167,10 +1166,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.komakhazine_mahdekoodak_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1178,10 +1177,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.komakhazine_mahdekoodak_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1223,10 +1222,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.komakhazine_varzesh_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1234,10 +1233,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.komakhazine_varzesh_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1278,10 +1277,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.komakhazine_mobile_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1289,10 +1288,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.komakhazine_mobile_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1325,19 +1324,19 @@
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
-                v-model="item.mazaya_mostamar_gheyre_naghdi_nature"
+                v-model="item.mazaya_mostamar_gheyre_naghdi_nature = 'p'"
                 item-text="name"
                 item-value="value"
-                :disabled="!isEditing"
+                :disabled="true"
             />
           </v-col>
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.mazaya_mostamar_gheyre_naghdi_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1345,10 +1344,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.mazaya_mostamar_gheyre_naghdi_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1367,25 +1366,63 @@
 
         <v-row class="mt-16">
           <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">حق اولاد :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-autocomplete
+                label="* ماهیت عناوین شغلی"
+                :items="NATURE_TYPES"
+                v-model="item.haghe_owlad_nature = 'u'"
+                :disabled="true"
+                item-text="name"
+                item-value="value"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.haghe_owlad_use_insurance"
+                label="معاف از بیمه"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.haghe_owlad_use_tax"
+                label=" معاف از مالیات"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+          </v-col>
+        </v-row>
+        <v-row class="mt-16">
+          <v-col cols="12" md="2" class="text-center">
             <v-card-text class="text-h6">اضافه کاری :</v-card-text>
           </v-col>
           <v-col cols="12" md="2">
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
-                v-model="item.ezafe_kari_nature"
+                v-model="item.ezafe_kari_nature = 'u'"
+                :disabled="true"
                 item-text="name"
                 item-value="value"
-                :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.ezafe_kari_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1393,10 +1430,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.ezafe_kari_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1412,19 +1449,19 @@
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
-                v-model="item.jome_kari_nature"
+                v-model="item.jome_kari_nature = 'u'"
                 item-text="name"
                 item-value="value"
-                :disabled="!isEditing"
+                :disabled="true"
             />
           </v-col>
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.jome_kari_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1432,10 +1469,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.jome_kari_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1450,19 +1487,19 @@
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
-                v-model="item.shab_kari_nature"
+                v-model="item.shab_kari_nature = 'u'"
                 item-text="name"
                 item-value="value"
-                :disabled="!isEditing"
+                :disabled="true"
             />
           </v-col>
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.shab_kari_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1470,10 +1507,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.shab_kari_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1488,19 +1525,19 @@
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
-                v-model="item.tatil_kari_nature"
+                v-model="item.tatil_kari_nature = 'u'"
+                :disabled="true"
                 item-text="name"
                 item-value="value"
-                :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.tatil_kari_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1508,10 +1545,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.tatil_kari_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1526,19 +1563,19 @@
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
-                v-model="item.nobat_kari_nature"
+                v-model="item.nobat_kari_nature = 'u'"
                 item-text="name"
                 item-value="value"
-                :disabled="!isEditing"
+                :disabled="true"
             />
           </v-col>
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.nobat_kari_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1546,10 +1583,10 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.nobat_kari_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1564,19 +1601,19 @@
             <v-autocomplete
                 label="* ماهیت عناوین شغلی"
                 :items="NATURE_TYPES"
-                v-model="item.haghe_maamooriat_nature"
+                v-model="item.haghe_maamooriat_nature = 'u'"
+                :disabled="true"
                 item-text="name"
                 item-value="value"
-                :disabled="!isEditing"
             />
           </v-col>
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_maamooriat_use_insurance"
-                label="بیمه تعلق می گیرد"
+                label="معاف از بیمه"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1584,10 +1621,78 @@
           <v-col cols="12" md="2">
             <v-checkbox
                 v-model="item.haghe_maamooriat_use_tax"
-                label="مالیات تعلق می گیرد"
+                label=" معاف از مالیات"
                 color="indigo"
-                :false-value="false"
-                :true-value="true"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+          </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">حق سنوات :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-text-field
+                :disabled="true"
+                v-model="sanavat_msg"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.haghe_sanavat_use_insurance"
+                label="معاف از بیمه"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.haghe_msanavat_use_tax"
+                label=" معاف از مالیات"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+          <v-col cols="12" md="2">
+          </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2" class="text-center">
+            <v-card-text class="text-h6">عیدی و پاداش :</v-card-text>
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-text-field
+                :disabled="true"
+                v-model="sanavat_msg"
+            />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.eydi_padash_use_insurance"
+                label="معاف از بیمه"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
+                hide-details
+            ></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="2">
+            <v-checkbox
+                v-model="item.eydi_padash_use_tax"
+                label=" معاف از مالیات"
+                color="indigo"
+                :false-value="true"
+                :true-value="false"
                 hide-details
             ></v-checkbox>
           </v-col>
@@ -1768,6 +1873,7 @@ export default {
       isDefinable: true,
       myClass: '',
       templates: [],
+      sanavat_msg: 'سالانه یا ماهانه',
       template: null,
       contract: this.$route.query.contract,
       contracts: [],

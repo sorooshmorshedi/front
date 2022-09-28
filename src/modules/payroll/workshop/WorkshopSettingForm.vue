@@ -46,7 +46,7 @@
             <v-row class="mt-8 mb-6" >
               <v-col cols="12" md="12">
                 <v-row>
-                  <v-col cols="12" md="6">
+                  <v-col cols="12" md="4">
                     <v-autocomplete
                         label="نحوه محاسبه سنوات "
                         :items="SANAVAT_TYPES"
@@ -56,7 +56,18 @@
                         :disabled="!isEditing"
                     />
                   </v-col>
-                  <v-col cols="12" md="6">
+                  <v-col cols="12" md="4">
+                    <v-autocomplete
+                        label="نحوه محاسبه حق سنوات "
+                        :items="HAGHE_SANAVAT_TYPES"
+                        v-model="item.haghe_sanavat_type"
+                        item-text="name"
+                        item-value="value"
+                        :disabled="!isEditing"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="4">
                     <v-autocomplete
                         label="نحوه محاسبه مزد مبنا"
                         :items="BASE_PAY_TYPES"
@@ -337,6 +348,87 @@
 
                     </tr>
                     </tbody>
+                    <thead class="mt-3">
+                    <tr>
+                      <th class="text-center">
+                        عنوان
+                      </th>
+                      <th class="text-center">
+                        محاسبه بر مبنای
+                      </th>
+                      <th class="text-center">
+                        نحوه شناسایی
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>عیدی و پاداش</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.eydi_padash_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                      <td>
+                        <v-autocomplete
+                            :items="REWARD_TYPES"
+                            v-model="item.eydi_padash_identification"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+
+                    </tr>
+
+                    <tr>
+                      <td>حق سنوات</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.haghe_sanavat_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                      <td>
+                        <v-autocomplete
+                            :items="REWARD_TYPES"
+                            v-model="item.haghe_sanavat_identification"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+
+                    </tr>
+                    <tr>
+                      <td>ذخیره ایام مزخصی</td>
+                      <td>
+                        <v-autocomplete
+                            :items="LEAVE_PAY_TYPES"
+                            v-model="item.leave_save_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                      <td>
+                        <v-text-field
+                            v-model="msg"
+                            :disabled="true"
+                        />
+                      </td>
+
+                    </tr>
+
+                    </tbody>
+
                   </template>
                 </v-simple-table>
               </v-col>
@@ -398,9 +490,21 @@ export default {
         {name: 'حداقل حقوق روزانه', value: 'd'},
         {name: 'مزد مبنا', value: 'b'},
       ],
+      LEAVE_PAY_TYPES: [
+        {name: 'حداقل حقوق روزانه', value: 'd'},
+        {name: 'جمع تمام مزایای حکم کارگزینی', value: 'h'},
+      ],
       SANAVAT_TYPES: [
         {name: 'پیوسته', value: 'c'},
         {name: 'نا پیوسته', value: 'n'},
+      ],
+      HAGHE_SANAVAT_TYPES: [
+        {name: 'قطعی', value: 'c'},
+        {name: 'علی الحساب', value: 'o'},
+      ],
+      REWARD_TYPES: [
+        {name: 'ماهانه', value: 'm'},
+        {name: 'سالانه', value: 'y'},
       ],
 
       printUrl: 'payroll/workshop/',
@@ -416,6 +520,7 @@ export default {
       items: null,
       factors: [],
       PathLevels,
+      msg: 'سالانه',
       VisitorLevels,
       paymentDialog: false,
       payment: '',

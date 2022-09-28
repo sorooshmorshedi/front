@@ -122,7 +122,7 @@
                 ></v-text-field>
               </td>
               <td>
-                حق بیمه پرداختی ماده 137 ق.م.م
+                 سایر حق بیمه پرداختی ماده 137 ق.م.م
               </td>
               <td>
                 <v-text-field
@@ -223,6 +223,21 @@
             </tr>
             <tr>
               <td>
+                مزایای غیر مستمر غیرنقدی  (ریال)
+              </td>
+              <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['mazaya_gheyr_mostamar'] "
+                ></v-text-field>
+              </td>
+              <td>
+              </td>
+              <td>
+              </td>
+            </tr>
+            <tr>
+              <td>
                 سایر اضافات (ریال)
               </td>
               <td>
@@ -232,8 +247,13 @@
                 ></v-text-field>
               </td>
               <td>
+                کسر کار (ساعت)
               </td>
               <td>
+                <v-text-field
+                    class="currency-input"
+                    v-model="items[person.id]['kasre_kar'] "
+                ></v-text-field>
               </td>
             </tr>
             </tbody>
@@ -620,6 +640,7 @@ export default {
               'sob_asr': 0,
               'asr_shab': 0,
               'sob_asr_shab': 0,
+              'mazaya_gheyr_mostamar': 0,
               'sayer_ezafat': 0,
               'contract_row': null,
               'hazine_made_137': 0,
@@ -669,6 +690,12 @@ export default {
             'nobat_kari_sob_asr_shab': this.items[payitem]['sob_asr_shab'],
             'sayer_ezafat': this.items[payitem]['sayer_ezafat'],
             'contract_row': this.items[payitem]['contract_row'],
+            'mazaya_gheyr_mostamar': this.items[payitem]['mazaya_gheyr_mostamar'],
+            'hazine_made_137': this.items[payitem]['hazine_made_137'],
+            'kosoorat_insurance': this.items[payitem]['kosoorat_insurance'],
+            'sayer_moafiat': this.items[payitem]['sayer_moafiat'],
+            'manategh_tejari_moafiat': this.items[payitem]['manategh_tejari_moafiat'],
+            'ejtenab_maliat_mozaaf': this.items[payitem]['ejtenab_maliat_mozaaf'],
             'calculate_payment': true,
           },
           success: data => {

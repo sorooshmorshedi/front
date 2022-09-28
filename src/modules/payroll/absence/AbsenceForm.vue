@@ -63,7 +63,67 @@
                 />
               </v-col>
             </v-row>
-            <v-row v-if="item.leave_type != 'e'">
+            <v-row v-if="item.leave_type == 'm'">
+              <v-col cols="12" md="4">
+                <v-autocomplete
+                    v-if="!this.workshopPersonnel"
+                    label=" پرسنل در کارگاه"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="name"
+                    item-value="id"
+                    @change
+                    :disabled="!isEditing"
+                />
+                <v-text-field
+                    label="پرسنل در کارگاه"
+                    v-if="this.workshopPersonnel"
+                    disabled="true"
+                    v-model="item.workshop_personnel = this.workshopPersonnel"
+
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-autocomplete
+                    label="نوع"
+                    :items="ABSENCE_TYPES"
+                    v-model="item.leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                    @change="setValues(item)"
+                />
+              </v-col>
+              <v-col cols="12" md="4">
+                <v-autocomplete
+                    v-if="item.leave_type == 'm'"
+                    label="دلیل مرخصی ماده 73"
+                    :items="MATTER_73_LEAVE_TYPES"
+                    v-model="item.matter_73_leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </v-col>
+              <v-col cols="12" md="12">
+                <v-banner
+                    class="mt-2 ئ-ذ-2"
+                    outlined
+                    rounded
+                    single-line
+                    sticky
+                >
+                  <v-icon
+                      color="orange"
+                      large
+                  >info
+                  </v-icon>
+                  در مرخصی ماده 73 حداکثر مدت زمان سه روز ثبت  می شود
+                </v-banner>
+              </v-col>
+
+            </v-row>
+            <v-row v-if="item.leave_type != 'e' && item.leave_type != 'm'">
               <v-col cols="12" md="6">
                 <v-autocomplete
                     v-if="!this.workshopPersonnel"
@@ -280,9 +340,17 @@ export default {
     return {
       ABSENCE_TYPES: [
         {name: ' استحقاقی', value: 'e'},
+        {name: 'ماده 73', value: 'm'},
         {name: 'استعلاجی', value: 'i'},
         {name: 'بدون حقوق', value: 'w'},
         {name: 'غیبت', value: 'a'},
+      ],
+      MATTER_73_LEAVE_TYPES: [
+        {name: ' زایمان', value: 'c'},
+        {name: 'ازدواج', value: 'm'},
+        {name: 'مرگ همسر', value: 's'},
+        {name: 'مرگ فرزند', value: 'd'},
+        {name: 'مرگ پدر یا مادر', value: 'p'},
       ],
       ENTITLEMENT_LEAVE_TYPES: [
         {name: ' ساعتی', value: 'h'},
