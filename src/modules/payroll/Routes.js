@@ -19,6 +19,8 @@ import HRLetterForm from "@/modules/payroll/hr_letter/HRLetterForm";
 import MissionForm from "@/modules/payroll/mission/MissionForm";
 import MissionList from "@/modules/payroll/mission/MissionList";
 import PaymentForm from "@/modules/payroll/payment/PaymentForm";
+import PaymentList from "@/modules/payroll/payment/PaymentList";
+import ListOfPayItem from "@/modules/payroll/payment/ListOfPayItemList";
 import TaxRowList from "@/modules/payroll/workshop/tax/TaxRowList";
 import TaxRowForm from "@/modules/payroll/workshop/tax/TaxRowForm";
 
@@ -217,7 +219,7 @@ export default [
     },
     {
         name: 'HRLetterList',
-        path: 'hr_letter/list',
+        path: 'hrLetter/list',
         component: HRLetterList,
     },
 
@@ -245,7 +247,34 @@ export default [
         path: 'payment',
         component: Payment,
         props: true,
+        children : [
+            {
+                name: 'PaymentDetail',
+                path: ':id',
+                component: PaymentForm,
+            },
+        ]
+
     },
+    {
+        name: 'PaymentList',
+        path: 'ListOfPay',
+        component: PaymentList,
+    },
+    {
+        name: 'ListOfPayItem',
+        path: 'listOfPayItem',
+        component: ListOfPayItem,
+        children : [
+            {
+                name: 'ListOfPayDetail',
+                path: ':id',
+                component: ListOfPayItem,
+            },
+        ]
+
+    },
+
     {
         name: 'WorkshopInfo',
         path: 'info/workshop',

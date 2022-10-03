@@ -92,13 +92,6 @@
 
             <v-row class="mt-16">
               <v-col cols="12" md="3">
-                <v-text-field label="تاریخ اضافه شدن به لیست بیمه" v-model="item.insurance_add_date"
-                              background-color="white"
-                              disabled="true"/>
-
-              </v-col>
-
-              <v-col cols="12" md="3">
                 <v-text-field label="* عنوان شغلی " v-model="item.work_title" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
@@ -116,6 +109,18 @@
                     :disabled="!isEditing"
                 />
               </v-col>
+              <v-col cols="12" md="3">
+                <v-autocomplete
+                    label="* وضعیت کارمند"
+                    :items="EMPLOYEE_TYPES"
+                    v-model="item.employee_status"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </v-col>
+
+
               <v-col cols="12" md="3">
                 <v-text-field label="* سابقه بیمه قبلی خارج این کارگاه (ماه) "
                               v-model="item.previous_insurance_history_out_workshop" background-color="white"
@@ -135,11 +140,11 @@
                 <v-text-field label="* مجموع سوابق بیمه ای  (ماه) " v-model="item.insurance_history_totality"
                               background-color="white" :disabled="true"/>
               </v-col>
-              <v-col cols="12" md="2">
+              <v-col cols="12" md="3">
                 <v-text-field label="* سمت یا شغل (دارایی)" v-model="item.job_position" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
-              <v-col cols="12" md="2">
+              <v-col cols="12" md="3">
                 <v-autocomplete
                     label="* رسته شغلی "
                     :items="JOB_POSITIONS"
@@ -163,7 +168,7 @@
                 />
               </v-col>
 
-              <v-col cols="12" md="2">
+              <v-col cols="12" md="3">
                 <v-autocomplete
                     label="* نوع قرارداد"
                     :items="CONTRACT_TYPES"
@@ -173,17 +178,40 @@
                     :disabled="!isEditing"
                 />
               </v-col>
-              <v-col cols="12" md="3">
-                <v-autocomplete
-                    label="* وضعیت کارمند"
-                    :items="EMPLOYEE_TYPES"
-                    v-model="item.employee_status"
-                    item-text="name"
-                    item-value="value"
+
+            </v-row>
+            <v-row class="mt-5">
+              <v-col cols="12" md="4">
+                <v-banner
+                    class=" "
+                    elevation="6"
+                    outlined
+                    rounded
+                    single-line
+                    sticky
+                >
+                  <v-icon
+                      color="orange"
+                      large
+                  >info
+                  </v-icon>
+                  برای محاسبه حق سنوات <br>علی الحساب این دو فیلد لازم است
+                </v-banner>
+              </v-col>
+              <v-col cols="12" md="4" class="mt-3">
+                <v-text-field label=" روز های کارکرد قبل از تعریف "
+                              v-model="item.haghe_sanavat_days" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+
+              <v-col cols="12" md="4" class="mt-3">
+                <money
+                    label="* مبلغ حق سنوات شناسایی شده "
+                    v-model="item.komakhazine_mobile_amount"
+                    background-color="white"
                     :disabled="!isEditing"
                 />
               </v-col>
-
 
             </v-row>
           </template>

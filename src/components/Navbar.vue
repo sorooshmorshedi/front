@@ -1982,6 +1982,12 @@ export default {
                   to: {
                     name: "Payment",
                   },
+                  title: "محاسبه حقوق",
+                },
+                {
+                  to: {
+                    name: "PaymentList",
+                  },
                   title: "لیست حقوق",
                 },
                 {

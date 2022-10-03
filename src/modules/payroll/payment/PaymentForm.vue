@@ -300,6 +300,9 @@
               <th class="text-center">
               </th>
               <th class="text-center">
+                مرخصی ماده 73
+              </th>
+              <th class="text-center">
                 مرخصی استعلاجی
               </th>
               <th class="text-center">
@@ -448,6 +451,7 @@
               <td>{{ person.hourly_entitlement_leave_day }}</td>
               <td>{{ person.daily_entitlement_leave_day }}</td>
               <td>{{ person.entitlement_leave_day }}</td>
+              <td>{{ person.matter_47_leave_day }}</td>
               <td>{{ person.illness_leave_day }}</td>
               <td>{{ person.without_salary_leave_day }}</td>
               <td>{{ person.absence_day }}</td>
