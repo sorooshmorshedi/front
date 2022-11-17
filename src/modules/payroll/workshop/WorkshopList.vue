@@ -33,11 +33,6 @@ export default {
 
         },
         {
-          text: "ردیف پیمان",
-          value: "contract_row",
-          type: "numeric",
-        },
-        {
           text: "نام کارگاه",
           value: "name",
         },
@@ -52,11 +47,6 @@ export default {
         {
           text: "کد پستی",
           value: "postal_code",
-          type: "numeric",
-        },
-        {
-          text: "نرخ بیمه حق کارفرما",
-          value: "employer_insurance_contribution",
           type: "numeric",
         },
         {

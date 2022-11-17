@@ -23,6 +23,12 @@ import PaymentList from "@/modules/payroll/payment/PaymentList";
 import ListOfPayItem from "@/modules/payroll/payment/ListOfPayItemList";
 import TaxRowList from "@/modules/payroll/workshop/tax/TaxRowList";
 import TaxRowForm from "@/modules/payroll/workshop/tax/TaxRowForm";
+import LoanList from "@/modules/payroll/loan/LoanList";
+import LoanForm from "@/modules/payroll/loan/LoanForm";
+import DeductionList from "@/modules/payroll/deduction/DeductionList";
+import DeductionForm from "@/modules/payroll/deduction/DeductionForm";
+import PayForm from "@/modules/payroll/pay/PayForm";
+import ListOfPayItemForm from "@/modules/payroll/payment/ListOfPayItemForm";
 
 const Workshop = () => import( /* wepackChunkName: "workshop" */ "@/modules/payroll/workshop/WorkshopForm.vue")
 const WorkshopInfo = () => import( /* wepackChunkName: "workshopInfo" */ "@/modules/payroll/workshop/WorkshopInfo.vue")
@@ -37,6 +43,10 @@ const HRLetter = () => import( /* wepackChunkName: "hr_letter" */ "@/modules/pay
 const Mission = () => import( /* wepackChunkName: "mission" */ "@/modules/payroll/mission/MissionForm.vue")
 const Payment = () => import( /* wepackChunkName: "payment" */ "@/modules/payroll/payment/PaymentForm.vue")
 const TaxRow = () => import( /* wepackChunkName: "tax_row" */ "@/modules/payroll/workshop/tax/TaxRowForm.vue")
+const Loan = () => import( /* wepackChunkName: "loan" */ "@/modules/payroll/loan/LoanForm.vue")
+const Deduction = () => import( /* wepackChunkName: "deduction" */ "@/modules/payroll/deduction/DeductionForm.vue")
+const Pay = () => import( /* wepackChunkName: "pay" */ "@/modules/payroll/pay/PayForm.vue")
+const ListOfPayItemDetail = () => import( /* wepackChunkName: "list_of_pay_item" */ "@/modules/payroll/payment/ListOfPayItemForm.vue")
 
 export default [
     {
@@ -280,6 +290,70 @@ export default [
         path: 'info/workshop',
         component: WorkshopInfo,
     },
+    {
+        name: 'Loan',
+        path: 'loan',
+        component: Loan,
+        props: true,
+        children : [
+            {
+                name: 'LoanDetail',
+                path: ':id',
+                component: LoanForm,
+            },
+        ]
 
+    },
+    {
+        name: 'LoanList',
+        path: 'loan/list',
+        component: LoanList,
+    },
+    {
+        name: 'Deduction',
+        path: 'deduction',
+        component: Deduction,
+        props: true,
+        children : [
+            {
+                name: 'DeductionDetail',
+                path: ':id',
+                component: DeductionForm,
+            },
+        ]
+
+    },
+    {
+        name: 'DeductionList',
+        path: 'deduction/list',
+        component: DeductionList,
+    },
+
+    {
+        name: 'ListOfPayItemForm',
+        path: 'listOfPayItemForm',
+        component: ListOfPayItemDetail,
+        children : [
+            {
+                name: 'ListOfPayItemForm',
+                path: ':id',
+                component: ListOfPayItemDetail,
+            },
+        ]
+
+    },
+    {
+        name: 'payForm',
+        path: 'pay',
+        component: Pay,
+        children : [
+            {
+                name: 'pay',
+                path: ':id',
+                component: PayForm,
+            },
+        ]
+
+    },
 
 ]

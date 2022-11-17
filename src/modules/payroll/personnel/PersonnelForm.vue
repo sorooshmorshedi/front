@@ -179,7 +179,11 @@
       <v-btn
           class="light-blue white--text mt-6  mr-2 float-left"
           @click="verifyPersonnel(item.id)"
-          v-if="item.id && !item.is_personnel_verified" >ثبت نهایی</v-btn>
+          v-if="item.id && !item.verified" >ثبت نهایی</v-btn>
+      <v-btn
+          :disabled="true"
+          class="green white--text mt-6  mr-2 float-left"
+          v-if="item.id && item.verified" > نهایی شده</v-btn>
 
     </m-form>
 
@@ -217,8 +221,8 @@ export default {
   data() {
     return {
       NATIONALITY_TYPE: [
-        {name: ' ایرانی', value: 'i'},
-        {name: 'غیر ایرانی', value: 'a'},
+        {name: ' ایرانی', value: 1},
+        {name: 'غیر ایرانی', value: 2},
       ],
       PERSONNEL_STATUS: [
         {name: ' فعال', value: true},
@@ -240,13 +244,14 @@ export default {
         {name: 'سرپرست فرزند', value: 'c'},
       ],
       DEGREE_TYPE: [
-        {name: ' زیر دیپلم', value: 'un'},
-        {name: ' دیپلم', value: 'di'},
-        {name: 'کاردانی', value: 'as'},
-        {name: 'لیسانس', value: 'ba'},
-        {name: 'فوق لیسانس', value: 'ma'},
-        {name: 'دکترا', value: 'do'},
-        {name: 'فوق دکترا', value: 'pd'},
+        {name: ' کم سواد', value: 1},
+        {name: ' زیر دیپلم', value: 2},
+        {name: ' دیپلم', value: 3},
+        {name: 'کاردانی', value: 4},
+        {name: 'لیسانس', value: 5},
+        {name: 'فوق لیسانس', value: 6},
+        {name: 'دکترا', value: 7},
+        {name: 'فوق دکترا', value: 8},
       ],
       UNIVERSITY_TYPES: [
         {name: ' دولتی', value: 'st'},
@@ -420,6 +425,10 @@ export default {
           console.log(data);
           this.notify(' ثبت پرسنل تایید  شد', 'success')
           window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
         }
       })
 

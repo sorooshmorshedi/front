@@ -120,7 +120,7 @@ export default {
   data() {
     return {
 
-      printUrl: 'payroll/contract/all',
+      printUrl: 'payroll/contract/form',
       isWorkshopConfirmed: false,
       baseUrl: "payroll/contract",
       permissionBasename: "contract",

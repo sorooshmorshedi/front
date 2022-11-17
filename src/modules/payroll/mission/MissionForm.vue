@@ -262,7 +262,7 @@ export default {
       time: null,
       menu1: false,
       modal2: false,
-      printUrl: 'payroll/mission/all',
+      printUrl: 'payroll/mission/request',
       isWorkshopConfirmed: false,
       baseUrl: "payroll/mission",
       type: null,

@@ -24,36 +24,34 @@
                 <v-text-field label="* کد کارگاه " v-model="item.code" background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
-                              :disabled="!isEditing"/>
-              </v-col>
-              <v-col cols="12" md="6">
                 <v-text-field label="* نام کارگاه " v-model="item.name" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
+
               <v-col cols="12" md="6">
                 <v-text-field label="* نام کارفرما " v-model="item.employer_name" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
-              <v-col cols="12" md="8">
-                <v-textarea label="* آدرس کارگاه" v-model="item.address" :disabled="!isEditing"></v-textarea>
-              </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <v-textarea label=" کد پستی کارگاه" v-model="item.postal_code" :disabled="!isEditing"></v-textarea>
               </v-col>
-              <v-col cols="12" md="4">
-                <v-textarea label=" * نرخ بیمه حق کارفرما " v-model="item.employer_insurance_contribution"
-                            :disabled="!isEditing"></v-textarea>
+
+              <v-col cols="12" md="12">
+                <v-textarea label="* آدرس کارگاه" v-model="item.address" :disabled="!isEditing"></v-textarea>
               </v-col>
-              <v-col cols="12" md="4">
+
+              <v-col cols="12" md="6">
                 <v-textarea label=" کد شعبه" v-model="item.branch_code" :disabled="!isEditing"></v-textarea>
               </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <v-textarea label=" نام شعبه" v-model="item.branch_name" :disabled="!isEditing"></v-textarea>
               </v-col>
             </v-row>
             <v-btn class="primary white--text mt-6 ml-2 float-left"
                    v-if=" item.id" @click="setting(item)">تنظیمات کارگاه
+            </v-btn>
+            <v-btn color="blue" class=" white--text mt-6 ml-2 float-left"
+                   v-if=" item.id" @click="goWorkshop(item)">مشاهده جامع
             </v-btn>
 
           </template>
@@ -116,7 +114,7 @@ export default {
         {name: 'نا پیوسته', value: 'n'},
       ],
 
-      printUrl: 'payroll/workshop/',
+      printUrl: 'payroll/workshop/all',
       isWorkshopConfirmed: false,
       worshopId: 0,
       baseUrl: "payroll/workshop",
@@ -124,8 +122,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      hasLock: true,
-      isDefinable: true,
+      hasLock: false,
+      isDefinable: false,
       myClass: '',
       factors: [],
       PathLevels,
@@ -199,6 +197,10 @@ export default {
     },
     setting(item) {
       this.$router.push('/panel/setting/' + item.id)
+    },
+
+    goWorkshop(item) {
+      this.$router.push('/panel/info/workshop?workshop=' + item.id)
     },
 
     unConfirm() {

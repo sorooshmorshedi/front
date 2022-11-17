@@ -2,7 +2,6 @@
   <div>
     <v-row>
       <v-col cols="12" md="6">
-
         <m-form
             title="تعریف پرسنل در کارگاه"
             :showList="false"
@@ -18,9 +17,29 @@
             ref="WorkshopPersonnelForm"
 
         >
+          <v-toolbar  v-if="item.id"  class="white--text" color="indigo">
+            <v-toolbar-title>
+              {{ personnelName }}
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn color="red" class="white--text" left @click="settlement('html')" v-if="item.quit_job">
+              فرم تسویه
+            </v-btn>
+            <v-btn left color="indigo lighten-4" @click="balance('html')" class="ml-2 mr-2 indigo--text text--darken-3">
+              گردش پرداخت
+            </v-btn>
+            <m-datatable v-show="false" :headers="headers" :apiUrl="export_url" :filters.sync="export_filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
+                         ref="exportTable">
+              <template #item.detail="{ item }">
+                <detail-link :to="to(item)" />
+              </template>
+
+            </m-datatable>
+
+          </v-toolbar>
 
           <template>
-            <v-row class="mt-3">
+            <v-row class="mt-3" v-if="!item.id">
               <v-col cols="12" md="3">
                 <v-autocomplete
                     v-if="!this.workshop"
@@ -101,9 +120,9 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-autocomplete
-                    label="* وضعیت محل خدمت "
-                    :items="JOB_LOCATION_STATUSES"
-                    v-model="item.job_location_status"
+                    label="* وضعیت کارمند"
+                    :items="EMPLOYEE_TYPES"
+                    v-model="item.employee_status"
                     item-text="name"
                     item-value="value"
                     :disabled="!isEditing"
@@ -111,9 +130,9 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-autocomplete
-                    label="* وضعیت کارمند"
-                    :items="EMPLOYEE_TYPES"
-                    v-model="item.employee_status"
+                    label="* وضعیت محل کار"
+                    :items="JOB_LOCATION_STATUSES"
+                    v-model="item.job_location_status"
                     item-text="name"
                     item-value="value"
                     :disabled="!isEditing"
@@ -133,11 +152,11 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-text-field label="* سابقه بیمه جاری در این کارگاه (ماه) "
-                              v-model="item.current_insurance_history_in_workshop"
+                              v-model="item.current_insurance_month"
                               background-color="white" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="3">
-                <v-text-field label="* مجموع سوابق بیمه ای  (ماه) " v-model="item.insurance_history_totality"
+                <v-text-field label="* مجموع سوابق بیمه ای  (ماه) " v-model="item.total_insurance_month"
                               background-color="white" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="3">
@@ -177,6 +196,10 @@
                     item-value="value"
                     :disabled="!isEditing"
                 />
+              </v-col>
+
+              <v-col cols="12" md="3">
+                <date v-model="item.employment_date" label="تاریخ استخدام " :default="false" :disabled="!isEditing"/>
               </v-col>
 
             </v-row>
@@ -261,58 +284,60 @@ export default {
   data() {
     return {
       CONTRACT_TYPES: [
-        {name: ' پاره وقت', value: 'p'},
-        {name: 'تمام وقت', value: 'f'},
-        {name: 'موقت', value: 't'},
-        {name: 'ساعتی', value: 'h'},
-        {name: 'پیمانی', value: 'c'},
+        {name: ' پاره وقت', value: 2},
+        {name: 'تمام وقت', value: 1},
+        {name: 'موقت', value: 5},
+        {name: 'ساعتی', value: 3},
+        {name: 'پیمانی', value: 4},
       ],
       JOB_LOCATION_STATUSES: [
-        {name: ' معمولی', value: 'nr'},
-        {name: 'مناطق کمتر توسعه یافته', value: 'dp'},
-        {name: 'مناطق آزاد تجاری', value: 'ft'},
-        {name: 'پارک علم و فناوری', value: 'sp'},
+        {name: ' معمولی', value: 1},
+        {name: 'مناطق کمتر توسعه یافته', value: 2},
+        {name: 'مناطق آزاد تجاری', value: 3},
       ],
       EMPLOYMENTS_TYPES: [
-        {name: ' پیمانی', value: 'c'},
-        {name: 'قراردادی', value: 'co'},
-        {name: 'َشرکتی', value: 'cr'},
-        {name: 'مامور', value: 'fu'},
-        {name: 'رسمی', value: 'p'},
-        {name: 'سایر', value: 'or'},
+        {name: ' پیمانی', value: 4},
+        {name: 'قراردادی', value: 1},
+        {name: 'َشرکتی', value: 2},
+        {name: 'مامور', value: 5},
+        {name: 'رسمی', value: 3},
+        {name: 'سایر', value: 6},
       ],
       EMPLOYEE_TYPES: [
-        {name: ' معمولی', value: 'nr'},
-        {name: 'فرزند شهید', value: 'fc'},
-        {name: 'جانباز', value: 'st'},
-        {name: 'آزاده', value: 'fr'},
-        {name: 'نیروهای مسلح', value: 'ar'},
-        {name: 'مشمولین بند چهارده ماده نود و هفت', value: 'bn'},
-        {name: 'اتباع خارجی مشمول قانون اجتناب از اخذ مالیات مضاعف', value: 'fo'},
+        {name: ' معمولی', value: 1},
+        {name: 'جانباز', value: 2},
+        {name: 'فرزند شهید', value: 3},
+        {name: 'آزاده', value: 4},
+        {name: 'نیروهای مسلح', value: 5},
+        {name: 'یر مشمولین بند14 ماده 11', value: 6},
+        {name: 'اتباع خارجی مشمول قانون اجتناب از اخذ مالیات مضاعف', value: 7},
+
       ],
       JOB_POSITIONS: [
-        {name: ' آموزشي و فرهنگي', value: 'st'},
-        {name: 'اداري و مالي', value: 'fn'},
-        {name: 'اموراجتماعي', value: 'so'},
-        {name: 'درماني و بهداشتي', value: 'he'},
-        {name: 'اطلاعات فناوري', value: 'it'},
-        {name: 'خدمات', value: 'se'},
-        {name: 'فني و مهندسي', value: 'en'},
-        {name: 'كشاورزي ومحيط زيست', value: 'ar'},
-        {name: 'تولیدی', value: 'pr'},
-        {name: 'تحقیقاتی', value: 'sr'},
-        {name: 'کارگری', value: 'wo'},
-        {name: 'حراست و نگهبانی', value: 'sc'},
-        {name: 'ترابری', value: 'tr'},
-        {name: 'بازاریابی و فروش', value: 'sa'},
-        {name: 'قضات', value: 'ju'},
-        {name: 'انبارداری', value: 'wa'},
-        {name: 'کنترل کیفی', value: 'co'},
-        {name: 'هیات علمی', value: 'ma'},
-        {name: 'سایر', value: 'ot'},
+        {name: ' آموزشي و فرهنگي', value: 2},
+        {name: 'اداري و مالي', value: 1},
+        {name: 'اموراجتماعي', value: 3},
+        {name: 'درماني و بهداشتي', value: 5},
+        {name: 'اطلاعات فناوري', value: 4},
+        {name: 'خدمات', value: 7},
+        {name: 'فني و مهندسي', value: 6},
+        {name: 'كشاورزي ومحيط زيست', value: 8},
+        {name: 'تولیدی', value: 13},
+        {name: 'تحقیقاتی', value: 15},
+        {name: 'کارگری', value: 11},
+        {name: 'حراست و نگهبانی', value: 10},
+        {name: 'ترابری', value: 12},
+        {name: 'بازاریابی و فروش', value: 9},
+        {name: 'قضات', value: 17},
+        {name: 'انبارداری', value: 16},
+        {name: 'کنترل کیفی', value: 14},
+        {name: 'هیات علمی', value: 18},
+        {name: 'سایر', value: 0},
       ],
       personnel_code: null,
       search_code: null,
+      export_url: 'balance/',
+      export_filters: [],
       national_code: null,
       national_code_dis: true,
       personnel_code_dis: true,
@@ -326,6 +351,7 @@ export default {
       hasLock: true,
       isDefinable: true,
       myClass: '',
+      id: this.$route.params.id,
       personnel: this.$route.query.personnel,
       personnels: [],
       workshop: this.$route.query.workshop,
@@ -417,6 +443,17 @@ export default {
     if (this.personnel) {
       this.searchByCode = true
       this.setValues(this.personnel)
+    }
+
+    if (this.id) {
+      this.request({
+        url: this.endpoint(`payroll/workshop/personnel/` + this.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.personnelName = data['personnel_name']
+        }
+      })
     }
 
     if (!this.personnel) {
@@ -541,6 +578,17 @@ export default {
         this.personnel_code = null
       }
     },
+    balance(type) {
+      this.export_filter = {id: this.$route.params.id}
+      this.export_url = "payroll/balance"
+      this.$refs.exportTable.exportTo(type)
+    },
+    settlement(type) {
+      this.export_filter = {id: this.$route.params.id}
+      this.export_url = "payroll/settlement/" + this.$route.params.id
+      this.$refs.exportTable.exportTo(type)
+    },
+
   }
 }
 

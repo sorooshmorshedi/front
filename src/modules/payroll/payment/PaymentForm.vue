@@ -1,14 +1,27 @@
 <template>
-  <v-card class="pa-3 ma-4 m">
-    <v-card-title>محاسبه حقوق</v-card-title>
-    <v-row>
-      <v-col cols="12" md="3">
+  <v-card class=" "
+          elevation="3"
+          outlined
+          tile>
+    <v-toolbar color="indigo darken-2">
+      <v-toolbar-title class="white--text">محاسبه حقوق</v-toolbar-title>
+    </v-toolbar>
+    <v-row class="pr-2 pl-2 pt-8">
+      <v-col cols="12" md="2">
+        <v-text-field
+            label="نام لیست"
+            :disabled="list_generated"
+            v-model="list_name"
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12" md="2">
         <v-autocomplete
             v-if="!this.workshop"
             label="کارگاه"
             :items="workshops"
             v-model="search_workshop"
-            :disabled="show_list_of_pay"
+            :disabled="list_generated"
             item-text="name"
             item-value="id"
         />
@@ -26,478 +39,246 @@
             v-model="this.workshop_name "
         ></v-text-field>
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" md="2">
         <v-text-field
             label="سال"
             v-model="this.serverNow.format('jYYYY') "
             disabled=true
         ></v-text-field>
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" md="2">
         <v-autocomplete
             label="ماه"
             :items="MONTHS"
-            :disabled="show_list_of_pay"
+            :disabled="list_generated"
             v-model="search_month"
             item-text="name"
             item-value="value"
         />
       </v-col>
-      <v-col cols="12" md="3" class="pr-16" v-if="!list_generated">
-        <v-btn color="green" class="justify-center white--text" @click="getList">لیست پرسنل فعال</v-btn>
+      <v-col cols="12" md="2">
+        <v-autocomplete
+            label="وضعیت"
+            :items="TYPES"
+            :disabled="list_generated"
+            v-model="list_status"
+            item-text="name"
+            item-value="value"
+        />
+      </v-col>
+      <v-col cols="12" md="2">
+        <v-autocomplete
+            label="بیمه و مالیات"
+            :items="CALCULATE_TYPES"
+            :disabled="list_generated"
+            v-model="calculate"
+            item-text="name"
+            item-value="value"
+        />
       </v-col>
     </v-row>
-    <v-row v-if="list_generated && !calculateDone">
-      <v-col cols="12" md="6"
-             v-for="person in payList" :key="person.id">
-        <v-simple-table class="mt-10">
-          <template v-slot:default>
-            <thead class="style: blue lighten-4">
-            <tr>
-              <th class="text-center">
-                نام و نام خانوادگی
-              </th>
-              <th class="text-center">
-                کارکرد عادی
-              </th>
-              <th class="text-center">
-                کارکرد واقعی
-              </th>
-              <th class="text-center">
-                ردیف پیمان
-              </th>
-            </tr>
-            <tr class="white">
-              <td class="text-center">{{ person.personnel_name }}</td>
-              <td class="text-center">{{ person.normal_worktime }}</td>
-              <td class="text-center">{{ person.real_worktime }}</td>
-              <td>
-                <v-autocomplete
-                    :items="contractRows"
-                    v-model="items[person.id]['contract_row']"
-                    item-text="name"
-                    item-value="id"
-                />
-              </td>
-            </tr>
-            <tr>
-              <th class="text-center" colspan="2">
-                اضافات
-              </th>
-              <th class="text-center" colspan="2">
-                کسورات
-              </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>
-                اضافه کاری (ساعت)
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['ezafe_kari'] "
-                ></v-text-field>
-              </td>
-              <td>
-                هزینه های درمانی ماده 137 ق.م.م
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['hazine_made_137'] "
-                ></v-text-field>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                تعطیل کاری (ساعت)
+    <v-card-actions v-if="!list_generated" class="mt-4 d-flex justify-center justify-md-end mt-2"
+    >
+      <v-btn
+          @click="getList"
+          large
+          v-if="isEditing"
+          left
+          class=" green white--text "
+      >لیست پرسنل فعال
+      </v-btn
+      >
 
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['tatil_kari'] "
-                ></v-text-field>
-              </td>
-              <td>
-                 سایر حق بیمه پرداختی ماده 137 ق.م.م
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['kosoorat_insurance'] "
-                ></v-text-field>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                شب کاری (ساعت)
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['shab_kari'] "
-                ></v-text-field>
-              </td>
-              <td>
-                معافیت مربوط به مناطق آزاد تجاری
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['manategh_tejari_moafiat'] "
-                ></v-text-field>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                نوبت کاری صبح و عصر (روز)
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['sob_asr'] "
-                ></v-text-field>
-              </td>
-              <td>
-                معافیت قانون اجتناب از اخذ مالیات مضاعف
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['ejtenab_maliat_mozaaf'] "
-                ></v-text-field>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                نوبت کاری صبح و شب (روز)
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['sob_shab'] "
-                ></v-text-field>
-              </td>
-              <td>
-                سایر معافیت ها
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['sayer_moafiat'] "
-                ></v-text-field>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                نوبت کاری عصر و شب (روز)
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['asr_shab'] "
-                ></v-text-field>
-              </td>
-              <td>
-              </td>
-              <td>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                نوبت کاری صبح و عصر و شب  (روز)
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['sob_asr_shab'] "
-                ></v-text-field>
-              </td>
-              <td>
-              </td>
-              <td>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                مزایای غیر مستمر غیرنقدی  (ریال)
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['mazaya_gheyr_mostamar'] "
-                ></v-text-field>
-              </td>
-              <td>
-              </td>
-              <td>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                سایر اضافات (ریال)
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['sayer_ezafat'] "
-                ></v-text-field>
-              </td>
-              <td>
-                کسر کار (ساعت)
-              </td>
-              <td>
-                <v-text-field
-                    class="currency-input"
-                    v-model="items[person.id]['kasre_kar'] "
-                ></v-text-field>
-              </td>
-            </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </v-col>
+    </v-card-actions>
+    <v-row v-if="list_generated && !calculateDone">
+      <v-simple-table class="mt-7 ml-2 mr-2 " dense>
+        <template v-slot:default>
+          <thead class="style: blue lighten-4">
+          <tr>
+            <th class="text-center">
+              نام و نام خانوادگی
+            </th>
+            <th class="text-center">
+              ردیف پیمان
+            </th>
+            <th class="text-center">
+              کسر کار (ساعت)
+            </th>
+
+            <th class="text-center">
+              اضافه کاری (ساعت)
+            </th>
+
+            <th class="text-center">
+              تعطیل کاری (ساعت)
+            </th>
+            <th class="text-center">
+              شب کاری (ساعت)
+            </th>
+            <th class="text-center">
+              نوبت کاری صبح و عصر (روز)
+            </th>
+            <th class="text-center">
+              نوبت کاری صبح و شب (روز)
+            </th>
+
+            <th class="text-center">
+              نوبت کاری عصر و شب (روز)
+            </th>
+
+            <th class="text-center">
+              نوبت کاری صبح و عصر و شب (روز)
+            </th>
+            <th class="text-center">
+              مزایای غیر مستمر غیرنقدی (ریال)
+            </th>
+            <th class="text-center">
+              سایر اضافات (ریال)
+            </th>
+            <th class="text-center">
+              هزینه های درمانی ماده 137 ق.م.م
+            <th class="text-center">
+              سایر حق بیمه پرداختی ماده 137 ق.م.م
+            </th>
+            <th class="text-center">
+              معافیت مربوط به مناطق آزاد تجاری
+            </th>
+            <th class="text-center">
+              معافیت قانون اجتناب از اخذ مالیات مضاعف
+            </th>
+            <th class="text-center">
+              سایر معافیت های مالیات(ریال)
+            </th>
+            <th class="text-center">
+              سایرکسورات (ریال)
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="person in payList" :key="person.id">
+            <td class="text-center">{{ person.personnel_name }}</td>
+            <td>
+              <v-autocomplete
+                  :items="contractRows"
+                  v-model="items[person.id]['contract_row']"
+                  item-text="name"
+                  item-value="id"
+              />
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['kasre_kar'] "
+                  prepend-inner-icon="fa-clock"
+              ></v-text-field>
+            </td>
+
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['ezafe_kari'] "
+                  prepend-inner-icon="fa-clock"
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['tatil_kari'] "
+                  prepend-inner-icon="fa-clock"
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['shab_kari'] "
+                  prepend-inner-icon="fa-clock"
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['sob_asr'] "
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['sob_shab'] "
+              ></v-text-field>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['asr_shab'] "
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['sob_asr_shab'] "
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['mazaya_gheyr_mostamar'] "
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['sayer_ezafat'] "
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['hazine_made_137'] "
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['kosoorat_insurance'] "
+              ></v-text-field>
+            </td>
+
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['manategh_tejari_moafiat'] "
+              ></v-text-field>
+            </td>
+
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['ejtenab_maliat_mozaaf'] "
+              ></v-text-field>
+            </td>
+
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['sayer_moafiat'] "
+              ></v-text-field>
+            </td>
+            <td>
+              <v-text-field
+                  class="currency-input"
+                  v-model="items[person.id]['sayer_kosoorat'] "
+              ></v-text-field>
+            </td>
+
+          </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
     </v-row>
     <v-row>
       <v-col>
         <v-btn v-if="list_generated && !calculateDone" @click="calculatePayment" color="green lighten-2"
                class="float-left">محاسبه حقوق و دستمزد
         </v-btn>
-      </v-col>
-    </v-row>
-    <v-row v-if="show_list_of_pay">
-      <v-col cols="12" md="12">
-        <v-simple-table class="mt-10">
-          <template v-slot:default>
-            <thead class="style: blue lighten-4 ">
-            <tr>
-              <th class="text-center">
-                ردیف
-              </th>
-              <th class="text-center">
-                نام و نام خانوادگی
-              </th>
-              <th class="text-center">
-                بیمه شود؟
-              </th>
-              <th class="text-center">
-                سابقه بیمه در کارگاه به ماه
-              </th>
-              <th class="text-center">
-                ردیف پیمان
-              </th>
-              <th class="text-center">
-                کارکرد عادی
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-                مرخصی استحقاقی
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-                مرخصی ماده 73
-              </th>
-              <th class="text-center">
-                مرخصی استعلاجی
-              </th>
-              <th class="text-center">
-                مرخصی بدون حقوق
-              </th>
-              <th class="text-center">
-                غیبت
-              </th>
-              <th class="text-center">
-                کارکرد واقعی
-              </th>
-              <th class="text-center">
-                حداقل مزد روزانه
-              </th>
-              <th class="text-center">
-                حقوق پایه ماهانه
-              </th>
-              <th class="text-center">
-                نرخ پایه سنوات روزانه
-              </th>
-              <th class="text-center">
-                نرخ پایه سنوات ماهانه
-              </th>
-              <th class="text-center">
-                اضافه کاری
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-                تعطیل کاری
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-                کسر کار
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-                ماموریت
-              </th>
-              <th class="text-center">
-                مبلغ ماموریت
-              </th>
-
-              <th class="text-center">
-                تعداد فرزندان مشمول عائله مندی
-              </th>
-              <th class="text-center">
-                عائله مندی
-              </th>
-              <th class="text-center">
-                سایر اضافات
-              </th>
-              <th class="text-center">
-                حقوق و مزایای کل ماهانه
-              </th>
-
-
-            </tr>
-
-            </thead>
-            <tbody>
-            <tr>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-                ساعتی
-              </th>
-              <th class="text-center">
-                روزانه
-              </th>
-              <th class="text-center">
-                جمع (روز)
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-                ساعت
-              </th>
-              <th class="text-center">
-                مبلغ
-              </th>
-              <th class="text-center">
-                ساعت
-              </th>
-              <th class="text-center">
-                مبلغ
-              </th>
-              <th class="text-center">
-                ساعت
-              </th>
-              <th class="text-center">
-                مبلغ
-              </th>
-              <th class="text-center">
-                روز
-              </th>
-              <th class="text-center">
-                مبلغ
-              </th>
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-              <th class="text-center">
-              </th>
-
-
-            </tr>
-
-            <tr v-for="person in list_of_pay" :key="person.id">
-              <td> *</td>
-              <td>{{ person.personnel_name }}</td>
-              <td>{{ person.is_insurance_display }}</td>
-              <td>{{ person.insurance_workshop }}</td>
-              <td>{{ person.contract_row_title }}</td>
-              <td>{{ person.normal_worktime }}</td>
-              <td>{{ person.hourly_entitlement_leave_day }}</td>
-              <td>{{ person.daily_entitlement_leave_day }}</td>
-              <td>{{ person.entitlement_leave_day }}</td>
-              <td>{{ person.matter_47_leave_day }}</td>
-              <td>{{ person.illness_leave_day }}</td>
-              <td>{{ person.without_salary_leave_day }}</td>
-              <td>{{ person.absence_day }}</td>
-              <td>{{ person.real_worktime }}</td>
-              <td>
-                <money :disabled="true" v-model="person.hoghoogh_roozane"></money>
-              </td>
-              <td>
-                <money :disabled="true" v-model="person.montly_pay"></money>
-              </td>
-              <td>
-                <money :disabled="true" v-model="person.sanavat_base"></money>
-              </td>
-              <td>
-                <money :disabled="true" v-model="person.sanavat_montly_pay"></money>
-              </td>
-              <td>{{ person.ezafe_kari }}</td>
-              <td>
-                <money :disabled="true" v-model="person.ezafe_kari_total"></money>
-              </td>
-              <td>{{ person.tatil_kari }}</td>
-              <td>
-                <money :disabled="true" v-model="person.tatil_kari_total"></money>
-              </td>
-              <td>{{ person.kasre_kar }}</td>
-              <td>
-                <money :disabled="true" v-model="person.kasre_kar_total"></money>
-              </td>
-              <td>{{ person.mission_day }}</td>
-              <td>
-                <money :disabled="true" v-model="person.total_mission"></money>
-              </td>
-              <td>{{ person.aele_mandi_child }}</td>
-              <td>
-                <money :disabled="true" v-model="person.aele_mandi"></money>
-              </td>
-              <td>
-                <money :disabled="true" v-model="person.sayer_ezafat"></money>
-              </td>
-              <td>
-                <money :disabled="true" v-model="person.total_payment"></money>
-              </td>
-            </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
       </v-col>
     </v-row>
   </v-card>
@@ -549,13 +330,24 @@ export default {
         {name: ' بهمن', value: 'ba'},
         {name: ' اسفند', value: 'es'},
       ],
+      TYPES: [
+        {name: ' قطعی', value: true},
+        {name: ' غیر قطعی', value: false},
+      ],
+      CALCULATE_TYPES: [
+        {name: 'محاسبه شود', value: true},
+        {name: ' محاسبه نشود', value: false},
+      ],
       time: null,
       search_workshop: null,
       search_month: null,
       menu1: false,
       modal2: false,
+      list_name: '',
       type: null,
       entitlement: null,
+      calculate: false,
+      list_status: false,
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
@@ -569,6 +361,7 @@ export default {
       VisitorLevels,
       paymentDialog: false,
       payment: '',
+      pay_id: '',
       performClearForm: true,
       workshop_name: null,
       list_generated: false,
@@ -629,8 +422,11 @@ export default {
     getList() {
       this.request({
         url: this.endpoint(`payroll/payment/` + this.serverNow.format('jYYYY') + '/' + this.search_month + '/' + this.search_workshop + '/'),
-        method: "get",
+        method: "post",
+        data: {'name': this.list_name, 'ultimate': this.list_status, 'use_in_calculate': this.calculate},
+
         success: data => {
+          this.pay_id = data.id
           this.payList = data.list_of_pay_item
           this.list_generated = true
           for (let item in this.payList) {
@@ -640,6 +436,7 @@ export default {
               'tatil_kari': 0,
               'kasre_kar': 0,
               'shab_kari': 0,
+              'jome_kar': 0,
               'sob_shab': 0,
               'sob_asr': 0,
               'asr_shab': 0,
@@ -651,7 +448,8 @@ export default {
               'kosoorat_insurance': 0,
               'sayer_moafiat': 0,
               'manategh_tejari_moafiat': 0,
-              'ejtenab_maliat_mozaaf': 0
+              'ejtenab_maliat_mozaaf': 0,
+              'sayer_kosoorat': 0
             }
           }
         }
@@ -691,6 +489,7 @@ export default {
             'nobat_kari_sob_asr': this.items[payitem]['sob_asr'],
             'nobat_kari_sob_shab': this.items[payitem]['sob_shab'],
             'nobat_kari_asr_shab': this.items[payitem]['asr_shab'],
+            'jome_kar': this.items[payitem]['jome_kar'],
             'nobat_kari_sob_asr_shab': this.items[payitem]['sob_asr_shab'],
             'sayer_ezafat': this.items[payitem]['sayer_ezafat'],
             'contract_row': this.items[payitem]['contract_row'],
@@ -700,6 +499,7 @@ export default {
             'sayer_moafiat': this.items[payitem]['sayer_moafiat'],
             'manategh_tejari_moafiat': this.items[payitem]['manategh_tejari_moafiat'],
             'ejtenab_maliat_mozaaf': this.items[payitem]['ejtenab_maliat_mozaaf'],
+            'sayer_kosoorat': this.items[payitem]['sayer_kosoorat'],
             'calculate_payment': true,
           },
           success: data => {
@@ -712,19 +512,9 @@ export default {
     },
 
     get_payment_list() {
-      setTimeout(1000)
-      this.request({
-        url: this.endpoint(`payroll/paylist/items/` + this.payList[0]['list_of_pay'] + '/'),
-        method: "get",
-        success: data => {
-          this.calculateDone = true
-          this.show_list_of_pay = true
-          this.list_of_pay = data
-          console.log(data)
-        }
-      })
-
+      this.$router.push('/panel/listOfPayItem/' + this.pay_id)
     }
+
 
   },
 }

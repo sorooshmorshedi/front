@@ -47,6 +47,10 @@ export default {
           value: "quit_job_date",
         },
         {
+          text: "بیمه می شود؟",
+          value: "insurance",
+        },
+        {
           text: "تاریخ اضافه شدن به لیست بیمه",
           value: "insurance_add_date",
         },

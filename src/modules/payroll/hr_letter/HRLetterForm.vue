@@ -1700,6 +1700,47 @@
           </v-col>
         </v-row>
 
+        <v-row >
+          <v-col cols="12" md="2">
+            <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارفرما</v-card-text>
+          </v-col>
+            <v-col cols="12" md="2" class="pt-8">
+              <money
+                  label="نرخ"
+                  v-model="item.employer_insurance_nerkh"
+                  background-color="white"
+                  :disabled="!isEditing"
+              />
+          </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2">
+            <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارگر</v-card-text>
+          </v-col>
+            <v-col cols="12" md="2" class="pt-8">
+              <money
+                  label="نرخ"
+                  v-model="item.worker_insurance_nerkh"
+                  background-color="white"
+                  :disabled="!isEditing"
+              />
+          </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" md="2">
+            <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم بیکاری</v-card-text>
+          </v-col>
+            <v-col cols="12" md="2" class="pt-8">
+              <money
+                  label="نرخ"
+                  v-model="item.unemployed_insurance_nerkh"
+                  background-color="white"
+                  :disabled="!isEditing"
+              />ssh
+          </v-col>
+        </v-row>
+
+
 
         <v-row >
           <v-col cols="12" md="2" class="text-center">
@@ -1732,21 +1773,19 @@
           </v-col>
         </v-row>
         <v-row >
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="2">
             <v-card-text class="text-h6 text-center">مشمول ماده یک تبصره 86 ق.م.م :</v-card-text>
           </v-col>
-            <v-col cols="12" md="2" class="pt-8">
-              <v-switch
-                  v-model="item.include_made_86"
-                  color="success"
-                  :false-value="false"
-                  :true-value="true"
-                  hide-details
-              ></v-switch>
+          <v-col cols="12" md="2" class="pt-8">
+            <v-switch
+                v-model="item.include_made_86"
+                color="success"
+                :false-value="false"
+                :true-value="true"
+                hide-details
+            ></v-switch>
           </v-col>
         </v-row>
-
-
 
           <v-row v-if="item.id" class="mt-10">
           <v-col cols="12" md="2" class="text-center">

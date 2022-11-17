@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>لیست مرخصی ها</v-card-title>
+    <v-card-title>لیست وام یا مساعده ها</v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
@@ -15,11 +15,11 @@
 
 <script>
 export default {
-  name: "AbsenceList",
+  name: "LoanList",
   props: {},
   data() {
     return {
-      url: "payroll/absence/all",
+      url: "payroll/loan/all",
       filters: {},
     };
   },
@@ -31,24 +31,33 @@ export default {
           value: "workshop_personnel_display",
         },
         {
+          text: "تاریخ",
+          value: "pay_date",
+        },
+        {
           text: "نوع",
-          value: "leave_type_display",
+          value: "loan_type_display",
         },
         {
-          text: "مدت به روز",
-          value: "time_period",
+          text: "مبلغ",
+          value: "amount",
         },
         {
-          text: "از تاریخ",
-          value: "from_date",
+          text: "تعداد اقساط",
+          value: "episode",
+        },
+
+        {
+          text: "مبلغ هر قسط",
+          value: "monthly_pay",
         },
         {
-          text: "تا تاریخ",
-          value: "to_date",
+          text: "تاریخ سررسید",
+          value: "last_dept_date",
         },
         {
-          text: "توضیحات",
-          value: "explanation",
+          text: "اقساط پرداخت شده",
+          value: "episode_payed",
         },
       ];
     },
@@ -56,7 +65,7 @@ export default {
   methods: {
     to(item) {
       return {
-        name: "AbsenceDetail",
+        name: "LoanDetail",
         params: {
           id: item.id,
         },

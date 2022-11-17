@@ -15,9 +15,7 @@
             @delete="deleteItem"
             @clearForm="clearForm()"
             ref="workshopForm"
-
         >
-
           <template>
             <v-row>
               <v-col cols="12" md="4">
@@ -34,7 +32,7 @@
                     label="کارگاه"
                     v-if="this.workshop"
                     disabled="true"
-                    v-model="item.tender = this.workshop"
+                    v-model="item.workshop = this.workshop"
 
                 ></v-text-field>
               </v-col>

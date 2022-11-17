@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>لیست حقوق و دستمزد</v-card-title>
     <v-card-text>
-      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
+      <m-datatable :headers="headers" :apiUrl="url" :show-export-btns="false" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
@@ -45,6 +45,10 @@ export default {
         {
           text: " تا",
           value: "end_date",
+        },
+        {
+          text: " نهایی شده؟",
+          value: "ultimate_display",
         },
       ];
     },

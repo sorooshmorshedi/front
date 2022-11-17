@@ -99,7 +99,7 @@
                     v-if="item.leave_type == 'm'"
                     label="دلیل مرخصی ماده 73"
                     :items="MATTER_73_LEAVE_TYPES"
-                    v-model="item.matter_73_leave_type"
+                    v-model="item.matter73_leave_type"
                     item-text="name"
                     item-value="value"
                     :disabled="!isEditing"
@@ -360,7 +360,7 @@ export default {
       time: null,
       menu1: false,
       modal2: false,
-      printUrl: 'payroll/absence/all',
+      printUrl: 'payroll/absence/request',
       isWorkshopConfirmed: false,
       baseUrl: "payroll/absence",
       type: null,

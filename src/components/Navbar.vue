@@ -1992,6 +1992,31 @@ export default {
                 },
                 {
                   to: {
+                    name: "Loan",
+                  },
+                  title: "مساعده یا وام",
+                },
+                {
+                  to: {
+                    name: "LoanList",
+                  },
+                  title: "لیست مساعده یا وام",
+                },
+                {
+                  to: {
+                    name: "Deduction",
+                  },
+                  title: "کسورات اختیاری",
+                },
+                {
+                  to: {
+                    name: "DeductionList",
+                  },
+                  title: "لیست کسورات اختیاری",
+                },
+
+                {
+                  to: {
                     name: "TaxRow",
                   },
                   title: "معافیت مالیات ",

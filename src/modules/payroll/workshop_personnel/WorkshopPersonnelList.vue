@@ -35,12 +35,17 @@ export default {
           value: "personnel_name",
         },
         {
+          text: " محل خدمت",
+          value: "job_location",
+        },
+
+        {
           text: "عنوان شغلی",
           value: "work_title",
         },
         {
-          text: " محل خدمت",
-          value: "job_location",
+          text: " تاریخ استخدام",
+          value: "employment_date",
         },
         {
           text: "وضعیت محل خدمت",
