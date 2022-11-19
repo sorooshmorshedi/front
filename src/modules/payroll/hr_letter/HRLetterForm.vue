@@ -1569,7 +1569,7 @@
                 :disabled="true"
             />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="2">s
             <v-checkbox
                 v-model="item.nobat_kari_use_insurance"
                 label="معاف از بیمه"

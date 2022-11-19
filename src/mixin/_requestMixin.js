@@ -3,17 +3,17 @@ import FillStore from '@/utils/fillStore'
 export default {
   mixins: [FillStore],
   methods: {
-    getServerUrl() {
-      let serverUrl = 'https://api.app.sobhan.net/'
-      if(window.location.hostname == '5.182.44.120') {
-        serverUrl = "http://5.182.44.120:8082/"
-      }
-      if (this.isDev) {
-        serverUrl = localStorage.getItem('serverUrl');
-        if (!serverUrl) serverUrl = 'http://localhost:7000/'
-      }
-      return serverUrl
-    },
+      getServerUrl() {
+        let serverUrl = 'https://api.app.sobhan.net/'
+        if(window.location.hostname == '5.182.44.120') {
+          serverUrl = "http://5.182.44.120:8082/"
+        }
+        if (this.isDev) {
+          serverUrl = localStorage.getItem('serverUrl');
+          if (!serverUrl) serverUrl = 'http://localhost:7000/'
+        }
+        return serverUrl
+      },
     endpoint(url) {
       return this.getServerUrl() + url;
     },
