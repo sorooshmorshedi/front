@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0c791f"],{"50d2":function(n,t,a){"use strict";a.r(t);var c=function(){var n=this,t=n.$createElement,a=n._self._c||t;return a("v-img",{attrs:{src:"/img/icons/payment-transaction.png"}})},e=[],s=a("2877"),r=a("6544"),i=a.n(r),u=a("adda"),l={},o=Object(s["a"])(l,c,e,!1,null,null,null);t["default"]=o.exports;i()(o,{VImg:u["a"]})}}]);
+//# sourceMappingURL=chunk-2d0c791f.fef2c98b.js.map
