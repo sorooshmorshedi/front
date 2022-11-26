@@ -6,16 +6,8 @@
     <v-toolbar color="indigo darken-2">
       <v-toolbar-title class="white--text">محاسبه حقوق</v-toolbar-title>
     </v-toolbar>
-    <v-row class="pr-2 pl-2 pt-8">
-      <v-col cols="12" md="2">
-        <v-text-field
-            label="نام لیست"
-            :disabled="list_generated"
-            v-model="list_name"
-        ></v-text-field>
-      </v-col>
-
-      <v-col cols="12" md="2">
+    <v-row class="mt-4 mr-3">
+      <v-col  class="mt-5" cols="12" md="2">
         <v-autocomplete
             v-if="!this.workshop"
             label="کارگاه"
@@ -23,6 +15,7 @@
             v-model="search_workshop"
             :disabled="list_generated"
             item-text="name"
+            @change="getWorkshopListOfPay"
             item-value="id"
         />
         <v-text-field
@@ -39,6 +32,38 @@
             v-model="this.workshop_name "
         ></v-text-field>
       </v-col>
+      <v-col class="mt-5" cols="12" md="2">
+        <v-autocomplete
+            v-if="this.search_workshop"
+            label="نوع محاسبه"
+            :items="PAYMENT_TYPES"
+            v-model="payment_type"
+            :disabled="list_generated"
+            item-text="name"
+            item-value="value"
+        />
+      </v-col>
+      <v-col class="mt-5" cols="12" md="2">
+        <v-autocomplete
+            v-if="!this.payment_type"
+            label="بر اساس"
+            :items="workshop_list_of_pay"
+            v-model="copy_id"
+            :disabled="list_generated"
+            item-text="name"
+            item-value="id"
+        />
+      </v-col>
+    </v-row>
+    <v-row v-if="search_workshop" class="pr-2 pl-2 pt-8 mr-3">
+      <v-col cols="12" md="2">
+        <v-text-field
+            label="نام لیست"
+            :disabled="list_generated"
+            v-model="list_name"
+        ></v-text-field>
+      </v-col>
+
       <v-col cols="12" md="2">
         <v-text-field
             label="سال"
@@ -48,12 +73,22 @@
       </v-col>
       <v-col cols="12" md="2">
         <v-autocomplete
+            v-if="payment_type"
             label="ماه"
             :items="MONTHS"
             :disabled="list_generated"
             v-model="search_month"
             item-text="name"
-            item-value="value"
+            item-value="id"
+        />
+        <v-autocomplete
+            v-if="!payment_type"
+            label="ماه"
+            :items="MONTHS"
+            :disabled="list_generated"
+            v-model="search_month"
+            item-text="name"
+            item-value="id"
         />
       </v-col>
       <v-col cols="12" md="2">
@@ -82,16 +117,23 @@
       <v-btn
           @click="getList"
           large
-          v-if="isEditing"
+          v-if="payment_type"
           left
           class=" green white--text "
       >لیست پرسنل فعال
-      </v-btn
-      >
+      </v-btn>
+      <v-btn
+          @click="createListOfPayByPervious"
+          large
+          v-if="!payment_type"
+          left
+          class=" green white--text "
+      >ثبت حقوق و دستمزد
+      </v-btn>
 
     </v-card-actions>
     <v-row v-if="list_generated && !calculateDone">
-      <v-simple-table class="mt-7 ml-2 mr-2 " dense>
+      <v-simple-table class="ma-6 " dense>
         <template v-slot:default>
           <thead class="style: blue lighten-4">
           <tr>
@@ -154,9 +196,9 @@
             </th>
           </tr>
           </thead>
-          <tbody>
-          <tr v-for="person in payList" :key="person.id">
-            <td class="text-center">{{ person.personnel_name }}</td>
+          <tbody class="grey lighten-4 ma-2">
+          <tr v-for="person in payList" :key="person.id" class="ma-2 pa-2">
+            <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
             <td>
               <v-autocomplete
                   :items="contractRows"
@@ -277,7 +319,7 @@
     <v-row>
       <v-col>
         <v-btn v-if="list_generated && !calculateDone" @click="calculatePayment" color="green lighten-2"
-               class="float-left">محاسبه حقوق و دستمزد
+               class="float-left ma-3">محاسبه حقوق و دستمزد
         </v-btn>
       </v-col>
     </v-row>
@@ -317,27 +359,32 @@ export default {
     return {
       items: [],
       MONTHS: [
-        {name: ' فروردین', value: 'fa'},
-        {name: ' اردیبهشت', value: 'or'},
-        {name: ' خرداد', value: 'kh'},
-        {name: ' تیر', value: 'ti'},
-        {name: ' مرداد', value: 'mo'},
-        {name: ' شهریور', value: 'sh'},
-        {name: ' مهر', value: 'me'},
-        {name: ' آبان', value: 'ab'},
-        {name: ' آذر', value: 'az'},
-        {name: ' دی', value: 'de'},
-        {name: ' بهمن', value: 'ba'},
-        {name: ' اسفند', value: 'es'},
+        {name: ' فروردین', value: 'fa', 'id': 1},
+        {name: ' اردیبهشت', value: 'or', 'id': 2},
+        {name: ' خرداد', value: 'kh', 'id': 3},
+        {name: ' تیر', value: 'ti', 'id': 4},
+        {name: ' مرداد', value: 'mo', 'id': 5},
+        {name: ' شهریور', value: 'sh', 'id': 6},
+        {name: ' مهر', value: 'me', 'id': 7},
+        {name: ' آبان', value: 'ab', 'id': 8},
+        {name: ' آذر', value: 'az', 'id': 9},
+        {name: ' دی', value: 'de', 'id': 10},
+        {name: ' بهمن', value: 'ba', 'id': 11},
+        {name: ' اسفند', value: 'es', 'id': 12},
       ],
       TYPES: [
         {name: ' قطعی', value: true},
         {name: ' غیر قطعی', value: false},
       ],
+      PAYMENT_TYPES: [
+        {name: ' محاسبه کامل', value: true},
+        {name: ' ماه های قبل', value: false},
+      ],
       CALCULATE_TYPES: [
         {name: 'محاسبه شود', value: true},
         {name: ' محاسبه نشود', value: false},
       ],
+      payment_type: true,
       time: null,
       search_workshop: null,
       search_month: null,
@@ -357,11 +404,13 @@ export default {
       myClass: '',
       workshop: this.$route.query.workshop,
       workshops: [],
+      workshop_list_of_pay: [],
       PathLevels,
       VisitorLevels,
       paymentDialog: false,
       payment: '',
       pay_id: '',
+      copy_id: '',
       performClearForm: true,
       workshop_name: null,
       list_generated: false,
@@ -513,6 +562,42 @@ export default {
 
     get_payment_list() {
       this.$router.push('/panel/listOfPayItem/' + this.pay_id)
+    },
+
+    getWorkshopListOfPay() {
+      this.request({
+        url: this.endpoint(`payroll/listOfPay/workshop/` + this.search_workshop + '/'),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.workshop_list_of_pay.push({
+              'name': data[t].name,
+              'id': data[t].id
+            })
+            console.log(this.workshop_list_of_pay)
+          }
+        }
+      })
+
+    },
+    createListOfPayByPervious() {
+      this.request({
+        url: this.endpoint(`payroll/listOfPay/copy/` + this.copy_id + '/'),
+        method: "post",
+        data: {
+          'year': 1401,
+          'name': this.list_name,
+          'ultimate': this.list_status,
+          'use_in_calculate': this.calculate,
+          'month': this.search_month},
+        success: data => {
+          this.$router.push('/panel/listOfPayItem/' + data['id'])
+
+
+        }
+
+      })
+
     }
 
 
