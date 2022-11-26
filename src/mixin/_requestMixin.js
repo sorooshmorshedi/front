@@ -8,6 +8,9 @@ export default {
       if(window.location.hostname == '5.182.44.120') {
         serverUrl = "http://5.182.44.120:8082/"
       }
+      if(window.location.hostname == '188.121.108.201') {
+        serverUrl = "http://188.121.108.201:40/"
+      }
       if (this.isDev) {
         serverUrl = localStorage.getItem('serverUrl');
         if (!serverUrl) serverUrl = 'http://localhost:7000/'
