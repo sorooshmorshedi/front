@@ -18,7 +18,7 @@ export default {
     ///  return serverUrl
     ///},
     getServerUrl() {
-      let serverUrl = 'http://188.121.108.201:40'
+      let serverUrl = 'http://188.121.108.201:40/'
       return serverUrl
     },
     endpoint(url) {
