@@ -18,7 +18,7 @@ export default {
     ///  return serverUrl
     ///},
       getServerUrl() {
-      return '188.121.108.201:40'
+      return '188.121.108.201:40/'
     },
 
     endpoint(url) {
