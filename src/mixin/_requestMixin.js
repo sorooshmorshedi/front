@@ -17,10 +17,10 @@ export default {
     ///  }
     ///  return serverUrl
     ///},
-    getServerUrl() {
-      let serverUrl = 'http://188.121.108.201:40/'
-      return serverUrl
+      getServerUrl() {
+      return '188.121.108.201:40'
     },
+
     endpoint(url) {
       return this.getServerUrl() + url;
     },
