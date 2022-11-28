@@ -5,6 +5,7 @@
         <m-form
             title="ثبت کارگاه"
             :showList="false"
+            :show-submit-and-clear-btn="false"
             :listRoute="{name:'WorkshopList'}"
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"

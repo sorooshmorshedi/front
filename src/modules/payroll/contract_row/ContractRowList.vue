@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title>لیست پیمان ها</v-card-title>
     <v-card-text>
-      <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
+      <m-datatable :headers="headers" :export-url="exportUrl" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
@@ -19,7 +19,8 @@ export default {
   props: {},
   data() {
     return {
-      url: "payroll/conractrow/all",
+      url: "payroll/contractRows/all",
+      exportUrl: "payroll/contractRows/all",
       filters: {},
     };
   },

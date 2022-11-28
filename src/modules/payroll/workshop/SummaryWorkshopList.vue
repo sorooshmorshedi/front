@@ -37,7 +37,7 @@ export default {
           value: "name",
         },
         {
-          text: "aنام کارفرما",
+          text: "نام کارفرما",
           value: "employer_name",
         },
         {

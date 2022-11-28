@@ -19,7 +19,8 @@ export default {
   props: {},
   data() {
     return {
-      url: "payroll/conractrow/all",
+      url: "payroll/contractRows/all",
+      exportUrl: "payroll/contractRows/all",
       filters: {},
     };
   },

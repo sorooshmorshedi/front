@@ -11,6 +11,7 @@
             :canDelete="false"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
+            :show-submit-and-clear-btn="false"
             @submit="submit"
             @delete="deleteItem"
             @clearForm="clearForm()"
@@ -138,15 +139,15 @@ export default {
         {name: 'غیر فعال', value: 'n'},
       ],
 
-      printUrl: 'payroll/conractrow/all',
+      printUrl: 'payroll/contractRows/all',
       isWorkshopConfirmed: false,
       baseUrl: "payroll/contract/row",
       permissionBasename: "contract_row",
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      hasLock: true,
-      isDefinable: true,
+      hasLock: false,
+      isDefinable: false,
       myClass: '',
       workshop: this.$route.query.workshop,
       workshops: [],
