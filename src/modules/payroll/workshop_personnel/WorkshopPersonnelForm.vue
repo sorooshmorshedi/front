@@ -9,8 +9,10 @@
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
             :canDelete="false"
-            :canSubmit="canSubmit"
+
+            :canSubmit="!item.quit_job"
             :isEditing.sync="isEditing"
+            :show-submit-and-clear-btn="false"
             @submit="submit"
             @delete="deleteItem"
             @clearForm="clearForm()"
@@ -28,7 +30,9 @@
             <v-btn left color="indigo lighten-4" @click="balance('html')" class="ml-2 mr-2 indigo--text text--darken-3">
               گردش پرداخت
             </v-btn>
-            <m-datatable v-show="false" :headers="headers" :apiUrl="export_url" :filters.sync="export_filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
+
+            <m-datatable v-if="item.id" v-show="false" :headers="headers"
+                         :apiUrl="export_url" :filters.sync="export_filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                          ref="exportTable">
               <template #item.detail="{ item }">
                 <detail-link :to="to(item)" />
@@ -37,6 +41,24 @@
             </m-datatable>
 
           </v-toolbar>
+          <v-col cols="12" md="12" v-if="item.quit_job">
+            <v-banner
+                class="red white--text"
+                elevation="6"
+                outlined
+                rounded
+                single-line
+                sticky
+            >
+              <v-icon
+                  class="mr-6 ml-10"
+                  color="white"
+                  large
+              >info
+              </v-icon>
+               به دلیل اینکه برای پرسنل ترک کار ثبت شده است قادر به ویرایش نمی باشید
+            </v-banner>
+          </v-col>
 
           <template>
             <v-row class="mt-3" v-if="!item.id">
@@ -48,7 +70,7 @@
                     v-model="item.workshop"
                     item-text="name"
                     item-value="id"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.quit_job"
                 />
                 <v-text-field
                     label="کارگاه"
@@ -74,7 +96,7 @@
                     v-model="item.personnel"
                     item-text="name"
                     item-value="id"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.quit_job"
                     @change="setValues(item.personnel)"
 
                 />
@@ -88,7 +110,7 @@
                 ></v-text-field>
                 <v-text-field
                     label="نام  و نام خانوادگی"
-                    v-if="this.searchByCode && personnelName"
+                    v-if="this.searchByCode || personnelName"
                     disabled="true"
                     v-model="personnelName"
 
@@ -110,96 +132,96 @@
             </v-row>
 
             <v-row class="mt-16">
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6">
                 <v-text-field label="* عنوان شغلی " v-model="item.work_title" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing || item.quit_job "/>
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6">
                 <v-text-field label="* محل خدمت  " v-model="item.job_location" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing || item.quit_job"/>
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6">
                 <v-autocomplete
                     label="* وضعیت کارمند"
                     :items="EMPLOYEE_TYPES"
                     v-model="item.employee_status"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.quit_job"
                 />
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6">
                 <v-autocomplete
                     label="* وضعیت محل کار"
                     :items="JOB_LOCATION_STATUSES"
                     v-model="item.job_location_status"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.quit_job"
                 />
               </v-col>
 
 
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6">
                 <v-text-field label="* سابقه بیمه قبلی خارج این کارگاه (ماه) "
                               v-model="item.previous_insurance_history_out_workshop" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing || item.quit_job"/>
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6">
                 <v-text-field label="* سابقه بیمه قبلی در این کارگاه (ماه)"
                               v-model="item.previous_insurance_history_in_workshop" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing || item.quit_job"/>
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6" v-if="item.id">
                 <v-text-field label="* سابقه بیمه جاری در این کارگاه (ماه) "
                               v-model="item.current_insurance_month"
                               background-color="white" :disabled="true"/>
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6"  v-if="item.id" >
                 <v-text-field label="* مجموع سوابق بیمه ای  (ماه) " v-model="item.total_insurance_month"
                               background-color="white" :disabled="true"/>
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6">
                 <v-text-field label="* سمت یا شغل (دارایی)" v-model="item.job_position" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing || item.quit_job"/>
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6">
                 <v-autocomplete
                     label="* رسته شغلی "
                     :items="JOB_POSITIONS"
                     v-model="item.job_group"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.quit_job"
                 />
 
               </v-col>
 
 
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="4">
                 <v-autocomplete
                     label="* نوع استخدام "
                     :items="EMPLOYMENTS_TYPES"
                     v-model="item.employment_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.quit_job"
                 />
               </v-col>
 
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="4">
                 <v-autocomplete
                     label="* نوع قرارداد"
                     :items="CONTRACT_TYPES"
                     v-model="item.contract_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.quit_job"
                 />
               </v-col>
 
-              <v-col cols="12" md="3">
-                <date v-model="item.employment_date" label="تاریخ استخدام " :default="false" :disabled="!isEditing"/>
+              <v-col cols="12" md="4">
+                <date v-model="item.employment_date" label="تاریخ استخدام " :default="false" :disabled="!isEditing || item.quit_job"/>
               </v-col>
 
             </v-row>
@@ -224,7 +246,7 @@
               <v-col cols="12" md="4" class="mt-3">
                 <v-text-field label=" روز های کارکرد قبل از تعریف "
                               v-model="item.haghe_sanavat_days" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing || item.quit_job"/>
               </v-col>
 
               <v-col cols="12" md="4" class="mt-3">
@@ -232,7 +254,7 @@
                     label="* مبلغ حق سنوات شناسایی شده "
                     v-model="item.komakhazine_mobile_amount"
                     background-color="white"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.quit_job"
                 />
               </v-col>
 
@@ -348,8 +370,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      hasLock: true,
-      isDefinable: true,
+      hasLock: false,
+      isDefinable: false,
       myClass: '',
       id: this.$route.params.id,
       personnel: this.$route.query.personnel,

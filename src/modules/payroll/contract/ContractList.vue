@@ -29,6 +29,7 @@ export default {
         {
           text: " پرسنل در کارگاه",
           value: "workshop_personnel_display",
+          filterable : false,
         },
         {
           text: "شماره قرارداد",
@@ -48,7 +49,8 @@ export default {
         },
         {
           text: "بیمه می شود؟",
-          value: "insurance",
+          value: "insurance_display",
+          filterable: false,
         },
         {
           text: "تاریخ اضافه شدن به لیست بیمه",

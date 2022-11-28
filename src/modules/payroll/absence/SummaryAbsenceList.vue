@@ -29,14 +29,17 @@ export default {
         {
           text: " پرسنل در کارگاه",
           value: "workshop_personnel_display",
+          filterable: false,
         },
         {
           text: "نوع",
           value: "leave_type_display",
+          filterable: false,
         },
         {
           text: "مدت به روز",
           value: "time_period",
+          filterable: false,
         },
       ];
     },

@@ -9,6 +9,7 @@
         :canDelete="false"
         :canSubmit="canSubmit"
         :isEditing.sync="isEditing"
+        :show-submit-and-clear-btn="false"
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
@@ -268,8 +269,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      hasLock: true,
-      isDefinable: true,
+      hasLock: false,
+      isDefinable: false,
       myClass: '',
       factors: [],
       PathLevels,

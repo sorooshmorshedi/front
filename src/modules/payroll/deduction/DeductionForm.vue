@@ -195,8 +195,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      hasLock: true,
-      isDefinable: true,
+      hasLock: false,
+      isDefinable: false,
       myClass: '',
       templates: [],
       template : null,
@@ -215,6 +215,7 @@ export default {
         {
           text: " پرسنل در کارگاه",
           value: "workshop_personnel_display",
+          filterable: false,
         },
         {
           text: "تاریخ",
@@ -223,10 +224,12 @@ export default {
         {
           text: "تاریخ اتمام",
           value: "last_dept_date",
+          filterable: false,
         },
         {
           text: "مبلغ هر ماه",
           value: "monthly_pay",
+          filterable: false,
         },
       ];
     },

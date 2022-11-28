@@ -2,6 +2,7 @@
   <div>
     <v-row>
       <v-col cols="12" md="6">
+        <v-card></v-card>
         <m-form
             title="ثبت وام یا مساعده"
             :showList="false"
@@ -16,16 +17,16 @@
             @clearForm="clearForm()"
             ref="LoanForm"
         >
-          <v-row>
-            <v-col  cols="12" md="7"></v-col>
-            <v-col class="pr-10" cols="12" md="5" v-if="item.id">
-              <v-btn v-if="is_req" class="white--text ma-2" color="orange" @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
-              <v-btn v-if="!is_req" class="ma-2" @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
-              <v-btn v-if="is_item" class="white--text ma-2" color="orange" @click="change_export_item(item)">جدول وام</v-btn>
-              <v-btn v-if="!is_item" class="ma-2" @click="change_export_item(item)">جدول وام</v-btn>
-            </v-col>
-          </v-row>
           <template>
+            <v-row>
+            <v-col cols="12" md="6"></v-col>
+              <v-col  cols="12" md="6" v-if="item.id">
+                <v-btn left v-if="is_req" class="white--text ma-2 " color="orange" @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
+                <v-btn left v-if="!is_req" class="ma-2 " @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
+                <v-btn left v-if="is_item" class="white--text ma-2 pl-10 pr-10" color="orange" @click="change_export_item(item)">جدول وام</v-btn>
+                <v-btn left v-if="!is_item" class="ma-2 pl-10 pr-10" @click="change_export_item(item)">جدول وام</v-btn>
+              </v-col>
+            </v-row>
             <v-row >
               <v-col cols="12" md="6">
                 <v-autocomplete
@@ -168,8 +169,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      hasLock: true,
-      isDefinable: true,
+      hasLock: false,
+      isDefinable: false,
       myClass: '',
       workshopPersonnel: this.$route.query.workshop_personnel,
       workshopPersonnels: [],
@@ -186,19 +187,23 @@ export default {
         {
           text: " پرسنل در کارگاه",
           value: "workshop_personnel_display",
+          filterable: false,
         },
         {
           text: "تاریخ",
           value: "pay_date",
+          filterable: false,
         },
         {
           text: "مبلغ کل",
           value: "amount",
-        },
+          filterable: false,
 
+        },
         {
           text: "مبلغ هر قسط",
           value: "monthly_pay",
+          filterable: false,
         },
       ];
     },

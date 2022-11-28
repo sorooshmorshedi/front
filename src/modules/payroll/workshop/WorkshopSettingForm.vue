@@ -43,7 +43,6 @@
                     :canSubmit="true"
                     :showClearBtn="false"
                     :showListBtn="false"
-                    :n="false"
                     :isEditing.sync="isEditing"
                     @submit="submit"
                     @delete="deleteItem"
@@ -152,105 +151,106 @@
                         </v-row>
                       </v-col>
                     </v-row>
+                    <v-simple-table>
+                      <thead class="mt-3">
+                      <tr>
+                        <th class="text-center">
+                          عنوان
+                        </th>
+                        <th class="text-center">
+                          محاسبه بر مبنای
+                        </th>
+                        <th class="text-center">
+                          نحوه شناسایی
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td>عیدی و پاداش</td>
+                        <td>
+                          <v-autocomplete
+                              :items="PAY_TYPES"
+                              v-model="item.eydi_padash_pay_type"
+                              item-text="name"
+                              item-value="value"
+                              :disabled="!isEditing"
+                          />
+                        </td>
+                        <td>
+                          <v-autocomplete
+                              :items="REWARD_TYPES"
+                              v-model="item.eydi_padash_identification"
+                              item-text="name"
+                              item-value="value"
+                              :disabled="!isEditing"
+                          />
+                        </td>
+
+                      </tr>
+
+                      <tr>
+                        <td>حق سنوات</td>
+                        <td>
+                          <v-autocomplete
+                              :items="PAY_TYPES"
+                              v-model="item.haghe_sanavat_pay_type"
+                              item-text="name"
+                              item-value="value"
+                              :disabled="!isEditing"
+                          />
+                        </td>
+                        <td>
+                          <v-autocomplete
+                              :items="REWARD_TYPES"
+                              v-model="item.haghe_sanavat_identification"
+                              item-text="name"
+                              item-value="value"
+                              :disabled="!isEditing"
+                          />
+                        </td>
+
+                      </tr>
+                      <tr>
+                        <td>ذخیره ایام مرخصی</td>
+                        <td>
+                          <v-autocomplete
+                              :items="LEAVE_PAY_TYPES"
+                              v-model="item.leave_save_pay_type"
+                              item-text="name"
+                              item-value="value"
+                              :disabled="!isEditing"
+                          />
+                        </td>
+                        <td class="pr-10 ">
+                          <v-switch
+                              v-model="item.save_absence_limit"
+                              label="محاسبه تا 9 روز"
+                              color="success"
+                              :false-value="false"
+                              :true-value="true"
+                              :disabled="!isEditing"
+                              hide-details
+                          ></v-switch>
+                          <v-switch
+                              v-model="item.save_absence_transfer_next_year"
+                              label="انتقال به سال بعد"
+                              color="success"
+                              :false-value="false"
+                              :true-value="true"
+                              :disabled="!isEditing"
+                              hide-details
+                          ></v-switch>
+
+                        </td>
+
+                      </tr>
+
+                      </tbody>
+
+                    </v-simple-table>
                   </template>
-                  <v-simple-table>
-                    <thead class="mt-3">
-                    <tr>
-                      <th class="text-center">
-                        عنوان
-                      </th>
-                      <th class="text-center">
-                        محاسبه بر مبنای
-                      </th>
-                      <th class="text-center">
-                        نحوه شناسایی
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td>عیدی و پاداش</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.eydi_padash_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-autocomplete
-                            :items="REWARD_TYPES"
-                            v-model="item.eydi_padash_identification"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
 
-                    </tr>
-
-                    <tr>
-                      <td>حق سنوات</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.haghe_sanavat_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-autocomplete
-                            :items="REWARD_TYPES"
-                            v-model="item.haghe_sanavat_identification"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-
-                    </tr>
-                    <tr>
-                      <td>ذخیره ایام مرخصی</td>
-                      <td>
-                        <v-autocomplete
-                            :items="LEAVE_PAY_TYPES"
-                            v-model="item.leave_save_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td class="pr-10 ">
-                        <v-switch
-                            v-model="item.save_absence_limit"
-                            label="محاسبه تا 9 روز"
-                            color="success"
-                            :false-value="false"
-                            :true-value="true"
-                            :disabled="!isEditing"
-                            hide-details
-                        ></v-switch>
-                        <v-switch
-                            v-model="item.save_absence_transfer_next_year"
-                            label="انتقال به سال بعد"
-                            color="success"
-                            :false-value="false"
-                            :true-value="true"
-                            :disabled="!isEditing"
-                            hide-details
-                        ></v-switch>
-
-                      </td>
-
-                    </tr>
-
-                    </tbody>
-
-                  </v-simple-table>
                 </m-form>
               </v-card-text>
             </v-card>

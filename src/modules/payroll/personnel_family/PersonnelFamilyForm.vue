@@ -8,6 +8,7 @@
         :exportParams="{id: item.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
+        :show-submit-and-clear-btn="false"
         :isEditing.sync="isEditing"
         @submit="submit"
         @delete="deleteItem"
@@ -196,8 +197,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      hasLock: true,
-      isDefinable: true,
+      hasLock: false,
+      isDefinable: false,
       myClass: '',
       personnel: this.$route.query.personnel,
       personnels: [],

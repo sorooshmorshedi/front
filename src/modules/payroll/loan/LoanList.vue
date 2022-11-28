@@ -29,6 +29,7 @@ export default {
         {
           text: " پرسنل در کارگاه",
           value: "workshop_personnel_display",
+          filterable: false,
         },
         {
           text: "تاریخ",
@@ -50,14 +51,18 @@ export default {
         {
           text: "مبلغ هر قسط",
           value: "monthly_pay",
+          filterable: false,
         },
         {
           text: "تاریخ سررسید",
           value: "last_dept_date",
+          filterable: false,
         },
         {
           text: "اقساط پرداخت شده",
           value: "episode_payed",
+          filterable: false,
+
         },
       ];
     },
