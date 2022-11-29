@@ -36,8 +36,27 @@
         >
           <v-icon>fa-file-pdf</v-icon>
         </v-btn>
+        <v-btn
+            small
+            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+            @click="printPayslip('xlsx')"
+            title="اکسل"
+            icon
+        >
+          <v-icon>fa-file-excel</v-icon>
+        </v-btn>
+
         <v-spacer></v-spacer>
         گزارش مالیات :
+        <v-btn
+            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+            rounded
+            title="چاپ"
+            icon
+            @click="printTax('html')"
+        >
+          <v-icon>fa-print</v-icon>
+        </v-btn>
 
         <v-btn
             class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
@@ -45,10 +64,19 @@
             title="PDF"
             @click="printTax('pdf')"
             icon
-
         >
           <v-icon>fa-file-pdf</v-icon>
         </v-btn>
+        <v-btn
+            small
+            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+            @click="printTax('xlsx')"
+            title="اکسل"
+            icon
+        >
+          <v-icon>fa-file-excel</v-icon>
+        </v-btn>
+
         <v-spacer></v-spacer>
         اطلاعات حقوق بگیر :
         <v-btn
@@ -61,7 +89,15 @@
         >
           <v-icon>fa-file-download</v-icon>
         </v-btn>
-
+        <v-btn
+            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+            rounded
+            title="چاپ"
+            icon
+            @click="printPersonTax('html')"
+        >
+          <v-icon>fa-print</v-icon>
+        </v-btn>
         <v-btn
             class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
             rounded
@@ -72,6 +108,16 @@
         >
           <v-icon>fa-file-pdf</v-icon>
         </v-btn>
+        <v-btn
+            small
+            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+            @click="printPersonTax('xlsx')"
+            title="اکسل"
+            icon
+        >
+          <v-icon>fa-file-excel</v-icon>
+        </v-btn>
+
         <v-spacer></v-spacer>
         گزارش بیمه :
         <v-btn
@@ -86,7 +132,16 @@
         </v-btn>
 
         <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 ml-3 mt-md-0"
+            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+            rounded
+            title="چاپ"
+            icon
+            @click="printInsurance('html')"
+        >
+          <v-icon>fa-print</v-icon>
+        </v-btn>
+        <v-btn
+            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
             rounded
             title="PDF"
             @click="printInsurance('pdf')"
@@ -95,6 +150,16 @@
         >
           <v-icon>fa-file-pdf</v-icon>
         </v-btn>
+        <v-btn
+            small
+            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+            @click="printInsurance('xlsx')"
+            title="اکسل"
+            icon
+        >
+          <v-icon>fa-file-excel</v-icon>
+        </v-btn>
+
 
       </v-toolbar>
 
@@ -366,6 +431,7 @@ export default {
       entitlement: null,
       permissionBasename: "list_of_pay_item",
       exportUrl: "payroll/listOfPayItem/less",
+      exportBaseUrl: "payroll/payslip",
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
@@ -437,6 +503,8 @@ export default {
       this.$refs.exportTable.exportTo(type)
 
     },
+
+
     printInsurance(type) {
       this.export_filter = {id : this.$route.params.id}
       this.exportUrl = 'payroll/person/insurance/report'
@@ -454,7 +522,7 @@ export default {
       this.exportUrl = 'payroll/diskette/person'
       this.$refs.exportTable.exportTo(type)
 
-    }
+    },
 
 
   },

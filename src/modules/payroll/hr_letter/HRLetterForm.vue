@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div>
     <m-form
         title="ثبت حکم کارگزینی"
@@ -6,8 +6,10 @@
         :listRoute="{name:'HRLetterList'}"
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
+        :show-actions="!item.is_calculated"
+
         :canDelete="false"
-        :canSubmit="canSubmit"
+        :canSubmit="!item.is_calculated"
         :isEditing.sync="isEditing"
         @submit="submit"
         @delete="deleteItem"
@@ -1864,6 +1866,28 @@
                   background-color="white"
                   disabled=true
               />
+            </v-col>
+
+          </v-row>
+          <v-row class="ma-5">
+            <v-col cols="12" md="12" v-if="item.is_calculated">
+              <v-banner
+                  class="red white--text"
+                  elevation="6"
+                  outlined
+                  rounded
+                  single-line
+                  sticky
+              >
+                <v-icon
+                    class="mr-6 ml-10"
+                    color="white"
+                    large
+                >info
+                </v-icon>
+                به دلیل اینکه با این حکم کارگزینی محاسبات حقوق و دستمزد ثبت شده است  قادر به ویرایش نمی باشید
+                در صورت تمایل به تغییر برای قرارداد خود حکم جدید ثبت کنید
+              </v-banner>
             </v-col>
 
           </v-row>
