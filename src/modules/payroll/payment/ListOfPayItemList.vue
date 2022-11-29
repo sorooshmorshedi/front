@@ -21,6 +21,15 @@
       <span class="subheading mr-2 ml-2 "> ماه : {{ list_of_pay.month_name }}</span>
       <v-divider class="mr-2 ml-2" vertical></v-divider>
       <v-spacer></v-spacer>
+      <v-btn v-if="!list_of_pay.pay_done" @click="goPay()" color="green darken-1" class=" white--text pl-10 pr-10"
+             large> پرداخت حقوق
+      </v-btn>
+      <v-btn v-if="list_of_pay.pay_done" @click="goPay()" color="blue darken-3" class=" white--text pl-10 pr-10"
+             large>نمایش حقوق پرداخت شده
+      </v-btn>
+
+    </v-toolbar>
+    <v-toolbar color="indigo darken-3" class="white--text pl-10 pr-10 ml-5 mt-1 mr-5 rounded">
       حقوق و دستمزد جامع :
       <v-btn
           class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
@@ -41,8 +50,18 @@
       >
         <v-icon>fa-file-pdf</v-icon>
       </v-btn>
+      <v-btn
+          small
+          class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+          @click="printThis('xlsx')"
+          title="اکسل"
+          icon
+      >
+        <v-icon>fa-file-excel</v-icon>
+      </v-btn>
+
       <v-spacer></v-spacer>
-      گزارش  مالیات ماه :
+      گزارش مالیات ماه :
       <v-btn
           class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
           rounded
@@ -56,6 +75,7 @@
 
 
       <v-spacer></v-spacer>
+
       گزارش خلاصه مالیات ماه :
       <v-btn
           class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
@@ -67,7 +87,15 @@
       >
         <v-icon>fa-file-download</v-icon>
       </v-btn>
-
+      <v-btn
+          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+          rounded
+          title="چاپ"
+          icon
+          @click="printTaxWorkshop('html')"
+      >
+        <v-icon>fa-print</v-icon>
+      </v-btn>
       <v-btn
           class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
           rounded
@@ -77,6 +105,15 @@
 
       >
         <v-icon>fa-file-pdf</v-icon>
+      </v-btn>
+      <v-btn
+          small
+          class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+          @click="printTaxWorkshop('xlsx')"
+          title="اکسل"
+          icon
+      >
+        <v-icon>fa-file-excel</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       گزارش بیمه :
@@ -89,9 +126,17 @@
       >
         <v-icon>fa-file-download</v-icon>
       </v-btn>
-
       <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 ml-3 mt-md-0"
+          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+          rounded
+          title="چاپ"
+          icon
+          @click="printInsurance('html')"
+      >
+        <v-icon>fa-print</v-icon>
+      </v-btn>
+      <v-btn
+          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
           rounded
           title="PDF"
           @click="printInsurance('pdf')"
@@ -100,11 +145,19 @@
       >
         <v-icon>fa-file-pdf</v-icon>
       </v-btn>
+      <v-btn
+          small
+          class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+          @click="printInsurance('xlsx')"
+          title="اکسل"
+          icon
+      >
+        <v-icon>fa-file-excel</v-icon>
+      </v-btn>
+
     </v-toolbar>
 
     <v-card-actions class="justify-end mt-4">
-      <v-btn v-if="!list_of_pay.pay_done" @click="goPay()" color="green darken-3" class="ml-5 white--text pl-2 pr-2" large> پرداخت حقوق</v-btn>
-      <v-btn v-if="list_of_pay.pay_done" @click="goPay()" color="blue darken-3" class="ml-5 white--text pl-2 pr-2" large>نمایش حقوق پرداخت شده</v-btn>
     </v-card-actions>
     <v-card-text>
       <m-datatable :headers="headers" e :exportUrl="exportUrl" :apiUrl="url" :filters.sync="filters"
@@ -114,7 +167,7 @@
           <detail-link :to="to(item)"/>
         </template>
       </m-datatable>
-      <m-datatable v-show="false"   :headers="headers"  :apiUrl="url" :exportUrl="export_url" :filters.sync="export_filter"
+      <m-datatable v-show="false" :headers="headers" :apiUrl="url" :exportUrl="export_url" :filters.sync="export_filter"
                    ref="exportTable">
         <template #item.detail="{ item }">
           <detail-link :to="to(item)"/>
@@ -206,13 +259,13 @@ export default {
     },
 
     printTax(type) {
-      this.export_filter = {id : this.$route.params.id}
+      this.export_filter = {id: this.$route.params.id}
       this.export_url = 'payroll/tax/report'
       this.$refs.exportTable.exportTo(type)
 
     },
     printTaxWorkshop(type) {
-      this.export_filter = {id : this.$route.params.id}
+      this.export_filter = {id: this.$route.params.id}
       this.export_url = 'payroll/month/tax'
       this.$refs.exportTable.exportTo(type)
 
