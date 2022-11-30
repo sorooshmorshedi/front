@@ -242,6 +242,237 @@
             </v-card>
           </template>
         </v-dialog>
+
+
+        <v-dialog
+            max-width="900"
+            hide-overlay
+            transition="dialog-bottom-transition"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                class="primary  mr-2 rounded white--text "
+                large
+                v-bind="attrs"
+                v-on="on"
+            >
+              <v-icon class="ml-2">
+                fa-search
+              </v-icon>
+              گزارش جامع عیدی و پاداش
+            </v-btn>
+
+          </template>
+          <template v-slot:default="dialog">
+            <v-card>
+              <v-toolbar
+                  color="green darken-2"
+                  dark
+              > گزارش جامع عیدی و پاداش {{ workshop.name }} {{ workshop.code }}
+              </v-toolbar>
+              <v-card-text class="pa-5">
+                <v-text-field
+                    class="currency-input"
+                    color="blue"
+                    label="سال"
+                    v-model="year"
+                    background-color="white"
+                />
+              </v-card-text>
+
+              <v-container fluid class="pa-5">
+                <v-select
+                    v-model="months"
+                    :items="MONTHS"
+                    item-text="name"
+                    item-value="value"
+                    label="انتخاب ماه"
+                    multiple
+                >
+                  <template v-slot:prepend-item>
+                    <v-list-item
+                        ripple
+                        @mousedown.prevent
+                        @click="toggle"
+                    >
+                      <v-list-item-action>
+                        <v-icon :color="months.length > 0 ? 'blue darken-4' : ''">
+                          {{ icon }}
+                        </v-icon>
+                      </v-list-item-action>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          انتخاب همه
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2"></v-divider>
+                  </template>
+                  <template v-slot:append-item>
+                    <v-divider class="mb-2"></v-divider>
+                    <v-list-item disabled>
+                      <v-list-item-avatar color="grey lighten-3">
+                        <v-icon>
+                          fa-plus
+                        </v-icon>
+                      </v-list-item-avatar>
+
+                      <v-list-item-content v-if="getAllMonth">
+                        <v-list-item-title>
+                          همه ماه ها
+                        </v-list-item-title>
+                      </v-list-item-content>
+
+                      <v-list-item-content v-else-if="getSomeMonth">
+                        <v-list-item-title>
+                          تعداد ماه
+                        </v-list-item-title>
+                        <v-list-item-subtitle>
+                          {{ months.length }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+
+                      <v-list-item-content v-else>
+                        <v-list-item-title>
+                          ماه انتخاب نشده
+                        </v-list-item-title>
+                        <v-list-item-subtitle>
+                          برای گزارش حداقل یک ماه نیاز است
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </template>
+                </v-select>
+              </v-container>
+              <v-card-actions class="justify-end mt-16 mb-5">
+                <v-btn
+                    color="green"
+                    class="white--text"
+                    large
+                    @click="dialog.value = false ; reportEydi()"
+                >گزارش
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
+
+        <v-dialog
+            max-width="900"
+            hide-overlay
+            transition="dialog-bottom-transition"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                class="primary  mr-2 rounded white--text "
+                large
+                v-bind="attrs"
+                v-on="on"
+            >
+              <v-icon class="ml-2">
+                fa-search
+              </v-icon>
+              گزارش جامع حق سنوات
+            </v-btn>
+
+          </template>
+          <template v-slot:default="dialog">
+            <v-card>
+              <v-toolbar
+                  color="green darken-2"
+                  dark
+              > گزارش جامع حق سنوات {{ workshop.name }} {{ workshop.code }}
+              </v-toolbar>
+              <v-card-text class="pa-5">
+                <v-text-field
+                    class="currency-input"
+                    color="blue"
+                    label="سال"
+                    v-model="year"
+                    background-color="white"
+                />
+              </v-card-text>
+
+              <v-container fluid class="pa-5">
+                <v-select
+                    v-model="months"
+                    :items="MONTHS"
+                    item-text="name"
+                    item-value="value"
+                    label="انتخاب ماه"
+                    multiple
+                >
+                  <template v-slot:prepend-item>
+                    <v-list-item
+                        ripple
+                        @mousedown.prevent
+                        @click="toggle"
+                    >
+                      <v-list-item-action>
+                        <v-icon :color="months.length > 0 ? 'blue darken-4' : ''">
+                          {{ icon }}
+                        </v-icon>
+                      </v-list-item-action>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          انتخاب همه
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2"></v-divider>
+                  </template>
+                  <template v-slot:append-item>
+                    <v-divider class="mb-2"></v-divider>
+                    <v-list-item disabled>
+                      <v-list-item-avatar color="grey lighten-3">
+                        <v-icon>
+                          fa-plus
+                        </v-icon>
+                      </v-list-item-avatar>
+
+                      <v-list-item-content v-if="getAllMonth">
+                        <v-list-item-title>
+                          همه ماه ها
+                        </v-list-item-title>
+                      </v-list-item-content>
+
+                      <v-list-item-content v-else-if="getSomeMonth">
+                        <v-list-item-title>
+                          تعداد ماه
+                        </v-list-item-title>
+                        <v-list-item-subtitle>
+                          {{ months.length }}
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+
+                      <v-list-item-content v-else>
+                        <v-list-item-title>
+                          ماه انتخاب نشده
+                        </v-list-item-title>
+                        <v-list-item-subtitle>
+                          برای گزارش حداقل یک ماه نیاز است
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </template>
+                </v-select>
+              </v-container>
+              <v-card-actions class="justify-end mt-16 mb-5">
+                <v-btn
+                    color="green"
+                    class="white--text"
+                    large
+                    @click="dialog.value = false ; reportHagheSanavat()"
+                >گزارش
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
+
+
+
+
         <v-btn
             class="green darken-2  mr-2 rounded white--text "
             large
@@ -679,6 +910,32 @@ export default {
         this.months_string += selected_months[month]
       }
       this.report_url= 'payroll/absence/report/' + this.year + '/' + this.months_string + '/'
+      this.report_filter = {id : this.$route.query.workshop}
+      this.$refs.exportTable.exportTo('')
+      this.months_string = ''
+      this.months = []
+
+    },
+
+    reportEydi() {
+      let selected_months = this.months.sort()
+      for( let month in selected_months ){
+        this.months_string += selected_months[month]
+      }
+      this.report_url= 'payroll/eydi/report/' + this.year + '/' + this.months_string + '/'
+      this.report_filter = {id : this.$route.query.workshop}
+      this.$refs.exportTable.exportTo('')
+      this.months_string = ''
+      this.months = []
+
+    },
+
+    reportHagheSanavat() {
+      let selected_months = this.months.sort()
+      for( let month in selected_months ){
+        this.months_string += selected_months[month]
+      }
+      this.report_url= 'payroll/sanavat/report/' + this.year + '/' + this.months_string + '/'
       this.report_filter = {id : this.$route.query.workshop}
       this.$refs.exportTable.exportTo('')
       this.months_string = ''
