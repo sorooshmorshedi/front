@@ -18,7 +18,7 @@ export default {
       //return serverUrl
     //},
     getServerUrl() {
-      return 'http://188.121.108.201:40/'
+      return 'http://127.0.0.1:7000/' ///return 'http://188.121.108.201:40/'
     },
     endpoint(url) {
       return this.getServerUrl() + url;

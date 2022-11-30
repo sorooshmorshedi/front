@@ -22,7 +22,7 @@
             مبانی محاسباتی حقوق و دستمزد
           </v-tab>
           <v-tab-item>
-            <v-card flat>
+            <v-card >
               <v-card-text>
                 <m-form
                     :title="'تنظیمات  کارگاه ' + item.name"
@@ -480,7 +480,6 @@
             </v-card>
           </v-tab-item>
         </v-tabs>
-
       </v-toolbar>
     </v-card>
   </div>

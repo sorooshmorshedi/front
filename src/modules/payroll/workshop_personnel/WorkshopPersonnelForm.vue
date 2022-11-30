@@ -109,8 +109,8 @@
 
                 ></v-text-field>
                 <v-text-field
+                    v-if="this.searchByCode"
                     label="نام  و نام خانوادگی"
-                    v-if="this.searchByCode || personnelName"
                     disabled="true"
                     v-model="personnelName"
 
