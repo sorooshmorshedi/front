@@ -8,8 +8,10 @@
         :exportParams="{id: item.id}"
         :canDelete="false"
         :canSubmit="canSubmit"
+        :show-navigation-btns="false"
         :isEditing.sync="isEditing"
         :show-submit-and-clear-btn="false"
+        :show-actions="!item.verified"
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
@@ -20,19 +22,20 @@
       <template>
         <v-row>
           <v-col cols="12" md="3">
-            <v-text-field label="* نام" v-model="item.name" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* نام" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]" v-model="item.name" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* نام خانوادگی" v-model="item.last_name" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* نام خانوادگی" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"  v-model="item.last_name" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* نام پدر" v-model="item.father_name" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* نام پدر" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]" v-model="item.father_name" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="کد پرسنلی" v-model="item.personnel_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="کد پرسنلی" v-on:keypress="NumbersOnly" v-model="item.personnel_code" background-color="white" :disabled="item.id"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                :rules="[rules.required,]"
                 label="* ملیت"
                 :items="NATIONALITY_TYPE"
                 v-model="item.nationality"
@@ -42,10 +45,12 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* کشوز" v-model="item.country" background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-if="item.nationality !== 1" :rules="[rules.required,]" label="* کشور" v-model="item.country" background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-if="item.nationality == 1" label="* کشور" v-model="iran" background-color="white" :disabled="true"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                :rules="[rules.required,]"
                 label="* جنسیت"
                 :items="GENDER_TYPE"
                 v-model="item.gender"
@@ -55,7 +60,10 @@
             />
           </v-col>
           <v-col cols="12" md="3">
+            <v-text-field v-if="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white" :disabled="true"/>
             <v-autocomplete
+                :rules="[rules.required,]"
+                v-if="item.gender !== 'f' "
                 label="* خدمت سربازی"
                 :items="MILITARY_SERVICE_STATUS"
                 v-model="item.military_service"
@@ -65,13 +73,14 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* شماره شناسنامه" v-model="item.identity_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* شماره شناسنامه" counter v-model="item.identity_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* کد ملی" v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد ملی"  v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                :rules="[rules.required,]"
                 label="* وضعیت تاهل"
                 :items="MARITAL_STATUS_TYPES"
                 v-model="item.marital_status"
@@ -81,53 +90,54 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label=" تعداد فرزندان" v-model="item.number_of_childes" readonly  background-color="white" :disabled="!isEditing"/>
+            <v-text-field label=" تعداد فرزندان" v-model="item.number_of_childes"  background-color="white" :disabled="true"/>
           </v-col>
           <v-col cols="12" md="3">
-            <date v-model="item.date_of_birth" label="* تاریخ تولد" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.date_of_birth" label="* تاریخ تولد" :default="false" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="3">
-            <date v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="true" :disabled="!isEditing"/>
+            <date v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="false" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label=" محل تولد " v-model="item.location_of_birth"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field label=" * محل تولد " v-model="item.location_of_birth"   background-color="white" :disabled="!isEditing" :rules="[rules.required,]"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label=" محل صدور شناسنامه" v-model="item.location_of_exportation"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* محل صدور شناسنامه" v-model="item.location_of_exportation"   background-color="white" :disabled="!isEditing" :rules="[rules.required,]"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="بخش محل صدور" v-model="item.sector_of_exportation"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="بخش محل صدور" v-model="item.sector_of_exportation"   background-color="white" :disabled="!isEditing" />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-text-field label="تلفن ثابت " v-model="item.phone_number"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
           </v-col>
           <v-col cols="12" md="1">
-            <v-text-field label="* کد تلفن" v-model="item.city_phone_code"   background-color="white" :disabled="!isEditing"/>
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-text-field label="* تلفن ثابت " v-model="item.phone_number"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="کد تلفن" v-model="item.city_phone_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
           </v-col>
           <v-col cols="12" md="7">
-            <v-text-field label="* آدرس " v-model="item.address"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* آدرس " v-model="item.address"   background-color="white" :disabled="!isEditing"  :rules="[rules.required,]"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="* کد پستی " v-model="item.postal_code"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* کد پستی " v-model="item.postal_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" :rules="[rules.required,]"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* شماره همراه 1" v-model="item.mobile_number_1" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* شماره همراه 1" v-model="item.mobile_number_1" background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" :rules="[rules.required,]"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label=" شماره همراه 2 " v-model="item.mobile_number_2" background-color="white" :disabled="!isEditing"/>
+            <v-text-field label=" شماره همراه 2 " v-model="item.mobile_number_2" background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
           </v-col>
           <v-col cols="12" md="2">
             <v-switch
                 v-model="item.insurance"
-                label= 'ّبیمه تامین اجتماعی دارد'
+                label= 'بیمه تامین اجتماعی دارد'
                 :disabled="!isEditing"
             ></v-switch>
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field label=" شماره بیمه" v-model="item.insurance_code"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]"  label=" شماره بیمه" v-model="item.insurance_code"   background-color="white" :disabled="!item.insurance"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                :rules="[rules.required,]"
                 label="* مدرک تحصیلی"
                 :items="DEGREE_TYPE"
                 v-model="item.degree_education"
@@ -137,35 +147,45 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* رشته تحصیلی" v-model="item.field_of_study"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field
+                :rules="[rules.required,]"
+                label="* رشته تحصیلی"
+                v-model="item.field_of_study"
+                background-color="white"
+                :disabled="!isEditing || item.degree_education == 1 || item.degree_education == 2 "/>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
-                label="نوع دانشگاه"
+                :rules="[rules.required,]"
+                label="* نوع دانشگاه"
                 :items="UNIVERSITY_TYPES"
                 v-model="item.university_type"
                 item-text="name"
                 item-value="value"
-                :disabled="!isEditing"
-            />
+                :disabled="!isEditing || item.degree_education == 1 || item.degree_education == 2 || item.degree_education == 3 "/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="نام دانشگاه" v-model="item.university_name"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field label="* نام دانشگاه"
+                          :rules="[rules.required,]"
+                          v-model="item.university_name"
+                          background-color="white"
+                          :disabled="!isEditing || item.degree_education == 1 || item.degree_education == 2 || item.degree_education == 3 "/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* نام بانک " v-model="item.account_bank_name"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field  :rules="[rules.required,]" label="* نام بانک " v-model="item.account_bank_name"    background-color="white" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* شماره حساب حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره حساب حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* شماره کارت حقوق" v-model="item.bank_cart_number"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره کارت حقوق" v-model="item.bank_cart_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* شماره شبا" v-model="item.sheba_number"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره شبا" v-model="item.sheba_number"  append-icon="IR"  background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                :rules="[rules.required,]"
                 label="* وضعیت پرسنل "
                 :items="PERSONNEL_STATUS"
                 v-model="item.is_personnel_active"
@@ -182,9 +202,10 @@
           @click="verifyPersonnel(item.id)"
           v-if="item.id && !item.verified" >ثبت نهایی</v-btn>
       <v-btn
-          :disabled="true"
-          class="green white--text mt-6  mr-2 float-left"
-          v-if="item.id && item.verified" > نهایی شده</v-btn>
+          class="red white--text mt-6  mr-2 float-left"
+          @click="verifyUnPersonnel(item.id)"
+
+          v-if="item.id && item.verified" > خروج از وضعیت نهایی</v-btn>
 
     </m-form>
 
@@ -237,7 +258,7 @@ export default {
         {name: ' انجام داده', value: 'd'},
         {name: 'انجام نداده', value: 'n'},
         {name: 'معاف', value: 'e'},
-        {name: 'هبچ کدام', value: 'x'},
+        {name: 'هیچ کدام', value: 'x'},
       ],
       MARITAL_STATUS_TYPES: [
         {name: ' مجرد', value: 's'},
@@ -277,7 +298,13 @@ export default {
       VisitorLevels,
       paymentDialog: false,
       payment: '',
+      female: 'هیچ کدام',
+      iran: 'ایران',
       performClearForm: true,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+      },
     };
   },
   computed: {
@@ -416,15 +443,54 @@ export default {
 
     },
   },
-
+  mounted() {
+    if (this.$route.params.id) {
+      this.isEditing = false
+    }
+  },
   methods: {
+    NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    NoneNumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        return true;
+      } else {
+        evt.preventDefault();;
+      }
+    },
+
     verifyPersonnel(id){
       this.request({
         url: this.endpoint(`payroll/personnel/verify/` + id + '/'),
         method: "get",
         success: data => {
           console.log(data);
-          this.notify(' ثبت پرسنل تایید  شد', 'success')
+          this.notify('  پرسنل نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+
+    },
+    verifyUnPersonnel(id){
+      this.request({
+        url: this.endpoint(`payroll/personnel/unverify/` + id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('پرسنل از نهایی خارج شد', 'success')
           window.location.reload();
         },
         error: data => {

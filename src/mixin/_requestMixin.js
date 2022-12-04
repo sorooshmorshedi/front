@@ -137,12 +137,18 @@ export default {
     },
     handle_400(error) {
       let errors = error.response.data;
-      for (const error of errors) {
+      for (const error in errors) {
+        console.log(typeof errors[error])
         let message = ""
         if (typeof (error) == typeof ("")) {
-          message = error;
+          if (errors[error][0] == undefined){
+            message = errors[error].messages[0]
+          } else{message = error + ' : ' + errors[error][0]}
+
         } else if (error.field == 'non_field_errors' || error.field == '') {
-          message = error.messages[0]
+          message = error
+          console.log(2)
+
         } else {
           message = error.field + ' : ' + error.messages, 'danger'
         }

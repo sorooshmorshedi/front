@@ -22,23 +22,23 @@
           <template>
             <v-row>
               <v-col cols="12" md="6">
-                <v-text-field label="* کد کارگاه " v-model="item.code" background-color="white" :disabled="!isEditing"/>
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد کارگاه " v-model="item.code" background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field label="* نام کارگاه " v-model="item.name" background-color="white"
+                <v-text-field :rules="[rules.required,]"  label="* نام کارگاه " v-model="item.name" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
 
               <v-col cols="12" md="6">
-                <v-text-field label="* نام کارفرما " v-model="item.employer_name" background-color="white"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* نام کارفرما " v-model="item.employer_name" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-textarea label=" کد پستی کارگاه" v-model="item.postal_code" :disabled="!isEditing"></v-textarea>
+                <v-textarea :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد پستی کارگاه" v-model="item.postal_code" :disabled="!isEditing"></v-textarea>
               </v-col>
 
               <v-col cols="12" md="12">
-                <v-textarea label="* آدرس کارگاه" v-model="item.address" :disabled="!isEditing"></v-textarea>
+                <v-textarea :rules="[rules.required,]" label="* آدرس کارگاه" v-model="item.address" :disabled="!isEditing"></v-textarea>
               </v-col>
 
               <v-col cols="12" md="6">
@@ -132,6 +132,11 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+      },
+
     };
   },
   computed: {
@@ -208,6 +213,25 @@ export default {
       this.$router.go()
       this.notify(' ثبت کارگاه رد شد', 'warning')
     },
+    NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    NoneNumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        return true;
+      } else {
+        evt.preventDefault();;
+      }
+    },
+
   },
 }
 </script>

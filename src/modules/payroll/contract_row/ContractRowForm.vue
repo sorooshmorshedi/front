@@ -21,6 +21,7 @@
             <v-row>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="!this.workshop"
                     label="کارگاه"
                     :items="workshops"
@@ -38,24 +39,24 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field label="* شماره قرارداد " v-model="item.contract_number" background-color="white"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره قرارداد " v-model="item.contract_number" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.registration_date" label="تاریخ قرارداد" :default="true" :disabled="!isEditing"/>
+                <date v-model="item.registration_date" label="تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.from_date" label="تاریخ شروع قرارداد" :default="true" :disabled="!isEditing"/>
+                <date v-model="item.from_date" label="تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.to_date" label="تاریخ پایان قرارداد" :default="true" :disabled="!isEditing"/>
+                <date v-model="item.to_date" label="تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
                               background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
@@ -63,7 +64,7 @@
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
                               background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
@@ -71,6 +72,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <money
+                    v-on:keypress="NumbersOnly"
                     label=" مبلغ اولیه قرارداد"
                     v-model="item.contract_initial_amount"
                     background-color="white"
@@ -79,6 +81,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="* وضعیت"
                     :items="STATUS_TYPE"
                     v-model="item.status"
@@ -156,6 +159,11 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+      },
+
     };
   },
 
@@ -235,6 +243,25 @@ export default {
   },
 
   methods: {
+    NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    NoneNumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        return true;
+      } else {
+        evt.preventDefault();;
+      }
+    },
+
     to(item) {
       return {
         name: 'WorkshopDetail',

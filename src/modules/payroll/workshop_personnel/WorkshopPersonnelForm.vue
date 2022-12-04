@@ -125,8 +125,9 @@
                               :disabled="!isEditing || !personnel_code_dis || personnel"/>
               </v-col>
               <v-col cols="12" md="2">
-                <v-btn v-if="!personnel" color="green" class=" white--text" @click="searchUser"> سـرچ کنبد</v-btn>
-                <v-btn v-if="!personnel" color="red" class="mt-1 white--text" @click="setNull"> خالی کردن</v-btn>
+                <v-btn v-if="!personnel" fab color="green" class=" white--text"  @click="searchUser"> <v-icon>fa-search</v-icon>
+                </v-btn>
+                <v-btn v-if="!personnel" fab color="red" class="mt-1 mr-1 white--text" @click="setNull"><v-icon>fa-times</v-icon></v-btn>
               </v-col>
 
             </v-row>
@@ -236,7 +237,7 @@
                     sticky
                 >
                   <v-icon
-                      color="orange"
+                      color="red"
                       large
                   >info
                   </v-icon>
@@ -524,6 +525,25 @@ export default {
   },
 
   methods: {
+    NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    NoneNumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        return true;
+      } else {
+        evt.preventDefault();;
+      }
+    },
+
     searchUser(code) {
       if (this.personnel_code) {
         this.request({
