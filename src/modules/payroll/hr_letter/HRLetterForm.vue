@@ -35,6 +35,7 @@
                   item-text="name"
                   item-value="value"
                   :disabled="!isEditing"
+                  :rules="[rules.required,]"
               />
             </v-col>
             <v-col cols="12" md="3" v-if="item.is_template == 'p' && item.is_template != 't'">
@@ -52,6 +53,7 @@
 
             <v-col cols="12" md="3" v-if="item.is_template == 'p' && item.is_template != 't'">
               <v-autocomplete
+                  :rules="[rules.required,]"
                   v-if="!this.contract"
                   label=" قرارداد در کارگاه"
                   :items="contracts"
@@ -70,6 +72,7 @@
             </v-col>
             <v-col cols="12" md="3">
               <v-text-field
+                  :rules="[rules.required,]"
                   v-if="item.is_template == 't'"
                   label="نام قالب"
                   v-model="item.name"
@@ -92,6 +95,8 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  :rules="[rules.required,]"
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.hoghooghe_roozane_amount"
                   background-color="white"
@@ -148,7 +153,9 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  :rules="[rules.required,]"
                   label="* مبلغ "
+                  v-on:keypress="NumbersOnly"
                   v-model="item.paye_sanavat_amount"
                   background-color="white"
                   :disabled="!isEditing"
@@ -202,6 +209,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.haghe_maskan_amount"
                   background-color="white"
@@ -258,6 +266,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.bon_kharo_bar_amount"
                   background-color="white"
@@ -315,6 +324,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.haghe_sarparasti_amount"
                   background-color="white"
@@ -371,6 +381,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.haghe_modiriyat_amount"
                   background-color="white"
@@ -428,6 +439,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.haghe_jazb_amount"
                   background-color="white"
@@ -484,6 +496,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.fogholade_shoghl_amount"
                   background-color="white"
@@ -540,6 +553,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.haghe_tahsilat_amount"
                   background-color="white"
@@ -597,6 +611,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.fogholade_sakhti_kar_amount"
                   background-color="white"
@@ -653,6 +668,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.haghe_ankal_amount"
                   background-color="white"
@@ -709,6 +725,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.fogholade_badi_abohava_amount"
                   background-color="white"
@@ -765,6 +782,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.mahroomiat_tashilat_zendegi_amount"
                   background-color="white"
@@ -821,6 +839,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.fogholade_mahal_khedmat_amount"
                   background-color="white"
@@ -877,6 +896,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.fogholade_sharayet_mohit_kar_amount"
                   background-color="white"
@@ -933,6 +953,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.ayabo_zahab_amount"
                   background-color="white"
@@ -989,6 +1010,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.yarane_ghaza_amount"
                   background-color="white"
@@ -1045,6 +1067,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.haghe_shir_amount"
                   background-color="white"
@@ -1103,6 +1126,7 @@
             <v-col cols="12" md="2">
               <money
                   label="* مبلغ "
+                  v-on:keypress="NumbersOnly"
                   v-model="item.haghe_taahol_amount"
                   background-color="white"
                   :disabled="!isEditing"
@@ -1156,6 +1180,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.komakhazine_mahdekoodak_amount"
                   background-color="white"
@@ -1212,6 +1237,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.komakhazine_varzesh_amount"
                   background-color="white"
@@ -1267,6 +1293,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.komakhazine_mobile_amount"
                   background-color="white"
@@ -1323,6 +1350,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <money
+                  v-on:keypress="NumbersOnly"
                   label="* مبلغ "
                   v-model="item.mazaya_mostamar_gheyre_naghdi_amount"
                   background-color="white"
@@ -1966,6 +1994,11 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+      },
+
     };
   },
   computed: {
@@ -2006,9 +2039,14 @@ export default {
   },
 
   methods: {
-    setInfos() {
-
-
+    NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
     },
     to(item) {
       return {

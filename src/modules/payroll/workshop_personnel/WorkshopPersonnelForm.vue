@@ -9,10 +9,10 @@
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
             :canDelete="false"
-
             :canSubmit="!item.quit_job"
             :isEditing.sync="isEditing"
             :show-submit-and-clear-btn="false"
+            :show-actions="item.personnel"
             @submit="submit"
             @delete="deleteItem"
             @clearForm="clearForm()"
@@ -62,8 +62,9 @@
 
           <template>
             <v-row class="mt-3" v-if="!item.id">
-              <v-col cols="12" md="3">
+              <v-col cols="12" md="6">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="!this.workshop"
                     label="کارگاه"
                     :items="workshops"
@@ -87,9 +88,11 @@
                 ></v-text-field>
 
               </v-col>
-
-              <v-col cols="12" md="3">
+            </v-row>
+            <v-row class="mt-3" v-if="!item.id && item.workshop">
+            <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="!this.personnel"
                     label="نام  و نام خانوادگی"
                     :items="personnels"
@@ -116,33 +119,41 @@
 
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" md="2" @click='nationalDisplaySet(item)'>
-                <v-text-field label="* کد ملی" v-model="national_code" background-color="white"
+              <v-col v-if="!item.personnel" cols="12" md="3" @click='nationalDisplaySet(item)'>
+                <v-text-field  v-on:keypress="NumbersOnly" label="* کد ملی" v-model="national_code" background-color="white"
                               :disabled="!isEditing || !national_code_dis || personnel"/>
               </v-col>
-              <v-col cols="12" md="2" @click='personnelDisplaySet(item)'>
-                <v-text-field label="* کد پرسنلی " v-model="personnel_code" background-color="white"
+              <v-col cols="12" md="3" v-if="!item.personnel"  @click='personnelDisplaySet(item)'>
+                <v-text-field v-on:keypress="NumbersOnly" label="* کد پرسنلی " v-model="personnel_code" background-color="white"
                               :disabled="!isEditing || !personnel_code_dis || personnel"/>
               </v-col>
-              <v-col cols="12" md="2">
+              <v-col v-if="item.personnel" cols="12" md="4">
+                <v-text-field  v-on:keypress="NumbersOnly" label="* کد ملی" v-model="national_code" background-color="white"
+                              :disabled="true"/>
+              </v-col>
+              <v-col cols="12" md="4" v-if="item.personnel"  >
+                <v-text-field v-on:keypress="NumbersOnly" label="* کد پرسنلی " v-model="personnel_code" background-color="white"
+                              :disabled="true"/>
+              </v-col>
+              <v-col cols="12" md="2" v-if="!item.personnel">
                 <v-btn v-if="!personnel" fab color="green" class=" white--text"  @click="searchUser"> <v-icon>fa-search</v-icon>
                 </v-btn>
                 <v-btn v-if="!personnel" fab color="red" class="mt-1 mr-1 white--text" @click="setNull"><v-icon>fa-times</v-icon></v-btn>
               </v-col>
-
             </v-row>
 
-            <v-row class="mt-16">
+            <v-row class="mt-16" v-if="item.personnel">
               <v-col cols="12" md="6">
-                <v-text-field label="* عنوان شغلی " v-model="item.work_title" background-color="white"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* عنوان شغلی " v-model="item.work_title" background-color="white"
                               :disabled="!isEditing || item.quit_job "/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field label="* محل خدمت  " v-model="item.job_location" background-color="white"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* محل خدمت  " v-model="item.job_location" background-color="white"
                               :disabled="!isEditing || item.quit_job"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="* وضعیت کارمند"
                     :items="EMPLOYEE_TYPES"
                     v-model="item.employee_status"
@@ -153,6 +164,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="* وضعیت محل کار"
                     :items="JOB_LOCATION_STATUSES"
                     v-model="item.job_location_status"
@@ -164,12 +176,14 @@
 
 
               <v-col cols="12" md="6">
-                <v-text-field label="* سابقه بیمه قبلی خارج این کارگاه (ماه) "
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly"
+                              label="* سابقه بیمه قبلی خارج این کارگاه (ماه) "
                               v-model="item.previous_insurance_history_out_workshop" background-color="white"
                               :disabled="!isEditing || item.quit_job"/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field label="* سابقه بیمه قبلی در این کارگاه (ماه)"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly"
+                              label="* سابقه بیمه قبلی در این کارگاه (ماه)"
                               v-model="item.previous_insurance_history_in_workshop" background-color="white"
                               :disabled="!isEditing || item.quit_job"/>
               </v-col>
@@ -183,11 +197,17 @@
                               background-color="white" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field label="* سمت یا شغل (دارایی)" v-model="item.job_position" background-color="white"
-                              :disabled="!isEditing || item.quit_job"/>
+                <v-text-field
+                    :rules="[rules.required,]"
+                    v-on:keypress="NoneNumbersOnly"
+                    label="* سمت یا شغل (دارایی)"
+                    v-model="item.job_position"
+                    background-color="white"
+                    :disabled="!isEditing || item.quit_job"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="* رسته شغلی "
                     :items="JOB_POSITIONS"
                     v-model="item.job_group"
@@ -201,6 +221,7 @@
 
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="* نوع استخدام "
                     :items="EMPLOYMENTS_TYPES"
                     v-model="item.employment_type"
@@ -212,6 +233,7 @@
 
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="* نوع قرارداد"
                     :items="CONTRACT_TYPES"
                     v-model="item.contract_type"
@@ -226,7 +248,7 @@
               </v-col>
 
             </v-row>
-            <v-row class="mt-5">
+            <v-row class="mt-5" v-if="item.personnel">
               <v-col cols="12" md="4">
                 <v-banner
                     class=" "
@@ -245,13 +267,16 @@
                 </v-banner>
               </v-col>
               <v-col cols="12" md="4" class="mt-3">
-                <v-text-field label=" روز های کارکرد قبل از تعریف "
-                              v-model="item.haghe_sanavat_days" background-color="white"
-                              :disabled="!isEditing || item.quit_job"/>
+                <v-text-field
+                    v-on:keypress="NumbersOnly"
+                    label=" روز های کارکرد قبل از تعریف "
+                    v-model="item.haghe_sanavat_days" background-color="white"
+                    :disabled="!isEditing || item.quit_job"/>
               </v-col>
 
               <v-col cols="12" md="4" class="mt-3">
                 <money
+                    v-on:keypress="NumbersOnly"
                     label="* مبلغ حق سنوات شناسایی شده "
                     v-model="item.komakhazine_mobile_amount"
                     background-color="white"
@@ -389,6 +414,11 @@ export default {
       workshop_name: null,
       selected: false,
       cleared: false,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+      },
+
     };
   },
   computed: {

@@ -18,11 +18,11 @@
             ref="workshopContractForm"
 
         >
-
           <template>
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -40,17 +40,17 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field label="* شماره قرارداد  " v-model="item.code" background-color="white"
-                              :disabled="!isEditing"/>
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره قرارداد  " v-model="item.code" background-color="white"
+                               :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="4">
-                <date v-model="item.contract_from_date" label="* تاریخ شروع قرارداد " :default="true"
+                <date v-model="item.contract_from_date" label="* تاریخ شروع قرارداد " :default="false"
                       :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.contract_to_date" label="* تاریخ پایان قرارداد " :default="true"
+                <date v-model="item.contract_to_date" label="* تاریخ پایان قرارداد " :default="false"
                       :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
@@ -137,7 +137,13 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+      },
+
     };
+
   },
   computed: {
     headers() {
@@ -185,6 +191,16 @@ export default {
   },
 
   methods: {
+    NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+
     show(item) {
       console.log(item)
     },

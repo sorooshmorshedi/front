@@ -22,6 +22,7 @@
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -41,6 +42,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="نوع"
                     :items="MISSION_TYPES"
                     v-model="item.mission_type"
@@ -53,20 +55,30 @@
             </v-row>
             <v-row
                 v-if="item.mission_type == 'd'"
-
             >
               <v-col cols="9" md="6">
-                <date v-model="item.from_date" label="* از تاریخ" :default="true" :disabled="!isEditing"/>
+                <date
+                    v-model="item.from_date"
+                    label="* از تاریخ"
+                    :default="false"
+                    :disabled="!isEditing"/>
               </v-col>
               <v-col cols="9" md="6">
-                <date v-model="item.to_date" label="* تا تاریخ " :default="true" :disabled="!isEditing"/>
+                <date
+                    v-model="item.to_date"
+                    label="* تا تاریخ "
+                    :default="false"
+                    :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row
                 v-if="item.mission_type == 'h'"
             >
               <v-col cols="12" md="4">
-                <date v-model="item.date" label="* تاریخ " :default="true" :disabled="!isEditing"/>
+                <date v-model="item.date"
+                      label="* تاریخ "
+                      :default="false"
+                      :disabled="!isEditing"/>
               </v-col>
 
               <v-col
@@ -281,6 +293,11 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+      },
+
     };
   },
   computed: {
@@ -310,7 +327,7 @@ export default {
           console.log(data);
           for (let t in data) {
             this.workshopPersonnels.push({
-              'name': data[t].personnel_name + ' ' + data[t].personnel_last_name + ' in ' + data[t].workshop_name,
+              'name': data[t].personnel_name +  ' در کارگاه ' + data[t].workshop_name,
               'id': data[t].id,
             })
           }
@@ -321,6 +338,25 @@ export default {
   },
 
   methods: {
+    NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    NoneNumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        return true;
+      } else {
+        evt.preventDefault();;
+      }
+    },
+
     setValues(item) {
       if (item.leave_type == 'e') {
         console.log('ok')

@@ -99,13 +99,13 @@
             <date v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="false" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label=" * محل تولد " v-model="item.location_of_birth"   background-color="white" :disabled="!isEditing" :rules="[rules.required,]"/>
+            <city-select label=" * محل تولد " v-model="item.location_of_birth"  background-color="white" :disabled="!isEditing" :rules="[rules.required,]"></city-select>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="* محل صدور شناسنامه" v-model="item.location_of_exportation"   background-color="white" :disabled="!isEditing" :rules="[rules.required,]"/>
+            <city-select label="* محل صدور شناسنامه" v-model="item.location_of_exportation"  background-color="white" :disabled="!isEditing" :rules="[rules.required,]"></city-select>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="بخش محل صدور" v-model="item.sector_of_exportation"   background-color="white" :disabled="!isEditing" />
+            <city-select label="بخش محل صدور" v-model="item.sector_of_exportation"   background-color="white" :disabled="!isEditing"></city-select>
           </v-col>
           <v-col cols="12" md="2">
             <v-text-field label="تلفن ثابت " v-model="item.phone_number"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
@@ -172,7 +172,15 @@
                           :disabled="!isEditing || item.degree_education == 1 || item.degree_education == 2 || item.degree_education == 3 "/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field  :rules="[rules.required,]" label="* نام بانک " v-model="item.account_bank_name"    background-color="white" :disabled="!isEditing" />
+            <v-autocomplete
+                :rules="[rules.required,]"
+                label="* نام بانک"
+                :items="BANK_NAMES"
+                v-model="item.account_bank_name"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"/>
+
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره حساب حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
@@ -274,6 +282,36 @@ export default {
         {name: 'فوق لیسانس', value: 6},
         {name: 'دکترا', value: 7},
         {name: 'فوق دکترا', value: 8},
+      ],
+
+      BANK_NAMES: [
+        {name: ' بانک انصار', value: 'BANSAR'},
+        {name: ' بانک توسعه تعاون', value: 'BCDEVE'},
+        {name: ' بانک شهر', value: 'BCENTR'},
+        {name: 'کاردانی', value: 'BCITY'},
+        {name: 'بانک دی', value: 'BDAY'},
+        {name: 'بانک  صادرات توسعه ایران', value: 'BEDIRA'},
+        {name: 'بانک اقتصاد نوین', value: 'BEGHTE'},
+        {name: 'بانک قرض الحسنه مهر', value: 'BGHARZ'},
+        {name: 'بانک حکمت ایرانیان', value: 'BHEKMA'},
+        {name: 'بانک کارآفرین', value: 'BKARAF'},
+        {name: 'بانک کشاورزی', value: 'BKESHA'},
+        {name: 'بانک مسکن', value: 'BMASKA'},
+        {name: 'بانک ملت', value: 'BMELLA'},
+        {name: 'بانک  ملی ایران', value: 'BMELLI'},
+        {name: 'بانک پارسیان', value: 'BPARSI'},
+        {name: 'بانک پاسارگاد', value: 'BPASAR'},
+        {name: 'پست بانک ', value: 'BPOST'},
+        {name: 'بانک رفاه کارگران ', value: 'BREFAH'},
+        {name: 'بانک صادرات ', value: 'BSADER'},
+        {name: 'بانک سامان ', value: 'BSAMAN'},
+        {name: 'بانک سرمایه ', value: 'BSARMA'},
+        {name: 'بانک سپه ', value: 'BSEPAH'},
+        {name: 'بانک سینا ', value: 'BSINA'},
+        {name: 'بانک تات ', value: 'BTAT'},
+        {name: 'بانک تجارت ', value: 'BTEJAR'},
+        {name: 'بانک گردشگری ', value: 'BTOURI'},
+        {name: 'بانک رسالت ', value: 'BRESALA'},
       ],
       UNIVERSITY_TYPES: [
         {name: ' دولتی', value: 'st'},

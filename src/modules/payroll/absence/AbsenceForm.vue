@@ -23,6 +23,7 @@
             <v-row v-if="item.leave_type == 'e'">
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -42,6 +43,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="نوع"
                     :items="ABSENCE_TYPES"
                     v-model="item.leave_type"
@@ -53,6 +55,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="item.leave_type == 'e'"
                     label="نوع مرخصی استحقاقی"
                     :items="ENTITLEMENT_LEAVE_TYPES"
@@ -66,6 +69,7 @@
             <v-row v-if="item.leave_type == 'm'">
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -85,6 +89,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="نوع"
                     :items="ABSENCE_TYPES"
                     v-model="item.leave_type"
@@ -96,6 +101,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="item.leave_type == 'm'"
                     label="دلیل مرخصی ماده 73"
                     :items="MATTER_73_LEAVE_TYPES"
@@ -126,6 +132,7 @@
             <v-row v-if="item.leave_type != 'e' && item.leave_type != 'm'">
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -145,6 +152,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    :rules="[rules.required,]"
                     label="نوع"
                     :items="ABSENCE_TYPES"
                     v-model="item.leave_type"
@@ -160,10 +168,10 @@
 
             >
               <v-col cols="9" md="6">
-                <date v-model="item.from_date" label="* از تاریخ" :default="true" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="9" md="6">
-                <date v-model="item.to_date" label="* تا تاریخ " :default="true" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row
@@ -171,17 +179,17 @@
 
             >
               <v-col cols="9" md="6">
-                <date v-model="item.from_date" label="* از تاریخ" :default="true" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="9" md="6">
-                <date v-model="item.to_date" label="* تا تاریخ " :default="true" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="12" v-if="item.leave_type == 'i'"
               >
 
-                <v-text-field label="علت حادثه" v-model="item.cause_of_incident" background-color="white"
+                <v-text-field :rules="[rules.required,]" label="علت حادثه" v-model="item.cause_of_incident" background-color="white"
                               :disabled="!isEditing"/>
 
               </v-col>
@@ -190,7 +198,7 @@
                 v-if="item.entitlement_leave_type == 'h' && item.leave_type == 'e' "
             >
               <v-col cols="12" md="4">
-                <date v-model="item.date" label="* تاریخ " :default="true" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.date" label="* تاریخ " :default="false" :disabled="!isEditing"/>
               </v-col>
 
               <v-col
@@ -355,7 +363,6 @@ export default {
       ENTITLEMENT_LEAVE_TYPES: [
         {name: ' ساعتی', value: 'h'},
         {name: 'روزانه', value: 'd'},
-
       ],
       time: null,
       menu1: false,
@@ -379,6 +386,11 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+      },
+
     };
   },
   computed: {
@@ -419,6 +431,25 @@ export default {
   },
 
   methods: {
+    NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    NoneNumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        return true;
+      } else {
+        evt.preventDefault();;
+      }
+    },
+
     setValues(item) {
       if (item.leave_type == 'e') {
         console.log('ok')
