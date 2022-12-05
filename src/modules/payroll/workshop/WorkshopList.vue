@@ -29,8 +29,6 @@ export default {
         {
           text: "کد کارگاه",
           value: "code",
-          type: "numeric",
-
         },
         {
           text: "نام کارگاه",
@@ -47,14 +45,10 @@ export default {
         {
           text: "کد پستی",
           value: "postal_code",
-          type: "numeric",
-          filterable: false,
         },
         {
           text: "کد شعبه",
           value: "branch_code",
-          type: "numeric",
-          filterable: false,
         },
 
         {

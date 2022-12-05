@@ -12,6 +12,7 @@
             :canDelete="false"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
+            :show-navigation-btns="false"
             @submit="submit"
             @delete="deleteItem"
             @clearForm="clearForm()"
@@ -22,7 +23,7 @@
           <template>
             <v-row>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد کارگاه " v-model="item.code" background-color="white" :disabled="!isEditing"/>
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد کارگاه (بیمه) " v-model="item.code" background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field :rules="[rules.required,]"  label="* نام کارگاه " v-model="item.name" background-color="white"
@@ -132,6 +133,7 @@ export default {
       paymentDialog: false,
       payment: '',
       performClearForm: true,
+      first: false,
       rules: {
         required: value => !!value || 'Required.',
         min: v => v.length >= 8 || 'Min 8 characters',
@@ -145,13 +147,11 @@ export default {
         {
           text: "کد کارگاه",
           value: "code",
-          type: "numeric",
 
         },
         {
           text: "ردیف پیمان",
           value: "contract_row",
-          type: "numeric",
         },
         {
           text: "نام کارگاه",
@@ -168,17 +168,14 @@ export default {
         {
           text: "کد پستی",
           value: "postal_code",
-          type: "numeric",
         },
         {
           text: "نرخ بیمه حق کارفرما",
           value: "employer_insurance_contribution",
-          type: "numeric",
         },
         {
           text: "کد شعبه",
           value: "branch_code",
-          type: "numeric",
         },
 
         {
@@ -188,7 +185,12 @@ export default {
       ];
     },
   },
-
+  updated() {
+    if (!this.first && this.$route.params.id){
+      this.first = true
+      this.isEditing = false
+    }
+  },
   methods: {
     to(item) {
       return {

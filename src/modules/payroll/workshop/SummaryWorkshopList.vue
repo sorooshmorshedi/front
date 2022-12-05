@@ -29,8 +29,6 @@ export default {
         {
           text: "کد کارگاه",
           value: "code",
-          type: "numeric",
-
         },
         {
           text: "نام کارگاه",

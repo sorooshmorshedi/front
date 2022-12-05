@@ -31,7 +31,8 @@
             <v-text-field label="* نام پدر" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]" v-model="item.father_name" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="کد پرسنلی" v-on:keypress="NumbersOnly" v-model="item.personnel_code" background-color="white" :disabled="item.id"/>
+            <v-text-field label="کد پرسنلی" v-on:keypress="NumbersOnly" v-model="item.personnel_code" background-color="white" :disabled="true">
+            </v-text-field>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
@@ -60,7 +61,8 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field v-if="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white" :disabled="true"/>
+            <v-text-field v-show="false" v-if="item.gender == 'f'" label="* خدمت سربازی" v-model="item.military_service = 'x'" background-color="white" :disabled="true"/>
+            <v-text-field v-show="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white" :disabled="true"/>
             <v-autocomplete
                 :rules="[rules.required,]"
                 v-if="item.gender !== 'f' "
@@ -127,6 +129,7 @@
           </v-col>
           <v-col cols="12" md="2">
             <v-switch
+                @change="item.insurance_code = null"
                 v-model="item.insurance"
                 label= 'بیمه تامین اجتماعی دارد'
                 :disabled="!isEditing"
@@ -137,6 +140,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                @change="item.field_of_study = null"
                 :rules="[rules.required,]"
                 label="* مدرک تحصیلی"
                 :items="DEGREE_TYPE"
@@ -148,6 +152,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
+                v-on:keypress="NoneNumbersOnly"
                 :rules="[rules.required,]"
                 label="* رشته تحصیلی"
                 v-model="item.field_of_study"
@@ -166,6 +171,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field label="* نام دانشگاه"
+                          v-on:keypress="NoneNumbersOnly"
                           :rules="[rules.required,]"
                           v-model="item.university_name"
                           background-color="white"
@@ -173,6 +179,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                v-on:keypress="NoneNumbersOnly"
                 :rules="[rules.required,]"
                 label="* نام بانک"
                 :items="BANK_NAMES"
@@ -186,7 +193,7 @@
             <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره حساب حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره کارت حقوق" v-model="item.bank_cart_number"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field :rules="[rules.required,]" @change="set"v-on:keypress="NumbersOnly" label="* شماره کارت حقوق" v-model="item.bank_cart_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره شبا" v-model="item.sheba_number"  append-icon="IR"  background-color="white" :disabled="!isEditing"/>
@@ -536,6 +543,9 @@ export default {
 
         }
       })
+
+    },
+    set(value){
 
     },
     to(item) {

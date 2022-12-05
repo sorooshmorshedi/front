@@ -72,6 +72,7 @@ export default {
         {
           text: "مبلغ اولیه قرارداد",
           value: "contract_initial_amount",
+          type: "numeric",
         },
         {
           text: "وضعیت",

@@ -11,6 +11,7 @@
             :canDelete="false"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
+            :show-navigation-btns="false"
             :show-submit-and-clear-btn="false"
             @submit="submit"
             @delete="deleteItem"
@@ -60,7 +61,7 @@
                               background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field label="* نام واگذار کننده " v-model="item.assignor_name" background-color="white"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* نام واگذار کننده " v-model="item.assignor_name" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
@@ -68,7 +69,7 @@
                               background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field label=" شعبه " v-model="item.branch" background-color="white" :disabled="!isEditing"/>
+                <v-text-field label=" شعبه تامین اجتماعی" v-model="item.branch" background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
                 <money
@@ -158,6 +159,7 @@ export default {
       VisitorLevels,
       paymentDialog: false,
       payment: '',
+      first: false,
       performClearForm: true,
       rules: {
         required: value => !!value || 'Required.',
@@ -165,6 +167,12 @@ export default {
       },
 
     };
+  },
+  updated() {
+    if (!this.first && this.$route.params.id){
+      this.first = true
+      this.isEditing = false
+    }
   },
 
   computed: {

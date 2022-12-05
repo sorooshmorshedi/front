@@ -81,15 +81,18 @@ export default {
         },
         {
           text: "محل تولد",
-          value: "location_of_birth",
+          value: "birth_city",
+          filterable: false
         },
         {
           text: "محل صدور شناسنامه",
-          value: "location_of_exportation",
+          value: "exportation_city",
+          filterable: false
         },
         {
           text: "بخش محل صدور",
-          value: "sector_of_exportation",
+          value: "exportation_sector",
+          filterable: false
         },
         {
           text: "کد تلفن",
@@ -118,6 +121,8 @@ export default {
         {
           text: "بیمه تامین اجتماعی",
           value: "insurance",
+          type: 'boolean'
+
         },
         {
           text: "شماره بیمه",
@@ -141,7 +146,8 @@ export default {
         },
         {
           text: "نام بانک",
-          value: "account_bank_name",
+          value: "bank_name",
+          filterable: false,
         },
         {
           text: "شماره حساب حقوق",
@@ -155,6 +161,20 @@ export default {
           text: "شماره شبا",
           value: "sheba_number",
         },
+        {
+          text: "فعال",
+          value: "is_personnel_active",
+          type: 'boolean'
+
+
+        },
+        {
+          text: "نهایی",
+          value: "is_personnel_verified",
+          type: 'boolean'
+
+        },
+
       ];
 
     },

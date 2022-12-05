@@ -79,9 +79,9 @@
 
           <v-col cols="12" md="4">
             <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
-                          v-if="item.relative !== 'f'" label="* نام  " v-model="item.name"
+                          v-if="item.relative !== 'f' || item.id" label="* نام  " v-model="item.name"
                           background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 'f'"
+            <v-text-field v-if="item.relative == 'f'&& !item.id"
                           label="* نام "
                           v-model="item.name = father_naming[item.personnel]"
                           background-color="white" :disabled="false"/>
@@ -89,10 +89,10 @@
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
-                          v-if="item.relative !== 'c' && item.relative !== 'f'" label="* نام خانوادگی "
+                          v-if="item.relative !== 'c' && item.relative !== 'f' || item.id" label="* نام خانوادگی "
                           v-model="item.last_name" background-color="white" :disabled="!isEditing"/>
 
-            <v-text-field v-if="item.relative == 'c' || item.relative == 'f'"
+            <v-text-field v-if="item.relative == 'c' || item.relative == 'f' && !item.id"
                           label="* نام خانوادگی "
                           v-model="item.last_name = naming[item.personnel]"
                           background-color="white" :disabled="false"/>
@@ -200,7 +200,7 @@
           <v-col cols="12" md="4">
             <v-autocomplete
                 :rules="[rules.required,]"
-                label="* وضعیت پرسنل "
+                label="* وضعیت  "
                 :items="PERSONNEL_STATUS"
                 v-model="item.is_active"
                 item-text="name"
@@ -340,6 +340,7 @@ export default {
       married: 'متاهل',
       men: 'آقا',
       women: 'خانم',
+      first: false,
       rules: {
         required: value => !!value || 'Required.',
       },
@@ -347,6 +348,12 @@ export default {
 
 
     };
+  },
+  updated() {
+    if (!this.first && this.$route.params.id){
+      this.first = true
+      this.isEditing = false
+    }
   },
 
   computed: {
