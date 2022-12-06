@@ -47,6 +47,10 @@ export default {
           value: "nationality_display",
         },
         {
+          text: "کشور",
+          value: "country",
+        },
+        {
           text: "جنسیت",
           value: "gender_display",
         },

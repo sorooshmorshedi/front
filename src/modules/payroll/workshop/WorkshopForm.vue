@@ -19,8 +19,22 @@
             ref="workshopForm"
 
         >
-
           <template>
+            <v-banner  class="mt-3 mb-5 red--text">
+              <v-avatar
+                  slot="icon"
+                  color="red"
+                  size="25"
+              >
+                <v-icon
+                    color="white"
+                >
+                  fa-check
+                </v-icon>
+              </v-avatar>
+              توجه داشته باشید اطلاعات کارگاه باید با اطلاعات مندرج در بیمه تامین اجتماعی یکی باشد
+            </v-banner>
+
             <v-row>
               <v-col cols="12" md="6">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد کارگاه (بیمه) " v-model="item.code" background-color="white" :disabled="!isEditing"/>

@@ -60,7 +60,7 @@
                 item-value="value"
                 :disabled="!isEditing"
                 :rules="[rules.required,]"
-                @change="item.gender = null ; item.marital_status = null"
+                @change="item.gender = null ; item.marital_status = null; item.name = null ; item.last_name = null"
             />
 
             <v-autocomplete
@@ -79,45 +79,46 @@
 
           <v-col cols="12" md="4">
             <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
-                          v-if="item.relative !== 'f' || item.id" label="* نام  " v-model="item.name"
+                          label="* نام  " v-model="item.name"
                           background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 'f'&& !item.id"
-                          label="* نام "
-                          v-model="item.name = father_naming[item.personnel]"
-                          background-color="white" :disabled="false"/>
 
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
-                          v-if="item.relative !== 'c' && item.relative !== 'f' || item.id" label="* نام خانوادگی "
+                          label="* نام خانوادگی "
                           v-model="item.last_name" background-color="white" :disabled="!isEditing"/>
 
-            <v-text-field v-if="item.relative == 'c' || item.relative == 'f' && !item.id"
-                          label="* نام خانوادگی "
-                          v-model="item.last_name = naming[item.personnel]"
-                          background-color="white" :disabled="false"/>
           </v-col>
 
           <v-col cols="12" md="4">
-            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد ملی " v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد ملی "
+                          v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
 
           <v-col cols="12" md="4">
             <date v-model="item.date_of_birth" label="* تاریخ  تولد " :default="false" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 's'">
-            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'f'" v-show="false" label="* جنسیت " v-model="item.gender = 'm'" background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'm'" v-show="false" label="* جنسیت " v-model="item.gender = 'f'" background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'f'"  label="* جنسیت " v-model="men" background-color="white" :disabled="true"/>
-            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'm'"  label="* جنسیت " v-model="women" background-color="white" :disabled="true"/>
+            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'f'" v-show="false" label="* جنسیت "
+                          v-model="item.gender = 'm'" background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'm'" v-show="false" label="* جنسیت "
+                          v-model="item.gender = 'f'" background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'f'" label="* جنسیت " v-model="men"
+                          background-color="white" :disabled="true"/>
+            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'm'" label="* جنسیت " v-model="women"
+                          background-color="white" :disabled="true"/>
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 'm'">
-            <v-text-field v-if="item.relative == 'm'" v-show="false" label="* جنسیت " v-model="item.gender = 'f'" background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 'm'"  label="* جنسیت " v-model="women" background-color="white" :disabled="true"/>
+            <v-text-field v-if="item.relative == 'm'" v-show="false" label="* جنسیت " v-model="item.gender = 'f'"
+                          background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-if="item.relative == 'm'" label="* جنسیت " v-model="women" background-color="white"
+                          :disabled="true"/>
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 'f'">
-            <v-text-field v-if="item.relative == 'f'" v-show="false" label="* جنسیت " v-model="item.gender = 'm'" background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 'f'"  label="* جنسیت " v-model="men" background-color="white" :disabled="true"/>
+            <v-text-field v-if="item.relative == 'f'" v-show="false" label="* جنسیت " v-model="item.gender = 'm'"
+                          background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-if="item.relative == 'f'" label="* جنسیت " v-model="men" background-color="white"
+                          :disabled="true"/>
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 'c' || !item.relative">
             <v-autocomplete
@@ -172,8 +173,10 @@
             />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field v-show="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white" :disabled="true"/>
-            <v-text-field v-show="false" v-if="item.gender == 'f'" label="* خدمت سربازی" v-model="item.military_service = 'x'" background-color="white" :disabled="true"/>
+            <v-text-field v-show="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white"
+                          :disabled="true"/>
+            <v-text-field v-show="false" v-if="item.gender == 'f'" label="* خدمت سربازی"
+                          v-model="item.military_service = 'x'" background-color="white" :disabled="true"/>
             <v-autocomplete
                 :rules="[rules.required,]"
                 v-if="item.gender == 'm' || !item.gender"
@@ -214,22 +217,25 @@
       <v-btn
           class="light-blue white--text mt-6  mr-2 float-left"
           @click="verifyPersonnel(item.id)"
-          v-if="item.id && !item.is_verified" >ثبت نهایی</v-btn>
+          v-if="item.id && !item.is_verified">ثبت نهایی
+      </v-btn>
       <v-btn
           class="red white--text   mr-2 float-left "
           @click="verifyUnPersonnel(item.id)"
-          v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+          v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
+      </v-btn>
 
 
     </m-form>
-    <template v-if="this.personnel || item.personnel && !slug">
+    <template v-if="item.personnel">
       <v-card class="mt-8">
-        <v-card-title> خانواده {{personnel_name}} </v-card-title>
+        <v-card-title> خانواده {{ personnel_name }}</v-card-title>
         <v-card-text>
-          <m-datatable :headers="headers" :apiUrl="printUrl" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
+          <m-datatable :headers="headers" :apiUrl="printUrl" :filters.sync="filters"
+                       @dblclick:row="(e, row) => $router.push(to(row.item))"
                        ref="familyDatatable">
             <template #item.detail="{ item }">
-              <detail-link :to="to(item)" />
+              <detail-link :to="to(item)"/>
             </template>
 
           </m-datatable>
@@ -254,7 +260,6 @@ import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
-
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
@@ -334,7 +339,7 @@ export default {
       performClearForm: true,
       personnel_name: null,
       personnel_filter: null,
-      filters:{},
+      filters: {},
       slug: this.$route.params.id,
       female: 'هیچ کدام',
       married: 'متاهل',
@@ -346,11 +351,10 @@ export default {
       },
 
 
-
     };
   },
   updated() {
-    if (!this.first && this.$route.params.id){
+    if (!this.first && this.$route.params.id) {
       this.first = true
       this.isEditing = false
     }
@@ -412,7 +416,7 @@ export default {
     if (this.$route.params.id) {
       this.isEditing = false
     }
-    if(!this.personnel){
+    if (!this.personnel) {
       this.request({
         url: this.endpoint(`payroll/personnel/`),
         method: "get",
@@ -430,8 +434,9 @@ export default {
           }
           console.log(this.personnels)
         }
-      })}
-    if(this.personnel){
+      })
+    }
+    if (this.personnel) {
       this.filters['personnel'] = this.personnel
       this.request({
         url: this.endpoint(`payroll/personnel/` + this.personnel + '/'),
@@ -439,14 +444,16 @@ export default {
         success: data => {
           this.personnel_name = data.name + ' ' + data.last_name
         }
-      })}
+      })
+    }
   },
   methods: {
     NumbersOnly(evt) {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }
@@ -457,17 +464,18 @@ export default {
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
         return true;
       } else {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       }
     },
 
-    verifyPersonnel(id){
+    verifyPersonnel(id) {
       this.request({
         url: this.endpoint(`payroll/personnel/family/verify/` + id + '/'),
         method: "get",
         success: data => {
           console.log(data);
-          this.notify('  پرسنل نهایی شد', 'success')
+          this.notify('  خانواده نهایی شد', 'success')
           window.location.reload();
         },
         error: data => {
@@ -477,13 +485,13 @@ export default {
       })
 
     },
-    verifyUnPersonnel(id){
+    verifyUnPersonnel(id) {
       this.request({
         url: this.endpoint(`payroll/personnel/family/unverify/` + id + '/'),
         method: "get",
         success: data => {
           console.log(data);
-          this.notify('پرسنل از نهایی خارج شد', 'success')
+          this.notify('خانواده از نهایی خارج شد', 'success')
           window.location.reload();
         },
         error: data => {

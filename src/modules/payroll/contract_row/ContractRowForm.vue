@@ -9,6 +9,7 @@
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
             :canDelete="false"
+            :can-edit="!item.is_verified && !item.use_in_insurance_list"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
             :show-navigation-btns="false"
@@ -19,6 +20,35 @@
             ref="workshopForm"
         >
           <template>
+            <v-banner v-if="!item.is_verified && !item.use_in_insurance_list" class="mt-3 mb-5 green--text">
+              <v-avatar
+                  slot="icon"
+                  color="green"
+                  size="25"
+              >
+                <v-icon
+                    color="white"
+                >
+                  fa-check
+                </v-icon>
+              </v-avatar>
+              توجه داشته باشید اطلاعات پیمان باید با اطلاعات مندرج در بیمه تامین اجتماعی یکی باشد
+            </v-banner>
+            <v-banner v-if="item.use_in_insurance_list" class="mt-3 mb-5 red--text">
+              <v-avatar
+                  slot="icon"
+                  color="red"
+                  size="25"
+              >
+                <v-icon
+                    color="white"
+                >
+                  fa-times
+                </v-icon>
+              </v-avatar>
+              با توجه به این که ردیف پیمان در محاسبات حقوق و لیست بیمه درج شده قابل ویرایش نیست
+
+            </v-banner>
             <v-row>
               <v-col cols="12" md="4">
                 <v-autocomplete
@@ -48,13 +78,13 @@
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.registration_date" label="تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
+                <date v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.from_date" label="تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
+                <date v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.to_date" label="تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
+                <date v-model="item.to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
@@ -74,7 +104,7 @@
               <v-col cols="12" md="4">
                 <money
                     v-on:keypress="NumbersOnly"
-                    label=" مبلغ اولیه قرارداد"
+                    label="* مبلغ اولیه قرارداد"
                     v-model="item.contract_initial_amount"
                     background-color="white"
                     :disabled="!isEditing"
@@ -98,6 +128,15 @@
               </v-col>
             </v-row>
           </template>
+          <v-btn
+              class="light-blue white--text mt-6  mr-2 float-left"
+              @click="verifyContract(item.id)"
+              v-if="item.id && !item.is_verified && !item.use_in_insurance_list" >ثبت نهایی</v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 float-left "
+              @click="UnVerifyContract(item)"
+              v-if="item.id && item.is_verified && !item.use_in_insurance_list" > خروج از وضعیت نهایی</v-btn>
+
         </m-form>
       </v-col>
       <v-col cols="12" md="6">
@@ -139,8 +178,8 @@ export default {
   data() {
     return {
       STATUS_TYPE: [
-        {name: ' فعال', value: 'a'},
-        {name: 'غیر فعال', value: 'n'},
+        {name: ' فعال', value: true},
+        {name: 'غیر فعال', value: false},
       ],
 
       printUrl: 'payroll/contractRows/all',
@@ -269,7 +308,38 @@ export default {
         evt.preventDefault();;
       }
     },
+    verifyContract(id){
+      this.request({
+        url: this.endpoint(`payroll/contract/row/verify/` + id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  ردیف پیمان نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
 
+        }
+      })
+
+    },
+    UnVerifyContract(item) {
+      this.request({
+        url: this.endpoint(`payroll/contract/row/unverify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('ردیف پیمان از نهایی خارج شد', 'success')
+          this.to(item)
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
     to(item) {
       return {
         name: 'WorkshopDetail',

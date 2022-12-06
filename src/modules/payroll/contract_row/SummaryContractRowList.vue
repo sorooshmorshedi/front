@@ -34,7 +34,6 @@ export default {
         {
           text: "ردیف پیمان",
           value: "contract_row",
-          type: "numeric",
         },
         {
           text: "شماره قرارداد",
@@ -49,8 +48,14 @@ export default {
           value: "to_date",
         },
         {
-          text: "وضعیت",
-          value: "status_display",
+          text: "فعال",
+          value: "status",
+          type: "boolean"
+        },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: "boolean"
         },
       ];
 

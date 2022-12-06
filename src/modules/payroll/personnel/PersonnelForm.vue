@@ -46,8 +46,18 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field v-if="item.nationality !== 1" :rules="[rules.required,]" label="* کشور" v-model="item.country" background-color="white" :disabled="!isEditing"/>
             <v-text-field v-if="item.nationality == 1" label="* کشور" v-model="iran" background-color="white" :disabled="true"/>
+            <v-autocomplete
+                v-if="item.nationality !== 1"
+                :rules="[rules.required,]"
+                label="* کشور"
+                :items="Country"
+                v-model="item.country"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+            />
+
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
@@ -60,7 +70,7 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="3" v-if="item.nationality !== 2">
             <v-text-field v-show="false" v-if="item.gender == 'f'" label="* خدمت سربازی" v-model="item.military_service = 'x'" background-color="white" :disabled="true"/>
             <v-text-field v-show="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white" :disabled="true"/>
             <v-autocomplete
@@ -74,10 +84,13 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="3" v-if="item.nationality == 2">
+            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد فراگیر تابعیت"  v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="3" v-if="item.nationality !== 2">
             <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* شماره شناسنامه" counter v-model="item.identity_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col cols="12" md="3" v-if="item.nationality !== 2">
             <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد ملی"  v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
@@ -97,17 +110,27 @@
           <v-col cols="12" md="3">
             <date v-model="item.date_of_birth" label="* تاریخ تولد" :default="false" :disabled="!isEditing" />
           </v-col>
-          <v-col cols="12" md="3">
-            <date v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="false" :disabled="!isEditing" />
+          <v-col cols="12" md="3" v-if="item.nationality !== 2">
+            <date  v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="false" :disabled="!isEditing" />
           </v-col>
-          <v-col cols="12" md="2">
-            <city-select label=" * محل تولد " v-model="item.location_of_birth"  background-color="white" :disabled="!isEditing" :rules="[rules.required,]"></city-select>
+          <v-col cols="12" md="2" v-if="item.nationality !== 2">
+            <city-select v-if="item.nationality !== 2" label=" * محل تولد "
+                         v-model="item.location_of_birth"  background-color="white"
+                         :disabled="!isEditing" :rules="[rules.required,]"></city-select>
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" md="3" v-if="item.nationality == 2">
+            <v-text-field v-if="item.nationality == 2"
+                          v-on:keypress="NoneNumbersOnly"
+                          label="* محل تولد"
+                          v-model="item.location_of_foreign_birth"
+                          :rules="[rules.required,]"
+                          background-color="white" :disabled="!isEditing"/>
+          </v-col>
+          <v-col cols="12" md="2" v-if="item.nationality !== 2">
             <city-select label="* محل صدور شناسنامه" v-model="item.location_of_exportation"  background-color="white" :disabled="!isEditing" :rules="[rules.required,]"></city-select>
           </v-col>
-          <v-col cols="12" md="2">
-            <city-select label="بخش محل صدور" v-model="item.sector_of_exportation"   background-color="white" :disabled="!isEditing"></city-select>
+          <v-col cols="12" md="2" v-if="item.nationality !== 2">
+            <city-select  label="بخش محل صدور" v-model="item.sector_of_exportation"   background-color="white" :disabled="!isEditing"></city-select>
           </v-col>
           <v-col cols="12" md="2">
             <v-text-field label="تلفن ثابت " v-model="item.phone_number"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
@@ -115,7 +138,10 @@
           <v-col cols="12" md="1">
             <v-text-field label="کد تلفن" v-model="item.city_phone_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
           </v-col>
-          <v-col cols="12" md="7">
+          <v-col cols="12" md="2">
+            <city-select label="* شهر سکونت" v-model="item.city"  background-color="white" :disabled="!isEditing" :rules="[rules.required,]"></city-select>
+          </v-col>
+          <v-col cols="12" md="5">
             <v-text-field label="* آدرس " v-model="item.address"   background-color="white" :disabled="!isEditing"  :rules="[rules.required,]"/>
           </v-col>
           <v-col cols="12" md="2">
@@ -193,7 +219,7 @@
             <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره حساب حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field :rules="[rules.required,]" @change="set"v-on:keypress="NumbersOnly" label="* شماره کارت حقوق" v-model="item.bank_cart_number"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field :rules="[rules.required,]"  v-on:keypress="NumbersOnly" label="* شماره کارت حقوق" v-model="testt"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره شبا" v-model="item.sheba_number"  append-icon="IR"  background-color="white" :disabled="!isEditing"/>
@@ -246,6 +272,7 @@ import date from "@/components/mcomponents/cleave/Date";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
+import {range} from "lodash";
 
 
 export default {
@@ -292,19 +319,20 @@ export default {
       ],
 
       BANK_NAMES: [
-        {name: ' بانک انصار', value: 'BANSAR'},
         {name: ' بانک توسعه تعاون', value: 'BCDEVE'},
         {name: ' بانک شهر', value: 'BCENTR'},
-        {name: 'کاردانی', value: 'BCITY'},
+        {name: 'بانک شهر', value: 'BCITY'},
         {name: 'بانک دی', value: 'BDAY'},
-        {name: 'بانک  صادرات توسعه ایران', value: 'BEDIRA'},
+        {name: 'بانک آینده', value: 'BAYAN'},
+        {name: 'استاندارد چارترد', value: 'CHART'},
+        {name: 'بانک توسعه صادرات  ایران', value: 'BEDIRA'},
         {name: 'بانک اقتصاد نوین', value: 'BEGHTE'},
-        {name: 'بانک قرض الحسنه مهر', value: 'BGHARZ'},
-        {name: 'بانک حکمت ایرانیان', value: 'BHEKMA'},
+        {name: 'بانک قرض الحسنه مهر ایران', value: 'BGHARZ'},
         {name: 'بانک کارآفرین', value: 'BKARAF'},
         {name: 'بانک کشاورزی', value: 'BKESHA'},
         {name: 'بانک مسکن', value: 'BMASKA'},
         {name: 'بانک ملت', value: 'BMELLA'},
+        {name: 'بانک تجاری ایران و اروپا', value: 'EURO'},
         {name: 'بانک  ملی ایران', value: 'BMELLI'},
         {name: 'بانک پارسیان', value: 'BPARSI'},
         {name: 'بانک پاسارگاد', value: 'BPASAR'},
@@ -318,15 +346,28 @@ export default {
         {name: 'بانک تات ', value: 'BTAT'},
         {name: 'بانک تجارت ', value: 'BTEJAR'},
         {name: 'بانک گردشگری ', value: 'BTOURI'},
-        {name: 'بانک رسالت ', value: 'BRESALA'},
+        {name: 'بانک قرض الحسنه رسالت ', value: 'BRESALA'},
+        {name: 'بانک خاورمیانه ', value: 'KHAVA'},
+        {name: 'بانک مشترک ایران - ونزوئلا ', value: 'VENE'},
+        {name: 'تعاون اسلامی برای سرمایه‌گذاری (مصرف التعاون الاسلامی للاستثمار) ', value: 'ESLA'},
+        {name: 'فیوچر بانک (المستقبل)', value: 'FUTU'},
+        {name: 'مؤسسه اعتباری غیربانکی کاسپین ', value: 'CASP'},
+        {name: 'مؤسسه اعتباری غیربانکی  توسعه ', value: 'TOSE'},
+        {name: 'مؤسسه اعتباری غیربانکی  ملل ', value: 'MELAL'},
+        {name: 'مؤسسه اعتباری غیربانکی نور ', value: 'NOR'},
       ],
       UNIVERSITY_TYPES: [
         {name: ' دولتی', value: 'st'},
         {name: 'آزاد', value: 'op'},
         {name: 'غیر انتفاعی', value: 'np'},
       ],
+      Country: [
+        {name: ' انگلیس', value: 'انگلیس'},
+        {name: 'آلمان', value: 'آلمان'},
+        {name: 'افغانستان', value: 'افغانستان'},
+      ],
 
-
+      testt: '',
       printUrl: 'payroll/personnel/all',
       isWorkshopConfirmed: false,
       worshopId: 0,
@@ -339,6 +380,7 @@ export default {
       isDefinable: false,
       myClass: '',
       factors: [],
+      cart_number: '################',
       PathLevels,
       VisitorLevels,
       paymentDialog: false,
@@ -494,6 +536,23 @@ export default {
     }
   },
   methods: {
+    put_under_line(str) {
+      this.testt = this.cardNumberSpace(str, 4, '-')
+      for (let i in range(0, (this.testt.length) + 1)){
+        this.cart_number = this.testt.replace('-', '')
+        console.log(this.cart_number)
+      }},
+    cardNumberSpace: function spacify(str, after, c) {
+      if (!str) {
+        return '';
+      }
+      var v = str.replace(/[^\dA-Z]/g, ''),
+          reg = new RegExp(".{" + after + "}", "g");
+      return v.replace(reg, function (a) {
+        return a + c;
+      }).replace(/[^0-9]+$/, "");
+    },
+
     NumbersOnly(evt) {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
