@@ -20,10 +20,10 @@
 
         >
           <template>
-            <v-banner  class="mt-3 mb-5 red--text">
+            <v-banner  class="mt-3 mb-5 green--text">
               <v-avatar
                   slot="icon"
-                  color="red"
+                  color="green"
                   size="25"
               >
                 <v-icon

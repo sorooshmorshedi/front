@@ -216,13 +216,14 @@
 
           </v-col>
           <v-col cols="12" md="3">
+
             <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره حساب حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field :rules="[rules.required,]"  v-on:keypress="NumbersOnly" label="* شماره کارت حقوق" v-model="item.bank_cart_number"   background-color="white" :disabled="!isEditing"/>
+            <cart :rules="[rules.max_cart, rules.required]" label="* شماره کارت حقوق" v-model="item.bank_cart_number" :disabled="!isEditing"></cart>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره شبا" v-model="item.sheba_number"  append-icon="IR"  background-color="white" :disabled="!isEditing"/>
+            <cart :rules="[rules.max_sheba, rules.required]" label="* شماره شبا" v-model="item.sheba_number" :disabled="!isEditing" append-icon="IR"></cart>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
@@ -268,6 +269,7 @@ import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import cart from "@/components/scomponents/Cart";
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
@@ -278,7 +280,7 @@ import {range} from "lodash";
 export default {
   name: "PersonnelForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, cart},
   props: {
     id: {},
   },
@@ -391,6 +393,8 @@ export default {
       rules: {
         required: value => !!value || 'Required.',
         min: v => v.length >= 8 || 'Min 8 characters',
+        max_cart: v => v.length <= 19 || 'Max 19 characters',
+        max_sheba: v => v.length <= 29 || 'max 29 characters',
       },
     };
   },
