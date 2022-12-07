@@ -79,16 +79,8 @@ export default {
       this.formattedAmount = formattedAmount;
     },
     getAmount() {
-      let valueParts = this.formattedAmount.split("-").join("").split(".");
-      if (valueParts.length == 3) {
-        return `${valueParts[0]}.${valueParts[1].substr(0, 6)}`;
-      }
-      let value = valueParts[0];
-      if (value == "") {
-        return null;
-      } else {
-        return +value;
-      }
+      let valueParts = this.formattedAmount.split("-").join("")
+      return valueParts
     },
     change(newValue) {
       this.setAmount(newValue);
