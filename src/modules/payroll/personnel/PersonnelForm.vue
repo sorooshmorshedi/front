@@ -219,7 +219,7 @@
             <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره حساب حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field :rules="[rules.required,]"  v-on:keypress="NumbersOnly" label="* شماره کارت حقوق" v-model="testt"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field :rules="[rules.required,]"  v-on:keypress="NumbersOnly" label="* شماره کارت حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره شبا" v-model="item.sheba_number"  append-icon="IR"  background-color="white" :disabled="!isEditing"/>
