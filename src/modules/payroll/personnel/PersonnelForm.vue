@@ -395,6 +395,8 @@ export default {
         min: v => v.length >= 8 || 'Min 8 characters',
         max_cart: v => v.length <= 19 || 'Max 19 characters',
         max_sheba: v => v.length <= 29 || 'max 29 characters',
+        min_cart: v => v.length >= 19 || 'Min 19 characters',
+        min_sheba: v => v.length >= 29 || 'Min 29 characters',
       },
     };
   },
