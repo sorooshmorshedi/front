@@ -20,10 +20,10 @@
             ref="workshopForm"
         >
           <template>
-            <v-banner v-if="!item.is_verified && !item.use_in_insurance_list" class="mt-3 mb-5 green--text">
+            <v-banner v-if="!item.is_verified && !item.use_in_insurance_list" class="mt-3 mb-5 red--text">
               <v-avatar
                   slot="icon"
-                  color="green"
+                  color="red"
                   size="25"
               >
                 <v-icon
@@ -104,6 +104,7 @@
               <v-col cols="12" md="4">
                 <money
                     v-on:keypress="NumbersOnly"
+                    :rules="[rules.required,]"
                     label="* مبلغ اولیه قرارداد"
                     v-model="item.contract_initial_amount"
                     background-color="white"
@@ -219,12 +220,12 @@ export default {
       return [
         {
           text: " کارگاه",
-          value: "workshop",
+          value: "workshop_name",
+          filterable: false,
         },
         {
           text: "ردیف پیمان",
           value: "contract_row",
-          type: "numeric",
         },
         {
           text: "شماره قرارداد",

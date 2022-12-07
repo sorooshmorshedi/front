@@ -48,6 +48,18 @@
             ></v-text-field>
 
           </v-col>
+          <v-col cols="12" md="4" v-if="item.personnel">
+            <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
+                          label="نام پدر پرسنل" v-model="father_naming[item.personnel]"
+                          background-color="white" :disabled="true"/>
+
+          </v-col>
+          <v-col cols="12" md="4" v-if="item.personnel">
+            <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
+                          label="کد ملی پرسنل  " v-model="nat[item.personnel]"
+                          background-color="white" :disabled="true"/>
+
+          </v-col>
         </v-row>
         <v-row class="mt-15" v-if="item.personnel">
           <v-col cols="12" md="4">
@@ -122,8 +134,8 @@
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 'c' || !item.relative">
             <v-autocomplete
-                label="* جنسیت"
-                :items="GENDER_TYPES"
+                label=" * جنسیت فرزند"
+                :items="CHILD_TYPES"
                 v-model="item.gender"
                 item-text="name"
                 item-value="value"
@@ -289,7 +301,6 @@ export default {
       SINGLE_RELATIVE_TYPE: [
         {name: ' پدر', value: 'f'},
         {name: 'مادر', value: 'm'},
-        {name: 'همسر', value: 's'},
       ],
       MARITAL_STATUS_TYPES: [
         {name: ' مجرد', value: 's'},
@@ -299,6 +310,10 @@ export default {
       GENDER_TYPES: [
         {name: ' آقا', value: 'm'},
         {name: 'خانم', value: 'f'},
+      ],
+      CHILD_TYPES: [
+        {name: ' فرزند پسر', value: 'm'},
+        {name: 'فرزند دختر', value: 'f'},
       ],
       MILITARY_SERVICE_STATUS: [
         {name: ' انجام داده', value: 'd'},
@@ -313,7 +328,7 @@ export default {
       PHYSICAL_TYPE: [
         {name: ' سالم', value: 'h'},
         {name: 'بیمار', value: 'p'},
-        {name: 'نفص عضو', value: 'm'},
+        {name: 'نقض عضو', value: 'm'},
       ],
 
       printUrl: 'payroll/personnel/family/all',
@@ -336,6 +351,7 @@ export default {
       naming: {},
       gender: {},
       father_naming: {},
+      nat: {},
       performClearForm: true,
       personnel_name: null,
       personnel_filter: null,
@@ -365,7 +381,7 @@ export default {
       return [
         {
           text: "پرسنل",
-          value: "personnel",
+          value: "personnel_name",
         },
         {
           text: "نام",
@@ -431,6 +447,7 @@ export default {
             this.naming[data[t].id] = data[t].last_name
             this.father_naming[data[t].id] = data[t].father_name
             this.gender[data[t].id] = data[t].gender
+            this.nat[data[t].id] = data[t].national_code
           }
           console.log(this.personnels)
         }
@@ -445,6 +462,18 @@ export default {
           this.personnel_name = data.name + ' ' + data.last_name
         }
       })
+    }
+    if (this.$route.params.id){
+      this.request({
+        url: this.endpoint(`payroll/personnel/family/` + this.$route.params.id + '/'),
+        method: "get",
+        success: data => {
+          this.filters['personnel'] = data.personnel
+          console.log(data.personnel)
+        }
+      })
+
+
     }
   },
   methods: {

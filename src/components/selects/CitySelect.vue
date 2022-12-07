@@ -10,6 +10,7 @@
       :multiple="multiple"
       :placeholder="placeholder"
       :return-object="true"
+      :rules="[rules.required]"
     ></v-autocomplete>
   </div>
 </template>
@@ -35,7 +36,11 @@ export default {
   },
   data() {
     return {
-      item: null
+      item: null,
+      rules: {
+        required: value => !!value || 'Required.',
+      },
+
     };
   },
   computed: {

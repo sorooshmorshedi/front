@@ -63,11 +63,6 @@ export default {
           filterable : false,
         },
         {
-          text: "خدمت سربازی",
-          value: "military_service_display",
-          filterable : false,
-        },
-        {
           text: "وضعیت تحصیل",
           value: "study_status_display",
           filterable : false,

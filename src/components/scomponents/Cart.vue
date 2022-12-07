@@ -1,5 +1,6 @@
 <template>
   <v-text-field
+    :rules="[rules.required,]"
     dir="ltr"
     :label="label"
     :placeholder="placeholder"
@@ -38,7 +39,10 @@ export default {
   data() {
     return {
       formattedAmount: "",
-    };
+      rules: {
+        required: value => !!value || 'Required.',
+      }
+      };
   },
   computed: {
     listeners() {

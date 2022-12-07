@@ -20,10 +20,10 @@
 
         >
           <template>
-            <v-banner  class="mt-3 mb-5 green--text">
+            <v-banner  class="mt-3 mb-5 red--text">
               <v-avatar
                   slot="icon"
-                  color="green"
+                  color="red"
                   size="25"
               >
                 <v-icon
@@ -62,6 +62,20 @@
               <v-col cols="12" md="6">
                 <v-textarea label=" نام شعبه" v-model="item.branch_name" :disabled="!isEditing"></v-textarea>
               </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-autocomplete
+                    :rules="[rules.required,]"
+                    label="* وضعیت"
+                    :items="STATUS_TYPE"
+                    v-model="item.status"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </v-col>
+
             </v-row>
             <v-btn class="primary white--text mt-6 ml-2 float-left"
                    v-if=" item.id" @click="setting(item)">تنظیمات کارگاه
@@ -117,6 +131,11 @@ export default {
   },
   data() {
     return {
+      STATUS_TYPE: [
+        {name: ' فعال', value: true},
+        {name: 'غیر فعال', value: false},
+      ],
+
       BASE_PAY_TYPES: [
         {name: 'مزد مبنای روزانه', value: 'd'},
         {name: 'مزد مبنای ماهانه', value: 'm'},

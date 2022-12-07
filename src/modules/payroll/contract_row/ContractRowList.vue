@@ -29,7 +29,8 @@ export default {
       return [
         {
           text: " کارگاه",
-          value: "workshop",
+          value: "workshop_name",
+          filterable: false,
         },
         {
           text: "ردیف پیمان",

@@ -64,7 +64,7 @@ export default {
         },
 
         {
-          text: "کد ملی",
+          text: "کد ملی/ کد فراگیر",
           value: "national_code",
         },
         {

@@ -108,13 +108,13 @@
             <v-text-field label=" تعداد فرزندان" v-model="item.number_of_childes"  background-color="white" :disabled="true"/>
           </v-col>
           <v-col cols="12" md="3">
-            <date v-model="item.date_of_birth" label="* تاریخ تولد" :default="false" :disabled="!isEditing" />
+            <date v-model="item.date_of_birth" :rules="[rules.required,]" label="* تاریخ تولد" :default="false" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="3" v-if="item.nationality !== 2">
-            <date  v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="false" :disabled="!isEditing" />
+            <date :rules="[rules.required,]" v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="false" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
-            <city-select v-if="item.nationality !== 2" label=" * محل تولد "
+            <city-select  v-if="item.nationality !== 2" label=" * محل تولد "
                          v-model="item.location_of_birth"  background-color="white"
                          :disabled="!isEditing" :rules="[rules.required,]"></city-select>
           </v-col>
@@ -127,7 +127,10 @@
                           background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
-            <city-select label="* محل صدور شناسنامه" v-model="item.location_of_exportation"  background-color="white" :disabled="!isEditing" :rules="[rules.required,]"></city-select>
+            <city-select label="* محل صدور شناسنامه"
+                         v-model="item.location_of_exportation"
+                         background-color="white" :disabled="!isEditing"
+                         :rules="[rules.required,]"></city-select>
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
             <city-select  label="بخش محل صدور" v-model="item.sector_of_exportation"   background-color="white" :disabled="!isEditing"></city-select>
@@ -139,7 +142,7 @@
             <v-text-field label="کد تلفن" v-model="item.city_phone_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
           </v-col>
           <v-col cols="12" md="2">
-            <city-select label="* شهر سکونت" v-model="item.city"  background-color="white" :disabled="!isEditing" :rules="[rules.required,]"></city-select>
+            <city-select label="* شهر محل سکونت" v-model="item.city"  background-color="white" :disabled="!isEditing" :rules="[rules.required,]"></city-select>
           </v-col>
           <v-col cols="12" md="5">
             <v-text-field label="* آدرس " v-model="item.address"   background-color="white" :disabled="!isEditing"  :rules="[rules.required,]"/>
@@ -162,7 +165,11 @@
             ></v-switch>
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]"  label=" شماره بیمه" v-model="item.insurance_code"   background-color="white" :disabled="!item.insurance"/>
+            <v-text-field v-on:keypress="NumbersOnly"
+                          :rules="[rules.required,]"
+                          label=" شماره بیمه" v-model="item.insurance_code"
+                          background-color="white"
+                          :disabled="!item.insurance || !isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
@@ -220,10 +227,23 @@
             <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره حساب حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <cart :rules="[rules.max_cart, rules.required]" label="* شماره کارت حقوق" v-model="item.bank_cart_number" :disabled="!isEditing"></cart>
+            <cart :rules="[rules.max_cart, rules.min_cart, rules.required]"
+                  v-on:keypress="NumbersTo16Only"
+                  ref="cart"
+                  label="* شماره کارت حقوق"
+                  v-model="item.bank_cart_number"
+                  :disabled="!isEditing">
+
+            </cart>
           </v-col>
           <v-col cols="12" md="3">
-            <cart :rules="[rules.max_sheba, rules.required]" label="* شماره شبا" v-model="item.sheba_number" :disabled="!isEditing" append-icon="IR"></cart>
+            <cart :rules="[rules.max_sheba, rules.min_sheba, rules.required]"
+                  v-on:keypress="NumbersTo24Only"
+                  ref="sheba"
+                  label="* شماره شبا" v-model="item.sheba_number"
+                  :disabled="!isEditing"
+                  append-icon="IR">
+            </cart>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
@@ -321,37 +341,37 @@ export default {
       ],
 
       BANK_NAMES: [
-        {name: ' بانک توسعه تعاون', value: 'BCDEVE'},
-        {name: ' بانک شهر', value: 'BCENTR'},
-        {name: 'بانک شهر', value: 'BCITY'},
-        {name: 'بانک دی', value: 'BDAY'},
-        {name: 'بانک آینده', value: 'BAYAN'},
+        {name: ' توسعه تعاون', value: 'BCDEVE'},
+        {name: ' شهر', value: 'BCITY'},
+        {name: ' دی', value: 'BDAY'},
+        {name: ' آینده', value: 'BAYAN'},
         {name: 'استاندارد چارترد', value: 'CHART'},
-        {name: 'بانک توسعه صادرات  ایران', value: 'BEDIRA'},
-        {name: 'بانک اقتصاد نوین', value: 'BEGHTE'},
-        {name: 'بانک قرض الحسنه مهر ایران', value: 'BGHARZ'},
-        {name: 'بانک کارآفرین', value: 'BKARAF'},
-        {name: 'بانک کشاورزی', value: 'BKESHA'},
-        {name: 'بانک مسکن', value: 'BMASKA'},
-        {name: 'بانک ملت', value: 'BMELLA'},
-        {name: 'بانک تجاری ایران و اروپا', value: 'EURO'},
-        {name: 'بانک  ملی ایران', value: 'BMELLI'},
-        {name: 'بانک پارسیان', value: 'BPARSI'},
-        {name: 'بانک پاسارگاد', value: 'BPASAR'},
+        {name: ' توسعه صادرات  ایران', value: 'BEDIRA'},
+        {name: ' اقتصاد نوین', value: 'BEGHTE'},
+        {name: ' قرض الحسنه مهر ایران', value: 'BGHARZ'},
+        {name: ' کارآفرین', value: 'BKARAF'},
+        {name: ' کشاورزی', value: 'BKESHA'},
+        {name: ' مسکن', value: 'BMASKA'},
+        {name: ' ملت', value: 'BMELLA'},
+        {name: ' تجاری ایران و اروپا', value: 'EURO'},
+        {name: '  ملی ایران', value: 'BMELLI'},
+        {name: ' پارسیان', value: 'BPARSI'},
+        {name: ' پاسارگاد', value: 'BPASAR'},
         {name: 'پست بانک ', value: 'BPOST'},
-        {name: 'بانک رفاه کارگران ', value: 'BREFAH'},
-        {name: 'بانک صادرات ', value: 'BSADER'},
-        {name: 'بانک سامان ', value: 'BSAMAN'},
-        {name: 'بانک سرمایه ', value: 'BSARMA'},
-        {name: 'بانک سپه ', value: 'BSEPAH'},
-        {name: 'بانک سینا ', value: 'BSINA'},
-        {name: 'بانک تات ', value: 'BTAT'},
-        {name: 'بانک تجارت ', value: 'BTEJAR'},
-        {name: 'بانک گردشگری ', value: 'BTOURI'},
-        {name: 'بانک قرض الحسنه رسالت ', value: 'BRESALA'},
-        {name: 'بانک خاورمیانه ', value: 'KHAVA'},
-        {name: 'بانک مشترک ایران - ونزوئلا ', value: 'VENE'},
-        {name: 'تعاون اسلامی برای سرمایه‌گذاری (مصرف التعاون الاسلامی للاستثمار) ', value: 'ESLA'},
+        {name: ' رفاه کارگران ', value: 'BREFAH'},
+        {name: ' صادرات ', value: 'BSADER'},
+        {name: ' صنعت و معدن ', value: 'BINDMI'},
+        {name: ' سامان ', value: 'BSAMAN'},
+        {name: ' سرمایه ', value: 'BSARMA'},
+        {name: ' سپه ', value: 'BSEPAH'},
+        {name: ' سینا ', value: 'BSINA'},
+        {name: ' تجارت ', value: 'BTEJAR'},
+        {name: ' ایران زمین ', value: 'ZAMIN'},
+        {name: ' گردشگری ', value: 'BTOURI'},
+        {name: ' قرض الحسنه رسالت ', value: 'BRESALA'},
+        {name: ' خاورمیانه ', value: 'KHAVA'},
+        {name: ' مشترک ایران - ونزوئلا ', value: 'VENE'},
+        {name: 'تعاون اسلامی برای سرمایه‌گذاری', value: 'ESLA'},
         {name: 'فیوچر بانک (المستقبل)', value: 'FUTU'},
         {name: 'مؤسسه اعتباری غیربانکی کاسپین ', value: 'CASP'},
         {name: 'مؤسسه اعتباری غیربانکی  توسعه ', value: 'TOSE'},
@@ -560,6 +580,30 @@ export default {
     },
 
     NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    NumbersTo16Only(evt) {
+      if (this.$refs.cart.$props.value.length >= 16){
+        evt.preventDefault();
+      }
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    NumbersTo24Only(evt) {
+      if (this.$refs.sheba.$props.value.length >= 24){
+        evt.preventDefault();
+      }
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
