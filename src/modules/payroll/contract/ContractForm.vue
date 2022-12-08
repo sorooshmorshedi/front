@@ -65,7 +65,8 @@
                     v-model="item.insurance"
                     label='ّبیمه میشود'
                     :disabled="!isEditing"
-                    :value="true"
+                    :true-value="true"
+                    :false-value="false"
                     @change="show(item.insurance)"
                 ></v-switch>
               </v-col>

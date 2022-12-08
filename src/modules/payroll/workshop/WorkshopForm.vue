@@ -69,7 +69,7 @@
                     :rules="[rules.required,]"
                     label="* وضعیت"
                     :items="STATUS_TYPE"
-                    v-model="item.status"
+                    v-model="item.is_active"
                     item-text="name"
                     item-value="value"
                     :disabled="!isEditing"

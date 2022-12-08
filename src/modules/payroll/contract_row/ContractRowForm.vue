@@ -137,8 +137,38 @@
               class="red white--text mt-12 mr-2 float-left "
               @click="UnVerifyContract(item)"
               v-if="item.id && item.is_verified && !item.use_in_insurance_list" > خروج از وضعیت نهایی</v-btn>
+          <v-dialog
+              v-if="item.id && !item.is_verified && !item.use_in_insurance_list"
+              transition="dialog-top-transition"
+              max-width="600"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                  class="accent darken-3 white--text mt-6 mr-2 float-left "
+                  v-bind="attrs"
+                  v-on="on"
+              >ثبت تعدیل</v-btn>
+            </template>
+            <template v-slot:default="dialog">
+              <v-card>
+                <v-toolbar
+                    color="accent darken-3"
+                    dark
+                >ثبت تعدیل برای ردیف پیمان {{item.contract_row}}</v-toolbar>
+                <v-card-text>
+
+                  <adjustment-form :contract_row="item.id" ></adjustment-form>
+
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                  <v-btn fab color="red" class="mt-1 mr-1 white--text" @click="dialog.value = false"><v-icon>fa-times</v-icon></v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
         </m-form>
 
+        <adjustment-list  v-if="item.id && !item.is_verified && !item.use_in_insurance_list " :ex_filter="{'contract_row': item.id}"></adjustment-list>
       </v-col>
 
       <v-col cols="12" md="6">
@@ -168,12 +198,17 @@ import date from "@/components/mcomponents/cleave/Date";
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import SummaryContractRowList from "@/modules/payroll/contract_row/SummaryContractRowList";
+import AdjustmentForm from "@/modules/payroll/contract_row/AdjustmentForm";
+import AdjustmentList from "@/modules/payroll/contract_row/AdjustmentList";
 
 
 export default {
   name: "ContractRowFrom",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {SummaryContractRowList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+  components: {
+    AdjustmentList,
+    AdjustmentForm,
+    SummaryContractRowList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
     id: {},
   },
