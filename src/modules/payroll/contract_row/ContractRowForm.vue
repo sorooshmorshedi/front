@@ -137,9 +137,10 @@
               class="red white--text mt-12 mr-2 float-left "
               @click="UnVerifyContract(item)"
               v-if="item.id && item.is_verified && !item.use_in_insurance_list" > خروج از وضعیت نهایی</v-btn>
-
         </m-form>
+
       </v-col>
+
       <v-col cols="12" md="6">
         <summary-contract-row-list></summary-contract-row-list>
       </v-col>
