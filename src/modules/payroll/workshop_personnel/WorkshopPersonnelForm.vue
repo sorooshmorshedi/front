@@ -10,6 +10,7 @@
             :exportParams="{id: item.id}"
             :canDelete="false"
             :canSubmit="!item.quit_job"
+            :can-edit="!item.is_verified"
             :isEditing.sync="isEditing"
             :show-submit-and-clear-btn="false"
             :show-actions="item.personnel"
@@ -19,7 +20,7 @@
             ref="WorkshopPersonnelForm"
 
         >
-          <v-toolbar  v-if="item.id"  class="white--text" color="indigo">
+          <v-toolbar v-if="item.id" class="white--text" color="indigo">
             <v-toolbar-title>
               {{ personnelName }}
             </v-toolbar-title>
@@ -30,15 +31,6 @@
             <v-btn left color="indigo lighten-4" @click="balance('html')" class="ml-2 mr-2 indigo--text text--darken-3">
               گردش پرداخت
             </v-btn>
-
-            <m-datatable v-if="item.id" v-show="false" :headers="headers"
-                         :apiUrl="export_url" :filters.sync="export_filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
-                         ref="exportTable">
-              <template #item.detail="{ item }">
-                <detail-link :to="to(item)" />
-              </template>
-
-            </m-datatable>
 
           </v-toolbar>
           <v-col cols="12" md="12" v-if="item.quit_job">
@@ -56,7 +48,7 @@
                   large
               >info
               </v-icon>
-               به دلیل اینکه برای پرسنل ترک کار ثبت شده است قادر به ویرایش نمی باشید
+              به دلیل اینکه برای پرسنل ترک کار ثبت شده است قادر به ویرایش نمی باشید
             </v-banner>
           </v-col>
 
@@ -90,7 +82,7 @@
               </v-col>
             </v-row>
             <v-row class="mt-3" v-if="!item.id && item.workshop">
-            <v-col cols="12" md="4">
+              <v-col cols="12" md="4">
                 <v-autocomplete
                     :rules="[rules.required,]"
                     v-if="!this.personnel"
@@ -120,35 +112,77 @@
                 ></v-text-field>
               </v-col>
               <v-col v-if="!item.personnel" cols="12" md="3" @click='nationalDisplaySet(item)'>
-                <v-text-field  v-on:keypress="NumbersOnly" label="* کد ملی" v-model="national_code" background-color="white"
+                <v-text-field v-on:keypress="NumbersOnly" label="* کد ملی" v-model="national_code"
+                              background-color="white"
                               :disabled="!isEditing || !national_code_dis || personnel"/>
               </v-col>
-              <v-col cols="12" md="3" v-if="!item.personnel"  @click='personnelDisplaySet(item)'>
-                <v-text-field v-on:keypress="NumbersOnly" label="* کد پرسنلی " v-model="personnel_code" background-color="white"
+              <v-col cols="12" md="3" v-if="!item.personnel" @click='personnelDisplaySet(item)'>
+                <v-text-field v-on:keypress="NumbersOnly" label="* کد پرسنلی " v-model="personnel_code"
+                              background-color="white"
                               :disabled="!isEditing || !personnel_code_dis || personnel"/>
               </v-col>
               <v-col v-if="item.personnel" cols="12" md="4">
-                <v-text-field  v-on:keypress="NumbersOnly" label="* کد ملی" v-model="national_code" background-color="white"
+                <v-text-field v-on:keypress="NumbersOnly" label="* کد ملی" v-model="national_code"
+                              background-color="white"
                               :disabled="true"/>
               </v-col>
-              <v-col cols="12" md="4" v-if="item.personnel"  >
-                <v-text-field v-on:keypress="NumbersOnly" label="* کد پرسنلی " v-model="personnel_code" background-color="white"
+              <v-col cols="12" md="4" v-if="item.personnel">
+                <v-text-field v-on:keypress="NumbersOnly" label="* کد پرسنلی " v-model="personnel_code"
+                              background-color="white"
                               :disabled="true"/>
               </v-col>
               <v-col cols="12" md="2" v-if="!item.personnel">
-                <v-btn v-if="!personnel" fab color="green" class=" white--text"  @click="searchUser"> <v-icon>fa-search</v-icon>
+                <v-btn v-if="!personnel" fab color="green" class=" white--text" @click="searchUser">
+                  <v-icon>fa-search</v-icon>
                 </v-btn>
-                <v-btn v-if="!personnel" fab color="red" class="mt-1 mr-1 white--text" @click="setNull"><v-icon>fa-times</v-icon></v-btn>
+                <v-btn v-if="!personnel" fab color="red" class="mt-1 mr-1 white--text" @click="setNull">
+                  <v-icon>fa-times</v-icon>
+                </v-btn>
               </v-col>
             </v-row>
 
             <v-row class="mt-16" v-if="item.personnel">
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* عنوان شغلی " v-model="item.work_title" background-color="white"
-                              :disabled="!isEditing || item.quit_job "/>
+                <v-autocomplete
+                    v-if="item.id"
+                    label="کارگاه"
+                    :items="workshops"
+                    v-model="item.workshop"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing || item.quit_job"
+                />
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* محل خدمت  " v-model="item.job_location" background-color="white"
+                <v-autocomplete
+                    v-if="item.id"
+                    label="نام  و نام خانوادگی"
+                    :items="personnels"
+                    v-model="item.personnel"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing || item.quit_job"
+                    @change="setValues(item.personnel)"
+
+                />
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-autocomplete
+                    :rules="[rules.required,]"
+                    v-if="!this.personnel"
+                    label="عنوان شغلی(بیمه)"
+                    :items="WORK_TITLES"
+                    v-model="item.work_title"
+                    item-text="نام شغل"
+                    item-value="نام شغل"
+                    :disabled="!isEditing || item.quit_job"
+                    @change="setValues(item.personnel, item.work_title)"
+                />
+
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* محل خدمت  "
+                              v-model="item.job_location" background-color="white"
                               :disabled="!isEditing || item.quit_job"/>
               </v-col>
               <v-col cols="12" md="6">
@@ -192,7 +226,7 @@
                               v-model="item.current_insurance_month"
                               background-color="white" :disabled="true"/>
               </v-col>
-              <v-col cols="12" md="6"  v-if="item.id" >
+              <v-col cols="12" md="6" v-if="item.id">
                 <v-text-field label="* مجموع سوابق بیمه ای  (ماه) " v-model="item.total_insurance_month"
                               background-color="white" :disabled="true"/>
               </v-col>
@@ -244,29 +278,28 @@
               </v-col>
 
               <v-col cols="12" md="4">
-                <date v-model="item.employment_date" label="تاریخ استخدام " :default="false" :disabled="!isEditing || item.quit_job"/>
+                <date v-model="item.employment_date" label="تاریخ استخدام " :default="false"
+                      :disabled="!isEditing || item.quit_job"/>
               </v-col>
-
             </v-row>
             <v-row class="mt-5" v-if="item.personnel">
-              <v-col cols="12" md="4">
-                <v-banner
-                    class=" "
-                    elevation="6"
-                    outlined
-                    rounded
-                    single-line
-                    sticky
-                >
-                  <v-icon
+              <v-col cols="12" md="12" >
+                <v-banner class="mt-3  red--text">
+                  <v-avatar
+                      slot="icon"
                       color="red"
-                      large
-                  >info
-                  </v-icon>
-                  برای محاسبه حق سنوات <br>علی الحساب این دو فیلد لازم است
+                      size="25"
+                  >
+                    <v-icon
+                        color="white"
+                    >
+                      fa-check
+                    </v-icon>
+                  </v-avatar>
+                  برای محاسبه حق سنوات در شناسایی (( علی الحساب  ))  پر کردن دو فیلد زیر لازم است
                 </v-banner>
               </v-col>
-              <v-col cols="12" md="4" class="mt-3">
+              <v-col cols="12" md="6" >
                 <v-text-field
                     v-on:keypress="NumbersOnly"
                     label=" روز های کارکرد قبل از تعریف "
@@ -274,18 +307,28 @@
                     :disabled="!isEditing || item.quit_job"/>
               </v-col>
 
-              <v-col cols="12" md="4" class="mt-3">
+              <v-col cols="12" md="6" >
                 <money
                     v-on:keypress="NumbersOnly"
                     label="* مبلغ حق سنوات شناسایی شده "
-                    v-model="item.komakhazine_mobile_amount"
+                    v-model="item.haghe_sanavat_identify_amount"
                     background-color="white"
                     :disabled="!isEditing || item.quit_job"
                 />
               </v-col>
-
             </v-row>
           </template>
+          <v-btn
+              class="light-blue white--text mt-6  mr-2 float-left"
+              @click="verifyPersonnel(item.id)"
+              v-if="item.id && !item.is_verified">ثبت نهایی
+          </v-btn>
+          <v-btn
+              class="red white--text mt-6  mr-2 float-left "
+              @click="verifyUnPersonnel(item.id)"
+              v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
+          </v-btn>
+
         </m-form>
       </v-col>
       <v-col cols="12" md="6">
@@ -311,6 +354,7 @@ import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import work_titles from "./bime_title.json"
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
@@ -331,6 +375,10 @@ export default {
   },
   data() {
     return {
+      work_title: null,
+      work_title_code: null,
+
+      WORK_TITLES: work_titles.work_titles,
       CONTRACT_TYPES: [
         {name: ' پاره وقت', value: 2},
         {name: 'تمام وقت', value: 1},
@@ -339,7 +387,7 @@ export default {
         {name: 'پیمانی', value: 4},
       ],
       JOB_LOCATION_STATUSES: [
-        {name: ' معمولی', value: 1},
+        {name: ' عادی', value: 1},
         {name: 'مناطق کمتر توسعه یافته', value: 2},
         {name: 'مناطق آزاد تجاری', value: 3},
       ],
@@ -352,12 +400,12 @@ export default {
         {name: 'سایر', value: 6},
       ],
       EMPLOYEE_TYPES: [
-        {name: ' معمولی', value: 1},
+        {name: ' عادی', value: 1},
         {name: 'جانباز', value: 2},
         {name: 'فرزند شهید', value: 3},
         {name: 'آزاده', value: 4},
         {name: 'نیروهای مسلح', value: 5},
-        {name: 'یر مشمولین بند14 ماده 11', value: 6},
+        {name: 'یر مشمولین بند14 ماده 91', value: 6},
         {name: 'اتباع خارجی مشمول قانون اجتناب از اخذ مالیات مضاعف', value: 7},
 
       ],
@@ -366,10 +414,10 @@ export default {
         {name: 'اداري و مالي', value: 1},
         {name: 'اموراجتماعي', value: 3},
         {name: 'درماني و بهداشتي', value: 5},
-        {name: 'اطلاعات فناوري', value: 4},
+        {name: 'فناوري اطلاعات ', value: 4},
         {name: 'خدمات', value: 7},
         {name: 'فني و مهندسي', value: 6},
-        {name: 'كشاورزي ومحيط زيست', value: 8},
+        {name: 'کشاورزی و محيط زيست', value: 8},
         {name: 'تولیدی', value: 13},
         {name: 'تحقیقاتی', value: 15},
         {name: 'کارگری', value: 11},
@@ -408,6 +456,7 @@ export default {
       VisitorLevels,
       paymentDialog: false,
       payment: '',
+      first: false,
       performClearForm: true,
       searchByCode: false,
       personnelName: null,
@@ -421,6 +470,13 @@ export default {
 
     };
   },
+  updated() {
+    if (!this.first && this.$route.params.id) {
+      this.first = true
+      this.isEditing = false
+    }
+  },
+
   computed: {
     headers() {
       return [
@@ -559,7 +615,8 @@ export default {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }
@@ -570,7 +627,8 @@ export default {
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
         return true;
       } else {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       }
     },
 
@@ -651,14 +709,44 @@ export default {
       }
     },
     balance(type) {
-      this.export_filter = {id: this.$route.params.id}
-      this.export_url = "payroll/balance"
-      this.$refs.exportTable.exportTo(type)
+      window.location.href = "http://127.0.0.1:7000/payroll/balance/html?id=" + this.$route.params.id + '&token=' +
+          this.token
     },
     settlement(type) {
-      this.export_filter = {id: this.$route.params.id}
-      this.export_url = "payroll/settlement/" + this.$route.params.id
-      this.$refs.exportTable.exportTo(type)
+      window.location.href = "http://127.0.0.1:7000/payroll/settlement/" + this.$route.params.id + '/?token=' +
+          this.token
+    },
+    verifyPersonnel(id) {
+      this.request({
+        url: this.endpoint(`payroll/workshopPersonnel/verify/` + id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  پرسنل در کارگاه نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+
+    },
+    verifyUnPersonnel(id) {
+      this.request({
+        url: this.endpoint(`payroll/workshopPersonnel/unverify/` + id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('پرسنل در کارگاه از نهایی خارج شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+
     },
 
   }

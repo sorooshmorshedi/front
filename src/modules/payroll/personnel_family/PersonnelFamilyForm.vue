@@ -84,21 +84,33 @@
                 item-value="value"
                 :disabled="!isEditing"
                 @click="item.name = null"
-                @change="item.last_name = null ; item.gender = null ; item.marital_status = null"
+                @change="item.last_name = null ;item.name = null ; item.gender = null ; item.marital_status = null"
                 :rules="[rules.required,]"
             />
           </v-col>
 
           <v-col cols="12" md="4">
             <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
+                          v-if="item.relative != 'f'"
+
                           label="* نام  " v-model="item.name"
                           background-color="white" :disabled="!isEditing"/>
+
+            <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
+                          v-if="item.relative == 'f'"
+                          label="* نام  " v-model="item.name = father_naming[item.personnel]"
+                          background-color="white" :disabled="true"/>
 
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
                           label="* نام خانوادگی "
+                          v-if="item.relative != 'f' && item.relative != 'c'"
                           v-model="item.last_name" background-color="white" :disabled="!isEditing"/>
+            <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
+                          v-if="item.relative == 'f' || item.relative == 'c'"
+                          label="* نام خانوادگی "
+                          v-model="item.last_name = naming[item.personnel]" background-color="white" :disabled="true"/>
 
           </v-col>
 

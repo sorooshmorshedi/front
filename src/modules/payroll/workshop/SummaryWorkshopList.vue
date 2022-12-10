@@ -39,9 +39,11 @@ export default {
           value: "employer_name",
         },
         {
-          text: "آدرس کارگاه",
-          value: "address",
+          text: "فعال",
+          value: "is_active",
+          type: 'boolean'
         },
+
       ];
 
     },

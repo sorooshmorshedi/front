@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <v-card-title>لیست تعدیل ها</v-card-title>
     <v-card-text>
       <m-datatable  :headers="headers" :export-url="exportUrl" :apiUrl="url" :filters.sync="ex_filter"
                    ref="datatable">
@@ -38,10 +37,6 @@ export default {
           text: " ردیف پیمان",
           value: "contract_row_display",
           filterable: false,
-        },
-        {
-          text: "ردیف پیمان",
-          value: "contract_row",
         },
         {
           text: "تاریخ ثبت",

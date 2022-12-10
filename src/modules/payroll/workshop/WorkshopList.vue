@@ -55,6 +55,11 @@ export default {
           text: "نام شعبه",
           value: "branch_name",
         },
+        {
+          text: "فعال",
+          value: "is_active",
+          type: 'boolean'
+        },
       ];
 
     },

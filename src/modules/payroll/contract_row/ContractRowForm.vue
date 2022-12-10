@@ -78,13 +78,13 @@
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
@@ -166,9 +166,36 @@
               </v-card>
             </template>
           </v-dialog>
+          <v-dialog
+              v-if="item.id && !item.is_verified && !item.use_in_insurance_list"
+              transition="dialog-top-transition"
+              max-width="1500"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                  class="primary darken-1 white--text mt-6 mr-2 float-left "
+                  v-bind="attrs"
+                  v-on="on"
+              >لیست تعدیل</v-btn>
+            </template>
+            <template v-slot:default="dialog">
+              <v-card>
+                <v-toolbar
+                    color="accent darken-3"
+                    dark
+                >لیست تعدیل برای ردیف پیمان {{item.contract_row}}</v-toolbar>
+                <v-card-text>
+
+                <adjustment-list :ex_filter="{'contract_row': item.id}"></adjustment-list>
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                  <v-btn fab color="red" class="mt-1 mr-1 white--text" @click="dialog.value = false"><v-icon>fa-times</v-icon></v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
         </m-form>
 
-        <adjustment-list  v-if="item.id && !item.is_verified && !item.use_in_insurance_list " :ex_filter="{'contract_row': item.id}"></adjustment-list>
       </v-col>
 
       <v-col cols="12" md="6">

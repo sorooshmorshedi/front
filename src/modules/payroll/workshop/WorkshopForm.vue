@@ -37,7 +37,7 @@
 
             <v-row>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد کارگاه (بیمه) " v-model="item.code" background-color="white" :disabled="!isEditing"/>
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد کارگاه (بیمه) " v-model="item.workshop_code" background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field :rules="[rules.required,]"  label="* نام کارگاه " v-model="item.name" background-color="white"

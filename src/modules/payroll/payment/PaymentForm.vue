@@ -830,11 +830,17 @@ export default {
 
     },
     paymentStart() {
-      this.payment_start = true
-      this.export_filter['workshop'] = this.search_workshop
-      this.export_filter['month'] = this.search_month
-      this.export_filter['year'] = parseInt(this.serverNow.format('jYYYY'))
-      console.log(this.export_filter)
+      this.request({
+        url: this.endpoint(`payroll/PaymentVerify/` + this.serverNow.format('jYYYY') + '/' + this.search_month + '/' + this.search_workshop + '/'),
+        method: "get",
+        success: data => {
+          this.payment_start = true
+          this.export_filter['workshop'] = this.search_workshop
+          this.export_filter['month'] = this.search_month
+          this.export_filter['year'] = parseInt(this.serverNow.format('jYYYY'))
+        }
+      })
+
     },
 
     getListsOfMonth(month) {

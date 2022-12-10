@@ -108,10 +108,10 @@
             <v-text-field label=" تعداد فرزندان" v-model="item.number_of_childes"  background-color="white" :disabled="true"/>
           </v-col>
           <v-col cols="12" md="3">
-            <date v-model="item.date_of_birth" :rules="[rules.required,]" label="* تاریخ تولد" :default="false" :disabled="!isEditing" />
+            <date v-model="item.date_of_birth" label="* تاریخ تولد" :default="false" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="3" v-if="item.nationality !== 2">
-            <date :rules="[rules.required,]" v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="false" :disabled="!isEditing" />
+            <date v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="false" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
             <city-select  v-if="item.nationality !== 2" label=" * محل تولد "
@@ -341,38 +341,38 @@ export default {
       ],
 
       BANK_NAMES: [
-        {name: ' توسعه تعاون', value: 'BCDEVE'},
-        {name: ' شهر', value: 'BCITY'},
-        {name: ' دی', value: 'BDAY'},
         {name: ' آینده', value: 'BAYAN'},
         {name: 'استاندارد چارترد', value: 'CHART'},
-        {name: ' توسعه صادرات  ایران', value: 'BEDIRA'},
         {name: ' اقتصاد نوین', value: 'BEGHTE'},
-        {name: ' قرض الحسنه مهر ایران', value: 'BGHARZ'},
-        {name: ' کارآفرین', value: 'BKARAF'},
-        {name: ' کشاورزی', value: 'BKESHA'},
-        {name: ' مسکن', value: 'BMASKA'},
-        {name: ' ملت', value: 'BMELLA'},
-        {name: ' تجاری ایران و اروپا', value: 'EURO'},
-        {name: '  ملی ایران', value: 'BMELLI'},
+        {name: ' ایران زمین ', value: 'ZAMIN'},
         {name: ' پارسیان', value: 'BPARSI'},
         {name: ' پاسارگاد', value: 'BPASAR'},
         {name: 'پست بانک ', value: 'BPOST'},
+        {name: ' توسعه صادرات  ایران', value: 'BEDIRA'},
+        {name: ' تجارت ', value: 'BTEJAR'},
+        {name: ' تجاری ایران و اروپا', value: 'EURO'},
+        {name: 'تعاون اسلامی برای سرمایه‌گذاری', value: 'ESLA'},
+        {name: ' توسعه تعاون', value: 'BCDEVE'},
+        {name: ' خاورمیانه ', value: 'KHAVA'},
+        {name: ' دی', value: 'BDAY'},
         {name: ' رفاه کارگران ', value: 'BREFAH'},
-        {name: ' صادرات ', value: 'BSADER'},
-        {name: ' صنعت و معدن ', value: 'BINDMI'},
         {name: ' سامان ', value: 'BSAMAN'},
         {name: ' سرمایه ', value: 'BSARMA'},
         {name: ' سپه ', value: 'BSEPAH'},
         {name: ' سینا ', value: 'BSINA'},
-        {name: ' تجارت ', value: 'BTEJAR'},
-        {name: ' ایران زمین ', value: 'ZAMIN'},
-        {name: ' گردشگری ', value: 'BTOURI'},
-        {name: ' قرض الحسنه رسالت ', value: 'BRESALA'},
-        {name: ' خاورمیانه ', value: 'KHAVA'},
-        {name: ' مشترک ایران - ونزوئلا ', value: 'VENE'},
-        {name: 'تعاون اسلامی برای سرمایه‌گذاری', value: 'ESLA'},
+        {name: ' شهر', value: 'BCITY'},
+        {name: ' صنعت و معدن ', value: 'BINDMI'},
+        {name: ' صادرات ', value: 'BSADER'},
         {name: 'فیوچر بانک (المستقبل)', value: 'FUTU'},
+        {name: ' قرض الحسنه رسالت ', value: 'BRESALA'},
+        {name: ' قرض الحسنه مهر ایران', value: 'BGHARZ'},
+        {name: ' کارآفرین', value: 'BKARAF'},
+        {name: ' کشاورزی', value: 'BKESHA'},
+        {name: ' گردشگری ', value: 'BTOURI'},
+        {name: ' مسکن', value: 'BMASKA'},
+        {name: ' ملت', value: 'BMELLA'},
+        {name: '  ملی ایران', value: 'BMELLI'},
+        {name: ' مشترک ایران - ونزوئلا ', value: 'VENE'},
         {name: 'مؤسسه اعتباری غیربانکی کاسپین ', value: 'CASP'},
         {name: 'مؤسسه اعتباری غیربانکی  توسعه ', value: 'TOSE'},
         {name: 'مؤسسه اعتباری غیربانکی  ملل ', value: 'MELAL'},
