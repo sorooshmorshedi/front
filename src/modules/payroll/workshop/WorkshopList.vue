@@ -28,7 +28,7 @@ export default {
       return [
         {
           text: "کد کارگاه",
-          value: "code",
+          value: "workshop_code",
         },
         {
           text: "نام کارگاه",

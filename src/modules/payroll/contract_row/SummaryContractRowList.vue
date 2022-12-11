@@ -57,6 +57,12 @@ export default {
           value: "is_verified",
           type: "boolean"
         },
+        {
+          text: "تعدیل",
+          value: "have_ads",
+          type: "boolean"
+        },
+
       ];
 
     },

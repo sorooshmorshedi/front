@@ -47,7 +47,9 @@ export default {
       mask: null,
       isDirty: false,
       id: "date" + (Math.random() * 100000).toFixed(0),
+
     };
+
   },
   watch: {
     value() {

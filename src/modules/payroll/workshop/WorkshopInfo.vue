@@ -13,7 +13,7 @@
 
         ></v-app-bar-nav-icon>
 
-        <v-toolbar-title>کارگاه {{ workshop.name }} {{ workshop.code }}</v-toolbar-title>
+        <v-toolbar-title>کارگاه {{ workshop.name }} {{ workshop.workshop_code }}</v-toolbar-title>
 
         <v-spacer></v-spacer>
         <v-dialog

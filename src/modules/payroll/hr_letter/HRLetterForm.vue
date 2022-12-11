@@ -1413,14 +1413,7 @@
               <v-card-text class="text-h6">حق اولاد :</v-card-text>
             </v-col>
             <v-col cols="12" md="2">
-              <v-autocomplete
-                  label="* ماهیت عناوین شغلی"
-                  :items="NATURE_TYPES"
-                  v-model="item.haghe_owlad_nature = 'u'"
-                  :disabled="true"
-                  item-text="name"
-                  item-value="value"
-              />
+              <money label="تعداد فرزندان مشمول" class="text-center" v-model="item.get_aele_mandi_sum" disabled="true"></money>
             </v-col>
             <v-col cols="12" md="2">
               <v-checkbox

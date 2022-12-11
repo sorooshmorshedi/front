@@ -7,9 +7,9 @@
         :listRoute="{name:'AdjustmentList'}"
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
-        :canDelete="false"
-        :can-edit="isEditing"
-        :canSubmit="canSubmit"
+        :canDelete="item.id != null"
+        :can-edit="false"
+        :canSubmit="!item.id"
         :show-clear-btn="false"
         :show-list-btn="false"
         :isEditing.sync="isEditing"
@@ -20,30 +20,41 @@
         @clearForm="clearForm()"
         ref="adjustment"
     >
-      <v-text-field v-show="false" v-model="item.contract_row = contract_row " />
       <v-row class="ma-3">
         <v-col cols="12" md="12">
-          <date :rules="[rules.required,]" v-model="item.change_date" label="* تاریخ تعدیل" :default="false" :disabled="!isEditing"/>
+          <v-text-field v-if="contract_row" v-show="false" v-model="item.contract_row=contract_row"></v-text-field>
+          <v-autocomplete
+              v-if="!contract_row"
+              :rules="[rules.required,]"
+              label="ردیف پیمان"
+              :items="contractRows"
+              v-model="item.contract_row"
+              item-text="name"
+              item-value="id"
+              :disabled="item.id"
+          />
+        </v-col>
+        <v-col cols="12" md="12">
+          <date v-model="item.change_date" label=" تاریخ پایان جدید" :default="false" :disabled="item.id"/>
         </v-col>
         <v-col cols="12" md="12">
           <money
               v-on:keypress="NumbersOnly"
-              :rules="[rules.required,]"
-              label="* مبلغ تغییر قرارداد"
+              label=" مبلغ تعدیل قرارداد"
               v-model="item.amount"
               background-color="white"
-              :disabled="!isEditing"
+              :disabled="item.id"
           />
         </v-col>
-        <v-col cols="12" md="12">
+        <v-col cols="12" md="12" v-if="item.amount">
           <v-autocomplete
               :rules="[rules.required,]"
-              label="* نوع تغییر"
+              label="* نوع تغییر تعدیل"
               :items="STATUS_TYPE"
               v-model="item.status"
               item-text="name"
               item-value="value"
-              :disabled="!isEditing"
+              :disabled="item.id"
           />
         </v-col>
         <v-col cols="12" md="12">
@@ -51,6 +62,7 @@
               outlined
               label="توضیحات"
               v-model="item.explanation"
+              :disabled="item.id"
           ></v-textarea>
         </v-col>
 
@@ -112,7 +124,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      contract_row: null,
+      contractRow: null,
+      contractRows: [],
       hasLock: false,
       isDefinable: false,
       myClass: '',
@@ -135,6 +148,26 @@ export default {
     },
   },
   mounted() {
+    if (this.contract_row == null){
+      this.contractRow = this.$route.params.id
+      this.request({
+        url: this.endpoint(`payroll/contract/row/`),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.contractRows.push({
+              'name': data[t].contract_row,
+              'id': data[t].id,
+            })
+            this.contractRows.push({
+              'name': 'هبچ کدام',
+              'id': null,
+            })
+            console.log(this.contractRows)
+          }
+        }
+      })
+    }
   },
 
   methods: {
@@ -164,8 +197,17 @@ export default {
         }
       })
     },
+    to(item) {
+      return {
+        name: 'AdjustmentDetail',
+        params: {
+          id: item.id,
+        },
+      };
+    },
 
   },
+
 }
 </script>
 

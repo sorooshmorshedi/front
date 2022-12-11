@@ -72,7 +72,7 @@
                 item-value="value"
                 :disabled="!isEditing"
                 :rules="[rules.required,]"
-                @change="item.gender = null ; item.marital_status = null; item.name = null ; item.last_name = null"
+                @change="item.gender = null ; item.marital_status = null; item.name = null ; item.last_name = null; "
             />
 
             <v-autocomplete
@@ -340,7 +340,7 @@ export default {
       PHYSICAL_TYPE: [
         {name: ' سالم', value: 'h'},
         {name: 'بیمار', value: 'p'},
-        {name: 'نقض عضو', value: 'm'},
+        {name: 'نقص عضو', value: 'm'},
       ],
 
       printUrl: 'payroll/personnel/family/all',
@@ -394,6 +394,7 @@ export default {
         {
           text: "پرسنل",
           value: "personnel_name",
+          filterable : false,
         },
         {
           text: "نام",
@@ -414,27 +415,39 @@ export default {
         {
           text: "نسبت",
           value: "relative_display",
+          filterable : false,
         },
         {
           text: "وضعیت تاهل",
           value: "marital_status_display",
+          filterable : false,
         },
         {
           text: "خدمت سربازی",
           value: "military_service_display",
-        },
-        {
-          text: "خدمت سربازی",
-          value: "military_service_display",
+          filterable : false,
         },
         {
           text: "وضعیت تحصیل",
           value: "study_status_display",
+          filterable : false,
         },
         {
           text: "وضعیت جسمی",
           value: "physical_condition_display",
+          filterable : false,
         },
+        {
+          text: "فعال",
+          value: "is_active",
+          type: "boolean"
+        },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: "boolean"
+        },
+
 
       ];
 

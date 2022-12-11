@@ -70,7 +70,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersTo3only" ref="code" label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
@@ -78,13 +78,13 @@
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date :rules="[rules.required,]" v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date :rules="[rules.required,]" v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
-              <v-col cols="12" md="4">
-                <date :rules="[rules.required,]" v-model="item.to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
+              <v-col cols="12" md="4" >
+                <date  v-model="item.initial_to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
@@ -95,7 +95,7 @@
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
+                <v-text-field :rules="[rules.required, rules.code_len]" v-on:keypress="NumbersOnly" label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
                               background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
@@ -125,7 +125,16 @@
             </v-row>
             <v-row>
               <v-col cols="12" md="12">
-                <v-text-field label=" موضوع " v-model="item.topic" background-color="white" :disabled="!isEditing"/>
+                <v-text-field  label=" موضوع " v-model="item.topic" background-color="white" :disabled="!isEditing"/>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="6">
+              <v-text-field v-show="item.id"  label="مبلغ فعلی قرارداد" v-model="item.amount" background-color="white"
+                            :disabled="true"/>
+              </v-col>
+              <v-col cols="12" md="6">
+                <date v-show="item.id" v-model="item.to_date" label="* تاریخ پایان فعلی قرارداد" :default="false" :disabled="true"/>
               </v-col>
             </v-row>
           </template>
@@ -138,13 +147,13 @@
               @click="UnVerifyContract(item)"
               v-if="item.id && item.is_verified && !item.use_in_insurance_list" > خروج از وضعیت نهایی</v-btn>
           <v-dialog
-              v-if="item.id && !item.is_verified && !item.use_in_insurance_list"
+              v-if="item.id && item.is_verified"
               transition="dialog-top-transition"
               max-width="600"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                  class="accent darken-3 white--text mt-6 mr-2 float-left "
+                  class="accent darken-3 white--text mt-12 mr-2 float-left "
                   v-bind="attrs"
                   v-on="on"
               >ثبت تعدیل</v-btn>
@@ -166,34 +175,12 @@
               </v-card>
             </template>
           </v-dialog>
-          <v-dialog
-              v-if="item.id && !item.is_verified && !item.use_in_insurance_list"
-              transition="dialog-top-transition"
-              max-width="1500"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                  class="primary darken-1 white--text mt-6 mr-2 float-left "
-                  v-bind="attrs"
-                  v-on="on"
-              >لیست تعدیل</v-btn>
-            </template>
-            <template v-slot:default="dialog">
-              <v-card>
-                <v-toolbar
-                    color="accent darken-3"
-                    dark
-                >لیست تعدیل برای ردیف پیمان {{item.contract_row}}</v-toolbar>
-                <v-card-text>
+          <v-btn
+              class="primary darken-1 white--text mt-12 mr-2 float-left "
+              v-if="item.id && item.is_verified"
+              @click="goAdjustment(item.id)"
+          >مشاهده تغییرات ردیف پیمان</v-btn>
 
-                <adjustment-list :ex_filter="{'contract_row': item.id}"></adjustment-list>
-                </v-card-text>
-                <v-card-actions class="justify-end">
-                  <v-btn fab color="red" class="mt-1 mr-1 white--text" @click="dialog.value = false"><v-icon>fa-times</v-icon></v-btn>
-                </v-card-actions>
-              </v-card>
-            </template>
-          </v-dialog>
         </m-form>
 
       </v-col>
@@ -266,7 +253,7 @@ export default {
       performClearForm: true,
       rules: {
         required: value => !!value || 'Required.',
-        min: v => v.length >= 8 || 'Min 8 characters',
+        code_len: v => v.length == 10|| '10 characters',
       },
 
     };
@@ -412,6 +399,22 @@ export default {
         },
       };
     },
+    goAdjustment(id) {
+      this.$router.push('/panel/ContractRowAdjustment?contract_row=' + id)
+    },
+    NumbersTo3only(evt) {
+      if (this.$refs.code.$props.value.length >= 3){
+        evt.preventDefault();
+      }
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+
 
     unConfirm() {
       this.$router.go()

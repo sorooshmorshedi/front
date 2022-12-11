@@ -1,8 +1,8 @@
 <template>
   <v-card>
     <v-card-text>
-      <m-datatable  :headers="headers" :export-url="exportUrl" :apiUrl="url" :filters.sync="ex_filter"
-                   ref="datatable">
+      <m-datatable  @dblclick:row="(e, row) => $router.push(to(row.item))" :headers="headers" :export-url="exportUrl" :apiUrl="url" :filters.sync="ex_filter"
+                   ref="datatable" >
         <template #item.detail="{ item }">
           <detail-link :to="to(item)" />
         </template>
@@ -32,26 +32,20 @@ export default {
           text: "ردیف پیمان",
           value: "contract_row",
         },
-
-        {
-          text: " ردیف پیمان",
-          value: "contract_row_display",
-          filterable: false,
-        },
         {
           text: "تاریخ ثبت",
           value: "date",
         },
         {
-          text: "تاریخ تعدیل",
+          text: "تاریخ پایان جدید",
           value: "change_date",
         },
         {
-          text: "مبلغ تعدیل",
+          text: "مبلغ تعدیل قرارداد",
           value: "amount",
         },
         {
-          text: "نوع",
+          text: "نوع تغییر تعدیل",
           value: "status_dis",
           filterable: false,
         },

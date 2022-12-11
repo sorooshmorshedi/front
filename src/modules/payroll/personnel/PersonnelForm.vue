@@ -104,8 +104,8 @@
                 :disabled="!isEditing"
             />
           </v-col>
-          <v-col cols="12" md="3">
-            <v-text-field label=" تعداد فرزندان" v-model="item.number_of_childes"  background-color="white" :disabled="true"/>
+          <v-col cols="12" md="3" v-if="item.id">
+            <v-text-field label=" تعداد فرزندان" v-model="item.get_child_number"  background-color="white" :disabled="true"/>
           </v-col>
           <v-col cols="12" md="3">
             <date v-model="item.date_of_birth" label="* تاریخ تولد" :default="false" :disabled="!isEditing" />
@@ -382,6 +382,9 @@ export default {
         {name: ' دولتی', value: 'st'},
         {name: 'آزاد', value: 'op'},
         {name: 'غیر انتفاعی', value: 'np'},
+        {name: 'علمی کاربردی', value: 'el'},
+        {name: 'پیام نور', value: 'pa'},
+        {name: 'پردیس خودگردان وابسته به دولت', value: 'pr'},
       ],
       Country: [
         {name: ' انگلیس', value: 'انگلیس'},

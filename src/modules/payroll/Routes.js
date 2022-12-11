@@ -26,9 +26,13 @@ import TaxRowForm from "@/modules/payroll/workshop/tax/TaxRowForm";
 import LoanList from "@/modules/payroll/loan/LoanList";
 import LoanForm from "@/modules/payroll/loan/LoanForm";
 import DeductionList from "@/modules/payroll/deduction/DeductionList";
+import AdjustmentList from "@/modules/payroll/contract_row/AdjustmentList";
+import AdjustmentForm from "@/modules/payroll/contract_row/AdjustmentForm";
 import DeductionForm from "@/modules/payroll/deduction/DeductionForm";
 import PayForm from "@/modules/payroll/pay/PayForm";
 import ListOfPayItemForm from "@/modules/payroll/payment/ListOfPayItemForm";
+import adjustmentList from "@/modules/payroll/contract_row/AdjustmentList";
+import contractRowAdjustment from "@/modules/payroll/contract_row/ContractRowAdjustment";
 
 const Workshop = () => import( /* wepackChunkName: "workshop" */ "@/modules/payroll/workshop/WorkshopForm.vue")
 const WorkshopInfo = () => import( /* wepackChunkName: "workshopInfo" */ "@/modules/payroll/workshop/WorkshopInfo.vue")
@@ -46,6 +50,7 @@ const TaxRow = () => import( /* wepackChunkName: "tax_row" */ "@/modules/payroll
 const Loan = () => import( /* wepackChunkName: "loan" */ "@/modules/payroll/loan/LoanForm.vue")
 const Deduction = () => import( /* wepackChunkName: "deduction" */ "@/modules/payroll/deduction/DeductionForm.vue")
 const Pay = () => import( /* wepackChunkName: "pay" */ "@/modules/payroll/pay/PayForm.vue")
+const Adjustment = () => import( /* wepackChunkName: "adjustment" */ "@/modules/payroll/contract_row/AdjustmentForm.vue")
 const ListOfPayItemDetail = () => import( /* wepackChunkName: "list_of_pay_item" */ "@/modules/payroll/payment/ListOfPayItemForm.vue")
 
 export default [
@@ -354,6 +359,31 @@ export default [
             },
         ]
 
+    },
+
+    {
+        name: 'Adjustment',
+        path: 'adjustment',
+        component: Adjustment,
+        props: true,
+        children : [
+            {
+                name: 'AdjustmentDetail',
+                path: ':id',
+                component: AdjustmentForm,
+            },
+        ]
+
+    },
+    {
+        name: 'AdjustmentList',
+        path: 'adjustment/list',
+        component: adjustmentList,
+    },
+    {
+        name: 'ContractRowAdjustment',
+        path: 'ContractRowAdjustment',
+        component: contractRowAdjustment,
     },
 
 ]

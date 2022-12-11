@@ -73,7 +73,7 @@ export default {
         },
         {
           text: "تعداد فرزندان",
-          value: "number_of_childes",
+          value: "get_child_number",
         },
         {
           text: "تاریخ تولد",
