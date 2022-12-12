@@ -7,7 +7,7 @@
         :listRoute="{name:'AdjustmentList'}"
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
-        :canDelete="item.id != null"
+        :canDelete="!deleteVerify"
         :can-edit="false"
         :canSubmit="!item.id"
         :show-clear-btn="false"
@@ -49,7 +49,7 @@
         <v-col cols="12" md="12" v-if="item.amount">
           <v-autocomplete
               :rules="[rules.required,]"
-              label="* نوع تغییر تعدیل"
+              label="* نوع تعدیل مبلغ"
               :items="STATUS_TYPE"
               v-model="item.status"
               item-text="name"
@@ -65,13 +65,16 @@
               :disabled="item.id"
           ></v-textarea>
         </v-col>
-
       </v-row>
+      <v-btn
+          v-if="item.id != null && deleteVerify"
+          class="red darken-1 white--text  mr-2 float-left "
+          @click="verifyDelete"
+      >حذف تعدیل</v-btn>
 
     </m-form>
 
   </div>
-
 </template>
 
 <script>
@@ -132,6 +135,7 @@ export default {
       PathLevels,
       VisitorLevels,
       paymentDialog: false,
+      deleteVerify: true,
       payment: '',
       performClearForm: true,
       rules: {
@@ -196,6 +200,11 @@ export default {
 
         }
       })
+    },
+    verifyDelete(){
+      window.alert('آیا از حذف این تعدیل اطمینان دارید؟')
+      this.deleteVerify = false
+
     },
     to(item) {
       return {

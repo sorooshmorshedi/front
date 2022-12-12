@@ -4,7 +4,7 @@
       <v-toolbar
           color="primary darken-3"
           dark
-      > ردیف پیمان اولیه {{ContractRowData.contract_row}} </v-toolbar>
+      > وضعیت اولیه ردیف پیمان  {{ContractRowData.contract_row}} </v-toolbar>
       <v-simple-table>
         <template v-slot:default>
           <thead>
@@ -29,6 +29,7 @@
           </thead>
           <tbody>
           <tr
+              @click="goToContractRow(ContractRowData.id)"
           >
             <td class="text-center">{{ ContractRowData.contract_row }}</td>
             <td class="text-center">{{ ContractRowData.workshop_name }}</td>
@@ -74,6 +75,7 @@
           </thead>
           <tbody>
           <tr
+              @click="goToContractRow(ContractRowData.id)"
           >
             <td class="text-center">{{ ContractRowData.contract_row }}</td>
             <td class="text-center">{{ ContractRowData.workshop_name }}</td>
@@ -166,6 +168,9 @@ export default {
   },
 
   methods: {
+    goToContractRow(id){
+      this.$router.push('/panel/contract_row/' + id)
+    }
   },
 }
 </script>

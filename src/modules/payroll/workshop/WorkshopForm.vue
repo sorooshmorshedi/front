@@ -37,7 +37,7 @@
 
             <v-row>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required, rules.code_len]" v-on:keypress="NumbersOnly" label="* کد کارگاه (بیمه) " v-model="item.workshop_code" background-color="white" :disabled="!isEditing"/>
+                <v-text-field :rules="[rules.required]" v-on:keypress="NumbersToTenOnly" ref="code" label="* کد کارگاه (بیمه) " v-model="item.workshop_code" background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field :rules="[rules.required,]"  label="* نام کارگاه " v-model="item.name" background-color="white"
@@ -169,7 +169,7 @@ export default {
       first: false,
       rules: {
         required: value => !!value || 'Required.',
-        code_len: v => v.length == 10 || '10 characters',
+        code_len: v => v.length < 10 || '10 characters',
       },
 
     };
@@ -249,6 +249,19 @@ export default {
       this.notify(' ثبت کارگاه رد شد', 'warning')
     },
     NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    NumbersToTenOnly(evt) {
+      if (this.$refs.code.$props.value.length >= 10){
+        evt.preventDefault();
+      }
+
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {

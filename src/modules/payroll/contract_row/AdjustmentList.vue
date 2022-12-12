@@ -33,7 +33,7 @@ export default {
           value: "contract_row",
         },
         {
-          text: "تاریخ ثبت",
+          text: "تاریخ ثبت تعدیل",
           value: "date",
         },
         {
@@ -43,9 +43,10 @@ export default {
         {
           text: "مبلغ تعدیل قرارداد",
           value: "amount",
+          type: 'numeric'
         },
         {
-          text: "نوع تغییر تعدیل",
+          text: "نوع تعدیل مبلغ",
           value: "status_dis",
           filterable: false,
         },
