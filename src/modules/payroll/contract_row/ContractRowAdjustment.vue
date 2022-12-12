@@ -35,7 +35,7 @@
             <td class="text-center">{{ ContractRowData.workshop_name }}</td>
             <td class="text-center">{{ ContractRowData.from_date }}</td>
             <td class="text-center">{{ ContractRowData.initial_to_date }}</td>
-            <td class="text-center">{{ ContractRowData.contract_initial_amount }}</td>
+            <td class="text-center">{{ ContractRowData.round_initial_amount }}</td>
           </tr>
           </tbody>
         </template>
@@ -81,7 +81,7 @@
             <td class="text-center">{{ ContractRowData.workshop_name }}</td>
             <td class="text-center">{{ ContractRowData.from_date }}</td>
             <td class="text-center">{{ ContractRowData.to_date }}</td>
-            <td class="text-center">{{ ContractRowData.amount }}</td>
+            <td class="text-center">{{ ContractRowData.round_amount }}</td>
           </tr>
           </tbody>
         </template>

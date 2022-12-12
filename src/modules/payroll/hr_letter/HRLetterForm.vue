@@ -1413,7 +1413,14 @@
               <v-card-text class="text-h6">حق اولاد :</v-card-text>
             </v-col>
             <v-col cols="12" md="2">
-              <money label="تعداد فرزندان مشمول" class="text-center" v-model="item.get_aele_mandi_sum" disabled="true"></money>
+              <v-autocomplete
+                  label="* ماهیت عناوین شغلی"
+                  :items="NATURE_TYPES"
+                  v-model="item.haghe_owlad_nature = 'u'"
+                  :disabled="true"
+                  item-text="name"
+                  item-value="value"
+              />
             </v-col>
             <v-col cols="12" md="2">
               <v-checkbox
@@ -1436,7 +1443,9 @@
                   hide-details
               ></v-checkbox>
             </v-col>
-            <v-col cols="12" md="2">
+            <v-col cols="12" md="2" v-if="item.id && item.is_template == 'p'">
+              <money label="تعداد فرزندان مشمول" class="text-center" v-model="item.get_aele_mandi_sum" disabled="true"></money>
+
             </v-col>
           </v-row>
           <v-row class="">
@@ -1467,45 +1476,6 @@
             <v-col cols="12" md="2">
               <v-checkbox
                   v-model="item.ezafe_kari_use_tax"
-                  label=" معاف از مالیات"
-                  color="indigo"
-                  :false-value="true"
-                  :true-value="false"
-                  hide-details
-              ></v-checkbox>
-            </v-col>
-            <v-col cols="12" md="2">
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">جمعه کاری :</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-autocomplete
-                  label="* ماهیت عناوین شغلی"
-                  :items="NATURE_TYPES"
-                  v-model="item.jome_kari_nature = 'u'"
-                  item-text="name"
-                  item-value="value"
-                  :disabled="true"
-              />
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-checkbox
-                  v-model="item.jome_kari_use_insurance"
-                  label="معاف از بیمه"
-                  color="indigo"
-                  :false-value="true"
-                  :true-value="false"
-                  hide-details
-              ></v-checkbox>
-            </v-col>
-
-            <v-col cols="12" md="2">
-              <v-checkbox
-                  v-model="item.jome_kari_use_tax"
                   label=" معاف از مالیات"
                   color="indigo"
                   :false-value="true"
@@ -1744,7 +1714,7 @@
             </v-toolbar-title>
           </v-toolbar>
 
-            <v-row class="mt-10">
+            <v-row class="mt-10 ml-3 ">
             <v-col cols="12" md="2">
               <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارفرما</v-card-text>
             </v-col>
@@ -1756,41 +1726,36 @@
                   :disabled="!isEditing"
               />
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="2">
-              <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارگر</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2" class="pt-8">
-              <money
-                  label="نرخ"
-                  v-model="item.worker_insurance_nerkh"
-                  background-color="white"
-                  :disabled="!isEditing"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="2">
-              <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم بیکاری</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2" class="pt-8">
-              <money
-                  label="نرخ"
-                  v-model="item.unemployed_insurance_nerkh"
-                  background-color="white"
-                  :disabled="!isEditing"
-              />
+              <v-col cols="12" md="2">
+                <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارگر</v-card-text>
+              </v-col>
+              <v-col cols="12" md="2" class="pt-8">
+                <money
+                    label="نرخ"
+                    v-model="item.worker_insurance_nerkh"
+                    background-color="white"
+                    :disabled="!isEditing"
+                />
+              </v-col>
+              <v-col cols="12" md="2">
+                <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم بیکاری</v-card-text>
+              </v-col>
+              <v-col cols="12" md="2" class="pt-8">
+                <money
+                    label="نرخ"
+                    v-model="item.unemployed_insurance_nerkh"
+                    background-color="white"
+                    :disabled="!isEditing"
+                />
 
-            </v-col>
-          </v-row>
+              </v-col>
 
-
-          <v-row>
+            </v-row>
+          <v-row class="ml-3 mt-5">
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">مسکن :</v-card-text>
             </v-col>
-            <v-col cols="12" md="2">
+            <v-col cols="12" md="4">
               <v-autocomplete
                   label="* مسکن"
                   :items="MASKAN_TYPE"
@@ -1800,12 +1765,10 @@
                   :disabled="!isEditing"
               />
             </v-col>
-          </v-row>
-          <v-row>
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">وسیله نقلیه :</v-card-text>
             </v-col>
-            <v-col cols="12" md="2">
+            <v-col cols="12" md="4">
               <v-autocomplete
                   label="* وسیله نقلیه"
                   :items="OTOMOBIL_TYPE"
@@ -1815,6 +1778,9 @@
                   :disabled="!isEditing"
               />
             </v-col>
+
+          </v-row>
+          <v-row>
           </v-row>
           <v-row>
             <v-col cols="12" md="2">
@@ -1830,6 +1796,13 @@
               ></v-switch>
             </v-col>
           </v-row>
+
+          <v-toolbar v-if="item.id" color="indigo" class="mt-10">
+
+            <v-toolbar-title class="white--text">
+              مبنا
+            </v-toolbar-title>
+          </v-toolbar>
 
           <v-row v-if="item.id" class="mt-10">
             <v-col cols="12" md="2" class="text-center">

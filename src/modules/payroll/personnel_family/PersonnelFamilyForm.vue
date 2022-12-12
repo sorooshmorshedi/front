@@ -7,6 +7,7 @@
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
         :canDelete="false"
+        :items.sync="item"
         :can-edit="!item.is_verified"
         :canSubmit="canSubmit"
         :show-submit-and-clear-btn="false"
@@ -15,7 +16,7 @@
         @submit="submit"
         @delete="deleteItem"
         @clearForm="clearForm()"
-        ref="personnelForm"
+        ref="PersonnelFamilyForm"
 
     >
 
@@ -72,7 +73,7 @@
                 item-value="value"
                 :disabled="!isEditing"
                 :rules="[rules.required,]"
-                @change="item.gender = null ; item.marital_status = null; item.name = null ; item.last_name = null; "
+                @change="setNames(item.personnel)"
             />
 
             <v-autocomplete
@@ -84,33 +85,21 @@
                 item-value="value"
                 :disabled="!isEditing"
                 @click="item.name = null"
-                @change="item.last_name = null ;item.name = null ; item.gender = null ; item.marital_status = null"
+                @change="setNames(item.personnel)"
                 :rules="[rules.required,]"
             />
           </v-col>
 
           <v-col cols="12" md="4">
             <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
-                          v-if="item.relative != 'f'"
-
                           label="* نام  " v-model="item.name"
                           background-color="white" :disabled="!isEditing"/>
-
-            <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
-                          v-if="item.relative == 'f'"
-                          label="* نام  " v-model="item.name = father_naming[item.personnel]"
-                          background-color="white" :disabled="true"/>
 
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
                           label="* نام خانوادگی "
-                          v-if="item.relative != 'f' && item.relative != 'c'"
                           v-model="item.last_name" background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
-                          v-if="item.relative == 'f' || item.relative == 'c'"
-                          label="* نام خانوادگی "
-                          v-model="item.last_name = naming[item.personnel]" background-color="white" :disabled="true"/>
 
           </v-col>
 
@@ -146,6 +135,7 @@
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 'c' || !item.relative">
             <v-autocomplete
+                :rules="[rules.required,]"
                 label=" * جنسیت فرزند"
                 :items="CHILD_TYPES"
                 v-model="item.gender"
@@ -521,6 +511,20 @@ export default {
         evt.preventDefault();
         ;
       }
+    },
+    setNames(id){
+      this.$refs.PersonnelFamilyForm.$props.items['gender'] = undefined
+      this.$refs.PersonnelFamilyForm.$props.items['marital_status'] = undefined
+      this.$refs.PersonnelFamilyForm.$props.items['name'] = ' '
+      this.$refs.PersonnelFamilyForm.$props.items['last_name'] = ' '
+      if (this.$refs.PersonnelFamilyForm.$props.items['relative'] == 'f'){
+        this.$refs.PersonnelFamilyForm.$props.items['name'] = this.father_naming[id]
+        this.$refs.PersonnelFamilyForm.$props.items['last_name'] = this.naming[id]
+      }
+      if (this.$refs.PersonnelFamilyForm.$props.items['relative'] == 'c'){
+        this.$refs.PersonnelFamilyForm.$props.items['last_name'] = this.naming[id]
+      }
+
     },
 
     verifyPersonnel(id) {

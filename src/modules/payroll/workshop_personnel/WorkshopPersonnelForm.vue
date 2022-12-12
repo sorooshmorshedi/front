@@ -8,6 +8,7 @@
             :listRoute="{name:'WorkshopPersonnelList'}"
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
+            :items.sync="item"
             :canDelete="false"
             :canSubmit="!item.quit_job"
             :can-edit="!item.is_verified"
@@ -232,6 +233,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
+                    ref="title"
                     :rules="[rules.required,]"
                     v-on:keypress="NoneNumbersOnly"
                     label="* سمت یا شغل (دارایی)"
@@ -405,7 +407,7 @@ export default {
         {name: 'فرزند شهید', value: 3},
         {name: 'آزاده', value: 4},
         {name: 'نیروهای مسلح', value: 5},
-        {name: 'یر مشمولین بند14 ماده 91', value: 6},
+        {name: 'سایر مشمولین بند14 ماده 91', value: 6},
         {name: 'اتباع خارجی مشمول قانون اجتناب از اخذ مالیات مضاعف', value: 7},
 
       ],
@@ -661,7 +663,9 @@ export default {
       }
 
     },
-    setValues(id) {
+    setValues(id, work_title) {
+      this.$refs.WorkshopPersonnelForm.$props.items['job_position'] = work_title
+
       this.request({
         url: this.endpoint(`payroll/personnel/` + id + '/'),
         method: "get",

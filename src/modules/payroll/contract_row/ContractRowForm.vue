@@ -9,6 +9,7 @@
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
             :canDelete="false"
+            :items.sync="item"
             :can-edit="!item.is_verified && !item.use_in_insurance_list"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
@@ -17,7 +18,7 @@
             @submit="submit"
             @delete="deleteItem"
             @clearForm="clearForm()"
-            ref="workshopForm"
+            ref="contractRowForm"
         >
           <template>
             <v-banner v-if="!item.is_verified && !item.use_in_insurance_list" class="mt-3 mb-5 red--text">
@@ -78,13 +79,13 @@
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date  v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date  v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4" >
-                <date  v-model="item.initial_to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
+                <date :rules="[rules.required,]" v-model="item.initial_to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
@@ -113,7 +114,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    :rules="[rules.required,]"
+                    :rules="[rules.bool_required,]"
                     label="* وضعیت"
                     :items="STATUS_TYPE"
                     v-model="item.status"
@@ -253,6 +254,7 @@ export default {
       performClearForm: true,
       rules: {
         required: value => !!value || 'Required.',
+        bool_required: value => value != null || 'Required.',
         code_len: v => v.length == 10|| '10 characters',
       },
 
@@ -322,6 +324,7 @@ export default {
     },
   },
   mounted() {
+
     if (!this.workshop) {
       this.request({
         url: this.endpoint(`payroll/workshop/`),
