@@ -48,7 +48,7 @@
         </v-col>
         <v-col cols="12" md="12" v-if="item.amount">
           <v-autocomplete
-              :rules="[rules.required,]"
+              :rules="[rules.bool_required,]"
               label="* نوع تعدیل مبلغ"
               :items="STATUS_TYPE"
               v-model="item.status"
@@ -69,7 +69,7 @@
       <v-btn
           v-if="item.id != null && deleteVerify"
           class="red darken-1 white--text  mr-2 float-left "
-          @click="verifyDelete"
+          @click="verifyDelete(item.contract_row)"
       >حذف تعدیل</v-btn>
 
     </m-form>
@@ -140,6 +140,7 @@ export default {
       performClearForm: true,
       rules: {
         required: value => !!value || 'Required.',
+        bool_required: value => value != null || 'Required.',
         min: v => v.length >= 8 || 'Min 8 characters',
       },
 
@@ -201,10 +202,10 @@ export default {
         }
       })
     },
-    verifyDelete(){
+    verifyDelete(id){
       window.alert('آیا از حذف این تعدیل اطمینان دارید؟')
-      this.deleteVerify = false
-
+      this.$refs.adjustment.emitDelete()
+      this.$router.push('/panel/contract_row/' + id)
     },
     to(item) {
       return {

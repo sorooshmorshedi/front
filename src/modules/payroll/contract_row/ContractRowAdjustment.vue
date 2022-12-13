@@ -80,7 +80,7 @@
             <td class="text-center">{{ ContractRowData.contract_row }}</td>
             <td class="text-center">{{ ContractRowData.workshop_name }}</td>
             <td class="text-center">{{ ContractRowData.from_date }}</td>
-            <td class="text-center">{{ ContractRowData.to_date }}</td>
+            <td class="text-center">{{ ContractRowData.get_now_date }}</td>
             <td class="text-center">{{ ContractRowData.round_amount }}</td>
           </tr>
           </tbody>

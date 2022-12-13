@@ -29,10 +29,6 @@ export default {
     headers() {
       return [
         {
-          text: "ردیف پیمان",
-          value: "contract_row",
-        },
-        {
           text: "تاریخ ثبت تعدیل",
           value: "date",
         },

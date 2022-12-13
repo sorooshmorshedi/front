@@ -75,6 +75,11 @@ export default {
           type: "numeric",
         },
         {
+          text: "مبلغ فعلی قرارداد",
+          value: "get_now_amount",
+          type: "numeric",
+        },
+        {
           text: "فعال",
           value: "status",
           type: "boolean"

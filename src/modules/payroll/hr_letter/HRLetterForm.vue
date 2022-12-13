@@ -1576,7 +1576,7 @@
                   :disabled="true"
               />
             </v-col>
-            <v-col cols="12" md="2">s
+            <v-col cols="12" md="2">
               <v-checkbox
                   v-model="item.nobat_kari_use_insurance"
                   label="معاف از بیمه"
@@ -1755,7 +1755,7 @@
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">مسکن :</v-card-text>
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="2">
               <v-autocomplete
                   label="* مسکن"
                   :items="MASKAN_TYPE"
@@ -1768,7 +1768,7 @@
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">وسیله نقلیه :</v-card-text>
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="2">
               <v-autocomplete
                   label="* وسیله نقلیه"
                   :items="OTOMOBIL_TYPE"
@@ -1778,16 +1778,12 @@
                   :disabled="!isEditing"
               />
             </v-col>
-
-          </v-row>
-          <v-row>
-          </v-row>
-          <v-row>
             <v-col cols="12" md="2">
               <v-card-text class="text-h6 text-center">مشمول ماده یک تبصره 86 ق.م.م :</v-card-text>
             </v-col>
             <v-col cols="12" md="2" class="pt-8">
               <v-switch
+                  class="mr-16"
                   v-model="item.include_made_86"
                   color="success"
                   :false-value="false"
@@ -1795,6 +1791,7 @@
                   hide-details
               ></v-switch>
             </v-col>
+
           </v-row>
 
           <v-toolbar v-if="item.id" color="indigo" class="mt-10">

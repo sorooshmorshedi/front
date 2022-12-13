@@ -34,7 +34,6 @@
               </v-avatar>
               توجه داشته باشید اطلاعات کارگاه باید با اطلاعات مندرج در بیمه تامین اجتماعی یکی باشد
             </v-banner>
-
             <v-row>
               <v-col cols="12" md="6">
                 <v-text-field :rules="[rules.required]" v-on:keypress="NumbersToTenOnly" ref="code" label="* کد کارگاه (بیمه) " v-model="item.workshop_code" background-color="white" :disabled="!isEditing"/>
@@ -117,6 +116,7 @@ import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import WorkshopList from "@/modules/payroll/workshop/WorkshopList";
 import SummaryWorkshopList from "@/modules/payroll/workshop/SummaryWorkshopList";
+import mobile from "@/components/scomponents/Mobile";
 
 
 export default {
@@ -124,7 +124,7 @@ export default {
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
     SummaryWorkshopList,
-    WorkshopList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money
+    WorkshopList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, mobile
   },
   props: {
     id: {},
@@ -160,6 +160,7 @@ export default {
       hasLock: false,
       isDefinable: false,
       myClass: '',
+      ss: null,
       factors: [],
       PathLevels,
       VisitorLevels,
@@ -279,6 +280,10 @@ export default {
         evt.preventDefault();;
       }
     },
+    show(){
+      console.log(this.ss)
+    }
+
 
   },
 }

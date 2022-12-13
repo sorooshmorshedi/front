@@ -330,8 +330,36 @@
               @click="verifyUnPersonnel(item.id)"
               v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
           </v-btn>
-
         </m-form>
+        <v-row justify="center">
+          <v-dialog
+              v-model="error_dialog"
+              persistent
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                ثبت نهایی انجام نشد
+              </v-card-title>
+              <v-card-text>
+                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                  {{item}}
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
       </v-col>
       <v-col cols="12" md="6">
         <summary-workshop-personnel-list></summary-workshop-personnel-list>
@@ -448,6 +476,8 @@ export default {
       hasIdProp: true,
       hasLock: false,
       isDefinable: false,
+      error_dialog: false,
+      error_message: null,
       myClass: '',
       id: this.$route.params.id,
       personnel: this.$route.query.personnel,
@@ -730,7 +760,8 @@ export default {
           window.location.reload();
         },
         error: data => {
-          this.notify(data.response.data[0].messages[0], 'warning')
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
 
         }
       })

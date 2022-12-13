@@ -216,7 +216,7 @@
           </v-col>
           <v-col cols="12" md="4">
             <v-autocomplete
-                :rules="[rules.required,]"
+                :rules="[rules.bool_required,]"
                 label="* وضعیت  "
                 :items="PERSONNEL_STATUS"
                 v-model="item.is_active"
@@ -238,9 +238,36 @@
           @click="verifyUnPersonnel(item.id)"
           v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
       </v-btn>
-
-
     </m-form>
+    <v-row justify="center">
+      <v-dialog
+          v-model="error_dialog"
+          persistent
+          max-width="400"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            ثبت نهایی انجام نشد
+          </v-card-title>
+          <v-card-text>
+            <v-row v-for="item in error_message" class="mt-5 mr-10">
+              {{item}}
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="green darken-1"
+                text
+                @click="error_dialog = false"
+            >
+              بستن
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
     <template v-if="item.personnel">
       <v-card class="mt-8">
         <v-card-title> خانواده {{ personnel_name }}</v-card-title>
@@ -347,6 +374,8 @@ export default {
       personnels: [],
       PathLevels,
       VisitorLevels,
+      error_dialog: false,
+      error_message: null,
       paymentDialog: false,
       payment: '',
       marital: {},
@@ -366,6 +395,8 @@ export default {
       first: false,
       rules: {
         required: value => !!value || 'Required.',
+        bool_required: value => value != null || 'Required.',
+
       },
 
 
@@ -537,8 +568,8 @@ export default {
           window.location.reload();
         },
         error: data => {
-          this.notify(data.response.data[0].messages[0], 'warning')
-
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
         }
       })
 

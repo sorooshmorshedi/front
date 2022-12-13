@@ -51,13 +51,12 @@
                 v-if="item.nationality !== 1"
                 :rules="[rules.required,]"
                 label="* کشور"
-                :items="Country"
+                :items="COUNTRIES"
                 v-model="item.country"
                 item-text="name"
-                item-value="value"
+                item-value="name"
                 :disabled="!isEditing"
             />
-
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
@@ -114,9 +113,15 @@
             <date v-model="item.date_of_exportation" label="* تاریخ صدور شناسنامه" :default="false" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
-            <city-select  v-if="item.nationality !== 2" label=" * محل تولد "
-                         v-model="item.location_of_birth"  background-color="white"
-                         :disabled="!isEditing" :rules="[rules.required,]"></city-select>
+            <v-autocomplete
+                :rules="[rules.required,]"
+                label=" * محل تولد "
+                :items="CITY_LIST"
+                v-model="item.location_of_birth"
+                item-text="code"
+                item-value="code"
+                :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="3" v-if="item.nationality == 2">
             <v-text-field v-if="item.nationality == 2"
@@ -127,13 +132,25 @@
                           background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
-            <city-select label="* محل صدور شناسنامه"
-                         v-model="item.location_of_exportation"
-                         background-color="white" :disabled="!isEditing"
-                         :rules="[rules.required,]"></city-select>
+            <v-autocomplete
+                :rules="[rules.required,]"
+                label=" * محل صدور شناسنامه "
+                :items="CITY_LIST"
+                v-model="item.location_of_exportation"
+                item-text="code"
+                item-value="code"
+                :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
-            <city-select  label="بخش محل صدور" v-model="item.sector_of_exportation"   background-color="white" :disabled="!isEditing"></city-select>
+            <v-autocomplete
+                label="  بخش محل صدور "
+                :items="CITY_LIST"
+                v-model="item.sector_of_exportation"
+                item-text="code"
+                item-value="code"
+                :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="2">
             <v-text-field label="تلفن ثابت " v-model="item.phone_number"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
@@ -142,7 +159,15 @@
             <v-text-field label="کد تلفن" v-model="item.city_phone_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
           </v-col>
           <v-col cols="12" md="2">
-            <city-select label="* شهر محل سکونت" v-model="item.city"  background-color="white" :disabled="!isEditing" :rules="[rules.required,]"></city-select>
+            <v-autocomplete
+                :rules="[rules.required,]"
+                label="* شهر محل سکونت "
+                :items="CITY_LIST"
+                v-model="item.city"
+                item-text="code"
+                item-value="code"
+                :disabled="!isEditing"
+            />
           </v-col>
           <v-col cols="12" md="5">
             <v-text-field label="* آدرس " v-model="item.address"   background-color="white" :disabled="!isEditing"  :rules="[rules.required,]"/>
@@ -151,10 +176,12 @@
             <v-text-field label="* کد پستی " v-model="item.postal_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" :rules="[rules.required,]"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* شماره همراه 1" v-model="item.mobile_number_1" background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" :rules="[rules.required,]"/>
+            <mobile label="* شماره همراه 1" v-model="item.mobile_number_1" ref="mobile1"
+                    background-color="white" :disabled="!isEditing" v-on:keypress="Mobile1NumbersOnly" :rules="[rules.required,]"></mobile>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label=" شماره همراه 2 " v-model="item.mobile_number_2" background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
+            <mobile label="* شماره همراه 2" v-model="item.mobile_number_2" ref="mobile2"
+                    background-color="white" :disabled="!isEditing" v-on:keypress="Mobile2NumbersOnly" :rules="[rules.required,]"></mobile>
           </v-col>
           <v-col cols="12" md="2">
             <v-switch
@@ -247,7 +274,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
-                :rules="[rules.required,]"
+                :rules="[rules.bool_required,]"
                 label="* وضعیت پرسنل "
                 :items="PERSONNEL_STATUS"
                 v-model="item.is_personnel_active"
@@ -270,6 +297,34 @@
           v-if="item.id && item.verified" > خروج از وضعیت نهایی</v-btn>
 
     </m-form>
+    <v-row justify="center">
+      <v-dialog
+          v-model="error_dialog"
+          persistent
+          max-width="400"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            ثبت نهایی انجام نشد
+          </v-card-title>
+          <v-card-text>
+            <v-row v-for="item in error_message" class="mt-5 mr-10">
+              {{item}}
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="green darken-1"
+                text
+                @click="error_dialog = false"
+            >
+              بستن
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
   </div>
 
@@ -290,22 +345,28 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import cart from "@/components/scomponents/Cart";
+import mobile from "@/components/scomponents/Mobile";
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import {range} from "lodash";
+import countries from "./country.json"
+import cityList from "./citys.json"
+
 
 
 export default {
   name: "PersonnelForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, cart},
+  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, cart, mobile},
   props: {
     id: {},
   },
   data() {
     return {
+      COUNTRIES : countries['countries'],
+      CITY_LIST : cityList,
       NATIONALITY_TYPE: [
         {name: ' ایرانی', value: 1},
         {name: 'غیر ایرانی', value: 2},
@@ -408,6 +469,8 @@ export default {
       cart_number: '################',
       PathLevels,
       VisitorLevels,
+      error_dialog: false,
+      error_message: null,
       paymentDialog: false,
       payment: '',
       female: 'هیچ کدام',
@@ -420,6 +483,8 @@ export default {
         max_sheba: v => v.length <= 29 || 'max 29 characters',
         min_cart: v => v.length >= 19 || 'Min 19 characters',
         min_sheba: v => v.length >= 29 || 'Min 29 characters',
+        bool_required: value => value != null || 'Required.',
+
       },
     };
   },
@@ -615,6 +680,30 @@ export default {
         return true;
       }
     },
+    Mobile1NumbersOnly(evt) {
+      if (this.$refs.mobile1.$props.value.length >= 11){
+        evt.preventDefault();
+      }
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+    Mobile2NumbersOnly(evt) {
+      if (this.$refs.mobile2.$props.value.length >= 11){
+        evt.preventDefault();
+      }
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
     NoneNumbersOnly(evt) {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -635,7 +724,8 @@ export default {
           window.location.reload();
         },
         error: data => {
-          this.notify(data.response.data[0].messages[0], 'warning')
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
 
         }
       })

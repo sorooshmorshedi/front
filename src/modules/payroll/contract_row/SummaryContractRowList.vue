@@ -44,8 +44,8 @@ export default {
           value: "from_date",
         },
         {
-          text: "تاریخ پایان قرارداد",
-          value: "to_date",
+          text: "تاریخ پایان فعلی قرارداد",
+          value: "get_now_date",
         },
         {
           text: "فعال",

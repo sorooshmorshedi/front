@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <div>
     <v-row>
       <v-col cols="12" md="6">
@@ -79,13 +79,13 @@
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date :rules="[rules.required,]" v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date :rules="[rules.required,]" v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4" >
-                <date :rules="[rules.required,]" v-model="item.initial_to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.initial_to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
@@ -96,7 +96,7 @@
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field :rules="[rules.required, rules.code_len]" v-on:keypress="NumbersOnly" label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
+                <v-text-field :rules="[rules.required]" v-on:keypress="NumbersToTenOnly"  ref="code" label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
                               background-color="white" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
@@ -131,11 +131,11 @@
             </v-row>
             <v-row>
               <v-col cols="12" md="6">
-              <v-text-field v-show="item.id"  label="مبلغ فعلی قرارداد" v-model="item.amount" background-color="white"
+              <v-text-field v-show="item.id"  label="مبلغ فعلی قرارداد" v-model="item.round_amount" background-color="white"
                             :disabled="true"/>
               </v-col>
               <v-col cols="12" md="6">
-                <date v-show="item.id" v-model="item.to_date" label="* تاریخ پایان فعلی قرارداد" :default="false" :disabled="true"/>
+                <date v-show="item.id" v-model="item.get_now_date" label="* تاریخ پایان فعلی قرارداد" :default="false" :disabled="true"/>
               </v-col>
             </v-row>
           </template>
@@ -148,7 +148,7 @@
               @click="UnVerifyContract(item)"
               v-if="item.id && item.is_verified && !item.use_in_insurance_list" > خروج از وضعیت نهایی</v-btn>
           <v-dialog
-              v-if="item.id && item.is_verified"
+              v-if="item.id && item.is_verified && item.status == true"
               transition="dialog-top-transition"
               max-width="600"
           >
@@ -183,7 +183,34 @@
           >مشاهده تغییرات ردیف پیمان</v-btn>
 
         </m-form>
-
+        <v-row justify="center">
+          <v-dialog
+              v-model="error_dialog"
+              persistent
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                ثبت نهایی انجام نشد
+              </v-card-title>
+              <v-card-text>
+                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                  {{item}}
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
       </v-col>
 
       <v-col cols="12" md="6">
@@ -251,6 +278,8 @@ export default {
       paymentDialog: false,
       payment: '',
       first: false,
+      error_dialog: false,
+      error_message: null,
       performClearForm: true,
       rules: {
         required: value => !!value || 'Required.',
@@ -353,6 +382,19 @@ export default {
         return true;
       }
     },
+    NumbersToTenOnly(evt) {
+      if (this.$refs.code.$props.value.length >= 10){
+        evt.preventDefault();
+      }
+
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
     NoneNumbersOnly(evt) {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -372,7 +414,8 @@ export default {
           window.location.reload();
         },
         error: data => {
-          this.notify(data.response.data[0].messages[0], 'warning')
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
 
         }
       })
