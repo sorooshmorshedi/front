@@ -172,10 +172,10 @@
                     :rules="[rules.required,]"
                     v-if="!this.personnel"
                     label="عنوان شغلی(بیمه)"
-                    :items="WORK_TITLES"
+                    :items="work_titles"
                     v-model="item.work_title"
-                    item-text="نام شغل"
-                    item-value="نام شغل"
+                    item-text="name"
+                    item-value="value"
                     :disabled="!isEditing || item.quit_job"
                     @change="setValues(item.personnel, item.work_title)"
                 />
@@ -406,6 +406,7 @@ export default {
   data() {
     return {
       work_title: null,
+      work_titles: [],
       work_title_code: null,
 
       WORK_TITLES: work_titles.work_titles,
@@ -581,6 +582,15 @@ export default {
     },
   },
   mounted() {
+    for( let i in this.WORK_TITLES){
+      this.work_titles.push(
+          {
+            'name': this.WORK_TITLES[i]['نام شغل'] + ' ' + this.WORK_TITLES[i]['كــد شغل'],
+            'value': this.WORK_TITLES[i]['نام شغل'],
+            'code': this.WORK_TITLES[i]['كــد شغل']
+          }
+      )
+    }
     if (this.personnel) {
       this.searchByCode = true
       this.setValues(this.personnel)
