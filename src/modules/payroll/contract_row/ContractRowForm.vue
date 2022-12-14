@@ -530,8 +530,8 @@ export default {
         },
       };
     },
-    goAdjustment(id) {
-      this.$router.push('/panel/ContractRowAdjustment?contract_row=' + id)
+    goAdjustment(item) {
+      this.$router.push('/panel/ContractRowAdjustment?contract_row=' + item.id)
     },
 
 
