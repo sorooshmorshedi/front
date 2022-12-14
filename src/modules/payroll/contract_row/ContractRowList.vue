@@ -50,7 +50,11 @@ export default {
         },
         {
           text: "تاریخ پایان قرارداد",
-          value: "to_date",
+          value: "initial_to_date",
+        },
+        {
+          text: "تاریخ پایان فعلی قرارداد",
+          value: "get_now_date",
         },
         {
           text: "شناسه ملی واگذار کننده",

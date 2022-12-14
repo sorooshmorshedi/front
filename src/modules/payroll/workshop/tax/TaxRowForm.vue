@@ -8,6 +8,8 @@
             :listRoute="{name:'TaxRowList'}"
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
+            :show-navigation-btns="false"
+            :show-submit-and-clear-btn="false"
             :canDelete="false"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
@@ -23,7 +25,7 @@
                 <v-text-field
                     label="نام"
                     v-model="item.name"
-
+                    :disabled="!isEditing"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4">
@@ -224,8 +226,9 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      hasLock: true,
-      isDefinable: true,
+      firstt: false,
+      hasLock: false,
+      isDefinable: false,
       myClass: '',
       workshops: [],
       PathLevels,
@@ -255,6 +258,13 @@ export default {
   },
   mounted() {
   },
+  updated() {
+    if (!this.firstt && this.$route.params.id){
+      this.firstt = true
+      this.isEditing = false
+    }
+  },
+
 
   methods: {
     goTo(item) {

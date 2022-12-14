@@ -11,7 +11,7 @@
             :canDelete="false"
             :items.sync="item"
             :can-edit="!item.is_verified && !item.use_in_insurance_list"
-            :canSubmit="canSubmit"
+            :canSubmit="!item.is_verified"
             :isEditing.sync="isEditing"
             :show-navigation-btns="false"
             :show-submit-and-clear-btn="false"
@@ -60,7 +60,7 @@
                     v-model="item.workshop"
                     item-text="name"
                     item-value="id"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.is_verified"
                 />
                 <v-text-field
                     label="کارگاه"
@@ -71,36 +71,36 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersTo3only" ref="code" label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
-                              :disabled="!isEditing"/>
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersTo3Only" ref="contract_row" label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
+                              :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره قرارداد " v-model="item.contract_number" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date  v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.registration_date" label="* تاریخ قرارداد" :default="false" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date  v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.from_date" label="* تاریخ شروع قرارداد" :default="false" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4" >
-                <date  v-model="item.initial_to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.initial_to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
-                              background-color="white" :disabled="!isEditing"/>
+                              background-color="white" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* نام واگذار کننده " v-model="item.assignor_name" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required]" v-on:keypress="NumbersToTenOnly"  ref="code" label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
-                              background-color="white" :disabled="!isEditing"/>
+                              background-color="white" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field label=" شعبه تامین اجتماعی" v-model="item.branch" background-color="white" :disabled="!isEditing"/>
+                <v-text-field label=" شعبه تامین اجتماعی" v-model="item.branch" background-color="white" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
                 <money
@@ -109,7 +109,7 @@
                     label="* مبلغ اولیه قرارداد"
                     v-model="item.contract_initial_amount"
                     background-color="white"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.is_verified"
                 />
               </v-col>
               <v-col cols="12" md="4">
@@ -120,13 +120,13 @@
                     v-model="item.status"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || item.is_verified"
                 />
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="12">
-                <v-text-field  label=" موضوع " v-model="item.topic" background-color="white" :disabled="!isEditing"/>
+                <v-text-field  label=" موضوع " v-model="item.topic" background-color="white" :disabled="!isEditing || item.is_verified"/>
               </v-col>
             </v-row>
             <v-row>
@@ -138,6 +138,35 @@
                 <date v-show="item.id" v-model="item.get_now_date" label="* تاریخ پایان فعلی قرارداد" :default="false" :disabled="true"/>
               </v-col>
             </v-row>
+            <v-banner v-if="item.have_ads" class="mt-5 red--text">
+              <v-avatar
+                  slot="icon"
+                  color="red"
+                  size="25"
+              >
+                <v-icon
+                    color="white"
+                >
+                  fa-check
+                </v-icon>
+              </v-avatar>
+              برای ویرایش اطلاعات ردیف پیمان ابتدا تمام تعدیل های این ردیف پیمان را حذف کنید
+            </v-banner>
+            <v-banner v-if="item.use_in_insurance_list" class="mt-3 mb-5 red--text">
+              <v-avatar
+                  slot="icon"
+                  color="red"
+                  size="25"
+              >
+                <v-icon
+                    color="white"
+                >
+                  fa-times
+                </v-icon>
+              </v-avatar>
+              با توجه به این که ردیف پیمان در محاسبات حقوق و لیست بیمه درج شده قابل ویرایش نیست
+
+            </v-banner>
           </template>
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
@@ -146,7 +175,7 @@
           <v-btn
               class="red white--text mt-12 mr-2 float-left "
               @click="UnVerifyContract(item)"
-              v-if="item.id && item.is_verified && !item.use_in_insurance_list" > خروج از وضعیت نهایی</v-btn>
+              v-if="item.id && item.is_verified && !item.use_in_insurance_list && !item.have_ads" > خروج از وضعیت نهایی</v-btn>
           <v-dialog
               v-if="item.id && item.is_verified && item.status == true"
               transition="dialog-top-transition"
@@ -178,20 +207,31 @@
           </v-dialog>
           <v-btn
               class="primary darken-1 white--text mt-12 mr-2 float-left "
-              v-if="item.id && item.is_verified"
-              @click="goAdjustment(item.id)"
+              v-if="item.id && item.is_verified && item.have_ads"
+              @click="goAdjustment(item)"
           >مشاهده تغییرات ردیف پیمان</v-btn>
+          <v-btn
+              class="red darken-1 white--text mt-12 mr-2 float-left "
+              v-if="item.id && item.is_verified && item.have_ads && item.status"
+              @click="UnActiveContract(item)"
+          >غیر فعال کردن</v-btn>
+          <v-btn
+              class="green darken-1 white--text mt-12 mr-2 float-left "
+              v-if="item.id && item.is_verified && item.have_ads && !item.status"
+              @click="ActiveContract(item)"
+          > فعال کردن</v-btn>
 
         </m-form>
         <v-row justify="center">
           <v-dialog
               v-model="error_dialog"
               persistent
+              @click:outside="error_dialog=false"
               max-width="400"
           >
             <v-card>
               <v-card-title class="red--text text-h5">
-                ثبت نهایی انجام نشد
+                لطفا موارد زیر را تکمیل یا اصلاح کنید!
               </v-card-title>
               <v-card-text>
                 <v-row v-for="item in error_message" class="mt-5 mr-10">
@@ -395,6 +435,19 @@ export default {
         return true;
       }
     },
+    NumbersTo3Only(evt) {
+      if (this.$refs.contract_row.$props.value.length >= 3){
+        evt.preventDefault();
+      }
+
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
     NoneNumbersOnly(evt) {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -437,6 +490,38 @@ export default {
         }
       })
     },
+    UnActiveContract(item) {
+      this.request({
+        url: this.endpoint(`payroll/contract/row/unactive/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('غیر فعال  کردن ردیف پیمان انجام شد', 'success')
+          this.to(item)
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+    ActiveContract(item) {
+      this.request({
+        url: this.endpoint(`payroll/contract/row/active/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify(' فعال  کردن ردیف پیمان انجام شد', 'success')
+          this.to(item)
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
     to(item) {
       return {
         name: 'WorkshopDetail',
@@ -447,18 +532,6 @@ export default {
     },
     goAdjustment(id) {
       this.$router.push('/panel/ContractRowAdjustment?contract_row=' + id)
-    },
-    NumbersTo3only(evt) {
-      if (this.$refs.code.$props.value.length >= 3){
-        evt.preventDefault();
-      }
-      evt = (evt) ? evt : window.event;
-      var charCode = (evt.which) ? evt.which : evt.keyCode;
-      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
-      } else {
-        return true;
-      }
     },
 
 

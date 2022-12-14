@@ -450,23 +450,6 @@ export default {
   computed: {
     headers() {
       return [
-        {
-          text: " پرسنل در کارگاه",
-          value: "workshop_personnel_display",
-        },
-        {
-          text: "تاریخ",
-          value: "pay_date",
-        },
-        {
-          text: "مبلغ کل",
-          value: "amount",
-        },
-
-        {
-          text: "مبلغ هر قسط",
-          value: "monthly_pay",
-        },
       ];
     },
 
@@ -495,7 +478,7 @@ export default {
 
     unConfirm() {
       this.$router.go()
-      this.notify(' ثبت وام رد شد', 'warning')
+      this.notify(' ثبت  رد شد', 'warning')
     },
     printPayslip(type) {
       this.export_filter = {id : this.$route.params.id}

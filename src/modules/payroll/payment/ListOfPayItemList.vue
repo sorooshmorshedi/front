@@ -232,6 +232,7 @@ export default {
         {
           text: "حقوق",
           value: "total_payment",
+          type: 'numeric'
         },
       ];
     },

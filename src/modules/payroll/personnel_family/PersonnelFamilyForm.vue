@@ -243,11 +243,12 @@
       <v-dialog
           v-model="error_dialog"
           persistent
+          @click:outside="error_dialog=false"
           max-width="400"
       >
         <v-card>
           <v-card-title class="red--text text-h5">
-            ثبت نهایی انجام نشد
+            لطفا موارد زیر را تکمیل یا اصلاح کنید!
           </v-card-title>
           <v-card-text>
             <v-row v-for="item in error_message" class="mt-5 mr-10">

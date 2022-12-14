@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-      :rules="[rules.required,]"
+      :rules="rul"
       dir="ltr"
       :label="label"
       :placeholder="placeholder"
@@ -35,6 +35,9 @@ export default {
     },
     disabled: {
       default: false,
+    },
+    rul: {
+      default: null,
     },
   },
   data() {

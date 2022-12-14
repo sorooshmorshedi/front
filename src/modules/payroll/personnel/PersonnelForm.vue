@@ -177,11 +177,11 @@
           </v-col>
           <v-col cols="12" md="3">
             <mobile label="* شماره همراه 1" v-model="item.mobile_number_1" ref="mobile1"
-                    background-color="white" :disabled="!isEditing" v-on:keypress="Mobile1NumbersOnly" :rules="[rules.required,]"></mobile>
+                    background-color="white" :disabled="!isEditing" v-on:keypress="Mobile1NumbersOnly" :rul="[rules.required,]"></mobile>
           </v-col>
           <v-col cols="12" md="3">
-            <mobile label="* شماره همراه 2" v-model="item.mobile_number_2" ref="mobile2"
-                    background-color="white" :disabled="!isEditing" v-on:keypress="Mobile2NumbersOnly" :rules="[rules.required,]"></mobile>
+            <mobile label=" شماره همراه 2" v-model="item.mobile_number_2" ref="mobile2"
+                    background-color="white" :disabled="!isEditing" v-on:keypress="Mobile2NumbersOnly" ></mobile>
           </v-col>
           <v-col cols="12" md="2">
             <v-switch
@@ -301,11 +301,12 @@
       <v-dialog
           v-model="error_dialog"
           persistent
+          @click:outside="error_dialog=false"
           max-width="400"
       >
         <v-card>
           <v-card-title class="red--text text-h5">
-            ثبت نهایی انجام نشد
+            لطفا موارد زیر را تکمیل یا اصلاح کنید!
           </v-card-title>
           <v-card-text>
             <v-row v-for="item in error_message" class="mt-5 mr-10">

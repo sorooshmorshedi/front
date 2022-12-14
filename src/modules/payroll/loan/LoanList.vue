@@ -46,12 +46,14 @@ export default {
         {
           text: "تعداد اقساط",
           value: "episode",
+          type: 'numeric'
         },
 
         {
           text: "مبلغ هر قسط",
           value: "monthly_pay",
           filterable: false,
+          type: 'numeric'
         },
         {
           text: "تاریخ سررسید",

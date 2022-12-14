@@ -205,7 +205,7 @@ export default {
     verifyDelete(id){
       window.alert('آیا از حذف این تعدیل اطمینان دارید؟')
       this.$refs.adjustment.emitDelete()
-      this.$router.push('/panel/contract_row/' + id)
+      this.$router.push('/panel/ContractRowAdjustment?contract_row=' + id)
     },
     to(item) {
       return {
