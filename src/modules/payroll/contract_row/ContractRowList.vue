@@ -28,7 +28,7 @@ export default {
     headers() {
       return [
         {
-          text: "کد و نام کارگاه",
+          text: " نام و کد کارگاه",
           value: "workshop_name",
           filterable: false,
         },

@@ -10,6 +10,7 @@
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
             :canDelete="false"
+            :can-edit="!item.is_verified"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
             :show-navigation-btns="false"
@@ -32,7 +33,7 @@
                   fa-check
                 </v-icon>
               </v-avatar>
-              توجه داشته باشید اطلاعات کارگاه باید با اطلاعات مندرج در بیمه تامین اجتماعی یکی باشد
+              توجه داشته باشید اطلاعات کارگاه باید با اطلاعات مندرج در بیمه تامین اجتماعی یکسان باشد
             </v-banner>
             <v-row>
               <v-col cols="12" md="6">
@@ -76,16 +77,55 @@
               </v-col>
 
             </v-row>
-            <v-btn class="primary white--text mt-6 ml-2 float-left"
-                   v-if=" item.id" @click="setting(item)">تنظیمات کارگاه
+            <v-btn class="primary white--text mt-12 ml-2 float-left"
+                   v-if=" item.id && item.is_verified" @click="setting(item)">تنظیمات کارگاه
             </v-btn>
-            <v-btn color="blue" class=" white--text mt-6 ml-2 float-left"
-                   v-if=" item.id" @click="goWorkshop(item)">مشاهده جامع
+            <v-btn color="blue" class=" white--text mt-12 ml-2 float-left"
+                   v-if=" item.id && item.is_verified" @click="goWorkshop(item)">مشاهده جامع
             </v-btn>
 
           </template>
+          <v-btn
+              class="light-blue white--text mt-6  mr-2 float-left"
+              @click="verifyWorkshop(item)"
+              v-if="item.id && !item.is_verified" >ثبت نهایی</v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="UnVerifyWorkshop(item)"
+              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+
 
         </m-form>
+        <v-row justify="center">
+          <v-dialog
+              v-model="error_dialog"
+              persistent
+              @click:outside="error_dialog=false"
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                لطفا موارد زیر را تکمیل یا اصلاح کنید!
+              </v-card-title>
+              <v-card-text>
+                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                  {{item}}
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
       </v-col>
       <v-col cols="12" md="6">
         <summary-workshop-list></summary-workshop-list>
@@ -158,6 +198,8 @@ export default {
       hasList: false,
       hasIdProp: true,
       hasLock: false,
+      error_dialog: false,
+      error_message: null,
       isDefinable: false,
       myClass: '',
       ss: null,
@@ -280,6 +322,40 @@ export default {
         evt.preventDefault();;
       }
     },
+    verifyWorkshop(item){
+      this.request({
+        url: this.endpoint(`payroll/workshop/verify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  ردیف پیمان نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
+
+        }
+      })
+
+    },
+    UnVerifyWorkshop(item) {
+      this.request({
+        url: this.endpoint(`payroll/workshop/unverify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('کارگاه از نهایی خارج شد', 'success')
+          this.to(item)
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+
     show(){
       console.log(this.ss)
     }
