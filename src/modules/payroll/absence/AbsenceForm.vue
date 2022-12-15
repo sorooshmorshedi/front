@@ -9,7 +9,10 @@
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
             :canDelete="false"
+            :show-navigation-btns="false"
+            :show-submit-and-clear-btn="false"
             :canSubmit="canSubmit"
+            :can-edit="!item.is_verified"
             :isEditing.sync="isEditing"
             @submit="submit"
             @delete="deleteItem"
@@ -306,7 +309,46 @@
             </v-row>
 
           </template>
+          <v-btn
+              class="light-blue white--text mt-6  mr-2 float-left"
+              @click="verifyAbsence(item)"
+              v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="UnVerifyAbsence(item)"
+              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+
         </m-form>
+        <v-row justify="center">
+          <v-dialog
+              v-model="error_dialog"
+              persistent
+              @click:outside="error_dialog=false"
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                لطفا موارد زیر را تکمیل یا اصلاح کنید!
+              </v-card-title>
+              <v-card-text>
+                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                  {{item}}
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
       </v-col>
       <v-col cols="12" md="6">
         <summary-absence-list></summary-absence-list>
@@ -376,8 +418,11 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
+      error_dialog: false,
+      error_message: null,
       hasLock: false,
       isDefinable: false,
+      first: false,
       myClass: '',
       workshopPersonnel: this.$route.query.workshop_personnel,
       workshopPersonnels: [],
@@ -411,6 +456,13 @@ export default {
       ];
     },
   },
+  updated() {
+    if (!this.first && this.$route.params.id){
+      this.first = true
+      this.isEditing = false
+    }
+  },
+
   mounted() {
     if (!this.workshopPersonnel) {
       this.request({
@@ -468,9 +520,44 @@ export default {
 
     unConfirm() {
       this.$router.go()
-      this.notify(' ثبت قرارداد رد شد', 'warning')
+      this.notify(' ثبت مرخصی یا غیبت رد شد', 'warning')
     },
+    verifyAbsence(item){
+      this.request({
+        url: this.endpoint(`payroll/absence/verify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  مرخصی یا غیبت نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
+
+        }
+      })
+
+    },
+    UnVerifyAbsence(item) {
+      this.request({
+        url: this.endpoint(`payroll/absence/unverify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('مرخصی یا غیبت از نهایی خارج شد', 'success')
+          this.to(item)
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+
   },
+
 }
 </script>
 

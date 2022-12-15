@@ -171,7 +171,7 @@
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
               @click="verifyContract(item.id)"
-              v-if="item.id && !item.is_verified && !item.use_in_insurance_list" >ثبت نهایی</v-btn>
+              v-if="item.id && !item.is_verified && !item.use_in_insurance_list && !isEditing" >ثبت نهایی</v-btn>
           <v-btn
               class="red white--text mt-12 mr-2 float-left "
               @click="UnVerifyContract(item)"

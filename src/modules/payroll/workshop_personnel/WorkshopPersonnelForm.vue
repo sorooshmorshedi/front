@@ -324,7 +324,7 @@
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
               @click="verifyPersonnel(item.id)"
-              v-if="item.id && !item.is_verified">ثبت نهایی
+              v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
           </v-btn>
           <v-btn
               class="red white--text mt-12  mr-2 float-left "
@@ -386,7 +386,7 @@ import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
-import work_titles from "./bime_title.json"
+import work_titles from "./bime.json"
 
 
 import TransactionForm from "@/views/panel/transaction/Form";

@@ -289,11 +289,10 @@
       <v-btn
           class="light-blue white--text mt-6  mr-2 float-left"
           @click="verifyPersonnel(item.id)"
-          v-if="item.id && !item.verified" >ثبت نهایی</v-btn>
+          v-if="item.id && !item.verified && !isEditing" >ثبت نهایی</v-btn>
       <v-btn
           class="red white--text mt-6  mr-2 float-left"
           @click="verifyUnPersonnel(item.id)"
-
           v-if="item.id && item.verified" > خروج از وضعیت نهایی</v-btn>
 
     </m-form>
