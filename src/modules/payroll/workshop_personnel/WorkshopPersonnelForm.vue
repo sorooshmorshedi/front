@@ -9,6 +9,7 @@
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
             :items.sync="item"
+            :show-navigation-btns="false"
             :canDelete="false"
             :canSubmit="!item.quit_job"
             :can-edit="!item.is_verified"
@@ -280,7 +281,7 @@
               </v-col>
 
               <v-col cols="12" md="4">
-                <date v-model="item.employment_date" label="تاریخ استخدام " :default="false"
+                <date v-model="item.employment_date" label=" * تاریخ استخدام " :default="false"
                       :disabled="!isEditing || item.quit_job"/>
               </v-col>
             </v-row>
@@ -312,7 +313,7 @@
               <v-col cols="12" md="6" >
                 <money
                     v-on:keypress="NumbersOnly"
-                    label="* مبلغ حق سنوات شناسایی شده "
+                    label="مبلغ حق سنوات شناسایی شده "
                     v-model="item.haghe_sanavat_identify_amount"
                     background-color="white"
                     :disabled="!isEditing || item.quit_job"
@@ -326,7 +327,7 @@
               v-if="item.id && !item.is_verified">ثبت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-6  mr-2 float-left "
+              class="red white--text mt-12  mr-2 float-left "
               @click="verifyUnPersonnel(item.id)"
               v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
           </v-btn>
@@ -514,71 +515,6 @@ export default {
   computed: {
     headers() {
       return [
-        {
-          text: " کارگاه",
-          value: "workshop",
-        },
-        {
-          text: " پرسنل",
-          value: "personnel",
-        },
-        {
-          text: "ّبیمه میشود",
-          value: "insurance",
-        },
-        {
-          text: "تاریخ اضافه شدن به لیست بیمه",
-          value: "insurance_add_date",
-        },
-        {
-          text: "عنوان شغلی",
-          value: "work_title",
-        },
-        {
-          text: " محل خدمت",
-          value: "job_location",
-        },
-        {
-          text: "وضعیت محل خدمت",
-          value: "job_location_status",
-        },
-        {
-          text: "سابقه بیمه قبلی خارج این کارگاه",
-          value: "previous_insurance_history_out_workshop",
-        },
-        {
-          text: "سابقه بیمه قبلی در کارگاه",
-          value: "previous_insurance_history_in_workshop",
-        },
-
-        {
-          text: "سابقه بیمه جاری در کارگاه",
-          value: "current_insurance_history_in_workshop",
-        },
-        {
-          text: "مجموع سوابق بیمه ای",
-          value: "insurance_history_totality",
-        },
-        {
-          text: "سمت",
-          value: "job_position",
-        },
-        {
-          text: "رسته شغلی",
-          value: "job_group",
-        },
-        {
-          text: "نوع استخدام",
-          value: "employment_type",
-        },
-        {
-          text: "نوع قرارداد",
-          value: "contract_type",
-        },
-        {
-          text: "وضعیت کارمند",
-          value: "employee_status",
-        },
       ];
     },
   },

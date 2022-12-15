@@ -39,12 +39,13 @@ export default {
           value: "work_title",
         },
         {
-          text: "سمت",
-          value: "job_position",
-        },
-        {
           text: "رسته شغلی",
           value: "job_group_display",
+        },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
         },
 
 

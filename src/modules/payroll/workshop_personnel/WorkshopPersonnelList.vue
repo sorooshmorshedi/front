@@ -88,6 +88,12 @@ export default {
           text: "وضعیت کارمند",
           value: "employee_status_display",
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
 
       ];
 

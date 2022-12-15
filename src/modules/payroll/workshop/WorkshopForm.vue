@@ -328,7 +328,7 @@ export default {
         method: "get",
         success: data => {
           console.log(data);
-          this.notify('  ردیف پیمان نهایی شد', 'success')
+          this.notify('  کارگاه نهایی شد', 'success')
           window.location.reload();
         },
         error: data => {

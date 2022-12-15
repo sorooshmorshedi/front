@@ -60,6 +60,11 @@ export default {
           value: "is_active",
           type: 'boolean'
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
       ];
 
     },

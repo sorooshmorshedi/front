@@ -12,6 +12,7 @@
       style="min-width: 80px;"
       v-bind="$attrs"
       v-on="listeners"
+      prepend-inner-icon="fa-mobile"
       autocomplete="off"
   >
     <template #append>

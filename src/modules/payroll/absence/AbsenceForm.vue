@@ -168,10 +168,10 @@
 
             >
               <v-col cols="9" md="6">
-                <date :rules="[rules.required,]" v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="9" md="6">
-                <date :rules="[rules.required,]" v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row
@@ -179,10 +179,10 @@
 
             >
               <v-col cols="9" md="6">
-                <date :rules="[rules.required,]" v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="9" md="6">
-                <date :rules="[rules.required,]" v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
+                <date  v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row>
