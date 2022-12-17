@@ -56,6 +56,12 @@ export default {
           text: "تاریخ اضافه شدن به لیست بیمه",
           value: "insurance_add_date",
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
 
       ];
 

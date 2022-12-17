@@ -12,6 +12,9 @@
             :canDelete="false"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
+            :show-navigation-btns="false"
+            :show-submit-and-clear-btn="false"
+            :can-edit="!item.is_verified"
             @submit="submit"
             @delete="deleteItem"
             @clearForm="clearForm()"
@@ -73,10 +76,51 @@
               <v-col cols="12" md="4" v-if="item.insurance">
                 <date v-model="item.insurance_add_date" label="تاریخ اضافه شدن به بیمه " :default="false" :disabled="!isEditing"/>
               </v-col>
+              <v-col cols="12" md="4" v-if="item.insurance">
+              </v-col>
 
             </v-row>
           </template>
+          <v-btn
+              class="light-blue white--text mt-6  mr-2 float-left"
+              @click="verifyContract(item)"
+              v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="UnVerifyContract(item)"
+              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+
         </m-form>
+        <v-row justify="center">
+          <v-dialog
+              v-model="error_dialog"
+              persistent
+              @click:outside="error_dialog=false"
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                لطفا موارد زیر را تکمیل یا اصلاح کنید!
+              </v-card-title>
+              <v-card-text>
+                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                  {{item}}
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
       </v-col>
       <v-col cols="12" md="6">
         <workshop-contract-summary-list></workshop-contract-summary-list>
@@ -129,6 +173,10 @@ export default {
       hasList: false,
       hasIdProp: true,
       hasLock: false,
+      error_dialog: false,
+      error_message: null,
+      is_insurance: {},
+      first: false,
       isDefinable: false,
       myClass: '',
       workshopPersonnel: this.$route.query.workshop_personnel,
@@ -184,12 +232,21 @@ export default {
               'name': data[t].personnel_name + ' ' + ' در کارگاه ' + data[t].workshop_name,
               'id': data[t].id,
             })
+            this.is_insurance[data[t].id] = data[t].personnel_insurance
+
           }
-          console.log(this.workshopPersonnels)
+          console.log(this.is_insurance)
         }
       })
     }
   },
+  updated() {
+    if (!this.first && this.$route.params.id){
+      this.first = true
+      this.isEditing = false
+    }
+  },
+
 
   methods: {
     NumbersOnly(evt) {
@@ -201,6 +258,40 @@ export default {
         return true;
       }
     },
+    verifyContract(item){
+      this.request({
+        url: this.endpoint(`payroll/contract/verify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  قرارداد نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
+
+        }
+      })
+
+    },
+    UnVerifyContract(item) {
+      this.request({
+        url: this.endpoint(`payroll/contract/unverify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('قرارداد از نهایی خارج شد', 'success')
+          this.to(item)
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+
 
     show(item) {
       console.log(item)

@@ -42,6 +42,12 @@ export default {
           text: " مکان",
           value: "location",
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
       ];
     },
   },

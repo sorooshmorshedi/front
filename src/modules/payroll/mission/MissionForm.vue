@@ -10,7 +10,10 @@
             :exportParams="{id: item.id}"
             :canDelete="false"
             :canSubmit="canSubmit"
+            :show-submit-and-clear-btn="false"
+            :show-navigation-btns="false"
             :isEditing.sync="isEditing"
+            :can-edit="!item.is_verified"
             @submit="submit"
             @delete="deleteItem"
             @clearForm="clearForm()"
@@ -42,6 +45,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    v-if="item.workshop_personnel"
                     :rules="[rules.required,]"
                     label="نوع"
                     :items="MISSION_TYPES"
@@ -96,7 +100,7 @@
                     <v-text-field
                         :disabled="!isEditing"
                         v-model="item.from_hour"
-                        label="از ساعت"
+                        label="*از ساعت"
                         prepend-icon="mdi-clock-time-four-outline"
                         readonly
                         v-bind="attrs"
@@ -141,7 +145,7 @@
                     <v-text-field
                         :disabled="!isEditing"
                         v-model="item.to_hour"
-                        label="تا ساعت"
+                        label="* تا ساعت"
                         prepend-icon="mdi-clock-time-four-outline"
                         readonly
                         v-bind="attrs"
@@ -220,12 +224,48 @@
                   کارگاه اصلی دور شود<br> و یا ناگزیر باشد حداقل یک شب در محل ماموریت توقف نماید.
                 </v-banner>
               </v-col>
-
             </v-row>
-
-
           </template>
+          <v-btn
+              class="light-blue white--text mt-6  mr-2 float-left"
+              @click="verifyMission(item)"
+              v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="UnVerifyMission(item)"
+              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+
         </m-form>
+        <v-row justify="center">
+          <v-dialog
+              v-model="error_dialog"
+              persistent
+              @click:outside="error_dialog=false"
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                لطفا موارد زیر را تکمیل یا اصلاح کنید!
+              </v-card-title>
+              <v-card-text>
+                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                  {{item}}
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
       </v-col>
       <v-col cols="12" md="6">
         <summary-mission-list></summary-mission-list>
@@ -284,6 +324,9 @@ export default {
       hasList: false,
       hasIdProp: true,
       hasLock: false,
+      error_dialog: false,
+      error_message: null,
+      first: false,
       isDefinable: false,
       myClass: '',
       workshopPersonnel: this.$route.query.workshop_personnel,
@@ -318,6 +361,13 @@ export default {
       ];
     },
   },
+  updated() {
+    if (!this.first && this.$route.params.id){
+      this.first = true
+      this.isEditing = false
+    }
+  },
+
   mounted() {
     if (!this.workshopPersonnel) {
       this.request({
@@ -377,6 +427,41 @@ export default {
       this.$router.go()
       this.notify(' ثبت ماموریت رد شد', 'warning')
     },
+    verifyMission(item){
+      this.request({
+        url: this.endpoint(`payroll/mission/verify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  ماموریت نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
+
+        }
+      })
+
+    },
+    UnVerifyMission(item) {
+      this.request({
+        url: this.endpoint(`payroll/mission/unverify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('ماموریت از نهایی خارج شد', 'success')
+          this.to(item)
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+
+
   },
 }
 </script>

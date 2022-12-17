@@ -114,7 +114,7 @@
                 ></v-text-field>
               </v-col>
               <v-col v-if="!item.personnel" cols="12" md="3" @click='nationalDisplaySet(item)'>
-                <v-text-field v-on:keypress="NumbersOnly" label="* کد ملی" v-model="national_code"
+                <v-text-field v-on:keypress="NumbersOnly" label="* کد ملی / فراگیر" v-model="national_code"
                               background-color="white"
                               :disabled="!isEditing || !national_code_dis || personnel"/>
               </v-col>
@@ -215,13 +215,13 @@
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly"
                               label="* سابقه بیمه قبلی خارج این کارگاه (ماه) "
                               v-model="item.previous_insurance_history_out_workshop" background-color="white"
-                              :disabled="!isEditing || item.quit_job"/>
+                              :disabled="!isEditing || item.quit_job || !is_insurance[item.personnel]"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly"
                               label="* سابقه بیمه قبلی در این کارگاه (ماه)"
                               v-model="item.previous_insurance_history_in_workshop" background-color="white"
-                              :disabled="!isEditing || item.quit_job"/>
+                              :disabled="!isEditing || item.quit_job || !is_insurance[item.personnel]"/>
               </v-col>
               <v-col cols="12" md="6" v-if="item.id">
                 <v-text-field label="* سابقه بیمه جاری در این کارگاه (ماه) "
@@ -244,7 +244,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    :rules="[rules.required,]"
+                    :rules="[rules.bool_required,]"
                     label="* رسته شغلی "
                     :items="JOB_POSITIONS"
                     v-model="item.job_group"
@@ -300,23 +300,32 @@
                     </v-icon>
                   </v-avatar>
                   برای محاسبه حق سنوات در شناسایی (( علی الحساب  ))  پر کردن دو فیلد زیر لازم است
+                  <v-switch
+                      class="float-left"
+                      v-model="sanava_disable"
+                      :true-value="false"
+                      :false-value="true"
+                      inset
+                      color="indigo"
+                      @click="myAlert"
+                  ></v-switch>
                 </v-banner>
               </v-col>
               <v-col cols="12" md="6" >
                 <v-text-field
                     v-on:keypress="NumbersOnly"
                     label=" روز های کارکرد قبل از تعریف "
-                    v-model="item.haghe_sanavat_days" background-color="white"
-                    :disabled="!isEditing || item.quit_job"/>
+                    v-model="item.sanavat_previuos_days" background-color="white"
+                    :disabled="!isEditing || item.quit_job || sanava_disable"/>
               </v-col>
 
               <v-col cols="12" md="6" >
                 <money
                     v-on:keypress="NumbersOnly"
                     label="مبلغ حق سنوات شناسایی شده "
-                    v-model="item.haghe_sanavat_identify_amount"
+                    v-model="item.sanavat_previous_amount"
                     background-color="white"
-                    :disabled="!isEditing || item.quit_job"
+                    :disabled="!isEditing || item.quit_job || sanava_disable"
                 />
               </v-col>
             </v-row>
@@ -480,6 +489,7 @@ export default {
       hasLock: false,
       isDefinable: false,
       error_dialog: false,
+      sanava_disable: true,
       error_message: null,
       myClass: '',
       id: this.$route.params.id,
@@ -496,10 +506,12 @@ export default {
       searchByCode: false,
       personnelName: null,
       workshop_name: null,
+      is_insurance:{},
       selected: false,
       cleared: false,
       rules: {
         required: value => !!value || 'Required.',
+        bool_required: value => value != null || 'Required.',
         min: v => v.length >= 8 || 'Min 8 characters',
       },
 
@@ -557,8 +569,10 @@ export default {
               'national_code': data[t].national_code,
               'personnel_code': data[t].personnel_code,
             })
+            this.is_insurance[data[t].id] = data[t].insurance
+
           }
-          console.log(this.personnels)
+          console.log(this.is_insurance)
         }
       })
     }
@@ -570,7 +584,7 @@ export default {
           console.log(data);
           for (let t in data) {
             this.workshops.push({
-              'name': data[t].name + ' ' + data[t].code,
+              'name': data[t].name + ' ' + data[t].workshop_code,
               'id': data[t].id,
             })
           }
@@ -637,6 +651,16 @@ export default {
 
           }
         })
+      }
+
+    },
+    myAlert(){
+      if(!this.sanava_disable){
+        window.alert('اگر از روش قطعی استفاده می کنید و حق سنوات را تسویه نموده اید، نیازی به تکمل فیلد های زیر نیست')
+      } else {
+        this.$refs.WorkshopPersonnelForm.$props.items['sanavat_previuos_days'] = undefined
+        this.$refs.WorkshopPersonnelForm.$props.items['sanavat_previous_amount'] = undefined
+
       }
 
     },

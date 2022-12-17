@@ -43,6 +43,12 @@ export default {
           text: "تاریخ پایان قرارداد",
           value: "contract_to_date",
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
 
       ];
 

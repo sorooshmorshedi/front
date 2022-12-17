@@ -41,6 +41,12 @@ export default {
           value: "time_period",
           filterable: false,
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
       ];
     },
   },

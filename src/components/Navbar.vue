@@ -1910,22 +1910,17 @@ export default {
                 },
                 {
                   to: {
-                    name: "Absence",
-                  },
-                  title: "ثبت مرخصی یا غیبت",
-                },
-                {
-                  to: {
-                    name: "Mission",
-                  },
-                  title: "ثبت ماموریت",
-                },
-                {
-                  to: {
                     name: "WorkshopPersonnelList",
                   },
                   title: " لیست پرسنل ها در کارگاه",
 
+                },
+
+                {
+                  to: {
+                    name: "Absence",
+                  },
+                  title: "ثبت مرخصی یا غیبت",
                 },
                 {
                   to: {
@@ -1933,6 +1928,13 @@ export default {
                   },
                   title: "لیست مرخصی یا غیبت ها",
 
+                },
+
+                {
+                  to: {
+                    name: "Mission",
+                  },
+                  title: "ثبت ماموریت",
                 },
                 {
                   to: {

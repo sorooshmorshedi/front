@@ -47,6 +47,19 @@ export default {
           value: "to_date",
         },
         {
+          text: " تاریخ",
+          value: "date",
+        },
+        {
+          text: " از ساعت",
+          value: "from_hour",
+        },
+        {
+          text: " تا ساعت",
+          value: "to_hour",
+        },
+
+        {
           text: " مکان",
           value: "location",
         },
@@ -54,6 +67,12 @@ export default {
           text: " موضوع",
           value: "topic",
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
       ];
     },
   },

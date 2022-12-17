@@ -34,7 +34,7 @@ export default {
         {
           text: "نوع",
           value: "leave_type_display",
-          filterable: false,
+
         },
         {
           text: "مدت به روز",
@@ -44,18 +44,35 @@ export default {
         {
           text: "از تاریخ",
           value: "from_date",
-          filterable: false,
+          type: 'date'
         },
         {
           text: "تا تاریخ",
           value: "to_date",
-          filterable: false,
+        },
+        {
+          text: " تاریخ",
+          value: "date",
+        },
+        {
+          text: " از ساعت",
+          value: "from_hour",
+        },
+        {
+          text: " تا ساعت",
+          value: "to_hour",
         },
         {
           text: "توضیحات",
           value: "explanation",
           filterable: false,
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
       ];
     },
   },
