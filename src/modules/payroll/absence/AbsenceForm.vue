@@ -23,7 +23,6 @@
         >
 
           <template>
-
             <v-row v-if="item.workshop_personnel && item.leave_type == 'e'">
               <v-col cols="12" md="4">
                 <v-autocomplete
@@ -47,10 +46,21 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    v-if="gender[item.workshop_personnel] == 'f'"
+                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
                     :rules="[rules.required,]"
                     label="نوع"
                     :items="ABSENCE_TYPES"
+                    v-model="item.leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                    @change="setValues(item)"
+                />
+                <v-autocomplete
+                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] == 'c'"
+                    :rules="[rules.required,]"
+                    label="نوع"
+                    :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
                     item-text="name"
                     item-value="value"
@@ -108,10 +118,21 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    v-if="gender[item.workshop_personnel] == 'f'"
+                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
                     :rules="[rules.required,]"
                     label="نوع"
                     :items="ABSENCE_TYPES"
+                    v-model="item.leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                    @change="setValues(item)"
+                />
+                <v-autocomplete
+                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] == 'c'"
+                    :rules="[rules.required,]"
+                    label="نوع"
+                    :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
                     item-text="name"
                     item-value="value"
@@ -132,7 +153,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    v-if="marital[item.workshop_personnel] != 's' && item.leave_type == 'm'"
+                    v-if="marital[item.workshop_personnel] != 's' &&marital[item.workshop_personnel] != 'c' && item.leave_type == 'm'"
                     :rules="[rules.required,]"
                     label="دلیل مرخصی ماده 73"
                     :items="MATTER_73_LEAVE_TYPES"
@@ -146,6 +167,16 @@
                     :rules="[rules.required,]"
                     label="دلیل مرخصی ماده 73"
                     :items="SINGLE_MATTER_73_LEAVE_TYPES"
+                    v-model="item.matter73_leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+                <v-autocomplete
+                    v-if="marital[item.workshop_personnel] == 'c' && item.leave_type == 'm'"
+                    :rules="[rules.required,]"
+                    label="دلیل مرخصی ماده 73"
+                    :items="C_MATTER_73_LEAVE_TYPES"
                     v-model="item.matter73_leave_type"
                     item-text="name"
                     item-value="value"
@@ -195,10 +226,21 @@
               </v-col>
               <v-col cols="12" md="6" v-if="item.workshop_personnel">
                 <v-autocomplete
-                    v-if="gender[item.workshop_personnel] == 'f'"
+                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
                     :rules="[rules.required,]"
                     label="نوع"
                     :items="ABSENCE_TYPES"
+                    v-model="item.leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                    @change="setValues(item)"
+                />
+                <v-autocomplete
+                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] == 'c'"
+                    :rules="[rules.required,]"
+                    label="نوع"
+                    :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
                     item-text="name"
                     item-value="value"
@@ -357,6 +399,10 @@
                 <v-text-field label="مدت مرخصی به روز" v-model="item.time_period" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
+              <v-col cols="12" md="4" v-if="item.id">
+                <v-text-field label="مدت مرخصی به ساعت" v-model="item.by_hour" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
 
             </v-row>
 
@@ -458,6 +504,11 @@ export default {
       MATTER_73_LEAVE_TYPES: [
         {name: 'ازدواج', value: 'm'},
         {name: 'مرگ همسر', value: 's'},
+        {name: 'مرگ فرزند', value: 'd'},
+        {name: 'مرگ پدر یا مادر', value: 'p'},
+      ],
+      C_MATTER_73_LEAVE_TYPES: [
+        {name: 'ازدواج', value: 'm'},
         {name: 'مرگ فرزند', value: 'd'},
         {name: 'مرگ پدر یا مادر', value: 'p'},
       ],
@@ -573,6 +624,10 @@ export default {
     setValues(item) {
       if (item.leave_type == 'e') {
         this.entitlement = true}
+      if (item.leave_type !== 'e') {
+        this.entitlement = false
+        this.$refs.AbsenceForm.$props.items['entitlement_leave_type'] = undefined
+      }
         this.$refs.AbsenceForm.$props.items['matter73_leave_type'] = undefined
         this.$refs.AbsenceForm.$props.items['from_date'] = undefined
         this.$refs.AbsenceForm.$props.items['to_date'] = undefined

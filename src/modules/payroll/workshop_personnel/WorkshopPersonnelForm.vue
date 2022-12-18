@@ -301,6 +301,7 @@
                   </v-avatar>
                   برای محاسبه حق سنوات در شناسایی (( علی الحساب  ))  پر کردن دو فیلد زیر لازم است
                   <v-switch
+                      :disabled="!isEditing || item.quit_job || item.sanavat_previuos_days || item.sanavat_previous_amount"
                       class="float-left"
                       v-model="sanava_disable"
                       :true-value="false"

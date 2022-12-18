@@ -34,7 +34,6 @@ export default {
         {
           text: "نوع",
           value: "leave_type_display",
-          filterable: false,
         },
         {
           text: "مدت به روز",

@@ -14,6 +14,7 @@
             :show-navigation-btns="false"
             :isEditing.sync="isEditing"
             :can-edit="!item.is_verified"
+            :items.sync="item"
             @submit="submit"
             @delete="deleteItem"
             @clearForm="clearForm()"
@@ -188,10 +189,6 @@
                 <v-text-field label="توضیحات" v-model="item.explanation" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
-              <v-col cols="12" md="2" v-if="item.id">
-                <v-text-field label="مدت مرخصی به روز" v-model="item.time_period" background-color="white"
-                              :disabled="!isEditing"/>
-              </v-col>
             </v-row>
             <v-row class="mt-10" v-if="item.mission_type">
               <v-col cols="12" md="5">
@@ -208,7 +205,6 @@
               <v-col cols="12" md="7" v-if="item.is_in_payment">
                 <v-banner
                     class="mt-2 "
-                    elevation="6"
                     outlined
                     rounded
                     single-line
@@ -224,6 +220,17 @@
                   کارگاه اصلی دور شود<br> و یا ناگزیر باشد حداقل یک شب در محل ماموریت توقف نماید.
                 </v-banner>
               </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="4" v-if="item.id">
+                <v-text-field label="مدت مرخصی به روز" v-model="item.time_period" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4" v-if="item.id">
+                <v-text-field label="مدت مرخصی به ساعت" v-model="item.by_hour" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
+
             </v-row>
           </template>
           <v-btn

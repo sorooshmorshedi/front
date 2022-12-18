@@ -34,7 +34,6 @@ export default {
         {
           text: "نوع",
           value: "leave_type_display",
-
         },
         {
           text: "مدت به روز",
@@ -57,10 +56,12 @@ export default {
         {
           text: " از ساعت",
           value: "from_hour",
+          filterable: false,
         },
         {
           text: " تا ساعت",
           value: "to_hour",
+          filterable: false,
         },
         {
           text: "توضیحات",

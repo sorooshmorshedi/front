@@ -29,6 +29,7 @@ export default {
         {
           text: " پرسنل در کارگاه",
           value: "workshop_personnel_display",
+          filterable: false,
         },
         {
           text: " نوع",
@@ -37,6 +38,7 @@ export default {
         {
           text: " مدت به روز",
           value: "time_period",
+          filterable: false,
         },
         {
           text: " مکان",

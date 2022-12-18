@@ -12,27 +12,53 @@
             :canDelete="false"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
+            :items.sync="item"
             :show-navigation-btns="false"
             :show-submit-and-clear-btn="false"
             :can-edit="!item.is_verified"
             @submit="submit"
             @delete="deleteItem"
             @clearForm="clearForm()"
-            ref="workshopContractForm"
+            ref="ContractForm"
 
         >
           <template>
+            <v-row v-if="!item.id">
+              <v-col cols="12" md="12">
+                <v-autocomplete
+                    label="  کارگاه"
+                    :items="workshops"
+                    v-model="workshop"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="getPersonnel(workshop)"
+                />
+              </v-col>
+            </v-row>
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
                     :rules="[rules.required,]"
-                    v-if="!this.workshopPersonnel"
+                    v-if="!item.id"
+                    label=" پرسنل در کارگاه"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!workshop"
+                    @change="setChange"
+                />
+                <v-autocomplete
+                    :rules="[rules.required,]"
+                    v-if="item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
                     item-text="name"
                     item-value="id"
                     :disabled="!isEditing"
+                    @change="setChange"
                 />
                 <v-text-field
                     label="پرسنل در کارگاه"
@@ -43,8 +69,9 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره قرارداد  " v-model="item.code" background-color="white"
-                               :disabled="!isEditing"/>
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره قرارداد  "
+                              v-model="item.code" background-color="white"
+                              :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row>
@@ -62,7 +89,7 @@
 
             </v-row>
             <v-row>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="3">
                 <v-switch
                     class="text-center pr-11"
                     v-model="item.insurance"
@@ -70,13 +97,31 @@
                     :disabled="!isEditing"
                     :true-value="true"
                     :false-value="false"
-                    @change="show(item.insurance)"
+                    @change="setChange(item)"
                 ></v-switch>
               </v-col>
-              <v-col cols="12" md="4" v-if="item.insurance">
-                <date v-model="item.insurance_add_date" label="تاریخ اضافه شدن به بیمه " :default="false" :disabled="!isEditing"/>
+              <v-col cols="12" md="5" v-if="item.insurance">
+                <date
+                    v-model="item.insurance_add_date"
+                    label="* تاریخ اضافه شدن به لیست بیمه "
+                    :default="false" :disabled="!isEditing"/>
               </v-col>
+
               <v-col cols="12" md="4" v-if="item.insurance">
+                <v-text-field v-on:keypress="NumbersOnly"
+                              v-if=" !is_insurance[item.workshop_personnel]"
+                              :rules="[rules.required,]"
+                              label=" * شماره بیمه" v-model="item.insurance_number"
+                              background-color="white"
+                              :disabled="!isEditing"/>
+                <v-text-field v-on:keypress="NumbersOnly"
+                              v-if=" is_insurance[item.workshop_personnel]"
+                              :rules="[rules.required,]"
+                              label=" شماره بیمه"
+                              v-model="item.insurance_number = personnel_insurance_code[item.workshop_personnel]"
+                              background-color="white"
+                              :disabled="true"/>
+
               </v-col>
 
             </v-row>
@@ -84,11 +129,13 @@
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
               @click="verifyContract(item)"
-              v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+              v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
+          </v-btn>
           <v-btn
               class="red white--text mt-12 mr-2 ml-2 float-left "
               @click="UnVerifyContract(item)"
-              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+              v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
+          </v-btn>
 
         </m-form>
         <v-row justify="center">
@@ -104,7 +151,7 @@
               </v-card-title>
               <v-card-text>
                 <v-row v-for="item in error_message" class="mt-5 mr-10">
-                  {{item}}
+                  {{ item }}
                 </v-row>
               </v-card-text>
               <v-card-actions>
@@ -158,7 +205,8 @@ export default {
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
     WorkshopContractSummaryList,
-    WorkshopContractList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+    WorkshopContractList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money
+  },
   props: {
     id: {},
   },
@@ -176,11 +224,15 @@ export default {
       error_dialog: false,
       error_message: null,
       is_insurance: {},
+      personnel_insurance_code: {},
       first: false,
       isDefinable: false,
+      workshops: [],
+      workshop: null,
       myClass: '',
       workshopPersonnel: this.$route.query.workshop_personnel,
       workshopPersonnels: [],
+      personnel_insurance_date: {},
       PathLevels,
       VisitorLevels,
       paymentDialog: false,
@@ -221,6 +273,7 @@ export default {
     },
   },
   mounted() {
+
     if (!this.workshopPersonnel) {
       this.request({
         url: this.endpoint(`payroll/workshop/personnel/`),
@@ -229,19 +282,34 @@ export default {
           console.log(data);
           for (let t in data) {
             this.workshopPersonnels.push({
-              'name': data[t].personnel_name + ' ' + ' در کارگاه ' + data[t].workshop_name,
+              'name': data[t].personnel_name +  '  ' + data[t].personnel_identity_code,
               'id': data[t].id,
             })
             this.is_insurance[data[t].id] = data[t].personnel_insurance
+            this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
+            this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
 
           }
-          console.log(this.is_insurance)
         }
       })
     }
+    this.request({
+      url: this.endpoint(`payroll/workshop/`),
+      method: "get",
+      success: data => {
+        for (let t in data) {
+          this.workshops.push({
+            'name': data[t].name + ' ' + data[t].workshop_code,
+            'id': data[t].id,
+          })
+        }
+
+      }
+    })
+
   },
   updated() {
-    if (!this.first && this.$route.params.id){
+    if (!this.first && this.$route.params.id) {
       this.first = true
       this.isEditing = false
     }
@@ -249,16 +317,33 @@ export default {
 
 
   methods: {
+    getPersonnel(id){
+      this.request({
+        url: this.endpoint(`payroll/workshop/workshop_personnel/` + id + '/'),
+        method: "get",
+        success: data => {
+          this.workshopPersonnels = []
+          for (let t in data) {
+            this.workshopPersonnels.push({
+              'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+              'id': data[t].id,
+            })
+          }
+        }
+      })
+
+    },
     NumbersOnly(evt) {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }
     },
-    verifyContract(item){
+    verifyContract(item) {
       this.request({
         url: this.endpoint(`payroll/contract/verify/` + item.id + '/'),
         method: "get",
@@ -293,8 +378,15 @@ export default {
     },
 
 
-    show(item) {
-      console.log(item)
+    setChange(item) {
+      if (this.personnel_insurance_date[item.workshop_personnel]) {
+        console.log('ok')
+        this.$refs.ContractForm.$props.items['insurance_add_date'] = this.personnel_insurance_date[item.workshop_personnel]
+        this.$refs.ContractForm.$props.items['insurance_number'] = undefineds
+      } else {
+        this.$refs.ContractForm.$props.items['insurance_add_date'] = undefined
+        this.$refs.ContractForm.$props.items['insurance_number'] = undefined
+      }
     },
     to(item) {
       return {
