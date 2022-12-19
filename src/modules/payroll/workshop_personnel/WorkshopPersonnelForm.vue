@@ -65,6 +65,7 @@
                     v-model="item.workshop"
                     item-text="name"
                     item-value="id"
+                    @change="getPersonnel(item.workshop)"
                     :disabled="!isEditing || item.quit_job"
                 />
                 <v-text-field
@@ -287,7 +288,22 @@
             </v-row>
             <v-row class="mt-5" v-if="item.personnel">
               <v-col cols="12" md="12" >
-                <v-banner class="mt-3  red--text">
+                <v-banner class="mt-3  red--text" v-if="item.un_editable">
+                  <v-avatar
+                      slot="icon"
+                      color="red"
+                      size="40"
+                  >
+                    <v-icon
+                        color="white"
+                    >
+                      fa-exclamation-triangle
+                    </v-icon>
+                  </v-avatar>
+                  با توجه به اینکه برای این پرسنل حق سنوات علی الحساب شناسایی شده  دو فیلد زیر غیر قابل ویرایش می باشد
+                </v-banner>
+
+                <v-banner class="mt-3  red--text" v-if="!item.un_editable">
                   <v-avatar
                       slot="icon"
                       color="red"
@@ -301,14 +317,14 @@
                   </v-avatar>
                   برای محاسبه حق سنوات در شناسایی (( علی الحساب  ))  پر کردن دو فیلد زیر لازم است
                   <v-switch
-                      :disabled="!isEditing || item.quit_job || item.sanavat_previuos_days || item.sanavat_previous_amount"
+                      :disabled="!isEditing || item.quit_job  && item.un_editable"
                       class="float-left"
-                      v-model="sanava_disable"
-                      :true-value="false"
-                      :false-value="true"
+                      v-model="item.sanavat_btn"
+                      :true-value="true"
+                      :false-value="false"
                       inset
                       color="indigo"
-                      @click="myAlert"
+                      @click="myAlert(item)"
                   ></v-switch>
                 </v-banner>
               </v-col>
@@ -316,17 +332,19 @@
                 <v-text-field
                     v-on:keypress="NumbersOnly"
                     label=" روز های کارکرد قبل از تعریف "
+                    ref="day"
                     v-model="item.sanavat_previuos_days" background-color="white"
-                    :disabled="!isEditing || item.quit_job || sanava_disable"/>
+                    :disabled="!isEditing || item.quit_job || !item.sanavat_btn  && item.un_editable"/>
               </v-col>
 
               <v-col cols="12" md="6" >
                 <money
                     v-on:keypress="NumbersOnly"
                     label="مبلغ حق سنوات شناسایی شده "
+                    ref="amount"
                     v-model="item.sanavat_previous_amount"
                     background-color="white"
-                    :disabled="!isEditing || item.quit_job || sanava_disable"
+                    :disabled="!isEditing || item.quit_job || !item.sanavat_btn  && item.un_editable"
                 />
               </v-col>
             </v-row>
@@ -557,26 +575,6 @@ export default {
       })
     }
 
-    if (!this.personnel) {
-      this.request({
-        url: this.endpoint(`payroll/personnel/`),
-        method: "get",
-        success: data => {
-          console.log(data);
-          for (let t in data) {
-            this.personnels.push({
-              'name': data[t].name + ' ' + data[t].last_name,
-              'id': data[t].id,
-              'national_code': data[t].national_code,
-              'personnel_code': data[t].personnel_code,
-            })
-            this.is_insurance[data[t].id] = data[t].insurance
-
-          }
-          console.log(this.is_insurance)
-        }
-      })
-    }
     if (!this.workshop) {
       this.request({
         url: this.endpoint(`payroll/workshop/`),
@@ -655,8 +653,8 @@ export default {
       }
 
     },
-    myAlert(){
-      if(!this.sanava_disable){
+    myAlert(item){
+      if(item.sanavat_btn){
         window.alert('اگر از روش قطعی استفاده می کنید و حق سنوات را تسویه نموده اید، نیازی به تکمل فیلد های زیر نیست')
       } else {
         this.$refs.WorkshopPersonnelForm.$props.items['sanavat_previuos_days'] = undefined
@@ -755,6 +753,27 @@ export default {
       })
 
     },
+    getPersonnel(id){
+      this.personnel = []
+      this.request({
+        url: this.endpoint(`payroll/personnel/not/workshop/` + id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          for (let t in data) {
+            this.personnels.push({
+              'name': data[t].name + ' ' + data[t].last_name,
+              'id': data[t].id,
+              'national_code': data[t].national_code,
+              'personnel_code': data[t].personnel_code,
+            })
+            this.is_insurance[data[t].id] = data[t].insurance
+
+          }
+          console.log(this.is_insurance)
+        }
+      })
+    }
 
   }
 }

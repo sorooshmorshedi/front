@@ -75,8 +75,28 @@
                     :disabled="!isEditing"
                 />
               </v-col>
+              <v-col cols="12" md="6">
+                <v-autocomplete
+                    v-if="item.is_verified"
+                    :rules="[rules.required,]"
+                    label="پیش فرض"
+                    :items="DEFAULT_TYPES"
+                    v-model="item.is_default"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="true"
+                />
+              </v-col>
 
             </v-row>
+            <v-btn class="green white--text mt-12 ml-2 float-left"
+                   v-if=" item.id && item.is_verified && !item.is_default"
+                   @click="goDefault(item.id)">انتخاب به عنوان پیش فرض
+            </v-btn>
+            <v-btn class="orange white--text mt-12 ml-2 float-left"
+                   v-if=" item.id && item.is_verified && item.is_default"
+                   @click="goUnDefault(item.id)">خروج از پیش فرض
+            </v-btn>
             <v-btn class="primary white--text mt-12 ml-2 float-left"
                    v-if=" item.id && item.is_verified" @click="setting(item)">تنظیمات کارگاه
             </v-btn>
@@ -171,6 +191,10 @@ export default {
   },
   data() {
     return {
+      DEFAULT_TYPES: [
+        {name: ' پیش فرض است', value: true},
+        {name: 'غیر پبش فرض', value: false},
+      ],
       STATUS_TYPE: [
         {name: ' فعال', value: true},
         {name: 'غیر فعال', value: false},
@@ -220,44 +244,6 @@ export default {
   computed: {
     headers() {
       return [
-        {
-          text: "کد کارگاه",
-          value: "code",
-
-        },
-        {
-          text: "ردیف پیمان",
-          value: "contract_row",
-        },
-        {
-          text: "نام کارگاه",
-          value: "name",
-        },
-        {
-          text: "نام کارفرما",
-          value: "employer_name",
-        },
-        {
-          text: "آدرس کارگاه",
-          value: "address",
-        },
-        {
-          text: "کد پستی",
-          value: "postal_code",
-        },
-        {
-          text: "نرخ بیمه حق کارفرما",
-          value: "employer_insurance_contribution",
-        },
-        {
-          text: "کد شعبه",
-          value: "branch_code",
-        },
-
-        {
-          text: "نام شعبه",
-          value: "branch_name",
-        },
       ];
     },
   },
@@ -268,6 +254,36 @@ export default {
     }
   },
   methods: {
+    goDefault(id){
+      this.request({
+        url: this.endpoint(`payroll/workshop/default/` + id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('کارگاه به حالت پیش فرض در آمد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+    goUnDefault(id){
+      this.request({
+        url: this.endpoint(`payroll/workshop/undefault/` + id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('کارگاه از حالت پیش فرض خارج شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
     to(item) {
       return {
         name: 'WorkshopDetail',
@@ -346,7 +362,6 @@ export default {
         success: data => {
           console.log(data);
           this.notify('کارگاه از نهایی خارج شد', 'success')
-          this.to(item)
           window.location.reload();
         },
         error: data => {

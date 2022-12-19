@@ -23,10 +23,49 @@
         >
 
           <template>
+            <v-row v-if="item.un_editable">
+              <v-col cols="12" md="12">
+              <v-banner  class="mt-3 mb-5 red--text">
+                <v-avatar
+                    slot="icon"
+                    color="red"
+                    size="40"
+                >
+                  <v-icon
+                      color="white"
+                  >
+                    fa-exclamation-triangle
+                  </v-icon>
+                </v-avatar>
+                این غیبت یا مرخصی در محاسبات حقوق استفاده شده و غیر قابل ویرایش می باشد
+              </v-banner>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="12" v-if="!item.id">
+                <v-autocomplete
+                    label="  کارگاه"
+                    :items="workshops"
+                    v-model="workshop"
+                    item-text="name"
+                    ref="workshopSelect"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="getPersonnel(workshop)"
+                />
+              </v-col>
+              <v-col cols="12" md="12" v-if="item.id">
+                <v-text-field
+                    label="  کارگاه"
+                    v-model="item.workshop"
+                    :disabled="true"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
             <v-row v-if="item.workshop_personnel && item.leave_type == 'e'">
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    :rules="[rules.required,]"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -34,7 +73,7 @@
                     item-text="name"
                     item-value="id"
                     @change
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || !workshop"
                 />
                 <v-text-field
                     label="پرسنل در کارگاه"
@@ -47,7 +86,6 @@
               <v-col cols="12" md="4">
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="ABSENCE_TYPES"
                     v-model="item.leave_type"
@@ -58,7 +96,6 @@
                 />
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] == 'c'"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
@@ -69,7 +106,6 @@
                 />
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] != 'f'"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
@@ -81,7 +117,6 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    :rules="[rules.required,]"
                     v-if="item.leave_type == 'e'"
                     label="نوع مرخصی استحقاقی"
                     :items="ENTITLEMENT_LEAVE_TYPES"
@@ -98,7 +133,6 @@
             <v-row v-if="item.workshop_personnel && item.leave_type == 'm'">
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    :rules="[rules.required,]"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -106,7 +140,7 @@
                     item-text="name"
                     item-value="id"
                     @change
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || !workshop"
                 />
                 <v-text-field
                     label="پرسنل در کارگاه"
@@ -119,7 +153,6 @@
               <v-col cols="12" md="4">
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="ABSENCE_TYPES"
                     v-model="item.leave_type"
@@ -130,7 +163,6 @@
                 />
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] == 'c'"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
@@ -141,7 +173,6 @@
                 />
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] !== 'f'"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
@@ -154,7 +185,6 @@
               <v-col cols="12" md="4">
                 <v-autocomplete
                     v-if="marital[item.workshop_personnel] != 's' &&marital[item.workshop_personnel] != 'c' && item.leave_type == 'm'"
-                    :rules="[rules.required,]"
                     label="دلیل مرخصی ماده 73"
                     :items="MATTER_73_LEAVE_TYPES"
                     v-model="item.matter73_leave_type"
@@ -164,7 +194,6 @@
                 />
                 <v-autocomplete
                     v-if="marital[item.workshop_personnel] == 's' && item.leave_type == 'm'"
-                    :rules="[rules.required,]"
                     label="دلیل مرخصی ماده 73"
                     :items="SINGLE_MATTER_73_LEAVE_TYPES"
                     v-model="item.matter73_leave_type"
@@ -174,7 +203,6 @@
                 />
                 <v-autocomplete
                     v-if="marital[item.workshop_personnel] == 'c' && item.leave_type == 'm'"
-                    :rules="[rules.required,]"
                     label="دلیل مرخصی ماده 73"
                     :items="C_MATTER_73_LEAVE_TYPES"
                     v-model="item.matter73_leave_type"
@@ -206,7 +234,6 @@
             <v-row v-if="item.leave_type != 'e' && item.leave_type != 'm'">
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    :rules="[rules.required,]"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -214,7 +241,7 @@
                     item-text="name"
                     item-value="id"
                     @change
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || !workshop"
                 />
                 <v-text-field
                     label="پرسنل در کارگاه"
@@ -224,38 +251,35 @@
 
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" md="6" v-if="item.workshop_personnel">
+              <v-col cols="12" md="6" >
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="ABSENCE_TYPES"
                     v-model="item.leave_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || !item.workshop_personnel"
                     @change="setValues(item)"
                 />
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] == 'c'"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || !item.workshop_personnel"
                     @change="setValues(item)"
                 />
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] != 'f'"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || !item.workshop_personnel"
                     @change="setValues(item)"
                 />
               </v-col>
@@ -286,7 +310,7 @@
               <v-col cols="12" md="12" v-if="item.leave_type == 'i'"
               >
 
-                <v-text-field :rules="[rules.required,]" label="* علت حادثه" v-model="item.cause_of_incident" background-color="white"
+                <v-text-field  label="* علت حادثه" v-model="item.cause_of_incident" background-color="white"
                               :disabled="!isEditing"/>
 
               </v-col>
@@ -302,91 +326,27 @@
                   cols="12"
                   sm="4"
               >
-                <v-dialog
-                    ref="dialog"
-                    v-model="modal2"
-                    :return-value.sync="time"
-                    persistent
-                    width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                        :disabled="!isEditing"
-                        v-model="item.from_hour"
-                        label="* از ساعت"
-                        prepend-icon="mdi-clock-time-four-outline"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                      v-if="modal2"
-                      v-model="item.from_hour"
-                      full-width
-                  >
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        text
-                        color="secondary"
-                        @click="modal2 = false"
-                    >
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.dialog.save(time)"
-                    >
-                      OK
-                    </v-btn>
-                  </v-time-picker>
-                </v-dialog>
+                <v-text-field
+                    label="* از ساعت"
+                    value="00:00"
+                    v-model="item.from_hour"
+                    type="time"
+                    append-icon="fa-clock"
+                    :disabled="!isEditing"
+                ></v-text-field>
               </v-col>
               <v-col
                   cols="12"
                   sm="4"
               >
-                <v-dialog
-                    ref="dialog1"
-                    v-model="menu1"
-                    :return-value.sync="time"
-                    persistent
-                    width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                        :disabled="!isEditing"
-                        v-model="item.to_hour"
-                        label=" * تا ساعت"
-                        prepend-icon="mdi-clock-time-four-outline"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                      v-if="menu1"
-                      v-model="item.to_hour"
-                      full-width
-                  >
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="menu1 = false"
-                    >
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.dialog1.save(time)"
-                    >
-                      OK
-                    </v-btn>
-                  </v-time-picker>
-                </v-dialog>
+                <v-text-field
+                    label=" * تا ساعت"
+                    value="00:00"
+                    v-model="item.to_hour"
+                    type="time"
+                    append-icon="fa-clock"
+                    :disabled="!isEditing"
+                ></v-text-field>
               </v-col>
 
             </v-row>
@@ -397,15 +357,13 @@
               </v-col>
               <v-col cols="12" md="4" v-if="item.id">
                 <v-text-field label="مدت مرخصی به روز" v-model="item.time_period" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="true"/>
               </v-col>
-              <v-col cols="12" md="4" v-if="item.id">
+              <v-col cols="12" md="4" v-if="item.id && item.entitlement_leave_type == 'h'">
                 <v-text-field label="مدت مرخصی به ساعت" v-model="item.by_hour" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="true"/>
               </v-col>
-
             </v-row>
-
           </template>
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
@@ -414,7 +372,7 @@
           <v-btn
               class="red white--text mt-12 mr-2 ml-2 float-left "
               @click="UnVerifyAbsence(item)"
-              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+              v-if="item.id && item.is_verified && !item.un_editable" > خروج از وضعیت نهایی</v-btn>
 
         </m-form>
         <v-row justify="center">
@@ -532,6 +490,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
+      workshop: null,
+      workshops: [],
       error_dialog: false,
       gender: {},
       marital: {},
@@ -580,25 +540,44 @@ export default {
   },
 
   mounted() {
-    if (!this.workshopPersonnel) {
-      this.request({
-        url: this.endpoint(`payroll/workshop/personnel/`),
-        method: "get",
-        success: data => {
-          console.log(data);
-          for (let t in data) {
-            this.workshopPersonnels.push({
-              'name': data[t].personnel_name + ' در کارگاه ' + data[t].workshop_name,
-              'id': data[t].id,
-            })
-            this.gender[data[t].id] = data[t].personnel_gender
-            this.marital[data[t].id] = data[t].personnel_marital
-
-          }
-          console.log(this.gender)
+    this.request({
+      url: this.endpoint(`payroll/workshop/`),
+      method: "get",
+      success: data => {
+        for (let t in data) {
+          this.workshops.push({
+            'name': data[t].name + ' ' + data[t].workshop_code,
+            'id': data[t].id,
+          })
         }
-      })
-    }
+
+      }
+    })
+
+    this.request({
+      url: this.endpoint(`payroll/workshop/default/`),
+      method: "get",
+      success: data => {
+        this.workshop = data.id
+        this.$refs.workshopSelect.$props.value = data.id
+        console.log(this.$refs.workshopSelect.$props)
+        console.log(this.$refs.workshopSelect.$props.value)
+        this.request({
+          url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
+          method: "get",
+          success: data => {
+            this.workshopPersonnels = []
+            for (let t in data) {
+              this.workshopPersonnels.push({
+                'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                'id': data[t].id,
+              })
+            }
+          }
+        })
+
+      }
+    })
   },
 
   methods: {
@@ -684,6 +663,22 @@ export default {
 
         }
       })
+    },
+    getPersonnel(id) {
+      this.request({
+        url: this.endpoint(`payroll/workshop/workshop_personnel/` + id + '/'),
+        method: "get",
+        success: data => {
+          this.workshopPersonnels = []
+          for (let t in data) {
+            this.workshopPersonnels.push({
+              'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+              'id': data[t].id,
+            })
+          }
+        }
+      })
+
     },
 
   },

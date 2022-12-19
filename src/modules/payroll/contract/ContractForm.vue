@@ -27,11 +27,14 @@
               <v-col cols="12" md="12">
                 <v-autocomplete
                     label="  کارگاه"
+                    @click="show()"
                     :items="workshops"
                     v-model="workshop"
+                    ref="workshopSelect"
                     item-text="name"
                     item-value="id"
                     :disabled="!isEditing"
+                    @keydown="show"
                     @change="getPersonnel(workshop)"
                 />
               </v-col>
@@ -39,7 +42,6 @@
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    :rules="[rules.required,]"
                     v-if="!item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -50,7 +52,6 @@
                     @change="setChange"
                 />
                 <v-autocomplete
-                    :rules="[rules.required,]"
                     v-if="item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -69,7 +70,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره قرارداد  "
+                <v-text-field v-on:keypress="NumbersOnly" label="* شماره قرارداد  "
                               v-model="item.code" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
@@ -93,7 +94,7 @@
                 <v-switch
                     class="text-center pr-11"
                     v-model="item.insurance"
-                    label='ّبیمه میشود'
+                    label='بیمه میشود'
                     :disabled="!isEditing"
                     :true-value="true"
                     :false-value="false"
@@ -110,13 +111,11 @@
               <v-col cols="12" md="4" v-if="item.insurance">
                 <v-text-field v-on:keypress="NumbersOnly"
                               v-if=" !is_insurance[item.workshop_personnel]"
-                              :rules="[rules.required,]"
                               label=" * شماره بیمه" v-model="item.insurance_number"
                               background-color="white"
                               :disabled="!isEditing"/>
                 <v-text-field v-on:keypress="NumbersOnly"
                               v-if=" is_insurance[item.workshop_personnel]"
-                              :rules="[rules.required,]"
                               label=" شماره بیمه"
                               v-model="item.insurance_number = personnel_insurance_code[item.workshop_personnel]"
                               background-color="white"
@@ -226,6 +225,7 @@ export default {
       is_insurance: {},
       personnel_insurance_code: {},
       first: false,
+      defaultWorkshop: null,
       isDefinable: false,
       workshops: [],
       workshop: null,
@@ -273,26 +273,6 @@ export default {
     },
   },
   mounted() {
-
-    if (!this.workshopPersonnel) {
-      this.request({
-        url: this.endpoint(`payroll/workshop/personnel/`),
-        method: "get",
-        success: data => {
-          console.log(data);
-          for (let t in data) {
-            this.workshopPersonnels.push({
-              'name': data[t].personnel_name +  '  ' + data[t].personnel_identity_code,
-              'id': data[t].id,
-            })
-            this.is_insurance[data[t].id] = data[t].personnel_insurance
-            this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
-            this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
-
-          }
-        }
-      })
-    }
     this.request({
       url: this.endpoint(`payroll/workshop/`),
       method: "get",
@@ -307,6 +287,30 @@ export default {
       }
     })
 
+    this.request({
+      url: this.endpoint(`payroll/workshop/default/`),
+      method: "get",
+      success: data => {
+        this.workshop = data.id
+        this.$refs.workshopSelect.$props.value = data.id
+        console.log(this.$refs.workshopSelect.$props)
+        console.log(this.$refs.workshopSelect.$props.value)
+        this.request({
+          url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
+          method: "get",
+          success: data => {
+            this.workshopPersonnels = []
+            for (let t in data) {
+              this.workshopPersonnels.push({
+                'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                'id': data[t].id,
+              })
+            }
+          }
+        })
+
+      }
+    })
   },
   updated() {
     if (!this.first && this.$route.params.id) {
@@ -318,6 +322,7 @@ export default {
 
   methods: {
     getPersonnel(id){
+      this.workshopPersonnels = []
       this.request({
         url: this.endpoint(`payroll/workshop/workshop_personnel/` + id + '/'),
         method: "get",
@@ -396,7 +401,9 @@ export default {
         },
       };
     },
-
+    show(){
+      console.log(this.$refs.workshopSelect.$props.value)
+    },
     unConfirm() {
       this.$router.go()
       this.notify(' ثبت قرارداد رد شد', 'warning')

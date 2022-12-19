@@ -7,6 +7,7 @@
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
         :canDelete="false"
+        :items.sync="item"
         :canSubmit="canSubmit"
         :show-navigation-btns="false"
         :isEditing.sync="isEditing"

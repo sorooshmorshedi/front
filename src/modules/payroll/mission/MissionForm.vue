@@ -22,11 +22,50 @@
         >
 
           <template>
+            <v-row v-if="item.un_editable">
+              <v-col cols="12" md="12">
+                <v-banner  class="mt-3 mb-5 red--text">
+                  <v-avatar
+                      slot="icon"
+                      color="red"
+                      size="40"
+                  >
+                    <v-icon
+                        color="white"
+                    >
+                      fa-exclamation-triangle
+                    </v-icon>
+                  </v-avatar>
+                  این ماموریت در محاسبات حقوق استفاده شده و غیر قابل ویرایش می باشد
+                </v-banner>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="12" md="12" v-if="!item.id">
+                <v-autocomplete
+                    label="  کارگاه"
+                    :items="workshops"
+                    v-model="workshop"
+                    ref="workshopSelect"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="getPersonnel(workshop)"
+                />
+              </v-col>
+              <v-col cols="12" md="12" v-if="item.id">
+                <v-text-field
+                    label="  کارگاه"
+                    v-model="item.workshop"
+                    :disabled="true"
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    :rules="[rules.required,]"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -34,7 +73,7 @@
                     item-text="name"
                     item-value="id"
                     @change
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || !workshop"
                 />
                 <v-text-field
                     label="پرسنل در کارگاه"
@@ -46,14 +85,12 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    v-if="item.workshop_personnel"
-                    :rules="[rules.required,]"
                     label="نوع"
                     :items="MISSION_TYPES"
                     v-model="item.mission_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="!isEditing || !item.workshop_personnel"
                     @change="setValues(item)"
                 />
               </v-col>
@@ -90,91 +127,27 @@
                   cols="12"
                   sm="4"
               >
-                <v-dialog
-                    ref="dialog"
-                    v-model="modal2"
-                    :return-value.sync="time"
-                    persistent
-                    width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                        :disabled="!isEditing"
-                        v-model="item.from_hour"
-                        label="*از ساعت"
-                        prepend-icon="mdi-clock-time-four-outline"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                      v-if="modal2"
-                      v-model="item.from_hour"
-                      full-width
-                  >
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        text
-                        color="secondary"
-                        @click="modal2 = false"
-                    >
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.dialog.save(time)"
-                    >
-                      OK
-                    </v-btn>
-                  </v-time-picker>
-                </v-dialog>
+                <v-text-field
+                    label="* از ساعت"
+                    value="00:00"
+                    v-model="item.from_hour"
+                    type="time"
+                    append-icon="fa-clock"
+                    :disabled="!isEditing"
+                ></v-text-field>
               </v-col>
               <v-col
                   cols="12"
                   sm="4"
               >
-                <v-dialog
-                    ref="dialog1"
-                    v-model="menu1"
-                    :return-value.sync="time"
-                    persistent
-                    width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                        :disabled="!isEditing"
-                        v-model="item.to_hour"
-                        label="* تا ساعت"
-                        prepend-icon="mdi-clock-time-four-outline"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                      v-if="menu1"
-                      v-model="item.to_hour"
-                      full-width
-                  >
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="menu1 = false"
-                    >
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.dialog1.save(time)"
-                    >
-                      OK
-                    </v-btn>
-                  </v-time-picker>
-                </v-dialog>
+                <v-text-field
+                    label=" * تا ساعت"
+                    value="00:00"
+                    v-model="item.to_hour"
+                    type="time"
+                    append-icon="fa-clock"
+                    :disabled="!isEditing"
+                ></v-text-field>
               </v-col>
 
             </v-row>
@@ -191,44 +164,68 @@
               </v-col>
             </v-row>
             <v-row class="mt-10" v-if="item.mission_type">
-              <v-col cols="12" md="5">
-                <v-switch
-                    class="text-center pt-5"
-                    v-model="item.is_in_payment"
-                    label='محاسبه حق ماموریت در حقوق مزایای ماهیانه'
-                    :disabled="!isEditing"
-                    :value="true"
-                ></v-switch>
 
-              </v-col>
-
-              <v-col cols="12" md="7" v-if="item.is_in_payment">
-                <v-banner
-                    class="mt-2 "
-                    outlined
-                    rounded
-                    single-line
-                    sticky
-                >
-                  <v-icon
-                      color="orange"
-                      large
-                  >info
-                  </v-icon>
-                  تبصره ماده ۴۶ قانون کار - ماموریت به موردی اطلاق می‌شود که<br> کارگر برای انجام کار حداقل ۵۰ کیلومتر از
+              <v-col cols="12" md="12">
+                <v-banner class="mt-3  green--text" v-if="item.is_in_payment">
+                  <v-avatar
+                      slot="icon"
+                      color="green"
+                      size="25"
+                  >
+                    <v-icon
+                        color="white"
+                    >
+                      fa-check
+                    </v-icon>
+                  </v-avatar>
+                  تبصره ماده ۴۶ قانون کار - ماموریت به موردی اطلاق می‌شود که کارگر برای انجام کار حداقل ۵۰ کیلومتر </br>
+                  از
                   محل
-                  کارگاه اصلی دور شود<br> و یا ناگزیر باشد حداقل یک شب در محل ماموریت توقف نماید.
+                  کارگاه اصلی دور شود و یا ناگزیر باشد حداقل یک شب در محل ماموریت توقف نماید.
+
+                  <v-switch
+                      :disabled="!isEditing"
+                      class="float-left"
+                      v-model="item.is_in_payment"
+                      :true-value="true"
+                      :false-value="false"
+                      inset
+                      color="green darken-2"
+                  ></v-switch>
+                </v-banner>
+                <v-banner class="mt-3  orange--text text--darken-3" v-if="!item.is_in_payment">
+                  <v-avatar
+                      slot="icon"
+                      color="orange"
+                      size="25"
+                  >
+                    <v-icon
+                        color="white"
+                    >
+                      fa-info
+                    </v-icon>
+                  </v-avatar>
+                  برای محاسبه حق ماموریت در حقوق مزایای ماهیانه گزینه را فعال کنید
+                  <v-switch
+                      :disabled="!isEditing"
+                      class="float-left"
+                      v-model="item.is_in_payment"
+                      :true-value="true"
+                      :false-value="false"
+                      inset
+                      color="green darken-2"
+                  ></v-switch>
                 </v-banner>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="4" v-if="item.id">
-                <v-text-field label="مدت مرخصی به روز" v-model="item.time_period" background-color="white"
-                              :disabled="!isEditing"/>
+                <v-text-field label="مدت ماموریت به روز" v-model="item.time_period" background-color="white"
+                              :disabled="true"/>
               </v-col>
-              <v-col cols="12" md="4" v-if="item.id">
-                <v-text-field label="مدت مرخصی به ساعت" v-model="item.by_hour" background-color="white"
-                              :disabled="!isEditing"/>
+              <v-col cols="12" md="4" v-if="item.id && item.mission_type == 'h'">
+                <v-text-field label="مدت ماموریت به ساعت" v-model="item.by_hour" background-color="white"
+                              :disabled="true"/>
               </v-col>
 
             </v-row>
@@ -236,11 +233,13 @@
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
               @click="verifyMission(item)"
-              v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+              v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
+          </v-btn>
           <v-btn
               class="red white--text mt-12 mr-2 ml-2 float-left "
               @click="UnVerifyMission(item)"
-              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+              v-if="item.id && item.is_verified && !item.un_editable"> خروج از وضعیت نهایی
+          </v-btn>
 
         </m-form>
         <v-row justify="center">
@@ -256,7 +255,7 @@
               </v-card-title>
               <v-card-text>
                 <v-row v-for="item in error_message" class="mt-5 mr-10">
-                  {{item}}
+                  {{ item }}
                 </v-row>
               </v-card-text>
               <v-card-actions>
@@ -316,7 +315,6 @@ export default {
       MISSION_TYPES: [
         {name: ' ساعتی', value: 'h'},
         {name: 'روزانه', value: 'd'},
-
       ],
       time: null,
       menu1: false,
@@ -332,6 +330,8 @@ export default {
       hasIdProp: true,
       hasLock: false,
       error_dialog: false,
+      workshop: null,
+      workshops: [],
       error_message: null,
       first: false,
       isDefinable: false,
@@ -369,29 +369,51 @@ export default {
     },
   },
   updated() {
-    if (!this.first && this.$route.params.id){
+    if (!this.first && this.$route.params.id) {
       this.first = true
       this.isEditing = false
     }
   },
 
   mounted() {
-    if (!this.workshopPersonnel) {
-      this.request({
-        url: this.endpoint(`payroll/workshop/personnel/`),
-        method: "get",
-        success: data => {
-          console.log(data);
-          for (let t in data) {
-            this.workshopPersonnels.push({
-              'name': data[t].personnel_name +  ' در کارگاه ' + data[t].workshop_name,
-              'id': data[t].id,
-            })
-          }
-          console.log(this.workshopPersonnels)
+    this.request({
+      url: this.endpoint(`payroll/workshop/`),
+      method: "get",
+      success: data => {
+        for (let t in data) {
+          this.workshops.push({
+            'name': data[t].name + ' ' + data[t].workshop_code,
+            'id': data[t].id,
+          })
         }
-      })
-    }
+
+      }
+    })
+
+    this.request({
+      url: this.endpoint(`payroll/workshop/default/`),
+      method: "get",
+      success: data => {
+        this.workshop = data.id
+        this.$refs.workshopSelect.$props.value = data.id
+        console.log(this.$refs.workshopSelect.$props)
+        console.log(this.$refs.workshopSelect.$props.value)
+        this.request({
+          url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
+          method: "get",
+          success: data => {
+            this.workshopPersonnels = []
+            for (let t in data) {
+              this.workshopPersonnels.push({
+                'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                'id': data[t].id,
+              })
+            }
+          }
+        })
+
+      }
+    })
   },
 
   methods: {
@@ -399,7 +421,8 @@ export default {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }
@@ -410,7 +433,8 @@ export default {
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
         return true;
       } else {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       }
     },
 
@@ -434,7 +458,7 @@ export default {
       this.$router.go()
       this.notify(' ثبت ماموریت رد شد', 'warning')
     },
-    verifyMission(item){
+    verifyMission(item) {
       this.request({
         url: this.endpoint(`payroll/mission/verify/` + item.id + '/'),
         method: "get",
@@ -467,7 +491,23 @@ export default {
         }
       })
     },
+    getPersonnel(id) {
+      this.workshopPersonnels = []
+      this.request({
+        url: this.endpoint(`payroll/workshop/workshop_personnel/` + id + '/'),
+        method: "get",
+        success: data => {
+          this.workshopPersonnels = []
+          for (let t in data) {
+            this.workshopPersonnels.push({
+              'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+              'id': data[t].id,
+            })
+          }
+        }
+      })
 
+    },
 
   },
 }
