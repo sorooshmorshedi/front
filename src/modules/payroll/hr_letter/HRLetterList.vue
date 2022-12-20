@@ -37,6 +37,11 @@ export default {
           value: "contract",
         },
         {
+          text: "طرفین قرارداد",
+          value: "contract_detail",
+          filterable: false,
+        },
+        {
           text: "نام",
           value: "name",
         },
@@ -73,9 +78,9 @@ export default {
 
         },
         {
-          text: "غیر قابل تغییر",
-          value: "pay_done",
-          filterable: false,
+          text: "قابل تغییر",
+          value: "is_calculated",
+          type: 'boolean',
 
         },
       ];

@@ -36,13 +36,17 @@ export default {
           value: "mission_type_display",
         },
         {
-          text: " مدت به روز",
-          value: "time_period",
-          filterable: false,
+          text: " تاریخ",
+          value: "date",
+        },
+
+        {
+          text: " از تاریخ",
+          value: "from_date",
         },
         {
-          text: " مکان",
-          value: "location",
+          text: " تا تاریخ",
+          value: "to_date",
         },
         {
           text: "نهایی",

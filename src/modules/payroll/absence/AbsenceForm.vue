@@ -25,20 +25,20 @@
           <template>
             <v-row v-if="item.un_editable">
               <v-col cols="12" md="12">
-              <v-banner  class="mt-3 mb-5 red--text">
-                <v-avatar
-                    slot="icon"
-                    color="red"
-                    size="40"
-                >
-                  <v-icon
-                      color="white"
+                <v-banner class="mt-3 mb-5 red--text">
+                  <v-avatar
+                      slot="icon"
+                      color="red"
+                      size="40"
                   >
-                    fa-exclamation-triangle
-                  </v-icon>
-                </v-avatar>
-                این غیبت یا مرخصی در محاسبات حقوق استفاده شده و غیر قابل ویرایش می باشد
-              </v-banner>
+                    <v-icon
+                        color="white"
+                    >
+                      fa-exclamation-triangle
+                    </v-icon>
+                  </v-avatar>
+                  این غیبت یا مرخصی در محاسبات حقوق استفاده شده و غیر قابل ویرایش می باشد
+                </v-banner>
               </v-col>
             </v-row>
             <v-row>
@@ -54,19 +54,30 @@
                     @change="getPersonnel(workshop)"
                 />
               </v-col>
-              <v-col cols="12" md="12" v-if="item.id">
+              <v-col cols="12" md="12" v-if="item.id && !isEditing">
                 <v-text-field
                     label="  کارگاه"
                     v-model="item.workshop"
                     :disabled="true"
                 ></v-text-field>
               </v-col>
+              <v-col cols="12" md="12" v-if="item.id && isEditing">
+                <v-autocomplete
+                    label="  کارگاه"
+                    :items="workshops"
+                    v-model="item.workshop_id"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="getPersonnel(item.workshop_id)"
+                />
+              </v-col>
             </v-row>
 
             <v-row v-if="item.workshop_personnel && item.leave_type == 'e'">
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    v-if="!this.workshopPersonnel"
+                    v-if="!item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
@@ -74,6 +85,16 @@
                     item-value="id"
                     @change
                     :disabled="!isEditing || !workshop"
+                />
+                <v-autocomplete
+                    v-if="item.id"
+                    label=" پرسنل در کارگاه"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="name"
+                    item-value="id"
+                    @change
+                    :disabled="!isEditing"
                 />
                 <v-text-field
                     label="پرسنل در کارگاه"
@@ -127,7 +148,6 @@
                 />
               </v-col>
             </v-row>
-
 
 
             <v-row v-if="item.workshop_personnel && item.leave_type == 'm'">
@@ -224,11 +244,10 @@
                       large
                   >info
                   </v-icon>
-                  در مرخصی ماده 73 حداکثر مدت زمان سه روز ثبت  می شود
+                  در مرخصی ماده 73 حداکثر مدت زمان سه روز ثبت می شود
                 </v-banner>
               </v-col>
             </v-row>
-
 
 
             <v-row v-if="item.leave_type != 'e' && item.leave_type != 'm'">
@@ -251,7 +270,7 @@
 
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" md="6" >
+              <v-col cols="12" md="6">
                 <v-autocomplete
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
                     label="نوع"
@@ -289,10 +308,10 @@
                 v-if="item.leave_type != 'e' && item.workshop_personnel"
             >
               <v-col cols="9" md="6">
-                <date  v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
+                <date v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="9" md="6">
-                <date  v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
+                <date v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row
@@ -300,17 +319,17 @@
 
             >
               <v-col cols="9" md="6">
-                <date  v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
+                <date v-model="item.from_date" label="* از تاریخ" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="9" md="6">
-                <date  v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
+                <date v-model="item.to_date" label="* تا تاریخ " :default="false" :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="12" v-if="item.leave_type == 'i'"
               >
 
-                <v-text-field  label="* علت حادثه" v-model="item.cause_of_incident" background-color="white"
+                <v-text-field label="* علت حادثه" v-model="item.cause_of_incident" background-color="white"
                               :disabled="!isEditing"/>
 
               </v-col>
@@ -368,11 +387,13 @@
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
               @click="verifyAbsence(item)"
-              v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+              v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
+          </v-btn>
           <v-btn
               class="red white--text mt-12 mr-2 ml-2 float-left "
               @click="UnVerifyAbsence(item)"
-              v-if="item.id && item.is_verified && !item.un_editable" > خروج از وضعیت نهایی</v-btn>
+              v-if="item.id && item.is_verified && !item.un_editable"> خروج از وضعیت نهایی
+          </v-btn>
 
         </m-form>
         <v-row justify="center">
@@ -388,7 +409,7 @@
               </v-card-title>
               <v-card-text>
                 <v-row v-for="item in error_message" class="mt-5 mr-10">
-                  {{item}}
+                  {{ item }}
                 </v-row>
               </v-card-text>
               <v-card-actions>
@@ -533,51 +554,90 @@ export default {
     },
   },
   updated() {
-    if (!this.first && this.$route.params.id){
+    if (!this.first && this.$route.params.id) {
       this.first = true
       this.isEditing = false
     }
   },
 
   mounted() {
-    this.request({
-      url: this.endpoint(`payroll/workshop/`),
-      method: "get",
-      success: data => {
-        for (let t in data) {
-          this.workshops.push({
-            'name': data[t].name + ' ' + data[t].workshop_code,
-            'id': data[t].id,
-          })
-        }
-
-      }
-    })
-
-    this.request({
-      url: this.endpoint(`payroll/workshop/default/`),
-      method: "get",
-      success: data => {
-        this.workshop = data.id
-        this.$refs.workshopSelect.$props.value = data.id
-        console.log(this.$refs.workshopSelect.$props)
-        console.log(this.$refs.workshopSelect.$props.value)
-        this.request({
-          url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
-          method: "get",
-          success: data => {
-            this.workshopPersonnels = []
-            for (let t in data) {
-              this.workshopPersonnels.push({
-                'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
-                'id': data[t].id,
-              })
-            }
+    if (this.$route.params.id) {
+      this.request({
+        url: this.endpoint(`payroll/workshop/`),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
+              'id': data[t].id,
+            })
           }
-        })
 
-      }
-    })
+        }
+      })
+      this.request({
+        url: this.endpoint(`payroll/absence/` + this.$route.params.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.workshop_id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                  'id': data[t].id,
+                })
+              }
+            }
+          })
+
+        }
+      })
+
+    } else {
+
+      this.request({
+        url: this.endpoint(`payroll/workshop/`),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
+              'id': data[t].id,
+            })
+          }
+
+        }
+      })
+
+      this.request({
+        url: this.endpoint(`payroll/workshop/default/`),
+        method: "get",
+        success: data => {
+          this.workshop = data.id
+          this.$refs.workshopSelect.$props.value = data.id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                  'id': data[t].id,
+                })
+              }
+            }
+          })
+
+        }
+      })
+    }
   },
 
   methods: {
@@ -585,7 +645,8 @@ export default {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }
@@ -596,25 +657,27 @@ export default {
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
         return true;
       } else {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       }
     },
 
     setValues(item) {
       if (item.leave_type == 'e') {
-        this.entitlement = true}
+        this.entitlement = true
+      }
       if (item.leave_type !== 'e') {
         this.entitlement = false
         this.$refs.AbsenceForm.$props.items['entitlement_leave_type'] = undefined
       }
-        this.$refs.AbsenceForm.$props.items['matter73_leave_type'] = undefined
-        this.$refs.AbsenceForm.$props.items['from_date'] = undefined
-        this.$refs.AbsenceForm.$props.items['to_date'] = undefined
-        this.$refs.AbsenceForm.$props.items['date'] = undefined
-        this.$refs.AbsenceForm.$props.items['from_hour'] = undefined
-        this.$refs.AbsenceForm.$props.items['to_hour'] = undefined
-        this.$refs.AbsenceForm.$props.items['explanation'] = undefined
-        this.$refs.AbsenceForm.$props.items['cause_of_incident'] = undefined
+      this.$refs.AbsenceForm.$props.items['matter73_leave_type'] = undefined
+      this.$refs.AbsenceForm.$props.items['from_date'] = undefined
+      this.$refs.AbsenceForm.$props.items['to_date'] = undefined
+      this.$refs.AbsenceForm.$props.items['date'] = undefined
+      this.$refs.AbsenceForm.$props.items['from_hour'] = undefined
+      this.$refs.AbsenceForm.$props.items['to_hour'] = undefined
+      this.$refs.AbsenceForm.$props.items['explanation'] = undefined
+      this.$refs.AbsenceForm.$props.items['cause_of_incident'] = undefined
 
     },
 
@@ -631,7 +694,7 @@ export default {
       this.$router.go()
       this.notify(' ثبت مرخصی یا غیبت رد شد', 'warning')
     },
-    verifyAbsence(item){
+    verifyAbsence(item) {
       this.request({
         url: this.endpoint(`payroll/absence/verify/` + item.id + '/'),
         method: "get",

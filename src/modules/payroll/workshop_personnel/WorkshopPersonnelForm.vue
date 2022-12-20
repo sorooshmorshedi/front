@@ -55,11 +55,10 @@
           </v-col>
 
           <template>
-            <v-row class="mt-3" v-if="!item.id">
-              <v-col cols="12" md="6">
+            <v-row class="mt-3">
+              <v-col cols="12" md="12">
                 <v-autocomplete
-                    :rules="[rules.required,]"
-                    v-if="!this.workshop"
+                    ref="workshopSelect"
                     label="کارگاه"
                     :items="workshops"
                     v-model="item.workshop"
@@ -68,27 +67,13 @@
                     @change="getPersonnel(item.workshop)"
                     :disabled="!isEditing || item.quit_job"
                 />
-                <v-text-field
-                    label="کارگاه"
-                    v-if="this.workshop"
-                    disabled="true"
-                    v-show="false"
-                    v-model="item.workshop = this.workshop"
-                ></v-text-field>
-                <v-text-field
-                    label="کارگاه"
-                    v-if="this.workshop"
-                    disabled="true"
-                    v-model="this.workshop_name "
-                ></v-text-field>
-
               </v-col>
             </v-row>
-            <v-row class="mt-3" v-if="!item.id && item.workshop">
+
+            <v-row class="mt-3" v-if="!item.id && workshop  && !searchByCode && !item.personnel">
               <v-col cols="12" md="4">
                 <v-autocomplete
                     :rules="[rules.required,]"
-                    v-if="!this.personnel"
                     label="نام  و نام خانوادگی"
                     :items="personnels"
                     v-model="item.personnel"
@@ -98,65 +83,80 @@
                     @change="setValues(item.personnel)"
 
                 />
-                <v-text-field
-                    label="نام  و نام خانوادگی"
-                    v-if="this.personnel"
-                    disabled="true"
-                    v-show="false"
-                    v-model="item.personnel = this.personnel"
-
-                ></v-text-field>
-                <v-text-field
-                    v-if="this.searchByCode"
-                    label="نام  و نام خانوادگی"
-                    disabled="true"
-                    v-model="personnelName"
-
-                ></v-text-field>
               </v-col>
-              <v-col v-if="!item.personnel" cols="12" md="3" @click='nationalDisplaySet(item)'>
+
+              <v-col v-if="!item.personnel" cols="12" md="3">
                 <v-text-field v-on:keypress="NumbersOnly" label="* کد ملی / فراگیر" v-model="national_code"
-                              background-color="white"
-                              :disabled="!isEditing || !national_code_dis || personnel"/>
+                              background-color="white" @keydown="personnel_code = null"/>
               </v-col>
-              <v-col cols="12" md="3" v-if="!item.personnel" @click='personnelDisplaySet(item)'>
+
+              <v-col cols="12" md="3" v-if="!item.personnel">
                 <v-text-field v-on:keypress="NumbersOnly" label="* کد پرسنلی " v-model="personnel_code"
-                              background-color="white"
-                              :disabled="!isEditing || !personnel_code_dis || personnel"/>
+                              background-color="white" @keydown="national_code = null"/>
               </v-col>
-              <v-col v-if="item.personnel" cols="12" md="4">
-                <v-text-field v-on:keypress="NumbersOnly" label="* کد ملی" v-model="national_code"
-                              background-color="white"
-                              :disabled="true"/>
-              </v-col>
-              <v-col cols="12" md="4" v-if="item.personnel">
-                <v-text-field v-on:keypress="NumbersOnly" label="* کد پرسنلی " v-model="personnel_code"
-                              background-color="white"
-                              :disabled="true"/>
-              </v-col>
+
               <v-col cols="12" md="2" v-if="!item.personnel">
-                <v-btn v-if="!personnel" fab color="green" class=" white--text" @click="searchUser">
+                <v-btn fab color="green" class=" white--text" @click="searchUser">
                   <v-icon>fa-search</v-icon>
                 </v-btn>
-                <v-btn v-if="!personnel" fab color="red" class="mt-1 mr-1 white--text" @click="setNull">
+                <v-btn fab color="red" class="mt-1 mr-1 white--text" @click="setNull">
                   <v-icon>fa-times</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
+            <v-row v-if="!item.id && item.workshop && searchByCode">
+              <v-col cols="12" md="4">
+                <v-text-field label="نام  و نام خانوادگی" v-model="personnelName"
+                              :disabled="true" background-color="white"/>
+                <v-text-field v-show="false" v-model="item.personnel = personnel"
+                              :disabled="true" background-color="white"/>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field label="کد ملی / فراگیر" v-model="national_code"
+                              :disabled="true" background-color="white"/>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field label="کد پرسنلی" v-model="personnel_code"
+                              :disabled="true" background-color="white"/>
+              </v-col>
+              <v-col cols="12" md="1" >
+                <v-btn fab color="red" class=" mr-5 white--text" @click="searchByCode = null ; item.personnel = null ; national_code = null ; personnel_code = null">
+                  <v-icon>fa-times</v-icon>
+                </v-btn>
+              </v-col>
 
-            <v-row class="mt-16" v-if="item.personnel">
-              <v-col cols="12" md="6">
+            </v-row>
+            <v-row v-if="!item.id && item.workshop && !searchByCode && item.personnel">
+              <v-col cols="12" md="4">
                 <v-autocomplete
-                    v-if="item.id"
-                    label="کارگاه"
-                    :items="workshops"
-                    v-model="item.workshop"
+                    :rules="[rules.required,]"
+                    label="نام  و نام خانوادگی"
+                    :items="personnels"
+                    v-model="item.personnel"
                     item-text="name"
                     item-value="id"
                     :disabled="!isEditing || item.quit_job"
+                    @change="setValues(item.personnel)"
                 />
               </v-col>
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="3">
+                <v-text-field label="کد ملی / فراگیر" v-model="national_code"
+                              :disabled="true" background-color="white"/>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field label="کد پرسنلی" v-model="personnel_code"
+                              :disabled="true" background-color="white"/>
+              </v-col>
+              <v-col cols="12" md="1">
+                <v-btn fab color="red" class=" mr-5 white--text" @click="national_code = null ; personnel_code = null ; item.personnel = null">
+                  <v-icon>fa-times</v-icon>
+                </v-btn>
+              </v-col>
+
+            </v-row>
+
+            <v-row class="" v-if="item.personnel">
+              <v-col cols="12" md="12">
                 <v-autocomplete
                     v-if="item.id"
                     label="نام  و نام خانوادگی"
@@ -172,14 +172,13 @@
               <v-col cols="12" md="6">
                 <v-autocomplete
                     :rules="[rules.required,]"
-                    v-if="!this.personnel"
                     label="عنوان شغلی(بیمه)"
                     :items="work_titles"
                     v-model="item.work_title"
                     item-text="name"
                     item-value="value"
                     :disabled="!isEditing || item.quit_job"
-                    @change="setValues(item.personnel, item.work_title)"
+                    @change="setChange(item.work_title)"
                 />
 
               </v-col>
@@ -287,7 +286,7 @@
               </v-col>
             </v-row>
             <v-row class="mt-5" v-if="item.personnel">
-              <v-col cols="12" md="12" >
+              <v-col cols="12" md="12">
                 <v-banner class="mt-3  red--text" v-if="item.un_editable">
                   <v-avatar
                       slot="icon"
@@ -300,7 +299,7 @@
                       fa-exclamation-triangle
                     </v-icon>
                   </v-avatar>
-                  با توجه به اینکه برای این پرسنل حق سنوات علی الحساب شناسایی شده  دو فیلد زیر غیر قابل ویرایش می باشد
+                  با توجه به اینکه برای این پرسنل حق سنوات علی الحساب شناسایی شده دو فیلد زیر غیر قابل ویرایش می باشد
                 </v-banner>
 
                 <v-banner class="mt-3  red--text" v-if="!item.un_editable">
@@ -315,7 +314,7 @@
                       fa-check
                     </v-icon>
                   </v-avatar>
-                  برای محاسبه حق سنوات در شناسایی (( علی الحساب  ))  پر کردن دو فیلد زیر لازم است
+                  برای محاسبه حق سنوات در شناسایی (( علی الحساب )) پر کردن دو فیلد زیر لازم است
                   <v-switch
                       :disabled="!isEditing || item.quit_job  && item.un_editable"
                       class="float-left"
@@ -328,24 +327,23 @@
                   ></v-switch>
                 </v-banner>
               </v-col>
-              <v-col cols="12" md="6" >
+              <v-col cols="12" md="6">
                 <v-text-field
                     v-on:keypress="NumbersOnly"
                     label=" روز های کارکرد قبل از تعریف "
                     ref="day"
                     v-model="item.sanavat_previuos_days" background-color="white"
-                    :disabled="!isEditing || item.quit_job || !item.sanavat_btn  && item.un_editable"/>
+                    :disabled="!item.sanavat_btn || !isEditing || item.quit_job || item.un_editable"/>
               </v-col>
 
-              <v-col cols="12" md="6" >
+              <v-col cols="12" md="6">
                 <money
                     v-on:keypress="NumbersOnly"
                     label="مبلغ حق سنوات شناسایی شده "
                     ref="amount"
                     v-model="item.sanavat_previous_amount"
                     background-color="white"
-                    :disabled="!isEditing || item.quit_job || !item.sanavat_btn  && item.un_editable"
-                />
+                    :disabled="!item.sanavat_btn || !isEditing || item.quit_job || item.un_editable"/>
               </v-col>
             </v-row>
           </template>
@@ -373,7 +371,7 @@
               </v-card-title>
               <v-card-text>
                 <v-row v-for="item in error_message" class="mt-5 mr-10">
-                  {{item}}
+                  {{ item }}
                 </v-row>
               </v-card-text>
               <v-card-actions>
@@ -514,7 +512,7 @@ export default {
       id: this.$route.params.id,
       personnel: this.$route.query.personnel,
       personnels: [],
-      workshop: this.$route.query.workshop,
+      workshop: null,
       workshops: [],
       PathLevels,
       VisitorLevels,
@@ -525,7 +523,7 @@ export default {
       searchByCode: false,
       personnelName: null,
       workshop_name: null,
-      is_insurance:{},
+      is_insurance: {},
       selected: false,
       cleared: false,
       rules: {
@@ -545,12 +543,11 @@ export default {
 
   computed: {
     headers() {
-      return [
-      ];
+      return [];
     },
   },
   mounted() {
-    for( let i in this.WORK_TITLES){
+    for (let i in this.WORK_TITLES) {
       this.work_titles.push(
           {
             'name': this.WORK_TITLES[i]['نام شغل'] + ' ' + this.WORK_TITLES[i]['كــد شغل'],
@@ -559,46 +556,52 @@ export default {
           }
       )
     }
-    if (this.personnel) {
-      this.searchByCode = true
-      this.setValues(this.personnel)
-    }
-
-    if (this.id) {
-      this.request({
-        url: this.endpoint(`payroll/workshop/personnel/` + this.id + '/'),
-        method: "get",
-        success: data => {
-          console.log(data);
-          this.personnelName = data['personnel_name']
+    this.request({
+      url: this.endpoint(`payroll/workshop/`),
+      method: "get",
+      success: data => {
+        console.log(data);
+        for (let t in data) {
+          this.workshops.push({
+            'name': data[t].name + ' ' + data[t].workshop_code,
+            'id': data[t].id,
+          })
         }
-      })
-    }
-
-    if (!this.workshop) {
+        console.log(this.workshops)
+      }
+    })
+    if(this.$route.params.id){
+      this.personnel = []
       this.request({
-        url: this.endpoint(`payroll/workshop/`),
+        url: this.endpoint(`payroll/personnel/`),
         method: "get",
         success: data => {
-          console.log(data);
+          this.personnels = []
           for (let t in data) {
-            this.workshops.push({
-              'name': data[t].name + ' ' + data[t].workshop_code,
+            this.personnels.push({
+              'name': data[t].name + ' ' + data[t].last_name,
               'id': data[t].id,
+              'national_code': data[t].national_code,
+              'personnel_code': data[t].personnel_code,
             })
+            this.is_insurance[data[t].id] = data[t].insurance
+
           }
-          console.log(this.workshops)
+          console.log(this.is_insurance)
         }
-      })
-    }
-    if (this.workshop) {
+      })} else {
       this.request({
-        url: this.endpoint(`payroll/workshop/` + this.workshop + '/'),
+        url: this.endpoint(`payroll/workshop/default/`),
         method: "get",
         success: data => {
-          this.workshop_name = data.name + ' ' + data.code
+          this.$refs.workshopSelect.$props.value = data.id
+          this.$refs.WorkshopPersonnelForm.$props.items['workshop'] = data.id
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.workshop = this.$refs.workshopSelect.$props.value
+          this.getPersonnel(data.id)
         }
       })
+
     }
   },
 
@@ -653,8 +656,8 @@ export default {
       }
 
     },
-    myAlert(item){
-      if(item.sanavat_btn){
+    myAlert(item) {
+      if (item.sanavat_btn) {
         window.alert('اگر از روش قطعی استفاده می کنید و حق سنوات را تسویه نموده اید، نیازی به تکمل فیلد های زیر نیست')
       } else {
         this.$refs.WorkshopPersonnelForm.$props.items['sanavat_previuos_days'] = undefined
@@ -663,9 +666,11 @@ export default {
       }
 
     },
-    setValues(id, work_title) {
+    setChange(work_title){
       this.$refs.WorkshopPersonnelForm.$props.items['job_position'] = work_title
+    },
 
+    setValues(id) {
       this.request({
         url: this.endpoint(`payroll/personnel/` + id + '/'),
         method: "get",
@@ -688,29 +693,15 @@ export default {
         },
       };
     },
-    personnelDisplaySet(item) {
-      if (!item.id && !this.personnel && !this.selected) {
-        this.national_code_dis = false
-        this.personnel_code_dis = true
-        this.national_code = null
-      }
-    },
     setNull(item) {
-      if (!item.id && !this.personnel && !this.selected) {
-        this.national_code_dis = true
-        this.personnel_code_dis = true
-        this.national_code = null
-        this.personnel_code = null
+      this.searchByCode = false
+      this.national_code_dis = true
+      this.personnel_code_dis = true
+      this.national_code = null
+      this.personnel_code = null
+      this.personnel = null
+      this.personnelName = null
 
-      }
-    },
-    nationalDisplaySet(item) {
-      if (!item.id && !this.personnel && !this.selected) {
-        console.log(this.personnel)
-        this.personnel_code_dis = false
-        this.national_code_dis = true
-        this.personnel_code = null
-      }
     },
     balance(type) {
       window.location.href = "http://127.0.0.1:7000/payroll/balance/html?id=" + this.$route.params.id + '&token=' +
@@ -753,13 +744,13 @@ export default {
       })
 
     },
-    getPersonnel(id){
+    getPersonnel(id) {
       this.personnel = []
       this.request({
         url: this.endpoint(`payroll/personnel/not/workshop/` + id + '/'),
         method: "get",
         success: data => {
-          console.log(data);
+          this.personnels = []
           for (let t in data) {
             this.personnels.push({
               'name': data[t].name + ' ' + data[t].last_name,

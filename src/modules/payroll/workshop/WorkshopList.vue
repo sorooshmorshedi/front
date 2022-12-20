@@ -61,6 +61,12 @@ export default {
           type: 'boolean'
         },
         {
+          text: "پیشفرض",
+          value: "is_default",
+          type: 'boolean'
+        },
+
+        {
           text: "نهایی",
           value: "is_verified",
           type: 'boolean'

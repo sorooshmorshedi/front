@@ -11,6 +11,7 @@
             :show-navigation-btns="false"
             :show-submit-and-clear-btn="false"
             :canDelete="false"
+            :show-clear-btn="false"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
             @submit="submit"
@@ -72,13 +73,13 @@
                   >
                     <td class="text-center">{{ index + 1 }}</td>
                     <td class="text-center">
-                      <money v-model="row.from_amount"></money>
+                      <money v-model="row.from_amount" disabled="true"></money>
                     </td>
                     <td class="text-center">
-                      <money v-model="row.to_amount , from = row.to_amount "></money>
+                      <money disabled="true" v-model="row.to_amount , from = row.to_amount "></money>
                     </td>
                     <td class="text-center">
-                      <money v-if="row.ratio" v-model="row.ratio"></money>
+                      <money v-if="row.ratio" disabled="true" v-model="row.ratio"></money>
                       <v-text-field
                           v-if="!row.ratio"
                           class="currency-input"
@@ -100,6 +101,7 @@
                       <v-btn
                           text
                           color="error"
+                          :disabled="!isEditing"
                           @click="delete_row(row.id)"
                       >
                         حذف
@@ -123,12 +125,13 @@
 
                     </td>
                     <td class="text-center">
-                      <money v-model="to"></money>
+                      <money v-model="to" :disabled="!isEditing"></money>
                     </td>
                     <td class="text-center">
                       <money
                           v-model="ratio"
                           v-if="item.tax_row.slice().reverse()[0]"
+                          :disabled="!isEditing"
                       ></money>
                       <v-text-field
                           v-if="!item.tax_row.slice().reverse()[0]"
@@ -146,6 +149,7 @@
                           v-if="item.tax_row.slice().reverse()[0]"
                           color="green darken-2 white--text"
                           @click="add_row(item.id)"
+                          :disabled="!isEditing"
                       >
                         ایجاد ردیف جدید
                       </v-btn>
@@ -153,6 +157,7 @@
                           v-if="!item.tax_row.slice().reverse()[0]"
                           color="green darken-2 white--text"
                           @click="add_row(item.id) ; goTo(item.id)"
+                          :disabled="!isEditing"
                       >
                         ایجاد ردیف جدید
                       </v-btn>

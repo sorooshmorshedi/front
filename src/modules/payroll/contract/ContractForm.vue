@@ -23,7 +23,7 @@
 
         >
           <template>
-            <v-row v-if="!item.id">
+            <v-row>
               <v-col cols="12" md="12">
                 <v-autocomplete
                     label="  کارگاه"
@@ -43,7 +43,7 @@
               <v-col cols="12" md="6">
                 <v-autocomplete
                     v-if="!item.id"
-                    label=" پرسنل در کارگاه"
+                    label=" پرسنل"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
                     item-text="name"
@@ -53,7 +53,7 @@
                 />
                 <v-autocomplete
                     v-if="item.id"
-                    label=" پرسنل در کارگاه"
+                    label=" پرسنل"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
                     item-text="name"
@@ -61,30 +61,46 @@
                     :disabled="!isEditing"
                     @change="setChange"
                 />
-                <v-text-field
-                    label="پرسنل در کارگاه"
-                    v-if="this.workshopPersonnel"
-                    disabled="true"
-                    v-model="item.workshop_personnel = this.workshopPersonnel"
-
-                ></v-text-field>
               </v-col>
+              <v-col cols="12" md="3">
+                <v-autocomplete
+                    label=" نام پدر"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="father_name"
+                    item-value="id"
+                    :disabled="true"
+                />
+
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-autocomplete
+                    label=" کد ملی"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="national_code"
+                    item-value="id"
+                    :disabled="true"
+                />
+
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col cols="12" md="6">
                 <v-text-field v-on:keypress="NumbersOnly" label="* شماره قرارداد  "
                               v-model="item.code" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="4">
+
+              <v-col cols="12" md="6">
                 <date v-model="item.contract_from_date" label="* تاریخ شروع قرارداد " :default="false"
                       :disabled="!isEditing"/>
               </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <date v-model="item.contract_to_date" label="* تاریخ پایان قرارداد " :default="false"
                       :disabled="!isEditing"/>
               </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <date v-model="item.quit_job_date" label="تاریخ ترک کار " :default="false" :disabled="!isEditing"/>
               </v-col>
 
@@ -110,12 +126,12 @@
 
               <v-col cols="12" md="4" v-if="item.insurance">
                 <v-text-field v-on:keypress="NumbersOnly"
-                              v-if=" !is_insurance[item.workshop_personnel]"
+                              v-if="!is_insurance[item.workshop_personnel]"
                               label=" * شماره بیمه" v-model="item.insurance_number"
                               background-color="white"
                               :disabled="!isEditing"/>
                 <v-text-field v-on:keypress="NumbersOnly"
-                              v-if=" is_insurance[item.workshop_personnel]"
+                              v-if="is_insurance[item.workshop_personnel]"
                               label=" شماره بیمه"
                               v-model="item.insurance_number = personnel_insurance_code[item.workshop_personnel]"
                               background-color="white"
@@ -224,6 +240,7 @@ export default {
       error_message: null,
       is_insurance: {},
       personnel_insurance_code: {},
+      personnel_insurance: [],
       first: false,
       defaultWorkshop: null,
       isDefinable: false,
@@ -304,7 +321,12 @@ export default {
               this.workshopPersonnels.push({
                 'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
                 'id': data[t].id,
+                'national_code': data[t].personnel_identity_code,
+                'father_name': data[t].personnel_father,
               })
+              this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
+              this.is_insurance[data[t].id] = data[t].personnel_insurance
+              this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
             }
           }
         })
@@ -332,7 +354,12 @@ export default {
             this.workshopPersonnels.push({
               'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
               'id': data[t].id,
+              'national_code': data[t].personnel_identity_code,
+              'father_name': data[t].personnel_father,
             })
+            this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
+            this.is_insurance[data[t].id] = data[t].personnel_insurance
+            this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
           }
         }
       })
@@ -385,9 +412,8 @@ export default {
 
     setChange(item) {
       if (this.personnel_insurance_date[item.workshop_personnel]) {
-        console.log('ok')
         this.$refs.ContractForm.$props.items['insurance_add_date'] = this.personnel_insurance_date[item.workshop_personnel]
-        this.$refs.ContractForm.$props.items['insurance_number'] = undefineds
+        this.$refs.ContractForm.$props.items['insurance_number'] = undefined
       } else {
         this.$refs.ContractForm.$props.items['insurance_add_date'] = undefined
         this.$refs.ContractForm.$props.items['insurance_number'] = undefined

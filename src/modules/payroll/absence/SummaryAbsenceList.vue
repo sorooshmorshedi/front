@@ -36,9 +36,17 @@ export default {
           value: "leave_type_display",
         },
         {
-          text: "مدت به روز",
-          value: "time_period",
-          filterable: false,
+          text: " تاریخ",
+          value: "date",
+        },
+
+        {
+          text: " از تاریخ",
+          value: "from_date",
+        },
+        {
+          text: " تا تاریخ",
+          value: "to_date",
         },
         {
           text: "نهایی",

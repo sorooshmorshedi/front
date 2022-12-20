@@ -6,10 +6,12 @@
         :listRoute="{name:'HRLetterList'}"
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
-        :show-actions="!item.is_calculated"
-
+        :show-actions="item.is_calculated"
+        :show-submit-and-clear-btn="false"
+        :show-navigation-btns="false"
         :canDelete="false"
-        :canSubmit="!item.is_calculated"
+        :canSubmit="item.is_calculated"
+        :can-edit="item.is_calculated"
         :isEditing.sync="isEditing"
         @submit="submit"
         @delete="deleteItem"
@@ -75,6 +77,7 @@
                   :rules="[rules.required,]"
                   v-if="item.is_template == 't'"
                   label="نام قالب"
+                  :disabled="!isEditing"
                   v-model="item.name"
               ></v-text-field>
 
@@ -121,6 +124,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -132,6 +136,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -142,6 +147,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -179,6 +185,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -190,6 +197,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -200,6 +208,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -234,6 +243,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -255,6 +265,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -291,6 +302,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -302,6 +314,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -312,6 +325,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -349,6 +363,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -360,6 +375,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -370,6 +386,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -406,6 +423,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -417,6 +435,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -427,6 +446,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -464,6 +484,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -485,6 +506,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -521,6 +543,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -532,6 +555,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -542,6 +566,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -578,6 +603,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -589,6 +615,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -599,6 +626,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -636,6 +664,8 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
+
               ></v-checkbox>
             </v-col>
 
@@ -647,6 +677,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -657,6 +688,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -693,6 +725,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -704,6 +737,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -714,6 +748,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -750,6 +785,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -761,6 +797,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -771,6 +808,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -807,6 +845,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -818,6 +857,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -828,6 +868,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -864,6 +905,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -875,6 +917,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -885,6 +928,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -921,6 +965,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -932,6 +977,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -942,6 +988,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -978,6 +1025,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -989,6 +1037,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -999,6 +1048,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -1035,6 +1085,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1046,6 +1097,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1056,6 +1108,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -1092,6 +1145,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1103,6 +1157,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1113,6 +1168,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -1150,6 +1206,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1160,6 +1217,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1170,6 +1228,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -1205,6 +1264,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1216,6 +1276,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1226,6 +1287,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -1262,6 +1324,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1273,6 +1336,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1283,6 +1347,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -1318,6 +1383,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1329,6 +1395,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1339,6 +1406,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -1375,6 +1443,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1386,6 +1455,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1396,6 +1466,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>
@@ -1430,6 +1501,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1441,10 +1513,12 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2" v-if="item.id && item.is_template == 'p'">
-              <money label="تعداد فرزندان مشمول" class="text-center" v-model="item.get_aele_mandi_sum" disabled="true"></money>
+              <money label="تعداد فرزندان مشمول" class="text-center" v-model="item.get_aele_mandi_sum"
+                     disabled="true"></money>
 
             </v-col>
           </v-row>
@@ -1460,6 +1534,7 @@
                   :disabled="true"
                   item-text="name"
                   item-value="value"
+
               />
             </v-col>
             <v-col cols="12" md="2">
@@ -1470,6 +1545,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1481,6 +1557,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1508,6 +1585,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1519,6 +1597,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1546,6 +1625,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1557,6 +1637,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1584,6 +1665,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1595,6 +1677,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1622,6 +1705,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1633,6 +1717,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1656,6 +1741,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1667,6 +1753,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1690,6 +1777,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -1701,6 +1789,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -1714,7 +1803,7 @@
             </v-toolbar-title>
           </v-toolbar>
 
-            <v-row class="mt-10 ml-3 ">
+          <v-row class="mt-10 ml-3 ">
             <v-col cols="12" md="2">
               <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارفرما</v-card-text>
             </v-col>
@@ -1726,31 +1815,31 @@
                   :disabled="!isEditing"
               />
             </v-col>
-              <v-col cols="12" md="2">
-                <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارگر</v-card-text>
-              </v-col>
-              <v-col cols="12" md="2" class="pt-8">
-                <money
-                    label="نرخ"
-                    v-model="item.worker_insurance_nerkh"
-                    background-color="white"
-                    :disabled="!isEditing"
-                />
-              </v-col>
-              <v-col cols="12" md="2">
-                <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم بیکاری</v-card-text>
-              </v-col>
-              <v-col cols="12" md="2" class="pt-8">
-                <money
-                    label="نرخ"
-                    v-model="item.unemployed_insurance_nerkh"
-                    background-color="white"
-                    :disabled="!isEditing"
-                />
+            <v-col cols="12" md="2">
+              <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارگر</v-card-text>
+            </v-col>
+            <v-col cols="12" md="2" class="pt-8">
+              <money
+                  label="نرخ"
+                  v-model="item.worker_insurance_nerkh"
+                  background-color="white"
+                  :disabled="!isEditing"
+              />
+            </v-col>
+            <v-col cols="12" md="2">
+              <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم بیکاری</v-card-text>
+            </v-col>
+            <v-col cols="12" md="2" class="pt-8">
+              <money
+                  label="نرخ"
+                  v-model="item.unemployed_insurance_nerkh"
+                  background-color="white"
+                  :disabled="!isEditing"
+              />
 
-              </v-col>
+            </v-col>
 
-            </v-row>
+          </v-row>
           <v-row class="ml-3 mt-5">
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">مسکن :</v-card-text>
@@ -1789,6 +1878,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
 
@@ -1861,7 +1951,7 @@
 
           </v-row>
           <v-row class="ma-5">
-            <v-col cols="12" md="12" v-if="item.is_calculated">
+            <v-col cols="12" md="12" v-if="!item.is_calculated">
               <v-banner
                   class="red white--text"
                   elevation="6"
@@ -1876,7 +1966,7 @@
                     large
                 >info
                 </v-icon>
-                به دلیل اینکه با این حکم کارگزینی محاسبات حقوق و دستمزد ثبت شده است  قادر به ویرایش نمی باشید
+                به دلیل اینکه با این حکم کارگزینی محاسبات حقوق و دستمزد ثبت شده است قادر به ویرایش نمی باشید
                 در صورت تمایل به تغییر برای قرارداد خود حکم جدید ثبت کنید
               </v-banner>
             </v-col>
@@ -1945,6 +2035,7 @@ export default {
       hasList: false,
       hasIdProp: true,
       hasLock: false,
+      first: false,
       isDefinable: false,
       myClass: '',
       templates: [],
@@ -1968,6 +2059,17 @@ export default {
     headers() {
     },
   },
+  updated() {
+    if (!this.first && this.$route.params.id) {
+      this.first = true
+      this.isEditing = false
+    }
+    if (this.$route.params.id) {
+      console.log('ok')
+    }
+
+  },
+
   mounted() {
     if (!this.contract) {
       this.request({
@@ -2006,7 +2108,8 @@ export default {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }

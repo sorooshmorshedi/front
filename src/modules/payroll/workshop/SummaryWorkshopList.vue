@@ -35,12 +35,13 @@ export default {
           value: "name",
         },
         {
-          text: "نام کارفرما",
-          value: "employer_name",
-        },
-        {
           text: "فعال",
           value: "is_active",
+          type: 'boolean'
+        },
+        {
+          text: "پیشفرض",
+          value: "is_default",
           type: 'boolean'
         },
         {

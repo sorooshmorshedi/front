@@ -24,7 +24,7 @@
           <template>
             <v-row v-if="item.un_editable">
               <v-col cols="12" md="12">
-                <v-banner  class="mt-3 mb-5 red--text">
+                <v-banner class="mt-3 mb-5 red--text">
                   <v-avatar
                       slot="icon"
                       color="red"
@@ -54,19 +54,30 @@
                     @change="getPersonnel(workshop)"
                 />
               </v-col>
-              <v-col cols="12" md="12" v-if="item.id">
+              <v-col cols="12" md="12" v-if="item.id && !isEditing">
                 <v-text-field
                     label="  کارگاه"
                     v-model="item.workshop"
                     :disabled="true"
                 ></v-text-field>
               </v-col>
+              <v-col cols="12" md="12" v-if="item.id && isEditing">
+                <v-autocomplete
+                    label="  کارگاه"
+                    :items="workshops"
+                    v-model="item.workshop_id"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="getPersonnel(item.workshop_id)"
+                />
+              </v-col>
             </v-row>
 
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    v-if="!this.workshopPersonnel"
+                    v-if="!item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
@@ -74,6 +85,16 @@
                     item-value="id"
                     @change
                     :disabled="!isEditing || !workshop"
+                />
+                <v-autocomplete
+                    v-if="item.id"
+                    label=" پرسنل در کارگاه"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="name"
+                    item-value="id"
+                    @change
+                    :disabled="!isEditing"
                 />
                 <v-text-field
                     label="پرسنل در کارگاه"
@@ -373,47 +394,90 @@ export default {
       this.first = true
       this.isEditing = false
     }
+    if (this.$route.params.id) {
+      console.log('ok')
+    }
+
   },
 
   mounted() {
-    this.request({
-      url: this.endpoint(`payroll/workshop/`),
-      method: "get",
-      success: data => {
-        for (let t in data) {
-          this.workshops.push({
-            'name': data[t].name + ' ' + data[t].workshop_code,
-            'id': data[t].id,
-          })
-        }
-
-      }
-    })
-
-    this.request({
-      url: this.endpoint(`payroll/workshop/default/`),
-      method: "get",
-      success: data => {
-        this.workshop = data.id
-        this.$refs.workshopSelect.$props.value = data.id
-        console.log(this.$refs.workshopSelect.$props)
-        console.log(this.$refs.workshopSelect.$props.value)
-        this.request({
-          url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
-          method: "get",
-          success: data => {
-            this.workshopPersonnels = []
-            for (let t in data) {
-              this.workshopPersonnels.push({
-                'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
-                'id': data[t].id,
-              })
-            }
+    if (this.$route.params.id) {
+      this.request({
+        url: this.endpoint(`payroll/workshop/`),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
+              'id': data[t].id,
+            })
           }
-        })
 
-      }
-    })
+        }
+      })
+      this.request({
+        url: this.endpoint(`payroll/mission/` + this.$route.params.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.workshop_id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                  'id': data[t].id,
+                })
+              }
+            }
+          })
+
+        }
+      })
+
+    } else {
+
+      this.request({
+        url: this.endpoint(`payroll/workshop/`),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
+              'id': data[t].id,
+            })
+          }
+
+        }
+      })
+
+      this.request({
+        url: this.endpoint(`payroll/workshop/default/`),
+        method: "get",
+        success: data => {
+          this.workshop = data.id
+          this.$refs.workshopSelect.$props.value = data.id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                  'id': data[t].id,
+                })
+              }
+            }
+          })
+
+        }
+      })
+    }
   },
 
   methods: {
