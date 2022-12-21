@@ -74,8 +74,6 @@ export default {
           value: "month_hourly_pay_base",
           type: "numeric",
           filterable: false,
-
-
         },
         {
           text: "قابل تغییر",
@@ -83,6 +81,12 @@ export default {
           type: 'boolean',
 
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
       ];
 
     },

@@ -745,6 +745,7 @@ export default {
 
     },
     getPersonnel(id) {
+      this.workshop = id
       this.personnel = []
       this.request({
         url: this.endpoint(`payroll/personnel/not/workshop/` + id + '/'),

@@ -9,7 +9,11 @@
             :listRoute="{name:'LoanList'}"
             :exportBaseUrl="exportUrl"
             :exportParams="ex"
+            :items.sync="item"
             :canDelete="false"
+            :show-navigation-btns="false"
+            :show-submit-and-clear-btn="false"
+            :can-edit="!item.is_verified"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
             @submit="submit"
@@ -20,17 +24,79 @@
           <template>
             <v-row>
             <v-col cols="12" md="6"></v-col>
-              <v-col  cols="12" md="6" v-if="item.id">
+              <v-col  cols="12" md="6" v-if="item.id && item.is_verified">
                 <v-btn left v-if="is_req" class="white--text ma-2 " color="orange" @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
                 <v-btn left v-if="!is_req" class="ma-2 " @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
                 <v-btn left v-if="is_item" class="white--text ma-2 pl-10 pr-10" color="orange" @click="change_export_item(item)">جدول وام</v-btn>
                 <v-btn left v-if="!is_item" class="ma-2 pl-10 pr-10" @click="change_export_item(item)">جدول وام</v-btn>
               </v-col>
             </v-row>
+            <v-row v-if="item.un_editable">
+              <v-col cols="12" md="12">
+                <v-banner class="mt-3 mb-5 red--text">
+                  <v-avatar
+                      slot="icon"
+                      color="red"
+                      size="40"
+                  >
+                    <v-icon
+                        color="white"
+                    >
+                      fa-exclamation-triangle
+                    </v-icon>
+                  </v-avatar>
+                  این وام یا مساعده در محاسبات حقوق استفاده شده و غیر قابل ویرایش می باشد
+                </v-banner>
+              </v-col>
+            </v-row>
+
+
+            <v-row>
+              <v-col cols="12" md="12" v-if="!item.id">
+                <v-autocomplete
+                    label="  کارگاه"
+                    :items="workshops"
+                    v-model="workshop"
+                    ref="workshopSelect"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="getPersonnel(workshop)"
+                />
+              </v-col>
+              <v-col cols="12" md="12" v-if="item.id && !isEditing">
+                <v-text-field
+                    label="  کارگاه"
+                    v-model="item.workshop"
+                    :disabled="true"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="12" v-if="item.id && isEditing">
+                <v-autocomplete
+                    label=" کارگاه"
+                    :items="workshops"
+                    v-model="item.workshop_id"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="getPersonnel(item.workshop_id)"
+                />
+              </v-col>
+            </v-row>
+
             <v-row >
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    v-if="!this.workshopPersonnel"
+                    v-if="!item.id"
+                    label=" پرسنل در کارگاه"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing || !workshop"
+                />
+                <v-autocomplete
+                    v-if="item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
@@ -44,6 +110,7 @@
                     v-if="this.workshopPersonnel"
                     disabled="true"
                     v-model="item.workshop_personnel = this.workshopPersonnel"
+
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="6">
@@ -60,10 +127,10 @@
             </v-row>
             <v-row>
               <v-col cols="12" md="4">
-                <date v-model="item.pay_date" label="* تاریخ" :default="true" :disabled="!isEditing"/>
+                <date v-model="item.pay_date" label="* تاریخ" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
-                <money v-model="item.amount"  label="مبلغ"></money>
+                <money v-model="item.amount" :disabled="!isEditing" label="مبلغ"></money>
               </v-col>
               <v-col cols="12" md="4" v-if="item.loan_type != 'd'">
                 <money v-model="item.episode"  :disabled="!isEditing" label="تعداد اقساط"></money>
@@ -78,35 +145,68 @@
                               :disabled="!isEditing"/>
               </v-col>
             </v-row >
-            <v-row class="mt-10" v-if="item.id">
+            <v-row class="mt-10" v-if="item.id && item.is_verified">
               <v-col cols="12" md="4">
-                <v-text-field label="مبلغ هر قسط" v-model="item.monthly_pay" background-color="white"
-                              disabled="ture"/>
+                <money v-model="item.monthly_pay"
+                       :disabled="!isEditing"
+                       label="مبلغ هر قسط"
+                       background-color="white"
+                       disabled="ture"></money>
+
               </v-col>
               <v-col cols="12" md="4">
                 <date v-model="item.last_dept_date" label="* تاریخ سررسید" :default="true" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="4">
+
                 <v-text-field label="اقساط پرداخت شده" v-model="item.episode_payed" background-color="white"
                               disabled="ture"/>
               </v-col>
 
             </v-row>
           </template>
+          <v-btn
+              class="light-blue white--text mt-6  mr-2 float-left"
+              @click="verifyLoan(item)"
+              v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="UnVerifyLoan(item)"
+              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
         </m-form>
+        <v-row justify="center">
+          <v-dialog
+              v-model="error_dialog"
+              persistent
+              @click:outside="error_dialog=false"
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                لطفا موارد زیر را تکمیل یا اصلاح کنید!
+              </v-card-title>
+              <v-card-text>
+                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                  {{item}}
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
       </v-col>
       <v-col cols="12" md="6">
-        <v-card>
-          <v-card-title>لیست وام یا مساعده ها</v-card-title>
-          <v-card-text>
-            <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
-                         ref="datatable">
-              <template #item.detail="{ item }">
-                <detail-link :to="to(item)" />
-              </template>
-            </m-datatable>
-          </v-card-text>
-        </v-card>
+        <summary-loan-list></summary-loan-list>
       </v-col>
     </v-row>
   </div>
@@ -133,12 +233,14 @@ import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import SummaryAbsenceList from "@/modules/payroll/absence/SummaryAbsenceList";
 import LoanList from "@/modules/payroll/loan/LoanList";
+import SummaryLoanList from "@/modules/payroll/loan/SummeryLoanList";
 
 
 export default {
   name: "LoanForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
+    SummaryLoanList,
     LoanList,
     SummaryAbsenceList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
@@ -168,7 +270,11 @@ export default {
       url: "payroll/loan/all",
       appendSlash: true,
       hasList: false,
+      workshop: null,
+      workshops: [],
       hasIdProp: true,
+      error_dialog: false,
+      error_message: null,
       hasLock: false,
       isDefinable: false,
       myClass: '',
@@ -176,53 +282,97 @@ export default {
       workshopPersonnels: [],
       PathLevels,
       VisitorLevels,
+      first: false,
       paymentDialog: false,
       payment: '',
       performClearForm: true,
     };
   },
   computed: {
-    headers() {
-      return [
-        {
-          text: " پرسنل در کارگاه",
-          value: "workshop_personnel_display",
-          filterable: false,
-        },
-        {
-          text: "تاریخ",
-          value: "pay_date",
-          filterable: false,
-        },
-        {
-          text: "مبلغ کل",
-          value: "amount",
-          filterable: false,
-
-        },
-        {
-          text: "مبلغ هر قسط",
-          value: "monthly_pay",
-          filterable: false,
-        },
-      ];
-    },
 
   },
+  updated() {
+    if (!this.first && this.$route.params.id){
+      this.first = true
+      this.isEditing = false
+    }
+  },
+
   mounted() {
-    if (!this.workshopPersonnel) {
+    if (this.$route.params.id) {
       this.request({
-        url: this.endpoint(`payroll/workshop/personnel/`),
+        url: this.endpoint(`payroll/workshop/`),
         method: "get",
         success: data => {
-          console.log(data);
           for (let t in data) {
-            this.workshopPersonnels.push({
-              'name': data[t].personnel_name + ' در کارگاه ' + data[t].workshop_name,
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
               'id': data[t].id,
             })
           }
-          console.log(this.workshopPersonnels)
+
+        }
+      })
+      this.request({
+        url: this.endpoint(`payroll/loan/` + this.$route.params.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.workshop_id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                  'id': data[t].id,
+                })
+              }
+            }
+          })
+
+        }
+      })
+
+    } else {
+
+      this.request({
+        url: this.endpoint(`payroll/workshop/`),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
+              'id': data[t].id,
+            })
+          }
+
+        }
+      })
+
+      this.request({
+        url: this.endpoint(`payroll/workshop/default/`),
+        method: "get",
+        success: data => {
+          this.workshop = data.id
+          this.$refs.workshopSelect.$props.value = data.id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                  'id': data[t].id,
+                })
+              }
+            }
+          })
+
         }
       })
     }
@@ -248,6 +398,55 @@ export default {
       this.is_item = true
 
     },
+    verifyLoan(item){
+      this.request({
+        url: this.endpoint(`payroll/loan/verify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  وام نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
+
+        }
+      })
+
+    },
+    UnVerifyLoan(item) {
+      this.request({
+        url: this.endpoint(`payroll/loan/unverify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('وام از نهایی خارج شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+    getPersonnel(id) {
+      this.workshopPersonnels = []
+      this.request({
+        url: this.endpoint(`payroll/workshop/workshop_personnel/` + id + '/'),
+        method: "get",
+        success: data => {
+          this.workshopPersonnels = []
+          for (let t in data) {
+            this.workshopPersonnels.push({
+              'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+              'id': data[t].id,
+            })
+          }
+        }
+      })
+
+    },
 
     to(item) {
       return {
@@ -262,6 +461,10 @@ export default {
       this.$router.go()
       this.notify(' ثبت وام رد شد', 'warning')
     },
+    show(item) {
+      console.log(item)
+    },
+
   },
 }
 </script>

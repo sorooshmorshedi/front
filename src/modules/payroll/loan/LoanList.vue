@@ -29,7 +29,6 @@ export default {
         {
           text: " پرسنل در کارگاه",
           value: "workshop_personnel_display",
-          filterable: false,
         },
         {
           text: "تاریخ",
@@ -40,13 +39,16 @@ export default {
           value: "loan_type_display",
         },
         {
-          text: "مبلغ",
+          text: "مبلغ کل",
           value: "amount",
+          type: 'numeric'
+
         },
         {
-          text: "تعداد اقساط",
-          value: "episode",
-          type: 'numeric'
+          text: "مبلغ هر قسط",
+          value: "monthly_pay",
+          type: 'numeric',
+          filterable: false,
         },
 
         {
@@ -64,8 +66,13 @@ export default {
           text: "اقساط پرداخت شده",
           value: "episode_payed",
           filterable: false,
-
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
       ];
     },
   },

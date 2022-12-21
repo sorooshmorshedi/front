@@ -35,8 +35,9 @@ export default {
           value: "start_date",
         },
         {
-          text: "قالب است؟",
+          text: "قالب",
           value: "is_template",
+          type: 'boolean',
         },
         {
           text: "نام",
@@ -49,23 +50,37 @@ export default {
         {
           text: "مبلغ",
           value: "amount",
+          type: 'numeric'
         },
         {
           text: "تعداد اقساط",
           value: "episode",
         },
+        {
+          text: "تاریخ اتمام",
+          value: "last_dept_date",
+          filterable: false,
+        },
 
         {
-          text: "مبلغ هر قسط",
+          text: "مبلغ هر ماه",
           value: "monthly_pay",
+          type: 'numeric',
+          filterable: false,
         },
+        {
+          text: "نهایی",
+          value: "is_verified",
+          type: 'boolean'
+        },
+
       ];
     },
   },
   methods: {
     to(item) {
       return {
-        name: "LoanDetail",
+        name: "DeductionDetail",
         params: {
           id: item.id,
         },

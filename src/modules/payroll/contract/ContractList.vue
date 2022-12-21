@@ -29,7 +29,6 @@ export default {
         {
           text: " پرسنل در کارگاه",
           value: "workshop_personnel_display",
-          filterable : false,
         },
         {
           text: "شماره قرارداد",

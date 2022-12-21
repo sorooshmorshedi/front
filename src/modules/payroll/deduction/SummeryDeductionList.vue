@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>لیست قرارداد ها</v-card-title>
+    <v-card-title>لیست کسورات اختیاری</v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
@@ -15,11 +15,11 @@
 
 <script>
 export default {
-  name: "WorkshopContractSummaryList",
+  name: "SummeryDeductionList",
   props: {},
   data() {
     return {
-      url: "payroll/contract/all",
+      url: "payroll/deduction/all",
       filters: {},
     };
   },
@@ -31,16 +31,19 @@ export default {
           value: "workshop_personnel_display",
         },
         {
-          text: "شماره قرارداد",
-          value: "code",
+          text: "تاریخ",
+          value: "start_date",
         },
         {
-          text: "تاریخ شروع قرارداد",
-          value: "contract_from_date",
+          text: "تاریخ اتمام",
+          value: "last_dept_date",
+          filterable: false,
         },
         {
-          text: "تاریخ پایان قرارداد",
-          value: "contract_to_date",
+          text: "مبلغ هر ماه",
+          value: "monthly_pay",
+          filterable: false,
+          type: 'numeric'
         },
         {
           text: "نهایی",
@@ -48,15 +51,14 @@ export default {
           type: 'boolean'
         },
 
-
       ];
-
     },
+
   },
   methods: {
     to(item) {
       return {
-        name: "WorkshopContractDetail",
+        name: "DeductionDetail",
         params: {
           id: item.id,
         },

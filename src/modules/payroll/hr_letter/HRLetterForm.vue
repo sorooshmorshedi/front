@@ -11,7 +11,7 @@
         :show-navigation-btns="false"
         :canDelete="false"
         :canSubmit="item.is_calculated"
-        :can-edit="item.is_calculated"
+        :can-edit="item.is_calculated && !item.is_verified"
         :isEditing.sync="isEditing"
         @submit="submit"
         @delete="deleteItem"
@@ -273,7 +273,7 @@
 
           <v-row>
             <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">بن خار و بار :</v-card-text>
+              <v-card-text class="text-h6">بن خوار و بار :</v-card-text>
             </v-col>
             <v-col cols="12" md="2">
               <money
@@ -816,7 +816,7 @@
 
           <v-row>
             <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">محرومیت از تسحیلات :</v-card-text>
+              <v-card-text class="text-h6">محرومیت از تسهیلات :</v-card-text>
             </v-col>
             <v-col cols="12" md="2">
               <money
@@ -1951,7 +1951,7 @@
 
           </v-row>
           <v-row class="ma-5">
-            <v-col cols="12" md="12" v-if="!item.is_calculated">
+            <v-col cols="12" md="12" v-if="item.id && !item.is_calculated">
               <v-banner
                   class="red white--text"
                   elevation="6"
@@ -1974,7 +1974,46 @@
           </v-row>
         </v-card>
       </template>
+      <v-btn
+          class="light-blue white--text mt-6  mr-2 float-left"
+          @click="verifyHRL(item)"
+          v-if="item.id && item.is_calculated && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+      <v-btn
+          class="red white--text mt-12 mr-2 ml-2 float-left "
+          @click="UnVerifyHRL(item)"
+          v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+
     </m-form>
+    <v-row justify="center">
+      <v-dialog
+          v-model="error_dialog"
+          persistent
+          @click:outside="error_dialog=false"
+          max-width="400"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            لطفا موارد زیر را تکمیل یا اصلاح کنید!
+          </v-card-title>
+          <v-card-text>
+            <v-row v-for="item in error_message" class="mt-5 mr-10">
+              {{item}}
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="green darken-1"
+                text
+                @click="error_dialog = false"
+            >
+              بستن
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
   </div>
 
 </template>
@@ -2034,6 +2073,8 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
+      error_dialog: false,
+      error_message: null,
       hasLock: false,
       first: false,
       isDefinable: false,
@@ -2131,6 +2172,40 @@ export default {
       this.$router.go()
       this.notify(' ثبت حکم کارگزینی رد شد', 'warning')
     },
+
+    verifyHRL(item){
+      this.request({
+        url: this.endpoint(`payroll/hrletter/verify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  حکم کارگزینی نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
+
+        }
+      })
+
+    },
+    UnVerifyHRL(item) {
+      this.request({
+        url: this.endpoint(`payroll/hrletter/unverify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('حکم کارگزینی از نهایی خارج شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+
   },
 }
 </script>

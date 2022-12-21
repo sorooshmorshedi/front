@@ -9,7 +9,10 @@
             :exportBaseUrl="printUrl"
             :exportParams="{id: item.id}"
             :canDelete="false"
+            :show-submit-and-clear-btn="false"
+            :show-navigation-btns="false"
             :canSubmit="canSubmit"
+            :can-edit="!item.is_verified"
             :isEditing.sync="isEditing"
             @submit="submit"
             @delete="deleteItem"
@@ -23,7 +26,7 @@
             <v-row  v-if="!item.is_template">
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    label="نوع"
+                    label="* نوع"
                     :items="TYPES"
                     v-model="item.is_template"
                     item-text="name"
@@ -39,14 +42,14 @@
                     item-value="id"
                     :disabled="!isEditing"
                     v-model="tem_id"
-                    @change="item = template[tem_id] ; item.is_template = false; item.id = null"
+                    @change="item = template[tem_id] ; item.is_template = false; item.id = null ; item.is_verified = False"
                 />
               </v-col>
 
               <v-col cols="12" md="4">
                 <v-autocomplete
                     v-if="!this.workshopPersonnel"
-                    label=" پرسنل در کارگاه"
+                    label=" * پرسنل در کارگاه"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
                     item-text="name"
@@ -66,8 +69,8 @@
             <v-row v-if="item.is_template" >
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    label="نوع"
-                    :items="DEDUCTION_TYPES"
+                    label="* نوع"
+                    :items="TYPES"
                     v-model="item.is_template"
                     item-text="name"
                     item-value="value"
@@ -77,64 +80,90 @@
               </v-col>
 
               <v-col cols="12" md="6">
-                <v-text-field label="نام قالب" v-model="item.template_name" background-color="white"
+                <v-text-field label="* نام قالب" v-model="item.template_name" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="6">
-                <v-text-field label="نام کسورات" v-model="item.name" background-color="white"
+                <v-text-field label="* نام کسورات" v-model="item.name" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
 
               <v-col cols="12" md="6">
-                <money v-model="item.amount"  label="مبلغ"></money>
+                <money v-model="item.amount" :disabled="!isEditing" label="* مبلغ"></money>
               </v-col>
               <v-col cols="12" md="6" >
-                <money v-model="item.episode"  :disabled="!isEditing" label="تعداد ماه "></money>
+                <money v-model="item.episode"  :disabled="!isEditing" label=" * تعداد ماه "></money>
               </v-col>
               <v-col cols="12" md="6">
-                <date v-model="item.start_date" label="* تاریخ" :default="true" :disabled="!isEditing"/>
+                <date v-model="item.start_date" label="* تاریخ" :default="false" :disabled="!isEditing"/>
               </v-col>
 
             </v-row>
-            <v-row v-if="item.id">
+            <v-row >
               <v-col cols="12" md="12">
                 <v-text-field label="توضیحات" v-model="item.explanation" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
             </v-row>
-            <v-row class="mt-10" v-if="item.id">
+            <v-row class="mt-10" v-if="item.id && item.is_verified">
               <v-col cols="12" md="4">
                 <v-text-field label="مبلغ هر ماه" v-model="item.monthly_pay" background-color="white"
                               disabled="ture"/>
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.last_dept_date" label="*تا تاریخ " :default="true" :disabled="true"/>
+                <date v-model="item.last_dept_date" label="*تا تاریخ " :default="false" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field label="ماه های پرداخت شده" v-model="item.episode_payed" background-color="white"
                               disabled="ture"/>
               </v-col>
-
             </v-row>
-
           </template>
+          <v-btn
+              class="light-blue white--text mt-6  mr-2 float-left"
+              @click="verifyDeduction(item)"
+              v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="UnVerifyDeduction(item)"
+              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+
         </m-form>
+        <v-row justify="center">
+          <v-dialog
+              v-model="error_dialog"
+              persistent
+              @click:outside="error_dialog=false"
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                لطفا موارد زیر را تکمیل یا اصلاح کنید!
+              </v-card-title>
+              <v-card-text>
+                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                  {{item}}
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
       </v-col>
       <v-col cols="12" md="6">
-        <v-card>
-          <v-card-title>لیست وام یا مساعده ها</v-card-title>
-          <v-card-text>
-            <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
-                         ref="datatable">
-              <template #item.detail="{ item }">
-                <detail-link :to="to(item)" />
-              </template>
-
-            </m-datatable>
-          </v-card-text>
-        </v-card>
+        <summery-deduction-list></summery-deduction-list>
       </v-col>
     </v-row>
   </div>
@@ -161,12 +190,14 @@ import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import SummaryAbsenceList from "@/modules/payroll/absence/SummaryAbsenceList";
 import LoanList from "@/modules/payroll/loan/LoanList";
+import SummeryDeductionList from "@/modules/payroll/deduction/SummeryDeductionList";
 
 
 export default {
-  name: "ِثیعزفهخدForm",
+  name: "DeductionForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
+    SummeryDeductionList,
     LoanList,
     SummaryAbsenceList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
@@ -196,6 +227,9 @@ export default {
       hasList: false,
       hasIdProp: true,
       hasLock: false,
+      first: false,
+      error_dialog: false,
+      error_message: null,
       isDefinable: false,
       myClass: '',
       templates: [],
@@ -209,32 +243,13 @@ export default {
       performClearForm: true,
     };
   },
-  computed: {
-    headers() {
-      return [
-        {
-          text: " پرسنل در کارگاه",
-          value: "workshop_personnel_display",
-          filterable: false,
-        },
-        {
-          text: "تاریخ",
-          value: "start_date",
-        },
-        {
-          text: "تاریخ اتمام",
-          value: "last_dept_date",
-          filterable: false,
-        },
-        {
-          text: "مبلغ هر ماه",
-          value: "monthly_pay",
-          filterable: false,
-        },
-      ];
-    },
-
+  updated() {
+    if (!this.first && this.$route.params.id){
+      this.first = true
+      this.isEditing = false
+    }
   },
+
   mounted() {
     this.request({
       url: this.endpoint(`payroll/deduction/template/`),
@@ -284,7 +299,42 @@ export default {
       this.$router.go()
       this.notify(' ثبت کسورات رد شد', 'warning')
     },
+
+    verifyDeduction(item){
+      this.request({
+        url: this.endpoint(`payroll/deduction/verify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  کسورات اختیاری نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.error_message = data.response.data['وضعییت']
+          this.error_dialog = true
+
+        }
+      })
+
+    },
+    UnVerifyDeduction(item) {
+      this.request({
+        url: this.endpoint(`payroll/deduction/unverify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('کسورات اختیاری از نهایی خارج شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+
   },
+
 }
 </script>
 

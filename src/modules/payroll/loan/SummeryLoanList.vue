@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>لیست قرارداد ها</v-card-title>
+    <v-card-title>لیست وام یا مساعده ها</v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
@@ -15,11 +15,11 @@
 
 <script>
 export default {
-  name: "WorkshopContractSummaryList",
+  name: "SummaryLoanList",
   props: {},
   data() {
     return {
-      url: "payroll/contract/all",
+      url: "payroll/loan/all",
       filters: {},
     };
   },
@@ -31,16 +31,21 @@ export default {
           value: "workshop_personnel_display",
         },
         {
-          text: "شماره قرارداد",
-          value: "code",
+          text: "تاریخ",
+          value: "pay_date",
+          type: 'date'
         },
         {
-          text: "تاریخ شروع قرارداد",
-          value: "contract_from_date",
+          text: "مبلغ کل",
+          value: "amount",
+          type: 'numeric'
+
         },
         {
-          text: "تاریخ پایان قرارداد",
-          value: "contract_to_date",
+          text: "مبلغ هر قسط",
+          value: "monthly_pay",
+          type: 'numeric',
+          filterable: false,
         },
         {
           text: "نهایی",
@@ -48,15 +53,13 @@ export default {
           type: 'boolean'
         },
 
-
       ];
-
     },
   },
   methods: {
     to(item) {
       return {
-        name: "WorkshopContractDetail",
+        name: "LoanDetail",
         params: {
           id: item.id,
         },
