@@ -55,17 +55,16 @@ export default {
         {
           text: " از ساعت",
           value: "from_hour",
-          filterable: false,
+          type: 'time',
         },
         {
           text: " تا ساعت",
           value: "to_hour",
-          filterable: false,
+          type: 'time',
         },
         {
           text: "توضیحات",
           value: "explanation",
-          filterable: false,
         },
         {
           text: "نهایی",

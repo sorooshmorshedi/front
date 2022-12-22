@@ -50,6 +50,7 @@ export default {
         {
           text: "وضعیت محل خدمت",
           value: "job_location_status_display",
+          filterable: false
         },
         {
           text: "سابقه بیمه قبلی خارج این کارگاه",
@@ -62,11 +63,13 @@ export default {
 
         {
           text: "سابقه بیمه جاری در کارگاه",
-          value: "current_insurance_history_in_workshop",
+          value: "get_current_insurance",
+          filterable: false
         },
         {
           text: "مجموع سوابق بیمه ای",
-          value: "insurance_history_totality",
+          value: "get_insurance_history_total",
+          filterable: false
         },
         {
           text: "سمت",

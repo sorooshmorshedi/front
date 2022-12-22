@@ -343,29 +343,23 @@
 
               <v-col
                   cols="12"
-                  sm="4"
+                  md="4"
               >
-                <v-text-field
+                <mtime
                     label="* از ساعت"
-                    value="00:00"
                     v-model="item.from_hour"
-                    type="time"
-                    append-icon="fa-clock"
                     :disabled="!isEditing"
-                ></v-text-field>
+                ></mtime>
               </v-col>
               <v-col
                   cols="12"
-                  sm="4"
+                  md="4"
               >
-                <v-text-field
+                <mtime
                     label=" * تا ساعت"
-                    value="00:00"
                     v-model="item.to_hour"
-                    type="time"
-                    append-icon="fa-clock"
                     :disabled="!isEditing"
-                ></v-text-field>
+                ></mtime>
               </v-col>
 
             </v-row>

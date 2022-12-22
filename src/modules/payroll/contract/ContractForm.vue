@@ -319,7 +319,7 @@ export default {
             this.workshopPersonnels = []
             for (let t in data) {
               this.workshopPersonnels.push({
-                'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                'name': data[t].personnel_name,
                 'id': data[t].id,
                 'national_code': data[t].personnel_identity_code,
                 'father_name': data[t].personnel_father,
@@ -352,7 +352,7 @@ export default {
           this.workshopPersonnels = []
           for (let t in data) {
             this.workshopPersonnels.push({
-              'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+              'name': data[t].personnel_name,
               'id': data[t].id,
               'national_code': data[t].personnel_identity_code,
               'father_name': data[t].personnel_father,

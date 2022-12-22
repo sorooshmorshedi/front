@@ -30,7 +30,6 @@ export default {
         {
           text: " نام و کد کارگاه",
           value: "workshop_name",
-          filterable: false,
         },
         {
           text: "ردیف پیمان",
@@ -82,6 +81,7 @@ export default {
           text: "مبلغ فعلی قرارداد",
           value: "get_now_amount",
           type: "numeric",
+          filterable: false
         },
         {
           text: "فعال",

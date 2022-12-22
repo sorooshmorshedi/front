@@ -85,18 +85,15 @@ export default {
         },
         {
           text: "محل تولد",
-          value: "birth_city",
-          filterable: false
+          value: "location_of_birth",
         },
         {
           text: "محل صدور شناسنامه",
-          value: "exportation_city",
-          filterable: false
+          value: "location_of_exportation",
         },
         {
           text: "بخش محل صدور",
-          value: "exportation_sector",
-          filterable: false
+          value: "sector_of_exportation",
         },
         {
           text: "کد تلفن",
@@ -135,6 +132,7 @@ export default {
         {
           text: "مدرک تحصیلی",
           value: "degree_education_display",
+          filterable: false
         },
         {
           text: "رشته تحصیلی",
@@ -143,10 +141,12 @@ export default {
         {
           text: "نوع دانشگاه",
           value: "university_type_display",
+          filterable: false
         },
         {
           text: "نام دانشگاه",
           value: "university_name",
+          filterable: false
         },
         {
           text: "نام بانک",

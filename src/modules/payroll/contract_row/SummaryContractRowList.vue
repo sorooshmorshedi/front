@@ -30,7 +30,6 @@ export default {
         {
           text: "کد و نام کارگاه",
           value: "workshop_name",
-          filterable: false,
         },
         {
           text: "ردیف پیمان",

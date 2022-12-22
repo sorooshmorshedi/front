@@ -47,13 +47,17 @@ export default {
           value: "quit_job_date",
         },
         {
-          text: "بیمه می شود؟",
-          value: "insurance_display",
-          filterable: false,
+          text: "بیمه شده",
+          value: "insurance",
+          type: 'boolean'
         },
         {
           text: "تاریخ اضافه شدن به لیست بیمه",
           value: "insurance_add_date",
+        },
+        {
+          text: "شماره بیمه",
+          value: "insurance_number",
         },
         {
           text: "نهایی",

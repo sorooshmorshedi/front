@@ -48,7 +48,7 @@
                   item-text="name"
                   item-value="info"
                   v-model="item"
-                  @change="item.is_template = 'p' ; item.id = null ; item.name = null"
+                  @change="item.is_template = 'p' ; item.id = null ; item.name = null ; item.is_verified = False"
                   :disabled="!isEditing"
               />
             </v-col>

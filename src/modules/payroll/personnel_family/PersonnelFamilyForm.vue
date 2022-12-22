@@ -416,7 +416,6 @@ export default {
         {
           text: "پرسنل",
           value: "personnel_name",
-          filterable : false,
         },
         {
           text: "نام",

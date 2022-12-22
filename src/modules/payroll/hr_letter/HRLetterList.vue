@@ -29,21 +29,19 @@ export default {
         {
           text: " قالب ",
           value: "is_template_display",
-          filterable: false,
-
-        },
-        {
-          text: " قرارداد",
-          value: "contract",
-        },
-        {
-          text: "طرفین قرارداد",
-          value: "contract_detail",
-          filterable: false,
         },
         {
           text: "نام",
           value: "name",
+        },
+
+        {
+          text: " قرارداد",
+          value: "contract_code",
+        },
+        {
+          text: "طرفین قرارداد",
+          value: "contract_detail",
         },
         {
           text: "مزد مبنای روزانه",
