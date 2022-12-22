@@ -478,7 +478,7 @@
                     <money v-model="list_of_pay_item.aele_mandi" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.info.additions.kharo_bar">
                   <th class="">
                     حق خواروبار
                   </th>
@@ -486,7 +486,7 @@
                     <money v-model=" list_of_pay_item.info.additions.kharo_bar" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.info.additions.hagh_maskan">
                   <th class="">
                     حق مسکن
                   </th>
@@ -494,7 +494,7 @@
                     <money v-model="list_of_pay_item.info.additions.hagh_maskan" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.info.additions.hagh_jazb">
                   <th class="">
                     حق جذب
                   </th>
@@ -502,6 +502,151 @@
                     <money v-model="list_of_pay_item.info.additions.hagh_jazb" disabled="true"></money>
                   </td>
                 </tr>
+                <tr v-if="list_of_pay_item.info.additions.hagh_sarparasti">
+                  <th class="">
+                    حق سرپرستی
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.hagh_sarparasti" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.hagh_modiriat">
+                  <th class="">
+                    حق مدیریت
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.hagh_modiriat" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.fogholade_shoghl">
+                  <th class="">
+                    فوق العاده شفل
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.fogholade_shoghl" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.haghe_tahsilat">
+                  <th class="">
+                    حق تحصیلات
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.haghe_tahsilat" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.fogholade_sakhti_kar">
+                  <th class="">
+                    فوق العاده سختی کار
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.fogholade_sakhti_kar" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.haghe_ankal">
+                  <th class="">
+                    حق آنکال
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.haghe_ankal" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.fogholade_badi_abohava">
+                  <th class="">
+                    فوق العاده بدی آب و هوا
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.fogholade_badi_abohava" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.mahroomiat_tashilat_zendegi">
+                  <th class="">
+                    فوق العاده محرومیت از تسهیلات زندگی
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.mahroomiat_tashilat_zendegi" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.fogholade_mahal_khedmat">
+                  <th class="">
+                    فوق العاده محل خدمت
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.fogholade_mahal_khedmat" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.fogholade_sharayet_mohit_kar">
+                  <th class="">
+                    فوق العاده محیط کار
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.fogholade_sharayet_mohit_kar" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.ayabo_zahab">
+                  <th class="">
+                    ایاب و ذهاب
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.ayabo_zahab" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.ayabo_zahab">
+                  <th class="">
+                    یارانه غذا
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.yarane_ghaza" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.haghe_shir">
+                  <th class="">
+                    حق شیر
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.haghe_shir" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.haghe_taahol">
+                  <th class="">
+                    حق تاهل
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.haghe_taahol" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.komakhazine_mahdekoodak">
+                  <th class="">
+                    کمک هزینه مهدکودک
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.komakhazine_mahdekoodak" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.komakhazine_varzesh">
+                  <th class="">
+                    کمک هزینه ورزش
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.komakhazine_varzesh" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.info.additions.mazaya_mostamar_gheyre_naghdi">
+                  <th class="">
+                    مزایای مستمر غیر نقدی
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.info.additions.mazaya_mostamar_gheyre_naghdi" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.mazaya_gheyr_mostamar">
+                  <th class="">
+                    مزایای غیر مستمر غیر نقدی
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.mazaya_gheyr_mostamar" disabled="true"></money>
+                  </td>
+                </tr>
+
                 <tr>
                   <th class="">
                     سایر اضافات
@@ -542,7 +687,6 @@
                 </thead>
                 <tbody>
                 <tr>
-
                 <th class="" rowspan="5">
                   بیمه
                 </th>
@@ -630,7 +774,6 @@
                   <td>
                     <money v-model="list_of_pay_item.get_employer_tax" disabled="true"></money>
                   </td>
-                </tr>
                 </tr>
                 <tr class="text-center">
                   <th class="text-center" colspan="2">  بیمه بیکاری</th>
