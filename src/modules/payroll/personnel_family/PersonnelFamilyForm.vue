@@ -77,9 +77,21 @@
             />
 
             <v-autocomplete
-                v-if="marital[item.personnel] !== 's'"
+                v-if="marital[item.personnel] !== 's' && marital[item.personnel] !== 'c'"
                 label="* نسبت"
                 :items="RELATIVE_TYPE"
+                v-model="item.relative"
+                item-text="name"
+                item-value="value"
+                :disabled="!isEditing"
+                @click="item.name = null"
+                @change="setNames(item.personnel)"
+                :rules="[rules.required,]"
+            />
+            <v-autocomplete
+                v-if="marital[item.personnel] == 'c'"
+                label="* نسبت"
+                :items="C_RELATIVE_TYPE"
                 v-model="item.relative"
                 item-text="name"
                 item-value="value"
@@ -327,6 +339,11 @@ export default {
         {name: 'مادر', value: 'm'},
         {name: 'فرزند', value: 'c'},
         {name: 'همسر', value: 's'},
+      ],
+      C_RELATIVE_TYPE: [
+        {name: ' پدر', value: 'f'},
+        {name: 'مادر', value: 'm'},
+        {name: 'فرزند', value: 'c'},
       ],
       SINGLE_RELATIVE_TYPE: [
         {name: ' پدر', value: 'f'},

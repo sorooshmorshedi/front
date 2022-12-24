@@ -656,7 +656,7 @@ export default {
           console.log(data);
           for (let t in data) {
             this.workshops.push({
-              'name': data[t].name + ' ' + data[t].code,
+              'name': data[t].name + ' ' + data[t].workshop_code,
               'id': data[t].id,
             })
           }

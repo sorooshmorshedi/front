@@ -54,21 +54,14 @@
               <v-col cols="12" md="4">
                 <v-autocomplete
                     :rules="[rules.required,]"
-                    v-if="!this.workshop"
                     label="کارگاه"
                     :items="workshops"
                     v-model="item.workshop"
+                    ref="workshopSelect"
                     item-text="name"
                     item-value="id"
                     :disabled="!isEditing || item.is_verified"
                 />
-                <v-text-field
-                    label="کارگاه"
-                    v-if="this.workshop"
-                    disabled="true"
-                    v-model="item.workshop = this.workshop"
-
-                ></v-text-field>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersTo3Only" ref="contract_row" label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
@@ -394,7 +387,7 @@ export default {
   },
   mounted() {
 
-    if (!this.workshop) {
+    if (!this.$route.params.id) {
       this.request({
         url: this.endpoint(`payroll/workshop/`),
         method: "get",
@@ -409,6 +402,46 @@ export default {
           }
         }
       })
+      this.request({
+        url: this.endpoint(`payroll/workshop/default/`),
+        method: "get",
+        success: data => {
+          this.workshop = data.id
+          this.$refs.workshopSelect.$props.value = data.id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                  'id': data[t].id,
+                })
+              }
+            }
+          })
+
+        }
+      })
+    } else {
+      this.request({
+        url: this.endpoint(`payroll/workshop/`),
+        method: "get",
+        success: data => {
+          console.log(data);
+          for (let t in data) {
+            this.workshops.push({
+              'name': data[t].name,
+              'code': data[t].code,
+              'id': data[t].id,
+            })
+          }
+        }
+      })
+
     }
   },
 

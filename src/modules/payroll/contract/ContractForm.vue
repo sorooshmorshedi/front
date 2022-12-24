@@ -27,8 +27,8 @@
               <v-col cols="12" md="12">
                 <v-autocomplete
                     label="  کارگاه"
-                    @click="show()"
                     :items="workshops"
+                    v-if="!item.id"
                     v-model="workshop"
                     ref="workshopSelect"
                     item-text="name"
@@ -36,6 +36,18 @@
                     :disabled="!isEditing"
                     @keydown="show"
                     @change="getPersonnel(workshop)"
+                />
+                <v-autocomplete
+                    label="  کارگاه"
+                    :items="workshops"
+                    v-model="item.workshop_id"
+                    ref="workshopSelect"
+                    item-text="name"
+                    v-if="item.id"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @keydown="show"
+                    @change="getPersonnel(item.workshop_id)"
                 />
               </v-col>
             </v-row>
@@ -245,6 +257,7 @@ export default {
       defaultWorkshop: null,
       isDefinable: false,
       workshops: [],
+      dont_have: true,
       workshop: null,
       myClass: '',
       workshopPersonnel: this.$route.query.workshop_personnel,
@@ -290,60 +303,141 @@ export default {
     },
   },
   mounted() {
-    this.request({
-      url: this.endpoint(`payroll/workshop/`),
-      method: "get",
-      success: data => {
-        for (let t in data) {
-          this.workshops.push({
-            'name': data[t].name + ' ' + data[t].workshop_code,
-            'id': data[t].id,
-          })
-        }
-
-      }
-    })
-
-    this.request({
-      url: this.endpoint(`payroll/workshop/default/`),
-      method: "get",
-      success: data => {
-        this.workshop = data.id
-        this.$refs.workshopSelect.$props.value = data.id
-        console.log(this.$refs.workshopSelect.$props)
-        console.log(this.$refs.workshopSelect.$props.value)
-        this.request({
-          url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
-          method: "get",
-          success: data => {
-            this.workshopPersonnels = []
-            for (let t in data) {
-              this.workshopPersonnels.push({
-                'name': data[t].personnel_name,
-                'id': data[t].id,
-                'national_code': data[t].personnel_identity_code,
-                'father_name': data[t].personnel_father,
-              })
-              this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
-              this.is_insurance[data[t].id] = data[t].personnel_insurance
-              this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
-            }
+    if (!this.$route.params.id) {
+      this.request({
+        url: this.endpoint(`payroll/workshop/`),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
+              'id': data[t].id,
+            })
           }
-        })
 
-      }
-    })
+        }
+      })
+
+      this.request({
+        url: this.endpoint(`payroll/workshop/default/`),
+        method: "get",
+        success: data => {
+          this.workshop = data.id
+          this.$refs.workshopSelect.$props.value = data.id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name,
+                  'id': data[t].id,
+                  'national_code': data[t].personnel_identity_code,
+                  'father_name': data[t].personnel_father,
+                })
+                this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
+                this.is_insurance[data[t].id] = data[t].personnel_insurance
+                this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
+              }
+            }
+          })
+
+        }
+      })
+    } else {
+      this.request({
+        url: this.endpoint(`payroll/workshop/`),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
+              'id': data[t].id,
+            })
+          }
+        }
+      })
+      this.request({
+        url: this.endpoint(`payroll/contract/` + this.$route.params.id + '/'),
+        method: "get",
+        success: data => {
+          this.workshop = data.workshop_id
+          this.$refs.workshopSelect.$props.value = data.workshop_id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.workshop_id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name,
+                  'id': data[t].id,
+                  'national_code': data[t].personnel_identity_code,
+                  'father_name': data[t].personnel_father,
+                })
+                this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
+                this.is_insurance[data[t].id] = data[t].personnel_insurance
+                this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
+              }
+              console.log('reload')
+              console.log(this.workshopPersonnels)
+            }
+          })
+
+        }
+      })
+
+    }
   },
   updated() {
     if (!this.first && this.$route.params.id) {
       this.first = true
       this.isEditing = false
     }
+    if(this.dont_have && this.$route.params.id){
+      this.dont_have = false
+      this.request({
+        url: this.endpoint(`payroll/contract/` + this.$route.params.id + '/'),
+        method: "get",
+        success: data => {
+          this.workshop = data.workshop_id
+          this.$refs.workshopSelect.$props.value = data.workshop_id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.workshop_id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name,
+                  'id': data[t].id,
+                  'national_code': data[t].personnel_identity_code,
+                  'father_name': data[t].personnel_father,
+                })
+                this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
+                this.is_insurance[data[t].id] = data[t].personnel_insurance
+                this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
+              }
+              console.log('reload')
+              console.log(this.workshopPersonnels)
+            }
+          })
+
+        }
+      })
+    }
   },
 
 
   methods: {
-    getPersonnel(id){
+    getPersonnel(id) {
       this.workshopPersonnels = []
       this.request({
         url: this.endpoint(`payroll/workshop/workshop_personnel/` + id + '/'),
@@ -427,7 +521,7 @@ export default {
         },
       };
     },
-    show(){
+    show() {
       console.log(this.$refs.workshopSelect.$props.value)
     },
     unConfirm() {

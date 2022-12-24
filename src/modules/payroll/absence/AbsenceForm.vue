@@ -106,9 +106,19 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
+                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c' && marital[item.workshop_personnel] != 's'"
                     label="نوع"
                     :items="ABSENCE_TYPES"
+                    v-model="item.leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                    @change="setValues(item)"
+                />
+                <v-autocomplete
+                    v-if="gender[item.workshop_personnel] == 'f' &&  marital[item.workshop_personnel] == 's'"
+                    label="نوع"
+                    :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
                     item-text="name"
                     item-value="value"
@@ -172,9 +182,19 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
+                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c' && marital[item.workshop_personnel] != 's'"
                     label="نوع"
                     :items="ABSENCE_TYPES"
+                    v-model="item.leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                    @change="setValues(item)"
+                />
+                <v-autocomplete
+                    v-if="gender[item.workshop_personnel] == 'f' &&  marital[item.workshop_personnel] == 's'"
+                    label="نوع"
+                    :items="MALE_ABSENCE_TYPES"
                     v-model="item.leave_type"
                     item-text="name"
                     item-value="value"
@@ -204,7 +224,19 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
-                    v-if="marital[item.workshop_personnel] != 's' &&marital[item.workshop_personnel] != 'c' && item.leave_type == 'm'"
+                    v-if="marital[item.workshop_personnel] != 's' && marital[item.workshop_personnel] != 'c' &&
+                     gender[item.workshop_personnel] == 'f' &&
+                     item.leave_type == 'm'"
+                    label="دلیل مرخصی ماده 73"
+                    :items="F_MATTER_73_LEAVE_TYPES"
+                    v-model="item.matter73_leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+                <v-autocomplete
+                    v-if="marital[item.workshop_personnel] != 's' && marital[item.workshop_personnel] != 'c'&&
+                     gender[item.workshop_personnel] != 'f' && item.leave_type == 'm'"
                     label="دلیل مرخصی ماده 73"
                     :items="MATTER_73_LEAVE_TYPES"
                     v-model="item.matter73_leave_type"
@@ -232,19 +264,21 @@
                 />
               </v-col>
               <v-col cols="12" md="12">
-                <v-banner
-                    class="mt-2 ئ-ذ-2"
-                    outlined
-                    rounded
-                    single-line
-                    sticky
-                >
-                  <v-icon
+                <v-banner class="mt-3 mb-5 orange--text text--darken-3">
+                  <v-avatar
+                      slot="icon"
                       color="orange"
-                      large
-                  >info
-                  </v-icon>
-                  در مرخصی ماده 73 حداکثر مدت زمان سه روز ثبت می شود
+                      size="25"
+                  >
+                    <v-icon
+                        color="white"
+                    >
+                      fa-info
+                    </v-icon>
+                  </v-avatar>
+                  کلیه کارگران در صورت ازدواج دائم، فوت همسر، پدرو مادر و فرزندان می‌توانند از 3 روز مرخصی با حقوق به عنوان
+                  </br>
+                  مرخصی ازدواج یا مرخصی فوت اقوام درجه یک در قانون کار استفاده کنند (ماده ۷۳).
                 </v-banner>
               </v-col>
             </v-row>
@@ -272,13 +306,23 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c'"
+                    v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c' && marital[item.workshop_personnel] != 's'"
                     label="نوع"
                     :items="ABSENCE_TYPES"
                     v-model="item.leave_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing || !item.workshop_personnel"
+                    :disabled="!isEditing"
+                    @change="setValues(item)"
+                />
+                <v-autocomplete
+                    v-if="gender[item.workshop_personnel] == 'f' &&  marital[item.workshop_personnel] == 's'"
+                    label="نوع"
+                    :items="MALE_ABSENCE_TYPES"
+                    v-model="item.leave_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
                     @change="setValues(item)"
                 />
                 <v-autocomplete
@@ -480,6 +524,11 @@ export default {
         {name: 'مرگ فرزند', value: 'd'},
         {name: 'مرگ پدر یا مادر', value: 'p'},
       ],
+      F_MATTER_73_LEAVE_TYPES: [
+        {name: 'مرگ همسر', value: 's'},
+        {name: 'مرگ فرزند', value: 'd'},
+        {name: 'مرگ پدر یا مادر', value: 'p'},
+      ],
       C_MATTER_73_LEAVE_TYPES: [
         {name: 'ازدواج', value: 'm'},
         {name: 'مرگ فرزند', value: 'd'},
@@ -584,6 +633,8 @@ export default {
                   'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
                   'id': data[t].id,
                 })
+                this.marital[data[t].id] = data[t].marital_status
+                this.gender[data[t].id] = data[t].gender
               }
             }
           })
@@ -602,6 +653,7 @@ export default {
               'name': data[t].name + ' ' + data[t].workshop_code,
               'id': data[t].id,
             })
+
           }
 
         }
@@ -625,7 +677,11 @@ export default {
                   'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
                   'id': data[t].id,
                 })
+                this.marital[data[t].id] = data[t].personnel_marital
+                this.gender[data[t].id] = data[t].personnel_gender
               }
+              console.log(this.marital)
+              console.log(this.gender)
             }
           })
 
@@ -662,16 +718,17 @@ export default {
       }
       if (item.leave_type !== 'e') {
         this.entitlement = false
-        this.$refs.AbsenceForm.$props.items['entitlement_leave_type'] = undefined
+        this.$refs.AbsenceForm.$props.items['entitlement_leave_type'] = null
       }
-      this.$refs.AbsenceForm.$props.items['matter73_leave_type'] = undefined
-      this.$refs.AbsenceForm.$props.items['from_date'] = undefined
-      this.$refs.AbsenceForm.$props.items['to_date'] = undefined
-      this.$refs.AbsenceForm.$props.items['date'] = undefined
-      this.$refs.AbsenceForm.$props.items['from_hour'] = undefined
-      this.$refs.AbsenceForm.$props.items['to_hour'] = undefined
-      this.$refs.AbsenceForm.$props.items['explanation'] = undefined
-      this.$refs.AbsenceForm.$props.items['cause_of_incident'] = undefined
+      this.$refs.AbsenceForm.$props.items['matter73_leave_type'] = null
+      this.$refs.AbsenceForm.$props.items['from_date'] = null
+      this.$refs.AbsenceForm.$props.items['explanation'] = ' '
+      this.$refs.AbsenceForm.$props.items['to_date'] = null
+      this.$refs.AbsenceForm.$props.items['date'] = null
+      this.$refs.AbsenceForm.$props.items['from_hour'] = null
+      this.$refs.AbsenceForm.$props.items['to_hour'] = null
+      this.$refs.AbsenceForm.$props.items['explanation'] = ' '
+      this.$refs.AbsenceForm.$props.items['cause_of_incident'] = ' '
 
     },
 
@@ -732,6 +789,9 @@ export default {
               'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
               'id': data[t].id,
             })
+            this.marital[data[t].id] = data[t].marital_status
+            this.gender[data[t].id] = data[t].gender
+
           }
         }
       })
