@@ -348,7 +348,7 @@ export default {
           window.location.reload();
         },
         error: data => {
-          this.error_message = data.response.data['وضعییت']
+          this.error_message = data.response.data['وضعیت']
           this.error_dialog = true
 
         }

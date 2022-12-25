@@ -19,6 +19,8 @@ import HRLetterForm from "@/modules/payroll/hr_letter/HRLetterForm";
 import MissionForm from "@/modules/payroll/mission/MissionForm";
 import MissionList from "@/modules/payroll/mission/MissionList";
 import PaymentForm from "@/modules/payroll/payment/PaymentForm";
+import TemplateForm from "@/modules/payroll/hr_letter/Template";
+import TemplateList from "@/modules/payroll/hr_letter/TemplateList";
 import PaymentList from "@/modules/payroll/payment/PaymentList";
 import ListOfPayItem from "@/modules/payroll/payment/ListOfPayItemList";
 import TaxRowList from "@/modules/payroll/workshop/tax/TaxRowList";
@@ -51,6 +53,7 @@ const Loan = () => import( /* wepackChunkName: "loan" */ "@/modules/payroll/loan
 const Deduction = () => import( /* wepackChunkName: "deduction" */ "@/modules/payroll/deduction/DeductionForm.vue")
 const Pay = () => import( /* wepackChunkName: "pay" */ "@/modules/payroll/pay/PayForm.vue")
 const Adjustment = () => import( /* wepackChunkName: "adjustment" */ "@/modules/payroll/contract_row/AdjustmentForm.vue")
+const Template = () => import( /* wepackChunkName: "template" */ "@/modules/payroll/hr_letter/Template.vue")
 const ListOfPayItemDetail = () => import( /* wepackChunkName: "list_of_pay_item" */ "@/modules/payroll/payment/ListOfPayItemForm.vue")
 
 export default [
@@ -385,5 +388,24 @@ export default [
         path: 'ContractRowAdjustment',
         component: contractRowAdjustment,
     },
+    {
+        name: 'HRTemplate',
+        path: 'hr_template',
+        component: TemplateForm,
+        props: true,
+        children : [
+            {
+                name: 'HRTemplateDetail',
+                path: ':id',
+                component: TemplateForm,
+            },
+        ]
+    },
+    {
+        name: 'TemplateList',
+        path: 'hr_template/list',
+        component: TemplateList,
+    },
+
 
 ]

@@ -1975,6 +1975,19 @@ export default {
                   },
                   title: "لیست حکم های کارگزینی",
                 },
+                {
+                  to: {
+                    name: "HRTemplate",
+                  },
+                  title: "ثبت قالب حکم کارگزینی",
+                },
+                {
+                  to: {
+                    name: "TemplateList",
+                  },
+                  title: "لیست قالب حکم کارگزینی",
+                },
+
               ]
             },
             {

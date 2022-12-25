@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>لیست حکم های کارگزینی</v-card-title>
+    <v-card-title>لیست قالب های حکم کارگزینی</v-card-title>
     <v-card-text>
       <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filters" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
@@ -15,68 +15,52 @@
 
 <script>
 export default {
-  name: "HRLetterList",
+  name: "TemplateList",
   props: {},
   data() {
     return {
       url: "payroll/hrletter/all",
-      filters: {'is_template': 'p'},
+      filters: {'is_template': 't'},
     };
   },
   computed: {
     headers() {
       return [
         {
-          text: " قرارداد",
-          value: "contract_code",
+          text: "نام",
+          value: "name",
         },
-        {
-          text: "طرفین قرارداد",
-          value: "contract_detail",
-        },
-        {
-          text: "حداقل مزد روزانه",
-          value: "hoghooghe_roozane_amount",
-          type: "numeric",
-        },
-        {
-          text: "پایه سنوات روزانه",
-          value: "paye_sanavat_amount",
-          type: "numeric",
-        },
-        {
-          text: "حق مسکن",
-          value: "haghe_maskan_amount",
-          type: "numeric",
-        },
-        {
-          text: "بن خوار و بار",
-          value: "bon_kharo_bar_amount",
-          type: "numeric",
-        },
+
         {
           text: "مزد مبنای روزانه",
           value: "daily_pay_base",
           type: "numeric",
           filterable: false,
+
+
         },
         {
           text: "مزد مبنای ماهانه",
           value: "monthly_pay_base",
           type: "numeric",
           filterable: false,
-        },
-        {
-          text: "قابل تغییر",
-          value: "is_calculated",
-          type: 'boolean',
-        },
-        {
-          text: "فعال",
-          value: "is_active",
-          type: 'boolean'
-        },
 
+
+        },
+        {
+          text: "مزد ساعتی بر مبنای روزانه",
+          value: "day_hourly_pay_base",
+          type: "numeric",
+          filterable: false,
+
+
+        },
+        {
+          text: " مزد ساعتی بر  مبنای ماهانه",
+          value: "month_hourly_pay_base",
+          type: "numeric",
+          filterable: false,
+        },
         {
           text: "نهایی",
           value: "is_verified",
@@ -90,7 +74,7 @@ export default {
   methods: {
     to(item) {
       return {
-        name: "HRLetterDetail",
+        name: "HRTemplateDetail",
         params: {
           id: item.id,
         },

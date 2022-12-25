@@ -494,25 +494,9 @@
           <tr>
             <th
                 class="text-center"
-                colspan="12">
+                colspan="13">
               <h2 class="white--text"
               >پــرسـنـل کــارگــاه </h2>
-            </th>
-            <th class="text-left pa-2">
-
-              <v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  color="green darken-2 "
-                  @click="$router.push('/panel/workshop_personnel?workshop=' + workshop.id)"
-              >
-                <v-icon class="ma-2 pa-2">
-                  fa-plus
-                </v-icon>
-              </v-btn>
-
-
             </th>
           </tr>
           </thead>
@@ -550,18 +534,18 @@
               v-for="item in personnel"
               :key="item.id"
           >
-            <td class="text-center">{{ item.personnel_name }}</td>
-            <td class="text-center">{{ item.personnel_identity_code }}</td>
-            <td class="text-center">{{ item.gender_display }}</td>
-            <td class="text-center">{{ item.marital_display }}</td>
-            <td class="text-center">{{ item.mobile_number }}</td>
-            <td class="text-center">{{ item.work_title }}</td>
-            <td class="text-center">{{ item.job_group_display }}</td>
+            <td class="text-center" @click="goToPersonnel(item.id)" >{{ item.personnel_name }}</td>
+            <td class="text-center" @click="goToPersonnel(item.id)" >{{ item.personnel_identity_code }}</td>
+            <td class="text-center" @click="goToPersonnel(item.id)" >{{ item.gender_display }}</td>
+            <td class="text-center" @click="goToPersonnel(item.id)" >{{ item.marital_display }}</td>
+            <td class="text-center" @click="goToPersonnel(item.id)" >{{ item.mobile_number }}</td>
+            <td class="text-center" @click="goToPersonnel(item.id)">{{ item.work_title }}</td>
+            <td class="text-center" @click="goToPersonnel(item.id)">{{ item.job_group_display }}</td>
             <td class="text-center">
               <v-btn
                   class="ml-2 mr-2 rounded grey--text text--darken-3"
                   color="yellow darken-2 "
-                  @click="$router.push('/panel/absence?workshop_personnel=' + item.id)"
+                  @click="$router.push('/panel/absence')"
               >
                 مرخصی یا غیبت
               </v-btn>
@@ -571,7 +555,7 @@
               <v-btn
                   class="ml-2 mr-2 rounded grey--text text--darken-3"
                   color="yellow darken-2 "
-                  @click="$router.push('/panel/mission?workshop_personnel=' + item.id)"
+                  @click="$router.push('/panel/mission')"
               >
                 ماموریت
               </v-btn>
@@ -580,7 +564,7 @@
               <v-btn
                   class="ml-2 mr-2 rounded grey--text text--darken-3"
                   color="yellow darken-2 "
-                  @click="$router.push('/panel/loan?workshop_personnel=' + item.id)"
+                  @click="$router.push('/panel/loan')"
               >
                 ثبت مساعده یا وام
               </v-btn>
@@ -590,7 +574,7 @@
               <v-btn
                   class="ml-2 mr-2 rounded grey--text text--darken-3"
                   color="yellow darken-2 "
-                  @click="$router.push('/panel/deduction?workshop_personnel=' + item.id)"
+                  @click="$router.push('/panel/deduction')"
               >
                 ثبت کسورات اختیاری
               </v-btn>
@@ -600,7 +584,7 @@
               <v-btn
                   class="ml-2 mr-2 rounded white--text"
                   color="blue darken-2 "
-                  @click="$router.push('/panel/workshop_contract?workshop_personnel=' + item.id)"
+                  @click="$router.push('/panel/workshop_contract')"
               >
                 ثبت قرارداد
               </v-btn>
@@ -610,7 +594,7 @@
               <v-btn
                   class="ml-2 mr-2 rounded white--text"
                   color="blue darken-2 "
-                  @click="$router.push('/panel/personnel_family?personnel=' + item.personnel)"
+                  @click="$router.push('/panel/personnel_family')"
               >
                 ثبت خانواده
               </v-btn>
@@ -628,25 +612,11 @@
           <tr>
             <th
                 class="text-center"
-                colspan="10">
+                colspan="11">
               <h2 class="white--text"
               >ردیـف پـیـمان های کــارگــاه </h2>
             </th>
             <th class="text-left pa-2">
-
-              <v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  color="green darken-2 "
-                  @click="$router.push('/panel/contract_row?workshop=' + workshop.id)"
-              >
-                <v-icon class="ma-2 pa-2">
-                  fa-plus
-                </v-icon>
-              </v-btn>
-
-
             </th>
           </tr>
           </thead>
@@ -687,6 +657,9 @@
             <th class="text-center white--text">
               وضعیت
             </th>
+            <th class="text-center white--text">
+              نهایی
+            </th>
           </tr>
           </thead>
           <tbody
@@ -694,6 +667,7 @@
           <tr
               v-for="item in contractRows"
               :key="item.id"
+              @click="goToContractRow(item.id)"
           >
             <td class="text-center">{{ item.contract_row }}</td>
             <td class="text-center">{{ item.contract_number }}</td>
@@ -704,8 +678,9 @@
             <td class="text-center">{{ item.assignor_name }}</td>
             <td class="text-center">{{ item.assignor_workshop_code }}</td>
             <td class="text-center">{{ item.branch }}</td>
-            <td class="text-center">{{ item.contract_initial_amount }}</td>
-            <td class="text-center">{{ item.status_display }}</td>
+            <td class="text-center">{{ item.round_initial_amount }}</td>
+            <td class="text-center">{{ item.get_status_display }}</td>
+            <td class="text-center">{{ item.get_verify_display }}</td>
           </tr>
           </tbody>
 
@@ -834,7 +809,7 @@ export default {
     })
 
     this.request({
-      url: this.endpoint(`payroll/workshop/worksho_personnel/` + this.workshopId + '/'),
+      url: this.endpoint(`payroll/workshop/workshop_personnel/` + this.workshopId + '/'),
       method: "get",
       success: data => {
         console.log(data);
@@ -928,6 +903,12 @@ export default {
       this.months_string = ''
       this.months = []
 
+    },
+    goToContractRow(id){
+      this.$router.push('/panel/contract_row/' + id + '/')
+    },
+    goToPersonnel(id){
+      this.$router.push('/panel/workshop_personnel/' + id + '/')
     },
 
     reportHagheSanavat() {

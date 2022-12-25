@@ -1,15 +1,14 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div>
     <m-form
-        title="ثبت حکم کارگزینی"
+        title="ثبت قالب حکم کارگزینی"
         :showList="false"
-        :listRoute="{name:'HRLetterList'}"
+        :listRoute="{name:'TemplateList'}"
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
-        :show-actions="item.id || createOne "
+        :show-actions="item.is_calculated"
         :show-submit-and-clear-btn="false"
         :show-navigation-btns="false"
-        :items.sync="item"
         :canDelete="false"
         :canSubmit="item.is_calculated"
         :can-edit="item.is_calculated && !item.is_verified"
@@ -20,212 +19,38 @@
         ref="HRLetterFrom"
     >
       <template>
-        <v-toolbar color="indigo">
-          <v-toolbar-title class="white--text">
-            مشخصات
-          </v-toolbar-title>
-        </v-toolbar>
-        <v-row v-show="false">
-          <v-text-field
-              v-model="item.is_template = 'p'"
-          />
-        </v-row>
+        <v-card class="ma-2 ">
+          <v-toolbar color="indigo">
+            <v-toolbar-title class="white--text">
+              مشخصات
+            </v-toolbar-title>
+          </v-toolbar>
 
-        <v-row class="pt-3 pb-3 pr-3 pl-3">
-          <v-col cols="12" md="6">
-            <v-card class="pa-4">
-              <v-row>
-                <v-col cols="12" md="12">
-                  <v-autocomplete
-                      v-if="!item.id"
-                      label=" کارگاه"
-                      :items="workshops"
-                      item-text="name"
-                      item-value="id"
-                      v-model="workshop"
-                      @change="getPersonnel(workshop)"
-                  />
-                  <v-autocomplete
-                      v-if="item.id"
-                      label=" کارگاه"
-                      :items="workshops"
-                      item-text="name"
-                      item-value="id"
-                      v-model="item.workshop_id"
-                      :disabled="!isEditing"
-                      @change="getPersonnel(item.workshop_id)"
-                  />
 
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="12">
-                  <v-autocomplete
-                      v-if="!item.id"
-                      :rules="[rules.required,]"
-                      label=" پرسنل"
-                      :items="workshopPersonnels"
-                      v-model="personnel"
-                      item-text="name"
-                      item-value="id"
-                      :disabled="!workshop"
-                      @change="getContracts(personnel)"
-                  />
-                  <v-autocomplete
-                      v-if="item.id"
-                      :rules="[rules.required,]"
-                      label=" پرسنل"
-                      :items="workshopPersonnels"
-                      v-model="item.personnel_id"
-                      item-text="name"
-                      item-value="id"
-                      :disabled="!isEditing"
-                      @change="getContracts(item.personnel_id)"
-                  />
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <v-autocomplete
-                      v-if="!item.id && personnel"
-                      :rules="[rules.required,]"
-                      label=" نام پدر"
-                      :items="workshopPersonnels"
-                      v-model="personnel"
-                      item-text="father_name"
-                      item-value="id"
-                      :disabled="true"
-                  />
-                  <v-autocomplete
-                      v-if="item.id"
-                      :rules="[rules.required,]"
-                      label=" نام پدر"
-                      :items="workshopPersonnels"
-                      v-model="item.personnel_id"
-                      item-text="father_name"
-                      item-value="id"
-                      :disabled="true"
-                  />
-                </v-col>
-                <v-col cols="12" md="6">
-                  <v-autocomplete
-                      v-if="!item.id && personnel"
-                      :rules="[rules.required,]"
-                      label=" کد ملی"
-                      :items="workshopPersonnels"
-                      v-model="personnel"
-                      item-text="identity"
-                      item-value="id"
-                      :disabled="true"
-                  />
-                  <v-autocomplete
-                      v-if="item.id"
-                      :rules="[rules.required,]"
-                      label=" کد ملی"
-                      :items="workshopPersonnels"
-                      v-model="item.personnel_id"
-                      item-text="identity"
-                      item-value="id"
-                      :disabled="true"
-                  />
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="12">
-                  <v-autocomplete
-                      v-if="personnel && !item.id"
-                      :rules="[rules.required,]"
-                      label=" قرارداد"
-                      :items="contracts"
-                      v-model="item.contract"
-                      item-text="name"
-                      item-value="id"
-                      @change="saveContract = item.contract  ; filter['contract'] = item.contract"
-                  />
-                  <v-autocomplete
-                      v-if="item.id"
-                      :rules="[rules.required,]"
-                      label=" قرارداد"
-                      :items="contracts"
-                      v-model="item.contract"
-                      item-text="name"
-                      item-value="id"
-                      :disabled="!isEditing"
-                      @change="saveContract = item.contract  ; filter['contract'] = item.contract"
+          <v-row class="pt-10 pb-10 pr-5">
 
-                  />
+            <v-col cols="12" md="4">
+              <v-text-field
+                  v-show="false"
+                  v-model="item.is_template = 't'"
+              ></v-text-field>
 
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <v-autocomplete
-                      v-if="item.contract"
-                      :rules="[rules.required,]"
-                      label=" شروع "
-                      :items="contracts"
-                      v-model="item.contract"
-                      item-text="start"
-                      item-value="id"
-                      :disabled="true"
-                  />
+              <v-text-field
+                  :rules="[rules.required,]"
+                  v-if="item.is_template == 't'"
+                  label="* نام قالب"
+                  :disabled="!isEditing"
+                  v-model="item.name"
+              ></v-text-field>
+            </v-col>
+          </v-row>
 
-                </v-col>
-                <v-col cols="12" md="6">
-                  <v-autocomplete
-                      v-if="item.contract"
-                      :rules="[rules.required,]"
-                      label=" پایان"
-                      :items="contracts"
-                      v-model="item.contract"
-                      item-text="end"
-                      item-value="id"
-                      :disabled="true"
-                  />
 
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md=" 12" class="text-center">
-                  <v-btn large block color="green darken-1"
-                         class="white--text"
-                         v-if="!item.id"
-                         :disabled="!item.contract"
-                         @click="createOne=true"
-                  >
-                    ایجاد حکم کارگزینی جدید
-                  </v-btn>
-                </v-col>
-
-              </v-row>
-              <v-row>
-                <v-col cols="12" md=" 12" class="text-center">
-                  <v-autocomplete
-                      v-if="!item.id && createOne"
-                      label=" کپی از قالب های پیشفرض"
-                      :items="templates"
-                      item-text="name"
-                      item-value="info"
-                      v-model="item"
-                      @change="item.is_template = 'p' ; item.id = null ; item.name = null ; item.is_verified = false ;
-                      item.contract = saveContract"
-                  />
-
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="6">
-            <summary-h-r-letter-list ref="hrlist" :filter="filter" v-if="!item.id" :contract.sync="item.contract" ></summary-h-r-letter-list>
-            <summary-h-r-letter-list ref="hrlist" :filter="{'is_template': 'p' , 'contract': item.contract}"
-                                     v-if="item.id" :contract.sync="item.contract" ></summary-h-r-letter-list>
-          </v-col>
-        </v-row>
-        <v-card v-if="item.id || createOne">
           <v-toolbar color="indigo">
             <v-toolbar-title class="white--text">
               عناوین حکمی
             </v-toolbar-title>
+
           </v-toolbar>
           <v-row class="mt-10">
             <v-col cols="12" md="2" class="text-center">
@@ -286,6 +111,8 @@
               ></v-switch>
             </v-col>
           </v-row>
+
+
           <v-row>
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">پایه سنوات روزانه:</v-card-text>
@@ -2081,46 +1908,40 @@
                   disabled=true
               />
             </v-col>
+
+          </v-row>
+          <v-row class="ma-5">
+            <v-col cols="12" md="12" v-if="item.id && !item.is_calculated">
+              <v-banner
+                  class="red white--text"
+                  elevation="6"
+                  outlined
+                  rounded
+                  single-line
+                  sticky
+              >
+                <v-icon
+                    class="mr-6 ml-10"
+                    color="white"
+                    large
+                >info
+                </v-icon>
+                به دلیل اینکه با این حکم کارگزینی محاسبات حقوق و دستمزد ثبت شده است قادر به ویرایش نمی باشید
+                در صورت تمایل به تغییر برای قرارداد خود حکم جدید ثبت کنید
+              </v-banner>
+            </v-col>
+
           </v-row>
         </v-card>
-        <v-row class="ma-5">
-          <v-col cols="12" md="12" v-if="item.id && !item.is_calculated">
-            <v-banner
-                class="red white--text"
-                elevation="6"
-                outlined
-                rounded
-                single-line
-                sticky
-            >
-              <v-icon
-                  class="mr-6 ml-10"
-                  color="white"
-                  large
-              >info
-              </v-icon>
-              به دلیل اینکه با این حکم کارگزینی محاسبات حقوق و دستمزد ثبت شده است قادر به ویرایش نمی باشید
-              در صورت تمایل به تغییر برای قرارداد خود حکم جدید ثبت کنید
-            </v-banner>
-          </v-col>
-
-        </v-row>
       </template>
       <v-btn
           class="light-blue white--text mt-6  mr-2 float-left"
           @click="verifyHRL(item)"
-          v-if="item.id && item.is_calculated && !item.is_verified && !isEditing">ثبت نهایی
-      </v-btn>
+          v-if="item.id && item.is_calculated && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
       <v-btn
           class="red white--text mt-12 mr-2 ml-2 float-left "
           @click="UnVerifyHRL(item)"
-          v-if="item.id && item.is_verified && item.is_calculated"> خروج از وضعیت نهایی
-      </v-btn>
-      <v-btn
-          class="green darken-1 white--text mt-12 mr-2 float-left "
-          v-if="item.id && item.is_verified  && !item.is_active"
-          @click="ActiveHR(item)"
-      > فعال کردن</v-btn>
+          v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
 
     </m-form>
     <v-row justify="center">
@@ -2136,7 +1957,7 @@
           </v-card-title>
           <v-card-text>
             <v-row v-for="item in error_message" class="mt-5 mr-10">
-              {{ item }}
+              {{item}}
             </v-row>
           </v-card-text>
           <v-card-actions>
@@ -2159,6 +1980,7 @@
 
 <script>
 
+import TenderList from "@/modules/contracting/tender/TenderList";
 import {MFormMixin} from "@/components/m-form";
 import mtime from "@/components/mcomponents/cleave/Time";
 import FormsMixin from "@/mixin/forms";
@@ -2174,17 +1996,12 @@ import date from "@/components/mcomponents/cleave/Date";
 
 import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
-import HRLetterList from "@/modules/payroll/hr_letter/HRLetterList";
-import SummaryHRLetterList from "@/modules/payroll/hr_letter/SummeryHRList";
 
 
 export default {
-  name: "HRLetterForm",
+  name: "HRTemplateForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {
-    SummaryHRLetterList,
-    HRLetterList, mtime, TreeSelect, citySelect, MDatatable, TransactionForm, money
-  },
+  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
   props: {
     id: {},
   },
@@ -2216,14 +2033,11 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
-      saveContract: null,
       error_dialog: false,
       error_message: null,
       hasLock: false,
       first: false,
-      filter: {'is_template': 'p', 'contract': null },
       isDefinable: false,
-      createOne: false,
       myClass: '',
       templates: [],
       sanavat_msg: 'سالانه یا ماهانه',
@@ -2234,10 +2048,6 @@ export default {
       VisitorLevels,
       paymentDialog: false,
       payment: '',
-      workshops: [],
-      workshopPersonnels: [],
-      workshop: null,
-      personnel: null,
       performClearForm: true,
       rules: {
         required: value => !!value || 'Required.',
@@ -2262,6 +2072,22 @@ export default {
   },
 
   mounted() {
+    if (!this.contract) {
+      this.request({
+        url: this.endpoint(`payroll/contract/`),
+        method: "get",
+        success: data => {
+          console.log(data);
+          for (let t in data) {
+            this.contracts.push({
+              'name': data[t].code + ' ' + data[t].personnel_name + ' در ' + data[t].workshop_name,
+              'id': data[t].id,
+            })
+          }
+          console.log(this.contracts)
+        }
+      })
+    }
     this.request({
       url: this.endpoint(`payroll/hrletter/templates/`),
       method: "get",
@@ -2276,89 +2102,6 @@ export default {
         console.log(this.contracts)
       }
     })
-
-    if (!this.$route.params.id) {
-      this.request({
-        url: this.endpoint(`payroll/workshop/`),
-        method: "get",
-        success: data => {
-          for (let t in data) {
-            this.workshops.push({
-              'name': data[t].name + ' ' + data[t].workshop_code,
-              'id': data[t].id,
-            })
-          }
-        }
-      })
-      this.request({
-        url: this.endpoint(`payroll/contract/`),
-        method: "get",
-        success: data => {
-          console.log(data);
-          for (let t in data) {
-            this.contracts.push({
-              'name': data[t].code + ' ' + data[t].personnel_name,
-              'id': data[t].id,
-            })
-          }
-          console.log(this.contracts)
-        }
-      })
-    } else {
-      this.request({
-        url: this.endpoint(`payroll/workshop/`),
-        method: "get",
-        success: data => {
-          for (let t in data) {
-            this.workshops.push({
-              'name': data[t].name + ' ' + data[t].workshop_code,
-              'id': data[t].id,
-            })
-          }
-        }
-      })
-      this.request({
-        url: this.endpoint(`payroll/hrletter/` + this.$route.params.id + '/'),
-        method: "get",
-        success: data => {
-          this.request({
-            url: this.endpoint(`payroll/workshop/personnel/contract/` + data.personnel_id + '/'),
-            method: "get",
-            success: data => {
-              this.contracts = []
-              for (let t in data) {
-                this.contracts.push({
-                  'name': 'قرارداد ' + data[t].code,
-                  'start': data[t].contract_from_date,
-                  'end': data[t].contract_to_date,
-                  'id': data[t].id,
-                })
-              }
-              console.log('this is it')
-              console.log(data[0])
-              this.request({
-                url: this.endpoint(`payroll/workshop/workshop_personnel/` + data[0].workshop_id + '/'),
-                method: "get",
-                success: data => {
-                  this.workshopPersonnels = []
-                  for (let t in data) {
-                    this.workshopPersonnels.push({
-                      'name': data[t].personnel_name,
-                      'father_name': data[t].personnel_father,
-                      'identity': data[t].personnel_identity_code,
-                      'id': data[t].id,
-                    })
-                  }
-                }
-              })
-            }
-          })
-
-
-        }
-      })
-
-    }
   },
 
   methods: {
@@ -2390,7 +2133,7 @@ export default {
       this.notify(' ثبت حکم کارگزینی رد شد', 'warning')
     },
 
-    verifyHRL(item) {
+    verifyHRL(item){
       this.request({
         url: this.endpoint(`payroll/hrletter/verify/` + item.id + '/'),
         method: "get",
@@ -2422,79 +2165,6 @@ export default {
         }
       })
     },
-    getPersonnel(id) {
-      this.workshopPersonnels = []
-      this.request({
-        url: this.endpoint(`payroll/workshop/workshop_personnel/` + id + '/'),
-        method: "get",
-        success: data => {
-          this.workshopPersonnels = []
-          for (let t in data) {
-            this.workshopPersonnels.push({
-              'name': data[t].personnel_name,
-              'father_name': data[t].personnel_father,
-              'identity': data[t].personnel_identity_code,
-              'id': data[t].id,
-            })
-          }
-        }
-      })
-
-    },
-    getContracts(id) {
-      this.contracts = []
-      this.request({
-        url: this.endpoint(`payroll/workshop/personnel/contract/` + id + '/'),
-        method: "get",
-        success: data => {
-          this.contracts = []
-          for (let t in data) {
-            this.contracts.push({
-              'name': 'قرارداد ' + data[t].code,
-              'start': data[t].contract_from_date,
-              'end': data[t].contract_to_date,
-              'id': data[t].id,
-            })
-            console.log('thisisdata')
-            console.log(data)
-          }
-        }
-      })
-
-    },
-    UnActiveHR(item) {
-      this.request({
-        url: this.endpoint(`payroll/hrletter/unactive/` + item.id + '/'),
-        method: "get",
-        success: data => {
-          console.log(data);
-          this.notify('غیر فعال  کردن حکم کارگزینی انجام شد', 'success')
-          this.to(item)
-          window.location.reload();
-        },
-        error: data => {
-          this.notify(data.response.data[0].messages[0], 'warning')
-
-        }
-      })
-    },
-    ActiveHR(item) {
-      this.request({
-        url: this.endpoint(`payroll/hrletter/active/` + item.id + '/'),
-        method: "get",
-        success: data => {
-          console.log(data);
-          this.notify(' فعال  کردن حکم کارگزینی انجام شد', 'success')
-          this.to(item)
-          window.location.reload();
-        },
-        error: data => {
-          this.notify(data.response.data[0].messages[0], 'warning')
-
-        }
-      })
-    },
-
 
   },
 }
