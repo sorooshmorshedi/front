@@ -854,7 +854,6 @@ export default {
               'name': data[t].name,
               'id': data[t].id
             })
-            console.log(this.workshop_list_of_pay)
           }
         }
       })

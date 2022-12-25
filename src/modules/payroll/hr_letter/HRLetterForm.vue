@@ -2117,9 +2117,14 @@
           v-if="item.id && item.is_verified && item.is_calculated"> خروج از وضعیت نهایی
       </v-btn>
       <v-btn
+          class="primary darken-2 white--text mt-12 mr-2 float-left "
+          v-if="item.id && item.is_verified  && item.is_active && item.is_calculated"
+          @click="UnActiveHR(item)"
+      >غیر فعال کردن</v-btn>
+      <v-btn
           class="green darken-1 white--text mt-12 mr-2 float-left "
-          v-if="item.id && item.is_verified  && !item.is_active"
-          @click="ActiveHR(item)"
+          v-if="item.id && item.is_verified  && !item.is_active && item.is_calculated"
+          @click="sure_dialog = true"
       > فعال کردن</v-btn>
 
     </m-form>
@@ -2147,6 +2152,42 @@
                 @click="error_dialog = false"
             >
               بستن
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+    <v-row justify="center">
+      <v-dialog
+          v-model="sure_dialog"
+          persistent
+          @click:outside="error_dialog=false"
+          max-width="430"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            آیا از فعال کردن حکم اطیمنان دارید؟!
+          </v-card-title>
+          <v-card-text>
+            <v-row class="mt-5 mr-4">
+              با فعال کردن این حکم تمامی حکم های دیگر قرارداد غیر فعال میشود
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red darken-1"
+                text
+                @click="sure_dialog = false"
+            >
+              بستن
+            </v-btn>
+            <v-btn
+                color="green darken-1"
+                text
+                @click="ActiveHR(item)"
+            >
+              فعال شود
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -2231,6 +2272,7 @@ export default {
       contract: this.$route.query.contract,
       contracts: [],
       PathLevels,
+      sure_dialog: false,
       VisitorLevels,
       paymentDialog: false,
       payment: '',
