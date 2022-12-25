@@ -216,7 +216,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="6">
-            <summary-h-r-letter-list ref="hrlist" :filter="filter" v-if="!item.id" :contract.sync="item.contract" ></summary-h-r-letter-list>
+            <summary-h-r-letter-list ref="hrlist" :filter="filter" v-if="!item.id && item.contract" :contract.sync="item.contract" ></summary-h-r-letter-list>
             <summary-h-r-letter-list ref="hrlist" :filter="{'is_template': 'p' , 'contract': item.contract}"
                                      v-if="item.id" :contract.sync="item.contract" ></summary-h-r-letter-list>
           </v-col>
