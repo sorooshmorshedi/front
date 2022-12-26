@@ -41,6 +41,7 @@
                       label=" کارگاه"
                       :items="workshops"
                       item-text="name"
+                      ref="workshopSelect"
                       item-value="id"
                       v-model="workshop"
                       @change="getPersonnel(workshop)"
@@ -1247,7 +1248,7 @@
 
           </v-row>
 
-          <v-row>
+          <v-row v-if="gender[item.personnel_id] == 'f' || gender[personnel] == 'f'">
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">حق شیر :</v-card-text>
             </v-col>
@@ -1649,7 +1650,7 @@
                   :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
-            <v-col cols="12" md="2" v-if="item.id && item.is_template == 'p'">
+            <v-col cols="12" md="2" v-if="item.is_verified && item.is_template == 'p'">
               <money label="تعداد فرزندان مشمول" class="text-center" v-model="item.get_aele_mandi_sum"
                      disabled="true"></money>
 
@@ -2014,8 +2015,26 @@
                   :disabled="!isEditing"
               ></v-switch>
             </v-col>
-
           </v-row>
+          <v-row v-if="item.include_made_86" class="ma-2">
+            <v-col cols="12" md="12">
+              <v-banner class="mt-3 mb-5 orange--text text--darken-3">
+                <v-avatar
+                    slot="icon"
+                    color="orange darken-2"
+                    size="40"
+                >
+                  <v-icon
+                      color="white"
+                  >
+                    fa-info
+                  </v-icon>
+                </v-avatar>
+                تبصره 1- در مورد پرداخت هایی که از طرف غیر از پرداخت کننده اصلی حقوق به اشخاص حقیقی، به عمل می­ آید،پرداخت­ کنندگان مکلفند هنگام هر پرداخت، مالیات متعلق را با رعایت معافیت­ های قانونی مربوط به حقوق به جز معافیت موضوع ماده (84) این قانون، به نرخ مقطوع ده درصد (10%) محاسبه،کسر و حداکثر تا پایان ماه بعد با فهرستی حاوی نام و نشانی دریافت­ کنندگان و میزان آن به اداره امور مالیاتی محل، پرداخت کنند و در صورت تخلف، مسوول پرداخت مالیات و جریمه­ های متعلق خواهندبود.
+              </v-banner>
+            </v-col>
+          </v-row>
+
 
           <v-toolbar v-if="item.id" color="indigo" class="mt-10">
 
@@ -2271,6 +2290,7 @@ export default {
       template: null,
       contract: this.$route.query.contract,
       contracts: [],
+      gender: {},
       PathLevels,
       sure_dialog: false,
       VisitorLevels,
@@ -2315,7 +2335,6 @@ export default {
             'info': data[t]
           })
         }
-        console.log(this.contracts)
       }
     })
 
@@ -2330,6 +2349,17 @@ export default {
               'id': data[t].id,
             })
           }
+        }
+      })
+      this.request({
+        url: this.endpoint(`payroll/workshop/default/`),
+        method: "get",
+        success: data => {
+          this.workshop = data.id
+          this.$refs.workshopSelect.$props.value = data.id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.getPersonnel(data.id)
         }
       })
       this.request({
@@ -2376,8 +2406,6 @@ export default {
                   'id': data[t].id,
                 })
               }
-              console.log('this is it')
-              console.log(data[0])
               this.request({
                 url: this.endpoint(`payroll/workshop/workshop_personnel/` + data[0].workshop_id + '/'),
                 method: "get",
@@ -2390,7 +2418,9 @@ export default {
                       'identity': data[t].personnel_identity_code,
                       'id': data[t].id,
                     })
+                    this.gender[data[t].id] = data[t].personnel_gender
                   }
+                  console.log(this.gender)
                 }
               })
             }
@@ -2478,7 +2508,9 @@ export default {
               'identity': data[t].personnel_identity_code,
               'id': data[t].id,
             })
+            this.gender[data[t].id] = data[t].personnel_gender
           }
+          console.log(this.gender)
         }
       })
 
@@ -2497,8 +2529,6 @@ export default {
               'end': data[t].contract_to_date,
               'id': data[t].id,
             })
-            console.log('thisisdata')
-            console.log(data)
           }
         }
       })

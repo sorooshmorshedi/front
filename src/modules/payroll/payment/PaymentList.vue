@@ -47,8 +47,14 @@ export default {
           value: "end_date",
         },
         {
-          text: " نهایی شده؟",
-          value: "ultimate_display",
+          text: "محاسبه در مالیات و بیمه",
+          value: "use_in_calculate",
+          type: 'boolean'
+        },
+        {
+          text: "قطعی",
+          value: "ultimate",
+          type: 'boolean'
         },
       ];
     },

@@ -67,7 +67,7 @@ export default {
           filterable: false,
         },
         {
-          text: "قابل تغییر",
+          text: "قابل ویرایش",
           value: "is_calculated",
           type: 'boolean',
         },

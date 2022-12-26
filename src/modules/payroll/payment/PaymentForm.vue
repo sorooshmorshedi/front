@@ -293,25 +293,19 @@
               ></v-text-field>
             </td>
             <td>
-              <v-text-field
-                  class="currency-input"
+              <hour-picker
                   v-model="items[person.id]['ezafe_kari'] "
-                  prepend-inner-icon="fa-clock"
-              ></v-text-field>
+              ></hour-picker>
             </td>
             <td>
-              <v-text-field
-                  class="currency-input"
+              <hour-picker
                   v-model="items[person.id]['tatil_kari'] "
-                  prepend-inner-icon="fa-clock"
-              ></v-text-field>
+              ></hour-picker>
             </td>
             <td>
-              <v-text-field
-                  class="currency-input"
+              <hour-picker
                   v-model="items[person.id]['kasre_kar'] "
-                  prepend-inner-icon="fa-clock"
-              ></v-text-field>
+              ></hour-picker>
             </td>
 
             <td>
@@ -406,35 +400,29 @@
                 <tr v-for="person in payList" :key="person.id" class="ma-2 pa-2">
                   <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
                   <td>
-                    <v-text-field
-                        class="currency-input"
+                    <hour-picker
                         v-model="items[person.id]['shab_kari'] "
-                        prepend-inner-icon="fa-clock"
-                    ></v-text-field>
+                    ></hour-picker>
                   </td>
-
                   <td>
-                    <v-text-field
-                        class="currency-input"
+                    <hour-picker
                         v-model="items[person.id]['sob_asr'] "
-                    ></v-text-field>
+                    ></hour-picker>
                   </td>
                   <td>
-                    <v-text-field
-                        class="currency-input"
+                    <hour-picker
                         v-model="items[person.id]['sob_shab'] "
-                    ></v-text-field>
-                  <td>
-                    <v-text-field
-                        class="currency-input"
-                        v-model="items[person.id]['asr_shab'] "
-                    ></v-text-field>
+                    ></hour-picker>
                   </td>
                   <td>
-                    <v-text-field
-                        class="currency-input"
+                    <hour-picker
+                        v-model="items[person.id]['asr_shab'] "
+                    ></hour-picker>
+                  </td>
+                  <td>
+                    <hour-picker
                         v-model="items[person.id]['sob_asr_shab'] "
-                    ></v-text-field>
+                    ></hour-picker>
                   </td>
 
                   <td>
@@ -525,7 +513,7 @@ import citySelect from "@/components/selects/CitySelect";
 import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
-import date from "@/components/mcomponents/cleave/Date";
+import HourPicker from "@/components/scomponents//HourPicker";
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
@@ -535,7 +523,7 @@ import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 export default {
   name: "payment",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, HourPicker},
   props: {
     id: {},
   },
@@ -693,15 +681,15 @@ export default {
           for (let item in this.payList) {
             this.items[this.payList[item].id] = {
               'id': this.payList[item].id,
-              'ezafe_kari': 0,
-              'tatil_kari': 0,
-              'kasre_kar': 0,
-              'shab_kari': 0,
-              'jome_kar': 0,
-              'sob_shab': 0,
-              'sob_asr': 0,
-              'asr_shab': 0,
-              'sob_asr_shab': 0,
+              'ezafe_kari': "00:00",
+              'tatil_kari': "00:00",
+              'kasre_kar': "00:00",
+              'shab_kari': "00:00",
+              'jome_kar': "00:00",
+              'sob_shab': "00:00",
+              'sob_asr': "00:00",
+              'asr_shab': "00:00",
+              'sob_asr_shab': "00:00",
               'mazaya_gheyr_mostamar': 0,
               'sayer_ezafat': 0,
               'contract_row': null,
@@ -757,7 +745,6 @@ export default {
             'nobat_kari_sob_asr': this.items[payitem]['sob_asr'],
             'nobat_kari_sob_shab': this.items[payitem]['sob_shab'],
             'nobat_kari_asr_shab': this.items[payitem]['asr_shab'],
-            'jome_kar': this.items[payitem]['jome_kar'],
             'nobat_kari_sob_asr_shab': this.items[payitem]['sob_asr_shab'],
             'sayer_ezafat': this.items[payitem]['sayer_ezafat'],
             'contract_row': this.items[payitem]['contract_row'],

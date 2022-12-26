@@ -446,6 +446,75 @@
                     <money v-model="list_of_pay_item.shab_kari_total" disabled="true"></money>
                   </td>
                 </tr>
+
+                <tr v-if="list_of_pay_item.nobat_kari_sob_shab">
+                  <th class="">
+                    نوبت کاری صبح و شب (ساعت)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.nobat_kari_sob_shab" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.get_nobat_kari_sob_shab_total">
+                  <th class="">
+                    نوبت کاری صبح و شب (مبلغ)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.get_nobat_kari_sob_shab_total" disabled="true"></money>
+                  </td>
+                </tr>
+
+                <tr v-if="list_of_pay_item.nobat_kari_sob_asr">
+                  <th class="">
+                    نوبت کاری صبح و عصر (ساعت)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.nobat_kari_sob_asr" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.get_nobat_kari_sob_asr_total">
+                  <th class="">
+                    نوبت کاری صبح و عصر (مبلغ)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.get_nobat_kari_sob_asr_total" disabled="true"></money>
+                  </td>
+                </tr>
+
+                <tr v-if="list_of_pay_item.nobat_kari_asr_shab">
+                  <th class="">
+                    نوبت کاری عصر و شب (ساعت)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.nobat_kari_asr_shab" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.get_nobat_kari_asr_shab_total">
+                  <th class="">
+                    نوبت کاری عصر و شب (مبلغ)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.get_nobat_kari_asr_shab_total" disabled="true"></money>
+                  </td>
+                </tr>
+
+                <tr v-if="list_of_pay_item.nobat_kari_sob_asr_shab">
+                  <th class="">
+                    نوبت کاری صبح، عصر و شب (ساعت)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.nobat_kari_sob_asr_shab" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.get_nobat_kari_sob_asr_shab_total">
+                  <th class="">
+                    نوبت کاری صبح، عصر و شب (مبلغ)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.get_nobat_kari_sob_asr_shab_total" disabled="true"></money>
+                  </td>
+                </tr>
+
                 <tr>
                   <th class="">
                     ماموریت (روز)
