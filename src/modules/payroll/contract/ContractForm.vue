@@ -87,6 +87,16 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-autocomplete
+                    v-if="personnel_nationality[item.workshop_personnel] == 2"
+                    label=" کد فراگیر تابعیت"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="national_code"
+                    item-value="id"
+                    :disabled="true"
+                />
+                <v-autocomplete
+                    v-if="personnel_nationality[item.workshop_personnel] != 2"
                     label=" کد ملی"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
@@ -251,6 +261,7 @@ export default {
       error_dialog: false,
       error_message: null,
       is_insurance: {},
+      personnel_nationality: {},
       personnel_insurance_code: {},
       personnel_insurance: [],
       first: false,
@@ -341,6 +352,8 @@ export default {
                 this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
                 this.is_insurance[data[t].id] = data[t].personnel_insurance
                 this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
+                this.personnel_nationality[data[t].id] = data[t].personnel_nationality
+                console.log(this.personnel_nationality)
               }
             }
           })
@@ -383,6 +396,8 @@ export default {
                 this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
                 this.is_insurance[data[t].id] = data[t].personnel_insurance
                 this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
+                this.personnel_nationality[data[t].id] = data[t].personnel_nationality
+                console.log(this.personnel_nationality)
               }
               console.log('reload')
               console.log(this.workshopPersonnels)
@@ -424,6 +439,8 @@ export default {
                 this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
                 this.is_insurance[data[t].id] = data[t].personnel_insurance
                 this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
+                this.personnel_nationality[data[t].id] = data[t].personnel_nationality
+                console.log(this.personnel_nationality)
               }
               console.log('reload')
               console.log(this.workshopPersonnels)
@@ -454,6 +471,8 @@ export default {
             this.personnel_insurance_code[data[t].id] = data[t].personnel_insurance_code
             this.is_insurance[data[t].id] = data[t].personnel_insurance
             this.personnel_insurance_date[data[t].id] = data[t].insurance_add_date
+            this.personnel_nationality[data[t].id] = data[t].personnel_nationality
+            console.log(this.personnel_nationality)
           }
         }
       })

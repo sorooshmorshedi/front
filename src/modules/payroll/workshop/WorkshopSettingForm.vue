@@ -2,485 +2,451 @@
 
   <div>
     <v-card>
-      <v-toolbar
-          flat
-          color="indigo"
-          dark
+      <m-form
+          :show-submit-and-clear-btn="false"
+          :show-navigation-btns="false"
+          :show-actions="true"
+          :showList="false"
+          :can-edit="true"
+          :canDelete="false"
+          :canSubmit="true"
+          :showClearBtn="false"
+          :showListBtn="false"
+          :isEditing.sync="isEditing"
+          @submit="submit"
+          @delete="deleteItem"
+          ref="workshopForm"
       >
+        <template>
+          <v-toolbar
+              class="mb-5"
+              flat
+              color="indigo"
+              dark
+          >
+            <v-toolbar-title>
+              تنظیمات کلی حقوق و مزایا
+            </v-toolbar-title>
+          </v-toolbar>
 
-        <v-tabs centered>
-          <v-tab>
-            <v-icon class="pl-3">
-              fa-cogs
-            </v-icon>
-            تنظیمات کلی حقوق و مزایا
-          </v-tab>
-          <v-tab>
-            <v-icon class="pl-3">
-              fa-cogs
-            </v-icon>
-            مبانی محاسباتی حقوق و دستمزد
-          </v-tab>
-          <v-tab-item>
-            <v-card >
-              <v-card-text>
-                <m-form
-                    :title="'تنظیمات  کارگاه ' + item.name"
-                    :show-submit-and-clear-btn="false"
-                    :show-navigation-btns="false"
-                    :show-actions="true"
-                    :showList="false"
-                    :can-edit="true"
-                    :canDelete="false"
-                    :canSubmit="true"
-                    :showClearBtn="false"
-                    :showListBtn="false"
-                    :isEditing.sync="isEditing"
-                    @submit="submit"
-                    @delete="deleteItem"
-                    ref="workshopForm"
-                >
-                  <template>
-                    <v-row class=" mb-6">
-                      <v-col cols="12" md="12">
-                        <v-row>
-                          <v-col cols="12" md="4">
-                            <v-autocomplete
-                                label="نحوه محاسبه سنوات "
-                                :items="SANAVAT_TYPES"
-                                v-model="item.sanavat_type"
-                                item-text="name"
-                                item-value="value"
-                                :disabled="!isEditing"
-                            />
-                          </v-col>
-                          <v-col cols="12" md="4">
-                            <v-autocomplete
-                                label="نحوه محاسبه حق سنوات "
-                                :items="HAGHE_SANAVAT_TYPES"
-                                v-model="item.haghe_sanavat_type"
-                                item-text="name"
-                                item-value="value"
-                                :disabled="!isEditing"
-                            />
-                          </v-col>
+          <v-row class=" mb-6">
+            <v-col cols="12" md="12">
+              <v-row>
+                <v-col cols="12" md="4">
+                  <v-autocomplete
+                      label="نحوه محاسبه سنوات "
+                      :items="SANAVAT_TYPES"
+                      v-model="item.sanavat_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-autocomplete
+                      label="نحوه محاسبه حق سنوات "
+                      :items="HAGHE_SANAVAT_TYPES"
+                      v-model="item.haghe_sanavat_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </v-col>
 
-                          <v-col cols="12" md="4">
-                            <v-autocomplete
-                                label="نحوه محاسبه مزد مبنا"
-                                :items="BASE_PAY_TYPES"
-                                v-model="item.base_pay_type"
-                                item-text="name"
-                                item-value="value"
-                                :disabled="!isEditing"
-                            />
+                <v-col cols="12" md="4">
+                  <v-autocomplete
+                      label="نحوه محاسبه مزد مبنا"
+                      :items="BASE_PAY_TYPES"
+                      v-model="item.base_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
 
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" md="4">
-                            <v-text-field
-                                label="نرخ حق بیمه سهم کارفرما"
-                                class="currency-input"
-                                v-model="item.employee_insurance_nerkh"
-                                :disabled="!isEditing"
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="4">
+                  <v-text-field
+                      label="نرخ حق بیمه سهم کارفرما"
+                      class="currency-input"
+                      v-model="item.employee_insurance_nerkh"
+                      :disabled="!isEditing"
 
-                            ></v-text-field>
+                  ></v-text-field>
 
-                          </v-col>
-                          <v-col cols="12" md="4">
-                            <v-text-field
-                                label="نرخ حق بیمه سهم بیمه شده"
-                                class="currency-input"
-                                v-model="item.worker_insurance_nerkh"
-                                :disabled="!isEditing"
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-text-field
+                      label="نرخ حق بیمه سهم بیمه شده"
+                      class="currency-input"
+                      v-model="item.worker_insurance_nerkh"
+                      :disabled="!isEditing"
 
-                            ></v-text-field>
+                  ></v-text-field>
 
-                          </v-col>
-                          <v-col cols="12" md="4">
-                            <v-text-field
-                                label="نرخ حق بیمه سهم بیکاری"
-                                class="currency-input"
-                                v-model="item.unemployed_insurance_nerkh"
-                                :disabled="!isEditing"
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-text-field
+                      label="نرخ حق بیمه سهم بیکاری"
+                      class="currency-input"
+                      v-model="item.unemployed_insurance_nerkh"
+                      :disabled="!isEditing"
 
-                            ></v-text-field>
+                  ></v-text-field>
 
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="12" md="4">
-                            <v-text-field
-                                label="حداقل حقوق اداره کار"
-                                class="currency-input"
-                                v-model="item.hade_aghal_hoghoogh"
-                                :disabled="!isEditing"
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="4">
+                  <v-text-field
+                      label="حداقل حقوق اداره کار"
+                      class="currency-input"
+                      v-model="item.hade_aghal_hoghoogh"
+                      :disabled="!isEditing"
 
-                            ></v-text-field>
+                  ></v-text-field>
 
-                          </v-col>
-                          <v-col cols="12" md="4">
-                            <v-text-field
-                                label="نرخ تبصره 1 ماده 86 ق.م.م"
-                                class="currency-input"
-                                v-model="item.made_86_nerkh"
-                                :disabled="!isEditing"
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-text-field
+                      label="نرخ تبصره 1 ماده 86 ق.م.م"
+                      class="currency-input"
+                      v-model="item.made_86_nerkh"
+                      :disabled="!isEditing"
 
-                            ></v-text-field>
+                  ></v-text-field>
 
-                          </v-col>
-                          <v-col cols="12" md="4">
-                            <v-autocomplete
-                                label="معافیت مالیاتی حق بیمه سهم بیمه شونده"
-                                :items="TAX_EMPLOYER_TYPES"
-                                v-model="item.tax_employer_type"
-                                item-text="name"
-                                item-value="value"
-                                :disabled="!isEditing"
-                            />
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                    </v-row>
-                    <v-simple-table>
-                      <thead class="mt-3">
-                      <tr>
-                        <th class="text-center">
-                          عنوان
-                        </th>
-                        <th class="text-center">
-                          محاسبه بر مبنای
-                        </th>
-                        <th class="text-center">
-                          نحوه شناسایی
-                        </th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                        <td>عیدی و پاداش</td>
-                        <td>
-                          <v-autocomplete
-                              :items="PAY_TYPES"
-                              v-model="item.eydi_padash_pay_type"
-                              item-text="name"
-                              item-value="value"
-                              :disabled="!isEditing"
-                          />
-                        </td>
-                        <td>
-                          <v-autocomplete
-                              :items="REWARD_TYPES"
-                              v-model="item.eydi_padash_identification"
-                              item-text="name"
-                              item-value="value"
-                              :disabled="!isEditing"
-                          />
-                        </td>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <v-autocomplete
+                      label="معافیت مالیاتی حق بیمه سهم بیمه شونده"
+                      :items="TAX_EMPLOYER_TYPES"
+                      v-model="item.tax_employer_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+          <v-simple-table>
+            <thead class="mt-3">
+            <tr>
+              <th class="text-center">
+                عنوان
+              </th>
+              <th class="text-center">
+                محاسبه بر مبنای
+              </th>
+              <th class="text-center">
+                نحوه شناسایی
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>عیدی و پاداش</td>
+              <td>
+                <v-autocomplete
+                    :items="PAY_TYPES"
+                    v-model="item.eydi_padash_pay_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </td>
+              <td>
+                <v-autocomplete
+                    :items="REWARD_TYPES"
+                    v-model="item.eydi_padash_identification"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </td>
 
-                      </tr>
+            </tr>
 
-                      <tr>
-                        <td>حق سنوات</td>
-                        <td>
-                          <v-autocomplete
-                              :items="PAY_TYPES"
-                              v-model="item.haghe_sanavat_pay_type"
-                              item-text="name"
-                              item-value="value"
-                              :disabled="!isEditing"
-                          />
-                        </td>
-                        <td>
-                          <v-autocomplete
-                              :items="REWARD_TYPES"
-                              v-model="item.haghe_sanavat_identification"
-                              item-text="name"
-                              item-value="value"
-                              :disabled="!isEditing"
-                          />
-                        </td>
+            <tr>
+              <td>حق سنوات</td>
+              <td>
+                <v-autocomplete
+                    :items="PAY_TYPES"
+                    v-model="item.haghe_sanavat_pay_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </td>
+              <td>
+                <v-autocomplete
+                    :items="REWARD_TYPES"
+                    v-model="item.haghe_sanavat_identification"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </td>
 
-                      </tr>
-                      <tr>
-                        <td>ذخیره ایام مرخصی</td>
-                        <td>
-                          <v-autocomplete
-                              :items="LEAVE_PAY_TYPES"
-                              v-model="item.leave_save_pay_type"
-                              item-text="name"
-                              item-value="value"
-                              :disabled="!isEditing"
-                          />
-                        </td>
-                        <td class="pr-10 ">
-                          <v-switch
-                              v-model="item.save_absence_limit"
-                              label="محاسبه تا 9 روز"
-                              color="success"
-                              :false-value="false"
-                              :true-value="true"
-                              :disabled="!isEditing"
-                              hide-details
-                          ></v-switch>
-                          <v-switch
-                              v-model="item.save_absence_transfer_next_year"
-                              label="انتقال به سال بعد"
-                              color="success"
-                              :false-value="false"
-                              :true-value="true"
-                              :disabled="!isEditing"
-                              hide-details
-                          ></v-switch>
+            </tr>
+            <tr>
+              <td>ذخیره ایام مرخصی</td>
+              <td>
+                <v-autocomplete
+                    :items="LEAVE_PAY_TYPES"
+                    v-model="item.leave_save_pay_type"
+                    item-text="name"
+                    item-value="value"
+                    :disabled="!isEditing"
+                />
+              </td>
+              <td class="pr-10 ">
+                <v-switch
+                    v-model="item.save_absence_limit"
+                    label="محاسبه تا 9 روز"
+                    color="success"
+                    :false-value="false"
+                    :true-value="true"
+                    :disabled="!isEditing"
+                    hide-details
+                ></v-switch>
+                <v-switch
+                    v-model="item.save_absence_transfer_next_year"
+                    label="انتقال به سال بعد"
+                    color="success"
+                    :false-value="false"
+                    :true-value="true"
+                    :disabled="!isEditing"
+                    hide-details
+                ></v-switch>
+              </td>
+            </tr>
+            </tbody>
+          </v-simple-table>
+          <v-toolbar
+              class="mt-5 mb-5"
+              flat
+              color="indigo"
+              dark
+          >
+            <v-toolbar-title>
+              مبانی محاسباتی حقوق و دستمزد
+            </v-toolbar-title>
+          </v-toolbar>
 
-                        </td>
-
-                      </tr>
-
-                      </tbody>
-
-                    </v-simple-table>
-                  </template>
-
-                </m-form>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item>
-            <v-card flat>
-              <v-card-text>
-                <v-simple-table class="">
-                  <template v-slot:default>
-                    <thead>
-                    <tr>
-                      <th class="text-center">
-                        عنوان حقوق و مزایا
-                      </th>
-                      <th class="text-center">
-                        محاسبه بر مبنای
-                      </th>
-                      <th class="text-center">
-                        نرخ پبش فرض
-                      </th>
+          <v-simple-table class="">
+            <template v-slot:default>
+              <thead>
+              <tr>
+                <th class="text-center">
+                  عنوان حقوق و مزایا
+                </th>
+                <th class="text-center">
+                  محاسبه بر مبنای
+                </th>
+                <th class="text-center">
+                  نرخ پبش فرض
+                </th>
 
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                      <td>اضافه کاری</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.ezafe_kari_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-text-field
-                            class="currency-input"
-                            v-model="item.ezafe_kari_nerkh"
-                            :disabled="!isEditing"
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>اضافه کاری</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.ezafe_kari_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </td>
+                <td>
+                  <v-text-field
+                      class="currency-input"
+                      v-model="item.ezafe_kari_nerkh"
+                      :disabled="!isEditing"
 
-                        ></v-text-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>تعطیل کاری</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.tatil_kari_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <td>تعطیل کاری</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.tatil_kari_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
 
-                      </td>
-                      <td>
-                        <v-text-field
-                            class="currency-input"
-                            v-model="item.tatil_kari_nerkh"
-                            :disabled="!isEditing"
+                </td>
+                <td>
+                  <v-text-field
+                      class="currency-input"
+                      v-model="item.tatil_kari_nerkh"
+                      :disabled="!isEditing"
 
-                        ></v-text-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>کسر کار</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.kasre_kar_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-text-field
-                            class="currency-input"
-                            v-model="item.kasre_kar_nerkh"
-                            :disabled="!isEditing"
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <td>کسر کار</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.kasre_kar_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </td>
+                <td>
+                  <v-text-field
+                      class="currency-input"
+                      v-model="item.kasre_kar_nerkh"
+                      :disabled="!isEditing"
 
-                        ></v-text-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>شب کاری</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.shab_kari_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-text-field
-                            class="currency-input"
-                            v-model="item.shab_kari_nerkh"
-                            :disabled="!isEditing"
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <td>شب کاری</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.shab_kari_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </td>
+                <td>
+                  <v-text-field
+                      class="currency-input"
+                      v-model="item.shab_kari_nerkh"
+                      :disabled="!isEditing"
 
-                        ></v-text-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>عائله مندی</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.aele_mandi_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-text-field
-                            class="currency-input"
-                            v-model="item.aele_mandi_nerkh"
-                            :disabled="!isEditing"
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <td>عائله مندی</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.aele_mandi_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </td>
+                <td>
+                  <v-text-field
+                      class="currency-input"
+                      v-model="item.aele_mandi_nerkh"
+                      :disabled="!isEditing"
 
-                        ></v-text-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>نوبت کاری صبح و عصر</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.nobat_kari_sob_asr_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-text-field
-                            class="currency-input"
-                            v-model="item.nobat_kari_sob_asr_nerkh"
-                            :disabled="!isEditing"
+                  ></v-text-field>
+                </td>
+              </tr>
+              <tr>
+                <td>نوبت کاری صبح و عصر</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.nobat_kari_sob_asr_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </td>
+                <td>
+                  <v-text-field
+                      class="currency-input"
+                      v-model="item.nobat_kari_sob_asr_nerkh"
+                      :disabled="!isEditing"
 
-                        ></v-text-field>
-                      </td>
+                  ></v-text-field>
+                </td>
 
-                    </tr>
-                    <tr>
-                      <td>نوبت کاری صبح و شب</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.nobat_kari_sob_shab_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-text-field
-                            class="currency-input"
-                            v-model="item.nobat_kari_sob_shab_nerkh"
-                            :disabled="!isEditing"
+              </tr>
+              <tr>
+                <td>نوبت کاری صبح و شب</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.nobat_kari_sob_shab_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </td>
+                <td>
+                  <v-text-field
+                      class="currency-input"
+                      v-model="item.nobat_kari_sob_shab_nerkh"
+                      :disabled="!isEditing"
 
-                        ></v-text-field>
-                      </td>
+                  ></v-text-field>
+                </td>
 
-                    </tr>
-                    <tr>
-                      <td>نوبت کاری عصر و شب</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.nobat_kari_asr_shab_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-text-field
-                            class="currency-input"
-                            v-model="item.nobat_kari_asr_shab_nerkh"
-                            :disabled="!isEditing"
+              </tr>
+              <tr>
+                <td>نوبت کاری عصر و شب</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.nobat_kari_asr_shab_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </td>
+                <td>
+                  <v-text-field
+                      class="currency-input"
+                      v-model="item.nobat_kari_asr_shab_nerkh"
+                      :disabled="!isEditing"
 
-                        ></v-text-field>
-                      </td>
+                  ></v-text-field>
+                </td>
 
-                    </tr>
-                    <tr>
-                      <td>نوبت کاری صبح و عصر و شب</td>
-                      <td>
-                        <v-autocomplete
-                            :items="PAY_TYPES"
-                            v-model="item.nobat_kari_sob_asr_shab_pay_type"
-                            item-text="name"
-                            item-value="value"
-                            :disabled="!isEditing"
-                        />
-                      </td>
-                      <td>
-                        <v-text-field
-                            class="currency-input"
-                            v-model="item.nobat_kari_sob_asr_shab_nerkh"
-                            :disabled="!isEditing"
+              </tr>
+              <tr>
+                <td>نوبت کاری صبح و عصر و شب</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.nobat_kari_sob_asr_shab_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </td>
+                <td>
+                  <v-text-field
+                      class="currency-input"
+                      v-model="item.nobat_kari_sob_asr_shab_nerkh"
+                      :disabled="!isEditing"
 
-                        ></v-text-field>
-                      </td>
-                    </tr>
-                    </tbody>
+                  ></v-text-field>
+                </td>
+              </tr>
+              </tbody>
 
-                  </template>
-                </v-simple-table>
-              </v-card-text>
-              <v-card-actions class="d-flex justify-center justify-md-end mt-2"
-              >
-                <v-btn
-                    left
-                    v-if="!isEditing"
+            </template>
+          </v-simple-table>
 
-                    @click="isEditing=true"
-                    class="submit amber w-100px mt-1 mt-md-0"
-                >ویرایش
-                </v-btn
-                >
-                <v-btn
-                    @click="submit(false)"
-                    v-if="isEditing"
-                    class="w-100px ml-1 green white--text mt-1 mt-md-0"
-                >ثبت
-                </v-btn
-                >
+        </template>
 
-              </v-card-actions>
-            </v-card>
-          </v-tab-item>
-        </v-tabs>
-      </v-toolbar>
+      </m-form>
+
     </v-card>
   </div>
 

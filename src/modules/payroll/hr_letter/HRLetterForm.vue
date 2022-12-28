@@ -81,7 +81,7 @@
                       item-text="name"
                       item-value="id"
                       :disabled="!isEditing"
-                      @change="getContracts(item.personnel_id)"
+                      @change="getContracts(item.personnel_id) ; item.personnel_nationality = null"
                   />
                 </v-col>
               </v-row>
@@ -110,7 +110,17 @@
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-autocomplete
-                      v-if="!item.id && personnel"
+                      v-if="!item.id && personnel && personnel_nationality[personnel] == 2"
+                      :rules="[rules.required,]"
+                      label=" کد فراگیر تابعیت"
+                      :items="workshopPersonnels"
+                      v-model="personnel"
+                      item-text="identity"
+                      item-value="id"
+                      :disabled="true"
+                  />
+                  <v-autocomplete
+                      v-if="!item.id && personnel && personnel_nationality[personnel] != 2"
                       :rules="[rules.required,]"
                       label=" کد ملی"
                       :items="workshopPersonnels"
@@ -120,7 +130,17 @@
                       :disabled="true"
                   />
                   <v-autocomplete
-                      v-if="item.id"
+                      v-if="item.id  && item.personnel_nationality == 2"
+                      :rules="[rules.required,]"
+                      label=" کد فراگیر تابعیت"
+                      :items="workshopPersonnels"
+                      v-model="item.personnel_id"
+                      item-text="identity"
+                      item-value="id"
+                      :disabled="true"
+                  />
+                  <v-autocomplete
+                      v-if="item.id && item.personnel_nationality != 2"
                       :rules="[rules.required,]"
                       label=" کد ملی"
                       :items="workshopPersonnels"
@@ -141,7 +161,7 @@
                       v-model="item.contract"
                       item-text="name"
                       item-value="id"
-                      @change="saveContract = item.contract  ; filter['contract'] = item.contract"
+                      @change="saveContract = item.contract  ; filter['contract'] = item.contract ; listShow = true"
                   />
                   <v-autocomplete
                       v-if="item.id"
@@ -152,7 +172,7 @@
                       item-text="name"
                       item-value="id"
                       :disabled="!isEditing"
-                      @change="saveContract = item.contract  ; filter['contract'] = item.contract"
+                      @change="saveContract = item.contract  ; filter['contract'] = item.contract ; listShow = true"
 
                   />
 
@@ -192,7 +212,7 @@
                          class="white--text"
                          v-if="!item.id"
                          :disabled="!item.contract"
-                         @click="createOne=true"
+                         @click="IscreateOne"
                   >
                     ایجاد حکم کارگزینی جدید
                   </v-btn>
@@ -217,12 +237,12 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="6">
-            <summary-h-r-letter-list ref="hrlist" :filter="filter" v-if="!item.id && item.contract" :contract.sync="item.contract" ></summary-h-r-letter-list>
+            <summary-h-r-letter-list ref="hrlist" :filter="filter" v-if="!item.id && item.contract && listShow" :contract.sync="item.contract" ></summary-h-r-letter-list>
             <summary-h-r-letter-list ref="hrlist" :filter="{'is_template': 'p' , 'contract': item.contract}"
                                      v-if="item.id" :contract.sync="item.contract" ></summary-h-r-letter-list>
           </v-col>
         </v-row>
-        <v-card v-if="item.id || createOne">
+        <v-card v-show="item.id || createOne">
           <v-toolbar color="indigo">
             <v-toolbar-title class="white--text">
               عناوین حکمی
@@ -278,7 +298,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.hoghooghe_roozane_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -337,7 +357,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.paye_sanavat_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -386,6 +406,7 @@
                   v-model="item.haghe_maskan_use_tax"
                   label=" معاف از مالیات"
                   color="indigo"
+                  :disabled="!isEditing"
                   :false-value="true"
                   :true-value="false"
                   hide-details
@@ -394,7 +415,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.haghe_maskan_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -454,7 +475,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.bon_kharo_bar_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -515,7 +536,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.haghe_sarparasti_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -575,7 +596,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.haghe_modiriyat_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -629,13 +650,14 @@
                   color="indigo"
                   :false-value="true"
                   :true-value="false"
+                  :disabled="!isEditing"
                   hide-details
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.haghe_jazb_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -695,7 +717,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.fogholade_shoghl_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -755,7 +777,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.haghe_tahsilat_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -817,7 +839,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.fogholade_sakhti_kar_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -877,7 +899,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.haghe_ankal_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -937,7 +959,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.fogholade_badi_abohava_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -997,7 +1019,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.mahroomiat_tashilat_zendegi_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1057,7 +1079,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.fogholade_mahal_khedmat_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1117,7 +1139,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.fogholade_sharayet_mohit_kar_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1177,7 +1199,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.ayabo_zahab_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1237,7 +1259,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.yarane_ghaza_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1297,7 +1319,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.haghe_shir_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1348,6 +1370,7 @@
               <v-checkbox
                   label=" معاف از مالیات"
                   color="indigo"
+                  v-model="item.haghe_taahol_use_tax"
                   :false-value="true"
                   :true-value="false"
                   hide-details
@@ -1357,7 +1380,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.haghe_taahol_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1416,7 +1439,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.komakhazine_mahdekoodak_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1476,7 +1499,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.komakhazine_varzesh_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1535,7 +1558,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.komakhazine_mobile_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1595,7 +1618,7 @@
             <v-col cols="12" md="2">
               <v-switch
                   v-model="item.mazaya_mostamar_gheyre_naghdi_base"
-                  label="مزد پایه"
+                  label="مزد مبنا"
                   color="success"
                   :false-value="false"
                   :true-value="true"
@@ -1881,7 +1904,7 @@
 
             <v-col cols="12" md="2">
               <v-checkbox
-                  v-model="item.haghe_msanavat_use_tax"
+                  v-model="item.haghe_sanavat_use_tax"
                   label=" معاف از مالیات"
                   color="indigo"
                   :false-value="true"
@@ -1944,6 +1967,7 @@
             <v-col cols="12" md="2" class="pt-8">
               <money
                   label="نرخ"
+                  ref="employer_nerkh"
                   v-model="item.employer_insurance_nerkh"
                   background-color="white"
                   :disabled="!isEditing"
@@ -1956,6 +1980,7 @@
               <money
                   label="نرخ"
                   v-model="item.worker_insurance_nerkh"
+                  ref="worker_nerkh"
                   background-color="white"
                   :disabled="!isEditing"
               />
@@ -1966,6 +1991,7 @@
             <v-col cols="12" md="2" class="pt-8">
               <money
                   label="نرخ"
+                  ref="unemployed_nerkh"
                   v-model="item.unemployed_insurance_nerkh"
                   background-color="white"
                   :disabled="!isEditing"
@@ -2265,8 +2291,8 @@ export default {
         {name: 'عدم استفاده از مسکن', value: false},
       ],
       OTOMOBIL_TYPE: [
-        {name: ' استفاده از اتوموبیل ', value: true},
-        {name: 'عدم استفاده از اتوموبیل', value: false},
+        {name: ' استفاده از اتومبیل ', value: true},
+        {name: 'عدم استفاده از اتومبیل', value: false},
       ],
 
       printUrl: 'payroll/hrletter/all',
@@ -2279,6 +2305,11 @@ export default {
       saveContract: null,
       error_dialog: false,
       error_message: null,
+      worker: null,
+      listShow: false,
+      personnel_nationality: {},
+      employer: null,
+      unemployed: null,
       hasLock: false,
       first: false,
       filter: {'is_template': 'p', 'contract': null },
@@ -2359,6 +2390,11 @@ export default {
           this.$refs.workshopSelect.$props.value = data.id
           console.log(this.$refs.workshopSelect.$props)
           console.log(this.$refs.workshopSelect.$props.value)
+          this.employer = data.employee_insurance_nerkh
+          this.worker = data.worker_insurance_nerkh
+          this.unemployed = data.unemployed_insurance_nerkh
+          console.log(this.unemployed)
+
           this.getPersonnel(data.id)
         }
       })
@@ -2419,6 +2455,7 @@ export default {
                       'id': data[t].id,
                     })
                     this.gender[data[t].id] = data[t].personnel_gender
+                    this.personnel_nationality[data[t].id] = data[t].personnel_nationality
                   }
                   console.log(this.gender)
                 }
@@ -2495,6 +2532,15 @@ export default {
       })
     },
     getPersonnel(id) {
+      this.request({
+        url: this.endpoint(`payroll/workshop/` + id + '/'),
+        method: "get",
+        success: data => {
+          this.worker = data.worker_insurance_nerkh
+          this.employer = data.employee_insurance_nerkh
+          this.unemployed = data.unemployed_insurance_nerkh
+        }
+      })
       this.workshopPersonnels = []
       this.request({
         url: this.endpoint(`payroll/workshop/workshop_personnel/` + id + '/'),
@@ -2509,6 +2555,8 @@ export default {
               'id': data[t].id,
             })
             this.gender[data[t].id] = data[t].personnel_gender
+            this.personnel_nationality[data[t].id] = data[t].personnel_nationality
+
           }
           console.log(this.gender)
         }
@@ -2516,6 +2564,7 @@ export default {
 
     },
     getContracts(id) {
+      this.listShow = false
       this.contracts = []
       this.request({
         url: this.endpoint(`payroll/workshop/personnel/contract/` + id + '/'),
@@ -2524,7 +2573,7 @@ export default {
           this.contracts = []
           for (let t in data) {
             this.contracts.push({
-              'name': 'قرارداد ' + data[t].code,
+              'name': data[t].code,
               'start': data[t].contract_from_date,
               'end': data[t].contract_to_date,
               'id': data[t].id,
@@ -2565,6 +2614,25 @@ export default {
 
         }
       })
+    },
+    setNerkhs(employer, worker, unemployed) {
+      this.$refs.worker_nerkh.$props.value = worker
+      this.$refs.HRLetterFrom.$props.items['worker_insurance_nerkh'] = worker
+      console.log(this.$refs.worker_nerkh.$props)
+      console.log(this.$refs.worker_nerkh.$props.value)
+      this.$refs.unemployed_nerkh.$props.value = unemployed
+      this.$refs.HRLetterFrom.$props.items['unemployed_insurance_nerkh'] = unemployed
+      console.log(this.$refs.unemployed_nerkh.$props)
+      console.log(this.$refs.unemployed_nerkh.$props.value)
+      this.$refs.employer_nerkh.$props.value = employer
+      this.$refs.HRLetterFrom.$props.items['employer_insurance_nerkh'] = employer
+      console.log(employer)
+
+
+    },
+    IscreateOne() {
+      this.createOne = true
+      this.setNerkhs(this.employer, this.worker, this.unemployed)
     },
 
 
