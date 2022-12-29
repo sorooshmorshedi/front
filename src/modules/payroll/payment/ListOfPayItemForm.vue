@@ -211,7 +211,7 @@
                 </tr>
                 <tr>
                   <th class="">
-                    تاریخ تسوبه
+                    تاریخ تسویه
                   </th>
                   <td>
                     -
@@ -716,6 +716,23 @@
                   </td>
                 </tr>
 
+                <tr>
+                  <th class="">
+                    حق سنوات
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.haghe_sanavat_total" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="">
+                    عیدی و پاداش
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.padash_total" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr>
                 <tr>
                   <th class="">
                     سایر اضافات

@@ -56,9 +56,19 @@
 
           </v-col>
           <v-col cols="12" md="4" v-if="item.personnel">
-            <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
-                          label="کد ملی پرسنل  " v-model="nat[item.personnel]"
-                          background-color="white" :disabled="true"/>
+
+            <v-text-field
+                label="کد ملی پرسنل  "
+                v-model="nat[item.personnel]"
+                background-color="white"
+                v-if="personnel_nationality[item.personnel] != 2"
+                :disabled="true"/>
+            <v-text-field
+                label="کد فراگیر تابعیت پرسنل "
+                v-if="personnel_nationality[item.personnel] == 2"
+                v-model="nat[item.personnel]"
+                background-color="white"
+                :disabled="true"/>
 
           </v-col>
         </v-row>
@@ -264,7 +274,7 @@
           </v-card-title>
           <v-card-text>
             <v-row v-for="item in error_message" class="mt-5 mr-10">
-              {{item}}
+              {{ item }}
             </v-row>
           </v-card-text>
           <v-card-actions>
@@ -398,6 +408,7 @@ export default {
       payment: '',
       marital: {},
       naming: {},
+      personnel_nationality: {},
       gender: {},
       father_naming: {},
       nat: {},
@@ -453,27 +464,27 @@ export default {
         {
           text: "نسبت",
           value: "relative_display",
-          filterable : false,
+          filterable: false,
         },
         {
           text: "وضعیت تاهل",
           value: "marital_status_display",
-          filterable : false,
+          filterable: false,
         },
         {
           text: "خدمت سربازی",
           value: "military_service_display",
-          filterable : false,
+          filterable: false,
         },
         {
           text: "وضعیت تحصیل",
           value: "study_status_display",
-          filterable : false,
+          filterable: false,
         },
         {
           text: "وضعیت جسمی",
           value: "physical_condition_display",
-          filterable : false,
+          filterable: false,
         },
         {
           text: "فعال",
@@ -511,6 +522,8 @@ export default {
             this.father_naming[data[t].id] = data[t].father_name
             this.gender[data[t].id] = data[t].gender
             this.nat[data[t].id] = data[t].national_code
+            this.personnel_nationality[data[t].id] = data[t].nationality
+
           }
           console.log(this.personnels)
         }
@@ -526,7 +539,7 @@ export default {
         }
       })
     }
-    if (this.$route.params.id){
+    if (this.$route.params.id) {
       this.request({
         url: this.endpoint(`payroll/personnel/family/` + this.$route.params.id + '/'),
         method: "get",
@@ -560,16 +573,16 @@ export default {
         ;
       }
     },
-    setNames(id){
+    setNames(id) {
       this.$refs.PersonnelFamilyForm.$props.items['gender'] = undefined
       this.$refs.PersonnelFamilyForm.$props.items['marital_status'] = undefined
       this.$refs.PersonnelFamilyForm.$props.items['name'] = ' '
       this.$refs.PersonnelFamilyForm.$props.items['last_name'] = ' '
-      if (this.$refs.PersonnelFamilyForm.$props.items['relative'] == 'f'){
+      if (this.$refs.PersonnelFamilyForm.$props.items['relative'] == 'f') {
         this.$refs.PersonnelFamilyForm.$props.items['name'] = this.father_naming[id]
         this.$refs.PersonnelFamilyForm.$props.items['last_name'] = this.naming[id]
       }
-      if (this.$refs.PersonnelFamilyForm.$props.items['relative'] == 'c'){
+      if (this.$refs.PersonnelFamilyForm.$props.items['relative'] == 'c') {
         this.$refs.PersonnelFamilyForm.$props.items['last_name'] = this.naming[id]
       }
 
