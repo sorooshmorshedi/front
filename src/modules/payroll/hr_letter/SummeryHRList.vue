@@ -1,7 +1,7 @@
 <template>
   <v-card class="pa-4">
-    <v-card-title class="primary darken-3 white--text"> حکم کارگزینی های این قرارداد</v-card-title>
-    <m-datatable :headers="headers" :apiUrl="url" :filters.sync="filter"
+    <v-card-title class="primary darken-3 white--text"> لیست کارگزینی  قرارداد {{contract_code}}</v-card-title>
+    <m-datatable :show-applied-filters="false" :headers="headers" :apiUrl="url" :filters.sync="filter"
                  @dblclick:row="(e, row) => $router.push(to(row.item))"
                  ref="datatable">
       <template #item.detail="{ item }">
@@ -18,6 +18,7 @@ export default {
   name: "SummaryHRLetterList",
   props: {
     contract: null,
+    contract_code: null,
     filter: null
   },
   data() {
@@ -31,8 +32,8 @@ export default {
     headers() {
       return [
         {
-          text: " قرارداد",
-          value: "contract_code",
+          text: " نام",
+          value: "name",
         },
         {
           text: "مزد مبنای ماهانه",

@@ -81,7 +81,7 @@
                       item-text="name"
                       item-value="id"
                       :disabled="!isEditing"
-                      @change="getContracts(item.personnel_id) ; item.personnel_nationality = null"
+                      @change="getContracts(item.personnel_id) ; item.personnel_nationality = null; show_list_with_id=false"
                   />
                 </v-col>
               </v-row>
@@ -172,10 +172,9 @@
                       item-text="name"
                       item-value="id"
                       :disabled="!isEditing"
-                      @change="saveContract = item.contract  ; filter['contract'] = item.contract ; listShow = true"
+                      @change="saveContract = item.contract  ; filter['contract'] = item.contract ; listShow = true ; show_list_with_id = true"
 
                   />
-
                 </v-col>
               </v-row>
               <v-row>
@@ -210,7 +209,7 @@
                 <v-col cols="12" md=" 12" class="text-center">
                   <v-btn large block color="green darken-1"
                          class="white--text"
-                         v-if="!item.id"
+                         v-if="!item.id && !createOne"
                          :disabled="!item.contract"
                          @click="IscreateOne"
                   >
@@ -219,33 +218,59 @@
                 </v-col>
 
               </v-row>
-              <v-row>
+              <v-row v-if="!item.id && createOne">
                 <v-col cols="12" md=" 12" class="text-center">
                   <v-autocomplete
-                      v-if="!item.id && createOne"
                       label=" کپی از قالب های پیشفرض"
                       :items="templates"
                       item-text="name"
                       item-value="info"
                       v-model="item"
-                      @change="item.is_template = 'p' ; item.id = null ; item.name = null ; item.is_verified = false ;
-                      item.contract = saveContract"
+                      @change="item.is_template = 'p' ; item.id = null ; item.is_verified = false ; edit_temp = false ;
+                      item.contract = saveContract ; cp_temp = true"
                   />
 
+                </v-col>
+              </v-row>
+              <v-row v-if="!item.id && createOne">
+                <v-col cols="12" md="12" class="text-center">
+                  <v-text-field
+                  label="نام حکم"
+                  v-model="item.name"
+                  :disabled="!isEditing"
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row v-if="item.id">
+                <v-col cols="12" md="12" class="text-center">
+                  <v-text-field
+                  label="نام حکم"
+                  v-model="item.name"
+                  :disabled="!isEditing"
+                  >
+                  </v-text-field>
                 </v-col>
               </v-row>
             </v-card>
           </v-col>
           <v-col cols="12" md="6">
-            <summary-h-r-letter-list ref="hrlist" :filter="filter" v-if="!item.id && item.contract && listShow" :contract.sync="item.contract" ></summary-h-r-letter-list>
-            <summary-h-r-letter-list ref="hrlist" :filter="{'is_template': 'p' , 'contract': item.contract}"
-                                     v-if="item.id" :contract.sync="item.contract" ></summary-h-r-letter-list>
+            <summary-h-r-letter-list ref="hrlist"
+                                     :filter="filter"
+                                     v-if="!item.id && item.contract && listShow"
+                                     :contract_code="contract_code[item.contract]"
+                                     :contract.sync="item.contract" ></summary-h-r-letter-list>
+            <summary-h-r-letter-list ref="hrlist"
+                                     :filter="{'is_template': 'p' , 'contract': item.contract}"
+                                     v-if="item.id" :contract.sync="item.contract"
+                                     :contract_code="contract_code[item.contract]"
+                                     v-show="show_list_with_id && item.contract" ></summary-h-r-letter-list>
           </v-col>
         </v-row>
         <v-card v-show="item.id || createOne">
           <v-toolbar color="indigo">
             <v-toolbar-title class="white--text">
-              عناوین حکمی
+              عناوین حکمی {{item.name}}
             </v-toolbar-title>
           </v-toolbar>
           <v-row class="mt-10">
@@ -1631,7 +1656,7 @@
           <v-toolbar color="indigo" class="mt-10">
 
             <v-toolbar-title class="white--text">
-              عناوین غیر حکمی
+              عناوین غیر حکمی {{item.name}}
             </v-toolbar-title>
 
           </v-toolbar>
@@ -1673,7 +1698,7 @@
                   :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
-            <v-col cols="12" md="2" v-if="item.is_verified && item.is_template == 'p'">
+            <v-col cols="12" md="2" v-if="item.id">
               <money label="تعداد فرزندان مشمول" class="text-center" v-model="item.get_aele_mandi_sum"
                      disabled="true"></money>
 
@@ -1965,37 +1990,37 @@
               <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارفرما</v-card-text>
             </v-col>
             <v-col cols="12" md="2" class="pt-8">
-              <money
+              <percent
                   label="نرخ"
                   ref="employer_nerkh"
                   v-model="item.employer_insurance_nerkh"
                   background-color="white"
                   :disabled="!isEditing"
-              />
+              ></percent>
             </v-col>
             <v-col cols="12" md="2">
               <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارگر</v-card-text>
             </v-col>
             <v-col cols="12" md="2" class="pt-8">
-              <money
+              <percent
                   label="نرخ"
-                  v-model="item.worker_insurance_nerkh"
                   ref="worker_nerkh"
+                  v-model="item.worker_insurance_nerkh"
                   background-color="white"
                   :disabled="!isEditing"
-              />
+              ></percent>
             </v-col>
             <v-col cols="12" md="2">
               <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم بیکاری</v-card-text>
             </v-col>
             <v-col cols="12" md="2" class="pt-8">
-              <money
+              <percent
                   label="نرخ"
                   ref="unemployed_nerkh"
                   v-model="item.unemployed_insurance_nerkh"
                   background-color="white"
                   :disabled="!isEditing"
-              />
+              ></percent>
 
             </v-col>
 
@@ -2256,6 +2281,7 @@ import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import percent from "@/components/scomponents/Percent";
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
@@ -2269,7 +2295,7 @@ export default {
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
     SummaryHRLetterList,
-    HRLetterList, mtime, TreeSelect, citySelect, MDatatable, TransactionForm, money
+    HRLetterList, mtime, TreeSelect, citySelect, MDatatable, TransactionForm, money, percent
   },
   props: {
     id: {},
@@ -2306,11 +2332,13 @@ export default {
       error_dialog: false,
       error_message: null,
       worker: null,
+      contract_code: {},
       listShow: false,
       personnel_nationality: {},
       employer: null,
       unemployed: null,
       hasLock: false,
+      show_list_with_id: true,
       first: false,
       filter: {'is_template': 'p', 'contract': null },
       isDefinable: false,
@@ -2323,6 +2351,8 @@ export default {
       contracts: [],
       gender: {},
       PathLevels,
+      cp_temp: false,
+      edit_temp: true,
       sure_dialog: false,
       VisitorLevels,
       paymentDialog: false,
@@ -2348,12 +2378,7 @@ export default {
       this.first = true
       this.isEditing = false
     }
-    if (this.$route.params.id) {
-      console.log('ok')
-    }
-
   },
-
   mounted() {
     this.request({
       url: this.endpoint(`payroll/hrletter/templates/`),
@@ -2408,6 +2433,7 @@ export default {
               'name': data[t].code + ' ' + data[t].personnel_name,
               'id': data[t].id,
             })
+            this.contract_code[data[t].id] = data[t].code
           }
           console.log(this.contracts)
         }
@@ -2441,6 +2467,7 @@ export default {
                   'end': data[t].contract_to_date,
                   'id': data[t].id,
                 })
+                this.contract_code[data[t].id] = data[t].code
               }
               this.request({
                 url: this.endpoint(`payroll/workshop/workshop_personnel/` + data[0].workshop_id + '/'),
@@ -2578,6 +2605,7 @@ export default {
               'end': data[t].contract_to_date,
               'id': data[t].id,
             })
+            this.contract_code[data[t].id] = data[t].code
           }
         }
       })

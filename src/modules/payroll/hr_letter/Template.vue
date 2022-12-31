@@ -1768,38 +1768,42 @@
               <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارفرما</v-card-text>
             </v-col>
             <v-col cols="12" md="2" class="pt-8">
-              <money
+              <percent
                   label="نرخ"
+                  ref="employer_nerkh"
                   v-model="item.employer_insurance_nerkh"
                   background-color="white"
                   :disabled="!isEditing"
-              />
+              ></percent>
             </v-col>
             <v-col cols="12" md="2">
               <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارگر</v-card-text>
             </v-col>
             <v-col cols="12" md="2" class="pt-8">
-              <money
+              <percent
                   label="نرخ"
+                  ref="worker_nerkh"
                   v-model="item.worker_insurance_nerkh"
                   background-color="white"
                   :disabled="!isEditing"
-              />
+              ></percent>
             </v-col>
             <v-col cols="12" md="2">
               <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم بیکاری</v-card-text>
             </v-col>
             <v-col cols="12" md="2" class="pt-8">
-              <money
+              <percent
                   label="نرخ"
+                  ref="unemployed_nerkh"
                   v-model="item.unemployed_insurance_nerkh"
                   background-color="white"
                   :disabled="!isEditing"
-              />
+              ></percent>
 
             </v-col>
 
           </v-row>
+
           <v-row class="ml-3 mt-5">
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">مسکن :</v-card-text>
@@ -1842,6 +1846,24 @@
               ></v-switch>
             </v-col>
 
+          </v-row>
+          <v-row v-if="item.include_made_86" class="ma-2">
+            <v-col cols="12" md="12">
+              <v-banner class="mt-3 mb-5 orange--text text--darken-3">
+                <v-avatar
+                    slot="icon"
+                    color="orange darken-2"
+                    size="40"
+                >
+                  <v-icon
+                      color="white"
+                  >
+                    fa-info
+                  </v-icon>
+                </v-avatar>
+                تبصره 1- در مورد پرداخت هایی که از طرف غیر از پرداخت کننده اصلی حقوق به اشخاص حقیقی، به عمل می­ آید،پرداخت­ کنندگان مکلفند هنگام هر پرداخت، مالیات متعلق را با رعایت معافیت­ های قانونی مربوط به حقوق به جز معافیت موضوع ماده (84) این قانون، به نرخ مقطوع ده درصد (10%) محاسبه،کسر و حداکثر تا پایان ماه بعد با فهرستی حاوی نام و نشانی دریافت­ کنندگان و میزان آن به اداره امور مالیاتی محل، پرداخت کنند و در صورت تخلف، مسوول پرداخت مالیات و جریمه­ های متعلق خواهندبود.
+              </v-banner>
+            </v-col>
           </v-row>
 
           <v-toolbar v-if="item.id" color="indigo" class="mt-10">
@@ -1992,6 +2014,8 @@ import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import percent from "@/components/scomponents/Percent";
+
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
@@ -2001,7 +2025,7 @@ import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 export default {
   name: "HRTemplateForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
-  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+  components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, percent},
   props: {
     id: {},
   },

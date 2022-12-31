@@ -34,7 +34,7 @@
               <v-row>
                 <v-col cols="12" md="4">
                   <v-autocomplete
-                      label="نحوه محاسبه سنوات "
+                      label="نحوه محاسبه پایه سنوات "
                       :items="SANAVAT_TYPES"
                       v-model="item.sanavat_type"
                       item-text="name"
@@ -67,60 +67,31 @@
               </v-row>
               <v-row>
                 <v-col cols="12" md="4">
-                  <v-text-field
-                      label="نرخ حق بیمه سهم کارفرما"
-                      class="currency-input"
-                      v-model="item.employee_insurance_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
-
+                  <percent label="نرخ حق بیمه سهم کارفرما" v-model="item.employee_insurance_nerkh" :disabled="!isEditing"></percent>
                 </v-col>
                 <v-col cols="12" md="4">
-                  <v-text-field
-                      label="نرخ حق بیمه سهم بیمه شده"
-                      class="currency-input"
-                      v-model="item.worker_insurance_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
-
+                  <percent label="نرخ حق بیمه سهم بیمه شده" v-model="item.worker_insurance_nerkh" :disabled="!isEditing"></percent>
                 </v-col>
                 <v-col cols="12" md="4">
-                  <v-text-field
-                      label="نرخ حق بیمه سهم بیکاری"
-                      class="currency-input"
-                      v-model="item.unemployed_insurance_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
-
+                  <percent label="نرخ حق بیمه سهم بیکاری" v-model="item.unemployed_insurance_nerkh" :disabled="!isEditing"></percent>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12" md="4">
-                  <v-text-field
-                      label="حداقل حقوق اداره کار"
+                  <money
+                      label="حداقل حقوق ماهانه اداره کار"
                       class="currency-input"
                       v-model="item.hade_aghal_hoghoogh"
                       :disabled="!isEditing"
-
-                  ></v-text-field>
-
+                  >
+                  </money>
                 </v-col>
                 <v-col cols="12" md="4">
-                  <v-text-field
-                      label="نرخ تبصره 1 ماده 86 ق.م.م"
-                      class="currency-input"
-                      v-model="item.made_86_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
-
+                  <percent label="نرخ تبصره 1 ماده 86 ق.م.م" v-model="item.made_86_nerkh" :disabled="!isEditing"></percent>
                 </v-col>
                 <v-col cols="12" md="4">
                   <v-autocomplete
-                      label="معافیت مالیاتی حق بیمه سهم بیمه شونده"
+                      label="معافیت مالیاتی حق بیمه سهم بیمه شده"
                       :items="TAX_EMPLOYER_TYPES"
                       v-model="item.tax_employer_type"
                       item-text="name"
@@ -255,6 +226,28 @@
               </thead>
               <tbody>
               <tr>
+                <td>عائله مندی</td>
+                <td>
+                  <v-autocomplete
+                      :items="PAY_TYPES"
+                      v-model="item.aele_mandi_pay_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </td>
+                <td>
+                  <money
+                      append-icon="X"
+                      v-on:keypress="NumbersOnly"
+                      v-model="item.aele_mandi_nerkh"
+                      :disabled="!isEditing"
+                  >
+                  </money>
+                </td>
+              </tr>
+
+              <tr>
                 <td>اضافه کاری</td>
                 <td>
                   <v-autocomplete
@@ -266,12 +259,7 @@
                   />
                 </td>
                 <td>
-                  <v-text-field
-                      class="currency-input"
-                      v-model="item.ezafe_kari_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
+                  <percent v-model="item.ezafe_kari_nerkh" :disabled="!isEditing"></percent>
                 </td>
               </tr>
               <tr>
@@ -287,12 +275,7 @@
 
                 </td>
                 <td>
-                  <v-text-field
-                      class="currency-input"
-                      v-model="item.tatil_kari_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
+                  <percent v-model="item.tatil_kari_nerkh" :disabled="!isEditing"></percent>
                 </td>
               </tr>
               <tr>
@@ -307,12 +290,7 @@
                   />
                 </td>
                 <td>
-                  <v-text-field
-                      class="currency-input"
-                      v-model="item.kasre_kar_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
+                  <percent v-model="item.kasre_kar_nerkh" :disabled="!isEditing"></percent>
                 </td>
               </tr>
               <tr>
@@ -327,32 +305,7 @@
                   />
                 </td>
                 <td>
-                  <v-text-field
-                      class="currency-input"
-                      v-model="item.shab_kari_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
-                </td>
-              </tr>
-              <tr>
-                <td>عائله مندی</td>
-                <td>
-                  <v-autocomplete
-                      :items="PAY_TYPES"
-                      v-model="item.aele_mandi_pay_type"
-                      item-text="name"
-                      item-value="value"
-                      :disabled="!isEditing"
-                  />
-                </td>
-                <td>
-                  <v-text-field
-                      class="currency-input"
-                      v-model="item.aele_mandi_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
+                  <percent v-model="item.shab_kari_nerkh" :disabled="!isEditing"></percent>
                 </td>
               </tr>
               <tr>
@@ -367,12 +320,7 @@
                   />
                 </td>
                 <td>
-                  <v-text-field
-                      class="currency-input"
-                      v-model="item.nobat_kari_sob_asr_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
+                  <percent v-model="item.nobat_kari_sob_asr_nerkh" :disabled="!isEditing"></percent>
                 </td>
 
               </tr>
@@ -388,12 +336,7 @@
                   />
                 </td>
                 <td>
-                  <v-text-field
-                      class="currency-input"
-                      v-model="item.nobat_kari_sob_shab_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
+                  <percent v-model="item.nobat_kari_sob_shab_nerkh" :disabled="!isEditing"></percent>
                 </td>
 
               </tr>
@@ -409,12 +352,7 @@
                   />
                 </td>
                 <td>
-                  <v-text-field
-                      class="currency-input"
-                      v-model="item.nobat_kari_asr_shab_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
+                  <percent v-model="item.nobat_kari_asr_shab_nerkh" :disabled="!isEditing"></percent>
                 </td>
 
               </tr>
@@ -430,12 +368,7 @@
                   />
                 </td>
                 <td>
-                  <v-text-field
-                      class="currency-input"
-                      v-model="item.nobat_kari_sob_asr_shab_nerkh"
-                      :disabled="!isEditing"
-
-                  ></v-text-field>
+                  <percent v-model="item.nobat_kari_sob_asr_shab_nerkh" :disabled="!isEditing"></percent>
                 </td>
               </tr>
               </tbody>
@@ -466,6 +399,7 @@ import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import percent from "@/components/scomponents/Percent";
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
@@ -479,7 +413,7 @@ export default {
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
     SummaryWorkshopList,
-    WorkshopList, mtime, TreeSelect, citySelect, MDatatable, TransactionForm, money
+    WorkshopList, mtime, TreeSelect, citySelect, MDatatable, TransactionForm, money, percent
   },
   props: {
     id: {},
@@ -541,6 +475,16 @@ export default {
     },
   },
   methods: {
+    NumbersOnly(evt) {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        evt.preventDefault();;
+      } else {
+        return true;
+      }
+    },
+
     to(item) {
       return {
         name: 'WorkshopSettingDetail',
