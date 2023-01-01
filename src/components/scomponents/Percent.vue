@@ -7,8 +7,8 @@
       :disabled="disabled"
       v-on:keypress="NumbersOnly"
       v-model="formattedAmount"
-      class="currency-input"
-      append-icon="%"
+      class=""
+      prepend-inner-icon="%"
       :smaller-font="formattedAmount.length > 14"
       style="min-width: 80px;"
       v-bind="$attrs"
@@ -16,13 +16,13 @@
       autocomplete="off"
   >
     <template #append>
-      <!-- <span class="py-1">%</span> -->
     </template>
   </v-text-field>
 </template>
 
 <script>
 import Cleave from "cleave.js";
+
 export default {
   name: "CleavePercent",
   props: {
@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     listeners() {
-      let listeners = { ...this.$listeners };
+      let listeners = {...this.$listeners};
       delete listeners.input;
       return listeners;
     },
@@ -62,7 +62,7 @@ export default {
     setAmount(value) {
       if (!value) value = 0;
       else {
-      this.formattedAmount = value  ;
+        this.formattedAmount = value;
       }
     },
     setFirstAmount(value) {
@@ -84,7 +84,8 @@ export default {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }

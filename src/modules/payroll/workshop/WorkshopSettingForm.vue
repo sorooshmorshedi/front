@@ -253,7 +253,6 @@
                 </td>
                 <td>
                   <money
-                      append-icon="X"
                       v-on:keypress="NumbersOnly"
                       v-model="item.aele_mandi_nerkh"
                       :disabled="!isEditing"
