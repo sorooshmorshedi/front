@@ -2046,8 +2046,8 @@ export default {
         {name: 'عدم استفاده از مسکن', value: false},
       ],
       OTOMOBIL_TYPE: [
-        {name: ' استفاده از اتوموبیل ', value: true},
-        {name: 'عدم استفاده از اتوموبیل', value: false},
+        {name: ' استفاده از اتومبیل ', value: true},
+        {name: 'عدم استفاده از اتومبیل', value: false},
       ],
 
       printUrl: 'payroll/hrletter/all',

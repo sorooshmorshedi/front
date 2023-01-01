@@ -98,13 +98,17 @@
                    @click="goUnDefault(item.id)">خروج از پیش فرض
             </v-btn>
             <v-btn class="primary white--text mt-12 ml-2 float-left"
-                   v-if=" item.id && item.is_verified" @click="setting(item)">تنظیمات کارگاه
+                   v-if=" item.id && item.is_verified" @click="setting(item)">مشاهده تنظیمات کارگاه
             </v-btn>
             <v-btn color="blue" class=" white--text mt-12 ml-2 float-left"
                    v-if=" item.id && item.is_verified" @click="goWorkshop(item)">مشاهده جامع
             </v-btn>
 
           </template>
+          <v-btn
+              class="primary white--text mt-6  mr-2 float-left"
+              @click="setting(item)"
+              v-if="item.id && !item.is_verified && !isEditing" >تنظیمات کارگاه</v-btn>
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
               @click="verifyWorkshop(item)"

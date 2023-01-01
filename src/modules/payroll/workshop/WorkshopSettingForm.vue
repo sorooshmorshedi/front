@@ -7,9 +7,9 @@
           :show-navigation-btns="false"
           :show-actions="true"
           :showList="false"
-          :can-edit="true"
+          :can-edit="!item.is_verified"
           :canDelete="false"
-          :canSubmit="true"
+          :canSubmit="!item.is_verified"
           :showClearBtn="false"
           :showListBtn="false"
           :isEditing.sync="isEditing"
@@ -18,6 +18,21 @@
           ref="workshopForm"
       >
         <template>
+          <v-banner v-if="item.is_verified"  class="mt-3 mb-5 red--text">
+            <v-avatar
+                slot="icon"
+                color="red"
+                size="25"
+            >
+              <v-icon
+                  color="white"
+              >
+                fa-info
+              </v-icon>
+            </v-avatar>
+            برای ایجاد تغییر در تنظیمات، ابتدا کارگاه را از حالت نهایی خارج کنید
+          </v-banner>
+
           <v-toolbar
               class="mb-5"
               flat

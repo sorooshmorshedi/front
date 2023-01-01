@@ -70,6 +70,7 @@ export default {
         value = 0
       }
       this.formattedAmount = value * 100;
+      this.formattedAmount = this.formattedAmount.toFixed(1);
       return value * 100
     },
     getAmount() {

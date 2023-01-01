@@ -126,8 +126,11 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="12" md="4">
-                <date v-model="item.pay_date" label="* تاریخ" :default="false" :disabled="!isEditing"/>
+              <v-col cols="12" md="4" v-if="item.loan_type != 'd'">
+                <date  v-model="item.pay_date" label="* تاریخ شروع" :default="false" :disabled="!isEditing"/>
+              </v-col>
+              <v-col cols="12" md="4" v-if="item.loan_type == 'd'">
+                <date  v-model="item.pay_date" label="* تاریخ اعمال در حقوق" :default="false" :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4">
                 <money v-model="item.amount" :disabled="!isEditing" label="مبلغ"></money>
@@ -145,7 +148,7 @@
                               :disabled="!isEditing"/>
               </v-col>
             </v-row >
-            <v-row class="mt-10" v-if="item.id && item.is_verified">
+            <v-row class="mt-10" v-if="item.id && item.is_verified && item.loan_type == 'l'">
               <v-col cols="12" md="4">
                 <money v-model="item.monthly_pay"
                        :disabled="!isEditing"
@@ -155,10 +158,9 @@
 
               </v-col>
               <v-col cols="12" md="4">
-                <date v-model="item.last_dept_date" label="* تاریخ سررسید" :default="true" :disabled="true"/>
+                <v-text-field v-model="item.last_dept_date" label=" تاریخ پایان وام" :default="true" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="4">
-
                 <v-text-field label="اقساط پرداخت شده" v-model="item.episode_payed" background-color="white"
                               disabled="ture"/>
               </v-col>

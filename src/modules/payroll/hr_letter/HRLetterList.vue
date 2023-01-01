@@ -31,6 +31,11 @@ export default {
           value: "contract_code",
         },
         {
+          text: " نام",
+          value: "name",
+        },
+
+        {
           text: "طرفین قرارداد",
           value: "contract_detail",
         },
