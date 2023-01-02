@@ -21,7 +21,7 @@
 
         >
           <template>
-            <v-banner  class="mt-3 mb-5 red--text">
+            <v-banner class="mt-3 mb-5 red--text">
               <v-avatar
                   slot="icon"
                   color="red"
@@ -35,25 +35,62 @@
               </v-avatar>
               توجه داشته باشید اطلاعات کارگاه باید با اطلاعات مندرج در بیمه تامین اجتماعی یکسان باشد
             </v-banner>
+            <v-dialog
+                transition="dialog-bottom-transition"
+                max-width="800"
+                v-model="show_setting"
+            >
+              <v-card>
+                <v-card-text>
+                  <workshop-setting-form ref="setting" :id="item.id" :is_pop="true" :show_edit="true"
+                                         :is-editing="true"></workshop-setting-form>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                      left
+                      large
+                      class="red white--text mt-12 mb-5 mr-2 float-left"
+                      @click="show_setting=false"
+                  >بستن
+                  </v-btn>
+                  <v-btn
+                      left
+                      large
+                      class="light-blue white--text mt-12 mb-5 mr-2 float-left"
+                      @click="$refs.setting.submit(false) ; show_setting = false ; verifyWorkshop(item)"
+                  >  تایید و ثبت نهایی کارگاه
+                  </v-btn>
+
+                </v-card-actions>
+              </v-card>
+
+            </v-dialog>
             <v-row>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required]" v-on:keypress="NumbersToTenOnly" ref="code" label="* کد کارگاه (بیمه) " v-model="item.workshop_code" background-color="white" :disabled="!isEditing"/>
+                <v-text-field :rules="[rules.required]" v-on:keypress="NumbersToTenOnly" ref="code"
+                              label="* کد کارگاه (بیمه) " v-model="item.workshop_code" background-color="white"
+                              :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]"  label="* نام کارگاه " v-model="item.name" background-color="white"
+                <v-text-field :rules="[rules.required,]" label="* نام کارگاه " v-model="item.name"
+                              background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
 
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* نام کارفرما " v-model="item.employer_name" background-color="white"
+                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* نام کارفرما "
+                              v-model="item.employer_name" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-textarea :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد پستی کارگاه" v-model="item.postal_code" :disabled="!isEditing"></v-textarea>
+                <v-textarea :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد پستی کارگاه"
+                            v-model="item.postal_code" :disabled="!isEditing"></v-textarea>
               </v-col>
 
               <v-col cols="12" md="12">
-                <v-textarea :rules="[rules.required,]" label="* آدرس کارگاه" v-model="item.address" :disabled="!isEditing"></v-textarea>
+                <v-textarea :rules="[rules.required,]" label="* آدرس کارگاه" v-model="item.address"
+                            :disabled="!isEditing"></v-textarea>
               </v-col>
 
               <v-col cols="12" md="6">
@@ -108,15 +145,18 @@
           <v-btn
               class="primary white--text mt-6  mr-2 float-left"
               @click="setting(item)"
-              v-if="item.id && !item.is_verified && !isEditing" >تنظیمات کارگاه</v-btn>
+              v-if="item.id && !item.is_verified && !isEditing">تنظیمات کارگاه
+          </v-btn>
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
-              @click="verifyWorkshop(item)"
-              v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
+              @click="show_setting = true"
+              v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
+          </v-btn>
           <v-btn
               class="red white--text mt-12 mr-2 ml-2 float-left "
               @click="UnVerifyWorkshop(item)"
-              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+              v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
+          </v-btn>
 
 
         </m-form>
@@ -133,7 +173,7 @@
               </v-card-title>
               <v-card-text>
                 <v-row v-for="item in error_message" class="mt-5 mr-10">
-                  {{item}}
+                  {{ item }}
                 </v-row>
               </v-card-text>
               <v-card-actions>
@@ -181,12 +221,14 @@ import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import WorkshopList from "@/modules/payroll/workshop/WorkshopList";
 import SummaryWorkshopList from "@/modules/payroll/workshop/SummaryWorkshopList";
 import mobile from "@/components/scomponents/Mobile";
+import WorkshopSettingForm from "@/modules/payroll/workshop/WorkshopSettingForm";
 
 
 export default {
   name: "WorkshopForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
+    WorkshopSettingForm,
     SummaryWorkshopList,
     WorkshopList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, mobile
   },
@@ -225,6 +267,7 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
+      show_setting: false,
       hasLock: false,
       error_dialog: false,
       error_message: null,
@@ -247,18 +290,17 @@ export default {
   },
   computed: {
     headers() {
-      return [
-      ];
+      return [];
     },
   },
   updated() {
-    if (!this.first && this.$route.params.id){
+    if (!this.first && this.$route.params.id) {
       this.first = true
       this.isEditing = false
     }
   },
   methods: {
-    goDefault(id){
+    goDefault(id) {
       this.request({
         url: this.endpoint(`payroll/workshop/default/` + id + '/'),
         method: "get",
@@ -273,7 +315,7 @@ export default {
         }
       })
     },
-    goUnDefault(id){
+    goUnDefault(id) {
       this.request({
         url: this.endpoint(`payroll/workshop/undefault/` + id + '/'),
         method: "get",
@@ -315,20 +357,22 @@ export default {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }
     },
     NumbersToTenOnly(evt) {
-      if (this.$refs.code.$props.value.length >= 10){
+      if (this.$refs.code.$props.value.length >= 10) {
         evt.preventDefault();
       }
 
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }
@@ -339,10 +383,11 @@ export default {
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
         return true;
       } else {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       }
     },
-    verifyWorkshop(item){
+    verifyWorkshop(item) {
       this.request({
         url: this.endpoint(`payroll/workshop/verify/` + item.id + '/'),
         method: "get",
@@ -375,7 +420,7 @@ export default {
       })
     },
 
-    show(){
+    show() {
       console.log(this.ss)
     }
 

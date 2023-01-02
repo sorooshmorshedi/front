@@ -9,13 +9,13 @@
           :showList="false"
           :can-edit="!item.is_verified"
           :canDelete="false"
-          :canSubmit="!item.is_verified"
+          :canSubmit="!item.is_verified && !is_pop"
           :showClearBtn="false"
           :showListBtn="false"
           :isEditing.sync="isEditing"
           @submit="submit"
           @delete="deleteItem"
-          ref="workshopForm"
+          ref="workshopSettingForm"
       >
         <template>
           <v-banner v-if="item.is_verified"  class="mt-3 mb-5 red--text">
@@ -34,6 +34,20 @@
           </v-banner>
 
           <v-toolbar
+              v-if="is_pop"
+              class="mb-5"
+              flat
+              color="red"
+              dark
+          >
+            <v-toolbar-title>
+              قبل از ثبت نهایی کارگاه، تنظیمات کارگاه بررسی و تایید شود
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn v-if="!is_pop" outlined color="white" @click="$router.push('/panel/workshop/' + item.id + '/')" >بازگشت به کارگاه</v-btn>
+          </v-toolbar>
+
+          <v-toolbar
               class="mb-5"
               flat
               color="indigo"
@@ -42,6 +56,8 @@
             <v-toolbar-title>
               تنظیمات کلی حقوق و مزایا
             </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn v-if="!is_pop" outlined color="white" @click="$router.push('/panel/workshop/' + item.id + '/')" >بازگشت به کارگاه</v-btn>
           </v-toolbar>
 
           <v-row class=" mb-6">
@@ -252,12 +268,13 @@
                   />
                 </td>
                 <td>
-                  <money
+                  <ratio
                       v-on:keypress="NumbersOnly"
+                      class="currency-input"
                       v-model="item.aele_mandi_nerkh"
                       :disabled="!isEditing"
                   >
-                  </money>
+                  </ratio>
                 </td>
               </tr>
 
@@ -392,6 +409,7 @@
 
         </template>
 
+
       </m-form>
 
     </v-card>
@@ -414,6 +432,7 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import percent from "@/components/scomponents/Percent";
+import ratio from "@/components/scomponents/Ratio";
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
@@ -427,10 +446,13 @@ export default {
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
     SummaryWorkshopList,
-    WorkshopList, mtime, TreeSelect, citySelect, MDatatable, TransactionForm, money, percent
+    WorkshopList, mtime, TreeSelect, citySelect, MDatatable, TransactionForm, money, percent, ratio
   },
   props: {
     id: {},
+    is_pop: false,
+    show_edit: false,
+    isEditing: false,
   },
   data() {
     return {
@@ -475,7 +497,6 @@ export default {
       setting_workshop: null,
       items: null,
       factors: [],
-      isEditing: false,
       PathLevels,
       msg: 'سالانه',
       VisitorLevels,
@@ -501,7 +522,7 @@ export default {
 
     to(item) {
       return {
-        name: 'WorkshopSettingDetail',
+        name: 'WorkshopDetail',
         params: {
           id: item.id,
         },

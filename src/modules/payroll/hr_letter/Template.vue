@@ -2033,7 +2033,7 @@ export default {
     return {
 
       NATURE_TYPES: [
-        {name: ' دستمزد رورانه', value: 'b'},
+        {name: ' دستمزد روزانه', value: 'b'},
         {name: 'مستمر', value: 'p'},
         {name: 'غیر مستمر', value: 'u'},
       ],

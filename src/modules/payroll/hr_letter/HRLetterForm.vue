@@ -235,9 +235,9 @@
               <v-row v-if="!item.id && createOne">
                 <v-col cols="12" md="12" class="text-center">
                   <v-text-field
-                  label="نام حکم"
-                  v-model="item.name"
-                  :disabled="!isEditing"
+                      label="نام حکم"
+                      v-model="item.name"
+                      :disabled="!isEditing"
                   >
                   </v-text-field>
                 </v-col>
@@ -245,9 +245,9 @@
               <v-row v-if="item.id">
                 <v-col cols="12" md="12" class="text-center">
                   <v-text-field
-                  label="نام حکم"
-                  v-model="item.name"
-                  :disabled="!isEditing"
+                      label="نام حکم"
+                      v-model="item.name"
+                      :disabled="!isEditing"
                   >
                   </v-text-field>
                 </v-col>
@@ -259,18 +259,18 @@
                                      :filter="filter"
                                      v-if="!item.id && item.contract && listShow"
                                      :contract_code="contract_code[item.contract]"
-                                     :contract.sync="item.contract" ></summary-h-r-letter-list>
+                                     :contract.sync="item.contract"></summary-h-r-letter-list>
             <summary-h-r-letter-list ref="hrlist"
                                      :filter="{'is_template': 'p' , 'contract': item.contract}"
                                      v-if="item.id" :contract.sync="item.contract"
                                      :contract_code="contract_code[item.contract]"
-                                     v-show="show_list_with_id && item.contract" ></summary-h-r-letter-list>
+                                     v-show="show_list_with_id && item.contract"></summary-h-r-letter-list>
           </v-col>
         </v-row>
         <v-card v-show="item.id || createOne">
           <v-toolbar color="indigo">
             <v-toolbar-title class="white--text">
-              عناوین حکمی {{item.name}}
+              عناوین حکمی {{ item.name }}
             </v-toolbar-title>
           </v-toolbar>
           <v-row class="mt-10">
@@ -1656,7 +1656,7 @@
           <v-toolbar color="indigo" class="mt-10">
 
             <v-toolbar-title class="white--text">
-              عناوین غیر حکمی {{item.name}}
+              عناوین غیر حکمی {{ item.name }}
             </v-toolbar-title>
 
           </v-toolbar>
@@ -1978,114 +1978,22 @@
             </v-col>
           </v-row>
 
-          <v-toolbar color="indigo" class="mt-10">
+          <v-toolbar color="indigo" class="mt-10" v-if="item.id">
 
             <v-toolbar-title class="white--text">
-              سایر
+              شخصی سازی مبانی محاسباتی حقوق و دستمزد برای حکم {{item.name}}
             </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="green darken-1"
+                class="white--text"
+                :disabled="!isEditing"
+                @click="show_custom=true"
+            >
+              مشاهده و شخصی سازی
+            </v-btn>
+
           </v-toolbar>
-
-          <v-row class="mt-10 ml-3 ">
-            <v-col cols="12" md="2">
-              <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارفرما</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2" class="pt-8">
-              <percent
-                  label="نرخ"
-                  ref="employer_nerkh"
-                  v-model="item.employer_insurance_nerkh"
-                  background-color="white"
-                  :disabled="!isEditing"
-              ></percent>
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم کارگر</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2" class="pt-8">
-              <percent
-                  label="نرخ"
-                  ref="worker_nerkh"
-                  v-model="item.worker_insurance_nerkh"
-                  background-color="white"
-                  :disabled="!isEditing"
-              ></percent>
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-card-text class="text-h6 text-center">نرخ حق بیمه سهم بیکاری</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2" class="pt-8">
-              <percent
-                  label="نرخ"
-                  ref="unemployed_nerkh"
-                  v-model="item.unemployed_insurance_nerkh"
-                  background-color="white"
-                  :disabled="!isEditing"
-              ></percent>
-
-            </v-col>
-
-          </v-row>
-          <v-row class="ml-3 mt-5">
-            <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">مسکن :</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-autocomplete
-                  label="* مسکن"
-                  :items="MASKAN_TYPE"
-                  v-model="item.maskan"
-                  item-text="name"
-                  item-value="value"
-                  :disabled="!isEditing"
-              />
-            </v-col>
-            <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">وسیله نقلیه :</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-autocomplete
-                  label="* وسیله نقلیه"
-                  :items="OTOMOBIL_TYPE"
-                  v-model="item.otomobil"
-                  item-text="name"
-                  item-value="value"
-                  :disabled="!isEditing"
-              />
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-card-text class="text-h6 text-center">مشمول ماده یک تبصره 86 ق.م.م :</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2" class="pt-8">
-              <v-switch
-                  class="mr-16"
-                  v-model="item.include_made_86"
-                  color="success"
-                  :false-value="false"
-                  :true-value="true"
-                  hide-details
-                  :disabled="!isEditing"
-              ></v-switch>
-            </v-col>
-          </v-row>
-          <v-row v-if="item.include_made_86" class="ma-2">
-            <v-col cols="12" md="12">
-              <v-banner class="mt-3 mb-5 orange--text text--darken-3">
-                <v-avatar
-                    slot="icon"
-                    color="orange darken-2"
-                    size="40"
-                >
-                  <v-icon
-                      color="white"
-                  >
-                    fa-info
-                  </v-icon>
-                </v-avatar>
-                تبصره 1- در مورد پرداخت هایی که از طرف غیر از پرداخت کننده اصلی حقوق به اشخاص حقیقی، به عمل می­ آید،پرداخت­ کنندگان مکلفند هنگام هر پرداخت، مالیات متعلق را با رعایت معافیت­ های قانونی مربوط به حقوق به جز معافیت موضوع ماده (84) این قانون، به نرخ مقطوع ده درصد (10%) محاسبه،کسر و حداکثر تا پایان ماه بعد با فهرستی حاوی نام و نشانی دریافت­ کنندگان و میزان آن به اداره امور مالیاتی محل، پرداخت کنند و در صورت تخلف، مسوول پرداخت مالیات و جریمه­ های متعلق خواهندبود.
-              </v-banner>
-            </v-col>
-          </v-row>
-
 
           <v-toolbar v-if="item.id" color="indigo" class="mt-10">
 
@@ -2173,6 +2081,294 @@
               در صورت تمایل به تغییر برای قرارداد خود حکم جدید ثبت کنید
             </v-banner>
           </v-col>
+          <v-dialog
+              transition="dialog-bottom-transition"
+              max-width="800"
+              v-model="show_custom"
+          >
+            <v-card>
+              <v-toolbar
+                  color="indigo"
+                  dark
+              >شخصی سازی مبانی محاسباتی حقوق و دستمزد
+              </v-toolbar>
+              <v-card-text>
+                <v-simple-table class="">
+                  <template v-slot:default>
+                    <thead>
+                    <tr>
+                      <th class="text-center">
+                        عنوان
+                      </th>
+                      <th class="text-center">
+                        نرخ
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>نرخ حق بیمه سهم کارفرما</td>
+                      <td>
+                        <percent
+                            ref="employer_nerkh"
+                            v-model="item.employer_insurance_nerkh"
+                            background-color="white"
+                            :disabled="!isEditing"
+                        ></percent>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>نرخ حق بیمه سهم کارگر</td>
+                      <td>
+                        <percent
+                            ref="worker_nerkh"
+                            v-model="item.worker_insurance_nerkh"
+                            background-color="white"
+                            :disabled="!isEditing"
+                        ></percent>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>نرخ حق بیمه سهم بیکاری</td>
+                      <td>
+                        <percent
+                            ref="unemployed_nerkh"
+                            v-model="item.unemployed_insurance_nerkh"
+                            background-color="white"
+                            :disabled="!isEditing"
+                        ></percent>
+                      </td>
+                    </tr>
+
+                    </tbody>
+
+                  </template>
+                </v-simple-table>
+                <v-simple-table class="">
+                  <template v-slot:default>
+                    <thead>
+                    <tr>
+                      <th class="text-center">
+                        عنوان حقوق و مزایا
+                      </th>
+                      <th class="text-center">
+                        محاسبه بر مبنای
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>عیدی و پاداش</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.eydi_padash_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>حق سنوات</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.haghe_sanavat_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>عائله مندی</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.aele_mandi_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>اضافه کاری</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.ezafe_kari_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>تعطیل کاری</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.tatil_kari_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>کسر کار</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.kasre_kar_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>شب کاری</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.shab_kari_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>نوبت کاری صبح و عصر</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.nobat_kari_sob_asr_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>نوبت کاری صبح و شب</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.nobat_kari_sob_shab_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>نوبت کاری عصر و شب</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.nobat_kari_asr_shab_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>نوبت کاری صبح و عصر و شب</td>
+                      <td>
+                        <v-autocomplete
+                            :items="PAY_TYPES"
+                            v-model="item.nobat_kari_sob_asr_shab_pay_type"
+                            item-text="name"
+                            item-value="value"
+                            :disabled="!isEditing"
+                        />
+                      </td>
+                    </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+                <v-row class="ml-3 mt-10">
+                  <v-col cols="12" md="6" class="text-center">
+                    <v-card-text class="text-h6">مسکن :</v-card-text>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-autocomplete
+                        label="* مسکن"
+                        :items="MASKAN_TYPE"
+                        v-model="item.maskan"
+                        item-text="name"
+                        item-value="value"
+                        :disabled="!isEditing"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6" class="text-center">
+                    <v-card-text class="text-h6">وسیله نقلیه :</v-card-text>
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-autocomplete
+                        label="* وسیله نقلیه"
+                        :items="OTOMOBIL_TYPE"
+                        v-model="item.otomobil"
+                        item-text="name"
+                        item-value="value"
+                        :disabled="!isEditing"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-card-text class="text-h6 text-center">مشمول ماده یک تبصره 86 ق.م.م :</v-card-text>
+                  </v-col>
+                  <v-col cols="12" md="6" class="pt-8">
+                    <v-switch
+                        class="mr-16"
+                        v-model="item.include_made_86"
+                        color="success"
+                        :false-value="false"
+                        :true-value="true"
+                        hide-details
+                        :disabled="!isEditing"
+                    ></v-switch>
+                  </v-col>
+                </v-row>
+                <v-row v-if="item.include_made_86" class="ma-2">
+                  <v-col cols="12" md="12">
+                    <v-banner class="mt-3 mb-5 orange--text text--darken-3">
+                      <v-avatar
+                          slot="icon"
+                          color="orange darken-2"
+                          size="40"
+                      >
+                        <v-icon
+                            color="white"
+                        >
+                          fa-info
+                        </v-icon>
+                      </v-avatar>
+                      تبصره 1- در مورد پرداخت هایی که از طرف غیر از پرداخت کننده اصلی حقوق به اشخاص حقیقی، به عمل می­
+                      آید،پرداخت­ کنندگان مکلفند هنگام هر پرداخت، مالیات متعلق را با رعایت معافیت­ های قانونی مربوط به حقوق به
+                      جز معافیت موضوع ماده (84) این قانون، به نرخ مقطوع ده درصد (10%) محاسبه،کسر و حداکثر تا پایان ماه بعد با
+                      فهرستی حاوی نام و نشانی دریافت­ کنندگان و میزان آن به اداره امور مالیاتی محل، پرداخت کنند و در صورت
+                      تخلف، مسوول پرداخت مالیات و جریمه­ های متعلق خواهندبود.
+                    </v-banner>
+                  </v-col>
+                </v-row>
+
+              </v-card-text>
+              <v-card-actions class="justify-end">
+                <v-btn
+                    class="green white--text"
+                    large
+                    @click="$refs.HRLetterFrom.submit(false) ; show_custom=false"
+                >ثبت
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
 
         </v-row>
       </template>
@@ -2190,12 +2386,14 @@
           class="primary darken-2 white--text mt-12 mr-2 float-left "
           v-if="item.id && item.is_verified  && item.is_active && item.is_calculated"
           @click="UnActiveHR(item)"
-      >غیر فعال کردن</v-btn>
+      >غیر فعال کردن
+      </v-btn>
       <v-btn
           class="green darken-1 white--text mt-12 mr-2 float-left "
           v-if="item.id && item.is_verified  && !item.is_active && item.is_calculated"
           @click="sure_dialog = true"
-      > فعال کردن</v-btn>
+      > فعال کردن
+      </v-btn>
 
     </m-form>
     <v-row justify="center">
@@ -2302,9 +2500,13 @@ export default {
   },
   data() {
     return {
+      PAY_TYPES: [
+        {name: 'حداقل حقوق روزانه', value: 'd'},
+        {name: 'مزد مبنا', value: 'b'},
+      ],
 
       NATURE_TYPES: [
-        {name: ' دستمزد رورانه', value: 'b'},
+        {name: ' دستمزد روزانه', value: 'b'},
         {name: 'مستمر', value: 'p'},
         {name: 'غیر مستمر', value: 'u'},
       ],
@@ -2330,6 +2532,7 @@ export default {
       hasIdProp: true,
       saveContract: null,
       error_dialog: false,
+      show_custom: false,
       error_message: null,
       worker: null,
       contract_code: {},
@@ -2340,7 +2543,7 @@ export default {
       hasLock: false,
       show_list_with_id: true,
       first: false,
-      filter: {'is_template': 'p', 'contract': null },
+      filter: {'is_template': 'p', 'contract': null},
       isDefinable: false,
       createOne: false,
       myClass: '',

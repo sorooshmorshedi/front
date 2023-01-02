@@ -7,8 +7,7 @@
       :disabled="disabled"
       v-on:keypress="NumbersOnly"
       v-model="formattedAmount"
-      class=""
-      prepend-inner-icon="%"
+      class="currency-input"
       :smaller-font="formattedAmount.length > 14"
       style="min-width: 80px;"
       v-bind="$attrs"
@@ -16,6 +15,7 @@
       autocomplete="off"
   >
     <template #append>
+      <span class="py-1 green--text text--darken-3"> درصد </span>
     </template>
   </v-text-field>
 </template>
