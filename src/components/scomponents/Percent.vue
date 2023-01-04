@@ -7,6 +7,7 @@
       :disabled="disabled"
       v-on:keypress="NumbersOnly"
       v-model="formattedAmount"
+      append-icon="fa-percent"
       class="currency-input"
       :smaller-font="formattedAmount.length > 14"
       style="min-width: 80px;"
@@ -15,7 +16,7 @@
       autocomplete="off"
   >
     <template v-slot:append>
-      <span class="py-1 green--text text--darken-3"> درصد </span>
+
     </template>
   </v-text-field>
 </template>
@@ -115,7 +116,7 @@ export default {
     text-align: center !important;
 
     &[smaller-font] {
-      font-size: 10px !important;
+      font-size: 20px !important;
     }
   }
 }

@@ -6,7 +6,7 @@
     @input="change"
     :disabled="disabled"
     v-model="formattedAmount"
-    :append-icon="icon"
+    append-icon="fas fa-sun"
     class="currency-input"
     :smaller-font="formattedAmount.length > 14"
     style="min-width: 80px;"
@@ -14,9 +14,6 @@
     v-on="listeners"
     autocomplete="off"
   >
-    <template #append>
-      <span class="py-1 pl-1 green--text text--darken-3">روز</span>
-    </template>
   </v-text-field>
 </template>
 

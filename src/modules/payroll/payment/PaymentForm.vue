@@ -32,11 +32,12 @@
         ></v-text-field>
       </v-col>
       <v-col class="mt-5" cols="12" md="4">
-        <v-text-field
+        <v-autocomplete
             label="سال"
-            v-model="this.serverNow.format('jYYYY') "
-            disabled=true
-        ></v-text-field>
+            v-model="year"
+            @change="Show(year)"
+            :items="years"
+        ></v-autocomplete>
       </v-col>
       <v-col class="mt-5" cols="12" md="4">
         <v-autocomplete
@@ -529,6 +530,8 @@ export default {
   },
   data() {
     return {
+      years: [],
+      year: null,
       export_filter: {workshop: this.search_workshop, month: this.search_month},
       url: 'payroll/listOfPay/all',
       items: [],
@@ -636,6 +639,18 @@ export default {
     },
   },
   mounted() {
+    this.year = parseInt(this.serverNow.format('jYYYY'))
+    let counter = 0
+    while (counter < 6){
+      if (counter == 0) {this.years.push(parseInt(this.serverNow.format('jYYYY')))} else {
+        this.years.push(parseInt(this.serverNow.format('jYYYY')) + counter)
+        this.years.push(parseInt(this.serverNow.format('jYYYY')) - counter)
+      }
+      counter += 1
+    }
+    this.years.sort()
+    console.log(this.years)
+
     if (!this.workshop) {
       this.request({
         url: this.endpoint(`payroll/workshop/`),
@@ -667,10 +682,12 @@ export default {
     Show(item) {
       console.log(item)
     },
-
+    onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    },
     getList() {
       this.request({
-        url: this.endpoint(`payroll/payment/` + this.serverNow.format('jYYYY') + '/' + this.search_month + '/' + this.search_workshop + '/'),
+        url: this.endpoint(`payroll/payment/` + this.year + '/' + this.search_month + '/' + this.search_workshop + '/'),
         method: "post",
         data: {'name': this.list_name, 'ultimate': this.list_status, 'use_in_calculate': this.calculate},
 
@@ -818,7 +835,7 @@ export default {
     },
     paymentStart() {
       this.request({
-        url: this.endpoint(`payroll/PaymentVerify/` + this.serverNow.format('jYYYY') + '/' + this.search_month + '/' + this.search_workshop + '/'),
+        url: this.endpoint(`payroll/PaymentVerify/` + this.year + '/' + this.search_month + '/' + this.search_workshop + '/'),
         method: "get",
         success: data => {
           this.payment_start = true
@@ -833,7 +850,7 @@ export default {
     getListsOfMonth(month) {
       this.request({
         url: this.endpoint(`payroll/listOfPay/workshop/` + this.search_workshop + '/' + month + '/' +
-            this.serverNow.format('jYYYY') + '/'),
+            this.year + '/'),
         method: "get",
         success: data => {
           for (let t in data) {
