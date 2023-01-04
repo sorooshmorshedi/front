@@ -7,7 +7,7 @@
           :show-navigation-btns="false"
           :show-actions="true"
           :showList="false"
-          :can-edit="!item.is_verified"
+          :can-edit="!item.is_verified && !is_pop"
           :canDelete="false"
           :canSubmit="!item.is_verified && !is_pop"
           :showClearBtn="false"
@@ -18,7 +18,7 @@
           ref="workshopSettingForm"
       >
         <template>
-          <v-banner v-if="item.is_verified"  class="mt-3 mb-5 red--text">
+          <v-banner v-if="item.is_verified" class="mt-3 mb-5 red--text">
             <v-avatar
                 slot="icon"
                 color="red"
@@ -44,7 +44,9 @@
               قبل از ثبت نهایی کارگاه، تنظیمات کارگاه بررسی و تایید شود
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn v-if="!is_pop" outlined color="white" @click="$router.push('/panel/workshop/' + item.id + '/')" >بازگشت به کارگاه</v-btn>
+            <v-btn v-if="!is_pop" outlined color="white" @click="$router.push('/panel/workshop/' + item.id + '/')">
+              بازگشت به کارگاه
+            </v-btn>
           </v-toolbar>
 
           <v-toolbar
@@ -54,16 +56,25 @@
               dark
           >
             <v-toolbar-title>
-              تنظیمات کلی حقوق و مزایا
+              تنظیمات کلی حقوق و مزایا کارگاه {{ item.name }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn v-if="!is_pop" outlined color="white" @click="$router.push('/panel/workshop/' + item.id + '/')" >بازگشت به کارگاه</v-btn>
+            <v-btn v-if="!is_pop" outlined color="white" @click="$router.push('/panel/workshop/' + item.id + '/')">
+              بازگشت به کارگاه
+            </v-btn>
           </v-toolbar>
-
+          <v-autocomplete
+              label="نحوه محاسبه مزد مبنا"
+              :items="BASE_PAY_TYPES"
+              v-model="item.base_pay_type = 'd'"
+              item-text="name"
+              item-value="value"
+              v-show="false"
+          />
           <v-row class=" mb-6">
             <v-col cols="12" md="12">
               <v-row>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                   <v-autocomplete
                       label="نحوه محاسبه پایه سنوات "
                       :items="SANAVAT_TYPES"
@@ -73,7 +84,7 @@
                       :disabled="!isEditing"
                   />
                 </v-col>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                   <v-autocomplete
                       label="نحوه محاسبه حق سنوات "
                       :items="HAGHE_SANAVAT_TYPES"
@@ -83,32 +94,7 @@
                       :disabled="!isEditing"
                   />
                 </v-col>
-
-                <v-col cols="12" md="4">
-                  <v-autocomplete
-                      label="نحوه محاسبه مزد مبنا"
-                      :items="BASE_PAY_TYPES"
-                      v-model="item.base_pay_type"
-                      item-text="name"
-                      item-value="value"
-                      :disabled="!isEditing"
-                  />
-
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="4">
-                  <percent label="نرخ حق بیمه سهم کارفرما" v-model="item.employee_insurance_nerkh" :disabled="!isEditing"></percent>
-                </v-col>
-                <v-col cols="12" md="4">
-                  <percent label="نرخ حق بیمه سهم بیمه شده" v-model="item.worker_insurance_nerkh" :disabled="!isEditing"></percent>
-                </v-col>
-                <v-col cols="12" md="4">
-                  <percent label="نرخ حق بیمه سهم بیکاری" v-model="item.unemployed_insurance_nerkh" :disabled="!isEditing"></percent>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                   <money
                       label="حداقل حقوق ماهانه اداره کار"
                       class="currency-input"
@@ -117,10 +103,7 @@
                   >
                   </money>
                 </v-col>
-                <v-col cols="12" md="4">
-                  <percent label="نرخ تبصره 1 ماده 86 ق.م.م" v-model="item.made_86_nerkh" :disabled="!isEditing"></percent>
-                </v-col>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                   <v-autocomplete
                       label="معافیت مالیاتی حق بیمه سهم بیمه شده"
                       :items="TAX_EMPLOYER_TYPES"
@@ -129,6 +112,24 @@
                       item-value="value"
                       :disabled="!isEditing"
                   />
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="3">
+                  <percent label="نرخ حق بیمه سهم کارفرما" v-model="item.employee_insurance_nerkh"
+                           :disabled="!isEditing"></percent>
+                </v-col>
+                <v-col cols="12" md="3">
+                  <percent label="نرخ حق بیمه سهم بیمه شده" v-model="item.worker_insurance_nerkh"
+                           :disabled="!isEditing"></percent>
+                </v-col>
+                <v-col cols="12" md="3">
+                  <percent label="نرخ حق بیمه سهم بیکاری" v-model="item.unemployed_insurance_nerkh"
+                           :disabled="!isEditing"></percent>
+                </v-col>
+                <v-col cols="12" md="3">
+                  <percent label="نرخ تبصره 1 ماده 86 ق.م.م" v-model="item.made_86_nerkh"
+                           :disabled="!isEditing"></percent>
                 </v-col>
               </v-row>
             </v-col>
@@ -234,7 +235,7 @@
               dark
           >
             <v-toolbar-title>
-              مبانی محاسباتی حقوق و دستمزد
+              مبانی محاسباتی حقوق و دستمزد کارگاه {{ item.name }}
             </v-toolbar-title>
           </v-toolbar>
 
@@ -458,10 +459,10 @@ export default {
     return {
       TAX_EMPLOYER_TYPES: [
         {name: '7/7', value: 1},
-        {name: '2/7', value: 2 / 7},
+        {name: '2/7', value: 2},
       ],
       BASE_PAY_TYPES: [
-        {name: 'مزد مبنای روزانه', value: 'd'},
+        {name: 'مزد مبنا بر اساس مدل روزانه', value: 'd'},
         {name: 'مزد مبنای ماهانه', value: 'm'},
       ],
       PAY_TYPES: [
@@ -514,7 +515,8 @@ export default {
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
       if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-        evt.preventDefault();;
+        evt.preventDefault();
+        ;
       } else {
         return true;
       }

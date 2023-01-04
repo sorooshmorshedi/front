@@ -403,7 +403,7 @@
                     اضافه کاری (ساعت)
                   </th>
                   <td class="text-center">
-                    {{list_of_pay_item.ezafe_kari}}
+                    <time_from_decimal v-model="list_of_pay_item.ezafe_kari"></time_from_decimal>
                   </td>
                 </tr>
                 <tr>
@@ -419,7 +419,7 @@
                     تعطیل کاری (ساعت)
                   </th>
                   <td class="text-center">
-                    {{list_of_pay_item.tatil_kari}}
+                    <time_from_decimal v-model="list_of_pay_item.tatil_kari"></time_from_decimal>
                   </td>
                 </tr>
                 <tr>
@@ -435,7 +435,7 @@
                     شب کاری (ساعت)
                   </th>
                   <td class="text-center">
-                    {{list_of_pay_item.shab_kari}}
+                    <time_from_decimal v-model="list_of_pay_item.shab_kari"></time_from_decimal>
                   </td>
                 </tr>
                 <tr>
@@ -447,15 +447,15 @@
                   </td>
                 </tr>
 
-                <tr v-if="list_of_pay_item.nobat_kari_sob_shab">
+                <tr v-if="list_of_pay_item.nobat_kari_sob_shab != 0">
                   <th class="">
                     نوبت کاری صبح و شب (ساعت)
                   </th>
                   <td>
-                    <money v-model="list_of_pay_item.nobat_kari_sob_shab" disabled="true"></money>
+                    <time_from_decimal v-model="list_of_pay_item.nobat_kari_sob_shab"></time_from_decimal>
                   </td>
                 </tr>
-                <tr v-if="list_of_pay_item.get_nobat_kari_sob_shab_total">
+                <tr v-if="list_of_pay_item.nobat_kari_sob_shab != 0">
                   <th class="">
                     نوبت کاری صبح و شب (مبلغ)
                   </th>
@@ -464,15 +464,15 @@
                   </td>
                 </tr>
 
-                <tr v-if="list_of_pay_item.nobat_kari_sob_asr">
+                <tr v-if="list_of_pay_item.nobat_kari_sob_asr != 0">
                   <th class="">
                     نوبت کاری صبح و عصر (ساعت)
                   </th>
                   <td>
-                    <money v-model="list_of_pay_item.nobat_kari_sob_asr" disabled="true"></money>
+                    <time_from_decimal v-model="list_of_pay_item.nobat_kari_sob_asr"></time_from_decimal>
                   </td>
                 </tr>
-                <tr v-if="list_of_pay_item.get_nobat_kari_sob_asr_total">
+                <tr v-if="list_of_pay_item.nobat_kari_sob_asr != 0">
                   <th class="">
                     نوبت کاری صبح و عصر (مبلغ)
                   </th>
@@ -481,15 +481,15 @@
                   </td>
                 </tr>
 
-                <tr v-if="list_of_pay_item.nobat_kari_asr_shab">
+                <tr v-if="list_of_pay_item.nobat_kari_asr_shab != 0">
                   <th class="">
                     نوبت کاری عصر و شب (ساعت)
                   </th>
                   <td>
-                    <money v-model="list_of_pay_item.nobat_kari_asr_shab" disabled="true"></money>
+                    <time_from_decimal v-model="list_of_pay_item.nobat_kari_asr_shab"></time_from_decimal>
                   </td>
                 </tr>
-                <tr v-if="list_of_pay_item.get_nobat_kari_asr_shab_total">
+                <tr v-if="list_of_pay_item.nobat_kari_asr_shab != 0">
                   <th class="">
                     نوبت کاری عصر و شب (مبلغ)
                   </th>
@@ -498,15 +498,15 @@
                   </td>
                 </tr>
 
-                <tr v-if="list_of_pay_item.nobat_kari_sob_asr_shab">
+                <tr v-if="list_of_pay_item.nobat_kari_sob_asr_shab != 0">
                   <th class="">
                     نوبت کاری صبح، عصر و شب (ساعت)
                   </th>
                   <td>
-                    <money v-model="list_of_pay_item.nobat_kari_sob_asr_shab" disabled="true"></money>
+                    <time_from_decimal v-model="list_of_pay_item.nobat_kari_sob_asr_shab"></time_from_decimal>
                   </td>
                 </tr>
-                <tr v-if="list_of_pay_item.get_nobat_kari_sob_asr_shab_total">
+                <tr v-if="list_of_pay_item.get_nobat_kari_sob_asr_shab_total != 0">
                   <th class="">
                     نوبت کاری صبح، عصر و شب (مبلغ)
                   </th>
@@ -898,6 +898,7 @@ import MDatatable from "@/components/m-datatable";
 import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
+import time_from_decimal from "@/components/scomponents/DecimalToTime";
 
 
 import TransactionForm from "@/views/panel/transaction/Form";
@@ -911,7 +912,7 @@ export default {
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
     LoanList,
-    SummaryAbsenceList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money},
+    SummaryAbsenceList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, time_from_decimal},
   props: {
     loan: {},
   },

@@ -14,7 +14,7 @@
       v-on="listeners"
       autocomplete="off"
   >
-    <template #append>
+    <template v-slot:append>
       <span class="py-1 green--text text--darken-3"> درصد </span>
     </template>
   </v-text-field>
@@ -70,7 +70,19 @@ export default {
         value = 0
       }
       this.formattedAmount = value * 100;
-      this.formattedAmount = this.formattedAmount.toFixed(1);
+      const decimalAmount = this.formattedAmount.toFixed(2);
+      const intAmount = parseInt(this.formattedAmount);
+      if (decimalAmount != intAmount){
+        const oneDecimalAmount = decimalAmount.toFixed(1)
+        if (oneDecimalAmount == decimalAmount) {
+          this.formattedAmount = oneDecimalAmount
+        } else {
+          this.formattedAmount = decimalAmount
+        }
+      } else {
+        this.formattedAmount = intAmount
+      }
+
       return value * 100
     },
     getAmount() {

@@ -42,8 +42,8 @@
             >
               <v-card>
                 <v-card-text>
-                  <workshop-setting-form ref="setting" :id="item.id" :is_pop="true" :show_edit="true"
-                                         :is-editing="true"></workshop-setting-form>
+                  <workshop-setting-form ref="setting" :id="item.id" :is_pop="true" :show_edit="false"
+                                         :is-editing="false"></workshop-setting-form>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -58,7 +58,7 @@
                       left
                       large
                       class="light-blue white--text mt-12 mb-5 mr-2 float-left"
-                      @click="$refs.setting.submit(false) ; show_setting = false ; verifyWorkshop(item)"
+                      @click="verifyWorkshop(item)"
                   >  تایید و ثبت نهایی کارگاه
                   </v-btn>
 

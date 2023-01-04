@@ -1985,10 +1985,17 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn
-                color="green darken-1"
+                color="blue"
                 class="white--text"
-                :disabled="!isEditing"
+                v-if="isEditing"
                 @click="show_custom=true"
+            >
+              مشاهده و شخصی سازی
+            </v-btn>
+            <v-btn
+                color="blue-grey"
+                class="white--text"
+                v-if="!isEditing"
             >
               مشاهده و شخصی سازی
             </v-btn>
@@ -1998,16 +2005,21 @@
           <v-toolbar v-if="item.id" color="indigo" class="mt-10">
 
             <v-toolbar-title class="white--text">
-              مبنا
+              مزد مبنا حکم {{item.name}}
             </v-toolbar-title>
           </v-toolbar>
 
-          <v-row v-if="item.id" class="mt-10">
-            <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">مزد مبنا :</v-card-text>
+          <v-row v-if="item.id" class="mt-10 pa-5">
+            <v-col cols="12" md="3">
+              <money
+                  label=" مزد مبنا ساعتی "
+                  v-model="item.day_hourly_pay_base"
+                  background-color="white"
+                  disabled=true
+              />
             </v-col>
 
-            <v-col cols="12" md="2">
+            <v-col cols="12" md="3">
               <money
                   label=" مزد مبنا روزانه "
                   v-model="item.daily_pay_base"
@@ -2015,7 +2027,7 @@
                   disabled=true
               />
             </v-col>
-            <v-col cols="12" md="2">
+            <v-col cols="12" md="3">
               <money
                   label=" مزد مبنا ماهانه "
                   v-model="item.monthly_pay_base"
@@ -2023,35 +2035,7 @@
                   disabled=true
               />
             </v-col>
-          </v-row>
-          <v-row v-if="item.id">
-            <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">مزد مبنا ساعتی :</v-card-text>
-            </v-col>
-
-            <v-col cols="12" md="2">
-              <money
-                  label=" مزد مبنا ساعتی مدل روزانه "
-                  v-model="item.day_hourly_pay_base"
-                  background-color="white"
-                  disabled=true
-              />
-            </v-col>
-            <v-col cols="12" md="2">
-              <money
-                  label=" مزد مبنا ساعتی مدل ماهانه "
-                  v-model="item.month_hourly_pay_base"
-                  background-color="white"
-                  disabled=true
-              />
-            </v-col>
-          </v-row>
-          <v-row v-if="item.id">
-            <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">دستمزد روزانه بیمه :</v-card-text>
-            </v-col>
-
-            <v-col cols="12" md="2">
+            <v-col cols="12" md="3">
               <money
                   label=" دستمزد روزانه بیمه "
                   v-model="item.insurance_pay_day"
@@ -2059,6 +2043,7 @@
                   disabled=true
               />
             </v-col>
+
           </v-row>
         </v-card>
         <v-row class="ma-5">

@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12" md="6">
         <m-form
-            title="ثبت  جدول معافیت مالیات و حقوق سالانه"
+            title="ثبت  جدول معافیت مالیات حقوق سالانه"
             :showList="false"
             :listRoute="{name:'TaxRowList'}"
             :exportBaseUrl="printUrl"
@@ -11,6 +11,7 @@
             :show-navigation-btns="false"
             :show-submit-and-clear-btn="false"
             :canDelete="false"
+            :can-edit="!item.is_verified"
             :show-clear-btn="false"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
@@ -169,8 +170,48 @@
               </v-simple-table>
             </v-row>
           </template>
+          <v-btn
+              class="light-blue white--text mt-6  mr-2 float-left"
+              @click="verifyWorkshopTax(item)"
+              v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
+          </v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="UnVerifyWorkshopTax(item)"
+              v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
+          </v-btn>
 
         </m-form>
+        <v-row justify="center">
+          <v-dialog
+              v-model="error_dialog"
+              persistent
+              @click:outside="error_dialog=false"
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                لطفا موارد زیر را تکمیل یا اصلاح کنید!
+              </v-card-title>
+              <v-card-text>
+                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                  {{ item }}
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
       </v-col>
       <v-col cols="12" md="6">
         <tax-row-list></tax-row-list>
@@ -232,6 +273,8 @@ export default {
       hasList: false,
       hasIdProp: true,
       firstt: false,
+      error_dialog: false,
+      error_message: null,
       hasLock: false,
       isDefinable: false,
       myClass: '',
@@ -314,6 +357,39 @@ export default {
         },
       };
     },
+    verifyWorkshopTax(item) {
+      this.request({
+        url: this.endpoint(`payroll/tax/verify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('  جدول معاف مالیات نهایی شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.error_message = data.response.data['وضعیت']
+          this.error_dialog = true
+
+        }
+      })
+
+    },
+    UnVerifyWorkshopTax(item) {
+      this.request({
+        url: this.endpoint(`payroll/tax/unverify/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('جدول معاف مالیات از نهایی خارج شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+
 
     unConfirm() {
       this.$router.go()
