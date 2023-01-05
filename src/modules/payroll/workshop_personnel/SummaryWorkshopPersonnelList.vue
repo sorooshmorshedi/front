@@ -36,7 +36,7 @@ export default {
         },
         {
           text: "عنوان شغلی",
-          value: "work_title",
+          value: "title_name",
         },
         {
           text: "رسته شغلی",

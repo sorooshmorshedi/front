@@ -222,6 +222,7 @@ import WorkshopList from "@/modules/payroll/workshop/WorkshopList";
 import SummaryWorkshopList from "@/modules/payroll/workshop/SummaryWorkshopList";
 import mobile from "@/components/scomponents/Mobile";
 import WorkshopSettingForm from "@/modules/payroll/workshop/WorkshopSettingForm";
+import WorkTitleSelect from "@/components/scomponents/WorkTitleSelect";
 
 
 export default {
@@ -230,7 +231,7 @@ export default {
   components: {
     WorkshopSettingForm,
     SummaryWorkshopList,
-    WorkshopList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, mobile
+    WorkshopList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, mobile, WorkTitleSelect
   },
   props: {
     id: {},

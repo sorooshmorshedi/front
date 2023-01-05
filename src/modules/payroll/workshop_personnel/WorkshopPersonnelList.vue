@@ -41,7 +41,11 @@ export default {
 
         {
           text: "عنوان شغلی",
-          value: "work_title",
+          value: "title_name",
+        },
+        {
+          text: "کد عنوان شغلی",
+          value: "title_code",
         },
         {
           text: " تاریخ استخدام",

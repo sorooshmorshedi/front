@@ -23,6 +23,7 @@ export default new Vuex.Store({
     companyUsers: [],
     options: null,
     cities: [],
+    work_titles: [],
     accounts: [],
     floatAccountGroups: [],
     floatAccounts: [],
@@ -81,6 +82,9 @@ export default new Vuex.Store({
     },
     setCities(state, data) {
       state.cities = data;
+    },
+    setWorkTitles(state, data) {
+      state.work_titles = data;
     },
     setAccounts(state, data) {
       state.accounts = data;

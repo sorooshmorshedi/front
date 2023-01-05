@@ -170,16 +170,12 @@
                 />
               </v-col>
               <v-col cols="12" md="6">
-                <v-autocomplete
-                    :rules="[rules.required,]"
-                    label="عنوان شغلی(بیمه)"
-                    :items="work_titles"
-                    v-model="item.work_title"
-                    item-text="name"
-                    item-value="value"
+                <work-title-select
+                    :first_item="item.title"
+                    v-model="item.title"
                     :disabled="!isEditing || item.quit_job"
                     @change="setChange(item.work_title)"
-                />
+                ></work-title-select>
 
               </v-col>
               <v-col cols="12" md="6">
@@ -419,6 +415,7 @@ import TransactionForm from "@/views/panel/transaction/Form";
 import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 import {toString} from "lodash";
 import SummaryWorkshopPersonnelList from "@/modules/payroll/workshop_personnel/SummaryWorkshopPersonnelList";
+import workTitleSelect from "@/components/scomponents/WorkTitleSelect";
 
 
 export default {
@@ -426,13 +423,14 @@ export default {
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
     SummaryWorkshopPersonnelList,
-    mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money
+    mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, workTitleSelect
   },
   props: {
     id: {},
   },
   data() {
     return {
+      test_val: 'fist',
       work_title: null,
       work_titles: [],
       work_title_code: null,
@@ -547,15 +545,6 @@ export default {
     },
   },
   mounted() {
-    for (let i in this.WORK_TITLES) {
-      this.work_titles.push(
-          {
-            'name': this.WORK_TITLES[i]['نام شغل'] + ' ' + this.WORK_TITLES[i]['كــد شغل'],
-            'value': this.WORK_TITLES[i]['نام شغل'],
-            'code': this.WORK_TITLES[i]['كــد شغل']
-          }
-      )
-    }
     this.request({
       url: this.endpoint(`payroll/workshop/`),
       method: "get",
