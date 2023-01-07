@@ -406,24 +406,24 @@
                     ></hour-picker>
                   </td>
                   <td>
-                    <hour-picker
-                        v-model="items[person.id]['sob_asr'] "
-                    ></hour-picker>
+                    <v-text-field v-model="items[person.id]['sob_asr'] "
+                                  class="currency-input">
+                    </v-text-field>
                   </td>
                   <td>
-                    <hour-picker
-                        v-model="items[person.id]['sob_shab'] "
-                    ></hour-picker>
+                    <v-text-field v-model="items[person.id]['sob_shab'] "
+                                  class="currency-input">
+                    </v-text-field>
                   </td>
                   <td>
-                    <hour-picker
-                        v-model="items[person.id]['asr_shab'] "
-                    ></hour-picker>
+                    <v-text-field v-model="items[person.id]['asr_shab'] "
+                                  class="currency-input">
+                    </v-text-field>
                   </td>
                   <td>
-                    <hour-picker
-                        v-model="items[person.id]['sob_asr_shab'] "
-                    ></hour-picker>
+                    <v-text-field v-model="items[person.id]['sob_asr_shab'] "
+                                  class="currency-input">
+                    </v-text-field>
                   </td>
 
                   <td>
@@ -703,10 +703,10 @@ export default {
               'kasre_kar': "00:00",
               'shab_kari': "00:00",
               'jome_kar': "00:00",
-              'sob_shab': "00:00",
-              'sob_asr': "00:00",
-              'asr_shab': "00:00",
-              'sob_asr_shab': "00:00",
+              'sob_shab': 0,
+              'sob_asr': 0,
+              'asr_shab': 0,
+              'sob_asr_shab': 0,
               'mazaya_gheyr_mostamar': 0,
               'sayer_ezafat': 0,
               'contract_row': null,

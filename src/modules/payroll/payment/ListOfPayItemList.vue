@@ -325,7 +325,7 @@ export default {
           value: "personnel_name",
         },
         {
-          text: "بیمه مبشود؟",
+          text: "بیمه میشود؟",
           value: "is_insurance_display",
         },
         {

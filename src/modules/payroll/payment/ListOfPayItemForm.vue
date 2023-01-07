@@ -8,11 +8,76 @@
           color="indigo darken-2"
           dark
       >
-        <v-app-bar-nav-icon
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-app-bar-nav-icon
+                class=""
+                v-bind="attrs"
+                v-on="on"
+            ></v-app-bar-nav-icon>
+          </template>
+          <v-list>
+            <v-list-item @click="$router.push('/panel/hr_letter/' + list_of_pay_item.hr)">
+              <v-list-item-avatar>
+                <img :src="endpoint('media/1.jpg')">
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>حکم کارگزینی</v-list-item-title>
+                <v-list-item-subtitle>برای مشاهده حکم این لیست کلیک کنید</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn icon>
+                  <v-icon>fa-eye</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+            <v-list-item @click="$router.push('/panel/listOfPayItem/' + list_of_pay_item.list_of_pay)">
+              <v-list-item-avatar>
+                <img :src="endpoint('media/list.png')">
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>لیست حقوق </v-list-item-title>
+                <v-list-item-subtitle>برای مشاهده لیست حقوق این ماه کلیک کنید</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn icon>
+                  <v-icon>fa-eye</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+            <v-list-item @click="$router.push('/panel/workshop_contract/' + list_of_pay_item.contract)">
+              <v-list-item-avatar>
+                <img :src="endpoint('media/contract.jpg')">
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>قرارداد </v-list-item-title>
+                <v-list-item-subtitle>برای مشاهده قرارداد این لیست کلیک کنید</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn icon>
+                  <v-icon>fa-eye</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+            <v-list-item @click="$router.push('/panel/workshop_personnel/' + list_of_pay_item.workshop_personnel)">
+              <v-list-item-avatar>
+                <img :src="endpoint('media/personnel.png')">
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>پرسنل در کارگاه </v-list-item-title>
+                <v-list-item-subtitle>برای مشاهده پرسنل در کارگاه این لیست کلیک کنید</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn icon>
+                  <v-icon>fa-eye</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
 
-        ></v-app-bar-nav-icon>
+          </v-list>
+        </v-menu>
 
-        <v-toolbar-title> حقوق و دستمزد  </v-toolbar-title>
+        <v-toolbar-title class="mr-2"> حقوق و دستمزد  </v-toolbar-title>
 
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
@@ -326,7 +391,7 @@
                     کسر کار (ساعت)
                   </th>
                   <td class="text-center">
-                    {{list_of_pay_item.kasre_kar}}
+                    <time_from_decimal v-model="list_of_pay_item.kasre_kar"></time_from_decimal>
                   </td>
                 </tr>
                 <tr>
@@ -449,10 +514,10 @@
 
                 <tr v-if="list_of_pay_item.nobat_kari_sob_shab != 0">
                   <th class="">
-                    نوبت کاری صبح و شب (ساعت)
+                    نوبت کاری صبح و شب (روز)
                   </th>
                   <td>
-                    <time_from_decimal v-model="list_of_pay_item.nobat_kari_sob_shab"></time_from_decimal>
+                    <money v-model="list_of_pay_item.nobat_kari_sob_shab" disabled="true"></money>
                   </td>
                 </tr>
                 <tr v-if="list_of_pay_item.nobat_kari_sob_shab != 0">
@@ -466,10 +531,10 @@
 
                 <tr v-if="list_of_pay_item.nobat_kari_sob_asr != 0">
                   <th class="">
-                    نوبت کاری صبح و عصر (ساعت)
+                    نوبت کاری صبح و عصر (روز)
                   </th>
                   <td>
-                    <time_from_decimal v-model="list_of_pay_item.nobat_kari_sob_asr"></time_from_decimal>
+                    <money v-model="list_of_pay_item.nobat_kari_sob_asr" disabled="true"></money>
                   </td>
                 </tr>
                 <tr v-if="list_of_pay_item.nobat_kari_sob_asr != 0">
@@ -483,10 +548,10 @@
 
                 <tr v-if="list_of_pay_item.nobat_kari_asr_shab != 0">
                   <th class="">
-                    نوبت کاری عصر و شب (ساعت)
+                    نوبت کاری عصر و شب (روز)
                   </th>
                   <td>
-                    <time_from_decimal v-model="list_of_pay_item.nobat_kari_asr_shab"></time_from_decimal>
+                    <money v-model="list_of_pay_item.nobat_kari_asr_shab" disabled="true"></money>
                   </td>
                 </tr>
                 <tr v-if="list_of_pay_item.nobat_kari_asr_shab != 0">
@@ -500,13 +565,13 @@
 
                 <tr v-if="list_of_pay_item.nobat_kari_sob_asr_shab != 0">
                   <th class="">
-                    نوبت کاری صبح، عصر و شب (ساعت)
+                    نوبت کاری صبح، عصر و شب (روز)
                   </th>
                   <td>
-                    <time_from_decimal v-model="list_of_pay_item.nobat_kari_sob_asr_shab"></time_from_decimal>
+                    <money v-model="list_of_pay_item.nobat_kari_sob_asr_shab" disabled="true"></money>
                   </td>
                 </tr>
-                <tr v-if="list_of_pay_item.get_nobat_kari_sob_asr_shab_total != 0">
+                <tr v-if="list_of_pay_item.nobat_kari_sob_asr_shab != 0">
                   <th class="">
                     نوبت کاری صبح، عصر و شب (مبلغ)
                   </th>
@@ -533,7 +598,7 @@
                 </tr>
                 <tr>
                   <th class="">
-                    تعداد اولاد
+                     تعداد اولاد مشمول
                   </th>
                   <td class="text-center">
                     {{list_of_pay_item.aele_mandi_child }}
