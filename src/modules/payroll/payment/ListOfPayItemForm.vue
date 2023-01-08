@@ -36,7 +36,7 @@
                 <img :src="endpoint('media/list.png')">
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>لیست حقوق </v-list-item-title>
+                <v-list-item-title>لیست حقوق</v-list-item-title>
                 <v-list-item-subtitle>برای مشاهده لیست حقوق این ماه کلیک کنید</v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
@@ -50,7 +50,7 @@
                 <img :src="endpoint('media/contract.jpg')">
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>قرارداد </v-list-item-title>
+                <v-list-item-title>قرارداد</v-list-item-title>
                 <v-list-item-subtitle>برای مشاهده قرارداد این لیست کلیک کنید</v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
@@ -64,7 +64,7 @@
                 <img :src="endpoint('media/personnel.png')">
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>پرسنل در کارگاه </v-list-item-title>
+                <v-list-item-title>پرسنل در کارگاه</v-list-item-title>
                 <v-list-item-subtitle>برای مشاهده پرسنل در کارگاه این لیست کلیک کنید</v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
@@ -77,7 +77,7 @@
           </v-list>
         </v-menu>
 
-        <v-toolbar-title class="mr-2"> حقوق و دستمزد  </v-toolbar-title>
+        <v-toolbar-title class="mr-2"> حقوق و دستمزد</v-toolbar-title>
 
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
@@ -234,13 +234,12 @@
       >
 
 
-
-        <v-toolbar-title>  {{ list_of_pay_item.personnel_name }} </v-toolbar-title>
+        <v-toolbar-title> {{ list_of_pay_item.personnel_name }}</v-toolbar-title>
 
         <v-spacer></v-spacer>
-       <span class="ml-2 mr-2"> کارگاه {{list_of_pay_item.workshop_display}}</span>
-       <span class="ml-2 mr-2"> سال {{list_of_pay_item.year}}</span>
-       <span class="ml-2 mr-2"> ماه  {{list_of_pay_item.month_display}}</span>
+        <span class="ml-2 mr-2"> کارگاه {{ list_of_pay_item.workshop_display }}</span>
+        <span class="ml-2 mr-2"> سال {{ list_of_pay_item.year }}</span>
+        <span class="ml-2 mr-2"> ماه  {{ list_of_pay_item.month_display }}</span>
       </v-toolbar>
       <v-card>
         <v-row>
@@ -303,7 +302,7 @@
                     سابقه بیمه در کارگاه
                   </th>
                   <td>
-                    {{list_of_pay_item.get_insurance_in_workshop}}
+                    {{ list_of_pay_item.get_insurance_in_workshop }}
                   </td>
                 </tr>
                 <tr>
@@ -311,7 +310,7 @@
                     ردیف پیمان
                   </th>
                   <td>
-                    {{list_of_pay_item.contract_row}}
+                    {{ list_of_pay_item.contract_row }}
                   </td>
                 </tr>
                 <tr>
@@ -319,7 +318,7 @@
                     کارکرد عادی
                   </th>
                   <td>
-                    {{list_of_pay_item.normal_worktime}}
+                    {{ list_of_pay_item.normal_worktime }}
                   </td>
                 </tr>
                 <tr>
@@ -327,7 +326,7 @@
                     مرخصی استحقاقی ساعتی
                   </th>
                   <td>
-                    {{list_of_pay_item.hourly_entitlement_leave_day}}
+                    {{ list_of_pay_item.hourly_entitlement_leave_day }}
                   </td>
                 </tr>
                 <tr>
@@ -335,7 +334,7 @@
                     مرخصی استحقاقی روزانه
                   </th>
                   <td>
-                    {{list_of_pay_item.daily_entitlement_leave_day}}
+                    {{ list_of_pay_item.daily_entitlement_leave_day }}
                   </td>
                 </tr>
                 <tr>
@@ -343,15 +342,15 @@
                     مرخصی استحقاقی جمع
                   </th>
                   <td>
-                    {{list_of_pay_item.entitlement_leave_day}}
+                    {{ list_of_pay_item.entitlement_leave_day }}
                   </td>
                 </tr>
                 <tr>
                   <th class="">
-                     مرخصی استعلاجی
+                    مرخصی استعلاجی
                   </th>
                   <td>
-                    {{list_of_pay_item.illness_leave_day}}
+                    {{ list_of_pay_item.illness_leave_day }}
                   </td>
                 </tr>
                 <tr>
@@ -359,7 +358,7 @@
                     مرخصی ماده 73
                   </th>
                   <td>
-                    {{list_of_pay_item.matter_47_leave_day}}
+                    {{ list_of_pay_item.matter_47_leave_day }}
                   </td>
                 </tr>
                 <tr>
@@ -367,7 +366,7 @@
                     مرخصی بدون حقوق
                   </th>
                   <td>
-                    {{list_of_pay_item.without_salary_leave_day}}
+                    {{ list_of_pay_item.without_salary_leave_day }}
                   </td>
                 </tr>
                 <tr>
@@ -375,7 +374,7 @@
                     غیبت
                   </th>
                   <td>
-                    {{list_of_pay_item.absence_day}}
+                    {{ list_of_pay_item.absence_day }}
                   </td>
                 </tr>
                 <tr>
@@ -383,7 +382,7 @@
                     کارکرد واقعی
                   </th>
                   <td>
-                    {{list_of_pay_item.real_worktime}}
+                    {{ list_of_pay_item.real_worktime }}
                   </td>
                 </tr>
                 <tr>
@@ -391,7 +390,10 @@
                     کسر کار (ساعت)
                   </th>
                   <td class="text-center">
-                    <time_from_decimal v-model="list_of_pay_item.kasre_kar"></time_from_decimal>
+                    <v-text-field class="currency-input" v-model="list_of_pay_item.get_kasre_kar"
+                                  append-icon="fa-clock"
+                                  disabled="true"
+                    ></v-text-field>
                   </td>
                 </tr>
                 <tr>
@@ -585,12 +587,12 @@
                     ماموریت (روز)
                   </th>
                   <td class="text-center">
-                    {{list_of_pay_item.mission_day}}
+                    {{ list_of_pay_item.mission_day }}
                   </td>
                 </tr>
                 <tr>
                   <th class="">
-                     ماموریت (مبلغ)
+                    ماموریت (مبلغ)
                   </th>
                   <td>
                     <money v-model="list_of_pay_item.get_mission_total" disabled="true"></money>
@@ -598,10 +600,10 @@
                 </tr>
                 <tr>
                   <th class="">
-                     تعداد اولاد مشمول
+                    تعداد اولاد مشمول
                   </th>
                   <td class="text-center">
-                    {{list_of_pay_item.aele_mandi_child }}
+                    {{ list_of_pay_item.aele_mandi_child }}
                   </td>
                 </tr>
                 <tr>
@@ -697,7 +699,8 @@
                     فوق العاده محرومیت از تسهیلات زندگی
                   </th>
                   <td>
-                    <money v-model="list_of_pay_item.info.additions.mahroomiat_tashilat_zendegi" disabled="true"></money>
+                    <money v-model="list_of_pay_item.info.additions.mahroomiat_tashilat_zendegi"
+                           disabled="true"></money>
                   </td>
                 </tr>
                 <tr v-if="list_of_pay_item.info.additions.fogholade_mahal_khedmat">
@@ -713,7 +716,8 @@
                     فوق العاده محیط کار
                   </th>
                   <td>
-                    <money v-model="list_of_pay_item.info.additions.fogholade_sharayet_mohit_kar" disabled="true"></money>
+                    <money v-model="list_of_pay_item.info.additions.fogholade_sharayet_mohit_kar"
+                           disabled="true"></money>
                   </td>
                 </tr>
                 <tr v-if="list_of_pay_item.info.additions.ayabo_zahab">
@@ -769,7 +773,8 @@
                     مزایای مستمر غیر نقدی
                   </th>
                   <td>
-                    <money v-model="list_of_pay_item.info.additions.mazaya_mostamar_gheyre_naghdi" disabled="true"></money>
+                    <money v-model="list_of_pay_item.info.additions.mazaya_mostamar_gheyre_naghdi"
+                           disabled="true"></money>
                   </td>
                 </tr>
                 <tr v-if="list_of_pay_item.mazaya_gheyr_mostamar">
@@ -825,7 +830,7 @@
               <template v-slot:default>
                 <thead class="style: indigo darken-2">
                 <tr>
-                <th class="white--text">
+                  <th class="white--text">
                     عنوان
                   </th>
                   <th>
@@ -838,53 +843,53 @@
                 </thead>
                 <tbody>
                 <tr>
-                <th class="" rowspan="5">
-                  بیمه
-                </th>
+                  <th class="" rowspan="5">
+                    بیمه
+                  </th>
                 <tr class="text-center">
-                  <th class="text-center">  دستمزد ماهانه</th>
+                  <th class="text-center"> دستمزد ماهانه</th>
                   <td>
                     <money v-model="list_of_pay_item.get_insurance_monthly_payment" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center">  مزایای ماهانه مشمول مستمر و غیر مستمر</th>
+                  <th class="text-center"> مزایای ماهانه مشمول مستمر و غیر مستمر</th>
                   <td>
                     <money v-model="list_of_pay_item.get_insurance_monthly_benefit" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center">  جمع دستمزد و مزایای ماهانه مشمول</th>
+                  <th class="text-center"> جمع دستمزد و مزایای ماهانه مشمول</th>
                   <td>
                     <money v-model="list_of_pay_item.get_insurance_total_included" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center">  جمع کل دستمزد و مزایای ماهانه</th>
+                  <th class="text-center"> جمع کل دستمزد و مزایای ماهانه</th>
                   <td>
                     <money v-model="list_of_pay_item.total_payment" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2">  حق بیمه سهم بیمه شده</th>
+                  <th class="text-center" colspan="2"> حق بیمه سهم بیمه شده</th>
                   <td>
                     <money v-model="list_of_pay_item.get_haghe_bime_bime_shavande" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2">  معافیت مالیاتی حقوق</th>
+                  <th class="text-center" colspan="2"> معافیت مالیاتی حقوق</th>
                   <td>
                     <money v-model="list_of_pay_item.get_moaf_sum" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2">  حقوق مشمول مالیات</th>
+                  <th class="text-center" colspan="2"> حقوق مشمول مالیات</th>
                   <td>
                     <money v-model="list_of_pay_item.get_tax_included" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2">  مالیات حقوق</th>
+                  <th class="text-center" colspan="2"> مالیات حقوق</th>
                   <td>
                     <money v-model="list_of_pay_item.get_month_tax" disabled="true"></money>
                   </td>
@@ -896,38 +901,38 @@
                     بدهی متفرقه
                   </th>
                 <tr class="text-center">
-                  <th class="text-center">  مساعده</th>
+                  <th class="text-center"> مساعده</th>
                   <td>
                     <money v-model="list_of_pay_item.get_dept" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center">  وام</th>
+                  <th class="text-center"> وام</th>
                   <td>
                     <money v-model="list_of_pay_item.get_loan" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center">  غیره</th>
+                  <th class="text-center"> غیره</th>
                   <td>
                     <money v-model="list_of_pay_item.get_deduction" disabled="true"></money>
                   </td>
                 </tr>
                 <tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2">  حقوق و دستمزد پرداختنی</th>
+                  <th class="text-center" colspan="2"> حقوق و دستمزد پرداختنی</th>
                   <td>
                     <money v-model="list_of_pay_item.get_payable" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2">  حق بیمه سهم کارفرما</th>
+                  <th class="text-center" colspan="2"> حق بیمه سهم کارفرما</th>
                   <td>
                     <money v-model="list_of_pay_item.get_employer_tax" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2">  بیمه بیکاری</th>
+                  <th class="text-center" colspan="2"> بیمه بیکاری</th>
                   <td>
                     <money v-model="list_of_pay_item.get_un_employer_tax" disabled="true"></money>
                   </td>
@@ -941,7 +946,7 @@
 
         </v-row>
       </v-card>
-      <m-datatable v-show="false"   :headers="headers"  :apiUrl="url" :exportUrl="exportUrl" :filters.sync="export_filter"
+      <m-datatable v-show="false" :headers="headers" :apiUrl="url" :exportUrl="exportUrl" :filters.sync="export_filter"
                    ref="exportTable">
       </m-datatable>
     </v-card>
@@ -977,7 +982,16 @@ export default {
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
     LoanList,
-    SummaryAbsenceList, mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, time_from_decimal},
+    SummaryAbsenceList,
+    mtime,
+    TreeSelect,
+    citySelect,
+    TenderList,
+    MDatatable,
+    TransactionForm,
+    money,
+    time_from_decimal,
+  },
   props: {
     loan: {},
   },
@@ -997,7 +1011,7 @@ export default {
       isDefinable: true,
       myClass: '',
       PathLevels,
-      export_filter : {},
+      export_filter: {},
       VisitorLevels,
       paymentDialog: false,
       payment: '',
@@ -1007,8 +1021,7 @@ export default {
   },
   computed: {
     headers() {
-      return [
-      ];
+      return [];
     },
 
   },
@@ -1019,7 +1032,6 @@ export default {
       success: data => {
         console.log(data);
         this.list_of_pay_item = data
-
       }
     })
   },
@@ -1039,7 +1051,7 @@ export default {
       this.notify(' ثبت  رد شد', 'warning')
     },
     printPayslip(type) {
-      this.export_filter = {id : this.$route.params.id}
+      this.export_filter = {id: this.$route.params.id}
       this.exportUrl = 'payroll/payslip'
       this.$refs.exportTable.exportTo(type)
 
@@ -1047,19 +1059,19 @@ export default {
 
 
     printInsurance(type) {
-      this.export_filter = {id : this.$route.params.id}
+      this.export_filter = {id: this.$route.params.id}
       this.exportUrl = 'payroll/person/insurance/report'
       this.$refs.exportTable.exportTo(type)
 
     },
     printTax(type) {
-      this.export_filter = {id : this.$route.params.id}
+      this.export_filter = {id: this.$route.params.id}
       this.exportUrl = 'payroll/personTax/report'
       this.$refs.exportTable.exportTo(type)
 
     },
     printPersonTax(type) {
-      this.export_filter = {id : this.list_of_pay_item.workshop_personnel}
+      this.export_filter = {id: this.list_of_pay_item.workshop_personnel}
       this.exportUrl = 'payroll/diskette/person'
       this.$refs.exportTable.exportTo(type)
 

@@ -188,14 +188,14 @@
               fa-times
             </v-icon>
           </v-avatar>
-          این لیست غیر قطعی میباشد
+          این لیست غیر نهایی میباشد
 
           <v-btn left class="float-left ml-5"
                  outlined
                  color="green darken-3"
                  @click="UltimateList">
             <v-icon class="ml-4"> fa-check</v-icon>
-            قطعی شود
+            نهایی شود
           </v-btn>
         </v-banner>
         <v-banner v-if="list_of_pay.ultimate" class="mt-3 ml-2 mr-2 green--text text--darken-3">
@@ -210,14 +210,14 @@
               fa-check
             </v-icon>
           </v-avatar>
-          این لیست قطعی میباشد
+          این لیست نهایی میباشد
 
           <v-btn left class="float-left ml-5"
                  outlined
                  color="red darken-3"
                  @click="UnUltimateList">
             <v-icon class="ml-4"> fa-times</v-icon>
-            غیر قطعی شود
+            غیر نهایی شود
           </v-btn>
         </v-banner>
       </v-col>
@@ -236,14 +236,14 @@
               fa-times
             </v-icon>
           </v-avatar>
-          این لیست در محاسبات بیمه و مالیات محاسبه نمی شود
+          این لیست در محاسبات  مالیات محاسبه نمی شود
 
           <v-btn left class="float-left ml-5"
                  outlined
                  color="green darken-3"
                  @click="CalculateList">
             <v-icon class="ml-4"> fa-check</v-icon>
-            محاسبات انجام شود
+            در محاسبات مالیات انجام شود
           </v-btn>
         </v-banner>
         <v-banner v-if="list_of_pay.use_in_calculate" class="ml-2 mr-2 mb-2 green--text text--darken-3">
@@ -258,14 +258,64 @@
               fa-check
             </v-icon>
           </v-avatar>
-          این لیست در محاسبات بیمه و مالیات محاسبه می شود
+          این لیست در محاسبات  مالیات محاسبه می شود
 
           <v-btn left class="float-left ml-5"
                  outlined
                  color="red darken-3"
                  @click="UnCalculateList">
             <v-icon class="ml-4"> fa-times</v-icon>
-            از محاسبات خارج شود
+            از محاسبات  مالیات خارج شود
+          </v-btn>
+        </v-banner>
+      </v-col>
+    </v-row>
+
+
+    <v-row>
+      <v-col cols="12" md="12">
+        <v-banner v-if="!list_of_pay.use_in_bime" class="ml-2 mr-2 mb-2 orange--text text--darken-3">
+          <v-avatar
+              slot="icon"
+              color="orange"
+              size="40"
+          >
+            <v-icon
+                color="white"
+            >
+              fa-times
+            </v-icon>
+          </v-avatar>
+          این لیست در محاسبات بیمه  محاسبه نمی شود
+
+          <v-btn left class="float-left ml-5"
+                 outlined
+                 color="green darken-3"
+                 @click="BimeList">
+            <v-icon class="ml-4"> fa-check</v-icon>
+            در محاسبات بیمه انجام شود
+          </v-btn>
+        </v-banner>
+        <v-banner v-if="list_of_pay.use_in_bime" class="ml-2 mr-2 mb-2 green--text text--darken-3">
+          <v-avatar
+              slot="icon"
+              color="green"
+              size="40"
+          >
+            <v-icon
+                color="white"
+            >
+              fa-check
+            </v-icon>
+          </v-avatar>
+          این لیست در محاسبات بیمه مالیات محاسبه می شود
+
+          <v-btn left class="float-left ml-5"
+                 outlined
+                 color="red darken-3"
+                 @click="UnBimeList">
+            <v-icon class="ml-4"> fa-times</v-icon>
+            از محاسبات بیمه خارج شود
           </v-btn>
         </v-banner>
       </v-col>
@@ -329,6 +379,10 @@ export default {
           value: "is_insurance_display",
         },
         {
+          text: "عنوان شغل",
+          value: "title",
+        },
+        {
           text: "کارکرد عادی",
           value: "normal_worktime",
         },
@@ -337,8 +391,13 @@ export default {
           value: "real_worktime",
         },
         {
-          text: "حقوق",
+          text: "حقوق مزایای کل ماهانه",
           value: "total_payment",
+          type: 'numeric'
+        },
+        {
+          text: "حقوق و دستمزد پرداختنی",
+          value: "get_payable",
           type: 'numeric'
         },
       ];
@@ -384,7 +443,8 @@ export default {
         method: "post",
         data: {
           'ultimate': true,
-          'use_in_calculate': this.list_of_pay.use_in_calculate
+          'use_in_calculate': this.list_of_pay.use_in_calculate,
+          'bime': this.list_of_pay.use_in_bime
         },
         success: data => {
           this.notify('قطعی شد', 'success')
@@ -398,7 +458,8 @@ export default {
         method: "post",
         data: {
           'ultimate': false,
-          'use_in_calculate': this.list_of_pay.use_in_calculate
+          'use_in_calculate': this.list_of_pay.use_in_calculate,
+          'bime': this.list_of_pay.use_in_bime
         },
         success: data => {
           this.notify('غیر قطعی شد', 'success')
@@ -412,7 +473,8 @@ export default {
         method: "post",
         data: {
           'ultimate': this.list_of_pay.ultimate,
-          'use_in_calculate': true
+          'use_in_calculate': true,
+          'bime': this.list_of_pay.use_in_bime
         },
         success: data => {
           this.notify('ثبت در محاسبات بیمه و مالیات انجام شد', 'success')
@@ -426,7 +488,38 @@ export default {
         method: "post",
         data: {
           'ultimate': this.list_of_pay.ultimate,
-          'use_in_calculate': false
+          'use_in_calculate': false,
+          'bime': this.list_of_pay.use_in_bime
+        },
+        success: data => {
+          this.notify('از محاسبات بیمه و مالیات خارج شد', 'success')
+          window.location.reload()
+        }
+      })
+    },
+    BimeList() {
+      this.request({
+        url: this.endpoint(`payroll/listOfPay/ultimate/` + this.$route.params.id + '/'),
+        method: "post",
+        data: {
+          'use_in_calculate': this.list_of_pay.use_in_calculate,
+          'ultimate': this.list_of_pay.ultimate,
+          'bime': true
+        },
+        success: data => {
+          this.notify('ثبت در محاسبات بیمه و مالیات انجام شد', 'success')
+          window.location.reload()
+        }
+      })
+    },
+    UnBimeList() {
+      this.request({
+        url: this.endpoint(`payroll/listOfPay/ultimate/` + this.$route.params.id + '/'),
+        method: "post",
+        data: {
+          'ultimate': this.list_of_pay.ultimate,
+          'use_in_calculate': this.list_of_pay.use_in_calculate,
+          'bime': false
         },
         success: data => {
           this.notify('از محاسبات بیمه و مالیات خارج شد', 'success')

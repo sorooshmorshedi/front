@@ -2013,7 +2013,7 @@
             <v-col cols="12" md="3">
               <money
                   label=" مزد مبنا ساعتی "
-                  v-model="item.day_hourly_pay_base"
+                  v-model="item.get_day_hourly_pay_base"
                   background-color="white"
                   disabled=true
               />
@@ -2022,7 +2022,7 @@
             <v-col cols="12" md="3">
               <money
                   label=" مزد مبنا روزانه "
-                  v-model="item.daily_pay_base"
+                  v-model="item.get_daily_pay_base"
                   background-color="white"
                   disabled=true
               />
@@ -2030,7 +2030,7 @@
             <v-col cols="12" md="3">
               <money
                   label=" مزد مبنا ماهانه "
-                  v-model="item.monthly_pay_base"
+                  v-model="item.get_monthly_pay_base"
                   background-color="white"
                   disabled=true
               />
@@ -2038,7 +2038,7 @@
             <v-col cols="12" md="3">
               <money
                   label=" دستمزد روزانه بیمه "
-                  v-model="item.insurance_pay_day"
+                  v-model="item.get_insurance_pay_day"
                   background-color="white"
                   disabled=true
               />
@@ -2371,13 +2371,13 @@
           class="primary darken-2 white--text mt-12 mr-2 float-left "
           v-if="item.id && item.is_verified  && item.is_active && item.is_calculated"
           @click="UnActiveHR(item)"
-      >غیر فعال کردن
+      >غیر فعال سازی
       </v-btn>
       <v-btn
           class="green darken-1 white--text mt-12 mr-2 float-left "
           v-if="item.id && item.is_verified  && !item.is_active && item.is_calculated"
           @click="sure_dialog = true"
-      > فعال کردن
+      > فعال سازی
       </v-btn>
 
     </m-form>

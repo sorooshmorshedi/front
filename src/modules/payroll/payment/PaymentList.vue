@@ -47,12 +47,17 @@ export default {
           value: "end_date",
         },
         {
-          text: "محاسبه در مالیات و بیمه",
+          text: "محاسبه در مالیات",
           value: "use_in_calculate",
           type: 'boolean'
         },
         {
-          text: "قطعی",
+          text: "محاسبه در بیمه",
+          value: "use_in_bime",
+          type: 'boolean'
+        },
+        {
+          text: "نهایی",
           value: "ultimate",
           type: 'boolean'
         },

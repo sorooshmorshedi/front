@@ -8,7 +8,6 @@
       :disabled="disabled"
       append-icon="fa-clock"
       @click:append="setZero"
-      clearable
       style="min-width: 90px"
   />
 </template>
