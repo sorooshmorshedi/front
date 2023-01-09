@@ -127,10 +127,10 @@
               </v-col>
 
             </v-row>
-            <v-row>
-              <v-col cols="12" md="3">
+            <v-row class="mt-10">
+              <v-col cols="12" md="4">
                 <v-switch
-                    class="text-center pr-11"
+                    class="text-right "
                     v-model="item.insurance"
                     label='بیمه میشود'
                     :disabled="!isEditing"
@@ -146,7 +146,7 @@
                     :default="false" :disabled="!isEditing"/>
               </v-col>
 
-              <v-col cols="12" md="4" v-if="item.insurance">
+              <v-col cols="12" md="3" v-if="item.insurance">
                 <v-text-field v-on:keypress="NumbersOnly"
                               v-if="!is_insurance[item.workshop_personnel]"
                               label=" * شماره بیمه" v-model="item.insurance_number"
@@ -161,6 +161,24 @@
 
               </v-col>
 
+            </v-row>
+            <v-row class="mt-10">
+              <v-col cols="12" md="4">
+                <v-switch
+                    class="text-right "
+                    v-model="item.tax"
+                    label='اضافه شدن به لیست مالیات '
+                    :disabled="!isEditing"
+                    :true-value="true"
+                    :false-value="false"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" md="5" v-if="item.tax">
+                <date
+                    v-model="item.tax_add_date"
+                    label="* تاریخ اضافه شدن به لیست مالیات "
+                    :default="false" :disabled="!isEditing"/>
+              </v-col>
             </v-row>
           </template>
           <v-btn

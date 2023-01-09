@@ -221,7 +221,7 @@
               <v-row v-if="!item.id && createOne">
                 <v-col cols="12" md=" 12" class="text-center">
                   <v-autocomplete
-                      label=" کپی از قالب های پیشفرض"
+                      label=" قالب پیشفرض را انتخاب کنید"
                       :items="templates"
                       item-text="name"
                       item-value="info"

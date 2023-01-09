@@ -390,7 +390,7 @@
                     کسر کار (ساعت)
                   </th>
                   <td class="text-center">
-                    <v-text-field class="currency-input" v-model="list_of_pay_item.get_kasre_kar"
+                    <v-text-field class="currency-input" v-model="list_of_pay_item.get_kasre_kar_time"
                                   append-icon="fa-clock"
                                   disabled="true"
                     ></v-text-field>

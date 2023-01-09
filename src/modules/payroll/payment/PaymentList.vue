@@ -31,6 +31,10 @@ export default {
           value: "workshop_display",
         },
         {
+          text: "نام لیست",
+          value: "name",
+        },
+        {
           text: " سال",
           value: "year",
         },
@@ -47,13 +51,8 @@ export default {
           value: "end_date",
         },
         {
-          text: "محاسبه در مالیات",
+          text: "محاسبه در بیمه و مالیات",
           value: "use_in_calculate",
-          type: 'boolean'
-        },
-        {
-          text: "محاسبه در بیمه",
-          value: "use_in_bime",
           type: 'boolean'
         },
         {

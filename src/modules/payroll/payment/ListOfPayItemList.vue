@@ -6,7 +6,7 @@
         color="indigo"
         dark
     >
-      <v-toolbar-title>حقوق و دستمزد</v-toolbar-title>
+      <v-toolbar-title>حقوق و دستمزد {{list_of_pay.name}}</v-toolbar-title>
 
       <v-divider
           class="mx-4"
@@ -156,6 +156,77 @@
       </v-btn>
 
     </v-toolbar>
+    <v-row justify="center">
+      <v-dialog
+          v-model="accept_dialog"
+          persistent
+          @click:outside="accept_dialog=false"
+          max-width="400"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            توجه!
+          </v-card-title>
+          <v-card-text v-if="list_of_pay.use_in_calculate">
+            باتوجه به اینکه فقط یک لیست حقوق در ماه با محاسبه بیمه و مالیات می تواند نهایی شود با نهایی کردن این لیست، تمامی لیست های دیگر این ماه که با محاسبه بیمه هستند غیرنهایی میشود
+          </v-card-text>
+          <v-card-text v-if="!list_of_pay.use_in_calculate">
+            باتوجه به اینکه فقط یک لیست حقوق در ماه بدون محاسبه بیمه و مالیات می تواند نهایی شود با نهایی کردن این لیست، تمامی لیست های دیگر این ماه که بدون محاسبه بیمه هستند و مالیات غیرنهایی میشود
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red darken-1"
+                text
+                @click="accept_dialog = false"
+            >
+              بستن
+            </v-btn>
+            <v-btn
+                color="light-blue"
+                text
+                @click="UltimateList"
+            >
+              ثبت نهایی
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+    <v-row justify="center">
+      <v-dialog
+          v-model="delete_dialog"
+          persistent
+          @click:outside="delete_dialog=false"
+          max-width="400"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            آیا از حذف این لیست اطمینان دارید?!
+          </v-card-title>
+          <v-card-text >
+            باتوجه به اینکه با حذف این لیست امکان بازگردانی مجدد اطلاعات نیست آیا اطمینان دارید؟
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red darken-1"
+                text
+                @click="delete_dialog = false"
+            >
+              بستن
+            </v-btn>
+            <v-btn
+                color="light-blue"
+                text
+                @click="DeleteList"
+            >
+              حذف
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
     <v-card-actions class="justify-end mt-4">
     </v-card-actions>
@@ -174,152 +245,73 @@
         </template>
       </m-datatable>
     </v-card-text>
-    <v-row>
-      <v-col cols="12" md="12">
-        <v-banner v-if="!list_of_pay.ultimate" class="mt-3 ml-2 mr-2 orange--text text--darken-3">
-          <v-avatar
-              slot="icon"
-              color="orange"
-              size="40"
-          >
-            <v-icon
-                color="white"
-            >
-              fa-times
-            </v-icon>
-          </v-avatar>
-          این لیست غیر نهایی میباشد
+    <v-card-actions>
+      <v-row>
+        <v-col cols="12" md="9">
+          <v-row>
+            <v-col cols="12" md="12">
+              <v-banner v-if="!list_of_pay.use_in_calculate" class="ml-2 mr-2 mb-2 orange--text text--darken-3">
+                <v-avatar
+                    slot="icon"
+                    color="orange"
+                    size="40"
+                >
+                  <v-icon
+                      color="white"
+                  >
+                    fa-times
+                  </v-icon>
+                </v-avatar>
+                این لیست در محاسبات بیمه و مالیات محاسبه نمی شود
+              </v-banner>
+              <v-banner v-if="list_of_pay.use_in_calculate" class="ml-2 mr-2 mb-2 green--text text--darken-3">
+                <v-avatar
+                    slot="icon"
+                    color="green"
+                    size="40"
+                >
+                  <v-icon
+                      color="white"
+                  >
+                    fa-check
+                  </v-icon>
+                </v-avatar>
+                این لیست در محاسبات بیمه و مالیات محاسبه می شود
+              </v-banner>
+            </v-col>
+          </v-row>
 
-          <v-btn left class="float-left ml-5"
-                 outlined
-                 color="green darken-3"
-                 @click="UltimateList">
-            <v-icon class="ml-4"> fa-check</v-icon>
-            نهایی شود
+        </v-col>
+        <v-col
+            cols="12"
+            md="3"
+            class="d-flex justify-center justify-md-end"
+        >
+          <v-btn
+              class="red white--text mt-2  mr-2 ml-5 float-left"
+              large
+              @click="delete_dialog = true"
+              v-if="!list_of_pay.ultimate"
+          >حذف لیست
           </v-btn>
-        </v-banner>
-        <v-banner v-if="list_of_pay.ultimate" class="mt-3 ml-2 mr-2 green--text text--darken-3">
-          <v-avatar
-              slot="icon"
-              color="green"
-              size="40"
-          >
-            <v-icon
-                color="white"
-            >
-              fa-check
-            </v-icon>
-          </v-avatar>
-          این لیست نهایی میباشد
-
-          <v-btn left class="float-left ml-5"
-                 outlined
-                 color="red darken-3"
-                 @click="UnUltimateList">
-            <v-icon class="ml-4"> fa-times</v-icon>
-            غیر نهایی شود
+          <v-btn
+              class="light-blue white--text mt-2  mr-2 ml-5 float-left"
+              large
+              @click="accept_dialog = true"
+              v-if="!list_of_pay.ultimate"
+          >ثبت نهایی
           </v-btn>
-        </v-banner>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" md="12">
-        <v-banner v-if="!list_of_pay.use_in_calculate" class="ml-2 mr-2 mb-2 orange--text text--darken-3">
-          <v-avatar
-              slot="icon"
-              color="orange"
-              size="40"
-          >
-            <v-icon
-                color="white"
-            >
-              fa-times
-            </v-icon>
-          </v-avatar>
-          این لیست در محاسبات  مالیات محاسبه نمی شود
-
-          <v-btn left class="float-left ml-5"
-                 outlined
-                 color="green darken-3"
-                 @click="CalculateList">
-            <v-icon class="ml-4"> fa-check</v-icon>
-            در محاسبات مالیات انجام شود
+          <v-btn
+              class="red white--text mt-2 mr-2 ml-5 float-left "
+              @click="UnUltimateList"
+              large
+              v-if="list_of_pay.ultimate"> خروج از وضعیت نهایی
           </v-btn>
-        </v-banner>
-        <v-banner v-if="list_of_pay.use_in_calculate" class="ml-2 mr-2 mb-2 green--text text--darken-3">
-          <v-avatar
-              slot="icon"
-              color="green"
-              size="40"
-          >
-            <v-icon
-                color="white"
-            >
-              fa-check
-            </v-icon>
-          </v-avatar>
-          این لیست در محاسبات  مالیات محاسبه می شود
-
-          <v-btn left class="float-left ml-5"
-                 outlined
-                 color="red darken-3"
-                 @click="UnCalculateList">
-            <v-icon class="ml-4"> fa-times</v-icon>
-            از محاسبات  مالیات خارج شود
-          </v-btn>
-        </v-banner>
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
+    </v-card-actions>
 
 
-    <v-row>
-      <v-col cols="12" md="12">
-        <v-banner v-if="!list_of_pay.use_in_bime" class="ml-2 mr-2 mb-2 orange--text text--darken-3">
-          <v-avatar
-              slot="icon"
-              color="orange"
-              size="40"
-          >
-            <v-icon
-                color="white"
-            >
-              fa-times
-            </v-icon>
-          </v-avatar>
-          این لیست در محاسبات بیمه  محاسبه نمی شود
-
-          <v-btn left class="float-left ml-5"
-                 outlined
-                 color="green darken-3"
-                 @click="BimeList">
-            <v-icon class="ml-4"> fa-check</v-icon>
-            در محاسبات بیمه انجام شود
-          </v-btn>
-        </v-banner>
-        <v-banner v-if="list_of_pay.use_in_bime" class="ml-2 mr-2 mb-2 green--text text--darken-3">
-          <v-avatar
-              slot="icon"
-              color="green"
-              size="40"
-          >
-            <v-icon
-                color="white"
-            >
-              fa-check
-            </v-icon>
-          </v-avatar>
-          این لیست در محاسبات بیمه مالیات محاسبه می شود
-
-          <v-btn left class="float-left ml-5"
-                 outlined
-                 color="red darken-3"
-                 @click="UnBimeList">
-            <v-icon class="ml-4"> fa-times</v-icon>
-            از محاسبات بیمه خارج شود
-          </v-btn>
-        </v-banner>
-      </v-col>
-    </v-row>
 
   </v-card>
 </template>
@@ -344,6 +336,8 @@ export default {
       export_url: "payroll/payroll",
       filters: {list_of_pay: this.$route.params.id},
       export_filter: {id: this.$route.params.id},
+      accept_dialog: false,
+      delete_dialog: false,
       list_of_pay: null,
       my_list: null,
     };
@@ -375,24 +369,193 @@ export default {
           value: "personnel_name",
         },
         {
+          text: "تاریخ شروع به کار",
+          value: "start_date",
+        },
+        {
           text: "بیمه میشود؟",
           value: "is_insurance_display",
         },
         {
           text: "عنوان شغل",
-          value: "title",
+          value: "work_title",
+        },
+        {
+          text: "سابقه بیمه در کارگاه",
+          value: "get_insurance_in_workshop",
+        },
+        {
+          text: "ردیف پیمان",
+          value: "contract_row",
         },
         {
           text: "کارکرد عادی",
           value: "normal_worktime",
         },
         {
+          text: "مرخصی استحقاقی",
+          value: "entitlement_leave_day",
+          type: 'numeric',
+        },
+        {
+          text: "مرخصی استعلاجی",
+          value: "illness_leave_day",
+          type: 'numeric',
+        },
+        {
+          text: "مرخصی ماده 73",
+          value: "matter_47_leave_day",
+          type: 'numeric',
+        },
+        {
+          text: "مرخصی بدون حقوق",
+          value: "without_salary_leave_day",
+          type: 'numeric',
+        },
+        {
+          text: "غیبت",
+          value: "absence_day",
+          type: 'numeric',
+        },
+        {
           text: "کارکرد واقعی",
           value: "real_worktime",
         },
         {
+          text: "حداقل مزد روزانه",
+          value: "hoghoogh_roozane",
+          type: 'numeric',
+        },
+        {
+          text: "حقوق پایه ماهانه",
+          value: "hoghoogh_mahane_real_work",
+          type: 'numeric',
+        },
+        {
+          text: "پایه سنوات روزانه",
+          value: "sanavat_base",
+          type: 'numeric',
+        },
+        {
+          text: "پایه سنوات ماهانه",
+          value: "sanavat_mahane_real_work",
+          type: 'numeric',
+        },
+
+        {
+          text: "اضافه کاری (ساعت)",
+          value: "get_ezafe_kari_time",
+          filterable: false,
+        },
+        {
+          text: "اضافه کاری (مبلغ)",
+          value: "ezafe_kari_total",
+          type: 'numeric'
+        },
+        {
+          text: "تعطیل کاری (ساعت)",
+          value: "get_tatil_kari_time",
+          filterable: false,
+        },
+        {
+          text: "تعطیل کاری (مبلغ)",
+          value: "tatil_kari_total",
+          type: 'numeric'
+        },
+        {
+          text: "شب کاری (ساعت)",
+          value: "get_shab_kari_time",
+          filterable: false,
+        },
+        {
+          text: "شب کاری (مبلغ)",
+          value: "shab_kari_total",
+          type: 'numeric'
+        },
+        {
+          text: "کسر کار (ساعت)",
+          value: "get_kasre_kar_time",
+          filterable: false,
+        },
+        {
+          text: "کسر کار (مبلغ)",
+          value: "kasre_kar_total",
+          type: 'numeric'
+        },
+        {
+          text: "ماموریت (روز)",
+          value: "mission_day",
+          type: 'numeric'
+        },
+        {
+          text: "ماموریت (مبلغ)",
+          value: "get_mission_total",
+          type: 'numeric'
+        },
+        {
+          text: "تعداد اولاد مشمول",
+          value: "aele_mandi_child",
+          type: 'numeric'
+        },
+        {
+          text: "حق اولاد",
+          value: "aele_mandi",
+          type: 'numeric'
+        },
+        {
           text: "حقوق مزایای کل ماهانه",
           value: "total_payment",
+          type: 'numeric'
+        },
+        {
+          text: "حق سنوات",
+          value: "haghe_sanavat_total",
+          type: 'numeric'
+        },
+        {
+          text: "عیدی و پاداش",
+          value: "padash_total",
+          type: 'numeric'
+        },
+
+        {
+          text: "سایر اضافات",
+          value: "sayer_ezafat",
+          type: 'numeric'
+        },
+        {
+          text: "سایر کسورات",
+          value: "sayer_kosoorat",
+          type: 'numeric'
+        },
+        {
+          text: "حق بیمه سهم بیمه شده",
+          value: "get_haghe_bime_bime_shavande",
+          type: 'numeric'
+        },
+        {
+          text: "مالیات حقوق",
+          value: "get_month_tax",
+          type: 'numeric'
+        },
+        {
+          text: "مالیات حقوق",
+          value: "get_month_tax",
+          type: 'numeric'
+        },
+        {
+          text: "بدهی مساعده",
+          value: "get_dept",
+          type: 'numeric'
+        },
+        {
+          text: "بدهی وام",
+          value: "get_loan",
+          type: 'numeric'
+        },
+        {
+          text: "بدهی غیره",
+          value: "get_deduction",
           type: 'numeric'
         },
         {
@@ -443,13 +606,15 @@ export default {
         method: "post",
         data: {
           'ultimate': true,
-          'use_in_calculate': this.list_of_pay.use_in_calculate,
-          'bime': this.list_of_pay.use_in_bime
         },
         success: data => {
-          this.notify('قطعی شد', 'success')
+          this.notify('نهایی شد', 'success')
           window.location.reload()
+        },
+        error: data => {
+          this.notify(data.response.data['وضعیت'], 'danger')
         }
+
       })
     },
     UnUltimateList() {
@@ -458,72 +623,20 @@ export default {
         method: "post",
         data: {
           'ultimate': false,
-          'use_in_calculate': this.list_of_pay.use_in_calculate,
-          'bime': this.list_of_pay.use_in_bime
         },
         success: data => {
-          this.notify('غیر قطعی شد', 'success')
+          this.notify('غیر نهایی شد', 'success')
           window.location.reload()
         }
       })
     },
-    CalculateList() {
+    DeleteList() {
       this.request({
-        url: this.endpoint(`payroll/listOfPay/ultimate/` + this.$route.params.id + '/'),
-        method: "post",
-        data: {
-          'ultimate': this.list_of_pay.ultimate,
-          'use_in_calculate': true,
-          'bime': this.list_of_pay.use_in_bime
-        },
+        url: this.endpoint(`payroll/paylist/` + this.$route.params.id + '/'),
+        method: "delete",
         success: data => {
-          this.notify('ثبت در محاسبات بیمه و مالیات انجام شد', 'success')
-          window.location.reload()
-        }
-      })
-    },
-    UnCalculateList() {
-      this.request({
-        url: this.endpoint(`payroll/listOfPay/ultimate/` + this.$route.params.id + '/'),
-        method: "post",
-        data: {
-          'ultimate': this.list_of_pay.ultimate,
-          'use_in_calculate': false,
-          'bime': this.list_of_pay.use_in_bime
-        },
-        success: data => {
-          this.notify('از محاسبات بیمه و مالیات خارج شد', 'success')
-          window.location.reload()
-        }
-      })
-    },
-    BimeList() {
-      this.request({
-        url: this.endpoint(`payroll/listOfPay/ultimate/` + this.$route.params.id + '/'),
-        method: "post",
-        data: {
-          'use_in_calculate': this.list_of_pay.use_in_calculate,
-          'ultimate': this.list_of_pay.ultimate,
-          'bime': true
-        },
-        success: data => {
-          this.notify('ثبت در محاسبات بیمه و مالیات انجام شد', 'success')
-          window.location.reload()
-        }
-      })
-    },
-    UnBimeList() {
-      this.request({
-        url: this.endpoint(`payroll/listOfPay/ultimate/` + this.$route.params.id + '/'),
-        method: "post",
-        data: {
-          'ultimate': this.list_of_pay.ultimate,
-          'use_in_calculate': this.list_of_pay.use_in_calculate,
-          'bime': false
-        },
-        success: data => {
-          this.notify('از محاسبات بیمه و مالیات خارج شد', 'success')
-          window.location.reload()
+          this.notify('لیست حقوق حذف شد شد', 'success')
+          this.$router.push('/panel/ListOfPay')
         }
       })
     },

@@ -74,7 +74,7 @@
           <v-row class=" mb-6">
             <v-col cols="12" md="12">
               <v-row>
-                <v-col cols="12" md="3">
+                <v-col cols="12" md="4">
                   <v-autocomplete
                       label="نحوه محاسبه پایه سنوات "
                       :items="SANAVAT_TYPES"
@@ -84,7 +84,7 @@
                       :disabled="!isEditing"
                   />
                 </v-col>
-                <v-col cols="12" md="3">
+                <v-col cols="12" md="4">
                   <v-autocomplete
                       label="نحوه محاسبه حق سنوات "
                       :items="HAGHE_SANAVAT_TYPES"
@@ -94,7 +94,33 @@
                       :disabled="!isEditing"
                   />
                 </v-col>
-                <v-col cols="12" md="3">
+                <v-col cols="12" md="4">
+                  <v-autocomplete
+                      label="نحوه لحاظ مرخصی استعلاجی جهت پرداخت عائله مندی "
+                      :items="ILLNESS_TYPES"
+                      v-model="item.illness_absence_in_real_work"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="4">
+                  <percent label="نرخ حق بیمه سهم کارفرما" v-model="item.employee_insurance_nerkh"
+                           :disabled="!isEditing"></percent>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <percent label="نرخ حق بیمه سهم بیمه شده" v-model="item.worker_insurance_nerkh"
+                           :disabled="!isEditing"></percent>
+                </v-col>
+                <v-col cols="12" md="4">
+                  <percent label="نرخ حق بیمه سهم بیکاری" v-model="item.unemployed_insurance_nerkh"
+                           :disabled="!isEditing"></percent>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="4">
                   <money
                       label="حداقل حقوق ماهانه اداره کار"
                       class="currency-input"
@@ -103,7 +129,7 @@
                   >
                   </money>
                 </v-col>
-                <v-col cols="12" md="3">
+                <v-col cols="12" md="4">
                   <v-autocomplete
                       label="معافیت مالیاتی حق بیمه سهم بیمه شده"
                       :items="TAX_EMPLOYER_TYPES"
@@ -113,21 +139,7 @@
                       :disabled="!isEditing"
                   />
                 </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="3">
-                  <percent label="نرخ حق بیمه سهم کارفرما" v-model="item.employee_insurance_nerkh"
-                           :disabled="!isEditing"></percent>
-                </v-col>
-                <v-col cols="12" md="3">
-                  <percent label="نرخ حق بیمه سهم بیمه شده" v-model="item.worker_insurance_nerkh"
-                           :disabled="!isEditing"></percent>
-                </v-col>
-                <v-col cols="12" md="3">
-                  <percent label="نرخ حق بیمه سهم بیکاری" v-model="item.unemployed_insurance_nerkh"
-                           :disabled="!isEditing"></percent>
-                </v-col>
-                <v-col cols="12" md="3">
+                <v-col cols="12" md="4">
                   <percent label="نرخ تبصره 1 ماده 86 ق.م.م" v-model="item.made_86_nerkh"
                            :disabled="!isEditing"></percent>
                 </v-col>
@@ -460,6 +472,10 @@ export default {
       TAX_EMPLOYER_TYPES: [
         {name: '7/7', value: 1},
         {name: '2/7', value: 2},
+      ],
+      ILLNESS_TYPES: [
+        {name: 'در پرداخت لحاظ شود', value: true},
+        {name: 'در پرداخت لحاظ نشود', value: false},
       ],
       BASE_PAY_TYPES: [
         {name: 'مزد مبنا بر اساس مدل روزانه', value: 'd'},

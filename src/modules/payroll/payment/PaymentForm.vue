@@ -143,19 +143,9 @@
             </v-col>
           </v-row>
           <v-row class="mt-2 pr-10 pl-10">
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="12">
               <v-autocomplete
-                  label="بیمه"
-                  :items="CALCULATE_TYPES"
-                  :disabled="list_generated"
-                  v-model="bime"
-                  item-text="name"
-                  item-value="value"
-              />
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-autocomplete
-                  label="مالیات"
+                  label="محاسبه در بیمه و مالیات"
                   :items="CALCULATE_TYPES"
                   :disabled="list_generated"
                   v-model="calculate"
@@ -226,7 +216,7 @@
         <v-card class="ma-5">
           <v-toolbar color="indigo">
             <v-toolbar-title class="white--text">
-               لیست های این کارگاه برای  {{search_month}} / {{year}}
+              لیست های این کارگاه برای {{ search_month }} / {{ year }}
             </v-toolbar-title>
           </v-toolbar>
           <m-datatable class="ma-3" :show-export-btns="false" :headers="headers"
@@ -244,6 +234,9 @@
         <template v-slot:default>
           <thead class="style: blue lighten-4">
           <tr>
+            <th class="text-center">
+              حقوق محاسبه شود
+            </th>
             <th class="text-center">
               نام و نام خانوادگی
             </th>
@@ -288,6 +281,15 @@
           </thead>
           <tbody class="grey lighten-4 ma-2">
           <tr v-for="person in payList" :key="person.id" class="ma-2 pa-2">
+            <td class="text-center pb-5 pt-5">
+              <v-switch
+                  color="green"
+                  background-color="rey lighten-4"
+                  :false-value="false"
+                  :true-value="true"
+                  v-model="items[person.id]['is_in']"
+              ></v-switch>
+            </td>
             <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
             <td>
               <v-autocomplete
@@ -437,7 +439,7 @@
                   <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
                   <td>
                     <hour-picker
-                        v-model="items[person.id]['shab_kari'] "
+                        v-model="items[person.id]['shab_kari']"
                     ></hour-picker>
                   </td>
                   <td>
@@ -525,12 +527,47 @@
       </div>
 
     </v-card-actions>
-    <v-card-actions class="mt-4 d-flex justify-center justify-md-end mt-2">
-      <v-btn large v-if="list_generated && !calculateDone && sayerDone" @click="calculatePayment" color="green"
+    <v-card-actions class="mt-4 mb-4 d-flex justify-center justify-md-end mt-2">
+      <v-btn large v-if="list_generated && !calculateDone && sayerDone" @click="accept_dialog = true" color="green"
              class="white--text float-left ma-3">محاسبه حقوق و دستمزد
       </v-btn>
 
     </v-card-actions>
+    <v-row justify="center">
+      <v-dialog
+          v-model="accept_dialog"
+          persistent
+          @click:outside="accept_dialog=false"
+          max-width="400"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            توجه!
+          </v-card-title>
+          <v-card-text>
+            با توجه به اینکه امکان ویرایش بعد از ثبت نیست، آیا از ساخت لیست حقوق و انجام محاسبات با این اطلاعات اطمینان دارید؟
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red darken-1"
+                text
+                @click="accept_dialog = false"
+            >
+              بستن
+            </v-btn>
+            <v-btn
+                color="green"
+                text
+                @click="calculatePayment"
+            >
+              محاسبه حقوق و دستمزد
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
   </v-card>
 
 
@@ -603,12 +640,13 @@ export default {
       type: null,
       entitlement: null,
       calculate: null,
-      bime: null,
+      bime: true,
       list_status: false,
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
       error_dialog: false,
+      accept_dialog: false,
       error_message: null,
       contractRows: [],
       hasLock: true,
@@ -660,13 +698,8 @@ export default {
           filterable: false,
         },
         {
-          text: "محاسبه در مالیات",
+          text: "محاسبه در بیمه و مالیات",
           value: "use_in_calculate",
-          type: 'boolean'
-        },
-        {
-          text: "محاسبه در بیمه",
-          value: "use_in_bime",
           type: 'boolean'
         },
         {
@@ -731,7 +764,12 @@ export default {
       this.request({
         url: this.endpoint(`payroll/payment/` + this.year + '/' + this.search_month + '/' + this.search_workshop + '/'),
         method: "post",
-        data: {'name': this.list_name, 'ultimate': this.list_status, 'use_in_calculate': this.calculate, 'use_in_bime': this.bime},
+        data: {
+          'name': this.list_name,
+          'ultimate': this.list_status,
+          'use_in_calculate': this.calculate,
+          'use_in_bime': this.bime
+        },
 
         success: data => {
           this.pay_id = data.id
@@ -739,6 +777,7 @@ export default {
           this.payListCreated = true
           for (let item in this.payList) {
             this.items[this.payList[item].id] = {
+              'is_in': true,
               'id': this.payList[item].id,
               'ezafe_kari': "00:00",
               'tatil_kari': "00:00",
@@ -802,6 +841,7 @@ export default {
 
           method: "put",
           data: {
+            'is_in': this.items[payitem]['is_in'],
             'ezafe_kari': this.items[payitem]['ezafe_kari'],
             'tatil_kari': this.items[payitem]['tatil_kari'],
             'kasre_kar': this.items[payitem]['kasre_kar'],
@@ -914,7 +954,9 @@ export default {
       })
 
     },
-
+    show(item) {
+      console.log(item)
+    }
 
   },
 }
