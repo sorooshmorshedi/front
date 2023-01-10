@@ -132,7 +132,7 @@
                 <v-switch
                     class="text-right "
                     v-model="item.insurance"
-                    label='بیمه میشود'
+                    label='اضافه شدن به لیست بیمه'
                     :disabled="!isEditing"
                     :true-value="true"
                     :false-value="false"

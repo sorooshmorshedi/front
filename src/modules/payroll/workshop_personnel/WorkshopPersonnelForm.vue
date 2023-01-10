@@ -174,7 +174,7 @@
                     :first_item="item.title"
                     v-model="item.title"
                     :disabled="!isEditing || item.quit_job"
-                    @change="setChange(item.work_title)"
+                    :change_func="get_name_from_id"
                 ></work-title-select>
 
               </v-col>
@@ -238,6 +238,7 @@
                     background-color="white"
                     :disabled="!isEditing || item.quit_job"/>
               </v-col>
+              <v-btn @click="show($refs.title.$refs.input.value)">ok</v-btn>
               <v-col cols="12" md="6">
                 <v-autocomplete
                     :rules="[rules.bool_required,]"
@@ -501,6 +502,7 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
+      dont_loop: true,
       hasLock: false,
       isDefinable: false,
       error_dialog: false,
@@ -655,8 +657,24 @@ export default {
       }
 
     },
+    get_name_from_id(work_title){
+      this.request({
+        url: this.endpoint(`payroll/workTitle/` + work_title + '/'),
+        method: "get",
+        success: data => {
+          this.setChange(data['name'])
+        }
+      })
+    },
     setChange(work_title){
+      console.log(work_title)
       this.$refs.WorkshopPersonnelForm.$props.items['job_position'] = work_title
+      this.$refs.title._props.value = work_title
+      console.log(this.$refs.WorkshopPersonnelForm.$props.items['job_position'])
+
+    },
+    show(item){
+      console.log(item)
     },
 
     setValues(id) {

@@ -30,34 +30,35 @@ export default {
           text: "نام",
           value: "name",
         },
-
+        {
+          text: "حداقل مزد روزانه",
+          value: "hoghooghe_roozane_amount",
+          type: "numeric",
+        },
+        {
+          text: "پایه سنوات روزانه",
+          value: "paye_sanavat_amount",
+          type: "numeric",
+        },
+        {
+          text: "حق مسکن",
+          value: "haghe_maskan_amount",
+          type: "numeric",
+        },
+        {
+          text: "بن خوار و بار",
+          value: "bon_kharo_bar_amount",
+          type: "numeric",
+        },
         {
           text: "مزد مبنای روزانه",
           value: "daily_pay_base",
           type: "numeric",
           filterable: false,
-
-
         },
         {
           text: "مزد مبنای ماهانه",
           value: "monthly_pay_base",
-          type: "numeric",
-          filterable: false,
-
-
-        },
-        {
-          text: "مزد ساعتی بر مبنای روزانه",
-          value: "day_hourly_pay_base",
-          type: "numeric",
-          filterable: false,
-
-
-        },
-        {
-          text: " مزد ساعتی بر  مبنای ماهانه",
-          value: "month_hourly_pay_base",
           type: "numeric",
           filterable: false,
         },

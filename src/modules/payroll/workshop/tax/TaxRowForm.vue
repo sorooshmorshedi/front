@@ -13,6 +13,7 @@
             :canDelete="false"
             :can-edit="!item.is_verified"
             :show-clear-btn="false"
+            :show-actions="false"
             :canSubmit="canSubmit"
             :isEditing.sync="isEditing"
             @submit="submit"
@@ -170,16 +171,6 @@
               </v-simple-table>
             </v-row>
           </template>
-          <v-btn
-              class="light-blue white--text mt-6  mr-2 float-left"
-              @click="verifyWorkshopTax(item)"
-              v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
-          </v-btn>
-          <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
-              @click="UnVerifyWorkshopTax(item)"
-              v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
-          </v-btn>
 
         </m-form>
         <v-row justify="center">

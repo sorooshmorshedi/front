@@ -6,6 +6,7 @@
       :search-input.sync="search"
       :return-object="false"
       :disabled="disabled"
+      @change="change_func"
       item-text="display"
       item-value="id"
       label="عنوان شغلی (بیمه)"
@@ -20,7 +21,8 @@ export default {
     disabled: {
       default: false,
     },
-    first_item: null
+    first_item: null,
+    change_func: null
   },
 
   data: () => ({
@@ -67,8 +69,6 @@ export default {
 
   watch: {
     search(val) {
-      console.log(val)
-      console.log(this.model)
       if (val.length > 2) {
         // Items have already been loaded
         if (this.items.length > 0) return
