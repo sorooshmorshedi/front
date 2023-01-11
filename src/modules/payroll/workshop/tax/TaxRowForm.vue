@@ -78,10 +78,13 @@
                       <money v-model="row.from_amount" disabled="true"></money>
                     </td>
                     <td class="text-center">
-                      <money disabled="true" v-model="row.to_amount , from = row.to_amount "></money>
+                      <money disabled="true" v-if="row.to_amount != 0" v-model="row.to_amount , from = row.to_amount "></money>
+                      <v-text-field class="currency-input" v-if="row.to_amount == 0" disabled="true" v-model="to_text "></v-text-field>
+
                     </td>
                     <td class="text-center">
                       <money v-if="row.ratio" disabled="true" v-model="row.ratio"></money>
+
                       <v-text-field
                           v-if="!row.ratio"
                           class="currency-input"
@@ -96,9 +99,11 @@
                       <money v-if="!row.from_amount_month" disabled="true" v-model="first "></money>
                     </td>
                     <td class="text-center">
-                      <money disabled="true" v-model="row.to_amount_month"></money>
-                    </td>
+                      <money disabled="true"  v-if="row.to_amount_month != 0" v-model="row.to_amount_month"></money>
+                      <v-text-field class="currency-input" v-if="row.to_amount_month == 0" disabled="true" v-model="to_text "></v-text-field>
 
+
+                    </td>
                     <td class="text-center">
                       <v-btn
                           text
@@ -111,61 +116,6 @@
                     </td>
                   </tr>
                   </tbody>
-                  <tr class="pt-10 green lighten-4">
-                    <td class="text-center">
-                      +
-                    </td>
-                    <td class="text-center">
-                      <money v-if="item.tax_row.slice().reverse()[0]" v-model="from = item.tax_row.slice().reverse()[0].auto_from" disabled="true"></money>
-                      <v-text-field
-                          v-if="!item.tax_row.slice().reverse()[0]"
-                          class="currency-input"
-                          v-model="first"
-                          disabled="true"
-                      >
-                      </v-text-field>
-
-                    </td>
-                    <td class="text-center">
-                      <money v-model="to" :disabled="!isEditing"></money>
-                    </td>
-                    <td class="text-center">
-                      <money
-                          v-model="ratio"
-                          v-if="item.tax_row.slice().reverse()[0]"
-                          :disabled="!isEditing"
-                      ></money>
-                      <v-text-field
-                          v-if="!item.tax_row.slice().reverse()[0]"
-                          class="currency-input"
-                          v-model="moaf"
-                          disabled="true"
-                      >
-                      </v-text-field>
-
-                    </td>
-                    <td class="text-center" colspan="2">
-                    </td>
-                    <td class="text-center">
-                      <v-btn
-                          v-if="item.tax_row.slice().reverse()[0]"
-                          color="green darken-2 white--text"
-                          @click="add_row(item.id)"
-                          :disabled="!isEditing"
-                      >
-                        ایجاد ردیف جدید
-                      </v-btn>
-                      <v-btn
-                          v-if="!item.tax_row.slice().reverse()[0]"
-                          color="green darken-2 white--text"
-                          @click="add_row(item.id) ; goTo(item.id)"
-                          :disabled="!isEditing"
-                      >
-                        ایجاد ردیف جدید
-                      </v-btn>
-                    </td>
-
-                  </tr>
 
                 </template>
               </v-simple-table>
@@ -263,6 +213,7 @@ export default {
       appendSlash: true,
       hasList: false,
       hasIdProp: true,
+      to_text: 'به بالا',
       firstt: false,
       error_dialog: false,
       error_message: null,
