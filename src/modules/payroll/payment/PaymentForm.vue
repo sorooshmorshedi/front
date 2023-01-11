@@ -291,46 +291,59 @@
                   v-model="items[person.id]['contract_row']"
                   item-text="name"
                   item-value="id"
+                  :disabled="!items[person.id].is_in"
               />
             </td>
             <td>
               <hour-picker
                   v-model="items[person.id]['ezafe_kari'] "
+                  :disabled="!items[person.id].is_in"
               ></hour-picker>
             </td>
             <td>
               <hour-picker
                   v-model="items[person.id]['tatil_kari'] "
+                  :disabled="!items[person.id].is_in"
               ></hour-picker>
             </td>
             <td>
               <hour-picker
                   v-model="items[person.id]['kasre_kar'] "
+                  :disabled="!items[person.id].is_in"
               ></hour-picker>
             </td>
             <td>
               <hour-picker
                   v-model="items[person.id]['shab_kari']"
+                  :disabled="!items[person.id].is_in"
               ></hour-picker>
             </td>
             <td>
               <v-text-field v-model="items[person.id]['sob_asr'] "
-                            class="currency-input">
+                            class="currency-input"
+                            :disabled="!items[person.id].is_in"
+              >
               </v-text-field>
             </td>
             <td>
               <v-text-field v-model="items[person.id]['sob_shab'] "
-                            class="currency-input">
+                            class="currency-input"
+                            :disabled="!items[person.id].is_in"
+              >
               </v-text-field>
             </td>
             <td>
               <v-text-field v-model="items[person.id]['asr_shab'] "
-                            class="currency-input">
+                            class="currency-input"
+                            :disabled="!items[person.id].is_in"
+              >
               </v-text-field>
             </td>
             <td>
               <v-text-field v-model="items[person.id]['sob_asr_shab'] "
-                            class="currency-input">
+                            class="currency-input"
+                            :disabled="!items[person.id].is_in"
+              >
               </v-text-field>
             </td>
           </tr>
@@ -361,42 +374,81 @@
             <v-card-title class="text-h5 indigo white--text">
               مرخصی و ماموریت تجمیعی
             </v-card-title>
-            <v-simple-table class="ma-4 " dense>
+            <v-simple-table class="border_all b ma-4 " dense>
               <template v-slot:default>
+                <thead class="style: blue lighten-4">
+                <tr>
+                  <th>
+                    مشخصات
+
+                  </th>
+                  <th class="text-center" colspan="3">
+                    ماموریت (روز)
+                  </th>
+                  <th class="text-center" colspan="3">
+                    مرخصی استحقاقی (روز)
+                  </th>
+                  <th class="text-center" colspan="3">
+                    مرخصی استعلاجی (روز)
+                  </th>
+                  <th class="text-center" colspan="3">
+                    مرخصی بدون حقوق (روز)
+                  </th>
+                  <th class="text-center" colspan="3">
+                    غیبت (روز)
+                  </th>
+
+                </tr>
+                </thead>
                 <thead class="style: blue lighten-4">
                 <tr>
                   <th class="text-center">
                     نام و نام خانوادگی
                   </th>
                   <th class="text-center">
-                    ماموریت ثبت شده (روز)
+                    ماموریت ثبت شده
                   </th>
                   <th class="text-center">
-                    ماموریت تجمیعی (روز)
+                    ماموریت تجمیعی
                   </th>
                   <th class="text-center">
-                    مرخصی استحقاقی ثبت شده (روز)
+                    جمع
                   </th>
                   <th class="text-center">
-                    مرخصی استحقاقی تجمیعی (روز)
+                    مرخصی استحقاقی ثبت شده
                   </th>
                   <th class="text-center">
-                    مرخصی استعلاجی ثبت شده (روز)
+                    مرخصی استحقاقی تجمیعی
                   </th>
                   <th class="text-center">
-                    مرخصی استعلاجی تجمیعی (روز)
+                    جمع
                   </th>
                   <th class="text-center">
-                    مرخصی بدون حقوق ثبت شده (روز)
+                    مرخصی استعلاجی ثبت شده
                   </th>
                   <th class="text-center">
-                    مرخصی بدون حقوق تجمیعی (روز)
+                    مرخصی استعلاجی تجمیعی
                   </th>
                   <th class="text-center">
-                    غیبت ثبت شده (روز)
+                    جمع
                   </th>
                   <th class="text-center">
-                    غیبت تجمیعی (روز)
+                    مرخصی بدون حقوق ثبت شده
+                  </th>
+                  <th class="text-center">
+                    مرخصی بدون حقوق تجمیعی
+                  </th>
+                  <th class="text-center">
+                    جمع
+                  </th>
+                  <th class="text-center">
+                    غیبت ثبت شده
+                  </th>
+                  <th class="text-center">
+                    غیبت تجمیعی
+                  </th>
+                  <th class="text-center">
+                    جمع
                   </th>
 
                 </tr>
@@ -404,73 +456,77 @@
                 <tbody class="grey lighten-4 ma-2">
                 <tr v-for="person in payList" :key="person.id" class="ma-2 pa-2">
                   <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
-                  <td>
-                    <v-text-field
-                        disabled="true"
-                        class="currency-input"
-                        v-model="items[person.id]['mission'] "
-                    ></v-text-field>
+                  <td class="text-center">
+                    {{items[person.id]['mission']}}
                   </td>
                   <td>
                     <v-text-field
                         class="currency-input"
                         v-model="items[person.id]['cumulative_mission'] "
+                        :disabled="!items[person.id].is_in"
+                        @change="get_total()"
                     ></v-text-field>
                   </td>
-                  <td>
-                    <v-text-field
-                        disabled="true"
-                        class="currency-input"
-                        v-model="items[person.id]['entitlement'] "
-                    ></v-text-field>
+                  <td class="text-center">
+                    {{ total[person.id].mission }}
+                  </td>
+                  <td class="text-center">
+                    {{items[person.id]['entitlement']}}
                   </td>
                   <td>
                     <v-text-field
                         class="currency-input"
                         v-model="items[person.id]['cumulative_entitlement'] "
+                        :disabled="!items[person.id].is_in"
+                        @change="get_total()"
+
                     ></v-text-field>
                   </td>
                   <td>
-                    <v-text-field
-                        disabled="true"
-                        class="currency-input"
-                        v-model="items[person.id]['illness'] "
-                    ></v-text-field>
+                    {{total[person.id].entitlement}}
+                  </td>
+                  <td class="text-center">
+                    {{items[person.id]['illness']}}
                   </td>
                   <td>
                     <v-text-field
                         class="currency-input"
                         v-model="items[person.id]['cumulative_illness'] "
+                        :disabled="!items[person.id].is_in"
+                        @change="get_total()"
                     ></v-text-field>
                   </td>
                   <td>
-                    <v-text-field
-                        disabled="true"
-                        class="currency-input"
-                        v-model="items[person.id]['without_salary'] "
-                    ></v-text-field>
+                    {{total[person.id].illness}}
+                  </td>
+                  <td class="text-center">
+                    {{items[person.id]['without_salary']}}
                   </td>
                   <td>
                     <v-text-field
                         class="currency-input"
                         v-model="items[person.id]['cumulative_without_salary'] "
+                        :disabled="!items[person.id].is_in"
+                        @change="get_total()"
                     ></v-text-field>
                   </td>
                   <td>
-                    <v-text-field
-                        disabled="true"
-                        class="currency-input"
-                        v-model="items[person.id]['absence'] "
-                    ></v-text-field>
+                    {{total[person.id].without_salary}}
+                  </td>
+                  <td class="text-center">
+                    {{items[person.id]['absence']}}
                   </td>
                   <td>
                     <v-text-field
                         class="currency-input"
                         v-model="items[person.id]['cumulative_absence'] "
+                        :disabled="!items[person.id].is_in"
+                        @change="get_total()"
                     ></v-text-field>
                   </td>
-
-
+                  <td>
+                    {{total[person.id].absence}}
+                  </td>
                 </tr>
                 </tbody>
               </template>
@@ -560,18 +616,21 @@
                     <money
                         v-model="items[person.id]['hazine_made_137'] "
                         background-color="white"
+                        :disabled="!items[person.id].is_in"
                     />
                   </td>
                   <td>
                     <money
                         v-model="items[person.id]['kosoorat_insurance'] "
                         background-color="white"
+                        :disabled="!items[person.id].is_in"
                     />
                   </td>
                   <td>
                     <money
                         v-model="items[person.id]['manategh_tejari_moafiat'] "
                         background-color="white"
+                        :disabled="!items[person.id].is_in"
                     />
                   </td>
 
@@ -579,24 +638,28 @@
                     <money
                         v-model="items[person.id]['ejtenab_maliat_mozaaf'] "
                         background-color="white"
+                        :disabled="!items[person.id].is_in"
                     />
                   </td>
                   <td>
                     <money
                         v-model="items[person.id]['mazaya_gheyr_mostamar'] "
                         background-color="white"
+                        :disabled="!items[person.id].is_in"
                     />
                   </td>
                   <td>
                     <money
                         v-model="items[person.id]['sayer_moafiat'] "
                         background-color="white"
+                        :disabled="!items[person.id].is_in"
                     />
                   </td>
                   <td>
                     <money
                         v-model="items[person.id]['sayer_ezafat'] "
                         background-color="white"
+                        :disabled="!items[person.id].is_in"
                     />
                   </td>
 
@@ -604,6 +667,7 @@
                     <money
                         v-model="items[person.id]['sayer_kosoorat'] "
                         background-color="white"
+                        :disabled="!items[person.id].is_in"
                     />
 
                   </td>
@@ -622,7 +686,7 @@
               <v-btn
                   color="green"
                   dark
-                  @click="dialog = false"
+                  @click="dialog1 = false"
               >
                 ادامه
               </v-btn>
@@ -652,7 +716,8 @@
             توجه!
           </v-card-title>
           <v-card-text>
-            با توجه به اینکه امکان ویرایش بعد از ثبت نیست، آیا از ساخت لیست حقوق و انجام محاسبات با این اطلاعات اطمینان دارید؟
+            با توجه به اینکه امکان ویرایش بعد از ثبت نیست، آیا از ساخت لیست حقوق و انجام محاسبات با این اطلاعات اطمینان
+            دارید؟
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -713,7 +778,7 @@ export default {
       year: null,
       export_filter: {workshop: this.search_workshop, month: this.search_month},
       url: 'payroll/listOfPay/all',
-      items: [],
+      items: {},
       MONTHS: [
         {name: ' فروردین', value: 'fa', 'id': 1},
         {name: ' اردیبهشت', value: 'or', 'id': 2},
@@ -745,12 +810,15 @@ export default {
       modal2: false,
       dialog1: false,
       list_name: '',
+      total: {},
       type: null,
       entitlement: null,
       calculate: null,
       bime: true,
       list_status: false,
       appendSlash: true,
+      a: 1,
+      b: 2,
       hasList: false,
       hasIdProp: true,
       error_dialog: false,
@@ -784,6 +852,15 @@ export default {
     };
   },
   computed: {
+    my_total: function () {
+      let res = {}
+      for (let item in this.items) {
+        this.$set(res, item, {
+          'mission': this.items.item.mission + this.items.item.cumulative_mission
+        })
+      }
+      return res;
+    },
     headers() {
       return [
         {
@@ -862,6 +939,21 @@ export default {
   },
 
   methods: {
+    get_total() {
+      console.log('okok')
+      for (let item in this.items) {
+        if (this.items[item] != null) {
+          this.$set(this.total, this.items[item].id, {
+            'mission': parseInt(this.items[item]['mission']) + parseInt(this.items[item]['cumulative_mission']),
+            'absence': parseInt(this.items[item]['absence']) + parseInt(this.items[item]['cumulative_absence']),
+            'entitlement': parseInt(this.items[item]['entitlement']) + parseInt(this.items[item]['cumulative_entitlement']),
+            'illness': parseInt(this.items[item]['illness']) + parseInt(this.items[item]['cumulative_illness']),
+            'without_salary': parseInt(this.items[item]['illness']) + parseInt(this.items[item]['cumulative_without_salary']),
+          })
+        }
+      }
+
+    },
     Show(item) {
       console.log(item)
     },
@@ -884,7 +976,7 @@ export default {
           this.payList = data.list_of_pay_item
           this.payListCreated = true
           for (let item in this.payList) {
-            this.items[this.payList[item].id] = {
+            this.$set(this.items, this.payList[item].id, {
               'is_in': true,
               'id': this.payList[item].id,
               'ezafe_kari': "00:00",
@@ -905,21 +997,20 @@ export default {
               'manategh_tejari_moafiat': null,
               'ejtenab_maliat_mozaaf': null,
               'sayer_kosoorat': null,
-              'cumulative_absence': null,
-              'cumulative_mission': null,
-              'cumulative_entitlement': null,
-              'cumulative_illness': null,
-              'cumulative_without_salary': null,
+              'cumulative_absence': 0,
+              'cumulative_mission': 0,
+              'cumulative_entitlement': 0,
+              'cumulative_illness': 0,
+              'cumulative_without_salary': 0,
               'absence': this.payList[item].absence_day,
               'mission': this.payList[item].mission_day,
               'entitlement': this.payList[item].entitlement_leave_day,
               'illness': this.payList[item].illness_leave_day,
               'without_salary': this.payList[item].without_salary_leave_day,
-            }
+            })
           }
-          for (let item of this.items){
-            console.log(item)
-          }
+          this.get_total()
+          console.log(this.items)
           this.notify('لیست حقوق ساخته شد، جهت تکمیل و انجام محاسبات روی دکمه انجام محاسبات کلیک کنید', 'success')
           this.request({
             url: this.endpoint(`payroll/workshop/contract/row/` + this.search_workshop + '/'),
@@ -1078,5 +1169,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
-
+<style scoped lang="scss">
+table th + th { border-left:2px solid #dddddd; }
+table td + td { border-left:1px solid #dddddd; }
+</style>

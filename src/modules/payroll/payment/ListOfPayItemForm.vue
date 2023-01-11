@@ -234,7 +234,7 @@
       >
 
 
-        <v-toolbar-title> {{ list_of_pay_item.personnel_name }}</v-toolbar-title>
+        <v-toolbar-title>  حقوق و دستمزد جامع {{ list_of_pay_item.personnel_name }} {{list_of_pay_item.personnel_national_code}} برای حکم {{list_of_pay_item.hr_name}}</v-toolbar-title>
 
         <v-spacer></v-spacer>
         <span class="ml-2 mr-2"> کارگاه {{ list_of_pay_item.workshop_display }}</span>
@@ -248,11 +248,8 @@
               <template v-slot:default>
                 <thead class="style: indigo darken-2">
                 <tr>
-                  <th class="white--text">
-                    عنوان
-                  </th>
-                  <th>
-
+                  <th class="white--text text-center" colspan="2">
+                    اطلاعات پایه
                   </th>
                 </tr>
                 </thead>
@@ -294,7 +291,15 @@
                     بیمه میشود
                   </th>
                   <td>
-                    <span v-if="list_of_pay_item.is_insurance == 'y'"> بلی</span>
+                    {{list_of_pay_item.is_insurance_display}}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="">
+                    تاریخ اضافه شدن به لیست بیمه
+                  </th>
+                  <td>
+                    {{ list_of_pay_item.insurance_date }}
                   </td>
                 </tr>
                 <tr>
@@ -305,6 +310,15 @@
                     {{ list_of_pay_item.get_insurance_in_workshop }}
                   </td>
                 </tr>
+                <tr>
+                  <th class="">
+                    تاریخ اضافه شدن به لیست مالیات
+                  </th>
+                  <td>
+                    {{ list_of_pay_item.tax_date }}
+                  </td>
+                </tr>
+
                 <tr>
                   <th class="">
                     ردیف پیمان
@@ -398,18 +412,84 @@
                 </tr>
                 <tr>
                   <th class="">
-                    کسر کار (مبلغ)
+                    اضافه کاری (ساعت)
                   </th>
-                  <td>
-                    <money v-model="list_of_pay_item.kasre_kar_total" disabled="true"></money>
+                  <td class="text-center">
+                    <v-text-field class="currency-input" v-model="list_of_pay_item.get_ezafe_kari_time"
+                                  append-icon="fa-clock"
+                                  disabled="true"
+                    ></v-text-field>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th class="">
+                    تعطیل کاری (ساعت)
+                  </th>
+                  <td class="text-center">
+                    <v-text-field class="currency-input" v-model="list_of_pay_item.get_tatil_kari_time"
+                                  append-icon="fa-clock"
+                                  disabled="true"
+                    ></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <th class="">
-                    سایر کسورات
+                    شب کاری (ساعت)
+                  </th>
+                  <td class="text-center">
+                    <v-text-field class="currency-input" v-model="list_of_pay_item.get_shab_kari_time"
+                                  append-icon="fa-clock"
+                                  disabled="true"
+                    ></v-text-field>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.nobat_kari_sob_shab != 0">
+                  <th class="">
+                    نوبت کاری صبح و شب (روز)
                   </th>
                   <td>
-                    <money v-model="list_of_pay_item.sayer_kosoorat" disabled="true"></money>
+                    <money v-model="list_of_pay_item.nobat_kari_sob_shab" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.nobat_kari_sob_asr != 0">
+                  <th class="">
+                    نوبت کاری صبح و عصر (روز)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.nobat_kari_sob_asr" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.nobat_kari_asr_shab != 0">
+                  <th class="">
+                    نوبت کاری عصر و شب (روز)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.nobat_kari_asr_shab" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.nobat_kari_sob_asr_shab != 0">
+                  <th class="">
+                    نوبت کاری صبح، عصر و شب (روز)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.nobat_kari_sob_asr_shab" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="">
+                    ماموریت (روز)
+                  </th>
+                  <td class="text-center">
+                    {{ list_of_pay_item.mission_day }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="">
+                    تعداد اولاد مشمول
+                  </th>
+                  <td class="text-center">
+                    {{ list_of_pay_item.aele_mandi_child }}
                   </td>
                 </tr>
 
@@ -424,11 +504,8 @@
               <template v-slot:default>
                 <thead class="style: indigo darken-2">
                 <tr>
-                  <th class="white--text">
-                    عنوان
-                  </th>
-                  <th>
-
+                  <th class="white--text text-center" colspan="2">
+                    اضافات
                   </th>
                 </tr>
                 </thead>
@@ -467,14 +544,6 @@
                 </tr>
                 <tr>
                   <th class="">
-                    اضافه کاری (ساعت)
-                  </th>
-                  <td class="text-center">
-                    <time_from_decimal v-model="list_of_pay_item.ezafe_kari"></time_from_decimal>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
                     اضافه کاری (مبلغ)
                   </th>
                   <td>
@@ -483,26 +552,10 @@
                 </tr>
                 <tr>
                   <th class="">
-                    تعطیل کاری (ساعت)
-                  </th>
-                  <td class="text-center">
-                    <time_from_decimal v-model="list_of_pay_item.tatil_kari"></time_from_decimal>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
                     تعطیل کاری (مبلغ)
                   </th>
                   <td>
                     <money v-model="list_of_pay_item.tatil_kari_total" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    شب کاری (ساعت)
-                  </th>
-                  <td class="text-center">
-                    <time_from_decimal v-model="list_of_pay_item.shab_kari"></time_from_decimal>
                   </td>
                 </tr>
                 <tr>
@@ -516,14 +569,6 @@
 
                 <tr v-if="list_of_pay_item.nobat_kari_sob_shab != 0">
                   <th class="">
-                    نوبت کاری صبح و شب (روز)
-                  </th>
-                  <td>
-                    <money v-model="list_of_pay_item.nobat_kari_sob_shab" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr v-if="list_of_pay_item.nobat_kari_sob_shab != 0">
-                  <th class="">
                     نوبت کاری صبح و شب (مبلغ)
                   </th>
                   <td>
@@ -533,27 +578,10 @@
 
                 <tr v-if="list_of_pay_item.nobat_kari_sob_asr != 0">
                   <th class="">
-                    نوبت کاری صبح و عصر (روز)
-                  </th>
-                  <td>
-                    <money v-model="list_of_pay_item.nobat_kari_sob_asr" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr v-if="list_of_pay_item.nobat_kari_sob_asr != 0">
-                  <th class="">
                     نوبت کاری صبح و عصر (مبلغ)
                   </th>
                   <td>
                     <money v-model="list_of_pay_item.get_nobat_kari_sob_asr_total" disabled="true"></money>
-                  </td>
-                </tr>
-
-                <tr v-if="list_of_pay_item.nobat_kari_asr_shab != 0">
-                  <th class="">
-                    نوبت کاری عصر و شب (روز)
-                  </th>
-                  <td>
-                    <money v-model="list_of_pay_item.nobat_kari_asr_shab" disabled="true"></money>
                   </td>
                 </tr>
                 <tr v-if="list_of_pay_item.nobat_kari_asr_shab != 0">
@@ -564,30 +592,12 @@
                     <money v-model="list_of_pay_item.get_nobat_kari_asr_shab_total" disabled="true"></money>
                   </td>
                 </tr>
-
-                <tr v-if="list_of_pay_item.nobat_kari_sob_asr_shab != 0">
-                  <th class="">
-                    نوبت کاری صبح، عصر و شب (روز)
-                  </th>
-                  <td>
-                    <money v-model="list_of_pay_item.nobat_kari_sob_asr_shab" disabled="true"></money>
-                  </td>
-                </tr>
                 <tr v-if="list_of_pay_item.nobat_kari_sob_asr_shab != 0">
                   <th class="">
                     نوبت کاری صبح، عصر و شب (مبلغ)
                   </th>
                   <td>
                     <money v-model="list_of_pay_item.get_nobat_kari_sob_asr_shab_total" disabled="true"></money>
-                  </td>
-                </tr>
-
-                <tr>
-                  <th class="">
-                    ماموریت (روز)
-                  </th>
-                  <td class="text-center">
-                    {{ list_of_pay_item.mission_day }}
                   </td>
                 </tr>
                 <tr>
@@ -830,14 +840,8 @@
               <template v-slot:default>
                 <thead class="style: indigo darken-2">
                 <tr>
-                  <th class="white--text">
-                    عنوان
-                  </th>
-                  <th>
-
-                  </th>
-                  <th>
-
+                  <th class="white--text text-center" colspan="3">
+                    کسورات
                   </th>
                 </tr>
                 </thead>
@@ -935,6 +939,22 @@
                   <th class="text-center" colspan="2"> بیمه بیکاری</th>
                   <td>
                     <money v-model="list_of_pay_item.get_un_employer_tax" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="text-center" colspan="2">
+                    کسر کار (مبلغ)
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.kasre_kar_total" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="text-center" colspan="2">
+                    سایر کسورات
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.sayer_kosoorat" disabled="true"></money>
                   </td>
                 </tr>
 

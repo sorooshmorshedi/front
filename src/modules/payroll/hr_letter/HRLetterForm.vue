@@ -334,7 +334,9 @@
           </v-row>
           <v-row>
             <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">پایه سنوات روزانه:</v-card-text>
+              <v-card-text class="text-h6"  v-if="insurance_month[item.contract] > 12 ">پایه سنوات روزانه:</v-card-text>
+              <p v-if="insurance_month[item.contract] < 12"> پایه سنوات روزانه:</p>
+              <p class="red--text" v-if="insurance_month[item.contract] < 12"> سابقه بیمه در کارگاه زیر یک سال است</p>
             </v-col>
             <v-col cols="12" md="2">
               <money
@@ -343,7 +345,7 @@
                   v-on:keypress="NumbersOnly"
                   v-model="item.paye_sanavat_amount"
                   background-color="white"
-                  :disabled="!isEditing"
+                  :disabled="!isEditing || insurance_month[item.contract] < 12"
               />
             </v-col>
             <v-col cols="12" md="2">
@@ -353,7 +355,7 @@
                   v-model="item.paye_sanavat_nature"
                   item-text="name"
                   value="value"
-                  :disabled="!isEditing"
+                  :disabled="!isEditing || insurance_month[item.contract] < 12"
               />
             </v-col>
             <v-col cols="12" md="2">
@@ -364,7 +366,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
-                  :disabled="!isEditing"
+                  :disabled="!isEditing || insurance_month[item.contract] < 12"
               ></v-checkbox>
             </v-col>
 
@@ -376,7 +378,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
-                  :disabled="!isEditing"
+                  :disabled="!isEditing || insurance_month[item.contract] < 12"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -387,7 +389,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
-                  :disabled="!isEditing"
+                  :disabled="!isEditing || insurance_month[item.contract] < 12"
               ></v-switch>
             </v-col>
           </v-row>
@@ -2538,6 +2540,7 @@ export default {
       contract: this.$route.query.contract,
       contracts: [],
       gender: {},
+      insurance_month: {},
       PathLevels,
       cp_temp: false,
       edit_temp: true,
@@ -2622,8 +2625,10 @@ export default {
               'id': data[t].id,
             })
             this.contract_code[data[t].id] = data[t].code
+            this.insurance_month[data[t].id] = data[t].personnel_insurance_month
+            console.log(this.insurance_month)
+
           }
-          console.log(this.contracts)
         }
       })
     } else {
@@ -2656,6 +2661,9 @@ export default {
                   'id': data[t].id,
                 })
                 this.contract_code[data[t].id] = data[t].code
+                this.insurance_month[data[t].id] = data[t].personnel_insurance_month
+                console.log(this.insurance_month)
+
               }
               this.request({
                 url: this.endpoint(`payroll/workshop/workshop_personnel/` + data[0].workshop_id + '/'),
@@ -2671,6 +2679,7 @@ export default {
                     })
                     this.gender[data[t].id] = data[t].personnel_gender
                     this.personnel_nationality[data[t].id] = data[t].personnel_nationality
+
                   }
                   console.log(this.gender)
                 }
@@ -2770,7 +2779,6 @@ export default {
               'id': data[t].id,
             })
             this.gender[data[t].id] = data[t].personnel_gender
-            this.personnel_nationality[data[t].id] = data[t].personnel_nationality
 
           }
           console.log(this.gender)
@@ -2794,6 +2802,8 @@ export default {
               'id': data[t].id,
             })
             this.contract_code[data[t].id] = data[t].code
+            this.insurance_month[data[t].id] = data[t].personnel_insurance_month
+            console.log(this.insurance_month)
           }
         }
       })

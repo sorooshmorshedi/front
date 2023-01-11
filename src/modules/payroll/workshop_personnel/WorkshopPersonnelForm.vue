@@ -238,7 +238,6 @@
                     background-color="white"
                     :disabled="!isEditing || item.quit_job"/>
               </v-col>
-              <v-btn @click="show($refs.title.$refs.input.value)">ok</v-btn>
               <v-col cols="12" md="6">
                 <v-autocomplete
                     :rules="[rules.bool_required,]"
