@@ -4,11 +4,9 @@
       @input="change"
       dir="ltr"
       :label="label"
-      :placeholder="placeholder"
       :disabled="disabled"
-      append-icon="fa-clock"
       @click:append="setZero"
-      style="min-width: 90px"
+      style="min-width: 50px"
   />
 </template>
 

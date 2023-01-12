@@ -4,233 +4,72 @@
           outlined
           tile>
     <v-toolbar color="indigo darken-2">
-      <v-toolbar-title class="white--text">محاسبه حقوق</v-toolbar-title>
+      <v-toolbar-title class="white--text">ویرایش لیست حقوق {{ list_name }}</v-toolbar-title>
     </v-toolbar>
-    <v-row class="mt-4 mr-3 ml-3">
+    <v-row class="mt-4 pr-2 pl-2">
       <v-col class="mt-5" cols="12" md="4">
-        <v-autocomplete
-            v-if="!this.workshop"
-            label="کارگاه"
-            :items="workshops"
-            v-model="search_workshop"
-            :disabled="list_generated"
-            item-text="name"
-            item-value="id"
-        />
         <v-text-field
             label="کارگاه"
-            v-if="this.workshop"
             disabled="true"
-            v-show="false"
-            v-model="search_workshop"
-        ></v-text-field>
-        <v-text-field
-            label="کارگاه"
-            v-if="this.workshop"
-            disabled="true"
-            v-model="this.workshop_name "
-        ></v-text-field>
+            v-model="workshop"
+
+        >
+        </v-text-field>
       </v-col>
       <v-col class="mt-5" cols="12" md="4">
-        <v-autocomplete
+        <v-text-field
             label="سال"
             v-model="year"
-            :disabled="list_generated || !search_workshop"
-            :items="years"
-        ></v-autocomplete>
+            disabled="true"
+        >
+        </v-text-field>
       </v-col>
       <v-col class="mt-5" cols="12" md="4">
-        <v-autocomplete
-            v-if="payment_type"
+        <v-text-field
             label="ماه"
-            :items="MONTHS"
-            :disabled="list_generated || !search_workshop || !year"
-            v-model="search_month"
-            @change="paymentStart"
-            item-text="name"
-            item-value="id"
-        />
-        <v-autocomplete
-            v-if="!payment_type"
-            label="ماه"
-            :items="MONTHS"
-            :disabled="list_generated"
-            v-model="search_month"
-            @change="paymentStart"
-            item-text="name"
-            item-value="id"
-        />
+            v-model="month"
+            disabled="true"
+        >
+
+        </v-text-field>
       </v-col>
     </v-row>
-    <v-card-actions v-if="!payment_start" class="mt-4 d-flex justify-center justify-md-end mt-2">
-      <v-btn
-          @click="paymentStart ; payment_start = true"
-          left
-          large
-          v-if="search_workshop && search_month"
-          class=" green white--text mb-5 ml-4 pl-4 pr-4 "
-      >ادامه
-      </v-btn>
-
-    </v-card-actions>
-    <v-row v-if="payment_start && !list_generated">
-      <v-col cols="12" md="6">
-        <v-card class="ma-5">
-          <v-toolbar color="indigo">
-            <v-toolbar-title class="white--text">
-              حقوق و دستمزد
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-col class="mt-5 pr-10 pl-10" cols="12" md="12" v-if="payment_type">
-
+    <v-row>
+      <v-col cols="12" md="12">
+        <v-row class="mt-2 pr-2 pl-2">
+          <v-col cols="12" md="6">
+            <v-text-field
+                label="نام لیست"
+                :disabled="list_edit"
+                v-model="list_name"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
             <v-autocomplete
-                label="نوع لیست"
-                :items="PAYMENT_TYPES"
-                v-model="payment_type"
-                :disabled="list_generated"
+                label="محاسبه بیمه و مالیات"
+                :items="CALCULATE_TYPES"
+                :disabled="list_edit"
+                v-model="calculate"
                 item-text="name"
                 item-value="value"
-
             />
-
           </v-col>
-          <v-row v-if="!payment_type" class="mt-5 pr-10 pl-10">
-            <v-col cols="12" md="6">
-              <v-autocomplete
-                  label="نوع لیست"
-                  :items="PAYMENT_TYPES"
-                  v-model="payment_type"
-                  :disabled="list_generated"
-                  item-text="name"
-                  item-value="value"
-              />
-
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-autocomplete
-                  @change="getListsOfMonth(lists_of_month)"
-                  label="ماه"
-                  :items="MONTHS"
-                  v-model="lists_of_month"
-                  :disabled="list_generated"
-                  item-text="name"
-                  item-value="id"
-              />
-
-            </v-col>
-          </v-row>
-          <v-row class="mt-2 pr-10 pl-10">
-            <v-col cols="12" md="12" v-if="!payment_type"
-            >
-              <v-autocomplete
-                  label=" کپی بر اساس"
-                  :items="workshop_list_of_pay"
-                  v-model="copy_id"
-                  :disabled="list_generated"
-                  item-text="name"
-                  item-value="id"
-              />
-            </v-col>
-          </v-row>
-          <v-row class="mt-2 pr-10 pl-10">
-
-            <v-col cols="12" md="12">
-              <v-text-field
-                  label="نام لیست"
-                  :disabled="list_generated"
-                  v-model="list_name"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row class="mt-2 pr-10 pl-10">
-            <v-col cols="12" md="12">
-              <v-autocomplete
-                  label="محاسبه بیمه و مالیات"
-                  :items="CALCULATE_TYPES"
-                  :disabled="list_generated"
-                  v-model="calculate"
-                  item-text="name"
-                  item-value="value"
-              />
-            </v-col>
-          </v-row>
-          <v-card-actions class="mt-4 d-flex justify-center justify-md-end mt-2">
-            <v-btn
-                @click="getList"
-                v-if="payment_type && !payListCreated"
-                left
-                class=" green white--text mb-5 ml-8 pl-4 pr-4 "
-            >ثبت
-            </v-btn>
-            <v-btn
-                @click="list_generated = true"
-                v-if="payment_type && payListCreated"
-                left
-                large
-                class=" blue white--text mb-5 ml-8 pl-4 pr-4 "
-            > انجام محاسبات
-            </v-btn>
-            <v-btn
-                @click="createListOfPayByPervious"
-                v-if="!payment_type"
-                left
-                class=" green white--text mb-5 ml-8 pl-4 pr-4 "
-            >ثبت
-            </v-btn>
-
-          </v-card-actions>
-        </v-card>
-
-        <v-row justify="center">
-          <v-dialog
-              v-model="error_dialog"
-              persistent
-              @click:outside="error_dialog=false"
-              max-width="400"
-          >
-            <v-card>
-              <v-card-title class="red--text text-h5">
-                لطفا موارد زیر را تکمیل یا اصلاح کنید!
-              </v-card-title>
-              <v-card-text>
-                <v-row v-for="item in error_message" class="mt-5 mr-10">
-                  {{ item }}
-                </v-row>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="green darken-1"
-                    text
-                    @click="error_dialog = false"
-                >
-                  بستن
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
         </v-row>
-
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-card class="ma-5">
-          <v-toolbar color="indigo">
-            <v-toolbar-title class="white--text">
-              لیست های این کارگاه برای {{ search_month }} / {{ year }}
-            </v-toolbar-title>
-          </v-toolbar>
-          <m-datatable class="ma-3" :show-export-btns="false" :headers="headers"
-                       :apiUrl="url" exportUrl="payroll" :filters.sync="export_filter"
-                       ref="exportTable">
-          </m-datatable>
-
-        </v-card>
+        <v-card-actions class="mt-4 d-flex justify-center justify-md-end ">
+          <v-btn
+              @click="EditList"
+              left
+              large
+              class=" green white--text mb-5  pl-4 pr-4 "
+          >ادامه
+          </v-btn>
+        </v-card-actions>
 
       </v-col>
     </v-row>
 
     <v-row>
-      <v-simple-table v-if="list_generated && !calculateDone" class="ma-6 " dense>
+      <v-simple-table v-if="list_generated" class="ma-6 " dense>
         <template v-slot:default>
           <thead class="style: blue lighten-4">
           <tr>
@@ -393,7 +232,7 @@
         </template>
       </v-simple-table>
     </v-row>
-    <v-card-actions v-if="payment_start && list_generated" class="mt-4 d-flex justify-center justify-md-end mt-2">
+    <v-card-actions v-if="list_generated" class="mt-4 d-flex justify-center justify-md-end mt-2">
       <div class="text-center">
         <v-dialog
             v-model="dialog"
@@ -499,7 +338,7 @@
                 <tr v-for="person in payList" :key="person.id" class="ma-2 pa-2">
                   <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
                   <td class="text-center">
-                    {{items[person.id]['mission']}}
+                    {{ items[person.id]['mission'] }}
                   </td>
                   <td>
                     <v-text-field
@@ -513,7 +352,7 @@
                     {{ total[person.id].mission }}
                   </td>
                   <td class="text-center">
-                    {{items[person.id]['entitlement']}}
+                    {{ items[person.id]['entitlement'] }}
                   </td>
                   <td>
                     <v-text-field
@@ -525,10 +364,10 @@
                     ></v-text-field>
                   </td>
                   <td>
-                    {{total[person.id].entitlement}}
+                    {{ total[person.id].entitlement }}
                   </td>
                   <td class="text-center">
-                    {{items[person.id]['illness']}}
+                    {{ items[person.id]['illness'] }}
                   </td>
                   <td>
                     <v-text-field
@@ -539,10 +378,10 @@
                     ></v-text-field>
                   </td>
                   <td>
-                    {{total[person.id].illness}}
+                    {{ total[person.id].illness }}
                   </td>
                   <td class="text-center">
-                    {{items[person.id]['without_salary']}}
+                    {{ items[person.id]['without_salary'] }}
                   </td>
                   <td>
                     <v-text-field
@@ -553,10 +392,10 @@
                     ></v-text-field>
                   </td>
                   <td>
-                    {{total[person.id].without_salary}}
+                    {{ total[person.id].without_salary }}
                   </td>
                   <td class="text-center">
-                    {{items[person.id]['absence']}}
+                    {{ items[person.id]['absence'] }}
                   </td>
                   <td>
                     <v-text-field
@@ -567,7 +406,7 @@
                     ></v-text-field>
                   </td>
                   <td>
-                    {{total[person.id].absence}}
+                    {{ total[person.id].absence }}
                   </td>
                 </tr>
                 </tbody>
@@ -589,8 +428,6 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-
-
       </div>
       <div class="text-center">
         <v-dialog
@@ -604,7 +441,6 @@
                 dark
                 v-bind="attrs"
                 v-on="on"
-                @click="sayerDone = true"
             >
               سایر معافیت ها
             </v-btn>
@@ -634,6 +470,8 @@
                   </th>
                   <th class="text-center">
                     سایر معافیت های مالیات
+                  </th>
+                  <th class="text-center">
                   </th>
 
                 </tr>
@@ -771,7 +609,7 @@ import LadingMixin from "@/modules/dashtbashi/LadingMixin";
 
 
 export default {
-  name: "payment",
+  name: "paymentEdit",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {mtime, TreeSelect, citySelect, TenderList, MDatatable, TransactionForm, money, HourPicker},
   props: {
@@ -833,7 +671,7 @@ export default {
       hasLock: true,
       isDefinable: true,
       myClass: '',
-      workshop: this.$route.query.workshop,
+      workshop: null,
       workshops: [],
       workshop_list_of_pay: [],
       PathLevels,
@@ -843,11 +681,14 @@ export default {
       pay_id: '',
       copy_id: '',
       performClearForm: true,
+      month: null,
       workshop_name: null,
       list_generated: false,
+      list_edit: false,
       payList: null,
       list_of_pay: null,
       show_list_of_pay: false,
+      id: this.$route.query.pay_id,
       calculateDone: false,
       dialog: false,
       payment_start: false,
@@ -902,48 +743,47 @@ export default {
     },
   },
   mounted() {
-    this.year = parseInt(this.serverNow.format('jYYYY'))
-    let counter = 0
-    while (counter < 6) {
-      if (counter == 0) {
-        this.years.push(parseInt(this.serverNow.format('jYYYY')))
-      } else {
-        this.years.push(parseInt(this.serverNow.format('jYYYY')) + counter)
-        this.years.push(parseInt(this.serverNow.format('jYYYY')) - counter)
+    this.request({
+      url: this.endpoint(`payroll/listOfPay/edit/` + this.$route.query.pay_id + '/'),
+      method: "get",
+      success: data => {
+        console.log(data);
+        this.workshop = data['workshop_name']
+        this.month = data['get_month_display']
+        this.year = data['get_year']
+        this.list_name = data['name']
+        this.calculate = data['use_in_calculate']
       }
-      counter += 1
-    }
-    this.years.sort()
-    console.log(this.years)
+    })
+    this.request({
+      url: this.endpoint(`payroll/paylist/edit/item/` + this.$route.query.pay_id + '/'),
+      method: "get",
+      success: data => {
+        console.log(data);
+        this.payList = data
+      }
+    })
 
-    if (!this.workshop) {
-      this.request({
-        url: this.endpoint(`payroll/workshop/`),
-        method: "get",
-        success: data => {
-          console.log(data);
-          for (let t in data) {
-            this.workshops.push({
-              'name': data[t].name + ' ' + data[t].workshop_code,
-              'id': data[t].id,
-            })
-          }
-          console.log(this.workshops)
-        }
-      })
-    }
-    if (this.workshop) {
-      this.request({
-        url: this.endpoint(`payroll/workshop/` + this.workshop + '/'),
-        method: "get",
-        success: data => {
-          this.workshop_name = data.name + ' ' + data.code
-        }
-      })
-    }
   },
 
   methods: {
+    EditList() {
+      this.request({
+        url: this.endpoint(`payroll/listOfPay/edit/` + this.$route.query.pay_id + '/'),
+        method: "put",
+        data: {
+          'name': this.list_name,
+          'use_in_calculate': this.calculate,
+        },
+        success: data => {
+          this.getList()
+          this.list_edit = true
+          this.list_generated = true
+          this.notify('نام و وضعیت بیمه و مالیات  ویرایش شد', 'success')
+        }
+      })
+    },
+
     get_total() {
       console.log('okok')
       for (let item in this.items) {
@@ -959,93 +799,68 @@ export default {
       }
 
     },
-    Show(item) {
-      console.log(item)
-    },
     onlyUnique(value, index, self) {
       return self.indexOf(value) === index;
     },
     getList() {
-      this.request({
-        url: this.endpoint(`payroll/payment/` + this.year + '/' + this.search_month + '/' + this.search_workshop + '/'),
-        method: "post",
-        data: {
-          'name': this.list_name,
-          'ultimate': this.list_status,
-          'use_in_calculate': this.calculate,
-          'use_in_bime': this.bime
-        },
+      for (let item in this.payList) {
+        this.$set(this.items, this.payList[item].id, {
+          'is_in': true,
+          'id': this.payList[item].id,
+          'ezafe_kari': this.payList[item].get_ezafe_kari_time,
+          'tatil_kari': this.payList[item].get_tatil_kari_time,
+          'kasre_kar': this.payList[item].get_kasre_kar_time,
+          'shab_kari': this.payList[item].get_shab_kari_time,
+          'sob_shab': this.payList[item].get_sob_shab,
+          'sob_asr': this.payList[item].get_sob_asr,
+          'asr_shab': this.payList[item].get_asr_shab,
+          'sob_asr_shab': this.payList[item].get_sob_asr_shab,
+          'mazaya_gheyr_mostamar': this.payList[item].mazaya_gheyr_mostamar,
+          'sayer_ezafat': this.payList[item].sayer_ezafat,
+          'contract_row': this.payList[item].contract_row,
+          'hazine_made_137': this.payList[item].hazine_made_137,
+          'kosoorat_insurance': this.payList[item].kosoorat_insurance,
+          'sayer_moafiat': this.payList[item].sayer_moafiat,
+          'manategh_tejari_moafiat': this.payList[item].manategh_tejari_moafiat,
+          'ejtenab_maliat_mozaaf': this.payList[item].ejtenab_maliat_mozaaf,
+          'sayer_kosoorat': this.payList[item].sayer_kosoorat,
+          'cumulative_absence': this.payList[item].cumulative_absence,
+          'cumulative_mission': this.payList[item].cumulative_mission,
+          'cumulative_entitlement': this.payList[item].cumulative_entitlement,
+          'cumulative_illness': this.payList[item].cumulative_illness,
+          'cumulative_without_salary': this.payList[item].cumulative_without_salary,
+          'absence': this.payList[item].get_absence,
+          'mission': this.payList[item].get_mission,
+          'entitlement': this.payList[item].get_entitlement,
+          'illness': this.payList[item].get_illness,
+          'without_salary': this.payList[item].get_with_out_salary,
+        })
 
-        success: data => {
-          this.pay_id = data.id
-          this.payList = data.list_of_pay_item
-          this.payListCreated = true
-          for (let item in this.payList) {
-            this.$set(this.items, this.payList[item].id, {
-              'is_in': true,
-              'id': this.payList[item].id,
-              'ezafe_kari': "00:00",
-              'tatil_kari': "00:00",
-              'kasre_kar': "00:00",
-              'shab_kari': "00:00",
-              'jome_kar': "00:00",
-              'sob_shab': null,
-              'sob_asr': null,
-              'asr_shab': null,
-              'sob_asr_shab': null,
-              'mazaya_gheyr_mostamar': null,
-              'sayer_ezafat': null,
-              'contract_row': null,
-              'hazine_made_137': null,
-              'kosoorat_insurance': null,
-              'sayer_moafiat': null,
-              'manategh_tejari_moafiat': null,
-              'ejtenab_maliat_mozaaf': null,
-              'sayer_kosoorat': null,
-              'cumulative_absence': 0,
-              'cumulative_mission': 0,
-              'cumulative_entitlement': 0,
-              'cumulative_illness': 0,
-              'cumulative_without_salary': 0,
-              'absence': this.payList[item].absence_day,
-              'mission': this.payList[item].mission_day,
-              'entitlement': this.payList[item].entitlement_leave_day,
-              'illness': this.payList[item].illness_leave_day,
-              'without_salary': this.payList[item].without_salary_leave_day,
-            })
-          }
-          this.get_total()
-          console.log(this.items)
-          this.notify('لیست حقوق ساخته شد، جهت تکمیل و انجام محاسبات روی دکمه انجام محاسبات کلیک کنید', 'success')
-          this.request({
-            url: this.endpoint(`payroll/workshop/contract/row/` + this.search_workshop + '/'),
-            method: "get",
-            success: data => {
-              for (let t in data) {
-                this.contractRows.push({
-                  'name': data[t].contract_row,
-                  'id': data[t].id,
-                })
-                console.log(this.contractRows)
-                this.contractRows.push({
-                  'name': 'هبچ کدام',
-                  'id': null,
-                })
+        this.get_total()
+        console.log(this.items)
+        this.notify('لیست حقوق ساخته شد، جهت تکمیل و انجام محاسبات روی دکمه انجام محاسبات کلیک کنید', 'success')
+        this.request({
+          url: this.endpoint(`payroll/workshop/contract/row/` + this.search_workshop + '/'),
+          method: "get",
+          success: data => {
+            for (let t in data) {
+              this.contractRows.push({
+                'name': data[t].contract_row,
+                'id': data[t].id,
+              })
+              console.log(this.contractRows)
+              this.contractRows.push({
+                'name': 'هبچ کدام',
+                'id': null,
+              })
 
-              }
-              this.$refs.exportTable.getDataFromApi()
-              this.$refs.exportTable.getDataFromApi()
             }
-          })
-        },
-        error: data => {
-          this.error_message = data.response.data['وضعیت']
-          this.error_dialog = true
-        }
-
-      })
+            this.$refs.exportTable.getDataFromApi()
+            this.$refs.exportTable.getDataFromApi()
+          }
+        })
+      }
     },
-
     calculatePayment() {
       for (let payitem in this.items) {
         this.request({
@@ -1057,6 +872,7 @@ export default {
             'ezafe_kari': this.items[payitem]['ezafe_kari'],
             'tatil_kari': this.items[payitem]['tatil_kari'],
             'kasre_kar': this.items[payitem]['kasre_kar'],
+            'sayer_kosoorat': this.items[payitem]['sayer_kosoorat'],
             'shab_kari': this.items[payitem]['shab_kari'],
             'nobat_kari_sob_asr': this.items[payitem]['sob_asr'],
             'nobat_kari_sob_shab': this.items[payitem]['sob_shab'],
@@ -1085,16 +901,19 @@ export default {
         })
 
       }
-    },
+    }
+    ,
 
     get_payment_list() {
-      this.$router.push('/panel/listOfPayItem/' + this.pay_id)
-    },
+      this.$router.push('/panel/listOfPayItem/' + this.$route.query.pay_id)
+    }
+    ,
 
     sayer(id) {
       this.id_set = id
       console.log(id)
-    },
+    }
+    ,
 
     getWorkshopListOfPay() {
       this.request({
@@ -1111,7 +930,8 @@ export default {
         }
       })
 
-    },
+    }
+    ,
     createListOfPayByPervious() {
       this.request({
         url: this.endpoint(`payroll/listOfPay/copy/` + this.copy_id + '/'),
@@ -1131,7 +951,8 @@ export default {
 
       })
 
-    },
+    }
+    ,
     paymentStart() {
       this.request({
         url: this.endpoint(`payroll/PaymentVerify/` + this.year + '/' + this.search_month + '/' + this.search_workshop + '/'),
@@ -1148,33 +969,21 @@ export default {
       })
 
     },
-
-    getListsOfMonth(month) {
-      this.request({
-        url: this.endpoint(`payroll/listOfPay/workshop/` + this.search_workshop + '/' + month + '/' +
-            this.year + '/'),
-        method: "get",
-        success: data => {
-          for (let t in data) {
-            this.workshop_list_of_pay.push({
-              'name': data[t].name,
-              'id': data[t].id
-            })
-          }
-        }
-
-      })
-
-    },
     show(item) {
       console.log(item)
-    }
+    },
 
   },
+
 }
 </script>
 
 <style scoped lang="scss">
-table th + th { border-left:2px solid #dddddd; }
-table td + td { border-left:1px solid #dddddd; }
+table th + th {
+  border-left: 2px solid #dddddd;
+}
+
+table td + td {
+  border-left: 1px solid #dddddd;
+}
 </style>

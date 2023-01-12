@@ -288,6 +288,13 @@
             class="d-flex justify-center justify-md-end"
         >
           <v-btn
+              class="orange white--text mt-2  mr-2 ml-5 float-left"
+              large
+              @click="$router.push('/panel/payList/edit?pay_id=' + $route.params.id)"
+              v-if="!list_of_pay.ultimate"
+          >ویرایش
+          </v-btn>
+          <v-btn
               class="red white--text mt-2  mr-2 ml-5 float-left"
               large
               @click="delete_dialog = true"

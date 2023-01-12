@@ -356,7 +356,7 @@
                     مرخصی استحقاقی جمع
                   </th>
                   <td>
-                    {{ list_of_pay_item.entitlement_leave_day }}
+                    {{ list_of_pay_item.get_entitlement_sum }}
                   </td>
                 </tr>
                 <tr>
@@ -364,7 +364,7 @@
                     مرخصی استعلاجی
                   </th>
                   <td>
-                    {{ list_of_pay_item.illness_leave_day }}
+                    {{ list_of_pay_item.get_illness_sum }}
                   </td>
                 </tr>
                 <tr>
@@ -380,7 +380,7 @@
                     مرخصی بدون حقوق
                   </th>
                   <td>
-                    {{ list_of_pay_item.without_salary_leave_day }}
+                    {{ list_of_pay_item.get_without_salary_sum }}
                   </td>
                 </tr>
                 <tr>
@@ -388,7 +388,7 @@
                     غیبت
                   </th>
                   <td>
-                    {{ list_of_pay_item.absence_day }}
+                    {{ list_of_pay_item.get_absence_sum }}
                   </td>
                 </tr>
                 <tr>
@@ -481,7 +481,7 @@
                     ماموریت (روز)
                   </th>
                   <td class="text-center">
-                    {{ list_of_pay_item.mission_day }}
+                    {{ list_of_pay_item.get_mission_sum }}
                   </td>
                 </tr>
                 <tr>

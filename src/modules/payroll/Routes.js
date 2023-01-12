@@ -22,6 +22,7 @@ import PaymentForm from "@/modules/payroll/payment/PaymentForm";
 import TemplateForm from "@/modules/payroll/hr_letter/Template";
 import TemplateList from "@/modules/payroll/hr_letter/TemplateList";
 import PaymentList from "@/modules/payroll/payment/PaymentList";
+import PaymentEdit from "@/modules/payroll/payment/PaymentEdit";
 import ListOfPayItem from "@/modules/payroll/payment/ListOfPayItemList";
 import TaxRowList from "@/modules/payroll/workshop/tax/TaxRowList";
 import TaxRowForm from "@/modules/payroll/workshop/tax/TaxRowForm";
@@ -48,6 +49,7 @@ const Absence = () => import( /* wepackChunkName: "contract" */ "@/modules/payro
 const HRLetter = () => import( /* wepackChunkName: "hr_letter" */ "@/modules/payroll/hr_letter/HRLetterForm.vue")
 const Mission = () => import( /* wepackChunkName: "mission" */ "@/modules/payroll/mission/MissionForm.vue")
 const Payment = () => import( /* wepackChunkName: "payment" */ "@/modules/payroll/payment/PaymentForm.vue")
+const PayEdit = () => import( /* wepackChunkName: "payment" */ "@/modules/payroll/payment/PaymentEdit.vue")
 const TaxRow = () => import( /* wepackChunkName: "tax_row" */ "@/modules/payroll/workshop/tax/TaxRowForm.vue")
 const Loan = () => import( /* wepackChunkName: "loan" */ "@/modules/payroll/loan/LoanForm.vue")
 const Deduction = () => import( /* wepackChunkName: "deduction" */ "@/modules/payroll/deduction/DeductionForm.vue")
@@ -406,6 +408,12 @@ export default [
         path: 'hr_template/list',
         component: TemplateList,
     },
+    {
+        name: 'PayListEdit',
+        path: 'payList/edit',
+        component: PaymentEdit,
+    },
+
 
 
 ]
