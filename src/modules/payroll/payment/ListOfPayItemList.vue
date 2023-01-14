@@ -167,11 +167,8 @@
           <v-card-title class="red--text text-h5">
             توجه!
           </v-card-title>
-          <v-card-text v-if="list_of_pay.use_in_calculate">
-            باتوجه به اینکه فقط یک لیست حقوق در ماه با محاسبه بیمه و مالیات می تواند نهایی شود با نهایی کردن این لیست، تمامی لیست های دیگر این ماه که با محاسبه بیمه هستند غیرنهایی میشود
-          </v-card-text>
-          <v-card-text v-if="!list_of_pay.use_in_calculate">
-            باتوجه به اینکه فقط یک لیست حقوق در ماه بدون محاسبه بیمه و مالیات می تواند نهایی شود با نهایی کردن این لیست، تمامی لیست های دیگر این ماه که بدون محاسبه بیمه هستند و مالیات غیرنهایی میشود
+          <v-card-text>
+            آیا برای نهایی کردن این لیست اطمینان دارید؟
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -188,6 +185,35 @@
                 @click="UltimateList"
             >
               ثبت نهایی
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+    <v-row justify="center">
+      <v-dialog
+          v-model="un_accept_dialog"
+          persistent
+          @click:outside="un_accept_dialog=false"
+          max-width="500"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            توجه!
+          </v-card-title>
+          <v-card-text>
+            <span v-if="!list_of_pay.ultimate">برای نهایی کردن یا تغییر لیست نباید لیست دیگری از ماه های بعد نهایی باشد</span>
+            <br/>
+            ابتدا تمام لیست های حقوق مربوط به ماه های بعد امسال را غیر نهایی کنید
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red darken-1"
+                text
+                @click="un_accept_dialog = false"
+            >
+              بستن
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -304,15 +330,28 @@
           <v-btn
               class="light-blue white--text mt-2  mr-2 ml-5 float-left"
               large
+              @click="un_accept_dialog = true"
+              v-if="!list_of_pay.ultimate && !list_of_pay.get_is_editable"
+          >ثبت نهایی
+          </v-btn>
+          <v-btn
+              class="light-blue white--text mt-2  mr-2 ml-5 float-left"
+              large
               @click="accept_dialog = true"
-              v-if="!list_of_pay.ultimate"
+              v-if="!list_of_pay.ultimate && list_of_pay.get_is_editable"
           >ثبت نهایی
           </v-btn>
           <v-btn
               class="red white--text mt-2 mr-2 ml-5 float-left "
               @click="UnUltimateList"
               large
-              v-if="list_of_pay.ultimate"> خروج از وضعیت نهایی
+              v-if="list_of_pay.ultimate && list_of_pay.get_is_editable"> خروج از وضعیت نهایی
+          </v-btn>
+          <v-btn
+              class="red white--text mt-2 mr-2 ml-5 float-left "
+              @click="un_accept_dialog = true"
+              large
+              v-if="list_of_pay.ultimate && !list_of_pay.get_is_editable"> خروج از وضعیت نهایی
           </v-btn>
         </v-col>
       </v-row>
@@ -344,6 +383,7 @@ export default {
       filters: {list_of_pay: this.$route.params.id},
       export_filter: {id: this.$route.params.id},
       accept_dialog: false,
+      un_accept_dialog: false,
       delete_dialog: false,
       list_of_pay: null,
       my_list: null,

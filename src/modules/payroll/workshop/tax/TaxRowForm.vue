@@ -62,10 +62,6 @@
                     <th class="text-center">
                       تا مبلغ (ماهانه)
                     </th>
-
-                    <th class="text-center">
-
-                    </th>
                   </tr>
                   </thead>
                   <tbody>
@@ -101,18 +97,6 @@
                     <td class="text-center">
                       <money disabled="true"  v-if="row.to_amount_month != 0" v-model="row.to_amount_month"></money>
                       <v-text-field class="currency-input" v-if="row.to_amount_month == 0" disabled="true" v-model="to_text "></v-text-field>
-
-
-                    </td>
-                    <td class="text-center">
-                      <v-btn
-                          text
-                          color="error"
-                          :disabled="!isEditing"
-                          @click="delete_row(row.id)"
-                      >
-                        حذف
-                      </v-btn>
                     </td>
                   </tr>
                   </tbody>

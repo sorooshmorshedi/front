@@ -125,7 +125,7 @@
                       label="حداقل حقوق ماهانه اداره کار"
                       class="currency-input"
                       v-model="item.hade_aghal_hoghoogh"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   >
                   </money>
                 </v-col>

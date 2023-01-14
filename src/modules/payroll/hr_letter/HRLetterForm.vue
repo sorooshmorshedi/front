@@ -332,11 +332,9 @@
               ></v-switch>
             </v-col>
           </v-row>
-          <v-row>
+          <v-row v-if="insurance_month[item.contract] > 12 ">
             <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6"  v-if="insurance_month[item.contract] > 12 ">پایه سنوات روزانه:</v-card-text>
-              <p v-if="insurance_month[item.contract] < 12"> پایه سنوات روزانه:</p>
-              <p class="red--text" v-if="insurance_month[item.contract] < 12"> سابقه بیمه در کارگاه زیر یک سال است</p>
+              <v-card-text class="text-h6">پایه سنوات روزانه:</v-card-text>
             </v-col>
             <v-col cols="12" md="2">
               <money
@@ -345,7 +343,7 @@
                   v-on:keypress="NumbersOnly"
                   v-model="item.paye_sanavat_amount"
                   background-color="white"
-                  :disabled="!isEditing || insurance_month[item.contract] < 12"
+                  :disabled="!isEditing"
               />
             </v-col>
             <v-col cols="12" md="2">
@@ -355,7 +353,7 @@
                   v-model="item.paye_sanavat_nature"
                   item-text="name"
                   value="value"
-                  :disabled="!isEditing || insurance_month[item.contract] < 12"
+                  :disabled="!isEditing"
               />
             </v-col>
             <v-col cols="12" md="2">
@@ -366,7 +364,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
-                  :disabled="!isEditing || insurance_month[item.contract] < 12"
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
 
@@ -378,7 +376,7 @@
                   :false-value="true"
                   :true-value="false"
                   hide-details
-                  :disabled="!isEditing || insurance_month[item.contract] < 12"
+                  :disabled="!isEditing"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" md="2">
@@ -389,7 +387,7 @@
                   :false-value="false"
                   :true-value="true"
                   hide-details
-                  :disabled="!isEditing || insurance_month[item.contract] < 12"
+                  :disabled="!isEditing"
               ></v-switch>
             </v-col>
           </v-row>

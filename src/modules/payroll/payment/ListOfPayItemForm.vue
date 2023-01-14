@@ -823,7 +823,7 @@
                 </tr>
                 <tr>
                   <th class="">
-                    حقوق مزایای کل ماهانه
+                    حقوق و مزایای کل ماهانه ناخالص
                   </th>
                   <td>
                     <money v-model="list_of_pay_item.total_payment" disabled="true"></money>

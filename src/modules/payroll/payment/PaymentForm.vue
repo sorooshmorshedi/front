@@ -398,6 +398,7 @@
         <v-dialog
             v-model="dialog"
             width="1500"
+            persistent
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -406,7 +407,6 @@
                 dark
                 v-bind="attrs"
                 v-on="on"
-                @click="sayerDone = true"
             >
               مرخصی و ماموریت تجمیعی
             </v-btn>
@@ -426,6 +426,9 @@
                   </th>
                   <th class="text-center" colspan="3">
                     ماموریت (روز)
+                  </th>
+                  <th class="text-center" colspan="1">
+                    مرخصی ماده 73 (روز)
                   </th>
                   <th class="text-center" colspan="3">
                     مرخصی استحقاقی (روز)
@@ -455,6 +458,8 @@
                   </th>
                   <th class="text-center">
                     جمع
+                  </th>
+                  <th class="text-center">
                   </th>
                   <th class="text-center">
                     مرخصی استحقاقی ثبت شده
@@ -511,6 +516,9 @@
                   </td>
                   <td class="text-center">
                     {{ total[person.id].mission }}
+                  </td>
+                  <td class="text-center">
+                    {{ items[person.id]['73'] }}
                   </td>
                   <td class="text-center">
                     {{items[person.id]['entitlement']}}
@@ -582,7 +590,7 @@
               <v-btn
                   color="green"
                   dark
-                  @click="dialog = false ; sayerDone = true"
+                  @click="dialog = false ; cumulativeDone = true"
               >
                 تایید
               </v-btn>
@@ -596,6 +604,7 @@
         <v-dialog
             v-model="dialog1"
             width="1500"
+            persistent
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -604,15 +613,14 @@
                 dark
                 v-bind="attrs"
                 v-on="on"
-                @click="sayerDone = true"
             >
-              سایر معافیت ها
+              سایر معافیت های مالیاتی
             </v-btn>
           </template>
 
           <v-card>
             <v-card-title class="text-h5 indigo white--text">
-              سایر معافیت ها
+              سایر معافیت های مالیاتی
             </v-card-title>
             <v-simple-table class="ma-4 " dense>
               <template v-slot:default>
@@ -691,9 +699,9 @@
               <v-btn
                   color="green"
                   dark
-                  @click="dialog1 = false"
+                  @click="dialog1 = false ; sayerDone=true"
               >
-                ادامه
+                تایید
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -703,25 +711,91 @@
       </div>
 
     </v-card-actions>
-    <v-card-actions class="mt-4 mb-4 d-flex justify-center justify-md-end mt-2">
-      <v-btn large v-if="list_generated && !calculateDone && sayerDone" @click="accept_dialog = true" color="green"
-             class="white--text float-left ma-3">محاسبه حقوق و دستمزد
-      </v-btn>
+    <v-card-actions class="mt-5">
+      <v-row v-if="list_generated && !calculateDone">
+        <v-col cols="12" md="4" class="text-center">
+          <v-banner v-if="cumulativeDone" class="mt-3 mb-5 green--text">
+            <v-avatar
+                slot="icon"
+                color="green"
+                size="25"
+            >
+              <v-icon
+                  color="white"
+              >
+                fa-check
+              </v-icon>
+            </v-avatar>
+            ماموریت و مرخصی تجمیعی تایید شد
+          </v-banner>
+          <v-banner v-if="!cumulativeDone" class="mt-3 mb-5 red--text">
+            <v-avatar
+                slot="icon"
+                color="red"
+                size="25"
+            >
+              <v-icon
+                  color="white"
+              >
+                fa-info
+              </v-icon>
+            </v-avatar>
+            برای محاسبه حقوق، ماموریت و مرخصی تجمیعی را تایید کنید
+          </v-banner>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-banner v-if="sayerDone" class="mt-3 mb-5 green--text">
+            <v-avatar
+                slot="icon"
+                color="green"
+                size="25"
+            >
+              <v-icon
+                  color="white"
+              >
+                fa-check
+              </v-icon>
+            </v-avatar>
+            سایر معافیت های مالیاتی تایید شد
+          </v-banner>
+          <v-banner v-if="!sayerDone" class="mt-3 mb-5 red--text">
+            <v-avatar
+                slot="icon"
+                color="red"
+                size="25"
+            >
+              <v-icon
+                  color="white"
+              >
+                fa-info
+              </v-icon>
+            </v-avatar>
+            برای محاسبه حقوق، سایر معافیت های مالیاتی را تایید کنید
+          </v-banner>
 
+        </v-col>
+        <v-col cols="12" md="4" class="text-center">
+          <v-btn large v-if="list_generated && !calculateDone && sayerDone && cumulativeDone"
+                 @click="accept_dialog = true" color="green"
+                 block
+                 class="white--text float-left ma-3 mt-6">ثبت و محاسبه حقوق و دستمزد
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-card-actions>
     <v-row justify="center">
       <v-dialog
           v-model="accept_dialog"
           persistent
           @click:outside="accept_dialog=false"
-          max-width="400"
+          max-width="450"
       >
         <v-card>
           <v-card-title class="red--text text-h5">
             توجه!
           </v-card-title>
           <v-card-text>
-            با توجه به اینکه امکان ویرایش بعد از ثبت نیست، آیا از ساخت لیست حقوق و انجام محاسبات با این اطلاعات اطمینان
+            آیا از ثبت این لیست و انجام محاسبات با این اطلاعات اطمینان
             دارید؟
           </v-card-text>
           <v-card-actions>
@@ -828,6 +902,7 @@ export default {
       hasIdProp: true,
       error_dialog: false,
       accept_dialog: false,
+      cumulativeDone: false,
       error_message: null,
       contractRows: [],
       hasLock: true,
@@ -945,7 +1020,6 @@ export default {
 
   methods: {
     get_total() {
-      console.log('okok')
       for (let item in this.items) {
         if (this.items[item] != null) {
           this.$set(this.total, this.items[item].id, {
@@ -977,6 +1051,8 @@ export default {
         },
 
         success: data => {
+          console.log('.........')
+          console.log(data.list_of_pay_item)
           this.pay_id = data.id
           this.payList = data.list_of_pay_item
           this.payListCreated = true
@@ -1008,6 +1084,7 @@ export default {
               'cumulative_illness': 0,
               'cumulative_without_salary': 0,
               'absence': this.payList[item].absence_day,
+              '73': this.payList[item].get_matter_47_leave_day,
               'mission': this.payList[item].mission_day,
               'entitlement': this.payList[item].entitlement_leave_day,
               'illness': this.payList[item].illness_leave_day,

@@ -53,3 +53,15 @@
                     </td>
 
                   </tr>
+
+
+                    <td class="text-center">
+                      <v-btn
+                          text
+                          color="error"
+                          :disabled="!isEditing"
+                          @click="delete_row(row.id)"
+                      >
+                        حذف
+                      </v-btn>
+                    </td>
