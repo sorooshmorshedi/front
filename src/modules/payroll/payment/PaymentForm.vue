@@ -13,7 +13,7 @@
             label="کارگاه"
             :items="workshops"
             v-model="search_workshop"
-            :disabled="list_generated"
+            :disabled="payment_start"
             item-text="name"
             item-value="id"
         />
@@ -35,7 +35,7 @@
         <v-autocomplete
             label="سال"
             v-model="year"
-            :disabled="list_generated || !search_workshop"
+            :disabled="payment_start || !search_workshop"
             :items="years"
         ></v-autocomplete>
       </v-col>
@@ -44,7 +44,7 @@
             v-if="payment_type"
             label="ماه"
             :items="MONTHS"
-            :disabled="list_generated || !search_workshop || !year"
+            :disabled="payment_start || !search_workshop || !year"
             v-model="search_month"
             @change="paymentStart"
             item-text="name"
@@ -54,7 +54,7 @@
             v-if="!payment_type"
             label="ماه"
             :items="MONTHS"
-            :disabled="list_generated"
+            :disabled="payment_start"
             v-model="search_month"
             @change="paymentStart"
             item-text="name"
