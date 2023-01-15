@@ -19,6 +19,7 @@ import HRLetterForm from "@/modules/payroll/hr_letter/HRLetterForm";
 import MissionForm from "@/modules/payroll/mission/MissionForm";
 import MissionList from "@/modules/payroll/mission/MissionList";
 import PaymentForm from "@/modules/payroll/payment/PaymentForm";
+import PayslipForm from "@/modules/payroll/payment/Payslip";
 import TemplateForm from "@/modules/payroll/hr_letter/Template";
 import TemplateList from "@/modules/payroll/hr_letter/TemplateList";
 import PaymentList from "@/modules/payroll/payment/PaymentList";
@@ -348,6 +349,19 @@ export default [
                 name: 'ListOfPayItemForm',
                 path: ':id',
                 component: ListOfPayItemDetail,
+            },
+        ]
+
+    },
+    {
+        name: 'Payslip',
+        path: 'Payslip',
+        component: PayslipForm,
+        children : [
+            {
+                name: 'PayslipDetail',
+                path: ':id',
+                component: PayslipForm,
             },
         ]
 

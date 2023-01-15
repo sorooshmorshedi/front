@@ -73,13 +73,13 @@
                 </v-btn>
               </v-list-item-action>
             </v-list-item>
-            <v-list-item @click="$router.push('/panel/Payslip/' + item_id)">
+            <v-list-item @click="$router.push('/panel/listOfPayItemForm/' + item_id)">
               <v-list-item-avatar>
                 <img :src="endpoint('media/pay.png')">
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>فیش حقوقی</v-list-item-title>
-                <v-list-item-subtitle>برای مشاهده فیش حقوقی این لیست کلیک کنید</v-list-item-subtitle>
+                <v-list-item-title>حقوق و دستمزد جامع</v-list-item-title>
+                <v-list-item-subtitle>برای مشاهده حقوق و دستمزد جامع این لیست کلیک کنید</v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
                 <v-btn icon>
@@ -88,14 +88,13 @@
               </v-list-item-action>
             </v-list-item>
 
+
           </v-list>
         </v-menu>
 
-        <v-toolbar-title class="mr-2"> حقوق و دستمزد</v-toolbar-title>
+        <v-toolbar-title class="mr-2"> فیش حقوقی</v-toolbar-title>
 
         <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        فیش حقوقی :
         <v-btn
             class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
             rounded
@@ -117,138 +116,20 @@
         </v-btn>
         <v-btn
             small
-            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+            class=" grey--text  text--darken-3 export-btn ml-5 mr-1 mt-1 mt-md-0"
             @click="printPayslip('xlsx')"
             title="اکسل"
             icon
         >
           <v-icon>fa-file-excel</v-icon>
         </v-btn>
-
-        <v-spacer></v-spacer>
-        گزارش مالیات :
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="چاپ"
-            icon
-            @click="printTax('html')"
-        >
-          <v-icon>fa-print</v-icon>
-        </v-btn>
-
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="PDF"
-            @click="printTax('pdf')"
-            icon
-        >
-          <v-icon>fa-file-pdf</v-icon>
-        </v-btn>
-        <v-btn
-            small
-            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-            @click="printTax('xlsx')"
-            title="اکسل"
-            icon
-        >
-          <v-icon>fa-file-excel</v-icon>
-        </v-btn>
-
-        <v-spacer></v-spacer>
-        اطلاعات حقوق بگیر :
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="فایل مالیات"
-            :href="this.endpoint(`payroll/diskette/tax/newPerson/` + this.list_of_pay_item.workshop_personnel + '/' + '?token=' + this.token)"
-            icon
-
-        >
-          <v-icon>fa-file-download</v-icon>
-        </v-btn>
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="چاپ"
-            icon
-            @click="printPersonTax('html')"
-        >
-          <v-icon>fa-print</v-icon>
-        </v-btn>
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="PDF"
-            @click="printPersonTax('pdf')"
-            icon
-
-        >
-          <v-icon>fa-file-pdf</v-icon>
-        </v-btn>
-        <v-btn
-            small
-            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-            @click="printPersonTax('xlsx')"
-            title="اکسل"
-            icon
-        >
-          <v-icon>fa-file-excel</v-icon>
-        </v-btn>
-
-        <v-spacer></v-spacer>
-        گزارش بیمه :
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="فایل بیمه"
-            :href="this.endpoint(`payroll/diskette/insurance/person/` + this.$route.params.id + '/' + '?token=' + this.token)"
-            icon
-
-        >
-          <v-icon>fa-file-download</v-icon>
-        </v-btn>
-
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="چاپ"
-            icon
-            @click="printInsurance('html')"
-        >
-          <v-icon>fa-print</v-icon>
-        </v-btn>
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="PDF"
-            @click="printInsurance('pdf')"
-            icon
-
-        >
-          <v-icon>fa-file-pdf</v-icon>
-        </v-btn>
-        <v-btn
-            small
-            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-            @click="printInsurance('xlsx')"
-            title="اکسل"
-            icon
-        >
-          <v-icon>fa-file-excel</v-icon>
-        </v-btn>
-
-
       </v-toolbar>
 
       <v-toolbar
           color="indigo"
           dark
       >
-
-
-        <v-toolbar-title>  حقوق و دستمزد جامع {{ list_of_pay_item.personnel_name }} {{list_of_pay_item.personnel_national_code}} برای حکم {{list_of_pay_item.hr_name}}</v-toolbar-title>
+        <v-toolbar-title>   {{ list_of_pay_item.personnel_name }} {{list_of_pay_item.personnel_national_code}} برای حکم {{list_of_pay_item.hr_name}}</v-toolbar-title>
 
         <v-spacer></v-spacer>
         <span class="ml-2 mr-2"> کارگاه {{ list_of_pay_item.workshop_display }}</span>
@@ -270,75 +151,10 @@
                 <tbody>
                 <tr>
                   <th class="">
-                    نام و نام خانوادگی
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.personnel_name }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    تاریخ شروع به کار
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.start_date }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    تاریخ تسویه
-                  </th>
-                  <td>
-                    -
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
                     عنوان شغل
                   </th>
                   <td>
                     {{ list_of_pay_item.work_title }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    بیمه میشود
-                  </th>
-                  <td>
-                    {{list_of_pay_item.is_insurance_display}}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    تاریخ اضافه شدن به لیست بیمه
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.insurance_date }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    سابقه بیمه در کارگاه
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.get_insurance_in_workshop }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    تاریخ اضافه شدن به لیست مالیات
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.tax_date }}
-                  </td>
-                </tr>
-
-                <tr>
-                  <th class="">
-                    ردیف پیمان
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.contract_row }}
                   </td>
                 </tr>
                 <tr>
@@ -351,23 +167,7 @@
                 </tr>
                 <tr>
                   <th class="">
-                    مرخصی استحقاقی ساعتی
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.hourly_entitlement_leave_day }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    مرخصی استحقاقی روزانه
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.daily_entitlement_leave_day }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    مرخصی استحقاقی جمع
+                    مرخصی استحقاقی
                   </th>
                   <td>
                     {{ list_of_pay_item.get_entitlement_sum }}
@@ -852,50 +652,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <th class="" rowspan="5">
-                    بیمه
-                  </th>
-                <tr class="text-center">
-                  <th class="text-center"> دستمزد ماهانه</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_insurance_monthly_payment" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <th class="text-center"> مزایای ماهانه مشمول مستمر و غیر مستمر</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_insurance_monthly_benefit" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <th class="text-center"> جمع دستمزد و مزایای ماهانه مشمول</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_insurance_total_included" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <th class="text-center"> جمع کل دستمزد و مزایای ماهانه</th>
-                  <td>
-                    <money v-model="list_of_pay_item.total_payment" disabled="true"></money>
-                  </td>
-                </tr>
                 <tr class="text-center">
                   <th class="text-center" colspan="2"> حق بیمه سهم بیمه شده</th>
                   <td>
                     <money v-model="list_of_pay_item.get_haghe_bime_bime_shavande" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <th class="text-center" colspan="2"> معافیت مالیاتی حقوق</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_moaf_sum" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <th class="text-center" colspan="2"> حقوق مشمول مالیات</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_tax_included" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
@@ -905,8 +665,6 @@
                   </td>
                 </tr>
                 <tr>
-                <tr>
-
                   <th class="" rowspan="4">
                     بدهی متفرقه
                   </th>
@@ -929,24 +687,6 @@
                   </td>
                 </tr>
                 <tr>
-                <tr class="text-center">
-                  <th class="text-center" colspan="2"> حقوق و دستمزد پرداختنی</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_payable" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <th class="text-center" colspan="2"> حق بیمه سهم کارفرما</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_employer_tax" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <th class="text-center" colspan="2"> بیمه بیکاری</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_un_employer_tax" disabled="true"></money>
-                  </td>
-                </tr>
                 <tr>
                   <th class="text-center" colspan="2">
                     کسر کار (مبلغ)
@@ -964,7 +704,12 @@
                   </td>
                 </tr>
 
-
+                <tr class="text-center">
+                  <th class="text-center" colspan="2"> حقوق و دستمزد پرداختنی</th>
+                  <td>
+                    <money v-model="list_of_pay_item.get_payable" disabled="true"></money>
+                  </td>
+                </tr>
                 </tbody>
               </template>
             </v-simple-table>
@@ -1004,7 +749,7 @@ import LoanList from "@/modules/payroll/loan/LoanList";
 
 
 export default {
-  name: "ListOfPayItemForm",
+  name: "PayslipForm",
   mixins: [MFormMixin, LadingMixin, formsMixin, FormsMixin, FactorMixin],
   components: {
     LoanList,
@@ -1036,8 +781,8 @@ export default {
       hasLock: true,
       isDefinable: true,
       myClass: '',
-      item_id: this.$route.params.id,
       PathLevels,
+      item_id: this.$route.params.id,
       export_filter: {},
       VisitorLevels,
       paymentDialog: false,
