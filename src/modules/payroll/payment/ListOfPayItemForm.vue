@@ -610,14 +610,6 @@
                 </tr>
                 <tr>
                   <th class="">
-                    تعداد اولاد مشمول
-                  </th>
-                  <td class="text-center">
-                    {{ list_of_pay_item.aele_mandi_child }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
                     حق اولاد
                   </th>
                   <td>

@@ -427,9 +427,6 @@
                   <th class="text-center" colspan="3">
                     ماموریت (روز)
                   </th>
-                  <th class="text-center" colspan="1">
-                    مرخصی ماده 73 (روز)
-                  </th>
                   <th class="text-center" colspan="3">
                     مرخصی استحقاقی (روز)
                   </th>
@@ -442,7 +439,9 @@
                   <th class="text-center" colspan="3">
                     غیبت (روز)
                   </th>
-
+                  <th class="text-center" colspan="1">
+                    مرخصی ماده 73 (روز)
+                  </th>
                 </tr>
                 </thead>
                 <thead class="style: blue lighten-4">
@@ -458,8 +457,6 @@
                   </th>
                   <th class="text-center">
                     جمع
-                  </th>
-                  <th class="text-center">
                   </th>
                   <th class="text-center">
                     مرخصی استحقاقی ثبت شده
@@ -497,6 +494,9 @@
                   <th class="text-center">
                     جمع
                   </th>
+                  <th class="text-center">
+                  </th>
+
 
                 </tr>
                 </thead>
@@ -516,9 +516,6 @@
                   </td>
                   <td class="text-center">
                     {{ total[person.id].mission }}
-                  </td>
-                  <td class="text-center">
-                    {{ items[person.id]['73'] }}
                   </td>
                   <td class="text-center">
                     {{items[person.id]['entitlement']}}
@@ -577,7 +574,11 @@
                   <td>
                     {{total[person.id].absence}}
                   </td>
+                  <td class="text-center">
+                    {{ items[person.id]['73'] }}
+                  </td>
                 </tr>
+
                 </tbody>
               </template>
             </v-simple-table>
@@ -1201,13 +1202,9 @@ export default {
           'month': this.search_month
         },
         success: data => {
-          this.$router.push('/panel/listOfPayItem/' + data['id'])
-
-
+          this.$router.push('/panel/payList/edit?pay_id=' + data['id'])
         }
-
       })
-
     },
     paymentStart() {
       this.request({

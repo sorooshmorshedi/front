@@ -253,6 +253,42 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <v-row justify="center">
+      <v-dialog
+          v-model="un_ultimate_dialog"
+          @click:outside="un_ultimate_dialog=false"
+          max-width="450"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            توجه
+          </v-card-title>
+          <v-card-text v-if="list_of_pay.use_in_calculate" >
+            باتوجه به اینکه با خروج این لیست از حالت نهایی امکان دارد تمام محاسبات دارای بیمه و مالیات این سال تغییر یابد، آیا اطمینان دارید؟
+          </v-card-text>
+          <v-card-text v-if="!list_of_pay.use_in_calculate" >
+            آیا از غیر نهایی کردن این لیست اطمینان دارید؟
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red darken-1"
+                text
+                @click="un_ultimate_dialog = false"
+            >
+              بستن
+            </v-btn>
+            <v-btn
+                color="light-blue"
+                text
+                @click="UnUltimateList"
+            >
+              خروج از وضعیت نهایی
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
     <v-card-actions class="justify-end mt-4">
     </v-card-actions>
@@ -343,7 +379,7 @@
           </v-btn>
           <v-btn
               class="red white--text mt-2 mr-2 ml-5 float-left "
-              @click="UnUltimateList"
+              @click="un_ultimate_dialog = true"
               large
               v-if="list_of_pay.ultimate && list_of_pay.get_is_editable"> خروج از وضعیت نهایی
           </v-btn>
@@ -355,6 +391,7 @@
           </v-btn>
         </v-col>
       </v-row>
+
     </v-card-actions>
 
 
@@ -385,6 +422,7 @@ export default {
       accept_dialog: false,
       un_accept_dialog: false,
       delete_dialog: false,
+      un_ultimate_dialog: false,
       list_of_pay: null,
       my_list: null,
     };

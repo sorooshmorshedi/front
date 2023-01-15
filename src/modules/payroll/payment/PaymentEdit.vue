@@ -279,6 +279,9 @@
                   <th class="text-center" colspan="3">
                     غیبت (روز)
                   </th>
+                  <th class="text-center" colspan="1">
+                    مرخصی ماده 73 (روز)
+                  </th>
 
                 </tr>
                 </thead>
@@ -331,6 +334,8 @@
                   </th>
                   <th class="text-center">
                     جمع
+                  </th>
+                  <th class="text-center">
                   </th>
 
                 </tr>
@@ -409,6 +414,10 @@
                   <td>
                     {{ total[person.id].absence }}
                   </td>
+                  <td class="text-center">
+                    {{ items[person.id]['73'] }}
+                  </td>
+
                 </tr>
                 </tbody>
               </template>
@@ -901,6 +910,7 @@ export default {
           'entitlement': this.payList[item].get_entitlement,
           'illness': this.payList[item].get_illness,
           'without_salary': this.payList[item].get_with_out_salary,
+          '73': this.payList[item].get_matter_47_leave_day,
         })
 
         this.get_total()
