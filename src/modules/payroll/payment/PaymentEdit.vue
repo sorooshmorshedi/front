@@ -861,15 +861,14 @@ export default {
     },
 
     get_total() {
-      console.log('okok')
       for (let item in this.items) {
         if (this.items[item] != null) {
           this.$set(this.total, this.items[item].id, {
             'mission': parseInt(this.items[item]['mission']) + parseInt(this.items[item]['cumulative_mission']),
             'absence': parseInt(this.items[item]['absence']) + parseInt(this.items[item]['cumulative_absence']),
-            'entitlement': parseInt(this.items[item]['entitlement']) + parseInt(this.items[item]['cumulative_entitlement']),
+            'entitlement': parseFloat(this.items[item]['entitlement']) + parseInt(this.items[item]['cumulative_entitlement']),
             'illness': parseInt(this.items[item]['illness']) + parseInt(this.items[item]['cumulative_illness']),
-            'without_salary': parseInt(this.items[item]['illness']) + parseInt(this.items[item]['cumulative_without_salary']),
+            'without_salary': parseInt(this.items[item]['without_salary']) + parseInt(this.items[item]['cumulative_without_salary']),
           })
         }
       }

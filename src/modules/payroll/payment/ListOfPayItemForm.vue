@@ -286,6 +286,14 @@
                 </tr>
                 <tr>
                   <th class="">
+                    تاریخ ترک کار
+                  </th>
+                  <td>
+                    {{ list_of_pay_item.get_quit_job }}
+                  </td>
+                </tr>
+                <tr>
+                  <th class="">
                     تاریخ تسویه
                   </th>
                   <td>
@@ -332,7 +340,6 @@
                     {{ list_of_pay_item.tax_date }}
                   </td>
                 </tr>
-
                 <tr>
                   <th class="">
                     ردیف پیمان
@@ -343,6 +350,24 @@
                 </tr>
                 <tr>
                   <th class="">
+                    حداقل مزد روزانه
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.hoghoogh_roozane" disabled="true"></money>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th class="">
+                    پایه سنوات روزانه
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.sanavat_base " disabled="true"></money>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th class="">
                     کارکرد عادی
                   </th>
                   <td>
@@ -351,23 +376,7 @@
                 </tr>
                 <tr>
                   <th class="">
-                    مرخصی استحقاقی ساعتی
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.hourly_entitlement_leave_day }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    مرخصی استحقاقی روزانه
-                  </th>
-                  <td>
-                    {{ list_of_pay_item.daily_entitlement_leave_day }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    مرخصی استحقاقی جمع
+                    مرخصی استحقاقی
                   </th>
                   <td>
                     {{ list_of_pay_item.get_entitlement_sum }}
@@ -526,26 +535,10 @@
                 <tbody>
                 <tr>
                   <th class="">
-                    حداقل مزد روزانه
-                  </th>
-                  <td>
-                    <money v-model="list_of_pay_item.hoghoogh_roozane" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
                     حقوق پایه ماهانه
                   </th>
                   <td>
                     <money v-model="list_of_pay_item.hoghoogh_mahane_real_work" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    پایه سنوات روزانه
-                  </th>
-                  <td>
-                    <money v-model="list_of_pay_item.sanavat_base " disabled="true"></money>
                   </td>
                 </tr>
                 <tr>
@@ -1057,7 +1050,6 @@ export default {
       url: this.endpoint(`payroll/paylist/item/detail/` + this.$route.params.id + '/'),
       method: "get",
       success: data => {
-        console.log(data);
         this.list_of_pay_item = data
       }
     })

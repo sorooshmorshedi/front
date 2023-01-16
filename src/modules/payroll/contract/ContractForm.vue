@@ -187,12 +187,152 @@
               v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
-              @click="UnVerifyContract(item)"
-              v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
+              class="indigo white--text mt-12 mr-2 ml-2 float-left "
+              :disabled="!item.insurance_editable"
+              @click="insurance_dialog=true"
+              v-if="item.id && item.is_verified"> اضافه کردن به لیست بیمه
+          </v-btn>
+          <v-btn
+              class="yellow darken-3 white--text mt-12 mr-2 ml-2 float-left "
+              :disabled="!item.tax_editable"
+              @click="tax_dialog=true"
+              v-if="item.id && item.is_verified"> اضافه کردن به لیست مالیات
+          </v-btn>
+          <v-btn
+              class="primary white--text mt-12 mr-2 ml-2 float-left "
+              :disabled="item.quit_job_date"
+              @click="quit_dialog = true"
+              v-if="item.id && item.is_verified"> ثبت ترک کار
           </v-btn>
 
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="UnVerifyContract(item)"
+              v-if="item.id && item.is_verified && item.unverifiable"> خروج از وضعیت نهایی
+          </v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="unverify_dialog = true"
+              v-if="item.id && item.is_verified && !item.unverifiable"> خروج از وضعیت نهایی
+          </v-btn>
         </m-form>
+        <v-row justify="center">
+          <v-dialog
+              v-model="tax_dialog"
+              persistent
+              @click:outside="tax_dialog=false"
+              max-width="600"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                اضافه کردن به لیست مالیات
+              </v-card-title>
+              <v-card-text>
+                <v-row class="mt-10">
+                  <v-col cols="12" md="6">
+                    <v-switch
+                        class="text-right "
+                        v-model="item.tax"
+                        label='اضافه شدن به لیست مالیات '
+                        :true-value="true"
+                        :false-value="false"
+                    ></v-switch>
+                  </v-col>
+                  <v-col cols="12" md="6" v-if="item.tax">
+                    <date
+                        v-model="item.tax_add_date"
+                        label="* تاریخ اضافه شدن به لیست مالیات "
+                        :default="false"/>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="red darken-1"
+                    text
+                    @click="tax_dialog = false"
+                >
+                  بستن
+                </v-btn>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="submit(false) ; tax_dialog=false"
+                >
+                  ثبت
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+        <v-row justify="center">
+          <v-dialog
+              v-model="insurance_dialog"
+              persistent
+              @click:outside="insurance_dialog=false"
+              max-width="600"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                اضافه کردن به لیست بیمه
+              </v-card-title>
+              <v-card-text>
+                <v-row class="mt-10">
+                  <v-col cols="12" md="4">
+                    <v-switch
+                        class="text-right "
+                        v-model="item.insurance"
+                        label='اضافه شدن به لیست بیمه'
+                        :true-value="true"
+                        :false-value="false"
+                        @change="setChange(item)"
+                    ></v-switch>
+                  </v-col>
+                  <v-col cols="12" md="5" v-if="item.insurance">
+                    <date
+                        v-model="item.insurance_add_date"
+                        label="* تاریخ اضافه شدن به لیست بیمه "
+                        :default="false"/>
+                  </v-col>
+
+                  <v-col cols="12" md="3" v-if="item.insurance">
+                    <v-text-field v-on:keypress="NumbersOnly"
+                                  v-if="!is_insurance[item.workshop_personnel]"
+                                  label=" * شماره بیمه" v-model="item.insurance_number"
+                                  background-color="white"
+                    />
+                    <v-text-field v-on:keypress="NumbersOnly"
+                                  v-if="is_insurance[item.workshop_personnel]"
+                                  label=" شماره بیمه"
+                                  v-model="item.insurance_number = personnel_insurance_code[item.workshop_personnel]"
+                                  background-color="white"
+                    />
+
+                  </v-col>
+
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="red darken-1"
+                    text
+                    @click="insurance_dialog = false"
+                >
+                  بستن
+                </v-btn>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="submit(false) ; insurance_dialog=false"
+                >
+                  ثبت
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
         <v-row justify="center">
           <v-dialog
               v-model="error_dialog"
@@ -222,12 +362,73 @@
             </v-card>
           </v-dialog>
         </v-row>
-
+        <v-row justify="center">
+          <v-dialog
+              v-model="unverify_dialog"
+              persistent
+              @click:outside="unverify_dialog=false"
+              max-width="300"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                خطا!
+              </v-card-title>
+              <v-card-text>
+                با توجه به اینکه برای این قرارداد لیست حقوق نهایی صادر شده نمیتوانید آنرا غیر نهایی کنید
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="unverify_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+        <v-row justify="center">
+          <v-dialog
+              v-model="quit_dialog"
+              persistent
+              @click:outside="quit_dialog=false"
+              max-width="300"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                ثبت ترک کار
+              </v-card-title>
+              <v-card-text>
+                <date v-model="quit_job_date" label="تاریخ ترک کار " :default="false"/>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="red darken-1"
+                    text
+                    @click="quit_dialog = false"
+                >
+                  بستن
+                </v-btn>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="quitJob(item)"
+                >
+                  ثبت ترک کار
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
       </v-col>
       <v-col cols="12" md="6">
         <workshop-contract-summary-list></workshop-contract-summary-list>
       </v-col>
     </v-row>
+
 
   </div>
 
@@ -278,13 +479,18 @@ export default {
       hasLock: false,
       error_dialog: false,
       error_message: null,
+      quit_job_date: null,
       is_insurance: {},
       personnel_nationality: {},
       personnel_insurance_code: {},
       personnel_insurance: [],
       first: false,
+      unverify_dialog: false,
       defaultWorkshop: null,
       isDefinable: false,
+      quit_dialog: false,
+      tax_dialog: false,
+      insurance_dialog: false,
       workshops: [],
       dont_have: true,
       workshop: null,
@@ -432,7 +638,7 @@ export default {
       this.first = true
       this.isEditing = false
     }
-    if(this.dont_have && this.$route.params.id){
+    if (this.dont_have && this.$route.params.id) {
       this.dont_have = false
       this.request({
         url: this.endpoint(`payroll/contract/` + this.$route.params.id + '/'),
@@ -472,6 +678,19 @@ export default {
 
 
   methods: {
+    quitJob(item) {
+      let put_data = item;
+      put_data.quit_job_date = this.quit_job_date
+      this.request({
+        url: this.endpoint(`payroll/contract/edit/` + this.$route.params.id + '/'),
+        method: "put",
+        data: put_data,
+        success: data => {
+          this.notify('ترک کار ثبت شد', 'success')
+          window.location.reload()
+        }
+      })
+    },
     getPersonnel(id) {
       this.workshopPersonnels = []
       this.request({

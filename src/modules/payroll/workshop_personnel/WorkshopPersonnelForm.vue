@@ -351,8 +351,14 @@
           <v-btn
               class="red white--text mt-12  mr-2 float-left "
               @click="verifyUnPersonnel(item.id)"
-              v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
+              v-if="item.id && item.is_verified && !item.unverifiable"> خروج از وضعیت نهایی
           </v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="unverify_dialog = true"
+              v-if="item.id && item.is_verified && item.unverifiable"> خروج از وضعیت نهایی
+          </v-btn>
+
         </m-form>
         <v-row justify="center">
           <v-dialog
@@ -383,6 +389,34 @@
             </v-card>
           </v-dialog>
         </v-row>
+        <v-row justify="center">
+          <v-dialog
+              v-model="unverify_dialog"
+              persistent
+              @click:outside="unverify_dialog=false"
+              max-width="300"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                خطا!
+              </v-card-title>
+              <v-card-text>
+                با توجه به اینکه برای این پرسنل قرارداد نهایی صادر شده نمیتوانید آنرا غیر نهایی کنید
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="unverify_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
 
       </v-col>
       <v-col cols="12" md="6">
@@ -516,6 +550,7 @@ export default {
       PathLevels,
       VisitorLevels,
       paymentDialog: false,
+      unverify_dialog: false,
       payment: '',
       first: false,
       performClearForm: true,

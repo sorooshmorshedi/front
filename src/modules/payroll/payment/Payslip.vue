@@ -159,6 +159,23 @@
                 </tr>
                 <tr>
                   <th class="">
+                    حداقل مزد روزانه
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.hoghoogh_roozane" disabled="true"></money>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th class="">
+                    پایه سنوات روزانه
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.sanavat_base " disabled="true"></money>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="">
                     کارکرد عادی
                   </th>
                   <td>
@@ -326,26 +343,10 @@
                 <tbody>
                 <tr>
                   <th class="">
-                    حداقل مزد روزانه
-                  </th>
-                  <td>
-                    <money v-model="list_of_pay_item.hoghoogh_roozane" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
                     حقوق پایه ماهانه
                   </th>
                   <td>
                     <money v-model="list_of_pay_item.hoghoogh_mahane_real_work" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    پایه سنوات روزانه
-                  </th>
-                  <td>
-                    <money v-model="list_of_pay_item.sanavat_base " disabled="true"></money>
                   </td>
                 </tr>
                 <tr>
