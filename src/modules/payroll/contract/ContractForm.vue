@@ -200,7 +200,7 @@
           </v-btn>
           <v-btn
               class="primary white--text mt-12 mr-2 ml-2 float-left "
-              :disabled="item.quit_job_date"
+              :disabled="!item.is_quit_job_editable"
               @click="quit_dialog = true"
               v-if="item.id && item.is_verified"> ثبت ترک کار
           </v-btn>
@@ -581,7 +581,6 @@ export default {
               }
             }
           })
-
         }
       })
     } else {

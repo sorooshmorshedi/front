@@ -655,6 +655,35 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <v-row justify="center">
+      <v-dialog
+          v-model="valid_dialog"
+          persistent
+          @click:outside="valid_dialog=false"
+          max-width="400"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            لطفا موارد زیر را تکمیل یا اصلاح کنید!
+          </v-card-title>
+          <v-card-text>
+            <v-row v-for="item in valid_message" class="mt-5 mr-10">
+              {{ item }}
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="green darken-1"
+                text
+                @click="valid_dialog = false"
+            >
+              بستن
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
   </v-card>
 
@@ -743,6 +772,9 @@ export default {
       contractRows: [],
       hasLock: true,
       isDefinable: true,
+      valid_dialog: false,
+      valid_message: null,
+
       myClass: '',
       workshop: null,
       workshop_id: null,
@@ -818,6 +850,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.$route.query.pay_id)
     this.request({
       url: this.endpoint(`payroll/listOfPay/edit/` + this.$route.query.pay_id + '/'),
       method: "get",
@@ -831,15 +864,6 @@ export default {
         this.workshop_id = data['workshop']
       }
     })
-    this.request({
-      url: this.endpoint(`payroll/paylist/edit/item/` + this.$route.query.pay_id + '/'),
-      method: "get",
-      success: data => {
-        console.log(data);
-        this.payList = data
-      }
-    })
-
   },
 
   methods: {
@@ -852,10 +876,20 @@ export default {
           'use_in_calculate': this.calculate,
         },
         success: data => {
-          this.getList()
+          this.request({
+            url: this.endpoint(`payroll/paylist/edit/item/` + this.$route.query.pay_id + '/'),
+            method: "get",
+            success: data => {
+              console.log(data);
+              this.payList = data
+              this.getList()
+            }
+          })
+
           this.list_edit = true
           this.list_generated = true
           this.notify('نام و وضعیت بیمه و مالیات  ویرایش شد', 'success')
+
         }
       })
     },
@@ -969,12 +1003,11 @@ export default {
             'calculate_payment': true,
           },
           success: data => {
-            console.log(data)
-            this.get_payment_list()
+            this.accept_dialog = false
           },
         })
-
       }
+      this.get_payment_list()
     }
     ,
 
@@ -1018,7 +1051,8 @@ export default {
           'month': this.search_month
         },
         success: data => {
-          this.$router.push('/panel/listOfPayItem/' + data['id'])
+          console.l
+          this.$router.push('/panel/listOfPayItem/' + this.$route.query.pay_id)
 
 
         }

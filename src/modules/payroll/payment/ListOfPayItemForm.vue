@@ -313,7 +313,7 @@
                     بیمه میشود
                   </th>
                   <td>
-                    {{list_of_pay_item.is_insurance_display}}
+                    {{list_of_pay_item.insurance_display}}
                   </td>
                 </tr>
                 <tr>
@@ -376,7 +376,7 @@
                 </tr>
                 <tr>
                   <th class="">
-                    مرخصی استحقاقی
+                     جمع مرخصی استحقاقی
                   </th>
                   <td>
                     {{ list_of_pay_item.get_entitlement_sum }}

@@ -184,7 +184,7 @@
                 </tr>
                 <tr>
                   <th class="">
-                    مرخصی استحقاقی
+                    جمع مرخصی استحقاقی
                   </th>
                   <td>
                     {{ list_of_pay_item.get_entitlement_sum }}
