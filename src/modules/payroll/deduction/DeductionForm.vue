@@ -20,9 +20,7 @@
             ref="DeductionForm"
 
         >
-
           <template>
-
             <v-row  v-if="!item.is_template">
               <v-col cols="12" md="4">
                 <v-autocomplete
@@ -63,8 +61,6 @@
                     v-model="item.workshop_personnel = this.workshopPersonnel"
                 ></v-text-field>
               </v-col>
-
-
             </v-row>
             <v-row v-if="item.is_template" >
               <v-col cols="12" md="6">
@@ -78,7 +74,6 @@
                     @change="setValues(item)"
                 />
               </v-col>
-
               <v-col cols="12" md="6">
                 <v-text-field label="* نام قالب" v-model="item.template_name" background-color="white"
                               :disabled="!isEditing"/>

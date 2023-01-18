@@ -232,15 +232,16 @@
                   <v-col cols="12" md="6">
                     <v-switch
                         class="text-right "
-                        v-model="item.tax"
+                        v-model="tax_status"
                         label='اضافه شدن به لیست مالیات '
                         :true-value="true"
                         :false-value="false"
+                        @change="tax_date = null"
                     ></v-switch>
                   </v-col>
-                  <v-col cols="12" md="6" v-if="item.tax">
+                  <v-col cols="12" md="6" v-if="tax_status">
                     <date
-                        v-model="item.tax_add_date"
+                        v-model="tax_date"
                         label="* تاریخ اضافه شدن به لیست مالیات "
                         :default="false"/>
                   </v-col>
@@ -258,7 +259,7 @@
                 <v-btn
                     color="green darken-1"
                     text
-                    @click="submit(false) ; tax_dialog=false"
+                    @click="EditTax"
                 >
                   ثبت
                 </v-btn>
@@ -282,33 +283,25 @@
                   <v-col cols="12" md="4">
                     <v-switch
                         class="text-right "
-                        v-model="item.insurance"
+                        v-model="insurance_status"
                         label='اضافه شدن به لیست بیمه'
                         :true-value="true"
                         :false-value="false"
-                        @change="setChange(item)"
+                        @change="insurance_number = null , insurance_date = null"
                     ></v-switch>
                   </v-col>
-                  <v-col cols="12" md="5" v-if="item.insurance">
+                  <v-col cols="12" md="5" v-if="insurance_status">
                     <date
-                        v-model="item.insurance_add_date"
+                        v-model="insurance_date"
                         label="* تاریخ اضافه شدن به لیست بیمه "
                         :default="false"/>
                   </v-col>
 
-                  <v-col cols="12" md="3" v-if="item.insurance">
+                  <v-col cols="12" md="3" v-if="insurance_status">
                     <v-text-field v-on:keypress="NumbersOnly"
-                                  v-if="!is_insurance[item.workshop_personnel]"
-                                  label=" * شماره بیمه" v-model="item.insurance_number"
+                                  label=" * شماره بیمه" v-model="insurance_number"
                                   background-color="white"
                     />
-                    <v-text-field v-on:keypress="NumbersOnly"
-                                  v-if="is_insurance[item.workshop_personnel]"
-                                  label=" شماره بیمه"
-                                  v-model="item.insurance_number = personnel_insurance_code[item.workshop_personnel]"
-                                  background-color="white"
-                    />
-
                   </v-col>
 
                 </v-row>
@@ -325,7 +318,7 @@
                 <v-btn
                     color="green darken-1"
                     text
-                    @click="submit(false) ; insurance_dialog=false"
+                    @click="EditInsurance"
                 >
                   ثبت
                 </v-btn>
@@ -480,6 +473,11 @@ export default {
       error_dialog: false,
       error_message: null,
       quit_job_date: null,
+      insurance_date: null,
+      insurance_number: null,
+      tax_date: null,
+      tax_status: false,
+      insurance_status: false,
       is_insurance: {},
       personnel_nationality: {},
       personnel_insurance_code: {},
@@ -585,6 +583,18 @@ export default {
       })
     } else {
       this.request({
+        url: this.endpoint(`payroll/contract/edit/` + this.$route.params.id + '/'),
+        method: "get",
+        success: data => {
+          this.quit_job_date = data.quit_job_date
+          this.insurance_status = data.insurance
+          this.insurance_date = data.insurance_add_date
+          this.insurance_number = data.insurance_number
+          this.tax_status = data.tax
+          this.tax_date = data.tax_add_date
+        }
+      })
+      this.request({
         url: this.endpoint(`payroll/workshop/`),
         method: "get",
         success: data => {
@@ -686,6 +696,35 @@ export default {
         data: put_data,
         success: data => {
           this.notify('ترک کار ثبت شد', 'success')
+          window.location.reload()
+        }
+      })
+    },
+    EditInsurance(item) {
+      let put_data = item;
+      put_data.insurance = this.insurance_status
+      put_data.insurance_add_date = this.insurance_date
+      put_data.insurance_number = this.insurance_number
+      this.request({
+        url: this.endpoint(`payroll/contract/editInsurance/` + this.$route.params.id + '/'),
+        method: "put",
+        data: put_data,
+        success: data => {
+          this.notify('تاریخ اضافه شدن به لیست بیمه ثبت شد', 'success')
+          window.location.reload()
+        }
+      })
+    },
+    EditTax(item) {
+      let put_data = item;
+      put_data.tax = this.tax_status
+      put_data.tax_add_date = this.tax_date
+      this.request({
+        url: this.endpoint(`payroll/contract/editTax/` + this.$route.params.id + '/'),
+        method: "put",
+        data: put_data,
+        success: data => {
+          this.notify('تاریخ اضافه شدن به لیست بیمه مالیات شد', 'success')
           window.location.reload()
         }
       })

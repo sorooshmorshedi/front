@@ -38,7 +38,6 @@ export default {
           text: " محل خدمت",
           value: "job_location",
         },
-
         {
           text: "عنوان شغلی",
           value: "title_name",

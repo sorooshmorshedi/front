@@ -5,6 +5,30 @@
           tile>
     <v-toolbar color="indigo darken-2">
       <v-toolbar-title class="white--text">محاسبه حقوق</v-toolbar-title>
+      <v-spacer></v-spacer>
+
+      <v-btn
+          small
+          v-if="payment_start"
+          outlined
+          @click="reloadWindow"
+          class="white--text mt-1 ml-1 mt-md-0"
+          icon
+          title="جدید"
+      >
+        <v-icon>fa-eraser</v-icon>
+      </v-btn>
+      <v-btn
+          small
+          class="light-blue white--text ml-2 mt-1 mt-md-0"
+          icon
+          @click="goToList"
+          outlined
+          title="لیست"
+      >
+        <v-icon>fa-th-list</v-icon>
+      </v-btn>
+
     </v-toolbar>
     <v-row class="mt-4 mr-3 ml-3">
       <v-col class="mt-5" cols="12" md="4">
@@ -1052,8 +1076,6 @@ export default {
         },
 
         success: data => {
-          console.log('.........')
-          console.log(data.list_of_pay_item)
           this.pay_id = data.id
           this.payList = data.list_of_pay_item
           this.payListCreated = true
@@ -1168,6 +1190,19 @@ export default {
     get_payment_list() {
       this.$router.push('/panel/listOfPayItem/' + this.pay_id)
     },
+    reloadWindow() {
+      if(this.pay_id){
+        this.request({
+          url: this.endpoint(`payroll/paylist/` + this.pay_id + '/'),
+          method: "delete",
+          success: data => {
+            window.location.reload()
+          }
+        })
+      } else {
+        window.location.reload()
+      }
+    },
 
     sayer(id) {
       this.id_set = id
@@ -1239,6 +1274,9 @@ export default {
 
       })
 
+    },
+    goToList() {
+      this.$router.push('/panel/ListOfPay')
     },
     show(item) {
       console.log(item)

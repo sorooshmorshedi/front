@@ -221,7 +221,7 @@
               </v-col>
               <v-col cols="12" md="6" v-if="item.id">
                 <v-text-field label="* سابقه بیمه جاری در این کارگاه (ماه) "
-                              v-model="item.current_insurance_month"
+                              v-model="item.get_current_insurance"
                               background-color="white" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="6" v-if="item.id">
