@@ -459,7 +459,7 @@ export default {
         },
         {
           text: "بیمه میشود؟",
-          value: "is_insurance_display",
+          value: "insurance_display",
         },
         {
           text: "عنوان شغل",
