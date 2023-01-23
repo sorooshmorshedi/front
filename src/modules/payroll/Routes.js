@@ -30,9 +30,11 @@ import TaxRowForm from "@/modules/payroll/workshop/tax/TaxRowForm";
 import LoanList from "@/modules/payroll/loan/LoanList";
 import LoanForm from "@/modules/payroll/loan/LoanForm";
 import DeductionList from "@/modules/payroll/deduction/DeductionList";
+import DeductionTemplateList from "@/modules/payroll/deduction/DeductionTemplateList";
 import AdjustmentList from "@/modules/payroll/contract_row/AdjustmentList";
 import AdjustmentForm from "@/modules/payroll/contract_row/AdjustmentForm";
 import DeductionForm from "@/modules/payroll/deduction/DeductionForm";
+import DeductionTemplate from "@/modules/payroll/deduction/Template";
 import PayForm from "@/modules/payroll/pay/PayForm";
 import ListOfPayItemForm from "@/modules/payroll/payment/ListOfPayItemForm";
 import adjustmentList from "@/modules/payroll/contract_row/AdjustmentList";
@@ -427,6 +429,30 @@ export default [
         path: 'payList/edit',
         component: PaymentEdit,
     },
+    {
+        name: 'DeductionTemplate',
+        path: 'deductionTemplate',
+        component: DeductionTemplate,
+    },
+    {
+        name: 'DeductionTemplate',
+        path: 'deductionTemplate',
+        component: DeductionTemplate,
+        props: true,
+        children : [
+            {
+                name: 'DeductionTemplateDetail',
+                path: ':id',
+                component: DeductionTemplate,
+            },
+        ]
+    },
+    {
+        name: 'DeductionTemplateList',
+        path: 'deductionTemplate/list',
+        component: DeductionTemplateList,
+    },
+
 
 
 

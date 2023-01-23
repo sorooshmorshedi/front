@@ -21,18 +21,8 @@
 
         >
           <template>
-            <v-row  v-if="!item.is_template">
-              <v-col cols="12" md="4">
-                <v-autocomplete
-                    label="* نوع"
-                    :items="TYPES"
-                    v-model="item.is_template"
-                    item-text="name"
-                    item-value="value"
-                    :disabled="!isEditing"
-                />
-              </v-col>
-              <v-col cols="12" md="4">
+            <v-row>
+              <v-col cols="12" md="6">
                 <v-autocomplete
                     label="انتخاب قالب"
                     :items="templates"
@@ -43,15 +33,64 @@
                     @change="item = template[tem_id] ; item.is_template = false; item.id = null ; item.is_verified = False"
                 />
               </v-col>
+              <v-col cols="12" md="6">
+                <v-text-field label="* نام کسورات" v-model="item.name" background-color="white"
+                              :disabled="!isEditing"/>
+              </v-col>
 
-              <v-col cols="12" md="4">
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="12" v-if="!item.id">
                 <v-autocomplete
-                    v-if="!this.workshopPersonnel"
-                    label=" * پرسنل در کارگاه"
+                    label="  کارگاه"
+                    :items="workshops"
+                    v-model="workshop"
+                    ref="workshopSelect"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="getPersonnel(workshop)"
+                />
+              </v-col>
+              <v-col cols="12" md="12" v-if="item.id && !isEditing">
+                <v-text-field
+                    label="  کارگاه"
+                    v-model="item.workshop"
+                    :disabled="true"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="12" v-if="item.id && isEditing">
+                <v-autocomplete
+                    label=" کارگاه"
+                    :items="workshops"
+                    v-model="item.workshop_id"
+                    item-text="name"
+                    item-value="id"
+                    :disabled="!isEditing"
+                    @change="getPersonnel(item.workshop_id)"
+                />
+              </v-col>
+            </v-row>
+            <v-row >
+
+              <v-col cols="12" md="6">
+                <v-autocomplete
+                    v-if="!item.id"
+                    label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
                     item-text="name"
                     item-value="id"
+                    :disabled="!isEditing || !workshop"
+                />
+                <v-autocomplete
+                    v-if="item.id"
+                    label=" پرسنل در کارگاه"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="name"
+                    item-value="id"
+                    @change
                     :disabled="!isEditing"
                 />
                 <v-text-field
@@ -59,40 +98,34 @@
                     v-if="this.workshopPersonnel"
                     disabled="true"
                     v-model="item.workshop_personnel = this.workshopPersonnel"
+
                 ></v-text-field>
               </v-col>
-            </v-row>
-            <v-row v-if="item.is_template" >
               <v-col cols="12" md="6">
                 <v-autocomplete
-                    label="* نوع"
-                    :items="TYPES"
-                    v-model="item.is_template"
-                    item-text="name"
-                    item-value="value"
-                    :disabled="!isEditing"
-                    @change="setValues(item)"
+                    label=" کد ملی"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="code"
+                    item-value="id"
+                    :disabled="true"
                 />
               </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field label="* نام قالب" v-model="item.template_name" background-color="white"
-                              :disabled="!isEditing"/>
-              </v-col>
+              <v-text-field
+                  v-show="false"
+                  v-model="item.is_template = false"
+              />
             </v-row>
             <v-row>
-              <v-col cols="12" md="6">
-                <v-text-field label="* نام کسورات" v-model="item.name" background-color="white"
-                              :disabled="!isEditing"/>
-              </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12" md="4">
                 <money v-model="item.amount" :disabled="!isEditing" label="* مبلغ"></money>
               </v-col>
-              <v-col cols="12" md="6" >
+              <v-col cols="12" md="4" >
                 <money v-model="item.episode"  :disabled="!isEditing" label=" * تعداد ماه "></money>
               </v-col>
-              <v-col cols="12" md="6">
-                <date v-model="item.start_date" label="* تاریخ" :default="false" :disabled="!isEditing"/>
+              <v-col cols="12" md="4">
+                <date v-model="item.start_date" label="* تاریخ شروع" :default="false" :disabled="!isEditing"/>
               </v-col>
 
             </v-row>
@@ -104,7 +137,7 @@
             </v-row>
             <v-row class="mt-10" v-if="item.id && item.is_verified">
               <v-col cols="12" md="4">
-                <v-text-field label="مبلغ هر ماه" v-model="item.monthly_pay" background-color="white"
+                <money label="مبلغ هر ماه" v-model="item.monthly_pay" background-color="white"
                               disabled="ture"/>
               </v-col>
               <v-col cols="12" md="4">
@@ -116,6 +149,17 @@
               </v-col>
             </v-row>
           </template>
+          <v-btn
+              class="primary darken-1 white--text mt-12 mr-2 float-left "
+              v-if="item.id && item.is_verified  && item.is_active"
+              @click="UnActiveDeduction(item)"
+          >غیر فعال کردن</v-btn>
+          <v-btn
+              class="green darken-1 white--text mt-12 mr-2 float-left "
+              v-if="item.id && item.is_verified && !item.is_active"
+              @click="ActiveDeduction(item)"
+          > فعال کردن</v-btn>
+
           <v-btn
               class="light-blue white--text mt-6  mr-2 float-left"
               @click="verifyDeduction(item)"
@@ -225,6 +269,8 @@ export default {
       first: false,
       error_dialog: false,
       error_message: null,
+      workshop: null,
+      workshops: [],
       isDefinable: false,
       myClass: '',
       templates: [],
@@ -262,19 +308,82 @@ export default {
         console.log(this.workshopPersonnels)
       }
     })
-    if (!this.workshopPersonnel) {
+    if (this.$route.params.id) {
       this.request({
-        url: this.endpoint(`payroll/workshop/personnel/`),
+        url: this.endpoint(`payroll/workshop/`),
         method: "get",
         success: data => {
-          console.log(data);
           for (let t in data) {
-            this.workshopPersonnels.push({
-              'name': data[t].personnel_name + ' در کارگاه ' + data[t].workshop_name,
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
               'id': data[t].id,
             })
           }
-          console.log(this.workshopPersonnels)
+
+        }
+      })
+      this.request({
+        url: this.endpoint(`payroll/deduction/` + this.$route.params.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.workshop_id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name,
+                  'id': data[t].id,
+                  'code': data[t].personnel_identity_code,
+                })
+              }
+            }
+          })
+
+        }
+      })
+
+    } else {
+
+      this.request({
+        url: this.endpoint(`payroll/workshop/`),
+        method: "get",
+        success: data => {
+          for (let t in data) {
+            this.workshops.push({
+              'name': data[t].name + ' ' + data[t].workshop_code,
+              'id': data[t].id,
+            })
+          }
+
+        }
+      })
+
+      this.request({
+        url: this.endpoint(`payroll/workshop/default/`),
+        method: "get",
+        success: data => {
+          this.workshop = data.id
+          this.$refs.workshopSelect.$props.value = data.id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
+          this.request({
+            url: this.endpoint(`payroll/workshop/workshop_personnel/` + data.id + '/'),
+            method: "get",
+            success: data => {
+              this.workshopPersonnels = []
+              for (let t in data) {
+                this.workshopPersonnels.push({
+                  'name': data[t].personnel_name,
+                  'id': data[t].id,
+                  'code': data[t].personnel_identity_code,
+                })
+              }
+            }
+          })
+
         }
       })
     }
@@ -289,6 +398,25 @@ export default {
         },
       };
     },
+    getPersonnel(id) {
+      this.workshopPersonnels = []
+      this.request({
+        url: this.endpoint(`payroll/workshop/workshop_personnel/` + id + '/'),
+        method: "get",
+        success: data => {
+          this.workshopPersonnels = []
+          for (let t in data) {
+            this.workshopPersonnels.push({
+              'name': data[t].personnel_name,
+              'id': data[t].id,
+              'code': data[t].personnel_identity_code,
+            })
+          }
+        }
+      })
+
+    },
+
 
     unConfirm() {
       this.$router.go()
@@ -319,6 +447,38 @@ export default {
         success: data => {
           console.log(data);
           this.notify('کسورات اختیاری از نهایی خارج شد', 'success')
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+    UnActiveDeduction(item) {
+      this.request({
+        url: this.endpoint(`payroll/deduction/unactive/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify('غیر فعال  کردن کسورات اختیاری انجام شد', 'success')
+          this.to(item)
+          window.location.reload();
+        },
+        error: data => {
+          this.notify(data.response.data[0].messages[0], 'warning')
+
+        }
+      })
+    },
+    ActiveDeduction(item) {
+      this.request({
+        url: this.endpoint(`payroll/deduction/active/` + item.id + '/'),
+        method: "get",
+        success: data => {
+          console.log(data);
+          this.notify(' فعال  کردن کسورات اختیاری انجام شد', 'success')
+          this.to(item)
           window.location.reload();
         },
         error: data => {

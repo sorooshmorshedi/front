@@ -20,32 +20,24 @@ export default {
   data() {
     return {
       url: "payroll/deduction/all",
-      filters: {},
+      filters: {is_template: false},
     };
   },
   computed: {
     headers() {
       return [
         {
+          text: "نام کسورات",
+          value: "name",
+        },
+
+        {
           text: " پرسنل در کارگاه",
           value: "workshop_personnel_display",
         },
         {
-          text: "تاریخ",
+          text: "تاریخ شروع",
           value: "start_date",
-        },
-        {
-          text: "قالب",
-          value: "is_template",
-          type: 'boolean',
-        },
-        {
-          text: "نام",
-          value: "name",
-        },
-        {
-          text: "نام قالب",
-          value: "template_name",
         },
         {
           text: "مبلغ",
@@ -53,7 +45,7 @@ export default {
           type: 'numeric'
         },
         {
-          text: "تعداد اقساط",
+          text: "تعداد ماه",
           value: "episode",
         },
         {

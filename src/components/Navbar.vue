@@ -2029,6 +2029,18 @@ export default {
                   },
                   title: "لیست کسورات اختیاری",
                 },
+                {
+                  to: {
+                    name: "DeductionTemplate",
+                  },
+                  title: " قالب کسورات اختیاری",
+                },
+                {
+                  to: {
+                    name: "DeductionTemplateList",
+                  },
+                  title: "لیست قالب کسورات اختیاری",
+                },
 
                 {
                   to: {

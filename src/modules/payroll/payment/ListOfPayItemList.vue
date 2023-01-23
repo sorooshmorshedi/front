@@ -432,8 +432,8 @@ export default {
       url: this.endpoint(`payroll/paylist/less/` + this.$route.params.id + '/'),
       method: "get",
       success: data => {
+        console.log('ok')
         this.list_of_pay = data
-
       }
     })
     this.request({

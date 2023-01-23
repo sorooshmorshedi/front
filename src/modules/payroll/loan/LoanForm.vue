@@ -115,6 +115,18 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    label="کد ملی"
+                    :items="workshopPersonnels"
+                    v-model="item.workshop_personnel"
+                    item-text="code"
+                    item-value="id"
+                    :disabled="true"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-autocomplete
                     label="نوع"
                     :items="LOAN_TYPES"
                     v-model="item.loan_type"
@@ -124,21 +136,20 @@
                     @change="setValues(item)"
                 />
               </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="4" v-if="item.loan_type != 'd'">
+
+              <v-col cols="12" md="6" v-if="item.loan_type != 'd'">
                 <date  v-model="item.pay_date" label="* تاریخ شروع" :default="false" :disabled="!isEditing"/>
               </v-col>
-              <v-col cols="12" md="4" v-if="item.loan_type == 'd'">
+              <v-col cols="12" md="6" v-if="item.loan_type == 'd'">
                 <date  v-model="item.pay_date" label="* تاریخ اعمال در حقوق" :default="false" :disabled="!isEditing"/>
               </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <money v-model="item.amount" :disabled="!isEditing" label="مبلغ"></money>
               </v-col>
-              <v-col cols="12" md="4" v-if="item.loan_type != 'd'">
+              <v-col cols="12" md="6" v-if="item.loan_type != 'd'">
                 <money v-model="item.episode"  :disabled="!isEditing" label="تعداد اقساط"></money>
               </v-col>
-              <v-col cols="12" md="4" v-if="item.loan_type == 'd'">
+              <v-col cols="12" md="6" v-if="item.loan_type == 'd'">
                 <money v-model="dept_episode"  disabled="true" label="تعداد اقساط"></money>
               </v-col>
             </v-row>
@@ -327,8 +338,9 @@ export default {
               this.workshopPersonnels = []
               for (let t in data) {
                 this.workshopPersonnels.push({
-                  'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                  'name': data[t].personnel_name,
                   'id': data[t].id,
+                  'code': data[t].personnel_identity_code,
                 })
               }
             }
@@ -368,8 +380,9 @@ export default {
               this.workshopPersonnels = []
               for (let t in data) {
                 this.workshopPersonnels.push({
-                  'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+                  'name': data[t].personnel_name,
                   'id': data[t].id,
+                  'code': data[t].personnel_identity_code,
                 })
               }
             }
@@ -441,8 +454,9 @@ export default {
           this.workshopPersonnels = []
           for (let t in data) {
             this.workshopPersonnels.push({
-              'name': data[t].personnel_name + '  ' + data[t].personnel_identity_code,
+              'name': data[t].personnel_name,
               'id': data[t].id,
+              'code': data[t].personnel_identity_code,
             })
           }
         }

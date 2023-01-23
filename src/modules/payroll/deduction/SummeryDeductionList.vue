@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       url: "payroll/deduction/all",
-      filters: {},
+      filters: {is_template: false},
     };
   },
   computed: {
@@ -31,20 +31,19 @@ export default {
           value: "workshop_personnel_display",
         },
         {
-          text: "تاریخ",
+          text: "تاریخ شروع",
           value: "start_date",
         },
         {
-          text: "تاریخ اتمام",
-          value: "last_dept_date",
-          filterable: false,
-        },
-        {
-          text: "مبلغ هر ماه",
-          value: "monthly_pay",
-          filterable: false,
+          text: "مبلغ",
+          value: "amount",
           type: 'numeric'
         },
+        {
+          text: "تعداد ماه",
+          value: "episode",
+        },
+
         {
           text: "نهایی",
           value: "is_verified",
