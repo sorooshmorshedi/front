@@ -436,15 +436,6 @@ export default {
         this.list_of_pay = data
       }
     })
-    this.request({
-      url: this.endpoint(`payroll/paylist/bank/` + this.$route.params.id + '/'),
-      method: "get",
-      success: data => {
-        console.log(data);
-        this.my_list = data
-
-      }
-    })
   },
   computed: {
     headers() {
