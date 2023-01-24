@@ -167,7 +167,11 @@
           <v-btn
               class="red white--text mt-12 mr-2 ml-2 float-left "
               @click="UnVerifyDeduction(item)"
-              v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
+              v-if="item.id && item.is_verified && item.editable" > خروج از وضعیت نهایی</v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="un_editable_dialog = true"
+              v-if="item.id && item.is_verified && !item.editable" > خروج از وضعیت نهایی</v-btn>
 
         </m-form>
         <v-row justify="center">
@@ -192,6 +196,33 @@
                     color="green darken-1"
                     text
                     @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+        <v-row justify="center">
+          <v-dialog
+              v-model="un_editable_dialog"
+              persistent
+              @click:outside="un_editable_dialog=false"
+              max-width="400"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                توجه!
+              </v-card-title>
+              <v-card-text>
+                با توجه به اینکه کسورات در لیست حقوق نهایی محاسبه شده، نمیتوانید آنرا از حالت نهایی خارج کنید
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="un_editable_dialog = false"
                 >
                   بستن
                 </v-btn>
@@ -267,6 +298,7 @@ export default {
       hasIdProp: true,
       hasLock: false,
       first: false,
+      un_editable_dialog: false,
       error_dialog: false,
       error_message: null,
       workshop: null,
