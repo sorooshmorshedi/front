@@ -880,6 +880,19 @@
                   </td>
                 </tr>
                 <tr class="text-center">
+                  <th class="text-center" colspan="2"> حق بیمه سهم کارفرما</th>
+                  <td>
+                    <money v-model="list_of_pay_item.get_employer_tax" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr class="text-center">
+                  <th class="text-center" colspan="2"> بیمه بیکاری</th>
+                  <td>
+                    <money v-model="list_of_pay_item.get_un_employer_tax" disabled="true"></money>
+                  </td>
+                </tr>
+
+                <tr class="text-center">
                   <th class="text-center" colspan="2"> معافیت مالیاتی حقوق</th>
                   <td>
                     <money v-model="list_of_pay_item.get_moaf_sum" disabled="true"></money>
@@ -912,7 +925,7 @@
                 <tr class="text-center">
                   <th class="text-center"> وام</th>
                   <td>
-                    <money v-model="list_of_pay_item.get_loan" disabled="true"></money>
+                    <money v-model="list_of_pay_item.loan_amount" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
@@ -926,18 +939,6 @@
                   <th class="text-center" colspan="2"> حقوق و دستمزد پرداختنی</th>
                   <td>
                     <money v-model="list_of_pay_item.get_payable" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <th class="text-center" colspan="2"> حق بیمه سهم کارفرما</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_employer_tax" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr class="text-center">
-                  <th class="text-center" colspan="2"> بیمه بیکاری</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_un_employer_tax" disabled="true"></money>
                   </td>
                 </tr>
                 <tr>

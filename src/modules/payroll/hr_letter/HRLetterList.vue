@@ -36,8 +36,12 @@ export default {
         },
 
         {
-          text: "طرفین قرارداد",
-          value: "contract_detail",
+          text: "پرسنل",
+          value: "personnel_name",
+        },
+        {
+          text: "کارگاه",
+          value: "workshop_name",
         },
         {
           text: "حداقل مزد روزانه",

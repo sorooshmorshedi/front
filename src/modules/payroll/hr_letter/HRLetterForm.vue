@@ -332,7 +332,7 @@
               ></v-switch>
             </v-col>
           </v-row>
-          <v-row v-if="insurance_month[item.contract] > 12 ">
+          <v-row v-if="insurance_month[item.contract] >= 12 ">
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">پایه سنوات روزانه:</v-card-text>
             </v-col>
