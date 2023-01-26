@@ -846,7 +846,7 @@
                 </thead>
                 <tbody>
                 <tr>
-                  <th class="" rowspan="5">
+                  <th class="" rowspan="8">
                     بیمه
                   </th>
                 <tr class="text-center">
@@ -874,19 +874,19 @@
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2"> حق بیمه سهم بیمه شده</th>
+                  <th class="text-center" colspan="1"> حق بیمه سهم بیمه شده</th>
                   <td>
                     <money v-model="list_of_pay_item.get_haghe_bime_bime_shavande" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2"> حق بیمه سهم کارفرما</th>
+                  <th class="text-center" colspan="1"> حق بیمه سهم کارفرما</th>
                   <td>
                     <money v-model="list_of_pay_item.get_employer_tax" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
-                  <th class="text-center" colspan="2"> بیمه بیکاری</th>
+                  <th class="text-center" colspan="1"> بیمه بیکاری</th>
                   <td>
                     <money v-model="list_of_pay_item.get_un_employer_tax" disabled="true"></money>
                   </td>

@@ -1629,9 +1629,11 @@
               ></v-checkbox>
             </v-col>
 
-            <v-col cols="12" md="2">
+            <v-col cols="12" md="2" class="pt-5">
+               2/12 معافیت سالانه، از مالیات معاف است
               <v-checkbox
-                  v-model="item.mazaya_mostamar_gheyre_naghdi_use_tax"
+                  v-show="false"
+                  v-model="item.mazaya_mostamar_gheyre_naghdi_use_tax = true"
                   label=" معاف از مالیات"
                   color="indigo"
                   :false-value="true"
