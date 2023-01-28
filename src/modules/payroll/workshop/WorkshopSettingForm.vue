@@ -106,7 +106,7 @@
                 </v-col>
                 <v-col cols="12" md="3">
                   <money
-                      label="حداقل حقوق ماهانه اداره کار"
+                      label="حداقل حقوق روزانه اداره کار"
                       class="currency-input"
                       v-model="item.hade_aghal_hoghoogh"
                       :disabled="true"
@@ -164,7 +164,7 @@
               <td>عیدی و پاداش</td>
               <td>
                 <v-autocomplete
-                    :items="PAY_TYPES"
+                    :items="EYDI_PAY_TYPES"
                     v-model="item.eydi_padash_pay_type"
                     item-text="name"
                     item-value="value"
@@ -483,6 +483,10 @@ export default {
       PAY_TYPES: [
         {name: 'حداقل حقوق روزانه', value: 'd'},
         {name: 'مزد مبنا', value: 'b'},
+      ],
+      EYDI_PAY_TYPES: [
+        {name: 'حداقل حقوق روزانه اداره کار', value: 'd'},
+        {name: 'مزد مبنا با رعایت سقف قانونی', value: 'b'},
       ],
       LEAVE_PAY_TYPES: [
         {name: 'حداقل حقوق روزانه', value: 'd'},

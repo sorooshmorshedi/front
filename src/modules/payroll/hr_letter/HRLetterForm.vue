@@ -1671,7 +1671,7 @@
               <v-autocomplete
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
-                  v-model="item.haghe_owlad_nature = 'u'"
+                  v-model="item.haghe_owlad_nature = 'p'"
                   :disabled="true"
                   item-text="name"
                   item-value="value"
@@ -1907,7 +1907,7 @@
             <v-col cols="12" md="2">
             </v-col>
           </v-row>
-          <v-row>
+          <v-row v-show="false">
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">حق سنوات :</v-card-text>
             </v-col>
@@ -1919,7 +1919,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-checkbox
-                  v-model="item.haghe_sanavat_use_insurance"
+                  v-model="item.haghe_sanavat_use_insurance = false"
                   label="معاف از بیمه"
                   color="indigo"
                   :false-value="true"
@@ -1931,7 +1931,7 @@
 
             <v-col cols="12" md="2">
               <v-checkbox
-                  v-model="item.haghe_sanavat_use_tax"
+                  v-model="item.haghe_sanavat_use_tax = false"
                   label=" معاف از مالیات"
                   color="indigo"
                   :false-value="true"
@@ -1943,7 +1943,7 @@
             <v-col cols="12" md="2">
             </v-col>
           </v-row>
-          <v-row>
+          <v-row v-show="false">
             <v-col cols="12" md="2" class="text-center">
               <v-card-text class="text-h6">عیدی و پاداش :</v-card-text>
             </v-col>
@@ -1955,7 +1955,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-checkbox
-                  v-model="item.eydi_padash_use_insurance"
+                  v-model="item.eydi_padash_use_insurance = false"
                   label="معاف از بیمه"
                   color="indigo"
                   :false-value="true"
@@ -1967,7 +1967,7 @@
 
             <v-col cols="12" md="2">
               <v-checkbox
-                  v-model="item.eydi_padash_use_tax"
+                  v-model="item.eydi_padash_use_tax = false"
                   label=" معاف از مالیات"
                   color="indigo"
                   :false-value="true"
