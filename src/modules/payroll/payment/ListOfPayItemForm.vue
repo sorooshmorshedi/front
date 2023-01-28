@@ -935,13 +935,6 @@
                   </td>
                 </tr>
                 <tr>
-                <tr class="text-center">
-                  <th class="text-center" colspan="2"> حقوق و دستمزد پرداختنی</th>
-                  <td>
-                    <money v-model="list_of_pay_item.get_payable" disabled="true"></money>
-                  </td>
-                </tr>
-                <tr>
                   <th class="text-center" colspan="2">
                     کسر کار (مبلغ)
                   </th>
@@ -958,7 +951,13 @@
                   </td>
                 </tr>
 
-
+                <tr>
+                <tr class="text-center">
+                  <th class="text-center" colspan="2"> حقوق و دستمزد پرداختنی</th>
+                  <td>
+                    <money v-model="list_of_pay_item.get_payable" disabled="true"></money>
+                  </td>
+                </tr>
                 </tbody>
               </template>
             </v-simple-table>
