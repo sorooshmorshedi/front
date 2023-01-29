@@ -50,7 +50,7 @@ export default {
         HH: {
           mask: IMask.MaskedRange,
           from: 0,
-          to: 99,
+          to: 200,
         },
         MM: {
           mask: IMask.MaskedRange,

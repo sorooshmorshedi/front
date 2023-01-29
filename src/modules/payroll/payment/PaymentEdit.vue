@@ -684,6 +684,35 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <v-row justify="center">
+      <v-dialog
+          v-model="error_dialog"
+          persistent
+          @click:outside="error_dialog=false"
+          max-width="400"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            لطفا موارد زیر را تکمیل یا اصلاح کنید!
+          </v-card-title>
+          <v-card-text>
+            <v-row v-for="item in error_message" class="mt-5 mr-10">
+              {{ item }}
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="green darken-1"
+                text
+                @click="error_dialog = false"
+            >
+              بستن
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
   </v-card>
 
@@ -774,7 +803,7 @@ export default {
       isDefinable: true,
       valid_dialog: false,
       valid_message: null,
-
+      can_go: true,
       myClass: '',
       workshop: null,
       workshop_id: null,
@@ -969,7 +998,9 @@ export default {
         })
       }
     },
+
     calculatePayment() {
+      this.can_go = true
       for (let payitem in this.items) {
         this.request({
           url: this.endpoint(`payroll/paylist/item/` + payitem + '/'),
@@ -1003,7 +1034,14 @@ export default {
             'calculate_payment': true,
           },
           success: data => {
+            console.log('ok')
             this.accept_dialog = false
+          },
+          error: data => {
+            this.can_go = false
+            this.error_message = data.response.data['وضعیت']
+            this.error_dialog = true
+
           },
         })
       }
@@ -1012,9 +1050,14 @@ export default {
     ,
 
     get_payment_list() {
-      this.$router.push('/panel/listOfPayItem/' + this.$route.query.pay_id)
+      setTimeout(() => { this.goToList(); }, 2000);
     }
     ,
+    goToList(){
+      if(this.can_go){
+        this.$router.push('/panel/listOfPayItem/' + this.$route.query.pay_id)
+      }
+    },
 
     sayer(id) {
       this.id_set = id

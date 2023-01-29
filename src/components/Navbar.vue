@@ -1850,6 +1850,12 @@ export default {
                   },
                 },
                 {
+                  title: "لیست جامع کارگاه",
+                  to: {
+                    name: "WorkshopInfoList",
+                  },
+                },
+                {
                   to: {
                     name: "ContractRow",
                   },

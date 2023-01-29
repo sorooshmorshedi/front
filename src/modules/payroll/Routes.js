@@ -7,7 +7,7 @@ import PersonnelFamilyList from "@/modules/payroll/personnel_family/PersonnelFam
 import AbsenceList from "@/modules/payroll/absence/AbsenceList";
 import HRLetterList from "@/modules/payroll/hr_letter/HRLetterList";
 import WorkshopForm from "@/modules/payroll/workshop/WorkshopForm";
-import WorkshopInfoList from "@/modules/payroll/workshop/WorkshopInfo";
+import WorkshopInfoList from "@/modules/payroll/workshop/WorkshopInfoList";
 import WorkshopSettingForm from "@/modules/payroll/workshop/WorkshopSettingForm";
 import PersonnelForm from "@/modules/payroll/personnel/PersonnelForm";
 import ContractRowForm from "@/modules/payroll/contract_row/ContractRowForm";
@@ -80,6 +80,11 @@ export default [
         name: 'WorkshopList',
         path: 'workshop/list',
         component: WorkshopList,
+    },
+    {
+        name: 'WorkshopInfoList',
+        path: 'workshopInfo/list',
+        component: WorkshopInfoList,
     },
     {
         name: 'WorkshopSetting',
