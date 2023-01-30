@@ -37,6 +37,7 @@
             label="کارگاه"
             :items="workshops"
             v-model="search_workshop"
+            ref="workshopSelect"
             :disabled="payment_start"
             item-text="name"
             item-value="id"
@@ -843,6 +844,35 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <v-row justify="center">
+      <v-dialog
+          v-model="error_dialog"
+          persistent
+          @click:outside="error_dialog=false"
+          max-width="400"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            لطفا موارد زیر را تکمیل یا اصلاح کنید!
+          </v-card-title>
+          <v-card-text>
+            <v-row v-for="item in error_message" class="mt-5 mr-10">
+              {{ item }}
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="green darken-1"
+                text
+                @click="error_dialog = false"
+            >
+              بستن
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
   </v-card>
 
@@ -922,6 +952,7 @@ export default {
       list_status: false,
       appendSlash: true,
       a: 1,
+      default_workshop: undefined,
       b: 2,
       hasList: false,
       hasIdProp: true,
@@ -931,6 +962,8 @@ export default {
       error_message: null,
       contractRows: [],
       hasLock: true,
+      valid_dialog: false,
+      valid_message: null,
       isDefinable: true,
       myClass: '',
       workshop: this.$route.query.workshop,
@@ -941,6 +974,7 @@ export default {
       paymentDialog: false,
       payment: '',
       pay_id: '',
+      can_go: true,
       copy_id: '',
       performClearForm: true,
       workshop_name: null,
@@ -1029,6 +1063,16 @@ export default {
             })
           }
           console.log(this.workshops)
+        }
+      })
+      this.request({
+        url: this.endpoint(`payroll/workshop/default/`),
+        method: "get",
+        success: data => {
+          this.search_workshop = data.id
+          this.$refs.workshopSelect.$props.value = data.id
+          console.log(this.$refs.workshopSelect.$props)
+          console.log(this.$refs.workshopSelect.$props.value)
         }
       })
     }
@@ -1147,6 +1191,7 @@ export default {
     },
 
     calculatePayment() {
+      this.can_go = true
       for (let payitem in this.items) {
         this.request({
           url: this.endpoint(`payroll/paylist/item/` + payitem + '/'),
@@ -1180,15 +1225,29 @@ export default {
           },
           success: data => {
             console.log(data)
-            this.get_payment_list()
+            this.accept_dialog = false
+
           },
+          error: data => {
+            this.can_go = false
+            this.error_message = data.response.data['وضعیت']
+            this.error_dialog = true
+          },
+
         })
 
       }
+      this.get_payment_list()
     },
 
     get_payment_list() {
-      this.$router.push('/panel/listOfPayItem/' + this.pay_id)
+      setTimeout(() => { this.goToListPay(); }, 2000);
+    },
+
+    goToListPay(){
+      if(this.can_go){
+        this.$router.push('/panel/listOfPayItem/' + this.pay_id)
+      }
     },
     reloadWindow() {
       if(this.pay_id){

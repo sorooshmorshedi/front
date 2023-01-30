@@ -2361,7 +2361,7 @@
       </template>
       <v-btn
           class="light-blue white--text mt-6  mr-2 float-left"
-          @click="verifyHRL(item)"
+          @click="submitAndActive(item)"
           v-if="item.id && item.is_calculated && !item.is_verified && !isEditing">ثبت نهایی
       </v-btn>
       <v-btn
@@ -2433,7 +2433,7 @@
             <v-btn
                 color="red darken-1"
                 text
-                @click="sure_dialog = false"
+                @click="reloadPage"
             >
               بستن
             </v-btn>
@@ -2730,7 +2730,6 @@ export default {
         success: data => {
           console.log(data);
           this.notify('  حکم کارگزینی نهایی شد', 'success')
-          window.location.reload();
         },
         error: data => {
           this.error_message = data.response.data['وضعیت']
@@ -2860,6 +2859,14 @@ export default {
       this.createOne = true
       this.setNerkhs(this.employer, this.worker, this.unemployed)
     },
+    submitAndActive(item){
+      this.verifyHRL(item)
+      this.sure_dialog = true
+
+    },
+    reloadPage(){
+      window.location.reload()
+    }
 
 
   },

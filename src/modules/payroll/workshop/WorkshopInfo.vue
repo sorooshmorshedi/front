@@ -476,7 +476,7 @@
         <v-btn
             class="green darken-2  mr-2 rounded white--text "
             large
-            @click="$router.push('/panel/setting/' + workshop.id)"
+            @click="$router.push('/panel/workshopSetting/' + workshop.id)"
         >
           <v-icon class="ml-2">
             fa-cogs

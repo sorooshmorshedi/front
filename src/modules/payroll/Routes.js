@@ -9,6 +9,7 @@ import HRLetterList from "@/modules/payroll/hr_letter/HRLetterList";
 import WorkshopForm from "@/modules/payroll/workshop/WorkshopForm";
 import WorkshopInfoList from "@/modules/payroll/workshop/WorkshopInfoList";
 import WorkshopSettingForm from "@/modules/payroll/workshop/WorkshopSettingForm";
+import Setting from "@/modules/payroll/workshop/Setting";
 import PersonnelForm from "@/modules/payroll/personnel/PersonnelForm";
 import ContractRowForm from "@/modules/payroll/contract_row/ContractRowForm";
 import PersonnelFamilyForm from "@/modules/payroll/personnel_family/PersonnelFamilyForm";
@@ -96,6 +97,20 @@ export default [
                 name: 'WorkshopSettingDetail',
                 path: ':id',
                 component: WorkshopSettingForm,
+            },
+        ]
+
+    },
+    {
+        name: 'Setting',
+        path: 'workshopSetting',
+        component: Setting,
+        props: true,
+        children : [
+            {
+                name: 'SettingDetail',
+                path: ':id',
+                component: Setting,
             },
         ]
 

@@ -12,7 +12,7 @@
           :canSubmit="!item.is_verified && !is_pop"
           :showClearBtn="false"
           :showListBtn="false"
-          :isEditing.sync="isEditing"
+          :isEditing.sync="isEditin"
           @submit="submit"
           @delete="deleteItem"
           ref="workshopSettingForm"
@@ -44,9 +44,6 @@
               قبل از ثبت نهایی کارگاه، تنظیمات کارگاه بررسی و تایید شود
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn v-if="!is_pop" outlined color="white" @click="$router.push('/panel/workshop/' + item.id + '/')">
-              بازگشت به کارگاه
-            </v-btn>
           </v-toolbar>
 
           <v-toolbar
@@ -59,9 +56,6 @@
               تنظیمات کلی حقوق و مزایا کارگاه {{ item.name }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn v-if="!is_pop" outlined color="white" @click="$router.push('/panel/workshop/' + item.id + '/')">
-              بازگشت به کارگاه
-            </v-btn>
           </v-toolbar>
           <v-autocomplete
               label="نحوه محاسبه مزد مبنا"
@@ -81,7 +75,7 @@
                       v-model="item.sanavat_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </v-col>
                 <v-col cols="12" md="3">
@@ -91,7 +85,7 @@
                       v-model="item.haghe_sanavat_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </v-col>
                 <v-col cols="12" md="3">
@@ -101,7 +95,7 @@
                       v-model="item.illness_absence_in_real_work"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </v-col>
                 <v-col cols="12" md="3">
@@ -120,26 +114,30 @@
                       v-model="item.tax_employer_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12" md="3">
                   <percent label="نرخ حق بیمه سهم کارفرما" v-model="item.employee_insurance_nerkh"
-                           :disabled="!isEditing"></percent>
+                           :disabled="true"
+                  ></percent>
                 </v-col>
                 <v-col cols="12" md="3">
                   <percent label="نرخ حق بیمه سهم بیمه شده" v-model="item.worker_insurance_nerkh"
-                           :disabled="!isEditing"></percent>
+                           :disabled="true"
+                  ></percent>
                 </v-col>
                 <v-col cols="12" md="3">
                   <percent label="نرخ حق بیمه سهم بیکاری" v-model="item.unemployed_insurance_nerkh"
-                           :disabled="!isEditing"></percent>
+                           :disabled="true"
+                  ></percent>
                 </v-col>
                 <v-col cols="12" md="3">
                   <percent label="نرخ تبصره 1 ماده 86 ق.م.م" v-model="item.made_86_nerkh"
-                           :disabled="!isEditing"></percent>
+                           :disabled="true"
+                  ></percent>
                 </v-col>
 
               </v-row>
@@ -168,7 +166,7 @@
                     v-model="item.eydi_padash_pay_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="true"
                 />
               </td>
               <td>
@@ -177,7 +175,7 @@
                     v-model="item.eydi_padash_identification"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="true"
                 />
               </td>
 
@@ -187,11 +185,11 @@
               <td>حق سنوات</td>
               <td>
                 <v-autocomplete
-                    :items="PAY_TYPES"
+                    :items="SANAVAT_PAY_TYPES"
                     v-model="item.haghe_sanavat_pay_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="true"
                 />
               </td>
               <td>
@@ -200,7 +198,7 @@
                     v-model="item.haghe_sanavat_identification"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="true"
                 />
               </td>
 
@@ -213,7 +211,7 @@
                     v-model="item.leave_save_pay_type"
                     item-text="name"
                     item-value="value"
-                    :disabled="!isEditing"
+                    :disabled="true"
                 />
               </td>
               <td class="pr-10 ">
@@ -223,7 +221,7 @@
                     color="success"
                     :false-value="false"
                     :true-value="true"
-                    :disabled="!isEditing"
+                    :disabled="true"
                     hide-details
                 ></v-switch>
                 <v-switch
@@ -232,7 +230,7 @@
                     color="success"
                     :false-value="false"
                     :true-value="true"
-                    :disabled="!isEditing"
+                    :disabled="true"
                     hide-details
                 ></v-switch>
               </td>
@@ -276,7 +274,7 @@
                       v-model="item.aele_mandi_pay_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </td>
                 <td>
@@ -284,7 +282,7 @@
                       v-on:keypress="NumbersOnly"
                       class="currency-input"
                       v-model="item.aele_mandi_nerkh"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   >
                   </ratio>
                 </td>
@@ -298,11 +296,12 @@
                       v-model="item.ezafe_kari_pay_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </td>
                 <td>
-                  <percent v-model="item.ezafe_kari_nerkh" :disabled="!isEditing"></percent>
+                  <percent v-model="item.ezafe_kari_nerkh"  :disabled="true"
+                  ></percent>
                 </td>
               </tr>
               <tr>
@@ -313,12 +312,12 @@
                       v-model="item.tatil_kari_pay_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
 
                 </td>
                 <td>
-                  <percent v-model="item.tatil_kari_nerkh" :disabled="!isEditing"></percent>
+                  <percent v-model="item.tatil_kari_nerkh" :disabled="true"></percent>
                 </td>
               </tr>
               <tr>
@@ -329,11 +328,11 @@
                       v-model="item.kasre_kar_pay_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </td>
                 <td>
-                  <percent v-model="item.kasre_kar_nerkh" :disabled="!isEditing"></percent>
+                  <percent v-model="item.kasre_kar_nerkh" :disabled="true"></percent>
                 </td>
               </tr>
               <tr>
@@ -344,11 +343,11 @@
                       v-model="item.shab_kari_pay_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </td>
                 <td>
-                  <percent v-model="item.shab_kari_nerkh" :disabled="!isEditing"></percent>
+                  <percent v-model="item.shab_kari_nerkh" :disabled="true"></percent>
                 </td>
               </tr>
               <tr>
@@ -359,11 +358,11 @@
                       v-model="item.nobat_kari_sob_asr_pay_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </td>
                 <td>
-                  <percent v-model="item.nobat_kari_sob_asr_nerkh" :disabled="!isEditing"></percent>
+                  <percent v-model="item.nobat_kari_sob_asr_nerkh" :disabled="true"></percent>
                 </td>
 
               </tr>
@@ -375,11 +374,11 @@
                       v-model="item.nobat_kari_sob_shab_pay_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </td>
                 <td>
-                  <percent v-model="item.nobat_kari_sob_shab_nerkh" :disabled="!isEditing"></percent>
+                  <percent v-model="item.nobat_kari_sob_shab_nerkh" :disabled="true"></percent>
                 </td>
 
               </tr>
@@ -391,11 +390,11 @@
                       v-model="item.nobat_kari_asr_shab_pay_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </td>
                 <td>
-                  <percent v-model="item.nobat_kari_asr_shab_nerkh" :disabled="!isEditing"></percent>
+                  <percent v-model="item.nobat_kari_asr_shab_nerkh" :disabled="true"></percent>
                 </td>
 
               </tr>
@@ -407,11 +406,11 @@
                       v-model="item.nobat_kari_sob_asr_shab_pay_type"
                       item-text="name"
                       item-value="value"
-                      :disabled="!isEditing"
+                      :disabled="true"
                   />
                 </td>
                 <td>
-                  <percent v-model="item.nobat_kari_sob_asr_shab_nerkh" :disabled="!isEditing"></percent>
+                  <percent v-model="item.nobat_kari_sob_asr_shab_nerkh" :disabled="true"></percent>
                 </td>
               </tr>
               </tbody>
@@ -420,8 +419,6 @@
           </v-simple-table>
 
         </template>
-
-
       </m-form>
 
     </v-card>
@@ -484,12 +481,16 @@ export default {
         {name: 'حداقل حقوق روزانه', value: 'd'},
         {name: 'مزد مبنا', value: 'b'},
       ],
+      SANAVAT_PAY_TYPES: [
+        {name: 'حداقل حقوق روزانه اداره کار', value: 'd'},
+        {name: 'مزد مبنا', value: 'b'},
+      ],
       EYDI_PAY_TYPES: [
         {name: 'حداقل حقوق روزانه اداره کار', value: 'd'},
         {name: 'مزد مبنا با رعایت سقف قانونی', value: 'b'},
       ],
       LEAVE_PAY_TYPES: [
-        {name: 'حداقل حقوق روزانه', value: 'd'},
+        {name: 'حداقل حقوق روزانه اداره کار', value: 'd'},
         {name: 'جمع تمام مزایای حکم کارگزینی', value: 'h'},
       ],
       SANAVAT_TYPES: [
@@ -514,16 +515,21 @@ export default {
       hasIdProp: true,
       hasLock: true,
       isDefinable: true,
+      isEditin: false,
       setting_workshop: null,
       items: null,
       factors: [],
       PathLevels,
+      first: false,
       msg: 'سالانه',
       VisitorLevels,
       paymentDialog: false,
       payment: '',
       performClearForm: true,
     };
+  },
+  mounted() {
+    this.isEditing = true
   },
   computed: {
     headers() {

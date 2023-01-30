@@ -155,7 +155,12 @@
           <v-btn
               class="red white--text mt-12 mr-2 ml-2 float-left "
               @click="UnVerifyWorkshop(item)"
-              v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
+              v-if="item.id && item.is_verified && !item.no_edit"> خروج از وضعیت نهایی
+          </v-btn>
+          <v-btn
+              class="red white--text mt-12 mr-2 ml-2 float-left "
+              @click="no_edit_dialog = true"
+              v-if="item.id && item.is_verified && item.no_edit"> خروج از وضعیت نهایی
           </v-btn>
 
 
@@ -182,6 +187,35 @@
                     color="green darken-1"
                     text
                     @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+        <v-row justify="center">
+          <v-dialog
+              v-model="no_edit_dialog"
+              persistent
+              @click:outside="no_edit_dialog=false"
+              max-width="500"
+          >
+            <v-card>
+              <v-card-title class="red--text text-h5">
+                توجه!
+              </v-card-title>
+              <v-card-text>
+                <v-row  class="mt-5 mr-10">
+                  برای خروج از حالت نهایی ابتدا لیست های غیر نهایی را نهایی یا حذف کنید
+                </v-row>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="no_edit_dialog = false"
                 >
                   بستن
                 </v-btn>
@@ -267,6 +301,7 @@ export default {
       permissionBasename: "workshop",
       appendSlash: true,
       hasList: false,
+      no_edit_dialog: false,
       hasIdProp: true,
       show_setting: false,
       hasLock: false,
@@ -343,7 +378,7 @@ export default {
       this.$router.push('/panel/contract_row' + '?workshop=' + item.id)
     },
     setting(item) {
-      this.$router.push('/panel/setting/' + item.id)
+      this.$router.push('/panel/workshopSetting/' + item.id)
     },
 
     goWorkshop(item) {
