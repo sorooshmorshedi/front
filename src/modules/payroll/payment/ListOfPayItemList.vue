@@ -221,6 +221,33 @@
     </v-row>
     <v-row justify="center">
       <v-dialog
+          v-model="workshop_dialog"
+          persistent
+          @click:outside="workshop_dialog=false"
+          max-width="300"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            توجه!
+          </v-card-title>
+          <v-card-text>
+            ابتدا  کارگاه را به حالت نهایی بازگردانید
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red darken-1"
+                text
+                @click="workshop_dialog = false"
+            >
+              بستن
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+    <v-row justify="center">
+      <v-dialog
           v-model="delete_dialog"
           persistent
           @click:outside="delete_dialog=false"
@@ -381,7 +408,13 @@
               class="red white--text mt-2 mr-2 ml-5 float-left "
               @click="un_ultimate_dialog = true"
               large
-              v-if="list_of_pay.ultimate && list_of_pay.get_is_editable"> خروج از وضعیت نهایی
+              v-if="list_of_pay.ultimate && list_of_pay.get_is_editable && list_of_pay.is_workshop_verified"> خروج از وضعیت نهایی
+          </v-btn>
+          <v-btn
+              class="red white--text mt-2 mr-2 ml-5 float-left "
+              @click="workshop_dialog = true"
+              large
+              v-if="list_of_pay.ultimate && list_of_pay.get_is_editable && !list_of_pay.is_workshop_verified"> خروج از وضعیت نهایی
           </v-btn>
           <v-btn
               class="red white--text mt-2 mr-2 ml-5 float-left "
@@ -422,6 +455,7 @@ export default {
       accept_dialog: false,
       un_accept_dialog: false,
       delete_dialog: false,
+      workshop_dialog: false,
       un_ultimate_dialog: false,
       list_of_pay: null,
       my_list: null,

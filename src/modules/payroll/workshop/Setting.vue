@@ -80,7 +80,25 @@
                       :disabled="!isEditing"
                   />
                 </v-col>
-
+                <v-col cols="12" md="3">
+                  <money
+                      label="حداقل حقوق روزانه اداره کار"
+                      class="currency-input"
+                      v-model="item.hade_aghal_hoghoogh"
+                      :disabled="true"
+                  >
+                  </money>
+                </v-col>
+                <v-col cols="12" md="3">
+                  <v-autocomplete
+                      label="معافیت مالیاتی حق بیمه سهم بیمه شده"
+                      :items="TAX_EMPLOYER_TYPES"
+                      v-model="item.tax_employer_type"
+                      item-text="name"
+                      item-value="value"
+                      :disabled="!isEditing"
+                  />
+                </v-col>
                 <v-col cols="12" md="3">
                   <v-tooltip top color="primary">
                     <template v-slot:activator="{ on, attrs }">
@@ -113,25 +131,7 @@
                       :disabled="!isEditing"
                   />
                 </v-col>
-                <v-col cols="12" md="3">
-                  <money
-                      label="حداقل حقوق روزانه اداره کار"
-                      class="currency-input"
-                      v-model="item.hade_aghal_hoghoogh"
-                      :disabled="true"
-                  >
-                  </money>
-                </v-col>
-                <v-col cols="12" md="3">
-                  <v-autocomplete
-                      label="معافیت مالیاتی حق بیمه سهم بیمه شده"
-                      :items="TAX_EMPLOYER_TYPES"
-                      v-model="item.tax_employer_type"
-                      item-text="name"
-                      item-value="value"
-                      :disabled="!isEditing"
-                  />
-                </v-col>
+
               </v-row>
               <v-row>
                 <v-col cols="12" md="3">
@@ -354,7 +354,9 @@
               <tr>
                 <td>کسر کار</td>
                 <td>
-                  <percent v-model="kasr" :disabled="true"></percent>
+                  <v-text-field append-icon="fa-percent"
+                                class="currency-input"
+                                v-model="kasr" :disabled="true"></v-text-field>
                 </td>
 
                 <td>
@@ -475,7 +477,7 @@
 
         </template>
         <v-btn
-            class="light-blue white--text mt-6  mr-2 float-left"
+            class="light-blue white--text mt-6 mb-6  mr-2 float-left"
             @click="$router.push('/panel/workshop/' + item.id + '/')"
         >بازگشت به کارگاه
 
@@ -603,8 +605,8 @@ export default {
       first: false,
       aele: 3,
       ezafe: 0.4,
-      kasr: 0.4,
-      tatil: 0.96,
+      kasr: '---',
+      tatil: 0.4,
       shab: 0.35,
       nobat_sob_shab: 0.225,
       nobat_sob_asr: 0.1,

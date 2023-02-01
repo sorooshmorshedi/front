@@ -2371,13 +2371,13 @@
       </v-btn>
       <v-btn
           class="primary darken-2 white--text mt-12 mr-2 float-left "
-          v-if="item.id && item.is_verified  && item.is_active && item.is_calculated"
+          v-if="item.id && item.is_verified  && item.is_active"
           @click="UnActiveHR(item)"
       >غیر فعال سازی
       </v-btn>
       <v-btn
           class="green darken-1 white--text mt-12 mr-2 float-left "
-          v-if="item.id && item.is_verified  && !item.is_active && item.is_calculated"
+          v-if="item.id && item.is_verified  && !item.is_active"
           @click="sure_dialog = true"
       > فعال سازی
       </v-btn>
@@ -2730,6 +2730,8 @@ export default {
         success: data => {
           console.log(data);
           this.notify('  حکم کارگزینی نهایی شد', 'success')
+          this.sure_dialog = true
+
         },
         error: data => {
           this.error_message = data.response.data['وضعیت']
@@ -2861,7 +2863,6 @@ export default {
     },
     submitAndActive(item){
       this.verifyHRL(item)
-      this.sure_dialog = true
 
     },
     reloadPage(){
