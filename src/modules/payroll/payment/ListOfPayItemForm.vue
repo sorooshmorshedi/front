@@ -284,20 +284,12 @@
                     {{ list_of_pay_item.start_date }}
                   </td>
                 </tr>
-                <tr>
-                  <th class="">
+                <tr v-if="list_of_pay_item.get_quit_job">
+                  <th>
                     تاریخ ترک کار
                   </th>
                   <td>
                     {{ list_of_pay_item.get_quit_job }}
-                  </td>
-                </tr>
-                <tr>
-                  <th class="">
-                    تاریخ تسویه
-                  </th>
-                  <td>
-                    -
                   </td>
                 </tr>
                 <tr>
@@ -340,7 +332,7 @@
                     {{ list_of_pay_item.tax_date }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.contract_row">
                   <th class="">
                     ردیف پیمان
                   </th>
@@ -357,7 +349,7 @@
                   </td>
                 </tr>
 
-                <tr>
+                <tr v-if="list_of_pay_item.sanavat_base != 0">
                   <th class="">
                     پایه سنوات روزانه
                   </th>
@@ -374,7 +366,7 @@
                     {{ list_of_pay_item.normal_worktime }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.get_entitlement_sum != 0">
                   <th class="">
                      جمع مرخصی استحقاقی
                   </th>
@@ -382,7 +374,7 @@
                     {{ list_of_pay_item.get_entitlement_sum }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.get_illness_sum != 0">
                   <th class="">
                     مرخصی استعلاجی
                   </th>
@@ -390,7 +382,7 @@
                     {{ list_of_pay_item.get_illness_sum }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.matter_47_leave_day != 0">
                   <th class="">
                     مرخصی ماده 73
                   </th>
@@ -398,7 +390,7 @@
                     {{ list_of_pay_item.matter_47_leave_day }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.get_without_salary_sum != 0">
                   <th class="">
                     مرخصی بدون حقوق
                   </th>
@@ -406,7 +398,7 @@
                     {{ list_of_pay_item.get_without_salary_sum }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.get_absence_sum != 0">
                   <th class="">
                     غیبت
                   </th>
@@ -422,7 +414,7 @@
                     {{ list_of_pay_item.real_worktime }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.kasre_kar_total != 0">
                   <th class="">
                     کسر کار (ساعت)
                   </th>
@@ -433,7 +425,7 @@
                     ></v-text-field>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.ezafe_kari_total">
                   <th class="">
                     اضافه کاری (ساعت)
                   </th>
@@ -444,8 +436,7 @@
                     ></v-text-field>
                   </td>
                 </tr>
-
-                <tr>
+                <tr v-if="list_of_pay_item.tatil_kari_total">
                   <th class="">
                     تعطیل کاری (ساعت)
                   </th>
@@ -456,7 +447,7 @@
                     ></v-text-field>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.shab_kari_total">
                   <th class="">
                     شب کاری (ساعت)
                   </th>
@@ -499,7 +490,7 @@
                     <money v-model="list_of_pay_item.nobat_kari_sob_asr_shab" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.get_mission_total != 0">
                   <th class="">
                     ماموریت (روز)
                   </th>
@@ -507,7 +498,7 @@
                     {{ list_of_pay_item.get_mission_sum }}
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.aele_mandi_child != 0">
                   <th class="">
                     تعداد اولاد مشمول
                   </th>
@@ -541,7 +532,7 @@
                     <money v-model="list_of_pay_item.hoghoogh_mahane_real_work" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.sanavat_mahane_real_work != 0">
                   <th class="">
                     پایه سنوات ماهانه
                   </th>
@@ -549,7 +540,7 @@
                     <money v-model="list_of_pay_item.sanavat_mahane_real_work" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.ezafe_kari_total">
                   <th class="">
                     اضافه کاری (مبلغ)
                   </th>
@@ -557,7 +548,7 @@
                     <money v-model="list_of_pay_item.ezafe_kari_total" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.tatil_kari_total">
                   <th class="">
                     تعطیل کاری (مبلغ)
                   </th>
@@ -565,7 +556,7 @@
                     <money v-model="list_of_pay_item.tatil_kari_total" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.shab_kari_total">
                   <th class="">
                     شب کاری (مبلغ)
                   </th>
@@ -607,7 +598,7 @@
                     <money v-model="list_of_pay_item.get_nobat_kari_sob_asr_shab_total" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.get_mission_total != 0">
                   <th class="">
                     ماموریت (مبلغ)
                   </th>
@@ -615,7 +606,7 @@
                     <money v-model="list_of_pay_item.get_mission_total" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.aele_mandi != 0">
                   <th class="">
                     حق اولاد
                   </th>
@@ -786,7 +777,7 @@
                            disabled="true"></money>
                   </td>
                 </tr>
-                <tr v-if="list_of_pay_item.mazaya_gheyr_mostamar">
+                <tr v-if="list_of_pay_item.mazaya_gheyr_mostamar != 0">
                   <th class="">
                     مزایای غیر مستمر غیر نقدی
                   </th>
@@ -795,7 +786,7 @@
                   </td>
                 </tr>
 
-                <tr>
+                <tr v-if="list_of_pay_item.haghe_sanavat_total != 0">
                   <th class="">
                     حق سنوات
                   </th>
@@ -803,7 +794,7 @@
                     <money v-model="list_of_pay_item.haghe_sanavat_total" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.padash_total != 0">
                   <th class="">
                     عیدی و پاداش
                   </th>
@@ -812,7 +803,7 @@
                   </td>
                 </tr>
                 <tr>
-                <tr>
+                <tr v-if="list_of_pay_item.sayer_ezafat != 0">
                   <th class="">
                     سایر اضافات
                   </th>
@@ -934,7 +925,7 @@
                     <money v-model="list_of_pay_item.get_deduction" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.kasre_kar_total != 0">
                   <th class="text-center" colspan="2">
                     کسر کار (مبلغ)
                   </th>
@@ -942,7 +933,7 @@
                     <money v-model="list_of_pay_item.kasre_kar_total" disabled="true"></money>
                   </td>
                 </tr>
-                <tr>
+                <tr v-if="list_of_pay_item.sayer_kosoorat != 0">
                   <th class="text-center" colspan="2">
                     سایر کسورات
                   </th>

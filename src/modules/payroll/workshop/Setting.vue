@@ -334,7 +334,9 @@
               <tr>
                 <td>تعطیل کاری</td>
                 <td>
-                  <percent v-model="tatil" :disabled="true"></percent>
+                  <v-text-field append-icon="fa-percent"
+                                class="currency-input"
+                                v-model="tatil" :disabled="true"></v-text-field>
                 </td>
 
                 <td>
@@ -606,7 +608,7 @@ export default {
       aele: 3,
       ezafe: 0.4,
       kasr: '---',
-      tatil: 0.4,
+      tatil: ' چهل درصد اضافه بر مزد',
       shab: 0.35,
       nobat_sob_shab: 0.225,
       nobat_sob_asr: 0.1,

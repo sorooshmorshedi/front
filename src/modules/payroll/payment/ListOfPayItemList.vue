@@ -503,38 +503,8 @@ export default {
           value: "normal_worktime",
         },
         {
-          text: "مرخصی استحقاقی",
-          value: "entitlement_leave_day",
-          type: 'numeric',
-        },
-        {
-          text: "مرخصی استعلاجی",
-          value: "illness_leave_day",
-          type: 'numeric',
-        },
-        {
-          text: "مرخصی ماده 73",
-          value: "matter_47_leave_day",
-          type: 'numeric',
-        },
-        {
-          text: "مرخصی بدون حقوق",
-          value: "without_salary_leave_day",
-          type: 'numeric',
-        },
-        {
-          text: "غیبت",
-          value: "absence_day",
-          type: 'numeric',
-        },
-        {
           text: "کارکرد واقعی",
           value: "real_worktime",
-        },
-        {
-          text: "حداقل مزد روزانه",
-          value: "hoghoogh_roozane",
-          type: 'numeric',
         },
         {
           text: "حقوق پایه ماهانه",
@@ -542,20 +512,9 @@ export default {
           type: 'numeric',
         },
         {
-          text: "پایه سنوات روزانه",
-          value: "sanavat_base",
-          type: 'numeric',
-        },
-        {
           text: "پایه سنوات ماهانه",
           value: "sanavat_mahane_real_work",
           type: 'numeric',
-        },
-
-        {
-          text: "اضافه کاری (ساعت)",
-          value: "get_ezafe_kari_time",
-          filterable: false,
         },
         {
           text: "اضافه کاری (مبلغ)",
@@ -563,38 +522,13 @@ export default {
           type: 'numeric'
         },
         {
-          text: "تعطیل کاری (ساعت)",
-          value: "get_tatil_kari_time",
-          filterable: false,
-        },
-        {
           text: "تعطیل کاری (مبلغ)",
           value: "tatil_kari_total",
           type: 'numeric'
         },
         {
-          text: "شب کاری (ساعت)",
-          value: "get_shab_kari_time",
-          filterable: false,
-        },
-        {
           text: "شب کاری (مبلغ)",
           value: "shab_kari_total",
-          type: 'numeric'
-        },
-        {
-          text: "کسر کار (ساعت)",
-          value: "get_kasre_kar_time",
-          filterable: false,
-        },
-        {
-          text: "کسر کار (مبلغ)",
-          value: "kasre_kar_total",
-          type: 'numeric'
-        },
-        {
-          text: "ماموریت (روز)",
-          value: "mission_day",
           type: 'numeric'
         },
         {
@@ -603,18 +537,8 @@ export default {
           type: 'numeric'
         },
         {
-          text: "تعداد اولاد مشمول",
-          value: "aele_mandi_child",
-          type: 'numeric'
-        },
-        {
           text: "حق اولاد",
           value: "aele_mandi",
-          type: 'numeric'
-        },
-        {
-          text: "حقوق مزایای کل ماهانه",
-          value: "total_payment",
           type: 'numeric'
         },
         {
@@ -627,15 +551,15 @@ export default {
           value: "padash_total",
           type: 'numeric'
         },
-
         {
           text: "سایر اضافات",
           value: "sayer_ezafat",
           type: 'numeric'
         },
+
         {
-          text: "سایر کسورات",
-          value: "sayer_kosoorat",
+          text: "حقوق مزایای کل ماهانه",
+          value: "total_payment",
           type: 'numeric'
         },
         {
@@ -648,11 +572,7 @@ export default {
           value: "get_month_tax",
           type: 'numeric'
         },
-        {
-          text: "مالیات حقوق",
-          value: "get_month_tax",
-          type: 'numeric'
-        },
+
         {
           text: "بدهی مساعده",
           value: "get_dept",
@@ -668,6 +588,18 @@ export default {
           value: "get_deduction",
           type: 'numeric'
         },
+        {
+          text: "کسر کار (مبلغ)",
+          value: "kasre_kar_total",
+          type: 'numeric'
+        },
+
+        {
+          text: "سایر کسورات",
+          value: "sayer_kosoorat",
+          type: 'numeric'
+        },
+
         {
           text: "حقوق و دستمزد پرداختنی",
           value: "get_payable",
