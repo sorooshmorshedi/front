@@ -152,7 +152,7 @@
               <th class="text-center">
                 محاسبه بر مبنای
               </th>
-              <th class="text-center">
+              <th class="text-center" colspan="2">
                 نحوه شناسایی
               </th>
             </tr>
@@ -160,7 +160,7 @@
             <tbody>
             <tr>
               <td>عیدی و پاداش</td>
-              <td>
+              <td >
                 <v-autocomplete
                     :items="EYDI_PAY_TYPES"
                     v-model="item.eydi_padash_pay_type"
@@ -169,7 +169,7 @@
                     :disabled="true"
                 />
               </td>
-              <td>
+              <td colspan="2">
                 <v-autocomplete
                     :items="REWARD_TYPES"
                     v-model="item.eydi_padash_identification"
@@ -192,7 +192,7 @@
                     :disabled="true"
                 />
               </td>
-              <td>
+              <td colspan="2">
                 <v-autocomplete
                     :items="REWARD_TYPES"
                     v-model="item.haghe_sanavat_identification"
@@ -213,6 +213,14 @@
                     item-value="value"
                     :disabled="true"
                 />
+              </td>
+              <td>
+                <v-text-field v-model="item.save_leave_limit"
+                              :disabled="true"
+                              class="currency-input"
+                              label="حد نصاب مرخصی سالانه"
+
+                ></v-text-field>
               </td>
               <td class="pr-10 ">
                 <v-switch
@@ -259,7 +267,7 @@
                   محاسبه بر مبنای
                 </th>
                 <th class="text-center">
-                  نرخ پبش فرض
+                  نرخ پبش فرض مازاد بر مزد
                 </th>
 
 

@@ -290,6 +290,64 @@
             </v-col>
 
           </v-row>
+          <v-row>
+            <v-col cols="12" md="2" class="text-center">
+              <v-card-text class="text-h6">حق جذب :</v-card-text>
+            </v-col>
+            <v-col cols="12" md="2">
+              <money
+                  v-on:keypress="NumbersOnly"
+                  label="* مبلغ "
+                  v-model="item.haghe_jazb_amount"
+                  background-color="white"
+                  :disabled="!isEditing"
+              />
+            </v-col>
+            <v-col cols="12" md="2">
+              <v-autocomplete
+                  label="* ماهیت عناوین شغلی"
+                  :items="NATURE_TYPES"
+                  v-model="item.haghe_jazb_nature"
+                  item-text="name"
+                  item-value="value"
+                  :disabled="!isEditing"
+              />
+            </v-col>
+            <v-col cols="12" md="2">
+              <v-checkbox
+                  v-model="item.haghe_jazb_use_insurance"
+                  label="معاف از بیمه"
+                  color="indigo"
+                  :false-value="true"
+                  :true-value="false"
+                  hide-details
+                  :disabled="!isEditing"
+              ></v-checkbox>
+            </v-col>
+
+            <v-col cols="12" md="2">
+              <v-checkbox
+                  v-model="item.haghe_jazb_use_tax"
+                  label=" معاف از مالیات"
+                  color="indigo"
+                  :false-value="true"
+                  :true-value="false"
+                  hide-details
+              ></v-checkbox>
+            </v-col>
+            <v-col cols="12" md="2">
+              <v-switch
+                  v-model="item.haghe_jazb_base"
+                  label="مزد پایه"
+                  color="success"
+                  :false-value="false"
+                  :true-value="true"
+                  hide-details
+                  :disabled="!isEditing"
+              ></v-switch>
+            </v-col>
+
+          </v-row>
 
 
           <v-row>
@@ -413,64 +471,6 @@
           </v-row>
 
 
-          <v-row>
-            <v-col cols="12" md="2" class="text-center">
-              <v-card-text class="text-h6">حق جذب :</v-card-text>
-            </v-col>
-            <v-col cols="12" md="2">
-              <money
-                  v-on:keypress="NumbersOnly"
-                  label="* مبلغ "
-                  v-model="item.haghe_jazb_amount"
-                  background-color="white"
-                  :disabled="!isEditing"
-              />
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-autocomplete
-                  label="* ماهیت عناوین شغلی"
-                  :items="NATURE_TYPES"
-                  v-model="item.haghe_jazb_nature"
-                  item-text="name"
-                  item-value="value"
-                  :disabled="!isEditing"
-              />
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-checkbox
-                  v-model="item.haghe_jazb_use_insurance"
-                  label="معاف از بیمه"
-                  color="indigo"
-                  :false-value="true"
-                  :true-value="false"
-                  hide-details
-                  :disabled="!isEditing"
-              ></v-checkbox>
-            </v-col>
-
-            <v-col cols="12" md="2">
-              <v-checkbox
-                  v-model="item.haghe_jazb_use_tax"
-                  label=" معاف از مالیات"
-                  color="indigo"
-                  :false-value="true"
-                  :true-value="false"
-                  hide-details
-              ></v-checkbox>
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-switch
-                  v-model="item.haghe_jazb_base"
-                  label="مزد پایه"
-                  color="success"
-                  :false-value="false"
-                  :true-value="true"
-                  hide-details
-                  :disabled="!isEditing"
-              ></v-switch>
-            </v-col>
-
-          </v-row>
 
           <v-row>
             <v-col cols="12" md="2" class="text-center">

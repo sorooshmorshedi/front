@@ -517,28 +517,48 @@ export default {
           type: 'numeric',
         },
         {
-          text: "اضافه کاری (مبلغ)",
+          text: "اضافه کاری ",
           value: "ezafe_kari_total",
           type: 'numeric'
         },
         {
-          text: "تعطیل کاری (مبلغ)",
+          text: "تعطیل کاری ",
           value: "tatil_kari_total",
           type: 'numeric'
         },
         {
-          text: "شب کاری (مبلغ)",
+          text: "شب کاری ",
           value: "shab_kari_total",
           type: 'numeric'
         },
         {
-          text: "ماموریت (مبلغ)",
+          text: "ماموریت",
           value: "get_mission_total",
           type: 'numeric'
         },
         {
           text: "حق اولاد",
           value: "aele_mandi",
+          type: 'numeric'
+        },
+        {
+          text: "حق مسکن",
+          value: "get_haghe_maskan",
+          type: 'numeric'
+        },
+        {
+          text: "حق جذب",
+          value: "get_haghe_jazb",
+          type: 'numeric'
+        },
+        {
+          text: "بن خاروبار",
+          value: "get_kharo_bar",
+          type: 'numeric'
+        },
+        {
+          text: "جمع سایر مزایای حکمی",
+          value: "get_sayer_hr",
           type: 'numeric'
         },
         {

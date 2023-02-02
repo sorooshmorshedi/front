@@ -252,7 +252,7 @@
               </v-col>
 
 
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <v-autocomplete
                     :rules="[rules.required,]"
                     label="* نوع استخدام "
@@ -264,7 +264,7 @@
                 />
               </v-col>
 
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <v-autocomplete
                     :rules="[rules.required,]"
                     label="* نوع قرارداد"
@@ -276,7 +276,15 @@
                 />
               </v-col>
 
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
+                <v-text-field v-model="item.save_leave_limit"
+                              :disabled="!isEditing"
+                              class="currency-input"
+                              label="حد نصاب مرخصی سالانه"
+
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="6">
                 <date v-model="item.employment_date" label=" * تاریخ استخدام " :default="false"
                       :disabled="!isEditing || item.quit_job"/>
               </v-col>

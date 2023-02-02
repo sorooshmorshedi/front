@@ -902,30 +902,26 @@
                   </td>
                 </tr>
                 <tr>
-                <tr>
 
-                  <th class="" rowspan="4">
-                    بدهی متفرقه
-                  </th>
-                <tr class="text-center">
-                  <th class="text-center"> مساعده</th>
+                <tr class="text-center" v-if="list_of_pay_item.get_dept != 0">
+                  <th class="text-center" colspan="2"> مساعده</th>
                   <td>
                     <money v-model="list_of_pay_item.get_dept" disabled="true"></money>
                   </td>
                 </tr>
-                <tr class="text-center">
-                  <th class="text-center"> وام</th>
+                <tr class="text-center" v-if="list_of_pay_item.loan_amount != 0">
+                  <th class="text-center" colspan="2"> وام</th>
                   <td>
                     <money v-model="list_of_pay_item.loan_amount" disabled="true"></money>
                   </td>
                 </tr>
-                <tr class="text-center">
-                  <th class="text-center"> غیره</th>
+                <tr class="text-center" v-if="list_of_pay_item.get_deduction != 0">
+                  <th class="text-center" colspan="2"> غیره</th>
                   <td>
                     <money v-model="list_of_pay_item.get_deduction" disabled="true"></money>
                   </td>
                 </tr>
-                <tr v-if="list_of_pay_item.kasre_kar_total != 0">
+                <tr class="text-center" v-if="list_of_pay_item.kasre_kar_total != 0">
                   <th class="text-center" colspan="2">
                     کسر کار (مبلغ)
                   </th>
