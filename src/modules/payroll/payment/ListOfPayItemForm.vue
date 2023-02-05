@@ -728,7 +728,7 @@
                     <money v-model="list_of_pay_item.info.additions.ayabo_zahab" disabled="true"></money>
                   </td>
                 </tr>
-                <tr v-if="list_of_pay_item.info.additions.ayabo_zahab">
+                <tr v-if="list_of_pay_item.info.additions.yarane_ghaza">
                   <th class="">
                     یارانه غذا
                   </th>
@@ -800,6 +800,14 @@
                   </th>
                   <td>
                     <money v-model="list_of_pay_item.padash_total" disabled="true"></money>
+                  </td>
+                </tr>
+                <tr v-if="list_of_pay_item.saved_leaves_total != 0">
+                  <th class="">
+                    ذخیره ایام مرخصی
+                  </th>
+                  <td>
+                    <money v-model="list_of_pay_item.saved_leaves_total" disabled="true"></money>
                   </td>
                 </tr>
                 <tr>
