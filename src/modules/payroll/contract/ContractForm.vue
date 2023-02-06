@@ -298,7 +298,15 @@
                   </v-col>
 
                   <v-col cols="12" md="3" v-if="insurance_status">
+
                     <v-text-field v-on:keypress="NumbersOnly"
+                                  v-if="is_insurance[item.workshop_personnel]"
+                                  label=" * شماره بیمه" v-model="insurance_number = personnel_insurance_code[item.workshop_personnel]"
+                                  background-color="white"
+                                  disabled="true"
+                    />
+                    <v-text-field v-on:keypress="NumbersOnly"
+                                  v-if="!is_insurance[item.workshop_personnel]"
                                   label=" * شماره بیمه" v-model="insurance_number"
                                   background-color="white"
                     />
@@ -641,6 +649,11 @@ export default {
       })
 
     }
+    console.log('--------------')
+    console.log(this.personnel_insurance_code)
+    console.log(this.is_insurance)
+    console.log('--------------')
+
   },
   updated() {
     if (!this.first && this.$route.params.id) {

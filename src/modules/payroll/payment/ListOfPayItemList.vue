@@ -480,7 +480,7 @@ export default {
         },
         {
           text: "تاریخ شروع به کار",
-          value: "start_date",
+          value: "work_start_date",
         },
         {
           text: "بیمه میشود؟",
