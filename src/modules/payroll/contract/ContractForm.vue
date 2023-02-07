@@ -828,13 +828,14 @@ export default {
         },
       };
     },
-    show() {
-      console.log(this.$refs.workshopSelect.$props.value)
+    show(item) {
+      console.log(item)
     },
     unConfirm() {
       this.$router.go()
       this.notify(' ثبت قرارداد رد شد', 'warning')
     },
+
   },
 }
 </script>

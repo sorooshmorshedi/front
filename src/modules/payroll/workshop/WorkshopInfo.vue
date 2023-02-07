@@ -863,7 +863,7 @@ export default {
         if (this.getAllMonth) {
           this.months = []
         } else {
-          this.months = this.MONTHS.slice()
+          this.months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
         }
       })
     },
@@ -882,6 +882,7 @@ export default {
     reportAbsence() {
       let selected_months = this.months.sort()
       for( let month in selected_months ){
+        console.log(selected_months[month])
         this.months_string += selected_months[month]
       }
       this.report_url= 'payroll/absence/report/' + this.year + '/' + this.months_string + '/'
@@ -912,6 +913,7 @@ export default {
     },
 
     reportHagheSanavat() {
+      console.log(' okeye ??')
       let selected_months = this.months.sort()
       for( let month in selected_months ){
         this.months_string += selected_months[month]
