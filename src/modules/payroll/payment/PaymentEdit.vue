@@ -128,12 +128,33 @@
           <tr v-for="person in payList" :key="person.id" class="ma-2 pa-2">
             <td class="text-center pb-5 pt-5">
               <v-switch
+                  v-if="!items[person.id]['notice']"
                   color="green"
                   background-color="rey lighten-4"
                   :false-value="false"
                   :true-value="true"
                   v-model="items[person.id]['is_in']"
               ></v-switch>
+              <v-tooltip top color="red">
+                <template v-slot:activator="{ on, attrs }">
+                <v-avatar
+                    v-bind="attrs"
+                    v-on="on"
+
+                    v-if="items[person.id]['notice']"
+                  color="red"
+                  size="40"
+              >
+                <v-icon dark>
+                  fa-exclamation
+                </v-icon>
+
+              </v-avatar>
+                </template>
+                <span>با توجه به این که پرسنل مشمول پایه سنوات شده، برای محاسبه حقوق برای این پرسنل، حکم جدید صادر کنید</span>
+              </v-tooltip>
+
+
             </td>
             <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
             <td>
@@ -942,9 +963,13 @@ export default {
     },
     getList() {
       for (let item in this.payList) {
+        if (this.payList[item].get_sanavat_notice == true) {
+          var is_in = false
+        } else {var is_in = true}
         this.$set(this.items, this.payList[item].id, {
-          'is_in': true,
+          'is_in': is_in,
           'id': this.payList[item].id,
+          'notice': this.payList[item].get_sanavat_notice,
           'ezafe_kari': this.payList[item].get_ezafe_kari_time,
           'tatil_kari': this.payList[item].get_tatil_kari_time,
           'kasre_kar': this.payList[item].get_kasre_kar_time,

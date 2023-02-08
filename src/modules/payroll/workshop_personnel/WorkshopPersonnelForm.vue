@@ -80,7 +80,7 @@
                     item-text="name"
                     item-value="id"
                     :disabled="!isEditing || item.quit_job"
-                    @change="setValues(item.personnel)"
+                    @change="setValues(item.personnel) ; item.save_leave_limit = 26"
 
                 />
               </v-col>
