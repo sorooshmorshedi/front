@@ -1224,6 +1224,7 @@ export default {
           method: "put",
           data: {
             'is_in': this.items[payitem]['is_in'],
+            'notice': this.items[payitem]['notice'],
             'ezafe_kari': this.items[payitem]['ezafe_kari'],
             'tatil_kari': this.items[payitem]['tatil_kari'],
             'kasre_kar': this.items[payitem]['kasre_kar'],
