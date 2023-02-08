@@ -475,6 +475,11 @@ export default {
     headers() {
       return [
         {
+          text: "تایید پایه سنوات",
+          value: "get_sanavat_verify",
+          type: 'boolean',
+        },
+        {
           text: "پرسنل در کارگاه",
           value: "personnel_name",
         },
