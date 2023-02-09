@@ -869,7 +869,7 @@
                 <tr class="text-center">
                   <th class="text-center"> جمع کل دستمزد و مزایای ماهانه</th>
                   <td>
-                    <money v-model="list_of_pay_item.total_payment" disabled="true"></money>
+                    <money v-model="list_of_pay_item.insurance_total_payment" disabled="true"></money>
                   </td>
                 </tr>
                 <tr class="text-center">
