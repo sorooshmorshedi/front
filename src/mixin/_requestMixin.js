@@ -30,7 +30,6 @@ export default {
                            force = false,
                            callback = null,
                        }) {
-
             let storeData = this.$store.state[storeKey]
             if (!force && storeData.length) return;
             if (!this.canGet(storeKey)) return;
