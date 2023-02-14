@@ -21,10 +21,10 @@
       <span class="subheading mr-2 ml-2 "> ماه : {{ list_of_pay.month_name }}</span>
       <v-divider class="mr-2 ml-2" vertical></v-divider>
       <v-spacer></v-spacer>
-      <v-btn v-if="!list_of_pay.pay_done" @click="goPay()" color="green darken-1" class=" white--text pl-10 pr-10"
+      <v-btn v-if="list_of_pay.ultimate && !list_of_pay.pay_done" @click="goPay()" color="green darken-1" class=" white--text pl-10 pr-10"
              large> پرداخت حقوق
       </v-btn>
-      <v-btn v-if="list_of_pay.pay_done" @click="goPay()" color="blue darken-3" class=" white--text pl-10 pr-10"
+      <v-btn v-if="list_of_pay.ultimate && list_of_pay.pay_done" @click="goPay()" color="blue darken-3" class=" white--text pl-10 pr-10"
              large>نمایش حقوق پرداخت شده
       </v-btn>
 
@@ -202,9 +202,13 @@
             توجه!
           </v-card-title>
           <v-card-text>
-            <span v-if="!list_of_pay.ultimate">برای نهایی کردن یا تغییر لیست نباید لیست دیگری از ماه های بعد نهایی باشد</span>
-            <br/>
-            ابتدا تمام لیست های حقوق مربوط به ماه های بعد امسال را غیر نهایی کنید
+            <span v-if="list_of_pay.bank_pay_date" class="mt-3 mr-5"> برای این لیست پرداخت حقوق ثبت شده</span>
+            <div v-if="!list_of_pay.bank_pay_date">
+              <span v-if="!list_of_pay.ultimate">برای نهایی کردن یا تغییر لیست نباید لیست دیگری از ماه های بعد نهایی باشد</span>
+              <br/>
+              ابتدا تمام لیست های حقوق مربوط به ماه های بعد امسال را غیر نهایی کنید
+
+            </div>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>

@@ -4,7 +4,7 @@
       <v-col cols="12" md="6">
         <v-card></v-card>
         <m-form
-            title="ثبت وام یا مساعده"
+            :title="my_title"
             :showList="false"
             :listRoute="{name:'LoanList'}"
             :exportBaseUrl="exportUrl"
@@ -25,10 +25,14 @@
             <v-row>
             <v-col cols="12" md="6"></v-col>
               <v-col  cols="12" md="6" v-if="item.id && item.is_verified">
-                <v-btn left v-if="is_req" class="white--text ma-2 " color="orange" @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
-                <v-btn left v-if="!is_req" class="ma-2 " @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
-                <v-btn left v-if="is_item" class="white--text ma-2 pl-10 pr-10" color="orange" @click="change_export_item(item)">جدول وام</v-btn>
-                <v-btn left v-if="!is_item" class="ma-2 pl-10 pr-10" @click="change_export_item(item)">جدول وام</v-btn>
+                <v-btn left v-if="item.loan_type == 'd' && is_req" class="white--text ma-2 " color="orange" @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
+                <v-btn left v-if="item.loan_type == 'd' && !is_req" class="ma-2 " @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
+                <v-btn left v-if="item.loan_type != 'd' && is_req" class="white--text ma-2 " color="orange" @click="change_export_req(item)">فرم درخواست وام</v-btn>
+                <v-btn left v-if="item.loan_type != 'd' && !is_req" class="ma-2 " @click="change_export_req(item)">فرم درخواست وام</v-btn>
+                <v-btn left v-if="item.loan_type == 'd' && is_item" class="white--text ma-2 pl-10 pr-10" color="orange" @click="change_export_item(item)">جدول مساعده</v-btn>
+                <v-btn left v-if="item.loan_type == 'd' && !is_item" class="ma-2 pl-10 pr-10" @click="change_export_item(item)">جدول مساعده</v-btn>
+                <v-btn left v-if="item.loan_type != 'd' && is_item" class="white--text ma-2 pl-10 pr-10" color="orange" @click="change_export_item(item)">جدول وام</v-btn>
+                <v-btn left v-if="item.loan_type != 'd' && !is_item" class="ma-2 pl-10 pr-10" @click="change_export_item(item)">جدول وام</v-btn>
               </v-col>
             </v-row>
             <v-row v-if="item.un_editable">
@@ -320,6 +324,7 @@ export default {
       workshops: [],
       hasIdProp: true,
       error_dialog: false,
+      my_title: 'ثبت وام یا مساعده',
       error_message: null,
       hasLock: false,
       isDefinable: false,
@@ -342,6 +347,13 @@ export default {
       this.first = true
       this.isEditing = false
     }
+    if (this.$refs.LoanForm.$props.items['loan_type'] == 'd') {
+      this.my_title = 'ثبت مساعده'
+    }
+    if (this.$refs.LoanForm.$props.items['loan_type'] == 'l') {
+      this.my_title = 'ثبت وام '
+    }
+
   },
 
   mounted() {
