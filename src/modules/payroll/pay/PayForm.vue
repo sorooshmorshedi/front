@@ -266,7 +266,7 @@
                color="green darken-1" class="white--text pl-4 pr-4 mb-8" large>
           ثبت
         </v-btn>
-        <v-btn v-if="!listOfPay.bank_pay_date" @click="dialog = true" color="blue darken-1"
+        <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount" @click="dialog = true" color="blue darken-1"
                class="white--text pl-4 pr-4 mb-8" large>
           ثبت نهایی پرداخت
         </v-btn>
