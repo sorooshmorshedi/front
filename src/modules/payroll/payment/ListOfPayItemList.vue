@@ -126,7 +126,20 @@
         <v-icon>fa-file-excel</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      گزارش بیمه :
+      گزارش بیمه ماه:
+      <v-btn
+          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+          rounded
+          title="فایل بیمه"
+          :href="this.endpoint(`payroll/diskette/insurance/workshopPerson/` + this.$route.params.id + '/' + '?token=' + this.token)"
+          icon
+
+      >
+        <v-icon>fa-file-download</v-icon>
+      </v-btn>
+
+      <v-spacer></v-spacer>
+      خلاصه گزارش بیمه ماه:
       <v-btn
           class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
           rounded

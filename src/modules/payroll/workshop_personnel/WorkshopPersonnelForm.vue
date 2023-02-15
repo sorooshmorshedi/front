@@ -753,11 +753,11 @@ export default {
 
     },
     balance(type) {
-      window.location.href = "http://127.0.0.1:7000/payroll/balance/html?id=" + this.$route.params.id + '&token=' +
+      window.location.href =  "http://188.121.108.201:40/payroll/balance/html?id=" + this.$route.params.id + '&token=' +
           this.token
     },
     settlement(type) {
-      window.location.href = "http://127.0.0.1:7000/payroll/settlement/" + this.$route.params.id + '/?token=' +
+      window.location.href = "http://188.121.108.201:40/payroll/settlement/" + this.$route.params.id + '/?token=' +
           this.token
     },
     verifyPersonnel(id) {
