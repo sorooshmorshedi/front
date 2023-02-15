@@ -39,6 +39,7 @@ import DeductionTemplate from "@/modules/payroll/deduction/Template";
 import PayForm from "@/modules/payroll/pay/PayForm";
 import ListOfPayItemForm from "@/modules/payroll/payment/ListOfPayItemForm";
 import adjustmentList from "@/modules/payroll/contract_row/AdjustmentList";
+import PayList from "@/modules/payroll/pay/PayList";
 import contractRowAdjustment from "@/modules/payroll/contract_row/ContractRowAdjustment";
 
 const Workshop = () => import( /* wepackChunkName: "workshop" */ "@/modules/payroll/workshop/WorkshopForm.vue")
@@ -471,6 +472,11 @@ export default [
         name: 'DeductionTemplateList',
         path: 'deductionTemplate/list',
         component: DeductionTemplateList,
+    },
+    {
+        name: 'PayList',
+        path: 'payList',
+        component: PayList,
     },
 
 

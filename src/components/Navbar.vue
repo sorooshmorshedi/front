@@ -2013,6 +2013,12 @@ export default {
                 },
                 {
                   to: {
+                    name: "PayList",
+                  },
+                  title: "لیست پرداخت",
+                },
+                {
+                  to: {
                     name: "Loan",
                   },
                   title: "مساعده یا وام",

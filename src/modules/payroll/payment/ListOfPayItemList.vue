@@ -21,11 +21,21 @@
       <span class="subheading mr-2 ml-2 "> ماه : {{ list_of_pay.month_name }}</span>
       <v-divider class="mr-2 ml-2" vertical></v-divider>
       <v-spacer></v-spacer>
-      <v-btn v-if="list_of_pay.ultimate && !list_of_pay.pay_done" @click="goPay()" color="green darken-1" class=" white--text pl-10 pr-10"
+      <v-btn v-if="list_of_pay.ultimate && !list_of_pay.pay_done" @click="goPay()" color="green darken-1" class=" white--text pl-10 pr-10 ml-16"
              large> پرداخت حقوق
       </v-btn>
-      <v-btn v-if="list_of_pay.ultimate && list_of_pay.pay_done" @click="goPay()" color="blue darken-3" class=" white--text pl-10 pr-10"
-             large>نمایش حقوق پرداخت شده
+      <v-btn v-if="list_of_pay.ultimate && list_of_pay.pay_done" @click="goPay()" color="blue darken-2" class=" white--text pl-10 pr-10 ml-16"
+             large>پرداخت حقوق
+      </v-btn>
+      <v-btn
+          small
+          class="light-blue white--text ml-2 mt-1 mt-md-0"
+          icon
+          @click="goToList"
+          outlined
+          title="لیست"
+      >
+        <v-icon>fa-th-list</v-icon>
       </v-btn>
 
     </v-toolbar>
@@ -670,6 +680,9 @@ export default {
       this.export_url = 'payroll/month/tax'
       this.$refs.exportTable.exportTo(type)
 
+    },
+    goToList() {
+      this.$router.push('/panel/ListOfPay')
     },
     UltimateList() {
       this.request({

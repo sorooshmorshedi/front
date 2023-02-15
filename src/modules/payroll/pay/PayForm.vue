@@ -49,7 +49,7 @@
       <v-btn
           v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
           small
-          class="export-btn grey--text  text--darken-3 ml-1  mt-1 mt-md-0"
+          class="export-btn grey--text  text--darken-3 ml-16  mt-1 mt-md-0"
           @click="printReport('xlsx')"
           title="اکسل"
           icon
@@ -84,7 +84,7 @@
       <v-btn
           v-if="!listOfPay.bank_pay_date && listOfPay.pay_done"
           small
-          class="export-btn grey--text  text--darken-3 ml-1  mt-1 mt-md-0"
+          class="export-btn grey--text  text--darken-3 ml-16  mt-1 mt-md-0"
           @click="printBankReport('xlsx')"
           title="اکسل"
           icon
@@ -92,6 +92,16 @@
         <v-icon>fa-file-excel</v-icon>
       </v-btn>
 
+      <v-btn
+          small
+          class="light-blue white--text ml-2 mt-1 mt-md-0"
+          icon
+          @click="goToList"
+          outlined
+          title="لیست"
+      >
+        <v-icon>fa-th-list</v-icon>
+      </v-btn>
 
     </v-toolbar>
     <v-row v-if="listOfPay.bank_pay_date && listOfPay.pay_done" class="mt-5  ml-5 mr-5">
@@ -151,13 +161,22 @@
               {{ item.personnel_name }}
             </td>
             <td class="text-center">
-              {{ item.unpaid_of_year }}
+              <money
+                  v-model="item.unpaid_of_year "
+                  disabled="true"
+              ></money>
             </td>
             <td class="text-center">
-              {{ item.payable_amout }}
+              <money
+                  v-model="item.payable_amout "
+                  disabled="true"
+              ></money>
             </td>
             <td class="text-center">
-              {{ item.get_total_unpaid }}
+              <money
+                  v-model="item.get_total_unpaid "
+                  disabled="true"
+              ></money>
             </td>
             <td class="text-center">
               <money
@@ -205,7 +224,7 @@
             جمع حقوق قابل پرداخت تا ماه
           </th>
           <th class="text-center">
-            مبلغ حقوق پرداخت
+            مبلغ حقوق پرداختی
           </th>
           <th class="text-center" v-if="!edit_amount">
             حقوق پرداخت نشده
@@ -217,26 +236,78 @@
               {{ item.personnel_name }}
             </td>
             <td class="text-center">
-              {{ item.unpaid_of_year }}
+              <money
+                  v-model="item.unpaid_of_year "
+                  disabled="true"
+              ></money>
             </td>
             <td class="text-center">
-              {{ item.payable_amout }}
+              <money
+                  v-model="item.payable_amout "
+                  disabled="true"
+              ></money>
             </td>
             <td class="text-center">
-              {{ item.get_total_unpaid }}
+              <money
+                  v-model="item.get_total_unpaid "
+                  disabled="true"
+              ></money>
             </td>
-            <td class="text-center" v-if="!edit_amount">
-              {{ item.paid_amount }}
-            </td>
-            <td class="text-center" v-if="edit_amount">
+            <td class="text-center" v-if="edit_amount" >
               <money
                   v-model="items[item.id]['pay_amount'] "
                   @change="updateUnpaid(item.id)"
+                  :disabled="!edit_amount"
+              ></money>
+            </td>
+            <td class="text-center" v-if="!edit_amount" >
+              <money
+                  v-model="item.paid_amount "
+                  :disabled="true"
               ></money>
             </td>
             <td class="text-center" v-if="!edit_amount">
-              {{ item.get_unpaid }}
+              <money
+                  v-model="item.get_unpaid "
+                  disabled="true"
+              ></money>
             </td>
+          </tr>
+          <tr class="green lighten-4" v-if="!edit_amount">
+            <td class="text-center green--text text--darken-3">
+              جمع
+            </td>
+            <td class="text-center">
+              <money
+                  v-model="listOfPay.get_total_un_paid_of_year "
+                  disabled="true"
+              ></money>
+            </td>
+            <td class="text-center">
+              <money
+                  v-model="listOfPay.get_total_payable "
+                  disabled="true"
+              ></money>
+            </td>
+            <td class="text-center">
+              <money
+                  v-model="listOfPay.get_total_un_paid "
+                  disabled="true"
+              ></money>
+            </td>
+            <td class="text-center" v-if="!edit_amount">
+              <money
+                  v-model="listOfPay.get_total_paid "
+                  disabled="true"
+              ></money>
+            </td>
+            <td class="text-center" v-if="!edit_amount">
+              <money
+                  v-model="listOfPay.get_un_paid "
+                  disabled="true"
+              ></money>
+            </td>
+
           </tr>
 
 
@@ -266,7 +337,11 @@
                color="green darken-1" class="white--text pl-4 pr-4 mb-8" large>
           ثبت
         </v-btn>
-        <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount" @click="dialog = true" color="blue darken-1"
+        <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount && !listOfPay.get_not_done_pay" @click="not_verify_dialog = true" color="blue darken-1"
+               class="white--text pl-4 pr-4 mb-8" large>
+          ثبت نهایی پرداخت
+        </v-btn>
+        <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount && listOfPay.get_not_done_pay" @click="dialog = true" color="blue darken-1"
                class="white--text pl-4 pr-4 mb-8" large>
           ثبت نهایی پرداخت
         </v-btn>
@@ -367,6 +442,33 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <v-row justify="center">
+      <v-dialog
+          v-model="not_verify_dialog"
+          persistent
+          @click:outside="not_verify_dialog=false"
+          max-width="500"
+      >
+        <v-card>
+          <v-card-title class="red--text text-h5">
+            توجه!
+          </v-card-title>
+          <v-card-text>
+            ابتدا تمام پرداخت های باز ماه های قبل را نهایی کنید
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="red darken-1"
+                text
+                @click="not_verify_dialog = false"
+            >
+              بستن
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
 
   </v-card>
@@ -431,6 +533,7 @@ export default {
       my_list: null,
       edit_amount: false,
       dialog: false,
+      not_verify_dialog: false,
       un_accept_dialog: false,
       list_of: null,
       listOfPay: null,
@@ -443,9 +546,8 @@ export default {
       url: this.endpoint(`payroll/listOfPay/pay/` + this.$route.params.id + '/'),
       method: "get",
       success: data => {
-        console.log(data);
         this.listOfPay = data
-        console.log(data);
+        console.log(this.listOfPay);
 
         this.listOfPayItem = data.list_of_pay_item
         this.bank_pay_date = data.bank_pay_date
@@ -573,6 +675,9 @@ export default {
       this.export_filter = {id: this.$route.params.id}
       this.export_url = "payroll/bankReport"
       this.$refs.exportTable.exportTo(type)
+    },
+    goToList() {
+      this.$router.push('/panel/payList')
     },
     NumbersOnly(evt) {
       evt = (evt) ? evt : window.event;
