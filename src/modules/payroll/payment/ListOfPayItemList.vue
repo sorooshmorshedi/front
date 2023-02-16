@@ -133,9 +133,36 @@
           title="فایل بیمه"
           :href="this.endpoint(`payroll/diskette/insurance/workshopPerson/` + this.$route.params.id + '/' + '?token=' + this.token)"
           icon
-
       >
         <v-icon>fa-file-download</v-icon>
+      </v-btn>
+      <v-btn
+          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+          rounded
+          title="چاپ"
+          icon
+          @click="printCardex('html')"
+      >
+        <v-icon>fa-print</v-icon>
+      </v-btn>
+      <v-btn
+          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+          rounded
+          title="PDF"
+          @click="printCardex('pdf')"
+          icon
+
+      >
+        <v-icon>fa-file-pdf</v-icon>
+      </v-btn>
+      <v-btn
+          small
+          class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+          @click="printCardex('xlsx')"
+          title="اکسل"
+          icon
+      >
+        <v-icon>fa-file-excel</v-icon>
       </v-btn>
 
       <v-spacer></v-spacer>
@@ -691,6 +718,12 @@ export default {
     printTaxWorkshop(type) {
       this.export_filter = {id: this.$route.params.id}
       this.export_url = 'payroll/month/tax'
+      this.$refs.exportTable.exportTo(type)
+
+    },
+    printCardex(type) {
+      this.export_filter = {id: this.$route.params.id}
+      this.export_url = 'payroll/insuranceCardex'
       this.$refs.exportTable.exportTo(type)
 
     },

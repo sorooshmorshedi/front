@@ -43,7 +43,7 @@ export default {
           value: "month_name",
         },
         {
-          text: "تاریخ ایچاد",
+          text: "تاریخ ایجاد",
           value: "pay_form_create_date",
         },
         {
@@ -51,13 +51,13 @@ export default {
           value: "bank_pay_date",
         },
         {
-          text: "چمع پرداختی",
+          text: "جمع پرداختی",
           value: "get_total_paid",
           type: 'numeric',
           filterable: false
         },
         {
-          text: "چمع باقیمانده",
+          text: "جمع باقیمانده",
           value: "get_un_paid",
           type: 'numeric',
           filterable: false
