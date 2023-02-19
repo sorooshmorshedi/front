@@ -21,10 +21,10 @@
       <span class="subheading mr-2 ml-2 "> ماه : {{ list_of_pay.month_name }}</span>
       <v-divider class="mr-2 ml-2" vertical></v-divider>
       <v-spacer></v-spacer>
-      <v-btn v-if="list_of_pay.ultimate && !list_of_pay.pay_done || !list_of_pay.bank_pay_date" @click="goPay()" color="green darken-1" class=" white--text pl-10 pr-10 ml-16"
+      <v-btn v-if="list_of_pay.ultimate && !list_of_pay.bank_pay_date" @click="goPay()" color="green darken-1" class=" white--text pl-10 pr-10 ml-16"
              large> پرداخت حقوق
       </v-btn>
-      <v-btn v-if="list_of_pay.ultimate && list_of_pay.pay_done && list_of_pay.bank_pay_date" @click="goPay()" color="blue darken-2" class=" white--text pl-10 pr-10 ml-16"
+      <v-btn v-if="list_of_pay.ultimate && list_of_pay.bank_pay_date" @click="goPay()" color="blue darken-2" class=" white--text pl-10 pr-10 ml-16"
              large>مشاهده حقوق پرداختی
       </v-btn>
       <v-btn

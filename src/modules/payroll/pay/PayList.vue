@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       url: "payroll/pay/all",
-      filters: {},
+      filters: {'pay_done': true},
     };
   },
   computed: {
@@ -49,6 +49,12 @@ export default {
         {
           text: "تاریخ پرداخت بانک",
           value: "bank_pay_date",
+        },
+        {
+          text: "جمع قابل پرداخت تا این ماه",
+          value: "get_total_payable",
+          type: 'numeric',
+          filterable: false
         },
         {
           text: "جمع پرداختی",
