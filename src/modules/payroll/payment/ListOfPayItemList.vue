@@ -21,26 +21,6 @@
       <span class="subheading mr-2 ml-2 "> ماه : {{ list_of_pay.month_name }}</span>
       <v-divider class="mr-2 ml-2" vertical></v-divider>
       <v-spacer></v-spacer>
-      <v-btn v-if="list_of_pay.ultimate && !list_of_pay.bank_pay_date" @click="goPay()" color="green darken-1" class=" white--text pl-10 pr-10 ml-16"
-             large> پرداخت حقوق
-      </v-btn>
-      <v-btn v-if="list_of_pay.ultimate && list_of_pay.bank_pay_date" @click="goPay()" color="blue darken-2" class=" white--text pl-10 pr-10 ml-16"
-             large>مشاهده حقوق پرداختی
-      </v-btn>
-      <v-btn
-          small
-          class="light-blue white--text ml-2 mt-1 mt-md-0"
-          icon
-          @click="goToList"
-          outlined
-          title="لیست"
-      >
-        <v-icon>fa-th-list</v-icon>
-      </v-btn>
-
-    </v-toolbar>
-    <v-toolbar color="indigo darken-3" class="white--text pl-10 pr-10 ml-5 mt-1 mr-5 rounded">
-      حقوق و دستمزد جامع :
       <v-btn
           class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
           rounded
@@ -70,139 +50,27 @@
         <v-icon>fa-file-excel</v-icon>
       </v-btn>
 
-      <v-spacer></v-spacer>
-      گزارش مالیات ماه :
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="فایل مالیات"
-          :href="this.endpoint(`payroll/diskette/tax/` + this.$route.params.id + '/' + '?token=' + this.token)"
-          icon
-
-      >
-        <v-icon>fa-file-download</v-icon>
-      </v-btn>
-
-
-      <v-spacer></v-spacer>
-
-      گزارش خلاصه مالیات ماه :
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="فایل مالیات"
-          :href="this.endpoint(`payroll/diskette/tax/summary/` + this.$route.params.id + '/' + '?token=' + this.token)"
-          icon
-
-      >
-        <v-icon>fa-file-download</v-icon>
-      </v-btn>
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="چاپ"
-          icon
-          @click="printTaxWorkshop('html')"
-      >
-        <v-icon>fa-print</v-icon>
-      </v-btn>
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="PDF"
-          @click="printTaxWorkshop('pdf')"
-          icon
-
-      >
-        <v-icon>fa-file-pdf</v-icon>
-      </v-btn>
       <v-btn
           small
-          class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-          @click="printTaxWorkshop('xlsx')"
-          title="اکسل"
+          class="light-blue white--text ml-2 mr-3 mt-1 mt-md-0"
           icon
+          @click="goToList"
+          outlined
+          title="لیست"
       >
-        <v-icon>fa-file-excel</v-icon>
+        <v-icon>fa-th-list</v-icon>
       </v-btn>
+    </v-toolbar>
+    <v-toolbar color="indigo darken-3" class="white--text   ml-5 mt-1 mr-5 rounded">
       <v-spacer></v-spacer>
-      گزارش بیمه ماه:
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="فایل بیمه"
-          :href="this.endpoint(`payroll/diskette/insurance/workshopPerson/` + this.$route.params.id + '/' + '?token=' + this.token)"
-          icon
-      >
-        <v-icon>fa-file-download</v-icon>
+      <v-btn v-if="list_of_pay.ultimate" @click="goReport()" color="primary darken-1" class=" white--text ml-4"
+             large>گزارش بیمه و مالیات
       </v-btn>
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="چاپ"
-          icon
-          @click="printCardex('html')"
-      >
-        <v-icon>fa-print</v-icon>
+      <v-btn v-if="list_of_pay.ultimate && !list_of_pay.bank_pay_date" @click="goPay()" color="green darken-1" class=" white--text"
+             large> پرداخت حقوق
       </v-btn>
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="PDF"
-          @click="printCardex('pdf')"
-          icon
-
-      >
-        <v-icon>fa-file-pdf</v-icon>
-      </v-btn>
-      <v-btn
-          small
-          class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-          @click="printCardex('xlsx')"
-          title="اکسل"
-          icon
-      >
-        <v-icon>fa-file-excel</v-icon>
-      </v-btn>
-
-      <v-spacer></v-spacer>
-      خلاصه گزارش بیمه ماه:
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="فایل بیمه"
-          :href="this.endpoint(`payroll/diskette/insurance/` + this.$route.params.id + '/' + '?token=' + this.token)"
-          icon
-      >
-        <v-icon>fa-file-download</v-icon>
-      </v-btn>
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="چاپ"
-          icon
-          @click="printInsurance('html')"
-      >
-        <v-icon>fa-print</v-icon>
-      </v-btn>
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="PDF"
-          @click="printInsurance('pdf')"
-          icon
-
-      >
-        <v-icon>fa-file-pdf</v-icon>
-      </v-btn>
-      <v-btn
-          small
-          class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-          @click="printInsurance('xlsx')"
-          title="اکسل"
-          icon
-      >
-        <v-icon>fa-file-excel</v-icon>
+      <v-btn v-if="list_of_pay.ultimate && list_of_pay.bank_pay_date" @click="goPay()" color="blue darken-2" class=" white--text"
+             large>مشاهده حقوق پرداختی
       </v-btn>
 
     </v-toolbar>
@@ -374,13 +242,129 @@
     <v-card-actions class="justify-end mt-4">
     </v-card-actions>
     <v-card-text>
-      <m-datatable :headers="headers" e :exportUrl="exportUrl" :apiUrl="url" :filters.sync="filters"
+      <m-datatable  :headers="headers" e :exportUrl="exportUrl" :apiUrl="url" :filters.sync="filters"
                    :show-export-btns="false" @dblclick:row="(e, row) => $router.push(to(row.item))"
                    ref="datatable">
         <template #item.detail="{ item }">
           <detail-link :to="to(item)"/>
         </template>
       </m-datatable>
+      <v-simple-table class="ma-3 border_all " dense>
+        <thead class="indigo darken-2 white--text">
+        <tr>
+          <th class="white--text pa-1">
+
+          </th>
+          <th class="white--text pa-1">
+            کارکرد عادی
+          </th>
+          <th class="white--text pa-1">
+            کارکرد واقعی
+          </th>
+          <th class="white--text pa-1">
+            حقوق پایه ماهانه
+          </th>
+          <th class="white--text pa-1">
+            پایه سنوات ماهانه
+          </th>
+          <th class="white--text pa-1">
+            اضافه کاری
+          </th>
+          <th class="white--text pa-1">
+            تعطیل کاری
+          </th>
+          <th class="white--text pa-1">
+            شب کاری
+          </th>
+          <th class="white--text pa-1">
+            ماموریت
+          </th>
+          <th class="white--text pa-1">
+            حق اولاد
+          </th>
+          <th class="white--text pa-1">
+            حق مسکن
+          </th>
+          <th class="white--text pa-1">
+            حق جذب
+          </th>
+          <th class="white--text pa-1">
+            بن خاروبار
+          </th>
+          <th class="white--text pa-1">
+            جمع سایر مزایای حکمی
+          </th>
+          <th class="white--text pa-1">
+            حق سنوات
+          </th>
+          <th class="white--text pa-1">
+            عیدی و پاداش
+          </th>
+          <th class="white--text pa-1">
+            سایر اضافات
+          </th>
+          <th class="white--text pa-1">
+            حقوق مزایای کل ماهانه
+          </th>
+          <th class="white--text pa-1">
+            حق بیمه سهم بیمه شده
+          </th>
+          <th class="white--text pa-1">
+            مالیات حقوق
+          </th>
+          <th class="white--text pa-1">
+            بدهی مساعده
+          </th>
+          <th class="white--text pa-1">
+            بدهی وام
+          </th>
+          <th class="white--text pa-1">
+            بدهی غیره
+          </th>
+          <th class="white--text pa-1">
+            کسر کار
+          </th>
+          <th class="white--text pa-1">
+            سایر کسورات
+          </th>
+          <th class="white--text pa-1">
+            حقوق و دستمزد پرداختنی
+          </th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+          <td  class="text-center"> جمع</td>
+          <td> {{list_of_pay.get_total.normal_worktime}}</td>
+          <td> {{list_of_pay.get_total.real_worktime}}</td>
+          <td> {{list_of_pay.get_total.hoghoogh_mahane}}</td>
+          <td> {{list_of_pay.get_total.sanavat_mahane}}</td>
+          <td> {{list_of_pay.get_total.ezafe_kari_total}}</td>
+          <td> {{list_of_pay.get_total.tatil_kari_total}}</td>
+          <td> {{list_of_pay.get_total.shab_kari_total}}</td>
+          <td> {{list_of_pay.get_total.mission_total}}</td>
+          <td> {{list_of_pay.get_total.aele_mandi}}</td>
+          <td> {{list_of_pay.get_total.haghe_maskan}}</td>
+          <td> {{list_of_pay.get_total.haghe_jazb}}</td>
+          <td> {{list_of_pay.get_total.kharo_bar}}</td>
+          <td> {{list_of_pay.get_total.sayer_hr}}</td>
+          <td> {{list_of_pay.get_total.haghe_sanavat_total}}</td>
+          <td> {{list_of_pay.get_total.padash_total}}</td>
+          <td> {{list_of_pay.get_total.sayer_ezafat}}</td>
+          <td> {{list_of_pay.get_total.total_payment}}</td>
+          <td> {{list_of_pay.get_total.haghe_bime_bime_shavande}}</td>
+          <td> {{list_of_pay.get_total.total_tax}}</td>
+          <td> {{list_of_pay.get_total.dept_amount}}</td>
+          <td> {{list_of_pay.get_total.loan_amount}}</td>
+          <td> {{list_of_pay.get_total.check_and_get_optional_deduction_episode}}</td>
+          <td> {{list_of_pay.get_total.kasre_kar_total}}</td>
+          <td> {{list_of_pay.get_total.sayer_kosoorat}}</td>
+          <td> {{list_of_pay.get_total.payable}}</td>
+        </tr>
+        </tbody>
+      </v-simple-table>
+
       <m-datatable v-show="false" :headers="headers" :apiUrl="url" :exportUrl="export_url" :filters.sync="export_filter"
                    ref="exportTable">
         <template #item.detail="{ item }">
@@ -512,6 +496,7 @@ export default {
       workshop_dialog: false,
       un_ultimate_dialog: false,
       list_of_pay: null,
+      list_of_pay_items: null,
       my_list: null,
     };
   },
@@ -520,8 +505,9 @@ export default {
       url: this.endpoint(`payroll/paylist/less/` + this.$route.params.id + '/'),
       method: "get",
       success: data => {
-        console.log('ok')
+        console.log(data.list_of_pay_item)
         this.list_of_pay = data
+        this.list_of_pay_items = data.list_of_pay_item
       }
     })
   },
@@ -701,6 +687,9 @@ export default {
     },
     goPay() {
       this.$router.push('/panel/pay/' + this.$route.params.id + '/')
+    },
+    goReport() {
+      this.$router.push('/panel/reportList/' + this.$route.params.id + '/')
     },
 
     printInsurance(type) {

@@ -194,7 +194,7 @@
               <money
 
                   v-model="items[item.id]['pay_amount'] "
-                  @change="updateUnpaid(item.id)"
+                  @keyup="updateUnpaid(item.id)"
               ></money>
             </td>
             <td class="text-center" v-if="item.get_total_unpaid <= 0">
@@ -263,7 +263,7 @@
             class="light-blue white--text pl-4 pr-4 mb-8  mr-2 float-left"
             large
             @click="$router.push('/panel/listOfPayItem/' + $route.params.id + '/')"
-        >بازگشت به لیست
+        > بازگشت به لیست حقوق
 
         </v-btn>
 
@@ -321,7 +321,7 @@
             <td class="text-center" v-if="edit_amount">
               <money
                   v-model="items[item.id]['pay_amount'] "
-                  @change="updateUnpaid(item.id)"
+                  @keyup="updateUnpaid(item.id)"
                   :disabled="item.get_total_unpaid <= 0"
               ></money>
             </td>
@@ -438,7 +438,7 @@
             class="light-blue white--text pl-4 pr-4 mb-8  mr-2 float-left"
             large
             @click="$router.push('/panel/listOfPayItem/' + $route.params.id + '/')"
-        >بازگشت به لیست
+        >بازگشت به لیست حقوق
 
         </v-btn>
 
