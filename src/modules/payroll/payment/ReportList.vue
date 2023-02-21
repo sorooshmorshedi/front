@@ -48,18 +48,104 @@
     >
       <template v-slot:default>
         <thead class="white--text style: indigo darken-2">
+        <th class="white--text text-center" colspan="5">گزارشات مالیات</th>
+
+        </thead>
+        <thead class="white--text style: indigo darken-2">
         <tr>
-          <th class="white--text text-center"> ردیف پیمان</th>
-          <th class="white--text text-center"> اطلاعات ماهانه کارگاه بیمه</th>
-          <th class="white--text text-center">اطلاعات ماهانه بیمه شدگان</th>
-          <th class="white--text text-center">خلاصه فهرست حقوق مالیات</th>
-          <th class="white--text text-center">ریز حقوق مالیات</th>
+          <th class="white--text text-center"> فایل اطلاعات ماهانه کارگاه </th>
+          <th class="white--text text-center"> فایل اطلاعات ماهانه کارگران</th>
+          <th class="white--text text-center"> گزارش ماهانه</th>
         </tr>
         </thead>
         <tbody class="">
         <tr>
-          <td class=" text-center pt-3"> کامل</td>
+
           <td class="pt-3 text-center">
+            <v-btn
+                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+                rounded
+                title="فایل مالیات"
+                :href="endpoint(`payroll/diskette/tax/summary/` + $route.params.id + '/' + '?token=' + token)"
+                icon
+
+            >
+              <v-icon>fa-file-download</v-icon>
+            </v-btn>
+          </td>
+
+          <td class="pt-3 text-center">
+            <v-btn
+                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+                rounded
+                title="فایل مالیات"
+                :href="endpoint(`payroll/diskette/tax/` + $route.params.id + '/' + '?token=' + token)"
+                icon
+
+            >
+              <v-icon>fa-file-download</v-icon>
+            </v-btn>
+          </td>
+
+          <td class="pt-2 text-center">
+            <v-btn
+                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+                rounded
+                title="چاپ"
+                icon
+                @click="printTaxCardex('html')"
+            >
+              <v-icon>fa-print</v-icon>
+            </v-btn>
+            <v-btn
+                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
+                rounded
+                title="PDF"
+                @click="printTaxCardex('pdf')"
+                icon
+
+            >
+              <v-icon>fa-file-pdf</v-icon>
+            </v-btn>
+            <v-btn
+                small
+                class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
+                @click="printTaxCardex('xlsx')"
+                title="اکسل"
+                icon
+            >
+              <v-icon>fa-file-excel</v-icon>
+            </v-btn>
+          </td>
+
+        </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
+
+
+    <v-simple-table
+        class="ma-5 "
+    >
+      <template v-slot:default>
+        <thead class="white--text style: indigo darken-2">
+        <th class="white--text text-center" colspan="5">گزارشات بیمه</th>
+
+        </thead>
+        <thead class="white--text style: indigo darken-2">
+        <tr>
+          <th class="white--text text-center"> کد کارگاه</th>
+          <th class="white--text text-center"> ردیف پیمان</th>
+          <th class="white--text text-center"> فایل اطلاعات ماهانه کارگاه </th>
+          <th class="white--text text-center"> فایل اطلاعات ماهانه بیمه شدگان</th>
+          <th class="white--text text-center"> گزارش ماهانه بیمه</th>
+        </tr>
+        </thead>
+        <tbody class="">
+        <tr>
+          <td class=" text-center pt-3"> {{list_of_pay.workshop_code}}</td>
+          <td class=" text-center pt-3"> </td>
+          <td class="pt-2 text-center">
             <v-btn
                 class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
                 rounded
@@ -69,36 +155,8 @@
             >
               <v-icon>fa-file-download</v-icon>
             </v-btn>
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="چاپ"
-                icon
-                @click="printInsurance('html')"
-            >
-              <v-icon>fa-print</v-icon>
-            </v-btn>
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="PDF"
-                @click="printInsurance('pdf')"
-                icon
-
-            >
-              <v-icon>fa-file-pdf</v-icon>
-            </v-btn>
-            <v-btn
-                small
-                class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-                @click="printInsurance('xlsx')"
-                title="اکسل"
-                icon
-            >
-              <v-icon>fa-file-excel</v-icon>
-            </v-btn>
           </td>
-          <td class="pt-3 text-center">
+          <td class="pt-2 text-center">
             <v-btn
                 class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
                 rounded
@@ -108,6 +166,9 @@
             >
               <v-icon>fa-file-download</v-icon>
             </v-btn>
+          </td>
+
+          <td class="pt-2 text-center">
             <v-btn
                 class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
                 rounded
@@ -136,68 +197,13 @@
             >
               <v-icon>fa-file-excel</v-icon>
             </v-btn>
-
-          </td>
-
-          <td class="pt-3 text-center">
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="فایل مالیات"
-                :href="endpoint(`payroll/diskette/tax/summary/` + $route.params.id + '/' + '?token=' + token)"
-                icon
-
-            >
-              <v-icon>fa-file-download</v-icon>
-            </v-btn>
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="چاپ"
-                icon
-                @click="printTaxWorkshop('html')"
-            >
-              <v-icon>fa-print</v-icon>
-            </v-btn>
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="PDF"
-                @click="printTaxWorkshop('pdf')"
-                icon
-
-            >
-              <v-icon>fa-file-pdf</v-icon>
-            </v-btn>
-            <v-btn
-                small
-                class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-                @click="printTaxWorkshop('xlsx')"
-                title="اکسل"
-                icon
-            >
-              <v-icon>fa-file-excel</v-icon>
-            </v-btn>
-
-          </td>
-
-          <td class="pt-3 text-center">
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="فایل مالیات"
-                :href="endpoint(`payroll/diskette/tax/` + $route.params.id + '/' + '?token=' + token)"
-                icon
-
-            >
-              <v-icon>fa-file-download</v-icon>
-            </v-btn>
           </td>
         </tr>
 
         <tr v-for="row in contract_row">
+          <td class=" text-center pt-3"> {{list_of_pay.workshop_code}}</td>
           <td class=" text-center pt-3"> {{ row.contract_row }}</td>
-          <td class="pt-3 text-center">
+          <td class="pt-2 text-center">
             <v-btn
                 class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
                 rounded
@@ -207,36 +213,8 @@
             >
               <v-icon>fa-file-download</v-icon>
             </v-btn>
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="چاپ"
-                icon
-                @click="printRowInsurance('html', row.id)"
-            >
-              <v-icon>fa-print</v-icon>
-            </v-btn>
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="PDF"
-                @click="printRowInsurance('pdf', row.id)"
-                icon
-
-            >
-              <v-icon>fa-file-pdf</v-icon>
-            </v-btn>
-            <v-btn
-                small
-                class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-                @click="printRowInsurance('xlsx', row.id)"
-                title="اکسل"
-                icon
-            >
-              <v-icon>fa-file-excel</v-icon>
-            </v-btn>
           </td>
-          <td class="pt-3 text-center">
+          <td class="pt-2 text-center">
             <v-btn
                 class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
                 rounded
@@ -246,6 +224,8 @@
             >
               <v-icon>fa-file-download</v-icon>
             </v-btn>
+          </td>
+          <td class="pt-2 text-center">
             <v-btn
                 class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
                 rounded
@@ -281,6 +261,9 @@
         </tbody>
       </template>
     </v-simple-table>
+
+
+
     <m-datatable v-show="false" :headers="headers" :apiUrl="url" :exportUrl="export_url" :filters.sync="export_filter"
                  ref="exportTable">
     </m-datatable>
@@ -373,9 +356,9 @@ export default {
       this.$refs.exportTable.exportTo(my_type)
     },
 
-    printTax(type) {
+    printTaxCardex(type) {
       this.export_filter = {id: this.$route.params.id}
-      this.export_url = 'payroll/tax/report'
+      this.export_url = 'payroll/tax/cardex'
       this.$refs.exportTable.exportTo(type)
 
     },
