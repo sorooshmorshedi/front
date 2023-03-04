@@ -1,7 +1,7 @@
 <template>
   <div class="text-center ltr" style="width: 100%">
-    <span class="mr-3">{{ systemBarDate }}</span>
-    <span>{{ systemBarTime}}</span>
+    <span class="mr-3 grey--text text--darken-3">{{ systemBarDate }}</span>
+    <span class="grey--text text--darken-3">{{ systemBarTime}}</span>
   </div>
 </template>
 
@@ -37,7 +37,7 @@ footer {
   // margin-top: 50px;
   height: 35px;
   bottom: 0px;
-  background-color: #eee;
+  background-color: #C2CEDB;
 
   padding: 6px 15px;
   border-top: 1px solid rgba(0, 0, 0, 0.28);

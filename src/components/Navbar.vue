@@ -28,7 +28,7 @@
 
     <navbar-list-item
         v-for="(route, i) in routes"
-        class="level-0"
+        class="level-0 mt-3"
         :key="i"
         :route="route"
         :level="1"

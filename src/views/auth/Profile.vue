@@ -1,17 +1,52 @@
 <template>
-  <v-row class="d-flex justify-center">
+  <v-row class="d-flex mr-5 ml-5">
+    <strong :style="{'color': '#080707'}" class="mr-5 mb-5">
+      حساب کاربری
+    </strong>
     <v-col cols="12">
-      <v-card>
-        <v-toolbar>
-          <v-toolbar-title>تنظیمات کاربری</v-toolbar-title>
-        </v-toolbar>
-        <v-tabs vertical v-model="openTab">
+      <v-card class="rounded-lg pt-4 pb-4" :style="'border: 1px solid white;'">
+        <v-row class="mr-1 ml-1">
+          <v-col cols="12" md="1" class=" justify-sm-center pr-4">
+            <v-img
+                contain
+                max-height="134"
+                max-width="134"
+                src="/img/user.png"
+            />
+          </v-col>
+          <v-col cols="12" md="3" class="mt-6  justify-start">
+            <v-row>
+              <strong :style="{'color': '#080707'}" class="mr-5 mb-5">
+                {{ user.name }}
+              </strong>
+            </v-row>
+            <v-row>
+            <span :style="{'color': '#080707'}" class="mr-5 mb-5">
+            ماژول حسابداری , خزانه داری
+            </span>
+            </v-row>
+          </v-col>
+          <v-col cols="12" md="8" class="mt-4 d-flex justify-end">
+            <v-chip
+                class="mt-5 ml-2"
+                color="success"
+                variant="outlined"
+            >
+              <v-icon class="ml-2" start> fa-certificate</v-icon>
+              وضعیت ماژول فعال
+            </v-chip>
+
+          </v-col>
+        </v-row>
+      </v-card>
+      <v-card class="rounded-lg mt-7 pt-4 pb-4" :style="'border: 1px solid white;'">
+        <v-tabs v-model="openTab" class="mr-10" color="#019EF6">
           <v-tab>
-            <v-icon class="ml-4">fa-user</v-icon>
+            <v-icon class="ml-4">fa-user-secret</v-icon>
             <span>مشخصات کاربری</span>
           </v-tab>
           <v-tab>
-            <v-icon class="ml-4">fa-key</v-icon>
+            <v-icon class="ml-4">fa-unlock-alt</v-icon>
             <span>تغییر کلمه عبور</span>
           </v-tab>
           <v-tab>
@@ -22,43 +57,46 @@
             <v-icon class="ml-4">fa-shield-alt</v-icon>
             <span class>ورود دوعاملی</span>
           </v-tab>
-
           <v-tab-item>
-            <v-card flat>
+            <v-card flat class="mt-5 ml-10" :style="'border: 1px solid white;'">
               <v-card-text>
                 <v-form ref="form">
                   <v-row>
                     <v-col cols="12" md="6">
                       <v-text-field
-                        label=" * نام"
-                        v-model="item.first_name"
-                        :disabled="!isEditing"
-                        :rules="rules.required"
-                        :hide-details="false"
+                          class="rounded-lg"
+                          label=" * نام"
+                          v-model="item.first_name"
+                          :disabled="!isEditing"
+                          :rules="rules.required"
+                          :hide-details="false"
                       />
                     </v-col>
                     <v-col cols="12" md="6">
                       <v-text-field
-                        label="* نام خانوادگی"
-                        v-model="item.last_name"
-                        :disabled="!isEditing"
-                        :rules="rules.required"
-                        :hide-details="false"
+                          class="rounded-lg"
+                          label="* نام خانوادگی"
+                          v-model="item.last_name"
+                          :disabled="!isEditing"
+                          :rules="rules.required"
+                          :hide-details="false"
                       />
                     </v-col>
 
                     <v-col cols="12" md="6">
-                      <m-phone-field
-                        label="* شماره موبایل "
-                        v-model="item.phone"
-                        :disabled="true"
+                      <mobile
+                          class="rounded-lg"
+                          label="* شماره موبایل "
+                          v-model="item.phone"
+                          :disabled="true"
                       />
                     </v-col>
                     <v-col cols="12" md="6">
                       <m-national-code
-                        label="* کد ملی "
-                        v-model="item.username"
-                        :disabled="true"
+                          class="rounded-lg"
+                          label="* کد ملی "
+                          v-model="item.username"
+                          :disabled="true"
                       />
                     </v-col>
                   </v-row>
@@ -67,57 +105,63 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  @click="openChangePhoneDialog"
-                  color="light-blue white--text"
-                  >تغییر شماره موبایل</v-btn
-                >
+                    depressed
+                    @click="openChangePhoneDialog"
+                    color="back secondary--text"
+                >تغییر شماره موبایل
+                </v-btn>
                 <template v-if="!isEditing">
-                  <v-btn @click="isEditing = true" class="amber w-100px"
-                    >ویرایش</v-btn
+                  <v-btn depressed @click="isEditing = true" class="primary white--text w-100px"
+                  >ویرایش
+                  </v-btn
                   >
                 </template>
                 <template v-else>
-                  <v-btn @click="updateProfile" color="blue white--text w-100px"
-                    >ثبت</v-btn
+                  <v-btn depressed @click="updateProfile" color="success white--text w-100px"
+                  >ثبت
+                  </v-btn
                   >
                 </template>
               </v-card-actions>
             </v-card>
           </v-tab-item>
-
           <v-tab-item>
-            <v-card flat>
+            <v-card flat class="mt-5 ml-10" :style="'border: 1px solid white;'">
               <v-card-text>
                 <v-form ref="changePasswordForm">
                   <v-row>
-                    <v-col cols="12" md="12">
+                    <v-col cols="12" md="4">
                       <v-text-field
-                        class="text-field-ltr"
-                        label=" * کلمه عبور فعلی"
-                        type="password"
-                        v-model="oldPassword"
-                        :rules="rules.required"
-                        :hide-details="false"
+                          class="text-field-ltr rounded-lg"
+                          label=" * کلمه عبور فعلی"
+                          type="password"
+                          v-model="oldPassword"
+                          :rules="rules.required"
+                          :hide-details="false"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col cols="12" md="4">
                       <v-text-field
-                        class="text-field-ltr"
-                        label=" * کلمه عبور جدید"
-                        type="password"
-                        v-model="newPassword"
-                        :rules="passwordRules"
-                        :hide-details="false"
+                          class="text-field-ltr rounded-lg"
+                          label=" * کلمه عبور جدید"
+                          :type="pass_type"
+                          v-model="newPassword"
+                          :rules="passwordRules"
+                          :append-icon="pass_icon"
+                          :hide-details="false"
+                          @click:append="changeType"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col cols="12" md="4">
                       <v-text-field
-                        class="text-field-ltr"
-                        type="password"
-                        label=" * تکرار کلمه عبور جدید"
-                        v-model="newPasswordRepeat"
-                        :rules="rules.required"
-                        :hide-details="false"
+                          class="text-field-ltr rounded-lg"
+                          :type="pass_type"
+                          label=" * تکرار کلمه عبور جدید"
+                          v-model="newPasswordRepeat"
+                          :rules="rules.required"
+                          :hide-details="false"
+                          :append-icon="pass_icon"
+                          @click:append="changeType"
                       />
                     </v-col>
                   </v-row>
@@ -125,32 +169,35 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn @click="changePassword" color="blue white--text w-100px"
-                  >ثبت</v-btn
+                <v-btn @click="changePassword" color="success white--text w-100px"
+                >ثبت
+                </v-btn
                 >
               </v-card-actions>
             </v-card>
           </v-tab-item>
-
           <v-tab-item>
-            <v-card flat>
+            <v-card flat class="mt-5 ml-10" :style="'border: 1px solid white;'">
               <v-card-text>
                 <m-datatable
-                  :headers="invitationsHeaders"
-                  :items="invitations"
-                  :showExportBtns="false"
+                    :headers="invitationsHeaders"
+                    :items="invitations"
+                    :show-applied-filters="false"
+                    :showExportBtns="false"
                 >
                   <template #item.action="{ item }">
                     <template v-if="item.status == 'p'">
                       <v-btn
-                        @click="confirmInvitation(item)"
-                        color="green white--text"
-                        >تایید دعوت</v-btn
+                          depressed
+                          @click="confirmInvitation(item)"
+                          color="success white--text"
+                      >تایید دعوت</v-btn
                       >
                       <v-btn
-                        @click="changeInvitationStatus(item, 'r')"
-                        color="red white--text mr-1"
-                        >رد دعوت</v-btn
+                          depressed
+                          @click="changeInvitationStatus(item, 'r')"
+                          color="error white--text mr-1"
+                      >رد دعوت</v-btn
                       >
                     </template>
                     <span v-else>-</span>
@@ -161,12 +208,12 @@
           </v-tab-item>
 
           <v-tab-item>
-            <v-card flat>
+            <v-card flat class="mt-5 ml-10" :style="'border: 1px solid white;'">
               <v-card-text>
                 <v-row>
                   <v-col cols="12" md="8">
                     <p>
-                      توسط ورود دوعاملی امنیت داده های خود را در سامانه حسابداری
+                      با فعال سازی ورود دوعاملی امنیت داده های خود را در سامانه حسابداری
                       سبحان چند برابر کنید
                     </p>
                     <p>
@@ -174,10 +221,10 @@
                       نام کاربری و کلمه عبور باید کد تایید نیز وارد نمایید
                     </p>
                     <p>کد تایید هر 30 ثاینه یک بار عوض می شود</p>
-                    <p>برای فعال سازی مراحل زیر را طی کنید:</p>
+                    <p class="secondary--text mt-10">برای فعال سازی مراحل زیر را طی کنید:</p>
                     <ul
-                      class="mr-4 mb-2"
-                      v-if="!user.has_two_factor_authentication"
+                        class=" mr-4 mb-2"
+                        v-if="!user.has_two_factor_authentication"
                     >
                       <li>
                         نرم افزار Google Authenticator را دانلود و نصب نمایید
@@ -192,41 +239,37 @@
                       </li>
                     </ul>
                     <v-btn
-                      color="red white--text"
-                      v-if="user.has_two_factor_authentication"
-                      @click="removeSecretKeyDialog = true"
-                      >غیر فعال سازی ورود دو عاملی</v-btn
+                        color="red white--text"
+                        v-if="user.has_two_factor_authentication"
+                        @click="removeSecretKeyDialog = true"
+                    >غیر فعال سازی ورود دو عاملی</v-btn
                     >
                   </v-col>
                   <v-col cols="12" md="4">
                     <v-row
-                      class
-                      no-gutters
-                      v-if="
+                        class
+                        no-gutters
+                        v-if="
                         secretKey.qr_code && !user.has_two_factor_authentication
                       "
                     >
                       <v-col class="d-flex justify-center">
                         <vue-qrcode
-                          :value="secretKey.qr_code"
-                          :options="{ width: 300 }"
+                            :value="secretKey.qr_code"
+                            :options="{ width: 30 }"
                         ></vue-qrcode>
                       </v-col>
                       <v-col cols="12" md="8" offset-md="1">
                         <v-text-field
-                          label="کد تایید"
-                          class="text-field-ltr"
-                          v-model="secretKey.code"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" md="2">
-                        <v-btn
-                          @click="setSecretKey"
-                          block
-                          class="mt-3 mt-md-1 mr-md-2"
-                          color="blue white--text"
-                          >تایید</v-btn
+                            @keyup.enter="setSecretKey"
+                            label="کد تایید"
+                            class=" rounded-lg mr-16"
+                            width="20"
+                            v-model="secretKey.code"
+                            append-icon="fa-arrow-left"
+                            @click:append="setSecretKey"
                         >
+                        </v-text-field>
                       </v-col>
                     </v-row>
                   </v-col>
@@ -238,108 +281,124 @@
       </v-card>
     </v-col>
     <v-dialog
-      v-model="removeSecretKeyDialog"
-      max-width="400px"
-      transition="dialog-transition"
+        v-model="removeSecretKeyDialog"
+        max-width="400px"
+        transition="dialog-transition"
     >
-      <v-card>
-        <v-card-title>غیر فعال سازی ورود دو عاملی</v-card-title>
+      <v-card class="rounded-lg">
+        <v-card-title class="secondary--text">غیر فعال سازی ورود دو عاملی</v-card-title>
 
         <v-card-text>
           <v-row>
             <v-col cols="12">
-              <p>برای غیر فعال سازی ورود دو عاملی کد تایید را وارد کنید</p>
+              <p >برای غیر فعال سازی ورود دو عاملی کد تایید را وارد کنید</p>
             </v-col>
             <v-col cols="12">
               <v-text-field
-                label="کد تایید"
-                class="text-field-ltr"
-                v-model="secretKey.code"
+                  color="secondary"
+                  label="کد تایید"
+                  class="text-field-ltr rounded-lg"
+                  v-model="secretKey.code"
               ></v-text-field>
             </v-col>
-            <v-col cols="12" md="6" offset-md="3">
+            <v-col cols="12" md="5" >
+            </v-col>
+            <v-col cols="12" md="3" >
               <v-btn
-                @click="removeSecretKey"
-                block
-                class="mt-3 mt-md-1 mr-md-2"
-                color="red white--text"
-                >غیر فعال سازی</v-btn
+                  @click="removeSecretKeyDialog = false"
+                  block
+                  depressed
+                  class="mt-3 mt-md-1 mr-md-6"
+                  color="error white--text"
+              >بستن</v-btn
+              >
+            </v-col>
+            <v-col cols="12" md="3" class="ml-1">
+              <v-btn
+                  @click="removeSecretKey"
+                  block
+                  depressed
+                  class="mt-3 mt-md-1 mr-md-2"
+                  color="success white--text"
+              >غیر فعال سازی</v-btn
               >
             </v-col>
           </v-row>
         </v-card-text>
       </v-card>
     </v-dialog>
-
     <v-dialog
-      v-model="confirmInvitationDialog"
-      scrollable
-      max-width="400px"
-      transition="dialog-transition"
+        @click:outside="confirmInvitationDialog = false"
+        v-model="confirmInvitationDialog"
+        scrollable
+        max-width="400px"
+        transition="dialog-transition"
     >
-      <v-card v-if="invitation">
-        <v-card-title>تایید دعوت</v-card-title>
-        <v-card-subtitle class="mt-0">
+      <v-card class="rounded-lg pa-3">
+        <v-card-title class="mt-0 secondary--text">تایید دعوت</v-card-title>
+        <v-card-subtitle class="mt-0" >
           لطفا کد تاییدی که از شرکت
-          <span>{{ invitation.company_name }}</span>
+          <span v-if="invitation">{{ invitation.company_name }}</span>
           دریافت کرده اید را وارد کنید
         </v-card-subtitle>
-
         <v-card-text>
           <v-text-field
-            class="text-field-ltr"
-            label="کد تایید دریافتی"
-            v-model="confirmationCode"
+              color="secondary"
+              class="text-field-ltr rounded-lg mt-2"
+              label="کد تایید دریافتی"
+              v-model="confirmationCode"
           />
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="mb-2">
           <v-btn
-            @click="changeInvitationStatus(invitation, 'a', confirmationCode)"
-            block
-            color="blue white--text "
-            >تایید</v-btn
+              @click="changeInvitationStatus(invitation, 'a', confirmationCode)"
+              block
+              color="success white--text "
+          >تایید</v-btn
           >
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <v-dialog
-      v-model="changePhoneDialog"
-      scrollable
-      max-width="400px"
-      transition="dialog-transition"
+        v-model="changePhoneDialog"
+        scrollable
+        max-width="500px"
+        transition="dialog-transition"
     >
-      <v-card>
-        <v-card-title>تغییر شماره موبایل</v-card-title>
+      <v-card class="rounded-lg pa-2">
+        <v-card-title class="secondary--text">تغییر شماره موبایل</v-card-title>
 
         <v-card-text>
           <v-form ref="changePhoneForm">
-            <v-row>
+            <v-row class="mt-2">
               <v-col cols="12" :md="codeSent ? 12 : 8">
-                <m-phone-field label="* شماره موبایل جدید" v-model="newPhone" />
+                <mobile class="rounded-lg" color="secondary" label="* شماره موبایل جدید" v-model="newPhone" :disabled="codeSent" />
               </v-col>
               <v-col cols="12" md="4" v-if="!codeSent">
                 <v-btn
-                  block
-                  color="blue white--text"
-                  class="mt-1"
-                  :disabled="codeSent"
-                  @click="sendCode"
+                    block
+                    depressed
+                    color="success white--text"
+                    class="mt-2"
+                    :disabled="codeSent"
+                    @click="sendCode"
                 >
                   ارسال کد
                 </v-btn>
               </v-col>
               <v-col cols="12" v-if="codeSent">
                 <v-text-field
-                  class="text-field-ltr"
-                  label="کد تایید دریافتی"
-                  v-model="phoneVerificationCode"
+                    color="secondary"
+                    class="text-field-ltr rounded-lg"
+                    label="کد تایید دریافتی"
+                    v-model="phoneVerificationCode"
                 />
               </v-col>
             </v-row>
           </v-form>
         </v-card-text>
-        <v-card-actions v-if="codeSent">
+        <v-card-actions v-if="codeSent" class="justify-end">
           <v-btn @click="sendCode" :disabled="!canResend" outlined >
             <span v-if="canResend">
               ارسال دوباره کد
@@ -348,9 +407,8 @@
               {{ timer }}
             </span>
           </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn @click="changePhone" color="blue white--text w-100px"
-            >تایید</v-btn
+          <v-btn @click="changePhone" color="success white--text w-100px"
+          >تایید</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -358,16 +416,17 @@
   </v-row>
 </template>
 <script>
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 import UserApi from "@/views/panel/user/api";
 import GetUserApi from "@/views/panel/user/getUserApi";
 import AuthMixin from "@/views/auth/mixin";
 import MDatatable from "@/components/m-datatable";
 import VueQrcode from "@chenfengyuan/vue-qrcode";
 import Template from "../Template.vue";
+import mobile from "@/components/scomponents/Mobile";
 
 export default {
-  components: { MDatatable, VueQrcode, Template },
+  components: {MDatatable, VueQrcode, Template, mobile},
   name: "Register",
   mixins: [AuthMixin, MFormMixin, UserApi, GetUserApi],
   props: {},
@@ -381,6 +440,8 @@ export default {
       newPasswordRepeat: null,
 
       invitations: [],
+      pass_type: "password",
+      pass_icon: "fa-eye",
       invitation: null,
       confirmInvitationDialog: false,
       confirmationCode: null,
@@ -427,11 +488,11 @@ export default {
     sendCode() {
       if (this.$refs.changePhoneForm.validate()) {
         this.sendVerificationCode(
-          {
-            phone: this.newPhone,
-            username: this.user.uesrname,
-          },
-          () => (this.codeSent = true)
+            {
+              phone: this.newPhone,
+              username: this.user.uesrname,
+            },
+            () => (this.codeSent = true)
         );
         this.canResend = false;
         this.timer = 120;
@@ -515,6 +576,7 @@ export default {
         success: (data) => {
           this.successNotify();
           this.isEditing = false;
+          window.location.reload()
         },
       });
     },
@@ -570,6 +632,15 @@ export default {
           this.invitations = data;
         },
       });
+    },
+    changeType() {
+      if (!this.pass_type) {
+        this.pass_type = "password"
+        this.pass_icon = "fa-eye"
+      } else {
+        this.pass_type = ""
+        this.pass_icon = "fa-eye-slash "
+      }
     },
   },
 };

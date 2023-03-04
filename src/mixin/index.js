@@ -26,8 +26,10 @@ Vue.mixin({
     ...mapState({
       user: state => state.user,
       financialYear: state => state.user ? state.user.active_financial_year || null : null,
+      financialYears: state => state.user ? state.user.financialYears || null : null,
       isAdvari: state => state.user && state.user.active_financial_year ? state.user.active_financial_year.warehouse_system == 'a' || null : null,
       company: state => state.user ? state.user.active_company || null : null,
+      companies: state => state.user ? state.user.companies || null : null,
       systemOptions: state => state.options,
       OGR: state => state.OGR,
       serverNow: state => state.serverNow,
@@ -133,9 +135,9 @@ Vue.mixin({
     },
     notify(msg, type) {
       let colors = {
-        'danger': 'red',
-        'warning': 'orange',
-        'success': 'green'
+        'danger': 'error',
+        'warning': 'primary',
+        'success': 'success'
       }
       this.$store.commit('setSnackbar', {
         show: true,
