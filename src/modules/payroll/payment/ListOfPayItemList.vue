@@ -242,18 +242,30 @@
     <v-card-actions class="justify-end mt-4">
     </v-card-actions>
     <v-card-text>
-      <m-datatable  :headers="headers" e :exportUrl="exportUrl" :apiUrl="url" :filters.sync="filters"
-                   :show-export-btns="false" @dblclick:row="(e, row) => $router.push(to(row.item))"
-                   ref="datatable">
-        <template #item.detail="{ item }">
-          <detail-link :to="to(item)"/>
-        </template>
-      </m-datatable>
       <v-simple-table class="ma-3 border_all " dense>
         <thead class="indigo darken-2 white--text">
+
         <tr>
           <th class="white--text pa-1">
-
+            تایید پایه سنوات
+          </th>
+          <th class="white--text pa-1">
+            پرسنل در کارگاه
+          </th>
+          <th class="white--text pa-1">
+            تاریخ شروع به کار
+          </th>
+          <th class="white--text pa-1">
+            بیمه میشود
+          </th>
+          <th class="white--text pa-1">
+            عنوان شغل
+          </th>
+          <th class="white--text pa-1">
+            سابقه بیمه در کارگاه
+          </th>
+          <th class="white--text pa-1">
+            ردیف پیمان
           </th>
           <th class="white--text pa-1">
             کارکرد عادی
@@ -334,8 +346,43 @@
 
         </thead>
         <tbody>
+
+        <tr v-for="item in list_of_pay_items" @click="$router.push(to(item))">
+          <td> {{item.get_sanavat_verify}}</td>
+          <td> {{item.personnel_name}}</td>
+          <td> {{item.work_start_date}}</td>
+          <td> {{item.insurance_display}}</td>
+          <td> {{item.work_title}}</td>
+          <td> {{item.get_insurance_in_workshop}}</td>
+          <td> {{item.contract_row}}</td>
+          <td> {{item.normal_worktime}}</td>
+          <td> {{item.real_worktime}}</td>
+          <td> {{item.hoghoogh_mahane_real_work}}</td>
+          <td> {{item.sanavat_mahane_real_work}}</td>
+          <td> {{item.ezafe_kari_total}}</td>
+          <td> {{item.tatil_kari_total}}</td>
+          <td> {{item.shab_kari_total}}</td>
+          <td> {{item.get_mission_total}}</td>
+          <td> {{item.aele_mandi}}</td>
+          <td> {{item.get_haghe_maskan}}</td>
+          <td> {{item.get_haghe_jazb}}</td>
+          <td> {{item.get_kharo_bar}}</td>
+          <td> {{item.get_sayer_hr}}</td>
+          <td> {{item.haghe_sanavat_total}}</td>
+          <td> {{item.padash_total}}</td>
+          <td> {{item.sayer_ezafat}}</td>
+          <td> {{item.total_payment}}</td>
+          <td> {{item.get_haghe_bime_bime_shavande}}</td>
+          <td> {{item.total_tax}}</td>
+          <td> {{item.dept_amount}}</td>
+          <td> {{item.loan_amount}}</td>
+          <td> {{item.get_deduction}}</td>
+          <td> {{item.kasre_kar_total}}</td>
+          <td> {{item.sayer_kosoorat}}</td>
+          <td> {{item.get_payable}}</td>
+        </tr>
         <tr>
-          <td  class="text-center"> جمع</td>
+          <td  class="text-center" colspan="7"> جمع</td>
           <td> {{list_of_pay.get_total.normal_worktime}}</td>
           <td> {{list_of_pay.get_total.real_worktime}}</td>
           <td> {{list_of_pay.get_total.hoghoogh_mahane}}</td>
