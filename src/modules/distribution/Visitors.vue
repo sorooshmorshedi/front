@@ -1,95 +1,103 @@
 <template>
   <m-form
-    :title="title"
-    :items="items"
-    :cols="cols"
-    :canSubmit="canSubmit"
-    :canDelete="canDelete"
-    :is-editing.sync="isEditing"
-    :showListBtn="false"
-    :show-navigation-btns="false"
-    :showList="usage != 'tree'"
-    @click:row="setItem"
-    @clearForm="clearForm"
-    @submit="submit"
-    @delete="deleteItem"
+      :title="title"
+      :items="items"
+      :cols="cols"
+      :canSubmit="canSubmit"
+      :canDelete="canDelete"
+      :is-editing.sync="isEditing"
+      :showListBtn="false"
+      :show-navigation-btns="false"
+      :showList="usage != 'tree'"
+      @click:row="setItem"
+      @clearForm="clearForm"
+      @submit="submit"
+      @delete="deleteItem"
   >
     <template #header-btns>
       <template v-for="i in 4">
         <v-btn
-          :key="i"
-          v-if="i-1 != level"
-          class="blue white--text mr-1 mt-1 mt-md-0"
-          :to="`/panel/visitors/${i-1}`"
-        >تعریف {{ getTitle(i-1) }}</v-btn>
+            depressed
+            :key="i"
+            v-if="i-1 != level"
+            class="secondary rounded-lg white--text mr-1 mt-1 mt-md-0"
+            :to="`/panel/visitors/${i-1}`"
+        >تعریف {{ getTitle(i - 1) }}
+        </v-btn>
         <v-btn
-          :key="i"
-          v-else
-          class="blue white--text mr-1 mt-1 mt-md-0"
-          @click="clearForm"
-        >تعریف {{ getTitle(i-1) }}</v-btn>
+            :key="i"
+            v-else
+            depressed
+            class="primary rounded-lg white--text mr-1 mt-1 mt-md-0"
+            @click="clearForm"
+        >تعریف {{ getTitle(i - 1) }}
+        </v-btn>
       </template>
     </template>
     <template #default>
       <v-row>
         <v-col cols="12" v-if="level != 0">
           <v-autocomplete
-            :label="'* ' + getTitle(level-1)"
-            v-model="item.parent"
-            :items="parentItems"
-            item-text="user.name"
-            item-value="id"
-            :disabled="!isEditing"
+              class="rounded-lg"
+              :label="'* ' + getTitle(level-1)"
+              v-model="item.parent"
+              :items="parentItems"
+              item-text="user.name"
+              item-value="id"
+              :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" md="6">
           <v-autocomplete
-            label="* کاربر"
-            v-model="item.user"
-            :items="users"
-            item-text="name"
-            item-value="id"
-            :disabled="!isEditing"
+              class="rounded-lg"
+              label="* کاربر"
+              v-model="item.user"
+              :items="users"
+              item-text="name"
+              item-value="id"
+              :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field v-if="item.id != undefined" label="کد" v-model="item.code" disabled />
+          <v-text-field class="rounded-lg" v-if="item.id != undefined" label="کد" v-model="item.code" disabled/>
         </v-col>
 
         <v-col cols="12" md="4">
-          <money label="پورسانت ثابت" :disabled="!isEditing" v-model="item.fixed_commission" />
+          <money label="پورسانت ثابت" :disabled="!isEditing" v-model="item.fixed_commission"/>
         </v-col>
         <v-col cols="12" md="4">
-          <money label="درصد پورسانت" :disabled="!isEditing" v-model="item.commission_percent" />
+          <money label="درصد پورسانت" :disabled="!isEditing" v-model="item.commission_percent"/>
         </v-col>
         <v-col cols="12" md="4">
           <v-autocomplete
-            label="بازه پورسانت"
-            :items="commissionRanges"
-            v-model="item.commissionRange"
-            item-text="name"
-            item-value="id"
-            :disabled="!isEditing"
+              class="rounded-lg"
+              label="بازه پورسانت"
+              :items="commissionRanges"
+              v-model="item.commissionRange"
+              item-text="name"
+              item-value="id"
+              :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" md="4">
           <account-select
-            :disabled="!isEditing"
-            label="* حساب شناور"
-            itemsType="floatAccounts"
-            :child-of="visitorsDefaultAccount"
-            v-model="item.floatAccount"
+              :disabled="!isEditing"
+              label="* حساب شناور"
+              itemsType="floatAccounts"
+              :child-of="visitorsDefaultAccount"
+              v-model="item.floatAccount"
           />
         </v-col>
         <v-col cols="12" md="8">
           <v-autocomplete
-            label="روش های دریافت"
-            :disabled="!isEditing"
-            :items="receiveTypes"
-            v-model="item.defaultAccounts"
-            item-text="name"
-            item-value="id"
-            :multiple="true"
+              class="rounded-lg"
+              label="روش های دریافت"
+              :disabled="!isEditing"
+              :items="receiveTypes"
+              v-model="item.defaultAccounts"
+              item-text="name"
+              item-value="id"
+              :multiple="true"
           />
         </v-col>
       </v-row>
@@ -97,15 +105,15 @@
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
-import { VisitorLevels } from "@/variables";
+import {VisitorLevels} from "@/variables";
 import UserApiMixin from "@/views/panel/user/api";
 import AccountSelect from "@/components/selects/AccountSelect.vue";
 import AccountApiMixin from "@/mixin/accountMixin";
 
 export default {
-  components: { AccountSelect },
+  components: {AccountSelect},
   mixins: [MFormMixin, DistributionApiMixin, UserApiMixin, AccountApiMixin],
   props: {
     level: {
@@ -163,7 +171,7 @@ export default {
     },
     visitorsDefaultAccount() {
       let defaultAccount = this.defaultAccounts.find(
-        (o) => o.codename == "visitorsAccount"
+          (o) => o.codename == "visitorsAccount"
       );
       if (defaultAccount) {
         return defaultAccount.account.floatAccountGroup.id;
@@ -173,7 +181,7 @@ export default {
     receiveTypes() {
       let type = "receive";
       return this.defaultAccounts.filter(
-        (o) => o.usage && o.usage.toLowerCase().includes(type)
+          (o) => o.usage && o.usage.toLowerCase().includes(type)
       );
     },
   },

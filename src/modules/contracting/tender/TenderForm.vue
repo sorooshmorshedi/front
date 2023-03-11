@@ -3,10 +3,10 @@
     <m-form
         title="ثبت مناقصه"
         :showList="false"
+        :can-delete="item.id"
         :listRoute="{name:'TenderList'}"
         :exportBaseUrl="printUrl"
         :exportParams="{id: item.id}"
-        :canDelete="false"
         :canSubmit="canSubmit"
         :isEditing.sync="isEditing"
         @submit="submit"

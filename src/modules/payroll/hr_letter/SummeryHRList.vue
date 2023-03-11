@@ -1,6 +1,6 @@
 <template>
-  <v-card class="pa-4">
-    <v-card-title class="primary darken-3 white--text"> لیست کارگزینی  قرارداد {{contract_code}}</v-card-title>
+  <v-card class="pa-4 rounded-lg">
+    <v-card-title class="back rounded-lg  secondary--text"> لیست کارگزینی  قرارداد {{contract_code}}</v-card-title>
     <m-datatable :show-applied-filters="false" :headers="headers" :apiUrl="url" :filters.sync="filter"
                  @dblclick:row="(e, row) => $router.push(to(row.item))"
                  ref="datatable">

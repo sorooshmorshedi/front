@@ -1,11 +1,12 @@
 <template>
-  <v-card>
+  <v-card class="rounded-lg">
     <v-card-title>صورت سود و زیان</v-card-title>
 
     <v-card-text>
       <v-row>
         <v-col cols="12" md="2">
           <v-select
+              class="rounded-lg"
               label="سطح حساب"
               v-model="filters.level"
               item-text="text"
@@ -16,6 +17,7 @@
         </v-col>
         <v-col cols="12" md="2">
           <v-select
+              class="rounded-lg"
               :items="accountStatuses"
               v-model="filters.status"
               label="وضعیت حساب"
@@ -28,34 +30,37 @@
           <date placeholder="تا تاریخ" v-model="filters.to_date"/>
         </v-col>
         <v-col cols="12" md="2">
-          <v-btn @click="getData()" class="blue white--text w-100px mt-1">گزارش</v-btn>
+          <v-btn @click="getData()" depressed class="success white--text w-100px mt-1 rounded-lg">گزارش</v-btn>
         </v-col>
         <v-col cols="12" class="d-flex justify-end">
           <v-btn
               :href="this.endpoint('reports/incomeStatement/html') + `?detailed=${detailed == true}&token=${token}`"
               target="_blank"
-              class="export-btn ma-1"
+              depressed
+              class="export-btn ma-1 rounded-lg"
           >چاپ
           </v-btn>
           <v-btn
               :href="this.endpoint('reports/incomeStatement/pdf') + `?detailed=${detailed == true}&token=${token}`"
               target="_blank"
-              class="export-btn ma-1"
+              depressed
+              class="export-btn ma-1 rounded-lg"
           >خروجی PDF
           </v-btn>
           <v-btn
               :href="this.endpoint('reports/incomeStatement/xlsx') + `?detailed=${detailed == true}&token=${token}`"
               target="_blank"
-              class="export-btn ma-1"
+              depressed
+              class="export-btn ma-1 rounded-lg"
           >خروجی اکسل
           </v-btn>
 
         </v-col>
         <v-col cols="12">
-          <v-simple-table dense>
-            <thead class="grey lighten-3">
+          <v-simple-table class="rounded-lg">
+            <thead class="back">
             <tr>
-              <th>#</th>
+              <th>ردیف</th>
               <th>شرح</th>
               <th colspan="2">مبلغ</th>
             </tr>

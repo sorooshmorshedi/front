@@ -1,31 +1,33 @@
 <template>
   <m-form
-    title="تایید کنندگان خروجی"
-    :items="items"
-    :cols="cols"
-    :deletable="item.id"
-    :is-editing.sync="isEditing"
-    @click:row="setItem"
-    @clearForm="clearForm"
-    @submit="submit"
-    @delete="deleteItem"
+      title="تایید کنندگان خروجی"
+      :items="items"
+      :cols="cols"
+      :show-list-btn="false"
+      :deletable="item.id"
+      :is-editing.sync="isEditing"
+      @click:row="setItem"
+      @clearForm="clearForm"
+      @submit="submit"
+      @delete="deleteItem"
   >
     <template #default>
       <v-row>
         <template v-if="hasParent">
           <v-col cols="12">
             <v-autocomplete
-              :return-object="false"
-              label=" * فرم"
-              :items="forms"
-              v-model="item.form"
+                class="rounded-lg"
+                :return-object="false"
+                label=" * فرم"
+                :items="forms"
+                v-model="item.form"
             ></v-autocomplete>
           </v-col>
           <v-col cols="12">
-            <v-text-field label="نام" v-model="item.name" />
+            <v-text-field class="rounded-lg" label="نام" v-model="item.name"/>
           </v-col>
           <v-col cols="12">
-            <v-text-field label=" * سمت" v-model="item.post" />
+            <v-text-field class="rounded-lg" label=" * سمت" v-model="item.post"/>
           </v-col>
         </template>
       </v-row>
@@ -33,27 +35,27 @@
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 
 export default {
   mixins: [MFormMixin],
   data() {
     let forms = [
-      { text: "سند", value: "s" },
-      { text: "رسید", value: "frc" },
-      { text: "حواله", value: "frm" },
-      { text: "پیش فاکتور خرید", value: "pfs" },
-      { text: "پیش فاکتور فروش", value: "frb" },
-      { text: "فاکتور خرید", value: "fb" },
-      { text: "فاکتور فروش", value: "fs" },
-      { text: "فاکتور برگشت از خرید", value: "fbfb" },
-      { text: "فاکتور برگشت از فروش", value: "fbfs" },
-      { text: "دریافت", value: "tr" },
-      { text: "پرداخت", value: "tp" },
-      { text: "انتقال", value: "t" },
-      { text: "حواله کالای مصرفی", value: "cwr" },
-      { text: "رسید تعدیل انبار", value: "ia" },
-      { text: "حواله تعدیل انبار", value: "oa" },
+      {text: "سند", value: "s"},
+      {text: "رسید", value: "frc"},
+      {text: "حواله", value: "frm"},
+      {text: "پیش فاکتور خرید", value: "pfs"},
+      {text: "پیش فاکتور فروش", value: "frb"},
+      {text: "فاکتور خرید", value: "fb"},
+      {text: "فاکتور فروش", value: "fs"},
+      {text: "فاکتور برگشت از خرید", value: "fbfb"},
+      {text: "فاکتور برگشت از فروش", value: "fbfs"},
+      {text: "دریافت", value: "tr"},
+      {text: "پرداخت", value: "tp"},
+      {text: "انتقال", value: "t"},
+      {text: "حواله کالای مصرفی", value: "cwr"},
+      {text: "رسید تعدیل انبار", value: "ia"},
+      {text: "حواله تعدیل انبار", value: "oa"},
     ];
     return {
       item: {},

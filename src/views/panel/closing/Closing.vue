@@ -13,8 +13,9 @@
     <template #header-btns>
       <v-btn
         @click="openConfirmDialog('cancel-closing')"
+        depressed
         :disabled="!financialYear.is_closed"
-        class="blue white--text"
+        class="accent roundedlg white--text"
       >لغو بستن سال مالی جاری</v-btn>
     </template>
 
@@ -22,26 +23,29 @@
       <v-row>
         <v-col cols="12">
           <v-autocomplete
-            :return-object="true"
-            label=" * سال مالی جدید"
-            :items="financialYears"
-            v-model="targetFinancialYear"
-            item-text="name"
-            item-value="id"
-            :multiple="false"
+              class="rounded-lg"
+              :return-object="true"
+              label=" * سال مالی جدید"
+              :items="financialYears"
+              v-model="targetFinancialYear"
+              item-text="name"
+              item-value="id"
+              :multiple="false"
           />
         </v-col>
 
         <v-col class="d-flex justify-end">
           <v-btn
+              depressed
             :disabled="financialYear.is_closed || !targetFinancialYear"
             @click="openConfirmDialog('close-and-move')"
-            class="blue white--text w-100px"
+            class="success rounded-lg white--text w-100px"
           >بستن و انتقال</v-btn>
           <v-btn
+              depressed
             :disabled="financialYear.is_closed || !targetFinancialYear"
             @click="openConfirmDialog('move')"
-            class="blue white--text w-100px mr-1"
+            class="success rounded-lg white--text w-100px mr-1"
           >انتقال</v-btn>
         </v-col>
       </v-row>
@@ -49,23 +53,23 @@
       <v-dialog
         v-model="confirmDialog"
         scrollable
-        max-width="420px"
+        max-width="500px"
         transition="dialog-transition"
         v-if="operation"
       >
-        <v-card class="red white--text">
-          <v-card-title class="text--center">آیا از انجام این عملیات اطمینان دارید؟</v-card-title>
+        <v-card class="rounded-lg pa-2">
+          <v-card-title class="error--text text--center">آیا از انجام این عملیات اطمینان دارید؟</v-card-title>
 
-          <v-card-text class="white--text">
+          <v-card-text class="black--text mt-3">
             <div
               v-if="operation == 'cancel-closing'"
             >بسته شدن سال مالی لغو می شود و سند های بستن خالی می گردند</div>
             <div v-if="operation == 'close-and-move'">
-              <span class="white black--text mx-1 px-1 rounded">سال مالی {{ financialYear.name }}</span>
+              <strong class="white danger--text mx-1 px-1 rounded">سال مالی {{ financialYear.name }}</strong>
               بسته می شود و به
-              <span
-                class="white black--text mx-1 px-1 rounded"
-              >سال مالی {{ targetFinancialYear.name }}</span>
+              <strong
+                class="white success_important--text mx-1 px-1 rounded"
+              >سال مالی {{ targetFinancialYear.name }}</strong>
               انتقال پیدا میکند
             </div>
             <div v-if="operation == 'move'">
@@ -78,14 +82,15 @@
             </div>
             <v-text-field
               type="password"
-              class="mt-3 text-field-ltr"
+              class="mt-7 rounded-lg text-field-ltr"
               hide-details
               label="کلمه عبور"
               v-model="password"
             />
           </v-card-text>
-          <v-card-actions class="white d-flex justify-center">
-            <v-btn @click="confirm" color="red white--text">تایید و انجام عملیات</v-btn>
+          <v-card-actions class="white d-flex justify-end">
+            <v-btn depressed @click="confirmDialog = false" color="success rounded-lg white--text">بستن</v-btn>
+            <v-btn depressed @click="confirm" color="error rounded-lg white--text">تایید و انجام عملیات</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>

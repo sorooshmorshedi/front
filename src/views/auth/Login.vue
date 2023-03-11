@@ -56,38 +56,65 @@
       </v-card>
       <v-row class="mt-16 d-flex justify-center">
         <v-col cols="12" md="1" class="mt-1 d-flex justify-center">
-          <v-tooltip top color="primary">
+          <v-tooltip bottom color="primary">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                  depressed
+                  :target="(isXs || isSm)?'_blank':null"
+                  :href="(isXs || isSm)?'tel:07191002510':null"
+                  fab
+                  color="primary white--text"
+                  width="37"
+                  height="37"
+                  class="mt-md-3"
+                  v-bind="!(isXs || isSm)?attrs:{}"
+                  v-on="!(isXs || isSm)?on:{}"
+              >
+                <v-icon>fa-phone</v-icon>
+              </v-btn>
+            </template>
+            <span dir="ltr">071 - 9100 25 10</span>
+          </v-tooltip>
+        </v-col>
+
+        <v-col cols="12" md="1" class="mt-1 d-flex justify-center">
+          <v-tooltip top color="secondary">
             <template v-slot:activator="{ on, attrs }">
               <a href="https://sobhan.net" target="_blank">
                 <v-img
                     v-bind="attrs"
                     v-on="on"
                     class="mt-3 "
+                    style="border-radius: 30%"
                     contain
-                    max-height="37"
-                    max-width="37"
-                    src="/img/site.png"
+                    max-height="39"
+                    max-width="39"
+                    src="/img/icons/logo.svg"
                 />
               </a>
             </template>
             سایت حسابداری سبحان
           </v-tooltip>
         </v-col>
-        <v-col cols="12" md="1" class="d-flex justify-center ">
+        <v-col cols="12" md="1" class="mt-1  d-flex justify-center ">
           <v-tooltip bottom color="success">
             <template v-slot:activator="{ on, attrs }">
-              <a href="https://ble.ir/sobhan_finance" target="_blank">
+              <v-btn
+                  depressed
+                  v-bind="attrs"
+                  class="mt-3"
+                  v-on="on"
+                  target="_blank"
+                  href="https://ble.ir/sobhan_finance"
+                  fab
+                  color="success white--text"
+              >
                 <v-img
-                    v-bind="attrs"
-                    v-on="on"
-                    class="mt-4"
-                    style="border-radius: 60%"
-                    contain
-                    max-height="37"
-                    max-width="37"
-                    src="/img/bale.png"
+                    max-height="25"
+                    max-width="25"
+                    src="/img/icons/bale.svg"
                 />
-              </a>
+              </v-btn>
             </template>
             پیام رسان بــلـه سبحان
           </v-tooltip>
@@ -102,8 +129,8 @@
                     class="mt-3 "
                     style="border-radius: 30%"
                     contain
-                    max-height="37"
-                    max-width="37"
+                    max-height="39"
+                    max-width="39"
                     src="/img/eitaa.png"
                 />
               </a>
@@ -121,8 +148,8 @@
                     class="mt-3 "
                     style="border-radius: 30%"
                     contain
-                    max-height="37"
-                    max-width="37"
+                    max-height="39"
+                    max-width="39"
                     src="/img/tel.png"
                 />
               </a>
@@ -132,20 +159,20 @@
 
         </v-col>
         <v-col cols="12" md="1" class="mt-1 d-flex justify-center">
-          <v-tooltip top color="#7239E9">
+          <v-tooltip top color="error">
             <template v-slot:activator="{ on, attrs }">
-            <a href="https://www.instagram.com/sobhan.accounting/" target="_blank">
-            <v-img
-                v-bind="attrs"
-                v-on="on"
-                class="mt-3 "
-                style="border-radius: 30%"
-                contain
-                max-height="37"
-                max-width="37"
-                src="/img/instagram.jpg"
-            />
-          </a>
+              <v-btn
+                  depressed
+                  v-bind="attrs"
+                  class="mt-3 "
+                  v-on="on"
+                  target="_blank"
+                  href="https://www.instagram.com/sobhan_finance/"
+                  fab
+                  color="error white--text"
+              >
+                <v-icon>fab fa-instagram</v-icon>
+              </v-btn>
             </template>
             اینـستاگرام سبحان
           </v-tooltip>

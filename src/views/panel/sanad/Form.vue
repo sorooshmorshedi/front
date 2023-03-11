@@ -1,100 +1,110 @@
 <template>
   <m-form
-    title="سند حسابداری"
-    :showList="false"
-    :listRoute="{name:'SanadsList'}"
-    exportBaseUrl="reports/lists/sanads"
-    :exportParams="{id: this.id}"
-    :canDelete="false"
-    :canEdit="canEdit"
-    :canSubmit="canSubmit"
-    :isEditing.sync="isEditing"
-    @goToForm="getItemByPosition"
-    @submit="submit"
-    @delete="deleteItem"
-    @clearForm="clearForm()"
+      title="سند حسابداری"
+      :showList="false"
+      :listRoute="{name:'SanadsList'}"
+      exportBaseUrl="reports/lists/sanads"
+      :exportParams="{id: this.id}"
+      :canDelete="false"
+      :canEdit="canEdit"
+      :canSubmit="canSubmit"
+      :isEditing.sync="isEditing"
+      @goToForm="getItemByPosition"
+      @submit="submit"
+      @delete="deleteItem"
+      @clearForm="clearForm()"
   >
     <template #header-btns>
+      <v-tooltip top color="#019EF6">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              v-bind="attrs"
+              v-on="on"
+              @click="copySanadToNewSanad"
+              class="export-btn  mt-1 mt-md-0 pa-4 mr-1"
+              :href="pdfUrl"
+              rel="noopener noreferrer"
+              icon
+          >
+            <v-img max-height="25" max-width="25" src="/img/icons/copy.svg"></v-img>
+          </v-btn>
+        </template>
+        کپی سند به سند جدید
+      </v-tooltip>
       <v-btn
-        v-if="relatedForm"
-        class="light-blue white--text mr-1 mt-1 mt-md-0"
-        :to="relatedForm.to"
-        rounded
+          class="rounded-lg secondary white--text mr-3 ml-1"
+          depressed
+          v-if="relatedForm"
+          :to="relatedForm.to"
       >
         <v-icon class="ml-1">fa-external-link-square-alt</v-icon>
         {{ relatedForm.title }}
       </v-btn>
 
-      <v-btn
-        small
-        @click="copySanadToNewSanad"
-        class="teal white--text mr-1 mt-1 mt-md-0"
-        title="کپی سند به سند جدید"
-        icon
-        outlined
-      >
-        <v-icon>fa-clone</v-icon>
-      </v-btn>
     </template>
 
     <template>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="12">
           <v-row>
             <v-col cols="12" md="3">
-              <v-text-field disabled label="عطف" v-model="item.local_id" background-color="white" />
+              <v-text-field class="rounded-lg" disabled label="عطف" v-model="item.local_id" background-color="white"/>
             </v-col>
             <v-col cols="12" md="3">
-              <v-text-field disabled label="شماره سند" v-model="item.code" background-color="white"></v-text-field>
+              <v-text-field class="rounded-lg" disabled label="شماره سند" v-model="item.code" background-color="white"></v-text-field>
             </v-col>
             <v-col cols="12" md="3">
               <date
-                class="form-control"
-                v-model="item.date"
-                label=" * تاریخ سند"
-                :default="true"
-                :disabled="!isEditing"
+                  class="form-control rounded-lg"
+                  v-model="item.date"
+                  label=" * تاریخ سند"
+                  :default="true"
+                  :disabled="!isEditing"
               />
             </v-col>
             <v-col cols="12" md="3">
               <v-select
-                :disabled="!isEditing"
-                :items="sanadTypes"
-                v-model="item.type"
-                label="نوع سند"
-                :return-object="false"
+                  class="rounded-lg"
+                  :disabled="!isEditing"
+                  :items="sanadTypes"
+                  v-model="item.type"
+                  label="نوع سند"
+                  :return-object="false"
               />
             </v-col>
             <v-col cols="12" md="3">
               <v-select
-                v-if="item.created_by"
-                disabled
-                :items="[{text: 'دستی', value: false}, {text: 'سیستمی', value: true}]"
-                v-model="item.is_auto_created"
-                label="نوع ثبت"
+                  class="rounded-lg"
+                  v-if="item.created_by"
+                  disabled
+                  :items="[{text: 'دستی', value: false}, {text: 'سیستمی', value: true}]"
+                  v-model="item.is_auto_created"
+                  label="نوع ثبت"
               />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
-                v-if="item.created_by"
-                label="کاربر"
-                disabled
-                v-model="item.created_by.name"
+                  class="rounded-lg"
+                  v-if="item.created_by"
+                  label="کاربر"
+                  disabled
+                  v-model="item.created_by.name"
               />
             </v-col>
             <v-col cols="12" md="3">
-              <v-switch v-if="item.id" label="قطعی شده" v-model="item.is_defined" disabled />
+              <v-switch v-if="item.id" label="قطعی شده" v-model="item.is_defined" disabled/>
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="12">
           <v-row>
             <v-col cols="12" md="12">
               <v-textarea
-                label="شرح سند"
-                v-model="item.explanation"
-                :disabled="!isEditing"
-                height="105"
+                  class="rounded-lg"
+                  label="شرح سند"
+                  v-model="item.explanation"
+                  :disabled="!isEditing"
+                  height="105"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -102,82 +112,86 @@
 
         <v-col cols="12">
           <m-datatable
-            :headers="headers"
-            :items="rows"
-            :showExportBtns="false"
-            :showAppliedFilters="false"
-            :showClearFiltersBtn="true"
-            :showSelect="false"
-            :filters.sync="filters"
+              :headers="headers"
+              :items="rows"
+              :showExportBtns="false"
+              :showAppliedFilters="false"
+              :showClearFiltersBtn="true"
+              :showSelect="false"
+              :filters.sync="filters"
           >
             <template
-              #item.account.title="{ item }"
-              v-tooltip="accountParentsName(item.account).join(' > ')"
+                #item.account.title="{ item }"
+                v-tooltip="accountParentsName(item.account).join(' > ')"
             >
               <account-select
-                :horizontal="true"
-                items-type="level3"
-                v-model="item.account"
-                :disabled="!isEditing"
-                :floatAccount="item.floatAccount"
-                @update:floatAccount="v => item.floatAccount = v"
-                :costCenter="item.costCenter"
-                @update:costCenter="v => item.costCenter = v"
+                  class="rounded-lg"
+                  :horizontal="true"
+                  items-type="level3"
+                  v-model="item.account"
+                  :disabled="!isEditing"
+                  :floatAccount="item.floatAccount"
+                  @update:floatAccount="v => item.floatAccount = v"
+                  :costCenter="item.costCenter"
+                  @update:costCenter="v => item.costCenter = v"
               />
             </template>
             <template #item.explanation="{ item }">
               <row-textarea
-                v-model="item.explanation"
-                :disabled="!isEditing"
-                :i="rows.indexOf(item)"
-                @updateRowsExplanation="updateRowsExplanation"
+                  class="rounded-lg"
+                  v-model="item.explanation"
+                  :disabled="!isEditing"
+                  :i="rows.indexOf(item)"
+                  @updateRowsExplanation="updateRowsExplanation"
               />
             </template>
             <template style="width: 150px" #item.bed="{ item }">
-              <money :disabled="!isEditing || item.bes != 0" v-model="item.bed" />
+              <money  :disabled="!isEditing || item.bes != 0" v-model="item.bed"/>
             </template>
             <template #item.swap="{ item }">
               <a
-                @click.prevent="exchangeValue(item)"
-                href
-                v-if="rows.indexOf(item) != rows.length-1"
+                  @click.prevent="exchangeValue(item)"
+                  href
+                  v-if="rows.indexOf(item) != rows.length-1"
               >
                 <i class="fas fa-exchange-alt"></i>
               </a>
             </template>
             <template style="width: 150px" #item.bes="{ item }">
               <money
-                :disabled="!isEditing || item.bed != 0"
-                class="form-control"
-                v-model="item.bes"
+                  :disabled="!isEditing || item.bed != 0"
+                  class="form-control"
+                  v-model="item.bes"
               />
             </template>
             <template #item.deleteRow="{ item }">
               <v-btn
-                v-if="rows.indexOf(item) != rows.length-1"
-                @click="deleteRow(rows.indexOf(item))"
-                class="red--text"
-                icon
-                :disabled="!isEditing"
+                  v-if="rows.indexOf(item) != rows.length-1"
+                  @click="deleteRow(rows.indexOf(item))"
+                  class="error--text"
+                  icon
+                  :disabled="!isEditing"
               >
-                <v-icon>delete</v-icon>
+                <v-img class="ml-1" max-width="15" src="/img/icons/delete.svg" ></v-img>
               </v-btn>
             </template>
 
             <template #body.append="{ headers }">
-              <tr class="grey lighten-3 text-white" key="last-row">
+              <tr class="back text-white" key="last-row">
                 <td colspan="2">
                   <span
-                    v-if="bedSum != besSum"
-                  >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}</span>
+                      v-if="bedSum != besSum"
+                  >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{
+                      (bedSum > besSum) ? 'بستانکار' : 'بدهکار'
+                    }}</span>
                 </td>
                 <td class="text-left">مجموع:</td>
                 <td class>{{ bedSum | toMoney }}</td>
                 <td class="d-print-none"></td>
                 <td class>{{ besSum | toMoney }}</td>
                 <td class="d-print-none">
-                  <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
-                    <v-icon>delete_sweep</v-icon>
+                  <v-btn @click="deleteRow(-1)" icon class="error--text" :disabled="!isEditing">
+                    <v-img class="ml-1" max-width="20" src="/img/icons/delete.svg" ></v-img>
                   </v-btn>
                 </td>
               </tr>
@@ -203,36 +217,36 @@
             </template>
             <template #tbody>
               <tr
-                v-for="(row,i) in rows"
-                :key="i"
-                :class="{'draggable': i != rows.length-1 && isEditing}"
+                  v-for="(row,i) in rows"
+                  :key="i"
+                  :class="{'draggable': i != rows.length-1 && isEditing}"
               >
-                <td class="tr-counter">{{ i+1 }}</td>
+                <td class="tr-counter">{{ i + 1 }}</td>
                 <td v-tooltip="accountParentsName(row.account).join(' > ')">
                   <account-select
-                    :horizontal="true"
-                    items-type="level3"
-                    v-model="rows[i].account"
-                    :disabled="!isEditing"
-                    :floatAccount="rows[i].floatAccount"
-                    @update:floatAccount="v => rows[i].floatAccount = v"
-                    :costCenter="rows[i].costCenter"
-                    @update:costCenter="v => rows[i].costCenter = v"
+                      :horizontal="true"
+                      items-type="level3"
+                      v-model="rows[i].account"
+                      :disabled="!isEditing"
+                      :floatAccount="rows[i].floatAccount"
+                      @update:floatAccount="v => rows[i].floatAccount = v"
+                      :costCenter="rows[i].costCenter"
+                      @update:costCenter="v => rows[i].costCenter = v"
                   />
                 </td>
                 <td>
                   <row-textarea
-                    v-model="rows[i].explanation"
-                    :disabled="!isEditing"
-                    :i="i"
-                    @updateRowsExplanation="updateRowsExplanation"
+                      v-model="rows[i].explanation"
+                      :disabled="!isEditing"
+                      :i="i"
+                      @updateRowsExplanation="updateRowsExplanation"
                   />
                 </td>
                 <td style="width: 150px">
                   <money
-                    :disabled="!isEditing || rows[i].bes != 0"
-                    class="form-control"
-                    v-model="rows[i].bed"
+                      :disabled="!isEditing || rows[i].bes != 0"
+                      class="form-control"
+                      v-model="rows[i].bed"
                   />
                 </td>
                 <td class="d-print-none">
@@ -242,18 +256,18 @@
                 </td>
                 <td style="width: 150px">
                   <money
-                    :disabled="!isEditing || rows[i].bed != 0"
-                    class="form-control"
-                    v-model="rows[i].bes"
+                      :disabled="!isEditing || rows[i].bed != 0"
+                      class="form-control"
+                      v-model="rows[i].bes"
                   />
                 </td>
                 <td class="d-print-none">
                   <v-btn
-                    v-if="i != rows.length-1"
-                    @click="deleteRow(i)"
-                    class="red--text"
-                    icon
-                    :disabled="!isEditing"
+                      v-if="i != rows.length-1"
+                      @click="deleteRow(i)"
+                      class="error--text"
+                      icon
+                      :disabled="!isEditing"
                   >
                     <v-icon>delete</v-icon>
                   </v-btn>
@@ -263,8 +277,10 @@
               <tr class="grey lighten-3 text-white" key="last-row">
                 <td colspan="2">
                   <span
-                    v-if="bedSum != besSum"
-                  >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{ (bedSum > besSum)?'بستانکار':'بدهکار' }}</span>
+                      v-if="bedSum != besSum"
+                  >اختلاف: {{ Math.abs(bedSum - besSum) | toMoney }} {{
+                      (bedSum > besSum) ? 'بستانکار' : 'بدهکار'
+                    }}</span>
                 </td>
                 <td class="text-left">مجموع:</td>
                 <td class>{{ bedSum | toMoney }}</td>
@@ -272,7 +288,7 @@
                 <td class>{{ besSum | toMoney }}</td>
                 <td class="d-print-none">
                   <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
-                    <v-icon>delete_sweep</v-icon>
+                    <v-img max-width="20" src="/img/icons/delete.svg" > </v-img>
                   </v-btn>
                 </td>
               </tr>
@@ -290,11 +306,11 @@ import formsMixin from "@/mixin/forms";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 
 export default {
   name: "Form",
-  components: { money, date },
+  components: {money, date},
   mixins: [formsMixin, accountApiMixin, MFormMixin],
   props: ["id"],
   data() {
@@ -380,7 +396,7 @@ export default {
           name: "factors.factor",
           title: "فاکتور",
           routeName: "FactorForm",
-          params: { isPreFactor: false },
+          params: {isPreFactor: false},
         },
         {
           name: "factors.factorsaggregatedsanad",
@@ -397,7 +413,7 @@ export default {
           title: "انتقال",
           routeName: "TransferForm",
         },
-        { name: "_dashtbashi.lading", title: "بارگیری", routeName: "Lading" },
+        {name: "_dashtbashi.lading", title: "بارگیری", routeName: "Lading"},
         {
           name: "_dashtbashi.oilcompanylading",
           title: "بارگیری شرکت نفت",
@@ -487,11 +503,11 @@ export default {
       this.itemsToDelete = [];
       this.rows = [];
       item.items
-        .sort((a, b) => a.order - b.order)
-        .forEach((item) => {
-          let row = { ...item };
-          this.rows.push(row);
-        });
+          .sort((a, b) => a.order - b.order)
+          .forEach((item) => {
+            let row = {...item};
+            this.rows.push(row);
+          });
       this.rows.push(this.getRowTemplate());
       this.changeRouteTo(item.id);
       this.isEditing = false;

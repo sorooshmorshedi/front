@@ -2,132 +2,169 @@
   <v-card>
 
     <v-toolbar
-        class="mt-10 mr-5 ml-5"
-        color="indigo"
-        dark
+        flat
+        class="mt-3 mr-3 ml-3 rounded-lg"
+        color="back"
     >
-      <v-toolbar-title>فرم پرداخت حقوق و دستمزد</v-toolbar-title>
+      <v-toolbar-title class="secondary--text">فرم پرداخت حقوق و دستمزد</v-toolbar-title>
       <v-divider
           class="mx-4"
           vertical
       ></v-divider>
 
-      <span class="subheading mr-4 ml-4">کارگاه :  {{ listOfPay.workshop_name }}</span>
+      <span class="subheading mr-4 ml-4 secondary--text">کارگاه :  {{ listOfPay.workshop_name }}</span>
       <v-divider class="mr-2 ml-2" vertical></v-divider>
-      <span class="subheading mr-4 ">سال : {{ listOfPay.year }}</span>
+      <span class="subheading mr-4 secondary--text">سال : {{ listOfPay.year }}</span>
 
       <v-divider class="mr-4" vertical></v-divider>
-      <span class="subheading mr-2 ml-2 "> ماه : {{ listOfPay.month_name }}</span>
+      <span class="subheading mr-2 ml-2 secondary--text"> ماه : {{ listOfPay.month_name }}</span>
       <v-spacer></v-spacer>
-
-      <v-btn
-          small
-          class="light-blue white--text ml-2 mt-1 mt-md-0"
-          icon
-          @click="goToList"
-          outlined
-          title="لیست"
-      >
-        <v-icon>fa-th-list</v-icon>
-      </v-btn>
+      <v-tooltip top color="secondary">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              v-bind="attrs"
+              v-on="on"
+              small
+              class="secondary white--text ml-1 mt-1 mt-md-0 pa-4"
+              @click="goToList"
+              icon
+          >
+            <v-img max-height="25" max-width="25" src="/img/icons/list_icon.svg"></v-img>
+          </v-btn>
+        </template>
+        لیست
+      </v-tooltip>
+      <v-tooltip top color="primary">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              v-bind="attrs"
+              v-on="on"
+              small
+              class=" white--text ml-2 mt-1 mt-md-0 pa-4"
+              @click="$router.push('/panel/listOfPayItem/' + $route.params.id + '/')"
+              icon
+          >
+            <v-img max-height="38" max-width="38" src="/img/icons/back.svg"></v-img>
+          </v-btn>
+        </template>
+        بازگشت
+      </v-tooltip>
 
     </v-toolbar>
     <v-toolbar
         v-if="listOfPay.pay_done"
-        class=" mr-5 ml-5"
-        color="indigo darken-2"
+        class=" mr-5 ml-5 rounded-b-lg"
+        flat
+        color="secondary"
         dark
     >
       <v-spacer></v-spacer>
-            <span v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
-            >
-              فرم پرداخت حقوق و دستمزد :
+      <span v-if="listOfPay.bank_pay_date && listOfPay.pay_done" class="white--text">
+        فرم پرداخت حقوق و دستمزد :
       </span>
-
-      <v-btn
-          v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="PDF"
-          @click="printReport('html')"
-          icon
-
-      >
-        <v-icon>fa-print</v-icon>
-      </v-btn>
-
-      <v-btn
-          v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
-          class="export-btn grey--text  text--darken-3 ml-1 mr-1 mt-1 mt-md-0"
-          rounded
-          title="PDF"
-          @click="printReport('pdf')"
-          icon
-      >
-        <v-icon>fa-file-pdf</v-icon>
-      </v-btn>
-      <v-btn
-          v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
-          small
-          class="export-btn grey--text  text--darken-3 ml-3  mt-1 mt-md-0"
-          @click="printReport('xlsx')"
-          title="اکسل"
-          icon
-      >
-        <v-icon>fa-file-excel</v-icon>
-      </v-btn>
-
-      <span v-if="listOfPay.pay_done">خروجی بانک جهت پرداخت :</span>
-      <v-btn
-          v-if="listOfPay.pay_done"
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="PDF"
-          @click="printBankReport('html')"
-          icon
-
-      >
-        <v-icon>fa-print</v-icon>
-      </v-btn>
-
-      <v-btn
-          v-if="listOfPay.pay_done"
-          class="export-btn grey--text  text--darken-3 mr-1 ml-1 mt-1 mt-md-0"
-          rounded
-          title="PDF"
-          @click="printBankReport('pdf')"
-          icon
-
-      >
-        <v-icon>fa-file-pdf</v-icon>
-      </v-btn>
-      <v-btn
-          v-if="listOfPay.pay_done"
-          small
-          class="export-btn grey--text  text--darken-3 ml-6 mt-1 mt-md-0"
-          @click="printBankReport('xlsx')"
-          title="اکسل"
-          icon
-      >
-        <v-icon>fa-file-excel</v-icon>
-      </v-btn>
-
+      <v-tooltip bottom color="#019EF6" v-if="listOfPay.bank_pay_date && listOfPay.pay_done">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              small
+              v-bind="attrs"
+              v-on="on"
+              class="secondary--text export-btn mr-md-2 pa-2"
+              @click="printReport('html')"
+              icon
+          >
+            <v-img max-height="25" max-width="25" src="/img/icons/print_icon.svg"></v-img>
+          </v-btn>
+        </template>
+        چاپ فرم پرداخت حقوق و دستمزد
+      </v-tooltip>
+      <v-tooltip bottom color="#019EF6" v-if="listOfPay.bank_pay_date && listOfPay.pay_done">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              v-bind="attrs"
+              v-on="on"
+              small
+              class="secondary--text export-btn mr-md-2 pa-2"
+              @click="printReport('pdf')"
+              icon
+          >
+            <v-img src="/img/icons/pdf.svg"></v-img>
+          </v-btn>
+        </template>
+        خروجی PDF فرم پرداخت حقوق و دستمزد
+      </v-tooltip>
+      <v-tooltip bottom color="#019EF6" v-if="listOfPay.bank_pay_date && listOfPay.pay_done">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn depressed
+                 icon
+                 v-bind="attrs"
+                 v-on="on"
+                 @click="printReport('xlsx')"
+                 class="secondary--text export-btn ml-10  mr-md-2 pa-2">
+            <v-img src="/img/icons/xls.svg"></v-img>
+          </v-btn>
+        </template>
+        خروجی اکسل فرم پرداخت حقوق و دستمزد
+      </v-tooltip>
+      <span v-if="listOfPay.pay_done" class="white--text">خروجی بانک جهت پرداخت :</span>
+      <v-tooltip bottom color="#019EF6" v-if="listOfPay.pay_done">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              small
+              v-bind="attrs"
+              v-on="on"
+              class="export-btn mr-md-2   pa-2"
+              @click="printBankReport('html')"
+              icon
+          >
+            <v-img max-height="25" max-width="25" src="/img/icons/print_icon.svg"></v-img>
+          </v-btn>
+        </template>
+        چاپ خروجی بانک جهت پرداخت
+      </v-tooltip>
+      <v-tooltip bottom color="#019EF6" v-if="listOfPay.pay_done">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              v-bind="attrs"
+              v-on="on"
+              small
+              class="secondary--text export-btn   mr-md-2 pa-2 "
+              @click="printBankReport('pdf')"
+              icon
+          >
+            <v-img src="/img/icons/pdf.svg"></v-img>
+          </v-btn>
+        </template>
+        خروجی PDF بانک جهت پرداخت
+      </v-tooltip>
+      <v-tooltip bottom color="#019EF6" v-if="listOfPay.pay_done">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn depressed
+                 icon
+                 v-bind="attrs"
+                 v-on="on"
+                 @click="printBankReport('xlsx')"
+                 class="secondary--text export-btn ml-2  mr-md-2 pa-2">
+            <v-img src="/img/icons/xls.svg"></v-img>
+          </v-btn>
+        </template>
+        خروجی اکسل بانک جهت پرداخت
+      </v-tooltip>
     </v-toolbar>
     <v-row v-if="listOfPay.bank_pay_date && listOfPay.pay_done" class="mt-5  ml-5 mr-5">
       <v-col cols="12" md="2">
-        <v-text-field class="currency-input" v-model="listOfPay.bank_pay_name" label="نام بانک"
+        <v-text-field class="currency-input rounded-lg" v-model="listOfPay.bank_pay_name" label="نام بانک"
                       v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
                       disabled="true"
         >
         </v-text-field>
       </v-col>
       <v-col cols="12" md="2">
-        <v-text-field class="currency-input" v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
+        <v-text-field class="currency-input rounded-lg" v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
                       v-model="listOfPay.bank_pay_date" label="تاریخ پرداخت بانک " :default="true" disabled="true"/>
       </v-col>
 
       <v-col cols="12" md="2">
-        <v-text-field class="currency-input" v-model="listOfPay.bank_pay_code" label="شماره مستند بانکی"
+        <v-text-field class="currency-input rounded-lg" v-model="listOfPay.bank_pay_code" label="شماره مستند بانکی"
                       v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
                       disabled="true"
         >
@@ -135,7 +172,7 @@
 
       </v-col>
       <v-col cols="12" md="6">
-        <v-text-field class="currency-input" v-model="listOfPay.bank_pay_explanation" label="توضیحات"
+        <v-text-field class="currency-input rounded-lg" v-model="listOfPay.bank_pay_explanation" label="توضیحات"
                       v-if="listOfPay.bank_pay_date && listOfPay.pay_done"
                       disabled="true"
         >
@@ -143,27 +180,25 @@
       </v-col>
     </v-row>
     <v-card-text v-if="!listOfPay.pay_done">
-      <v-card-actions class="justify-center">
-      </v-card-actions>
-      <v-simple-table class="mt-10 ">
+      <v-simple-table class="mt-2 ">
         <template v-slot:default>
-          <thead class="style: blue lighten-4 pa-5">
-          <th class="text-center">
+          <thead class="secondary">
+          <th class="text-center white--text">
             نام و نام خانوادگی
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             حقوق معوق
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             حقوق قابل پرداخت ماه جاری
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             جمع حقوق قابل پرداخت تا این ماه
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             مبلغ ارسالی به بانک جهت پرداخت
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             مبلغ باقیمانده
           </th>
           </thead>
@@ -209,10 +244,9 @@
                   disabled="true"
               ></money>
             </td>
-
           </tr>
-          <tr class="green lighten-4">
-            <td class="text-center green--text text--darken-3">
+          <tr class="success lighten-2">
+            <td class="text-center success--text text--darken-2">
               جمع
             </td>
             <td class="text-center">
@@ -246,25 +280,15 @@
                   disabled="true"
               ></money>
             </td>
-
-
           </tr>
-
           </tbody>
         </template>
       </v-simple-table>
       <v-divider class="mt-7" vertical></v-divider>
       <v-card-actions class="justify-end">
         <date class="ml-5  mb-8" v-model="create_date" label="تاریخ ایجاد " :default="true" disabled="true"/>
-        <v-btn @click="pay()" color="green darken-2" class="white--text pl-4 pr-4  mb-8" large>
+        <v-btn @click="pay()" color="success" class="white--text pl-4 pr-4 rounded-lg  mb-8" large depressed>
           ثبت
-        </v-btn>
-        <v-btn
-            class="light-blue white--text pl-4 pr-4 mb-8  mr-2 float-left"
-            large
-            @click="$router.push('/panel/listOfPayItem/' + $route.params.id + '/')"
-        > بازگشت به لیست حقوق
-
         </v-btn>
 
       </v-card-actions>
@@ -273,25 +297,25 @@
     <v-card-text v-if="listOfPay.pay_done">
       <v-card-actions class="justify-center">
       </v-card-actions>
-      <v-simple-table class="mt-10 ">
+      <v-simple-table>
         <template v-slot:default>
-          <thead class="style: blue lighten-4 pa-5">
-          <th class="text-center">
+          <thead class="secondary">
+          <th class="text-center white--text">
             نام و نام خانوادگی
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             حقوق معوق
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             حقوق قابل پرداخت ماه جاری
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             جمع حقوق قابل پرداخت تا این ماه
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             مبلغ حقوق پرداختی
           </th>
-          <th class="text-center">
+          <th class="text-center white--text">
             حقوق پرداخت نشده
           </th>
           </thead>
@@ -344,8 +368,8 @@
               ></money>
             </td>
           </tr>
-          <tr class="green lighten-4">
-            <td class="text-center green--text text--darken-3">
+          <tr class="success lighten-2">
+            <td class="text-center success--text text--darken-2">
               جمع
             </td>
             <td class="text-center">
@@ -392,8 +416,6 @@
             </td>
 
           </tr>
-
-
           </tbody>
         </template>
       </v-simple-table>
@@ -403,43 +425,39 @@
 
 
         <v-btn v-if="listOfPay.bank_pay_date && listOfPay.get_is_editable && listOfPay.pay_done" @click="deleteDate"
-               color="red darken-1"
-               class="white--text pl-4 pr-4 mb-8 " large>
+               color="error" depressed
+               class="white--text pl-4 pr-4 mb-8 rounded-lg" large>
           خروج از ثبت نهایی
         </v-btn>
         <v-btn v-if="listOfPay.bank_pay_date && !listOfPay.get_is_editable && listOfPay.pay_done"
-               @click="un_accept_dialog = true" color="red darken-1"
-               class="white--text pl-4 pr-4 mb-8 " large>
+               @click="un_accept_dialog = true" color="error"
+               class="white--text pl-4 pr-4 mb-8 rounded-lg" large depressed>
           خروج از ثبت نهایی
         </v-btn>
-        <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount" @click="deleteAllDate" color="red darken-1"
-               class="white--text pl-4 pr-4 mb-8 " large>
+        <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount" @click="deleteAllDate" color="error"
+               class="white--text pl-4 pr-4 mb-8 rounded-lg" large depressed>
           حذف پرداخت
         </v-btn>
-        <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount" @click="edit_amount = true" color="orange darken-1"
-               class="white--text pl-4 pr-4 mb-8 " large>
+        <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount" @click="edit_amount = true" color="warning"
+               class="white--text pl-4 pr-4 mb-8 rounded-lg" depressed large>
           ویرایش
         </v-btn>
         <v-btn v-if="!listOfPay.bank_pay_date && edit_amount" @click="edit_amount = false ; pay()"
-               color="green darken-1" class="white--text pl-4 pr-4 mb-8" large>
+               color="success" class="white--text pl-4 pr-4 mb-8 rounded-lg" large depressed>
           ثبت
         </v-btn>
         <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount && !listOfPay.get_not_done_pay"
-               @click="not_verify_dialog = true" color="blue darken-1"
-               class="white--text pl-4 pr-4 mb-8" large>
+               @click="not_verify_dialog = true"
+               color="accent"
+               depressed
+               class="white--text pl-4 pr-4 mb-8 rounded-lg" large>
           ثبت نهایی پرداخت
         </v-btn>
         <v-btn v-if="!listOfPay.bank_pay_date && !edit_amount && listOfPay.get_not_done_pay" @click="dialog = true"
-               color="blue darken-1"
-               class="white--text pl-4 pr-4 mb-8" large>
+               color="accent"
+               depressed
+               class="white--text pl-4 pr-4 mb-8 rounded-lg" large>
           ثبت نهایی پرداخت
-        </v-btn>
-        <v-btn
-            class="light-blue white--text pl-4 pr-4 mb-8  mr-2 float-left"
-            large
-            @click="$router.push('/panel/listOfPayItem/' + $route.params.id + '/')"
-        >بازگشت به لیست حقوق
-
         </v-btn>
 
       </v-card-actions>
@@ -450,19 +468,21 @@
 
     <v-row justify="center">
       <v-dialog
+          class="rounded-lg"
           v-model="dialog"
           persistent
           @click:outside="dialog=false"
           max-width="1200"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="success--text text-h5">
             ثبت نهایی پرداخت
           </v-card-title>
           <v-card-text>
             <v-row class="mt-5">
               <v-col cols="12" md="2">
                 <v-autocomplete
+                    class="rounded-lg"
                     label="نام بانک"
                     :items="BANK_NAMES"
                     v-model="bank_pay_name"
@@ -476,10 +496,12 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-text-field v-on:keypress="NumbersOnly"
+                              class="rounded-lg"
                               label=" شماره مستند بانکی " v-model="bank_pay_code" background-color="white"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field
+                    class="rounded-lg"
                     label="توضیحات " v-model="bank_pay_explanation" background-color="white"/>
               </v-col>
             </v-row>
@@ -487,15 +509,17 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
-                text
+                color="error"
+                depressed
+                class="rounded-lg"
                 @click="dialog = false"
             >
               بستن
             </v-btn>
             <v-btn
-                color="green darken-1"
-                text
+                color="accent"
+                depressed
+                class="rounded-lg"
                 @click="addBankDate()"
             >
               ثبت نهایی
@@ -506,13 +530,14 @@
     </v-row>
     <v-row justify="center">
       <v-dialog
+          class="rounded-lg"
           v-model="un_accept_dialog"
           persistent
           @click:outside="un_accept_dialog=false"
           max-width="500"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="error--text text-h5">
             توجه!
           </v-card-title>
           <v-card-text>
@@ -521,7 +546,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
+                color="error"
                 text
                 @click="un_accept_dialog = false"
             >
@@ -533,13 +558,14 @@
     </v-row>
     <v-row justify="center">
       <v-dialog
+          class="rounded-lg"
           v-model="not_verify_dialog"
           persistent
           @click:outside="not_verify_dialog=false"
           max-width="500"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="error--text text-h5">
             توجه!
           </v-card-title>
           <v-card-text>
@@ -548,7 +574,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
+                color="error"
                 text
                 @click="not_verify_dialog = false"
             >
@@ -650,13 +676,13 @@ export default {
           this.create_date = null
         }
         for (let item in data.list_of_pay_item) {
-          if (data.list_of_pay_item[item].get_total_unpaid > 0 ){
-          this.items[data.list_of_pay_item[item].id] = {
-            'id': data.list_of_pay_item[item].id,
-            'amount': data.list_of_pay_item[item].get_total_unpaid,
-            'pay_amount': data.list_of_pay_item[item].get_total_unpaid,
-            'un_paid': data.list_of_pay_item[item].get_total_unpaid - data.list_of_pay_item[item].get_total_unpaid,
-          }
+          if (data.list_of_pay_item[item].get_total_unpaid > 0) {
+            this.items[data.list_of_pay_item[item].id] = {
+              'id': data.list_of_pay_item[item].id,
+              'amount': data.list_of_pay_item[item].get_total_unpaid,
+              'pay_amount': data.list_of_pay_item[item].get_total_unpaid,
+              'un_paid': data.list_of_pay_item[item].get_total_unpaid - data.list_of_pay_item[item].get_total_unpaid,
+            }
           } else {
             this.items[data.list_of_pay_item[item].id] = {
               'id': data.list_of_pay_item[item].id,

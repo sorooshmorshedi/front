@@ -1,84 +1,96 @@
 <template>
   <div class="rtl">
     <m-form
-      :title="title"
-      :items="companyUsers"
-      :cols="cols"
-      :isEditing.sync="isEditing"
-      :canDelete="canDelete"
-      :canSubmit="canSubmit && item.id"
-      :show-navigation-btns="false"
-      :showListBtn="false"
-      :showClearBtn="false"
-      @click:row="setItem"
-      @clearForm="clearForm"
-      @submit="submit"
-      @delete="deleteItem"
+        :title="title"
+        :items="companyUsers"
+        :cols="cols"
+        :isEditing.sync="isEditing"
+        :canDelete="canDelete"
+        :canSubmit="canSubmit && item.id"
+        :show-navigation-btns="false"
+        :showListBtn="false"
+        :showClearBtn="false"
+        @click:row="setItem"
+        @clearForm="clearForm"
+        @submit="submit"
+        @delete="deleteItem"
     >
       <template #header-btns>
-        <v-btn
-          class="blue white--text mr-1 mt-1 mt-md-0"
-          :to="{name: 'UserInvitations'}"
-        >افزودن کاربر</v-btn>
+        <v-tooltip top color="accent">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                depressed
+                class="secondary white--text mr-1 mt-1 mt-md-0 rounded-lg"
+                :to="{name: 'UserInvitations'}"
+            >افزودن کاربر
+            </v-btn>
+          </template>
+          افزودن کاربر جدید
+        </v-tooltip>
+
       </template>
 
       <template #default>
         <v-row>
           <v-col cols="12" md="6">
             <v-text-field
-              class="text-field-ltr"
-              label=" * کد ملی"
-              v-model="item.user.username"
-              :disabled="true"
+                class="text-field-ltr rounded-lg"
+                label=" * کد ملی"
+                v-model="item.user.username"
+                :disabled="true"
             />
           </v-col>
 
           <template>
             <v-col cols="12" md="6">
               <v-text-field
-                class="text-field-ltr"
-                type="number"
-                label="شماره موبایل"
-                v-model="item.user.phone"
-                required
-                :disabled="true"
+                  class="text-field-ltr rounded-lg"
+                  type="number"
+                  label="شماره موبایل"
+                  v-model="item.user.phone"
+                  required
+                  :disabled="true"
               />
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="نام" v-model="item.user.first_name" :disabled="true" />
+              <v-text-field label="نام" v-model="item.user.first_name" :disabled="true" class="rounded-lg"/>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="نام خانوادگی" v-model="item.user.last_name" :disabled="true" />
+              <v-text-field label="نام خانوادگی" v-model="item.user.last_name" :disabled="true" class="rounded-lg"/>
             </v-col>
           </template>
 
           <v-col cols="12">
             <v-autocomplete
-              :return-object="false"
-              label="سال های مالی"
-              :items="financialYears"
-              v-model="item.financialYears"
-              :disabled="!isEditing"
-              item-text="name"
-              item-value="id"
-              multiple
+                class="rounded-lg"
+                :return-object="false"
+                label="سال های مالی"
+                :items="financialYears"
+                v-model="item.financialYears"
+                :disabled="!isEditing"
+                item-text="name"
+                item-value="id"
+                multiple
             ></v-autocomplete>
           </v-col>
 
           <v-col cols="12">
             <v-autocomplete
-              :return-object="false"
-              label="نقش ها"
-              :items="roles"
-              v-model="item.roles"
-              :disabled="!isEditing"
-              item-text="name"
-              item-value="id"
-              multiple
+                class="rounded-lg"
+                :return-object="false"
+                label="نقش ها"
+                :items="roles"
+                v-model="item.roles"
+                :disabled="!isEditing"
+                item-text="name"
+                item-value="id"
+                multiple
             ></v-autocomplete>
           </v-col>
           <v-col cols="12">
-            <v-switch label="فعال" v-model="item.is_active" :disabled="!isEditing"></v-switch>
+            <v-switch inset color="success" label="فعال" v-model="item.is_active" :disabled="!isEditing"></v-switch>
           </v-col>
         </v-row>
       </template>
@@ -86,7 +98,7 @@
   </div>
 </template>
 <script>
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 import getRolesApi from "../role/getRolesApi";
 import UserApi from "@/views/panel/user/api";
 import CompanyMixin from "@/views/panel/company/mixin";
@@ -154,7 +166,7 @@ export default {
       this.roles = data;
     },
     getSerialized() {
-      let item = { ...this.item };
+      let item = {...this.item};
       return item;
     },
   },

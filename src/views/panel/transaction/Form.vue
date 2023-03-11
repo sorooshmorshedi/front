@@ -1,45 +1,61 @@
 <template>
   <div>
     <m-form
-      :title="title"
-      :showList="false"
-      :listRoute="{ name: 'TransactionsList', params: { type: type } }"
-      exportBaseUrl="reports/lists/transactions"
-      :exportParams="{ id: id }"
-      :showNavigationButtons="!modalMode"
-      :showSubmitAndClearForm="!modalMode"
-      :canDelete="canDelete"
-      :canEdit="!item.is_auto_created"
-      :canSubmit="canSubmit"
-      :isEditing.sync="isEditing"
-      @clearForm="clearForm"
-      @goToForm="getItemByPosition"
-      @submit="validate"
-      @delete="deleteItem"
-      @define="defineItem"
+        :title="title"
+        :showList="false"
+        :listRoute="{ name: 'TransactionsList', params: { type: type } }"
+        exportBaseUrl="reports/lists/transactions"
+        :exportParams="{ id: id }"
+        :showNavigationButtons="!modalMode"
+        :showSubmitAndClearForm="!modalMode"
+        :canDelete="canDelete"
+        :canEdit="!item.is_auto_created"
+        :canSubmit="canSubmit"
+        :isEditing.sync="isEditing"
+        @clearForm="clearForm"
+        @goToForm="getItemByPosition"
+        @submit="validate"
+        @delete="deleteItem"
+        @define="defineItem"
     >
       <template #header-btns>
-        <open-sanad-btn v-if="item.is_defined" :sanad="item.sanad" />
-        <v-btn
-          v-if="
+        <open-sanad-btn v-if="item.is_defined" :sanad="item.sanad"/>
+        <v-tooltip top color="primary">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-if="
             isImprest && id != undefined && hasPerm('', 'imprestSettlement')
           "
-          class="blue white--text mr-1 mt-1 mt-md-0"
-          :to="{ name: 'ImprestSettlement', params: { id: item.id } }"
-          title="تسویه تنخواه"
-          icon
-        >
-          <v-icon>$receiveTransactionIcon</v-icon>
-        </v-btn>
-        <v-btn
-          v-if="!isImprest && !isBankTransfer"
-          @click="factorsDialog = true"
-          class="teal white--text mr-1 mt-1 mt-md-0"
-          title="بابت فاکتور های"
-          icon
-        >
-          <v-icon>$factorIcon</v-icon>
-        </v-btn>
+                class="primary white--text mr-1 mt-1 mt-md-0 pa-4"
+                :to="{ name: 'ImprestSettlement', params: { id: item.id } }"
+                icon
+                depressed
+                v-bind="attrs"
+                v-on="on"
+            >
+              <v-img max-width="25" src="/img/icons/card.svg"></v-img>
+            </v-btn>
+          </template>
+          تسویه تنخواه
+        </v-tooltip>
+
+        <v-tooltip top color="secondary">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-if="!isImprest && !isBankTransfer"
+                @click="factorsDialog = true"
+                class="export-btn white--text mr-1 mt-1 mt-md-0 pa-4"
+                icon
+                depressed
+                v-bind="attrs"
+                v-on="on"
+            >
+              <v-img max-width="25" src="/img/icons/factor.svg"></v-img>
+            </v-btn>
+          </template>
+          بابت فاکتور های
+        </v-tooltip>
+
       </template>
 
       <template>
@@ -47,50 +63,52 @@
           <v-col cols="12" md="6">
             <v-row>
               <v-col cols="12" md="2">
-                <v-text-field label="شماره" disabled v-model="item.code" />
+                <v-text-field class="rounded-lg" label="شماره" disabled v-model="item.code"/>
               </v-col>
               <v-col cols="12" md="3">
                 <date
-                  label=" * تاریخ"
-                  v-model="item.date"
-                  :default="true"
-                  :disabled="!isEditing"
+                    label=" * تاریخ"
+                    v-model="item.date"
+                    :default="true"
+                    :disabled="!isEditing"
                 />
               </v-col>
 
               <v-col cols="12" md="3" v-if="type == 'payment'">
-                <date placeholder="تاریخ راس" disabled />
+                <date placeholder="تاریخ راس" disabled/>
               </v-col>
 
               <v-col cols="12" md="3">
                 <v-switch
-                  v-if="id"
-                  label="قطعی شده"
-                  v-model="item.is_defined"
-                  disabled
+                    inset
+                    color="green"
+                    v-if="id"
+                    label="قطعی شده"
+                    v-model="item.is_defined"
+                    disabled
                 />
               </v-col>
 
               <v-col cols="12" md="8">
                 <account-select
-                  :label="accountLabel"
-                  :itemsType="accountsType"
-                  v-model="item.account"
-                  :disabled="modalMode || !isEditing"
-                  required
-                  :floatAccount="item.floatAccount"
-                  @update:floatAccount="(v) => (item.floatAccount = v)"
-                  :costCenter="item.costCenter"
-                  @update:costCenter="(v) => (item.costCenter = v)"
+                    :label="accountLabel"
+                    :itemsType="accountsType"
+                    v-model="item.account"
+                    :disabled="modalMode || !isEditing"
+                    required
+                    :floatAccount="item.floatAccount"
+                    @update:floatAccount="(v) => (item.floatAccount = v)"
+                    :costCenter="item.costCenter"
+                    @update:costCenter="(v) => (item.costCenter = v)"
                 />
               </v-col>
 
               <v-col cols="12" md="4">
                 <v-text-field
-                  v-if="item.created_by"
-                  label="کاربر"
-                  disabled
-                  v-model="item.created_by.name"
+                    v-if="item.created_by"
+                    label="کاربر"
+                    disabled
+                    v-model="item.created_by.name"
                 />
               </v-col>
             </v-row>
@@ -99,10 +117,11 @@
             <v-row>
               <v-col cols="12">
                 <v-textarea
-                  label="شرح"
-                  v-model="item.explanation"
-                  :disabled="!isEditing"
-                  height="105"
+                    class="rounded-lg"
+                    label="شرح"
+                    v-model="item.explanation"
+                    :disabled="!isEditing"
+                    height="105"
                 />
               </v-col>
             </v-row>
@@ -132,31 +151,32 @@
               </template>
               <template #tbody>
                 <tr
-                  v-for="(row, i) in rows"
-                  :key="i"
-                  :class="{ 'd-print-none': i == rows.length - 1 }"
+                    v-for="(row, i) in rows"
+                    :key="i"
+                    :class="{ 'd-print-none': i == rows.length - 1 }"
                 >
                   <td>{{ i + 1 }}</td>
                   <td
-                    v-if="!isBankTransfer"
-                    style="min-width: 150px"
-                    :title="rows[i].type.id && rows[i].type.name"
+                      v-if="!isBankTransfer"
+                      style="min-width: 150px"
+                      :title="rows[i].type.id && rows[i].type.name"
                   >
                     <v-autocomplete
-                      :return-object="true"
-                      :disabled="!isEditing || hasCheque(row)"
-                      :items="itemPaymentMethods"
-                      v-model="rows[i].type"
-                      @change="isChequeType(row) && openSubmitChequeDialog(row, i)"
-                      item-text="name"
-                      item-value="id"
+                        class="rounded-lg"
+                        :return-object="true"
+                        :disabled="!isEditing || hasCheque(row)"
+                        :items="itemPaymentMethods"
+                        v-model="rows[i].type"
+                        @change="isChequeType(row) && openSubmitChequeDialog(row, i)"
+                        item-text="name"
+                        item-value="id"
                     />
                     <v-btn
-                      v-if="isChequeType(row) && !hasCheque(row)"
-                      @click="openSubmitChequeDialog(row, i)"
-                      class="blue white--text mt-1"
-                      block
-                      :disabled="!isEditing"
+                        v-if="isChequeType(row) && !hasCheque(row)"
+                        @click="openSubmitChequeDialog(row, i)"
+                        class="blue white--text mt-1"
+                        block
+                        :disabled="!isEditing"
                     >
                       ثبت
                       {{ rows[i].type.name }}
@@ -164,104 +184,114 @@
                   </td>
                   <td class="tr-account">
                     <account-select
-                      v-if="rows[i].type.id || isBankTransfer"
-                      :horizontal="true"
-                      :items-type="isBankTransfer ? 'banks' : 'level3'"
-                      v-model="rows[i].type.account"
-                      :disabled="!isEditing"
-                      :account-disabled="!isBankTransfer"
-                      :floatAccount="rows[i].floatAccount"
-                      @update:floatAccount="(v) => (rows[i].floatAccount = v)"
-                      :costCenter="rows[i].costCenter"
-                      @update:costCenter="(v) => (rows[i].costCenter = v)"
+                        v-if="rows[i].type.id || isBankTransfer"
+                        :horizontal="true"
+                        :items-type="isBankTransfer ? 'banks' : 'level3'"
+                        v-model="rows[i].type.account"
+                        :disabled="!isEditing"
+                        :account-disabled="!isBankTransfer"
+                        :floatAccount="rows[i].floatAccount"
+                        @update:floatAccount="(v) => (rows[i].floatAccount = v)"
+                        :costCenter="rows[i].costCenter"
+                        @update:costCenter="(v) => (rows[i].costCenter = v)"
                     />
                   </td>
                   <td>
                     <money
-                      :disabled="!isEditing || isChequeType(row)"
-                      class="form-control"
-                      v-model="rows[i].value"
+                        :disabled="!isEditing || isChequeType(row)"
+                        class="form-control"
+                        v-model="rows[i].value"
                     />
                   </td>
                   <td style="width: 100px" :title="rows[i].documentNumber">
                     <v-text-field
-                      :disabled="!isEditing || isChequeType(row)"
-                      type="text"
-                      class="form-control"
-                      v-model="rows[i].documentNumber"
+                        :disabled="!isEditing || isChequeType(row)"
+                        type="text"
+                        class="rounded-lg form-control"
+                        v-model="rows[i].documentNumber"
                     />
                   </td>
                   <td>
                     <date
-                      :disabled="!isEditing || isChequeType(row)"
-                      default="1"
-                      v-model="rows[i].date"
+                        :disabled="!isEditing || isChequeType(row)"
+                        default="1"
+                        v-model="rows[i].date"
                     />
                   </td>
                   <td>
-                    <date disabled v-model="rows[i].due" />
+                    <date disabled v-model="rows[i].due"/>
                   </td>
                   <td>
                     <v-text-field
-                      :disabled="!isEditing || !hasBank(row)"
-                      type="text"
-                      class="form-control form-control"
-                      v-model="rows[i].bankName"
+                        :disabled="!isEditing || !hasBank(row)"
+                        type="text"
+                        class="form-control form-control rounded-lg"
+                        v-model="rows[i].bankName"
                     />
                   </td>
                   <td style="min-width: 120px">
                     <row-textarea
-                      v-model="rows[i].explanation"
-                      :disabled="!isEditing || isChequeType(row)"
-                      :i="i"
-                      @updateRowsExplanation="updateRowsExplanation"
+                        class="rounded-lg"
+                        v-model="rows[i].explanation"
+                        :disabled="!isEditing || isChequeType(row)"
+                        :i="i"
+                        @updateRowsExplanation="updateRowsExplanation"
                     />
                   </td>
                   <template v-if="!isReceive">
                     <td>
                       <v-autocomplete
-                        :return-object="false"
-                        :disabled="!isEditing || hasCheque(row)"
-                        :items="bankingOperations"
-                        v-model="rows[i].bankingOperation"
-                        item-text="name"
-                        item-value="id"
+                          class="rounded-lg"
+                          :return-object="false"
+                          :disabled="!isEditing || hasCheque(row)"
+                          :items="bankingOperations"
+                          v-model="rows[i].bankingOperation"
+                          item-text="name"
+                          item-value="id"
                       />
                     </td>
                     <td>
                       <money
-                        :disabled="!isEditing || hasCheque(row)"
-                        v-model="rows[i].banking_operation_value"
+                          :disabled="!isEditing || hasCheque(row)"
+                          v-model="rows[i].banking_operation_value"
                       />
                     </td>
                   </template>
                   <td class="d-print-none">
                     <v-btn
-                      v-if="
+                        v-if="
                         i != rows.length - 1 && (!hasCheque(row) || !row.id)
                       "
-                      :disabled="!isEditing"
-                      @click="deleteRow(i)"
-                      class="red--text"
-                      icon
+                        :disabled="!isEditing"
+                        @click="deleteRow(i)"
+                        class="red--text"
+                        icon
                     >
-                      <v-icon>delete</v-icon>
+                      <v-img class="" max-width="20" src="/img/icons/delete.svg"></v-img>
                     </v-btn>
-                    <router-link
-                      v-if="hasCheque(row) && row.cheque.id"
-                      :to="{
-                        name: 'ChequeDetail',
-                        params: { id: row.cheque.id },
-                      }"
-                      target="_blank"
-                      icon
-                    >
-                      <v-icon>fa-external-link-alt</v-icon>
-                    </router-link>
+                    <v-tooltip top color="secondary">
+                      <template v-slot:activator="{ on, attrs }">
+                        <router-link
+                            v-bind="attrs"
+                            v-on="on"
+                            v-if="hasCheque(row) && row.cheque.id"
+                            :to="{
+                            name: 'ChequeDetail',
+                            params: { id: row.cheque.id },
+                              }"
+                            target="_blank"
+                            icon
+                        >
+                          <v-img v-bind="attrs" v-on="on" class="" max-width="20" src="/img/icons/external.svg"></v-img>
+                        </router-link>
+                      </template>
+                      مشاهده چک
+                    </v-tooltip>
+
                   </td>
                 </tr>
                 <tr></tr>
-                <tr class="grey lighten-3 text-white">
+                <tr class="back text-white">
                   <td></td>
                   <td v-if="!isBankTransfer"></td>
                   <td class="text-left">مجموع:</td>
@@ -273,12 +303,12 @@
                   </template>
                   <td class="d-print-none">
                     <v-btn
-                      @click="deleteRow(-1)"
-                      icon
-                      class="red--text"
-                      :disabled="!isEditing"
+                        @click="deleteRow(-1)"
+                        icon
+                        class="red--text"
+                        :disabled="!isEditing"
                     >
-                      <v-icon>delete_sweep</v-icon>
+                      <v-img class="" max-width="20" src="/img/icons/delete.svg"></v-img>
                     </v-btn>
                   </td>
                 </tr>
@@ -290,93 +320,100 @@
     </m-form>
 
     <v-dialog
-      v-model="factorsDialog"
-      scrollable
-      max-width="1200px"
-      :persistent="isEditing"
+        v-model="factorsDialog"
+        scrollable
+        class="pa-2 rounded-lg"
+        max-width="1200px"
+        :persistent="isEditing"
     >
-      <v-card>
+      <v-card class="rounded-lg">
         <v-card-title>فاکتور های پرداخت نشده</v-card-title>
         <v-card-text>
-          <v-simple-table>
+          <v-simple-table class="rounded-lg">
             <thead>
-              <tr>
-                <th>شماره فاکتور</th>
-                <th>نوع فاکتور</th>
-                <th>توضیحات</th>
-                <th>تاریخ</th>
-                <th>جمع فاکتور</th>
-                <th>جمع برگشتی</th>
-                <th>مبلغ خالص</th>
-                <th>پرداختی قبلی</th>
-                <th v-if="!isEditing">پرداختی فعلی</th>
-                <th>مانده</th>
-                <th v-if="isEditing">پرداختی فعلی</th>
-                <th></th>
-              </tr>
+            <tr class="back">
+              <th>شماره فاکتور</th>
+              <th>نوع فاکتور</th>
+              <th>توضیحات</th>
+              <th>تاریخ</th>
+              <th>جمع فاکتور</th>
+              <th>جمع برگشتی</th>
+              <th>مبلغ خالص</th>
+              <th>پرداختی قبلی</th>
+              <th v-if="!isEditing">پرداختی فعلی</th>
+              <th>مانده</th>
+              <th v-if="isEditing">پرداختی فعلی</th>
+              <th></th>
+            </tr>
             </thead>
             <tbody>
-              <tr v-for="(f, i) in factors" :key="i">
-                <td>{{ f.code }}</td>
-                <td>{{ factorTypes[f.type] }}</td>
-                <td>{{ f.explanation }}</td>
-                <td>{{ f.date }}</td>
-                <td>{{ f.total_sum | toMoney }}</td>
-                <td>{{ f.back_total_sum | toMoney }}</td>
-                <td>{{ (f.total_sum - f.back_total_sum) | toMoney }}</td>
-                <td>{{ f.previous_paid_value | toMoney }}</td>
-                <td v-if="!isEditing">{{ f.payment.value | toMoney }}</td>
-                <td>{{ f.remain | toMoney }}</td>
-                <td v-if="isEditing">
-                  <money v-model="f.payment.value" :disabled="!isEditing" />
-                </td>
-                <td>
-                  <v-btn @click="openFactor(f)" class="blue white--text">
-                    مشاهده فاکتور
-                    <v-chip class="app-background-color mr-2" x-small>{{
+            <tr v-for="(f, i) in factors" :key="i">
+              <td>{{ f.code }}</td>
+              <td>{{ factorTypes[f.type] }}</td>
+              <td>{{ f.explanation }}</td>
+              <td>{{ f.date }}</td>
+              <td>{{ f.total_sum | toMoney }}</td>
+              <td>{{ f.back_total_sum | toMoney }}</td>
+              <td>{{ (f.total_sum - f.back_total_sum) | toMoney }}</td>
+              <td>{{ f.previous_paid_value | toMoney }}</td>
+              <td v-if="!isEditing">{{ f.payment.value | toMoney }}</td>
+              <td>{{ f.remain | toMoney }}</td>
+              <td v-if="isEditing">
+                <money v-model="f.payment.value" :disabled="!isEditing"/>
+              </td>
+              <td>
+                <v-btn @click="openFactor(f)" class="blue white--text">
+                  مشاهده فاکتور
+                  <v-chip class="app-background-color mr-2" x-small>{{
                       f.code
-                    }}</v-chip>
-                  </v-btn>
-                </td>
-              </tr>
+                    }}
+                  </v-chip>
+                </v-btn>
+              </td>
+            </tr>
             </tbody>
           </v-simple-table>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            @click="splitValue(true)"
-            :disabled="!isEditing"
-            class="blue white--text"
-            >سرشکن کردن از پایین</v-btn
+              @click="splitValue(true)"
+              :disabled="!isEditing"
+              depressed
+              class="info white--text rounded-lg"
+          >سرشکن کردن از پایین
+          </v-btn
           >
           <v-btn
-            @click="splitValue()"
-            :disabled="!isEditing"
-            class="blue white--text"
-            >سرشکن کردن از بالا</v-btn
+              @click="splitValue()"
+              :disabled="!isEditing"
+              depressed
+              class="info white--text rounded-lg"
+          >سرشکن کردن از بالا
+          </v-btn
           >
-          <v-btn @click="validatePaidValues" class="green white--text w-100px"
-            >تایید</v-btn
+          <v-btn @click="validatePaidValues" depressed class="success white--text w-100px rounded-lg"
+          >تایید
+          </v-btn
           >
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="submitChequeDialog" scrollable max-width="1200px">
-      <v-card>
+    <v-dialog v-model="submitChequeDialog" scrollable max-width="1200px" class="rounded-lg">
+      <v-card class="rounded-lg">
         <v-card-text>
           <cheque-form
-            ref="chequeForm"
-            :modalMode="true"
-            :isPaid="type[0] == 'p'"
-            :type="chequeType"
-            :selectedAccount="{
+              ref="chequeForm"
+              :modalMode="true"
+              :isPaid="type[0] == 'p'"
+              :type="chequeType"
+              :selectedAccount="{
               account: item.account,
               floatAccount: item.floatAccount,
               costCenter: item.costCenter,
             }"
-            @submit="addCheque"
+              @submit="addCheque"
           />
         </v-card-text>
       </v-card>
@@ -386,7 +423,7 @@
 
 <script>
 import accountApiMixin from "@/mixin/accountMixin";
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import _ from "lodash";
@@ -396,7 +433,7 @@ import TransactionMixin from "@/views/panel/transaction/mixin";
 
 export default {
   name: "TransactionForm",
-  components: { ChequeForm, money, date },
+  components: {ChequeForm, money, date},
   mixins: [MFormMixin, accountApiMixin, TransactionMixin, ChequeMixin],
   props: {
     type: {
@@ -415,7 +452,8 @@ export default {
       default: false,
     }
   },
-  data() {3
+  data() {
+    3
     return {
       baseUrl: "transactions",
       appendSlash: true,
@@ -495,7 +533,7 @@ export default {
       } else {
         let type = this.type == "receive" ? "receive" : "payment";
         return this.defaultAccounts.filter(
-          (o) => o.usage && o.usage.toLowerCase().includes(type)
+            (o) => o.usage && o.usage.toLowerCase().includes(type)
         );
       }
     },
@@ -542,8 +580,8 @@ export default {
 
           if (paymentValue + +factor.previous_paid_value > +factor.total_sum) {
             this.notify(
-              `پرداختی فعلی فاکتور شماره ${factor.code} بیشتر از مانده آن است.`,
-              "danger"
+                `پرداختی فعلی فاکتور شماره ${factor.code} بیشتر از مانده آن است.`,
+                "danger"
             );
             return;
           }
@@ -551,8 +589,8 @@ export default {
 
         if (totalPaymentValue > this.rowsSum("value")) {
           this.notify(
-            `جمع کل مبلغ پرداختی فاکتور ها بیشتر از جمع ${this.title} است`,
-            "danger"
+              `جمع کل مبلغ پرداختی فاکتور ها بیشتر از جمع ${this.title} است`,
+              "danger"
           );
           return;
         }
@@ -586,7 +624,7 @@ export default {
             transaction_id: this.item.id,
             account_id: this.item.account.id,
             floatAccount_id:
-              this.item.floatAccount && this.item.floatAccount.id,
+                this.item.floatAccount && this.item.floatAccount.id,
             costCenter_id: this.item.costCenter && this.item.costCenter.id,
           },
           success: (data) => {
@@ -635,8 +673,8 @@ export default {
         }
         if (!this.hasValue(r.date) || r.date.length != 10) {
           this.notify(
-            `لطفا تاریخ ردیف ${i + 1} را به صورت صحیح وارد کنید`,
-            "danger"
+              `لطفا تاریخ ردیف ${i + 1} را به صورت صحیح وارد کنید`,
+              "danger"
           );
           isValid = false;
         }
@@ -648,8 +686,8 @@ export default {
       });
       if (sum != 0 && sum > this.sum) {
         this.notify(
-          "مبلغ وارد شده برای فاکتور های پرداختی باید کمتر و یا مساوری مجموع ردیف ها باشد",
-          "danger"
+            "مبلغ وارد شده برای فاکتور های پرداختی باید کمتر و یا مساوری مجموع ردیف ها باشد",
+            "danger"
         );
         isValid = false;
       }
@@ -714,8 +752,8 @@ export default {
       if (row.type.id && row.type.codename) {
         let isCheque = row.type.codename.includes("Cheque");
         let isGuarantee =
-          this.GuaranteeTypes.find((o) => o.codename == row.type.codename) !=
-          undefined;
+            this.GuaranteeTypes.find((o) => o.codename == row.type.codename) !=
+            undefined;
 
         return isCheque || isGuarantee;
       } else {
@@ -828,16 +866,16 @@ export default {
       this.item = item;
       this.itemsToDelete = [];
       item.items
-        .sort((a, b) => a.order - b.order)
-        .forEach((item) => {
-          item = this.copy(item);
-          if (item.type == null) {
-            item.type = {
-              account: item.account,
-            };
-          }
-          this.rows.push(item);
-        });
+          .sort((a, b) => a.order - b.order)
+          .forEach((item) => {
+            item = this.copy(item);
+            if (item.type == null) {
+              item.type = {
+                account: item.account,
+              };
+            }
+            this.rows.push(item);
+          });
       this.rows.push(this.getRowTemplate());
 
 

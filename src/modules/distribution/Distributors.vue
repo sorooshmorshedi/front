@@ -1,40 +1,42 @@
 <template>
   <m-form
-    title="موزع ها"
-    :items="items"
-    :cols="cols"
-    :canSubmit="canSubmit"
-    :canDelete="canDelete"
-    :is-editing.sync="isEditing"
-    :showListBtn="false"
-    :show-navigation-btns="false"
-    @click:row="setItem"
-    @clearForm="clearForm"
-    @submit="submit"
-    @delete="deleteItem"
+      title="موزع ها"
+      :items="items"
+      :cols="cols"
+      :canSubmit="canSubmit"
+      :canDelete="canDelete"
+      :is-editing.sync="isEditing"
+      :showListBtn="false"
+      :show-navigation-btns="false"
+      @click:row="setItem"
+      @clearForm="clearForm"
+      @submit="submit"
+      @delete="deleteItem"
   >
     <template #default>
       <v-row>
         <v-col cols="12" md="4">
           <v-autocomplete
-            label="* کاربر"
-            v-model="item.user"
-            :items="users"
-            item-text="name"
-            item-value="id"
-            :disabled="!isEditing"
+              class="rounded-lg"
+              label="* کاربر"
+              v-model="item.user"
+              :items="users"
+              item-text="name"
+              item-value="id"
+              :disabled="!isEditing"
           />
         </v-col>
 
         <v-col cols="12" md="8">
           <v-autocomplete
-            label="روش های دریافت"
-            :disabled="!isEditing"
-            :items="receiveTypes"
-            v-model="item.defaultAccounts"
-            item-text="name"
-            item-value="id"
-            :multiple="true"
+              class="rounded-lg"
+              label="روش های دریافت"
+              :disabled="!isEditing"
+              :items="receiveTypes"
+              v-model="item.defaultAccounts"
+              item-text="name"
+              item-value="id"
+              :multiple="true"
           />
         </v-col>
       </v-row>
@@ -42,7 +44,7 @@
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 import UserApiMixin from "@/views/panel/user/api";
 import accountApiMixin from "@/mixin/accountMixin";
@@ -70,7 +72,7 @@ export default {
     receiveTypes() {
       let type = "receive";
       return this.defaultAccounts.filter(
-        (o) => o.usage && o.usage.toLowerCase().includes(type)
+          (o) => o.usage && o.usage.toLowerCase().includes(type)
       );
     },
   },

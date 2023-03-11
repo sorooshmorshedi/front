@@ -1,25 +1,36 @@
 <template>
   <div>
     <v-card
-        elevation="1"
-        class="ma-1 pa-1 rounded"
+        class="ma-1 pa-1 rounded-lg"
+        flat
     >
       <v-toolbar
-          color="indigo darken-2"
+          color="secondary"
+          class="rounded-t-lg"
+          flat
           dark
       >
-        <v-menu offset-y>
+        <v-menu offset-y class="rounded-lg">
           <template v-slot:activator="{ on, attrs }">
-            <v-app-bar-nav-icon
-                class=""
+            <v-btn
+                icon
+                class="ml-5 mr-2 pa-4"
                 v-bind="attrs"
                 v-on="on"
-            ></v-app-bar-nav-icon>
+            >
+            <v-img
+                max-height="25"
+                max-width="25"
+                src="/img/icons/menu.svg"></v-img>
+            </v-btn>
           </template>
           <v-list>
             <v-list-item @click="$router.push('/panel/hr_letter/' + list_of_pay_item.hr)">
               <v-list-item-avatar>
-                <img :src="endpoint('media/1.jpg')">
+                <v-img
+                    max-height="40"
+                    max-width="40"
+                    src="/img/icons/left_arrow.svg"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>حکم کارگزینی</v-list-item-title>
@@ -33,7 +44,10 @@
             </v-list-item>
             <v-list-item @click="$router.push('/panel/listOfPayItem/' + list_of_pay_item.list_of_pay)">
               <v-list-item-avatar>
-                <img :src="endpoint('media/list.png')">
+                <v-img
+                    max-height="40"
+                    max-width="40"
+                    src="/img/icons/left_arrow.svg"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>لیست حقوق</v-list-item-title>
@@ -47,7 +61,10 @@
             </v-list-item>
             <v-list-item @click="$router.push('/panel/workshop_contract/' + list_of_pay_item.contract)">
               <v-list-item-avatar>
-                <img :src="endpoint('media/contract.jpg')">
+                <v-img
+                    max-height="40"
+                    max-width="40"
+                    src="/img/icons/left_arrow.svg"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>قرارداد</v-list-item-title>
@@ -61,7 +78,10 @@
             </v-list-item>
             <v-list-item @click="$router.push('/panel/workshop_personnel/' + list_of_pay_item.workshop_personnel)">
               <v-list-item-avatar>
-                <img :src="endpoint('media/personnel.png')">
+                <v-img
+                    max-height="40"
+                    max-width="40"
+                    src="/img/icons/left_arrow.svg"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>پرسنل در کارگاه</v-list-item-title>
@@ -73,169 +93,8 @@
                 </v-btn>
               </v-list-item-action>
             </v-list-item>
-            <v-list-item @click="$router.push('/panel/Payslip/' + item_id)">
-              <v-list-item-avatar>
-                <img :src="endpoint('media/pay.png')">
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>فیش حقوقی</v-list-item-title>
-                <v-list-item-subtitle>برای مشاهده فیش حقوقی این لیست کلیک کنید</v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn icon>
-                  <v-icon>fa-eye</v-icon>
-                </v-btn>
-              </v-list-item-action>
-            </v-list-item>
-
           </v-list>
         </v-menu>
-
-        <v-toolbar-title class="mr-2"> حقوق و دستمزد</v-toolbar-title>
-
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        فیش حقوقی :
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="چاپ"
-            icon
-            @click="printPayslip('html')"
-        >
-          <v-icon>fa-print</v-icon>
-        </v-btn>
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="PDF"
-            @click="printPayslip('pdf')"
-            icon
-
-        >
-          <v-icon>fa-file-pdf</v-icon>
-        </v-btn>
-        <v-btn
-            small
-            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-            @click="printPayslip('xlsx')"
-            title="اکسل"
-            icon
-        >
-          <v-icon>fa-file-excel</v-icon>
-        </v-btn>
-
-        <v-spacer></v-spacer>
-        گزارش مالیات :
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="چاپ"
-            icon
-            @click="printTax('html')"
-        >
-          <v-icon>fa-print</v-icon>
-        </v-btn>
-
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="PDF"
-            @click="printTax('pdf')"
-            icon
-        >
-          <v-icon>fa-file-pdf</v-icon>
-        </v-btn>
-        <v-btn
-            small
-            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-            @click="printTax('xlsx')"
-            title="اکسل"
-            icon
-        >
-          <v-icon>fa-file-excel</v-icon>
-        </v-btn>
-
-        <v-spacer></v-spacer>
-        اطلاعات حقوق بگیر :
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="فایل مالیات"
-            :href="this.endpoint(`payroll/diskette/tax/newPerson/` + this.list_of_pay_item.workshop_personnel + '/' + '?token=' + this.token)"
-            icon
-
-        >
-          <v-icon>fa-file-download</v-icon>
-        </v-btn>
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="چاپ"
-            icon
-            @click="printPersonTax('html')"
-        >
-          <v-icon>fa-print</v-icon>
-        </v-btn>
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="PDF"
-            @click="printPersonTax('pdf')"
-            icon
-
-        >
-          <v-icon>fa-file-pdf</v-icon>
-        </v-btn>
-        <v-btn
-            small
-            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-            @click="printPersonTax('xlsx')"
-            title="اکسل"
-            icon
-        >
-          <v-icon>fa-file-excel</v-icon>
-        </v-btn>
-
-        <v-spacer></v-spacer>
-        گزارش بیمه :
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="چاپ"
-            icon
-            @click="printInsurance('html')"
-        >
-          <v-icon>fa-print</v-icon>
-        </v-btn>
-        <v-btn
-            class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-            rounded
-            title="PDF"
-            @click="printInsurance('pdf')"
-            icon
-
-        >
-          <v-icon>fa-file-pdf</v-icon>
-        </v-btn>
-        <v-btn
-            small
-            class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-            @click="printInsurance('xlsx')"
-            title="اکسل"
-            icon
-        >
-          <v-icon>fa-file-excel</v-icon>
-        </v-btn>
-
-
-      </v-toolbar>
-
-      <v-toolbar
-          color="indigo"
-          dark
-      >
-
 
         <v-toolbar-title>  حقوق و دستمزد جامع {{ list_of_pay_item.personnel_name }} {{list_of_pay_item.personnel_national_code}} برای حکم {{list_of_pay_item.hr_name}}</v-toolbar-title>
 
@@ -243,13 +102,227 @@
         <span class="ml-2 mr-2"> کارگاه {{ list_of_pay_item.workshop_display }}</span>
         <span class="ml-2 mr-2"> سال {{ list_of_pay_item.year }}</span>
         <span class="ml-2 mr-2"> ماه  {{ list_of_pay_item.month_display }}</span>
+        <v-tooltip top color="primary">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                small
+                class=" white--text mr-5 ml-2 mt-1 mt-md-0 pa-4"
+                @click="goToListOfPay"
+                icon
+            >
+              <v-img max-height="38" max-width="38" src="/img/icons/back.svg"></v-img>
+            </v-btn>
+          </template>
+          بازگشت
+        </v-tooltip>
+
+      </v-toolbar>
+
+      <v-toolbar
+          class="rounded-b-lg"
+          color="back"
+          flat
+      >
+        فیش حقوقی :
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                small
+                v-bind="attrs"
+                v-on="on"
+                class="export-btn mr-4 mt-1 mt-md-0 pa-4"
+                @click="printPayslip('html')"
+                icon
+            >
+              <v-img max-height="30" max-width="30" src="/img/icons/print_icon.svg"></v-img>
+            </v-btn>
+          </template>
+          چاپ فیش حقوقی
+        </v-tooltip>
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                small
+                class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 "
+                @click="printPayslip('pdf')"
+                icon
+            >
+              <v-img src="/img/icons/pdf.svg"></v-img>
+            </v-btn>
+          </template>
+          خروجی PDF فیش حقوقی
+        </v-tooltip>
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn depressed
+                   icon
+                   v-bind="attrs"
+                   v-on="on"
+                   @click="printPayslip('xlsx')"
+                   class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 pa-1">
+              <v-img src="/img/icons/xls.svg"></v-img>
+            </v-btn>
+          </template>
+          خروجی اکسل فیش حقوقی
+        </v-tooltip>
+
+        <v-spacer></v-spacer>
+        گزارش مالیات :
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                small
+                v-bind="attrs"
+                v-on="on"
+                class="export-btn mr-4 mt-1 mt-md-0 pa-4"
+                @click="printTax('html')"
+                icon
+            >
+              <v-img max-height="30" max-width="30" src="/img/icons/print_icon.svg"></v-img>
+            </v-btn>
+          </template>
+          چاپ گزارش مالیات
+        </v-tooltip>
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                small
+                class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 "
+                @click="printTax('pdf')"
+                icon
+            >
+              <v-img src="/img/icons/pdf.svg"></v-img>
+            </v-btn>
+          </template>
+          خروجی PDF گزارش مالیات
+        </v-tooltip>
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn depressed
+                   icon
+                   v-bind="attrs"
+                   v-on="on"
+                   @click="printTax('xlsx')"
+                   class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 pa-1">
+              <v-img src="/img/icons/xls.svg"></v-img>
+            </v-btn>
+          </template>
+          خروجی اکسل گزارش مالیات
+        </v-tooltip>
+        <v-spacer></v-spacer>
+        اطلاعات حقوق بگیر :
+            <v-btn
+                small
+                target="_blank"
+                class="secondary  mr-1 mt-1 mt-md-0"
+                :href="this.endpoint(`payroll/diskette/tax/newPerson/` + this.list_of_pay_item.workshop_personnel + '/' + '?token=' + this.token)"
+                icon
+            >
+              <v-img max-height="20" max-width="20" src="/img/icons/file_download.svg"></v-img>
+            </v-btn>
+
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                small
+                v-bind="attrs"
+                v-on="on"
+                class="export-btn mr-md-2 mt-1 mt-md-0 pa-4"
+                @click="printPersonTax('html')"
+                icon
+            >
+              <v-img max-height="30" max-width="30" src="/img/icons/print_icon.svg"></v-img>
+            </v-btn>
+          </template>
+          چاپ اطلاعات حقوق بگیر
+        </v-tooltip>
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                small
+                class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 "
+                @click="printPersonTax('pdf')"
+                icon
+            >
+              <v-img src="/img/icons/pdf.svg"></v-img>
+            </v-btn>
+          </template>
+          خروجی PDF اطلاعات حقوق بگیر
+        </v-tooltip>
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn depressed
+                   icon
+                   v-bind="attrs"
+                   v-on="on"
+                   @click="printPersonTax('xlsx')"
+                   class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 pa-1">
+              <v-img src="/img/icons/xls.svg"></v-img>
+            </v-btn>
+          </template>
+          خروجی اکسل اطلاعات حقوق بگیر
+        </v-tooltip>
+        <v-spacer></v-spacer>
+        گزارش بیمه :
+
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                small
+                v-bind="attrs"
+                v-on="on"
+                class="export-btn mr-md-2 mt-1 mt-md-0 pa-4"
+                @click="printInsurance('html')"
+                icon
+            >
+              <v-img max-height="30" max-width="30" src="/img/icons/print_icon.svg"></v-img>
+            </v-btn>
+          </template>
+          چاپ گزارش بیمه
+        </v-tooltip>
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                small
+                class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 "
+                @click="printInsurance('pdf')"
+                icon
+            >
+              <v-img src="/img/icons/pdf.svg"></v-img>
+            </v-btn>
+          </template>
+          خروجی PDF گزارش بیمه
+        </v-tooltip>
+        <v-tooltip top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn depressed
+                   icon
+                   v-bind="attrs"
+                   v-on="on"
+                   @click="printInsurance('xlsx')"
+                   class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 pa-1">
+              <v-img src="/img/icons/xls.svg"></v-img>
+            </v-btn>
+          </template>
+          خروجی اکسل گزارش بیمه
+        </v-tooltip>
       </v-toolbar>
       <v-card>
         <v-row>
           <v-col cols="12" md="4">
-            <v-simple-table class="ma-2 mt-5">
+            <v-simple-table class="ma-2 mt-5 rounded-lg">
               <template v-slot:default>
-                <thead class="style: indigo darken-2">
+                <thead class="secondary rounded-lg" dark>
                 <tr>
                   <th class="white--text text-center" colspan="2">
                     اطلاعات پایه
@@ -505,7 +578,7 @@
           <v-col cols="12" md="4">
             <v-simple-table class="ma-2 mt-5">
               <template v-slot:default>
-                <thead class="style: indigo darken-2">
+                <thead class="secondary rounded-lg" >
                 <tr>
                   <th class="white--text text-center" colspan="2">
                     اضافات
@@ -825,7 +898,7 @@
           <v-col cols="12" md="4">
             <v-simple-table class="ma-2 mt-5">
               <template v-slot:default>
-                <thead class="style: indigo darken-2">
+                <thead class="secondary rounded-lg" >
                 <tr>
                   <th class="white--text text-center" colspan="3">
                     کسورات
@@ -1079,6 +1152,10 @@ export default {
       this.$refs.exportTable.exportTo(type)
 
     },
+    goToListOfPay() {
+      this.$router.push('/panel/listOfPayItem/' + this.list_of_pay_item.list_of_pay + '/')
+    },
+
 
 
   },

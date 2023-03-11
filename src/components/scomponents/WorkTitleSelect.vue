@@ -6,6 +6,7 @@
       :search-input.sync="search"
       :return-object="false"
       :disabled="disabled"
+      class="rounded-lg"
       @change="change_func"
       item-text="display"
       item-value="id"

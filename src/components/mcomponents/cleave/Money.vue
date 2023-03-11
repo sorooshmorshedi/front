@@ -1,12 +1,13 @@
 <template>
   <v-text-field
+
     dir="ltr"
     :label="label"
     :placeholder="placeholder"
     @input="change"
     :disabled="disabled"
     v-model="formattedAmount"
-    class="currency-input"
+    class="currency-input rounded-lg"
     :smaller-font="formattedAmount.length > 14"
     style="min-width: 80px;"
     v-bind="$attrs"

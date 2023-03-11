@@ -410,8 +410,8 @@
               با تغییر سال مالی سایر تب های سامانه بسته می شوند، میخواهید ادامه دهید؟
             </v-card-text>
             <v-card-actions class="justify-end">
-              <v-btn color="error" @click="notChangeFinancialYear">خیر</v-btn>
-              <v-btn title="تغییر سال مالی" color="success" @click="activeFinancialYear">بله</v-btn>
+              <v-btn depressed color="error" @click="notChangeFinancialYear">خیر</v-btn>
+              <v-btn depressed title="تغییر سال مالی" color="success" @click="activeFinancialYear">بله</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -523,7 +523,7 @@
         <m-system-bar/>
       </v-app-bar>
       <v-main class="app-background-color">
-        <v-container fluid>
+        <v-container class="rounded-lg" fluid>
           <router-view></router-view>
         </v-container>
       </v-main>

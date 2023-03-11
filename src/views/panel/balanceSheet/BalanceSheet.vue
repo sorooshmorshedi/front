@@ -8,13 +8,16 @@
           <date placeholder="از تاریخ" v-model="filters.from_date"/>
           <date class="mr-md-3 mt-1 mt-md-0" placeholder="تا تاریخ" v-model="filters.to_date"/>
           <v-switch
+              inset
+              color="success"
               class="mr-md-3 mt-3 mt-md-1"
               label="در نظر نگرفتن سند بستن"
               v-model="filters.skip_closing_sanads"
           ></v-switch>
           <v-btn
               :block="isXs"
-              class="blue white--text w-100px mt-3 mr-2 md-5 mt-md-0"
+              depressed
+              class="success rounded-lg white--text w-100px mt-3 mr-5 md-5 mt-md-0"
               @click="getData()"
           >گزارش
           </v-btn>
@@ -22,20 +25,23 @@
           <v-btn
               :href="this.endpoint('reports/balanceSheet/html') + `?detailed=${detailed == true}&token=${token}`"
               target="_blank"
-              class="export-btn mr-1 md-3 mt-5 mt-md-0"
+              depressed
+              class="rounded-lg export-btn mr-1 md-3 mt-5 mt-md-0"
           >چاپ
           </v-btn>
           <v-btn
               :href="this.endpoint('reports/balanceSheet/pdf') + `?detailed=${detailed == true}&token=${token}`"
               target="_blank"
-              class="export-btn mr-1 md-3 mt-5 mt-md-0"
+              depressed
+              class="rounded-lg export-btn mr-1 md-3 mt-5 mt-md-0"
           >خروجی PDF
           </v-btn>
 
           <v-btn
               :href="this.endpoint('reports/balanceSheet/xlsx') + `?detailed=${detailed == true}&token=${token}`"
               target="_blank"
-              class="export-btn mr-1 md-3 mt-5 mt-md-0"
+              depressed
+              class="rounded-lg export-btn mr-1 md-3 mt-5 mt-md-0"
           >خروجی اکسل
           </v-btn>
 
@@ -43,8 +49,8 @@
 
         <template v-if="!_.isEmpty(d)">
           <v-col cols="12" md="6">
-            <v-simple-table dense>
-              <thead class="grey lighten-3">
+            <v-simple-table class="rounded">
+              <thead class="back">
               <tr>
                 <th colspan="2" class="text-center">دارایی ها</th>
               </tr>

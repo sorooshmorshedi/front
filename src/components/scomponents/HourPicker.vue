@@ -1,5 +1,6 @@
 <template>
   <v-text-field
+      class="rounded-lg"
       v-model="localValue"
       @input="change"
       dir="ltr"

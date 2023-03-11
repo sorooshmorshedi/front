@@ -23,12 +23,13 @@
           <template>
             <v-row>
               <v-text-field
+                  class="rounded-lg"
                   v-show="false"
                   v-model="item.is_template = true"
               />
               <v-col cols="12" md="6">
                 <v-text-field label="* نام قالب" v-model="item.template_name" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing" class="rounded-lg"/>
               </v-col>
               <v-col cols="12" md="6">
                 <date v-model="item.start_date" label="* تاریخ شروع" :default="false" :disabled="!isEditing"/>
@@ -47,7 +48,7 @@
             <v-row>
               <v-col cols="12" md="12">
                 <v-text-field label="توضیحات" v-model="item.explanation" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing" class="rounded-lg"/>
               </v-col>
             </v-row>
             <v-row class="mt-10" v-if="item.id && item.is_verified">
@@ -56,17 +57,17 @@
                               disabled="ture"/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field v-model="item.last_dept_date" label="تا تاریخ "  :disabled="true"/>
+                <v-text-field class="rounded-lg" v-model="item.last_dept_date" label="تا تاریخ "  :disabled="true"/>
               </v-col>
             </v-row>
           </template>
           <v-btn
-              class="light-blue white--text mt-6  mr-2 float-left"
+              class="accent rounded-lg white--text mt-6  mr-2 float-left" depressed
               @click="verifyDeduction(item)"
               v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
+              class="error white--text mt-12 mr-2 ml-2 float-left rounded-lg " depressed
               @click="UnVerifyDeduction(item)"
               v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
           </v-btn>
@@ -74,24 +75,25 @@
         </m-form>
         <v-row justify="center">
           <v-dialog
+              class="rounded-lg"
               v-model="error_dialog"
               persistent
               @click:outside="error_dialog=false"
               max-width="400"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg">
+              <v-card-title class="error--text text-h5">
                 لطفا موارد زیر را تکمیل یا اصلاح کنید!
               </v-card-title>
               <v-card-text>
-                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                <v-row v-for="item in error_message" class="mt-5 mr-6">
                   {{ item }}
                 </v-row>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="error_dialog = false"
                 >

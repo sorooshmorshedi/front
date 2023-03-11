@@ -21,10 +21,10 @@
 
         >
           <template>
-            <v-banner class="mt-3 mb-5 red--text">
+            <v-banner class="rounded-lg mt-3 mb-5 error--text">
               <v-avatar
                   slot="icon"
-                  color="red"
+                  color="error"
                   size="25"
               >
                 <v-icon
@@ -39,8 +39,9 @@
                 transition="dialog-bottom-transition"
                 max-width="800"
                 v-model="show_setting"
+                class="rounded-lg"
             >
-              <v-card>
+              <v-card class="rounded-lg pa-2">
                 <v-card-text>
                   <workshop-setting-form ref="setting" :id="item.id" :is_pop="true" :show_edit="false"
                                          :is-editing="false"></workshop-setting-form>
@@ -50,14 +51,16 @@
                   <v-btn
                       left
                       large
-                      class="red white--text mt-12 mb-5 mr-2 float-left"
+                      depressed
+                      class="error rounded-lg white--text mt-12 mb-5 mr-2 float-left"
                       @click="show_setting=false"
                   >بستن
                   </v-btn>
                   <v-btn
                       left
                       large
-                      class="light-blue white--text mt-12 mb-5 mr-2 float-left"
+                      depressed
+                      class="accent rounded-lg white--text mt-12 mb-5 mr-2 float-left"
                       @click="verifyWorkshop(item)"
                   >  تایید و ثبت نهایی کارگاه
                   </v-btn>
@@ -70,39 +73,40 @@
               <v-col cols="12" md="6">
                 <v-text-field :rules="[rules.required]" v-on:keypress="NumbersToTenOnly" ref="code"
                               label="* کد کارگاه (بیمه) " v-model="item.workshop_code" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing" class="rounded-lg"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field :rules="[rules.required,]" label="* نام کارگاه " v-model="item.name"
-                              background-color="white"
+                              background-color="white" class="rounded-lg"
                               :disabled="!isEditing"/>
               </v-col>
 
               <v-col cols="12" md="6">
                 <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* نام کارفرما "
-                              v-model="item.employer_name" background-color="white"
+                              v-model="item.employer_name" background-color="white" class="rounded-lg"
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-textarea :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* کد پستی کارگاه"
-                            v-model="item.postal_code" :disabled="!isEditing"></v-textarea>
+                            v-model="item.postal_code" :disabled="!isEditing" class="rounded-lg"></v-textarea>
               </v-col>
 
               <v-col cols="12" md="12">
                 <v-textarea :rules="[rules.required,]" label="* آدرس کارگاه" v-model="item.address"
-                            :disabled="!isEditing"></v-textarea>
+                            :disabled="!isEditing" class="rounded-lg"></v-textarea>
               </v-col>
 
               <v-col cols="12" md="6">
-                <v-textarea label=" کد شعبه" v-model="item.branch_code" :disabled="!isEditing"></v-textarea>
+                <v-textarea label=" کد شعبه" v-model="item.branch_code" :disabled="!isEditing" class="rounded-lg"></v-textarea>
               </v-col>
               <v-col cols="12" md="6">
-                <v-textarea label=" نام شعبه" v-model="item.branch_name" :disabled="!isEditing"></v-textarea>
+                <v-textarea label=" نام شعبه" v-model="item.branch_name" :disabled="!isEditing" class="rounded-lg"></v-textarea>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.required,]"
                     label="* وضعیت"
                     :items="STATUS_TYPE"
@@ -114,6 +118,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="item.is_verified"
                     :rules="[rules.required,]"
                     label="پیش فرض"
@@ -126,54 +131,67 @@
               </v-col>
 
             </v-row>
-            <v-btn class="green white--text mt-12 ml-2 float-left"
-                   v-if=" item.id && item.is_verified && !item.is_default"
-                   @click="goDefault(item.id)">انتخاب به عنوان پیش فرض
-            </v-btn>
-            <v-btn class="orange white--text mt-12 ml-2 float-left"
-                   v-if=" item.id && item.is_verified && item.is_default"
-                   @click="goUnDefault(item.id)">خروج از پیش فرض
-            </v-btn>
-            <v-btn class="primary white--text mt-12 ml-2 float-left"
-                   v-if=" item.id && item.is_verified" @click="setting(item)">مشاهده تنظیمات کارگاه
-            </v-btn>
-            <v-btn color="blue" class=" white--text mt-12 ml-2 float-left"
-                   v-if=" item.id && item.is_verified" @click="goWorkshop(item)">مشاهده جامع
-            </v-btn>
-
           </template>
           <v-btn
-              class="primary white--text mt-6  mr-2 float-left"
-              @click="setting(item)"
-              v-if="item.id && !item.is_verified && !isEditing">تنظیمات کارگاه
-          </v-btn>
-          <v-btn
-              class="light-blue white--text mt-6  mr-2 float-left"
+              depressed
+              class="accent rounded-lg white--text mt-6  mr-2 float-left"
               @click="show_setting = true"
               v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
+              depressed
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left "
               @click="UnVerifyWorkshop(item)"
               v-if="item.id && item.is_verified && !item.no_edit"> خروج از وضعیت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
+              depressed
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left "
               @click="no_edit_dialog = true"
               v-if="item.id && item.is_verified && item.no_edit"> خروج از وضعیت نهایی
           </v-btn>
+
+          <v-btn
+              class="secondary  rounded-lg white--text mt-6  mr-2 float-left"
+              @click="setting(item)"
+              depressed
+              v-if="item.id && !item.is_verified && !isEditing">
+            <v-icon class="ml-1">fa-cogs</v-icon>
+            تنظیمات کارگاه
+          </v-btn>
+          <v-btn depressed class="success rounded-lg white--text mt-12 ml-2 float-left"
+                 v-if=" item.id && item.is_verified && !item.is_default"
+                 @click="goDefault(item.id)">انتخاب به عنوان پیش فرض
+          </v-btn>
+          <v-btn depressed class="primary rounded-lg white--text mt-12 ml-2 float-left"
+                 v-if=" item.id && item.is_verified && item.is_default"
+                 @click="goUnDefault(item.id)">خروج از پیش فرض
+          </v-btn>
+          <v-btn depressed class="secondary  rounded-lg white--text mt-12 ml-2 float-left"
+                 v-if=" item.id && item.is_verified" @click="setting(item)">
+            <v-icon class="ml-1">fa-cogs</v-icon>
+            مشاهده تنظیمات کارگاه
+          </v-btn>
+          <v-btn depressed color="info" class="rounded-lg white--text mt-12 ml-2 float-left"
+                 v-if=" item.id && item.is_verified" @click="goWorkshop(item)">
+            <v-icon class="ml-1">fa-eye</v-icon>
+            مشاهده جامع
+
+          </v-btn>
+
 
 
         </m-form>
         <v-row justify="center">
           <v-dialog
               v-model="error_dialog"
+              class="rounded-lg"
               persistent
               @click:outside="error_dialog=false"
               max-width="400"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg pa-2">
+              <v-card-title class="error--text text-h5">
                 لطفا موارد زیر را تکمیل یا اصلاح کنید!
               </v-card-title>
               <v-card-text>
@@ -184,7 +202,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="error_dialog = false"
                 >
@@ -200,9 +218,10 @@
               persistent
               @click:outside="no_edit_dialog=false"
               max-width="500"
+              class="rounded-lg"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg pa-2">
+              <v-card-title class="error--text text-h5">
                 توجه!
               </v-card-title>
               <v-card-text>
@@ -213,7 +232,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="no_edit_dialog = false"
                 >

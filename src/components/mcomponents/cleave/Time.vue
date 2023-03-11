@@ -1,15 +1,16 @@
 <template>
   <v-text-field
-    v-model="localValue"
-    @input="change"
-    dir="ltr"
-    :label="label"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    append-icon="fa-clock"
-    @click:append="setToday"
-    clearable
-    style="min-width: 90px"
+      class="rounded-lg"
+      v-model="localValue"
+      @input="change"
+      dir="ltr"
+      :label="label"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      append-icon="fa-clock"
+      @click:append="setToday"
+      clearable
+      style="min-width: 90px"
   />
 </template>
 

@@ -20,8 +20,8 @@
         ref="HRLetterFrom"
     >
       <template>
-        <v-toolbar color="indigo">
-          <v-toolbar-title class="white--text">
+        <v-toolbar color="secondary" class="rounded-lg" flat>
+          <v-toolbar-title class="back--text">
             مشخصات
           </v-toolbar-title>
         </v-toolbar>
@@ -33,10 +33,11 @@
 
         <v-row class="pt-3 pb-3 pr-3 pl-3">
           <v-col cols="12" md="6">
-            <v-card class="pa-4">
+            <v-card class="pa-4 rounded-lg">
               <v-row>
                 <v-col cols="12" md="12">
                   <v-autocomplete
+                      class="rounded-lg"
                       v-if="!item.id"
                       label=" کارگاه"
                       :items="workshops"
@@ -47,6 +48,7 @@
                       @change="getPersonnel(workshop)"
                   />
                   <v-autocomplete
+                      class="rounded-lg"
                       v-if="item.id"
                       label=" کارگاه"
                       :items="workshops"
@@ -62,6 +64,7 @@
               <v-row>
                 <v-col cols="12" md="12">
                   <v-autocomplete
+                      class="rounded-lg"
                       v-if="!item.id"
                       :rules="[rules.required,]"
                       label=" پرسنل"
@@ -74,6 +77,7 @@
                   />
                   <v-autocomplete
                       v-if="item.id"
+                      class="rounded-lg"
                       :rules="[rules.required,]"
                       label=" پرسنل"
                       :items="workshopPersonnels"
@@ -88,6 +92,7 @@
               <v-row>
                 <v-col cols="12" md="6">
                   <v-autocomplete
+                      class="rounded-lg"
                       v-if="!item.id && personnel"
                       :rules="[rules.required,]"
                       label=" نام پدر"
@@ -99,6 +104,7 @@
                   />
                   <v-autocomplete
                       v-if="item.id"
+                      class="rounded-lg"
                       :rules="[rules.required,]"
                       label=" نام پدر"
                       :items="workshopPersonnels"
@@ -110,6 +116,7 @@
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-autocomplete
+                      class="rounded-lg"
                       v-if="!item.id && personnel && personnel_nationality[personnel] == 2"
                       :rules="[rules.required,]"
                       label=" کد فراگیر تابعیت"
@@ -120,6 +127,7 @@
                       :disabled="true"
                   />
                   <v-autocomplete
+                      class="rounded-lg"
                       v-if="!item.id && personnel && personnel_nationality[personnel] != 2"
                       :rules="[rules.required,]"
                       label=" کد ملی"
@@ -133,6 +141,7 @@
                       v-if="item.id  && item.personnel_nationality == 2"
                       :rules="[rules.required,]"
                       label=" کد فراگیر تابعیت"
+                      class="rounded-lg"
                       :items="workshopPersonnels"
                       v-model="item.personnel_id"
                       item-text="identity"
@@ -143,6 +152,7 @@
                       v-if="item.id && item.personnel_nationality != 2"
                       :rules="[rules.required,]"
                       label=" کد ملی"
+                      class="rounded-lg"
                       :items="workshopPersonnels"
                       v-model="item.personnel_id"
                       item-text="identity"
@@ -159,6 +169,7 @@
                       label=" قرارداد"
                       :items="contracts"
                       v-model="item.contract"
+                      class="rounded-lg"
                       item-text="name"
                       item-value="id"
                       @change="saveContract = item.contract  ; filter['contract'] = item.contract ; listShow = true"
@@ -168,6 +179,7 @@
                       :rules="[rules.required,]"
                       label=" قرارداد"
                       :items="contracts"
+                      class="rounded-lg"
                       v-model="item.contract"
                       item-text="name"
                       item-value="id"
@@ -183,6 +195,7 @@
                       v-if="item.contract"
                       :rules="[rules.required,]"
                       label=" شروع "
+                      class="rounded-lg"
                       :items="contracts"
                       v-model="item.contract"
                       item-text="start"
@@ -196,6 +209,7 @@
                       v-if="item.contract"
                       :rules="[rules.required,]"
                       label=" پایان"
+                      class="rounded-lg"
                       :items="contracts"
                       v-model="item.contract"
                       item-text="end"
@@ -207,8 +221,9 @@
               </v-row>
               <v-row>
                 <v-col cols="12" md=" 12" class="text-center">
-                  <v-btn large block color="green darken-1"
-                         class="white--text"
+                  <v-btn large block color="success"
+                         class="white--text rounded-lg"
+                         depressed
                          v-if="!item.id && !createOne"
                          :disabled="!item.contract"
                          @click="IscreateOne"
@@ -221,6 +236,7 @@
               <v-row v-if="!item.id && createOne">
                 <v-col cols="12" md=" 12" class="text-center">
                   <v-autocomplete
+                      class="rounded-lg"
                       label=" قالب پیشفرض را انتخاب کنید"
                       :items="templates"
                       item-text="name"
@@ -235,6 +251,7 @@
               <v-row v-if="!item.id && createOne">
                 <v-col cols="12" md="12" class="text-center">
                   <v-text-field
+                      class="rounded-lg"
                       label="نام حکم"
                       v-model="item.name"
                       :disabled="!isEditing"
@@ -245,6 +262,7 @@
               <v-row v-if="item.id">
                 <v-col cols="12" md="12" class="text-center">
                   <v-text-field
+                      class="rounded-lg"
                       label="نام حکم"
                       v-model="item.name"
                       :disabled="!isEditing"
@@ -268,7 +286,7 @@
           </v-col>
         </v-row>
         <v-card v-show="item.id || createOne">
-          <v-toolbar color="indigo">
+          <v-toolbar color="secondary" class="rounded-lg" flat>
             <v-toolbar-title class="white--text">
               عناوین حکمی {{ item.name }}
             </v-toolbar-title>
@@ -289,6 +307,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.hoghooghe_roozane_nature"
@@ -322,6 +341,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.hoghooghe_roozane_base"
                   label="مزد مبنا"
                   color="success"
@@ -348,6 +368,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.paye_sanavat_nature"
@@ -381,6 +402,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.paye_sanavat_base"
                   label="مزد مبنا"
                   color="success"
@@ -406,6 +428,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_maskan_nature"
@@ -439,6 +462,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_maskan_base"
                   label="مزد مبنا"
                   color="success"
@@ -466,6 +490,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.bon_kharo_bar_nature"
@@ -499,6 +524,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.bon_kharo_bar_base"
                   label="مزد مبنا"
                   color="success"
@@ -526,6 +552,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_jazb_nature"
@@ -559,6 +586,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_jazb_base"
                   label="مزد مبنا"
                   color="success"
@@ -586,6 +614,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_sarparasti_nature"
@@ -619,6 +648,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_sarparasti_base"
                   label="مزد مبنا"
                   color="success"
@@ -646,6 +676,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_modiriyat_nature"
@@ -679,6 +710,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_modiriyat_base"
                   label="مزد مبنا"
                   color="success"
@@ -708,6 +740,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_shoghl_nature"
@@ -741,6 +774,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_shoghl_base"
                   label="مزد مبنا"
                   color="success"
@@ -768,6 +802,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_tahsilat_nature"
@@ -801,6 +836,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_tahsilat_base"
                   label="مزد مبنا"
                   color="success"
@@ -829,6 +865,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_sakhti_kar_nature"
@@ -863,6 +900,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_sakhti_kar_base"
                   label="مزد مبنا"
                   color="success"
@@ -890,6 +928,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_ankal_nature"
@@ -923,6 +962,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_ankal_base"
                   label="مزد مبنا"
                   color="success"
@@ -950,6 +990,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_badi_abohava_nature"
@@ -983,6 +1024,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_badi_abohava_base"
                   label="مزد مبنا"
                   color="success"
@@ -1010,6 +1052,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.mahroomiat_tashilat_zendegi_nature"
@@ -1043,6 +1086,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.mahroomiat_tashilat_zendegi_base"
                   label="مزد مبنا"
                   color="success"
@@ -1070,6 +1114,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_mahal_khedmat_nature"
@@ -1103,6 +1148,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_mahal_khedmat_base"
                   label="مزد مبنا"
                   color="success"
@@ -1130,6 +1176,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_sharayet_mohit_kar_nature"
@@ -1163,6 +1210,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_sharayet_mohit_kar_base"
                   label="مزد مبنا"
                   color="success"
@@ -1190,6 +1238,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.ayabo_zahab_nature"
@@ -1223,6 +1272,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.ayabo_zahab_base"
                   label="مزد مبنا"
                   color="success"
@@ -1250,6 +1300,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.yarane_ghaza_nature"
@@ -1283,6 +1334,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.yarane_ghaza_base"
                   label="مزد مبنا"
                   color="success"
@@ -1310,6 +1362,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_shir_nature"
@@ -1343,6 +1396,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_shir_base"
                   label="مزد مبنا"
                   color="success"
@@ -1371,6 +1425,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_taahol_nature"
@@ -1404,6 +1459,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_taahol_base"
                   label="مزد مبنا"
                   color="success"
@@ -1430,6 +1486,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.komakhazine_mahdekoodak_nature"
@@ -1463,6 +1520,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.komakhazine_mahdekoodak_base"
                   label="مزد مبنا"
                   color="success"
@@ -1490,6 +1548,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.komakhazine_varzesh_nature"
@@ -1523,6 +1582,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.komakhazine_varzesh_base"
                   label="مزد مبنا"
                   color="success"
@@ -1549,6 +1609,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.komakhazine_mobile_nature"
@@ -1582,6 +1643,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.komakhazine_mobile_base"
                   label="مزد مبنا"
                   color="success"
@@ -1609,6 +1671,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.mazaya_mostamar_gheyre_naghdi_nature = 'p'"
@@ -1644,6 +1707,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.mazaya_mostamar_gheyre_naghdi_base"
                   label="مزد مبنا"
                   color="success"
@@ -1655,7 +1719,7 @@
             </v-col>
           </v-row>
 
-          <v-toolbar color="indigo" class="mt-10">
+          <v-toolbar color="secondary" flat class="mt-10 rounded-lg">
 
             <v-toolbar-title class="white--text">
               عناوین غیر حکمی {{ item.name }}
@@ -1669,6 +1733,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_owlad_nature = 'p'"
@@ -1712,6 +1777,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.ezafe_kari_nature = 'u'"
@@ -1753,6 +1819,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.shab_kari_nature = 'u'"
@@ -1793,6 +1860,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.tatil_kari_nature = 'u'"
@@ -1833,6 +1901,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.nobat_kari_nature = 'u'"
@@ -1873,6 +1942,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_maamooriat_nature = 'u'"
@@ -1913,6 +1983,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-text-field
+                  class="rounded-lg"
                   :disabled="true"
                   v-model="sanavat_msg"
               />
@@ -1949,6 +2020,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-text-field
+                  class="rounded-lg"
                   :disabled="true"
                   v-model="sanavat_msg"
               />
@@ -1980,31 +2052,41 @@
             </v-col>
           </v-row>
 
-          <v-toolbar color="indigo" class="mt-10" v-if="item.id">
+          <v-toolbar color="secondary" class="mt-10 rounded-lg" flat v-if="item.id">
 
             <v-toolbar-title class="white--text">
               شخصی سازی مبانی محاسباتی حقوق و دستمزد برای حکم {{item.name}}
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn
-                color="blue"
-                class="white--text"
+                depressed
+                color="primary"
+                class="white--text rounded-lg"
                 v-if="isEditing"
                 @click="show_custom=true"
             >
               مشاهده و شخصی سازی
             </v-btn>
-            <v-btn
-                color="blue-grey"
-                class="white--text"
-                v-if="!isEditing"
+            <v-tooltip top color="primary" v-else>
+              <template v-slot:activator="{ on, attrs }">
+
+              <v-btn
+                depressed
+                v-bind="attrs"
+                v-on="on"
+                color="back"
+                class="secondary--text  rounded-lg"
             >
               مشاهده و شخصی سازی
             </v-btn>
+              </template>
+              ابتدا ویرایش را فعال کنید
+            </v-tooltip>
+
 
           </v-toolbar>
 
-          <v-toolbar v-if="item.id" color="indigo" class="mt-10">
+          <v-toolbar v-if="item.id" color="secondary" class="mt-10 rounded-lg" flat>
 
             <v-toolbar-title class="white--text">
               مزد مبنا حکم {{item.name}}
@@ -2048,11 +2130,10 @@
 
           </v-row>
         </v-card>
-        <v-row class="ma-5">
+        <v-row class="mt-5 mb-5">
           <v-col cols="12" md="12" v-if="item.id && !item.is_calculated">
             <v-banner
-                class="red white--text"
-                elevation="6"
+                class="error white--text"
                 outlined
                 rounded
                 single-line
@@ -2071,11 +2152,14 @@
           <v-dialog
               transition="dialog-bottom-transition"
               max-width="800"
+              class="rounded-lg"
               v-model="show_custom"
           >
             <v-card>
               <v-toolbar
-                  color="indigo"
+                  class="rounded-lg"
+                  flat
+                  color="secondary"
                   dark
               >شخصی سازی مبانی محاسباتی حقوق و دستمزد
               </v-toolbar>
@@ -2148,6 +2232,7 @@
                       <td>عیدی و پاداش</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.eydi_padash_pay_type"
                             item-text="name"
@@ -2160,6 +2245,7 @@
                       <td>حق سنوات</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.haghe_sanavat_pay_type"
                             item-text="name"
@@ -2172,6 +2258,7 @@
                       <td>عائله مندی</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.aele_mandi_pay_type"
                             item-text="name"
@@ -2184,6 +2271,7 @@
                       <td>اضافه کاری</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.ezafe_kari_pay_type"
                             item-text="name"
@@ -2196,6 +2284,7 @@
                       <td>تعطیل کاری</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.tatil_kari_pay_type"
                             item-text="name"
@@ -2209,6 +2298,7 @@
                       <td>کسر کار</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.kasre_kar_pay_type"
                             item-text="name"
@@ -2221,6 +2311,7 @@
                       <td>شب کاری</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.shab_kari_pay_type"
                             item-text="name"
@@ -2233,6 +2324,7 @@
                       <td>نوبت کاری صبح و عصر</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.nobat_kari_sob_asr_pay_type"
                             item-text="name"
@@ -2245,6 +2337,7 @@
                       <td>نوبت کاری صبح و شب</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.nobat_kari_sob_shab_pay_type"
                             item-text="name"
@@ -2257,6 +2350,7 @@
                       <td>نوبت کاری عصر و شب</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.nobat_kari_asr_shab_pay_type"
                             item-text="name"
@@ -2269,6 +2363,7 @@
                       <td>نوبت کاری صبح و عصر و شب</td>
                       <td>
                         <v-autocomplete
+                            class="rounded-lg"
                             :items="PAY_TYPES"
                             v-model="item.nobat_kari_sob_asr_shab_pay_type"
                             item-text="name"
@@ -2286,6 +2381,7 @@
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-autocomplete
+                        class="rounded-lg"
                         label="* مسکن"
                         :items="MASKAN_TYPE"
                         v-model="item.maskan"
@@ -2299,6 +2395,7 @@
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-autocomplete
+                        class="rounded-lg"
                         label="* وسیله نقلیه"
                         :items="OTOMOBIL_TYPE"
                         v-model="item.otomobil"
@@ -2312,6 +2409,7 @@
                   </v-col>
                   <v-col cols="12" md="6" class="pt-8">
                     <v-switch
+                        inset
                         class="mr-16"
                         v-model="item.include_made_86"
                         color="success"
@@ -2324,10 +2422,10 @@
                 </v-row>
                 <v-row v-if="item.include_made_86" class="ma-2">
                   <v-col cols="12" md="12">
-                    <v-banner class="mt-3 mb-5 orange--text text--darken-3">
+                    <v-banner class="mt-3 mb-5 primary--text rounded-lg" flat>
                       <v-avatar
                           slot="icon"
-                          color="orange darken-2"
+                          color="primary"
                           size="40"
                       >
                         <v-icon
@@ -2348,7 +2446,7 @@
               </v-card-text>
               <v-card-actions class="justify-end">
                 <v-btn
-                    class="green white--text"
+                    class="success rounded-lg white--text" depressed
                     large
                     @click="$refs.HRLetterFrom.submit(false) ; show_custom=false"
                 >ثبت
@@ -2360,23 +2458,23 @@
         </v-row>
       </template>
       <v-btn
-          class="light-blue white--text mt-6  mr-2 float-left"
+          class="accent rounded-lg white--text mt-6  mr-2 float-left" depressed
           @click="submitAndActive(item)"
           v-if="item.id && item.is_calculated && !item.is_verified && !isEditing">ثبت نهایی
       </v-btn>
       <v-btn
-          class="red white--text mt-12 mr-2 ml-2 float-left "
+          class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
           @click="UnVerifyHRL(item)"
           v-if="item.id && item.is_verified && item.is_calculated"> خروج از وضعیت نهایی
       </v-btn>
       <v-btn
-          class="primary darken-2 white--text mt-12 mr-2 float-left "
+          class="primary white--text mt-12 mr-2 float-left rounded-lg" depressed
           v-if="item.id && item.is_verified  && item.is_active"
           @click="UnActiveHR(item)"
       >غیر فعال سازی
       </v-btn>
       <v-btn
-          class="green darken-1 white--text mt-12 mr-2 float-left "
+          class="secondary rounded-lg darken-1 white--text mt-12 mr-2 float-left " depressed
           v-if="item.id && item.is_verified  && !item.is_active"
           @click="sure_dialog = true"
       > فعال سازی
@@ -2386,12 +2484,13 @@
     <v-row justify="center">
       <v-dialog
           v-model="error_dialog"
+          class="rounded-lg"
           persistent
           @click:outside="error_dialog=false"
           max-width="400"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg pa-2">
+          <v-card-title class="error--text text-h5">
             لطفا موارد زیر را تکمیل یا اصلاح کنید!
           </v-card-title>
           <v-card-text>
@@ -2402,7 +2501,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="green darken-1"
+                color="success"
                 text
                 @click="error_dialog = false"
             >
@@ -2414,13 +2513,14 @@
     </v-row>
     <v-row justify="center">
       <v-dialog
+          class="rounded-lg"
           v-model="sure_dialog"
           persistent
           @click:outside="error_dialog=false"
           max-width="430"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="error--text text-h5">
             آیا از فعال کردن حکم اطیمنان دارید؟!
           </v-card-title>
           <v-card-text>
@@ -2431,15 +2531,15 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
-                text
+                color="error"
+                class="rounded-lg" depressed
                 @click="reloadPage"
             >
               بستن
             </v-btn>
             <v-btn
-                color="green darken-1"
-                text
+                color="success"
+                class="rounded-lg" depressed
                 @click="ActiveHR(item)"
             >
               فعال شود

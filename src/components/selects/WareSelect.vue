@@ -4,19 +4,20 @@
       v-if="factorType"
       title="آخرین قیمت"
       @click="showPrices"
-      color="cyan"
+      color="accent"
       :disabled="!ware"
     >fa-dollar-sign</v-icon>
     <open-inventory-btn :wareId="ware && ware.id" class="mr-2" />
     <v-icon
       title="موجودی"
       @click="showInventory"
-      color="cyan"
+      color="accent"
       class="pl-2 mr-2"
       :disabled="!ware"
     >fa-boxes</v-icon>
     <v-autocomplete
-      :title="ware && ware.name"
+        class="rounded-lg"
+        :title="ware && ware.name"
       :label="label"
       :items="wares.filter(o => o.level == 3)"
       v-model="ware"

@@ -16,7 +16,7 @@
     <template #default>
       <v-row>
         <v-col cols="12">
-          <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
+          <v-text-field class="rounded-lg" label=" * نام" v-model="item.name" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>

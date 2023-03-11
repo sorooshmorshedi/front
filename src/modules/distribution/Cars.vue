@@ -1,17 +1,17 @@
 <template>
   <m-form
-    title="ماشین ها"
-    :items="items"
-    :cols="cols"
-    :canSubmit="canSubmit"
-    :canDelete="canDelete"
-    :is-editing.sync="isEditing"
-    :showListBtn="false"
-    :show-navigation-btns="false"
-    @click:row="setItem"
-    @clearForm="clearForm"
-    @submit="submit"
-    @delete="deleteItem"
+      title="ماشین ها"
+      :items="items"
+      :cols="cols"
+      :canSubmit="canSubmit"
+      :canDelete="canDelete"
+      :is-editing.sync="isEditing"
+      :showListBtn="false"
+      :show-navigation-btns="false"
+      @click:row="setItem"
+      @clearForm="clearForm"
+      @submit="submit"
+      @delete="deleteItem"
   >
     <template #default>
       <v-row>
@@ -20,7 +20,7 @@
           <v-row no-gutters class="flex-row-reverse">
             <v-col cols="3">
               <div
-                class="v-input v-input--hide-details v-input--dense theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined"
+                  class="v-input v-input--hide-details v-input--dense theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined"
               >
                 <div class="v-input__control">
                   <div class="v-input__slot white">
@@ -30,11 +30,11 @@
                       </legend>
                     </fieldset>
                     <div class="v-text-field__slot ltr">
-                      <input
-                        id="car-number-1"
-                        type="text"
-                        v-model.lazy="carNumber[0]"
-                        :disabled="!isEditing"
+                      <input class=""
+                             id="car-number-1"
+                             type="text"
+                             v-model.lazy="carNumber[0]"
+                             :disabled="!isEditing"
                       />
                     </div>
                   </div>
@@ -43,7 +43,7 @@
             </v-col>
             <v-col cols="2">
               <div
-                class="v-input v-input--hide-details v-input--dense theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined"
+                  class="v-input v-input--hide-details v-input--dense theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined"
               >
                 <div class="v-input__control">
                   <div class="v-input__slot white">
@@ -54,10 +54,10 @@
                     </fieldset>
                     <div class="v-text-field__slot ltr">
                       <input
-                        id="car-number-2"
-                        type="text"
-                        v-model.lazy="carNumber[1]"
-                        :disabled="!isEditing"
+                          id="car-number-2"
+                          type="text"
+                          v-model.lazy="carNumber[1]"
+                          :disabled="!isEditing"
                       />
                     </div>
                   </div>
@@ -66,7 +66,7 @@
             </v-col>
             <v-col cols="3">
               <div
-                class="v-input v-input--hide-details v-input--dense theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined"
+                  class="v-input v-input--hide-details v-input--dense theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined"
               >
                 <div class="v-input__control">
                   <div class="v-input__slot white">
@@ -77,10 +77,10 @@
                     </fieldset>
                     <div class="v-text-field__slot ltr">
                       <input
-                        id="car-number-3"
-                        type="text"
-                        v-model.lazy="carNumber[2]"
-                        :disabled="!isEditing"
+                          id="car-number-3"
+                          type="text"
+                          v-model.lazy="carNumber[2]"
+                          :disabled="!isEditing"
                       />
                     </div>
                   </div>
@@ -89,7 +89,7 @@
             </v-col>
             <v-col cols="4">
               <div
-                class="v-input v-input--hide-details v-input--dense theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined"
+                  class="v-input v-input--hide-details v-input--dense theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined"
               >
                 <div class="v-input__control">
                   <div class="v-input__slot white">
@@ -98,14 +98,15 @@
                         <span>​</span>
                       </legend>
                     </fieldset>
-                    <div class="v-text-field__slot ltr">
+                    <div class="v-text-field__slot ltr blue darken-4" >
                       <input
-                        id="car-number-4"
-                        type="text"
-                        v-model.lazy="carNumber[3]"
-                        :disabled="!isEditing"
+                          class="white--text blue darken-4"
+                          id="car-number-4"
+                          type="text"
+                          v-model.lazy="carNumber[3]"
+                          :disabled="!isEditing"
                       />
-                      <div class="v-text-field__suffix">ایران</div>
+                      <div class="v-text-field__suffix white--text ml-3">ایران</div>
                     </div>
                   </div>
                 </div>
@@ -115,40 +116,42 @@
         </v-col>
 
         <v-col cols="12">
-          <v-text-field label="* نام" v-model="item.name" :disabled="!isEditing" />
+          <v-text-field class="rounded-lg" label="* نام" v-model="item.name" :disabled="!isEditing"/>
         </v-col>
 
         <v-col cols="12" md="6">
           <v-autocomplete
-            label="* راننده"
-            v-model="item.driver"
-            :items="drivers"
-            item-text="user.name"
-            item-value="id"
-            :return-object="true"
-            :disabled="!isEditing"
+              class="rounded-lg"
+              label="* راننده"
+              v-model="item.driver"
+              :items="drivers"
+              item-text="user.name"
+              item-value="id"
+              :return-object="true"
+              :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" md="6">
           <v-autocomplete
-            label="* موزع"
-            v-model="item.distributor"
-            :items="distributors"
-            item-text="user.name"
-            item-value="id"
-            :return-object="true"
-            :disabled="!isEditing"
+              class="rounded-lg"
+              label="* موزع"
+              v-model="item.distributor"
+              :items="distributors"
+              item-text="user.name"
+              item-value="id"
+              :return-object="true"
+              :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
+          <v-textarea class="rounded-lg" label="توضیحات" v-model="item.explanation" :disabled="!isEditing"/>
         </v-col>
       </v-row>
     </template>
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
 
 export default {

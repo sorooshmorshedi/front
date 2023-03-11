@@ -2,18 +2,16 @@
   <div>
     <v-card
         elevation="2"
-        class="ma-5 pa-1 rounded"
+        class="ma-5 pa-1 rounded-lg" flat
     >
       <v-toolbar
-          color="indigo"
+          color="back"
           dark
+          flat
+          class="rounded-lg"
       >
-        <v-app-bar-nav-icon
-            @click="$router.push('/panel/setting/' + workshop.id)"
 
-        ></v-app-bar-nav-icon>
-
-        <v-toolbar-title>کارگاه {{ workshop.name }} {{ workshop.workshop_code }}</v-toolbar-title>
+        <v-toolbar-title class="secondary--text">کارگاه {{ workshop.name }} {{ workshop.workshop_code }}</v-toolbar-title>
 
         <v-spacer></v-spacer>
         <v-dialog
@@ -23,8 +21,8 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-                class="primary  mr-2 rounded white--text "
-                large
+                class="secondary  mr-2 rounded-lg white--text "
+                depressed
                 v-bind="attrs"
                 v-on="on"
             >
@@ -36,16 +34,18 @@
 
           </template>
           <template v-slot:default="dialog">
-            <v-card>
+            <v-card class="rounded-lg">
               <v-toolbar
-                  color="green darken-2"
+                  flat
+                  class="rounded-lg"
+                  color="success"
                   dark
               > گزارش جامع مرخصی کارگاه {{ workshop.name }} {{ workshop.code }}
               </v-toolbar>
               <v-card-text class="pa-5">
                 <v-text-field
-                    class="currency-input"
-                    color="blue"
+                    class="currency-input rounded-lg"
+                    color="info"
                     label="سال"
                     v-model="year"
                     background-color="white"
@@ -54,6 +54,8 @@
 
               <v-container fluid class="pa-5">
                 <v-select
+                    color="info"
+                    class="rounded-lg"
                     v-model="months"
                     :items="MONTHS"
                     item-text="name"
@@ -118,8 +120,9 @@
               </v-container>
               <v-card-actions class="justify-end mt-16 mb-5">
                 <v-btn
-                    color="green"
-                    class="white--text"
+                    color="success"
+                    class="white--text rounded-lg"
+                    depressed
                     large
                     @click="dialog.value = false ; reportAbsence()"
                 >گزارش
@@ -131,14 +134,15 @@
 
 
         <v-dialog
+            class="rounded-lg"
             max-width="900"
             hide-overlay
             transition="dialog-bottom-transition"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-                class="primary  mr-2 rounded white--text "
-                large
+                class="secondary  mr-2 rounded-lg white--text "
+                depressed
                 v-bind="attrs"
                 v-on="on"
             >
@@ -150,16 +154,18 @@
 
           </template>
           <template v-slot:default="dialog">
-            <v-card>
+            <v-card class="rounded-lg">
               <v-toolbar
-                  color="green darken-3"
+                  color="success"
+                  class="rounded-lg"
+                  flat
                   dark
               > گزارش جامع ذخیره مزایای مرخصی کارگاه {{ workshop.name }} {{ workshop.code }}
               </v-toolbar>
               <v-card-text class="pa-5">
                 <v-text-field
-                    class="currency-input"
-                    color="blue"
+                    class="currency-input rounded-lg"
+                    color="info"
                     label="سال"
                     v-model="year"
                     background-color="white"
@@ -168,7 +174,9 @@
 
               <v-container fluid class="pa-5">
                 <v-select
+                    class="rounded-lg"
                     v-model="months"
+                    color="info"
                     :items="MONTHS"
                     item-text="name"
                     item-value="value"
@@ -232,8 +240,10 @@
               </v-container>
               <v-card-actions class="justify-end mt-16 mb-5">
                 <v-btn
-                    color="green"
-                    class="white--text"
+                    class="rounded-lg"
+                    color="success"
+                    depressed
+                    dark
                     large
                     @click="dialog.value = false ; reportSaveAbsence()"
                 >گزارش
@@ -245,14 +255,15 @@
 
 
         <v-dialog
+            class="rounded-lg"
             max-width="900"
             hide-overlay
             transition="dialog-bottom-transition"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-                class="primary  mr-2 rounded white--text "
-                large
+                class="secondary  mr-2 rounded-lg white--text "
+                depressed
                 v-bind="attrs"
                 v-on="on"
             >
@@ -264,16 +275,18 @@
 
           </template>
           <template v-slot:default="dialog">
-            <v-card>
+            <v-card class="rounded-lg">
               <v-toolbar
-                  color="green darken-2"
+                  class="rounded-lg"
+                  flat
+                  color="success"
                   dark
               > گزارش جامع عیدی و پاداش {{ workshop.name }} {{ workshop.code }}
               </v-toolbar>
               <v-card-text class="pa-5">
                 <v-text-field
                     class="currency-input"
-                    color="blue"
+                    color="info"
                     label="سال"
                     v-model="year"
                     background-color="white"
@@ -284,6 +297,7 @@
                 <v-select
                     v-model="months"
                     :items="MONTHS"
+                    color="info"
                     item-text="name"
                     item-value="value"
                     label="انتخاب ماه"
@@ -346,8 +360,9 @@
               </v-container>
               <v-card-actions class="justify-end mt-16 mb-5">
                 <v-btn
-                    color="green"
-                    class="white--text"
+                    color="success"
+                    class="white--text rounded-lg"
+                    depressed
                     large
                     @click="dialog.value = false ; reportEydi()"
                 >گزارش
@@ -358,14 +373,15 @@
         </v-dialog>
 
         <v-dialog
+            class="rounded-lg"
             max-width="900"
             hide-overlay
             transition="dialog-bottom-transition"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-                class="primary  mr-2 rounded white--text "
-                large
+                class="secondary  mr-2 rounded-lg white--text "
+                depressed
                 v-bind="attrs"
                 v-on="on"
             >
@@ -377,16 +393,18 @@
 
           </template>
           <template v-slot:default="dialog">
-            <v-card>
+            <v-card class="rounded-lg">
               <v-toolbar
-                  color="green darken-2"
+                  flat
+                  class="rounded-lg"
+                  color="success"
                   dark
               > گزارش جامع حق سنوات {{ workshop.name }} {{ workshop.code }}
               </v-toolbar>
               <v-card-text class="pa-5">
                 <v-text-field
                     class="currency-input"
-                    color="blue"
+                    color="info"
                     label="سال"
                     v-model="year"
                     background-color="white"
@@ -395,6 +413,7 @@
 
               <v-container fluid class="pa-5">
                 <v-select
+                    color="info"
                     v-model="months"
                     :items="MONTHS"
                     item-text="name"
@@ -459,8 +478,9 @@
               </v-container>
               <v-card-actions class="justify-end mt-16 mb-5">
                 <v-btn
-                    color="green"
-                    class="white--text"
+                    color="success"
+                    class="white--text rounded-lg"
+                    depressed
                     large
                     @click="dialog.value = false ; reportHagheSanavat()"
                 >گزارش
@@ -469,13 +489,8 @@
             </v-card>
           </template>
         </v-dialog>
-
-
-
-
         <v-btn
-            class="green darken-2  mr-2 rounded white--text "
-            large
+            class="primary  mr-2 rounded-lg white--text " depressed
             @click="$router.push('/panel/workshopSetting/' + workshop.id)"
         >
           <v-icon class="ml-2">
@@ -486,42 +501,41 @@
 
       </v-toolbar>
       <v-simple-table
-          class="ma-2 mt-5"
+          class="rounded-lg ma-2 mt-5"
       >
         <template v-slot:default>
-          <thead class="style: indigo darken-2">
-
+          <thead class="secondary rounded-lg">
           <tr>
             <th
                 class="text-center"
                 colspan="13">
-              <h2 class="white--text"
+              <h2 class="white--text rounded-lg"
               >پــرسـنـل کــارگــاه </h2>
             </th>
           </tr>
           </thead>
-          <thead class="style: indigo lighten-1"
+          <thead class="back"
           >
           <tr>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               نام و نام خانوادگی
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text ">
               شماره ملی
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               جنسیت
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               وضعیت تاهل
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               شماره موبایل
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               عنوان شغلی
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               رسته شغلی
             </th>
             <th class="text-left" colspan="9">
@@ -543,8 +557,8 @@
             <td class="text-center" @click="goToPersonnel(item.id)">{{ item.job_group_display }}</td>
             <td class="text-center">
               <v-btn
-                  class="ml-2 mr-2 rounded grey--text text--darken-3"
-                  color="yellow darken-2 "
+                  class="ml-2 mr-2 rounded-lg export-btn"
+                  depressed
                   @click="$router.push('/panel/absence')"
               >
                 مرخصی یا غیبت
@@ -553,8 +567,8 @@
             </td>
             <td class="text-center">
               <v-btn
-                  class="ml-2 mr-2 rounded grey--text text--darken-3"
-                  color="yellow darken-2 "
+                  class="ml-2 mr-2 rounded-lg export-btn"
+                  depressed
                   @click="$router.push('/panel/mission')"
               >
                 ماموریت
@@ -562,8 +576,8 @@
             </td>
             <td class="text-center">
               <v-btn
-                  class="ml-2 mr-2 rounded grey--text text--darken-3"
-                  color="yellow darken-2 "
+                  class="ml-2 mr-2 rounded-lg export-btn"
+                  depressed
                   @click="$router.push('/panel/loan')"
               >
                 ثبت مساعده یا وام
@@ -572,8 +586,8 @@
             </td>
             <td class="text-center">
               <v-btn
-                  class="ml-2 mr-2 rounded grey--text text--darken-3"
-                  color="yellow darken-2 "
+                  class="ml-2 mr-2 rounded-lg export-btn"
+                  depressed
                   @click="$router.push('/panel/deduction')"
               >
                 ثبت کسورات اختیاری
@@ -582,8 +596,8 @@
             </td>
             <td class="text-center">
               <v-btn
-                  class="ml-2 mr-2 rounded white--text"
-                  color="blue darken-2 "
+                  class="ml-2 mr-2 rounded-lg export-btn"
+                  depressed
                   @click="$router.push('/panel/workshop_contract')"
               >
                 ثبت قرارداد
@@ -592,8 +606,8 @@
             </td>
             <td class="text-center">
               <v-btn
-                  class="ml-2 mr-2 rounded white--text"
-                  color="blue darken-2 "
+                  class="ml-2 mr-2 rounded-lg export-btn"
+                  depressed
                   @click="$router.push('/panel/personnel_family')"
               >
                 ثبت خانواده
@@ -607,7 +621,7 @@
       </v-simple-table>
       <v-simple-table class="mt-16 ma-2">
         <template>
-          <thead class="style: indigo darken-2">
+          <thead class="secondary">
 
           <tr>
             <th
@@ -621,43 +635,43 @@
           </tr>
           </thead>
 
-          <thead class="style: indigo lighten-1"
+          <thead class="back"
           >
           <tr>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               ردیف پیمان
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               شماره قرارداد
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               تاریخ قرارداد
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               تاریخ شروع قرارداد
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               تاریخ پایان قرارداد
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               شناسه ملی واگذار کننده
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               نام واگذار کننده
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               کد کارگاه واگذار کننده
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               شعبه
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               مبلغ اولیه قرارداد
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               وضعیت
             </th>
-            <th class="text-center white--text">
+            <th class="text-center secondary--text">
               نهایی
             </th>
           </tr>

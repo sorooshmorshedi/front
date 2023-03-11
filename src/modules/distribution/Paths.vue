@@ -1,45 +1,50 @@
 <template>
   <m-form
-    :title="title"
-    :items="items"
-    :cols="cols"
-    :canSubmit="canSubmit"
-    :canDelete="canDelete"
-    :is-editing.sync="isEditing"
-    :showListBtn="false"
-    :show-navigation-btns="false"
-    :showList="usage != 'tree'"
-    @click:row="setItem"
-    @clearForm="clearForm"
-    @submit="submit"
-    @delete="deleteItem"
+      :title="title"
+      :items="items"
+      :cols="cols"
+      :canSubmit="canSubmit"
+      :canDelete="canDelete"
+      :is-editing.sync="isEditing"
+      :showListBtn="false"
+      :show-navigation-btns="false"
+      :showList="usage != 'tree'"
+      @click:row="setItem"
+      @clearForm="clearForm"
+      @submit="submit"
+      @delete="deleteItem"
   >
     <template #header-btns>
       <template v-for="i in 5">
         <v-btn
-          :key="i"
-          v-if="i-1 != level"
-          class="blue white--text mr-1 mt-1 mt-md-0"
-          :to="`/panel/paths/${i-1}`"
-        >تعریف {{ getTitle(i-1) }}</v-btn>
+            :key="i"
+            v-if="i-1 != level"
+            depressed
+            class="secondary rounded-lg white--text mr-1 mt-1 mt-md-0"
+            :to="`/panel/paths/${i-1}`"
+        >تعریف {{ getTitle(i - 1) }}
+        </v-btn>
         <v-btn
-          :key="i"
-          v-else
-          class="blue white--text mr-1 mt-1 mt-md-0"
-          @click="clearForm"
-        >تعریف {{ getTitle(i-1) }}</v-btn>
+            :key="i"
+            v-else
+            depressed
+            class="primary rounded-lg white--text mr-1 mt-1 mt-md-0"
+            @click="clearForm"
+        >تعریف {{ getTitle(i - 1) }}
+        </v-btn>
       </template>
     </template>
     <template #default>
       <v-row>
         <v-col cols="12" v-if="level != 0">
           <v-autocomplete
-            :label="'* ' + getTitle(level-1)"
-            v-model="item.parent"
-            :items="parentItems"
-            item-text="name"
-            item-value="id"
-            :disabled="!isEditing"
+              class="rounded-lg"
+              :label="'* ' + getTitle(level-1)"
+              v-model="item.parent"
+              :items="parentItems"
+              item-text="name"
+              item-value="id"
+              :disabled="!isEditing"
           />
         </v-col>
         <v-col cols="12" v-if="getParents(item.parent).length">
@@ -49,21 +54,21 @@
             </template>
           </v-breadcrumbs>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field label="* نام" v-model="item.name" :disabled="!isEditing" />
+        <v-col cols="12" md="12">
+          <v-text-field label="* نام" v-model="item.name" :disabled="!isEditing"/>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-text-field v-if="item.id != undefined" label="کد" v-model="item.code" disabled />
+        <v-col cols="12" md="12">
+          <v-text-field v-if="item.id != undefined" label="کد" v-model="item.code" disabled/>
         </v-col>
         <v-col cols="12" v-if="level != 4">
           <v-autocomplete
-            :label="visitorsTitle + ' ها'"
-            :items="pathVisitors"
-            v-model="item.visitors"
-            item-text="user.name"
-            item-value="id"
-            :disabled="!isEditing"
-            :multiple="true"
+              :label="visitorsTitle + ' ها'"
+              :items="pathVisitors"
+              v-model="item.visitors"
+              item-text="user.name"
+              item-value="id"
+              :disabled="!isEditing"
+              :multiple="true"
           />
         </v-col>
       </v-row>
@@ -71,9 +76,9 @@
   </m-form>
 </template>
 <script>
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 import DistributionApiMixin from "@/modules/distribution/api";
-import { PathLevels, VisitorLevels } from "@/variables";
+import {PathLevels, VisitorLevels} from "@/variables";
 
 export default {
   mixins: [MFormMixin, DistributionApiMixin],

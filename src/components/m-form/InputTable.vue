@@ -1,5 +1,5 @@
 <template>
-  <v-simple-table>
+  <v-simple-table class="rounded-lg">
     <thead>
       <slot name="thead" />
     </thead>

@@ -13,6 +13,7 @@
 
   <span>
     <v-file-input
+       class="rounded-lg"
       v-if="hasAttachment"
       clearable
       :label="label"

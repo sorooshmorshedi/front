@@ -24,23 +24,23 @@
           <template>
             <v-row>
             <v-col cols="12" md="6"></v-col>
-              <v-col  cols="12" md="6" v-if="item.id && item.is_verified">
-                <v-btn left v-if="item.loan_type == 'd' && is_req" class="white--text ma-2 " color="orange" @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
-                <v-btn left v-if="item.loan_type == 'd' && !is_req" class="ma-2 " @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
-                <v-btn left v-if="item.loan_type != 'd' && is_req" class="white--text ma-2 " color="orange" @click="change_export_req(item)">فرم درخواست وام</v-btn>
-                <v-btn left v-if="item.loan_type != 'd' && !is_req" class="ma-2 " @click="change_export_req(item)">فرم درخواست وام</v-btn>
-                <v-btn left v-if="item.loan_type == 'd' && is_item" class="white--text ma-2 pl-10 pr-10" color="orange" @click="change_export_item(item)">جدول مساعده</v-btn>
-                <v-btn left v-if="item.loan_type == 'd' && !is_item" class="ma-2 pl-10 pr-10" @click="change_export_item(item)">جدول مساعده</v-btn>
-                <v-btn left v-if="item.loan_type != 'd' && is_item" class="white--text ma-2 pl-10 pr-10" color="orange" @click="change_export_item(item)">جدول وام</v-btn>
-                <v-btn left v-if="item.loan_type != 'd' && !is_item" class="ma-2 pl-10 pr-10" @click="change_export_item(item)">جدول وام</v-btn>
+              <v-col  cols="12" md="6" v-if="item.id && item.is_verified" class="d-flex justify-end">
+                <v-btn depressed left v-if="item.loan_type == 'd' && is_req" class="white--text ma-2 rounded-lg" color="primary" @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
+                <v-btn depressed left v-if="item.loan_type == 'd' && !is_req" class="ma-2 rounded-lg" @click="change_export_req(item)">فرم درخواست مساعده</v-btn>
+                <v-btn depressed left v-if="item.loan_type != 'd' && is_req" class="white--text ma-2 rounded-lg " color="primary" @click="change_export_req(item)">فرم درخواست وام</v-btn>
+                <v-btn depressed left v-if="item.loan_type != 'd' && !is_req" class="ma-2 rounded-lg" @click="change_export_req(item)">فرم درخواست وام</v-btn>
+                <v-btn depressed left v-if="item.loan_type == 'd' && is_item" class="white--text ma-2 pl-10 pr-10 rounded-lg" color="primary" @click="change_export_item(item)">جدول مساعده</v-btn>
+                <v-btn depressed left v-if="item.loan_type == 'd' && !is_item" class="ma-2 pl-10 pr-10 rounded-lg" @click="change_export_item(item)">جدول مساعده</v-btn>
+                <v-btn depressed left v-if="item.loan_type != 'd' && is_item" class="white--text ma-2 pl-10 pr-10 rounded-lg" color="primary" @click="change_export_item(item)">جدول وام</v-btn>
+                <v-btn depressed left v-if="item.loan_type != 'd' && !is_item" class="ma-2 pl-10 pr-10 rounded-lg" @click="change_export_item(item)">جدول وام</v-btn>
               </v-col>
             </v-row>
             <v-row v-if="item.un_editable">
               <v-col cols="12" md="12">
-                <v-banner class="mt-3 mb-5 red--text">
+                <v-banner flat class="rounded-lg mt-3 mb-5 error--text">
                   <v-avatar
                       slot="icon"
-                      color="red"
+                      color="error"
                       size="40"
                   >
                     <v-icon
@@ -58,6 +58,7 @@
             <v-row>
               <v-col cols="12" md="12" v-if="!item.id">
                 <v-autocomplete
+                    class="rounded-lg"
                     label="  کارگاه"
                     :items="workshops"
                     v-model="workshop"
@@ -70,6 +71,7 @@
               </v-col>
               <v-col cols="12" md="12" v-if="item.id && !isEditing">
                 <v-text-field
+                    class="rounded-lg"
                     label="  کارگاه"
                     v-model="item.workshop"
                     :disabled="true"
@@ -77,6 +79,7 @@
               </v-col>
               <v-col cols="12" md="12" v-if="item.id && isEditing">
                 <v-autocomplete
+                    class="rounded-lg"
                     label=" کارگاه"
                     :items="workshops"
                     v-model="item.workshop_id"
@@ -91,6 +94,7 @@
             <v-row >
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="!item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -100,6 +104,7 @@
                     :disabled="!isEditing || !workshop"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -110,6 +115,7 @@
                     :disabled="!isEditing"
                 />
                 <v-text-field
+                    class="rounded-lg"
                     label="پرسنل در کارگاه"
                     v-if="this.workshopPersonnel"
                     disabled="true"
@@ -119,6 +125,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     label="کد ملی"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
@@ -131,6 +138,7 @@
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     label="نوع"
                     :items="LOAN_TYPES"
                     v-model="item.loan_type"
@@ -160,7 +168,7 @@
             <v-row>
               <v-col cols="12" md="12">
                 <v-text-field label="توضیحات" v-model="item.explanation" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing" class="rounded-lg"/>
               </v-col>
             </v-row >
             <v-row class="mt-10" v-if="item.id && item.is_verified && item.loan_type == 'l'">
@@ -173,38 +181,39 @@
 
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field v-model="item.last_dept_date" label=" تاریخ پایان وام" :default="true" :disabled="true"/>
+                <v-text-field class="rounded-lg" v-model="item.last_dept_date" label=" تاریخ پایان وام" :default="true" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field label="اقساط پرداخت شده" v-model="item.episode_payed" background-color="white"
-                              disabled="ture"/>
+                              disabled="ture" class="rounded-lg"/>
               </v-col>
 
             </v-row>
           </template>
           <v-btn
-              class="light-blue white--text mt-6  mr-2 float-left"
+              class="accent rounded-lg white--text mt-6  mr-2 float-left" depressed
               @click="verifyLoan(item)"
               v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
               @click="UnVerifyLoan(item)"
               v-if="item.id && item.is_verified && item.editable" > خروج از وضعیت نهایی</v-btn>
-          <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
+          <v-btn depressed
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left "
               @click="un_editable_dialog = true"
               v-if="item.id && item.is_verified && !item.editable" > خروج از وضعیت نهایی</v-btn>
 
         </m-form>
         <v-row justify="center">
           <v-dialog
+              class="rounded-lg"
               v-model="error_dialog"
               persistent
               @click:outside="error_dialog=false"
               max-width="400"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg">
+              <v-card-title class="error--text text-h5">
                 لطفا موارد زیر را تکمیل یا اصلاح کنید!
               </v-card-title>
               <v-card-text>
@@ -215,7 +224,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="error_dialog = false"
                 >
@@ -228,12 +237,13 @@
         <v-row justify="center">
           <v-dialog
               v-model="un_editable_dialog"
+              class="rounded-lg"
               persistent
               @click:outside="un_editable_dialog=false"
               max-width="420"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg">
+              <v-card-title class="error--text text-h5">
                 توجه!
               </v-card-title>
               <v-card-text>
@@ -242,7 +252,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="un_editable_dialog = false"
                 >

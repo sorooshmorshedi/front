@@ -1,125 +1,132 @@
 <template>
   <v-row
-    no-gutters
-    :class="{ 'flex-row': horizontal, 'flex-column': !horizontal }"
-    :title="item && item.title"
+      no-gutters
+      :class="{ 'flex-row': horizontal, 'flex-column': !horizontal }"
+      :title="item && item.title"
   >
     <v-col :cols="horizontal && hasDeepSelect ? 6 : 12">
       <div class="d-flex">
         <open-ledger-btn
-          v-if="showLedgerBtn && hasLedger && item"
-          :query="{
+            v-if="showLedgerBtn && hasLedger && item"
+            :query="{
             'ledger.account': item.id,
             'ledger.level': `level${item.level}`,
           }"
-          class="mr-2"
         />
-        <v-icon
-          v-if="hasLedger"
-          @click="openBalanceDialog"
-          color="cyan"
-          class="pl-2 mr-3"
-          >fa-wallet</v-icon
-        >
+        <v-tooltip top color="secondary" v-if="hasLedger">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                v-bind="attrs"
+                v-on="on"
+                icon
+                @click="openBalanceDialog"
+                class="back white--text mr-1 ml-1 pa-4 " depressed>
+              <v-img max-width="25" src="/img/icons/wallet.svg" > </v-img>
+            </v-btn>
+          </template>
+          دفتر کل
+        </v-tooltip>
         <v-autocomplete
-          :items="items"
-          v-model="item"
-          :label="label"
-          :item-text="mainSelectItemText"
-          :disabled="disabled || accountDisabled"
-          :multiple="multiple"
-          :placeholder="placeholder"
-          item-value="id"
-          :return-object="true"
-          v-bind="$attrs"
+            class="rounded-lg"
+            :items="items"
+            v-model="item"
+            :label="label"
+            :item-text="mainSelectItemText"
+            :disabled="disabled || accountDisabled"
+            :multiple="multiple"
+            :placeholder="placeholder"
+            item-value="id"
+            :return-object="true"
+            v-bind="$attrs"
         ></v-autocomplete>
       </div>
     </v-col>
     <template v-if="hasDeepSelect">
       <v-col>
         <account-select
-          v-if="item.floatAccountGroup"
-          :child-of="item.floatAccountGroup.id"
-          v-model="localFloatAccount"
-          :disabled="disabled"
-          placeholder=" * حساب شناور"
-          items-type="floatAccounts"
-          item-text="name"
-          item-value="id"
-          :showLedgerBtn="false"
-          :class="{
+            v-if="item.floatAccountGroup"
+            :child-of="item.floatAccountGroup.id"
+            v-model="localFloatAccount"
+            :disabled="disabled"
+            placeholder=" * حساب شناور"
+            items-type="floatAccounts"
+            item-text="name"
+            item-value="id"
+            :showLedgerBtn="false"
+            :class="{
             '': showLedgerBtn && !horizontal,
             'mr-1': horizontal,
             'mt-1': !horizontal,
           }"
-          v-bind="$attrs"
+            v-bind="$attrs"
         />
         <account-select
-          v-if="item.floatAccounts && !item.is_cost_center"
-          :child-of="item.id"
-          v-model="localFloatAccount"
-          :disabled="disabled"
-          placeholder="حساب شناور"
-          items-type="floatAccounts"
-          item-text="name"
-          item-value="id"
-          :showLedgerBtn="false"
-          :class="{
+            v-if="item.floatAccounts && !item.is_cost_center"
+            :child-of="item.id"
+            v-model="localFloatAccount"
+            :disabled="disabled"
+            placeholder="حساب شناور"
+            items-type="floatAccounts"
+            item-text="name"
+            item-value="id"
+            :showLedgerBtn="false"
+            :class="{
             'mr-7': showLedgerBtn && !horizontal,
             'mr-1': horizontal,
             'mt-1': !horizontal,
           }"
-          v-bind="$attrs"
+            v-bind="$attrs"
         />
       </v-col>
       <v-col
-        v-if="
+          v-if="
           item.costCenterGroup || (item.floatAccounts && item.is_cost_center)
         "
       >
         <account-select
-          v-if="item.costCenterGroup"
-          :child-of="item.costCenterGroup.id"
-          v-model="localCostCenter"
-          :disabled="disabled"
-          placeholder=" * مرکز هزینه و درآمد"
-          items-type="costCenters"
-          item-text="name"
-          item-value="id"
-          :showLedgerBtn="false"
-          :class="{
+            v-if="item.costCenterGroup"
+            :child-of="item.costCenterGroup.id"
+            v-model="localCostCenter"
+            :disabled="disabled"
+            placeholder=" * مرکز هزینه و درآمد"
+            items-type="costCenters"
+            item-text="name"
+            item-value="id"
+            :showLedgerBtn="false"
+            :class="{
             'mr-7': showLedgerBtn && !horizontal,
             'mr-1': horizontal,
             'mt-1': !horizontal,
           }"
-          v-bind="$attrs"
+            v-bind="$attrs"
         />
         <account-select
-          v-if="item.floatAccounts && item.is_cost_center"
-          :child-of="item.id"
-          v-model="localCostCenter"
-          :disabled="disabled"
-          placeholder="* حساب شناور"
-          items-type="floatAccounts"
-          item-text="name"
-          item-value="id"
-          :showLedgerBtn="false"
-          :class="{
+            v-if="item.floatAccounts && item.is_cost_center"
+            :child-of="item.id"
+            v-model="localCostCenter"
+            :disabled="disabled"
+            placeholder="* حساب شناور"
+            items-type="floatAccounts"
+            item-text="name"
+            item-value="id"
+            :showLedgerBtn="false"
+            :class="{
             'mr-7': showLedgerBtn && !horizontal,
             'mr-1': horizontal,
             'mt-1': !horizontal,
           }"
-          v-bind="$attrs"
+            v-bind="$attrs"
         />
       </v-col>
     </template>
 
     <v-dialog
-      v-model="balanceDialog"
-      max-width="500px"
-      v-if="item && item.balance"
+        class="rounded-lg"
+        v-model="balanceDialog"
+        max-width="500px"
+        v-if="item && item.balance"
     >
-      <v-card>
+      <v-card class="rounded-lg">
         <v-card-title>مانده حساب {{ item.name }}</v-card-title>
 
         <v-card-text>
@@ -127,18 +134,18 @@
             <v-col cols="12">
               <v-simple-table class="text-center">
                 <thead>
-                  <tr>
-                    <th class="text-center">بدهکار</th>
-                    <th class="text-center">بستانکار</th>
-                    <th class="text-center">مانده</th>
-                  </tr>
+                <tr>
+                  <th class="text-center">بدهکار</th>
+                  <th class="text-center">بستانکار</th>
+                  <th class="text-center">مانده</th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>{{ item.balance.bed | toMoney }}</td>
-                    <td>{{ item.balance.bes | toMoney }}</td>
-                    <td>{{ item.balance.remain | toMoney }}</td>
-                  </tr>
+                <tr>
+                  <td>{{ item.balance.bed | toMoney }}</td>
+                  <td>{{ item.balance.bes | toMoney }}</td>
+                  <td>{{ item.balance.remain | toMoney }}</td>
+                </tr>
                 </tbody>
               </v-simple-table>
             </v-col>
@@ -156,7 +163,7 @@ import DistributionApiMixin from "@/modules/distribution/api";
 
 export default {
   mixins: [accountApiMixin, DistributionApiMixin],
-  components: { OpenLedgerBtn },
+  components: {OpenLedgerBtn},
   props: {
     value: {},
     floatAccount: {},
@@ -257,59 +264,59 @@ export default {
       }
 
       !items.length &&
-        this.accounts.forEach((item) => {
-          if (this.itemsType == "all") {
+      this.accounts.forEach((item) => {
+        if (this.itemsType == "all") {
+          items.push(item);
+        }
+
+        if (this.itemsType.includes("level")) {
+          let level = this.itemsType[this.itemsType.length - 1];
+          if (item.level == level) {
             items.push(item);
           }
+        }
 
-          if (this.itemsType.includes("level")) {
-            let level = this.itemsType[this.itemsType.length - 1];
-            if (item.level == level) {
-              items.push(item);
-            }
+        if (this.itemsType == "persons") {
+          if (item.account_type == "p") {
+            items.push(item);
           }
+        }
 
-          if (this.itemsType == "persons") {
-            if (item.account_type == "p") {
-              items.push(item);
-            }
+        if (this.itemsType == "buyers") {
+          if (item.buyer_or_seller == "b") {
+            items.push(item);
           }
+        }
 
-          if (this.itemsType == "buyers") {
-            if (item.buyer_or_seller == "b") {
-              items.push(item);
-            }
+        if (this.itemsType == "sellers") {
+          if (item.buyer_or_seller == "s") {
+            items.push(item);
           }
+        }
 
-          if (this.itemsType == "sellers") {
-            if (item.buyer_or_seller == "s") {
-              items.push(item);
-            }
+        if (this.itemsType == "banks") {
+          if (item.account_type == "b") {
+            items.push(item);
           }
+        }
 
-          if (this.itemsType == "banks") {
-            if (item.account_type == "b") {
-              items.push(item);
-            }
-          }
-
-          if (this.itemsType == "imprests") {
-            let isImprest =
+        if (this.itemsType == "imprests") {
+          let isImprest =
               this.defaultAccounts.filter(
-                (o) => o.usage == "imprest" && o.account.id == item.parent
+                  (o) => o.usage == "imprest" && o.account.id == item.parent
               ).length != 0;
-            if (isImprest) {
-              items.push(item);
-            }
+          if (isImprest) {
+            items.push(item);
           }
-        });
+        }
+      });
 
       if (this.childOf) {
         items = items.filter((o) => {
           if (["floatAccounts", "costCenters"]) {
             return (
-              o.floatAccountGroups.filter((o) => o.id == this.childOf).length ==
-              1
+                o.floatAccountGroups.filter((o) => o.id == this.childOf).length ==
+                1
             );
           } else {
             return o.parent == this.childOf;
@@ -333,25 +340,25 @@ export default {
     },
     hasDeepSelect() {
       return (
-        this.item &&
-        (this.item.floatAccountGroup ||
-          this.item.costCenterGroup ||
-          this.item.floatAccounts) &&
-        this.deepSelect &&
-        [
-          "level3",
-          "persons",
-          "buyers",
-          "sellers",
-          "imprests",
-          "floatAccountGroups",
-          "costCenterGroups",
-        ].includes(this.itemsType)
+          this.item &&
+          (this.item.floatAccountGroup ||
+              this.item.costCenterGroup ||
+              this.item.floatAccounts) &&
+          this.deepSelect &&
+          [
+            "level3",
+            "persons",
+            "buyers",
+            "sellers",
+            "imprests",
+            "floatAccountGroups",
+            "costCenterGroups",
+          ].includes(this.itemsType)
       );
     },
     hasLedger() {
       return ["level3", "persons", "buyers", "sellers", "imprests"].includes(
-        this.itemsType
+          this.itemsType
       );
     },
   },
@@ -396,7 +403,7 @@ export default {
             this.localFloatAccount = this.floatAccount;
           } else {
             this.localFloatAccount = this.floatAccounts.find(
-              (o) => o.id == this.floatAccount
+                (o) => o.id == this.floatAccount
             );
             emitChanges = true;
           }

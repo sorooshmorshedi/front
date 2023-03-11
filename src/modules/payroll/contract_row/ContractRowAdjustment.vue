@@ -1,13 +1,15 @@
 <template>
   <div>
-    <v-card>
+    <v-card class="rounded-lg">
       <v-toolbar
-          color="primary darken-3"
+          flat
+          class="rounded-lg"
+          color="secondary"
           dark
       > وضعیت اولیه ردیف پیمان  {{ContractRowData.contract_row}} </v-toolbar>
-      <v-simple-table>
+      <v-simple-table class="rounded-lg mt-2">
         <template v-slot:default>
-          <thead>
+          <thead class="secondary--text">
           <tr>
             <th class="text-center">
               ردیف پیمان
@@ -41,14 +43,18 @@
         </template>
       </v-simple-table>
       <v-toolbar
-          color="primary darken-3"
+          flat
+          class="rounded-lg"
+          color="secondary"
           dark
       > تغییرات ردیف پیمان {{ContractRowData.contract_row}}</v-toolbar>
 
       <adjustment-list :ex_filter="{'contract_row': ContractRow}"></adjustment-list>
 
       <v-toolbar
-          color="primary darken-3"
+          flat
+          class="rounded-lg"
+          color="secondary"
           dark
       > وضعیت فعلی ردیف پیمان  {{ContractRowData.contract_row}} </v-toolbar>
       <v-simple-table>

@@ -5,33 +5,38 @@
       <v-row>
         <v-col cols="12">
           <v-btn
-            @click="changeSalePricesDialog = true"
-            color="light-blue white--text"
-            >تغییر قیمت موارد فیلتر شده</v-btn
+              depressed
+              class="rounded-lg"
+              @click="changeSalePricesDialog = true"
+              color="secondary white--text"
+          >تغییر قیمت موارد فیلتر شده
+          </v-btn
           >
           <v-btn
-            @click="salePriceChangesDialog = true"
-            color="light-blue white--text"
-            class="mr-1 mt-1 mt-md-0"
-            >تاریخچه تغییر قیمت کالاها</v-btn
+              depressed
+              @click="salePriceChangesDialog = true"
+              color="primary white--text"
+              class="mr-1 mt-1 mt-md-0 rounded-lg"
+          >تاریخچه تغییر قیمت کالاها
+          </v-btn
           >
         </v-col>
         <v-col cols="12">
           <m-datatable
-            :headers="headers"
-            :apiUrl="url"
-            :filters.sync="filters"
-            ref="datatable"
+              :headers="headers"
+              :apiUrl="url"
+              :filters.sync="filters"
+              ref="datatable"
           />
         </v-col>
       </v-row>
     </v-card-text>
 
     <v-dialog
-      v-model="salePriceChangesDialog"
-      scrollable
-      max-width="800px"
-      transition="dialog-transition"
+        v-model="salePriceChangesDialog"
+        scrollable
+        max-width="800px"
+        transition="dialog-transition"
     >
       <v-card>
         <v-card-title>تاریخچه تغییر قیمت کالا ها</v-card-title>
@@ -40,17 +45,19 @@
           <v-row>
             <v-col cols="12">
               <m-datatable
-                :headers="salePriceChangesHeaders"
-                :apiUrl="salePriceChangesUrl"
-                :filters.sync="salePriceChangesFilters"
-                ref="salePriceChangesDatatable"
+                  :headers="salePriceChangesHeaders"
+                  :apiUrl="salePriceChangesUrl"
+                  :filters.sync="salePriceChangesFilters"
+                  ref="salePriceChangesDatatable"
               >
                 <template #item.created_at="{ item }">{{
-                  item.date | toJalali("jYYYY/jMM/jDD HH:mm")
-                }}</template>
+                    item.date | toJalali("jYYYY/jMM/jDD HH:mm")
+                  }}
+                </template>
                 <template #item.detail="{ item }">
                   <v-btn @click="showWareSalePriceChanges(item)" color="info"
-                    >جزئیات</v-btn
+                  >جزئیات
+                  </v-btn
                   >
                 </template>
               </m-datatable>
@@ -61,10 +68,10 @@
     </v-dialog>
 
     <v-dialog
-      v-model="wareSalePriceChangesDialog"
-      scrollable
-      max-width="1200px"
-      transition="dialog-transition"
+        v-model="wareSalePriceChangesDialog"
+        scrollable
+        max-width="1200px"
+        transition="dialog-transition"
     >
       <v-card v-if="salePriceChange">
         <v-card-title>جزئیات تغییر قیمت کالا ها</v-card-title>
@@ -73,10 +80,10 @@
           <v-row>
             <v-col cols="12">
               <m-datatable
-                :headers="wareSalePriceChangesHeaders"
-                :apiUrl="wareSalePriceChangesUrl"
-                :filters.sync="wareSalePriceChangesFilters"
-                ref="wareSalePriceChangesDatatable"
+                  :headers="wareSalePriceChangesHeaders"
+                  :apiUrl="wareSalePriceChangesUrl"
+                  :filters.sync="wareSalePriceChangesFilters"
+                  ref="wareSalePriceChangesDatatable"
               >
                 <!-- <template #item.created_at="{ item }">{{ item.date | toJalali }}</template>
                 <template #item.detail="{ item }">
@@ -90,11 +97,11 @@
     </v-dialog>
 
     <v-dialog
-      v-model="changeSalePricesDialog"
-      scrollable
-      max-width="500px"
-      transition="dialog-transition"
-      @click:outside="item = {}"
+        v-model="changeSalePricesDialog"
+        scrollable
+        max-width="500px"
+        transition="dialog-transition"
+        @click:outside="item = {}"
     >
       <v-card>
         <v-card-title>تغییر گروهی قیمت کالا ها</v-card-title>
@@ -114,19 +121,20 @@
               </v-radio-group>
             </v-col>
             <money
-              v-if="item.is_percent != undefined"
-              :label="item.is_percent ? 'درصد' : 'مبلغ'"
-              v-model="item.rate"
+                v-if="item.is_percent != undefined"
+                :label="item.is_percent ? 'درصد' : 'مبلغ'"
+                v-model="item.rate"
             />
           </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            @click="submitChangeSalePrice"
-            class="w-100px"
-            color="green white--text"
-            >ثبت</v-btn
+              @click="submitChangeSalePrice"
+              class="w-100px"
+              color="green white--text"
+          >ثبت
+          </v-btn
           >
         </v-card-actions>
       </v-card>
@@ -296,7 +304,7 @@ export default {
   methods: {
     showWareSalePriceChanges(item) {
       this.salePriceChange = item;
-      this.wareSalePriceChangesFilters = { salePriceChange: item.id };
+      this.wareSalePriceChangesFilters = {salePriceChange: item.id};
       this.wareSalePriceChangesDialog = true;
     },
     submitChangeSalePrice() {

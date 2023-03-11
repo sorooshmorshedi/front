@@ -17,31 +17,31 @@
       <template #default>
         <v-row>
           <v-col cols="12">
-            <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
+            <v-text-field class="rounded-lg" label=" * نام" v-model="item.name" :disabled="!isEditing" />
           </v-col>
           <v-col cols="12">
             <v-subheader>دسترسی ها</v-subheader>
-            <div class="d-flex flex-column flex-md-row">
-              <v-text-field placeholder="جستجو" v-model="modelSearch" />
+            <div class="d-flex flex-column flex-md-row ">
+              <v-text-field class="rounded-lg" placeholder="جستجو" v-model="modelSearch" />
               <v-spacer></v-spacer>
               <v-btn
                 @click="setAll({value: false})"
                 :disabled="!isEditing"
                 small
                 depressed
-                color="cyan white--text"
-                class="mt-1 mt-md-0"
+                color="accent white--text"
+                class="mt-1 mt-md-0 rounded-lg"
               >عدم انتخاب همه</v-btn>
               <v-btn
                 @click="setAll({value: true})"
                 :disabled="!isEditing"
                 small
                 depressed
-                color="cyan white--text"
-                class="mt-1 mt-md-0 mr-md-1"
+                color="secondary white--text"
+                class="mt-1 mt-md-0 mr-md-1 rounded-lg"
               >انتخاب همه</v-btn>
             </div>
-            <v-expansion-panels multiple class="mt-3">
+            <v-expansion-panels flat focusable multiple class="mt-3 rounded-lg">
               <v-expansion-panel
                 v-for="(model, i) in filteredModels"
                 :key="i"
@@ -79,8 +79,8 @@
                   </v-row>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <v-row>
-                    <v-col cols="12" v-if="hasShortcutPerms(model)">
+                  <v-row class="mt-2">
+                    <v-col cols="12" md="6" v-if="hasShortcutPerms(model)">
                       <v-row no-gutters>
                         <v-col cols="12" class="pb-0">
                           <v-btn-toggle
@@ -95,10 +95,10 @@
                               <template v-slot:activator="{ on, attrs }">
                                 <v-btn
                                   :style="(getPermissionBtns(model).length != i-1)?'border-left: 1px solid black':''"
-                                  tile
                                   v-bind="attrs"
                                   v-on="on"
                                   :value="btn.value"
+                                  class="rounded-t-lg "
                                 >
                                   <v-icon>{{ btn.icon }}</v-icon>
                                 </v-btn>
@@ -109,11 +109,13 @@
                         </v-col>
                         <v-col cols="12" class="pt-0">
                           <v-btn-toggle
-                            v-model="item[model.ownModelKey]"
+                              class="rounded-b-lg "
+
+                              v-model="item[model.ownModelKey]"
                             background-color="white"
                             multiple
                             color="lime"
-                            tile
+
                             borderless
                           >
                             <template v-for="(btn, i) in getPermissionBtns(model)">
@@ -141,8 +143,10 @@
                         </v-col>
                       </v-row>
                     </v-col>
-                    <v-col cols="12">
+                    <v-col cols="12" md="6" class=" justify-end">
                       <v-switch
+                          inset
+                          color="success"
                         v-for="(permission, i) in model.permissions"
                         :key="i"
                         :label="permission.name"

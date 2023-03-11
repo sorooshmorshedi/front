@@ -1,30 +1,31 @@
 <template>
   <v-row>
     <v-col cols="12" class="journal">
-      <v-card>
+      <v-card class="rounded-lg">
         <v-card-title>دفتر روزنامه</v-card-title>
         <v-card-text>
           <v-row>
             <v-col cols="12" md="4">
               <v-select
-                v-model="journal.level"
-                label="سطح حساب"
-                :items="accountLevels"
-                item-text="text"
-                item-value="value"
-                :return-object="false"
+                  class="rounded-lg"
+                  v-model="journal.level"
+                  label="سطح حساب"
+                  :items="accountLevels"
+                  item-text="text"
+                  item-value="value"
+                  :return-object="false"
               />
             </v-col>
             <template v-if="journal.level">
               <v-col cols="12">
                 <sanad-item-list-report
-                  :filters.sync="filters"
-                  :showAccountInTable="true"
-                  :sortable="sortable"
-                  :filterable="filterable"
-                  :headers="headers"
-                  :showRemain="false"
-                  :showPreviousRemain="false"
+                    :filters.sync="filters"
+                    :showAccountInTable="true"
+                    :sortable="sortable"
+                    :filterable="filterable"
+                    :headers="headers"
+                    :showRemain="false"
+                    :showPreviousRemain="false"
                 >
                   <!-- <template
                     #item.account.name="{ item }"
@@ -44,9 +45,10 @@
 
 <script>
 import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
+
 export default {
   name: "Journal",
-  components: { SanadItemListReport },
+  components: {SanadItemListReport},
   data() {
     return {
       journal: {
@@ -59,15 +61,15 @@ export default {
       sortable: true,
       filterable: true,
       accountLevels: [
-        { value: "level0", text: "گروه" },
-        { value: "level1", text: "کل" },
-        { value: "level2", text: "معین" },
-        { value: "level3", text: "تفضیلی" },
+        {value: "level0", text: "گروه"},
+        {value: "level1", text: "کل"},
+        {value: "level2", text: "معین"},
+        {value: "level3", text: "تفضیلی"},
       ],
     };
   },
   computed: {
-    headers(){
+    headers() {
       return [
         {
           text: "سال مالی",

@@ -23,20 +23,21 @@
       <template>
         <v-row>
           <v-col cols="12" md="3">
-            <v-text-field label="* نام" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]" v-model="item.name" background-color="white" :disabled="!isEditing"/>
+            <v-text-field class="rounded-lg" label="* نام" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]" v-model="item.name" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* نام خانوادگی" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"  v-model="item.last_name" background-color="white" :disabled="!isEditing"/>
+            <v-text-field class="rounded-lg" label="* نام خانوادگی" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"  v-model="item.last_name" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="* نام پدر" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]" v-model="item.father_name" background-color="white" :disabled="!isEditing"/>
+            <v-text-field class="rounded-lg" label="* نام پدر" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]" v-model="item.father_name" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="کد پرسنلی" v-on:keypress="NumbersOnly" v-model="item.personnel_code" background-color="white" :disabled="true">
+            <v-text-field class="rounded-lg" label="کد پرسنلی" v-on:keypress="NumbersOnly" v-model="item.personnel_code" background-color="white" :disabled="true">
             </v-text-field>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label="* ملیت"
                 :items="NATIONALITY_TYPE"
@@ -47,8 +48,9 @@
             />
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field v-if="item.nationality == 1" label="* کشور" v-model="iran" background-color="white" :disabled="true"/>
+            <v-text-field class="rounded-lg" v-if="item.nationality == 1" label="* کشور" v-model="iran" background-color="white" :disabled="true"/>
             <v-autocomplete
+                class="rounded-lg"
                 v-if="item.nationality !== 1"
                 :rules="[rules.required,]"
                 label="* کشور"
@@ -61,6 +63,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label="* جنسیت"
                 :items="GENDER_TYPE"
@@ -71,9 +74,10 @@
             />
           </v-col>
           <v-col cols="12" md="3" v-if="item.nationality !== 2">
-            <v-text-field v-show="false" v-if="item.gender == 'f'" label="* خدمت سربازی" v-model="item.military_service = 'x'" background-color="white" :disabled="true"/>
-            <v-text-field v-show="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white" :disabled="true"/>
+            <v-text-field class="rounded-lg" v-show="false" v-if="item.gender == 'f'" label="* خدمت سربازی" v-model="item.military_service = 'x'" background-color="white" :disabled="true"/>
+            <v-text-field class="rounded-lg" v-show="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white" :disabled="true"/>
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 v-if="item.gender !== 'f' "
                 label="* خدمت سربازی"
@@ -85,16 +89,17 @@
             />
           </v-col>
           <v-col cols="12" md="3" v-if="item.nationality == 2">
-            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد فراگیر تابعیت"  v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field class="rounded-lg" v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد فراگیر تابعیت"  v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3" v-if="item.nationality !== 2">
-            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* شماره شناسنامه" counter v-model="item.identity_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field class="rounded-lg" v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* شماره شناسنامه" counter v-model="item.identity_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3" v-if="item.nationality !== 2">
-            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد ملی"  v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
+            <v-text-field class="rounded-lg" v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد ملی"  v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label="* وضعیت تاهل"
                 :items="MARITAL_STATUS_TYPES"
@@ -105,7 +110,7 @@
             />
           </v-col>
           <v-col cols="12" md="3" v-if="item.id">
-            <v-text-field label=" تعداد فرزندان" v-model="item.get_child_number"  background-color="white" :disabled="true"/>
+            <v-text-field class="rounded-lg" label=" تعداد فرزندان" v-model="item.get_child_number"  background-color="white" :disabled="true"/>
           </v-col>
           <v-col cols="12" md="3">
             <date v-model="item.date_of_birth" label="* تاریخ تولد" :default="false" :disabled="!isEditing" />
@@ -115,6 +120,7 @@
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label=" * محل تولد "
                 :items="CITY_LIST"
@@ -128,12 +134,14 @@
             <v-text-field v-if="item.nationality == 2"
                           v-on:keypress="NoneNumbersOnly"
                           label="* محل تولد"
+                          class="rounded-lg"
                           v-model="item.location_of_foreign_birth"
                           :rules="[rules.required,]"
                           background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label=" * محل صدور شناسنامه "
                 :items="CITY_LIST"
@@ -145,6 +153,7 @@
           </v-col>
           <v-col cols="12" md="2" v-if="item.nationality !== 2">
             <v-autocomplete
+                class="rounded-lg"
                 label="  بخش محل صدور "
                 :items="CITY_LIST"
                 v-model="item.sector_of_exportation"
@@ -154,13 +163,14 @@
             />
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="تلفن ثابت " v-model="item.phone_number"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
+            <v-text-field class="rounded-lg" label="تلفن ثابت " v-model="item.phone_number"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
           </v-col>
           <v-col cols="12" md="1">
-            <v-text-field label="کد تلفن" v-model="item.city_phone_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
+            <v-text-field class="rounded-lg" label="کد تلفن" v-model="item.city_phone_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" />
           </v-col>
           <v-col cols="12" md="2">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label="* شهر محل سکونت "
                 :items="CITY_LIST"
@@ -171,10 +181,10 @@
             />
           </v-col>
           <v-col cols="12" md="5">
-            <v-text-field label="* آدرس " v-model="item.address"   background-color="white" :disabled="!isEditing"  :rules="[rules.required,]"/>
+            <v-text-field class="rounded-lg" label="* آدرس " v-model="item.address"   background-color="white" :disabled="!isEditing"  :rules="[rules.required,]"/>
           </v-col>
           <v-col cols="12" md="2">
-            <v-text-field label="* کد پستی " v-model="item.postal_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" :rules="[rules.required,]"/>
+            <v-text-field class="rounded-lg" label="* کد پستی " v-model="item.postal_code"   background-color="white" :disabled="!isEditing" v-on:keypress="NumbersOnly" :rules="[rules.required,]"/>
           </v-col>
           <v-col cols="12" md="3">
             <mobile label="* شماره همراه 1" v-model="item.mobile_number_1" ref="mobile1"
@@ -186,6 +196,8 @@
           </v-col>
           <v-col cols="12" md="2">
             <v-switch
+                inset
+                color="success"
                 @change="item.insurance_code = null"
                 v-model="item.insurance"
                 label= 'بیمه تامین اجتماعی دارد'
@@ -194,6 +206,7 @@
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field v-on:keypress="NumbersOnly"
+                          class="rounded-lg"
                           :rules="[rules.required,]"
                           label=" شماره بیمه" v-model="item.insurance_code"
                           background-color="white"
@@ -201,6 +214,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                class="rounded-lg"
                 @change="item.field_of_study = null"
                 :rules="[rules.required,]"
                 label="* مدرک تحصیلی"
@@ -213,6 +227,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field
+                class="rounded-lg"
                 v-on:keypress="NoneNumbersOnly"
                 :rules="[rules.required,]"
                 label="* رشته تحصیلی"
@@ -222,6 +237,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label="* نوع دانشگاه"
                 :items="UNIVERSITY_TYPES"
@@ -232,6 +248,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-text-field label="* نام دانشگاه"
+                          class="rounded-lg"
                           v-on:keypress="NoneNumbersOnly"
                           :rules="[rules.required,]"
                           v-model="item.university_name"
@@ -240,6 +257,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                class="rounded-lg"
                 v-on:keypress="NoneNumbersOnly"
                 :rules="[rules.required,]"
                 label="* نام بانک"
@@ -252,7 +270,8 @@
           </v-col>
           <v-col cols="12" md="3">
 
-            <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره حساب حقوق" v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
+            <v-text-field class="rounded-lg" :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره حساب حقوق"
+                          v-model="item.account_bank_number"   background-color="white" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
             <cart :rules="[rules.max_cart, rules.min_cart, rules.required]"
@@ -275,6 +294,7 @@
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.bool_required,]"
                 label="* وضعیت پرسنل "
                 :items="PERSONNEL_STATUS"
@@ -288,11 +308,11 @@
         </v-row>
       </template>
       <v-btn
-          class="light-blue white--text mt-6  mr-2 float-left"
+          class="accent rounded-lg white--text mt-6  mr-2 float-left" depressed
           @click="verifyPersonnel(item.id)"
           v-if="item.id && !item.verified && !isEditing" >ثبت نهایی</v-btn>
       <v-btn
-          class="red white--text mt-6  mr-2 float-left"
+          class="error rounded-lg white--text mt-6  mr-2 float-left" depressed
           @click="verifyUnPersonnel(item.id)"
           v-if="item.id && item.verified" > خروج از وضعیت نهایی</v-btn>
 
@@ -300,23 +320,24 @@
     <v-row justify="center">
       <v-dialog
           v-model="error_dialog"
+          class="rounded-lg"
           persistent
           @click:outside="error_dialog=false"
           max-width="400"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg pa-2">
+          <v-card-title class="error--text text-h5">
             لطفا موارد زیر را تکمیل یا اصلاح کنید!
           </v-card-title>
           <v-card-text>
             <v-row v-for="item in error_message" class="mt-5 mr-10">
-              {{item}}
+              {{ item }}
             </v-row>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="green darken-1"
+                color="success"
                 text
                 @click="error_dialog = false"
             >

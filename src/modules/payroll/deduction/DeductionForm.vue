@@ -18,12 +18,12 @@
             @delete="deleteItem"
             @clearForm="clearForm()"
             ref="DeductionForm"
-
         >
           <template>
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     label="انتخاب قالب"
                     :items="templates"
                     item-text="name"
@@ -34,7 +34,7 @@
                 />
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field label="* نام کسورات" v-model="item.name" background-color="white"
+                <v-text-field class="rounded-lg" label="* نام کسورات" v-model="item.name" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
 
@@ -42,6 +42,7 @@
             <v-row>
               <v-col cols="12" md="12" v-if="!item.id">
                 <v-autocomplete
+                    class="rounded-lg"
                     label="  کارگاه"
                     :items="workshops"
                     v-model="workshop"
@@ -54,6 +55,7 @@
               </v-col>
               <v-col cols="12" md="12" v-if="item.id && !isEditing">
                 <v-text-field
+                    class="rounded-lg"
                     label="  کارگاه"
                     v-model="item.workshop"
                     :disabled="true"
@@ -61,6 +63,7 @@
               </v-col>
               <v-col cols="12" md="12" v-if="item.id && isEditing">
                 <v-autocomplete
+                    class="rounded-lg"
                     label=" کارگاه"
                     :items="workshops"
                     v-model="item.workshop_id"
@@ -75,6 +78,7 @@
 
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="!item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -84,6 +88,7 @@
                     :disabled="!isEditing || !workshop"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -94,6 +99,7 @@
                     :disabled="!isEditing"
                 />
                 <v-text-field
+                    class="rounded-lg"
                     label="پرسنل در کارگاه"
                     v-if="this.workshopPersonnel"
                     disabled="true"
@@ -103,6 +109,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     label=" کد ملی"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
@@ -112,6 +119,7 @@
                 />
               </v-col>
               <v-text-field
+                  class="rounded-lg"
                   v-show="false"
                   v-model="item.is_template = false"
               />
@@ -132,7 +140,7 @@
             <v-row >
               <v-col cols="12" md="12">
                 <v-text-field label="توضیحات" v-model="item.explanation" background-color="white"
-                              :disabled="!isEditing"/>
+                              :disabled="!isEditing" class="rounded-lg"/>
               </v-col>
             </v-row>
             <v-row class="mt-10" v-if="item.id && item.is_verified">
@@ -145,55 +153,56 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-text-field label="ماه های پرداخت شده" v-model="item.episode_payed" background-color="white"
-                              disabled="ture"/>
+                              disabled="ture" class="rounded-lg"/>
               </v-col>
             </v-row>
           </template>
           <v-btn
-              class="primary darken-1 white--text mt-12 mr-2 float-left "
+              class="primary  white--text mt-12 mr-2 float-left rounded-lg" depressed
               v-if="item.id && item.is_verified  && item.is_active"
               @click="UnActiveDeduction(item)"
           >غیر فعال کردن</v-btn>
           <v-btn
-              class="green darken-1 white--text mt-12 mr-2 float-left "
+              class="secondary white--text mt-12 mr-2 float-left rounded-lg" depressed
               v-if="item.id && item.is_verified && !item.is_active"
               @click="ActiveDeduction(item)"
           > فعال کردن</v-btn>
 
           <v-btn
-              class="light-blue white--text mt-6  mr-2 float-left"
+              class="accent white--text mt-6  mr-2 float-left rounded-lg" depressed
               @click="verifyDeduction(item)"
               v-if="item.id && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
               @click="UnVerifyDeduction(item)"
               v-if="item.id && item.is_verified && item.editable" > خروج از وضعیت نهایی</v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
               @click="un_editable_dialog = true"
               v-if="item.id && item.is_verified && !item.editable" > خروج از وضعیت نهایی</v-btn>
 
         </m-form>
         <v-row justify="center">
           <v-dialog
+              class="rounded-lg"
               v-model="error_dialog"
               persistent
               @click:outside="error_dialog=false"
               max-width="400"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg">
+              <v-card-title class="error--text text-h5">
                 لطفا موارد زیر را تکمیل یا اصلاح کنید!
               </v-card-title>
               <v-card-text>
-                <v-row v-for="item in error_message" class="mt-5 mr-10">
+                <v-row v-for="item in error_message" class="mt-5 mr-6">
                   {{item}}
                 </v-row>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="error_dialog = false"
                 >
@@ -206,12 +215,13 @@
         <v-row justify="center">
           <v-dialog
               v-model="un_editable_dialog"
+              class="rounded-lg"
               persistent
               @click:outside="un_editable_dialog=false"
-              max-width="400"
+              max-width="600"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg">
+              <v-card-title class="error--text text-h5">
                 توجه!
               </v-card-title>
               <v-card-text>
@@ -220,7 +230,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="un_editable_dialog = false"
                 >

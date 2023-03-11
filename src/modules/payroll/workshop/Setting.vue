@@ -20,10 +20,10 @@
 
       >
         <template>
-          <v-banner v-if="item.is_verified" class="mt-3 mb-5 red--text">
+          <v-banner v-if="item.is_verified"  class="mt-3 mb-5 error--text rounded-lg">
             <v-avatar
                 slot="icon"
-                color="red"
+                color="error"
                 size="25"
             >
               <v-icon
@@ -37,9 +37,9 @@
 
           <v-toolbar
               v-if="is_pop"
-              class="mb-5"
+              class="mb-5 rounded-lg"
               flat
-              color="red"
+              color="error"
               dark
           >
             <v-toolbar-title>
@@ -49,17 +49,18 @@
           </v-toolbar>
 
           <v-toolbar
-              class="mb-5"
+              class="mb-5 rounded-lg"
               flat
-              color="indigo"
+              color="back"
               dark
           >
-            <v-toolbar-title>
+            <v-toolbar-title class="secondary--text">
               تنظیمات کلی حقوق و مزایا کارگاه {{ item.name }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-autocomplete
+              class="rounded-lg"
               label="نحوه محاسبه مزد مبنا"
               :items="BASE_PAY_TYPES"
               v-model="item.base_pay_type = 'd'"
@@ -72,6 +73,7 @@
               <v-row>
                 <v-col cols="12" md="3" v-if="1 == 0">
                   <v-autocomplete
+                      class="rounded-lg"
                       label="نحوه محاسبه پایه سنوات "
                       :items="SANAVAT_TYPES"
                       v-model="item.sanavat_type"
@@ -91,6 +93,7 @@
                 </v-col>
                 <v-col cols="12" md="3">
                   <v-autocomplete
+                      class="rounded-lg"
                       label="معافیت مالیاتی حق بیمه سهم بیمه شده"
                       :items="TAX_EMPLOYER_TYPES"
                       v-model="item.tax_employer_type"
@@ -100,13 +103,13 @@
                   />
                 </v-col>
                 <v-col cols="12" md="3">
-                  <v-tooltip top color="primary">
+                  <v-tooltip top color="info">
                     <template v-slot:activator="{ on, attrs }">
 
                       <v-autocomplete
                           v-bind="attrs"
                           v-on="on"
-
+                          class="rounded-lg"
                           label="نحوه محاسبه حق سنوات "
                           :items="HAGHE_SANAVAT_TYPES"
                           v-model="item.haghe_sanavat_type"
@@ -123,6 +126,7 @@
                 </v-col>
                 <v-col cols="12" md="3">
                   <v-autocomplete
+                      class="rounded-lg"
                       label="نحوه لحاظ مرخصی استعلاجی جهت پرداخت عائله مندی "
                       :items="ILLNESS_TYPES"
                       v-model="item.illness_absence_in_real_work"
@@ -173,6 +177,7 @@
               <td>عیدی و پاداش</td>
               <td >
                 <v-autocomplete
+                    class="rounded-lg"
                     :items="EYDI_PAY_TYPES"
                     v-model="item.eydi_padash_pay_type"
                     item-text="name"
@@ -182,6 +187,7 @@
               </td>
               <td colspan="2">
                 <v-autocomplete
+                    class="rounded-lg"
                     :items="REWARD_TYPES"
                     v-model="item.eydi_padash_identification"
                     item-text="name"
@@ -196,6 +202,7 @@
               <td>حق سنوات</td>
               <td>
                 <v-autocomplete
+                    class="rounded-lg"
                     :items="SANAVAT_PAY_TYPES"
                     v-model="item.haghe_sanavat_pay_type"
                     item-text="name"
@@ -205,6 +212,7 @@
               </td>
               <td colspan="2">
                 <v-autocomplete
+                    class="rounded-lg"
                     :items="REWARD_TYPES"
                     v-model="item.haghe_sanavat_identification"
                     item-text="name"
@@ -218,6 +226,7 @@
               <td>ذخیره ایام مرخصی</td>
               <td>
                 <v-autocomplete
+                    class="rounded-lg"
                     :items="LEAVE_PAY_TYPES"
                     v-model="item.leave_save_pay_type"
                     item-text="name"
@@ -228,9 +237,8 @@
               <td>
                 <v-text-field v-model="item.save_leave_limit"
                               :disabled="!isEditing"
-                              class="currency-input"
+                              class="currency-input rounded-lg"
                               label="حد نصاب مرخصی سالانه"
-
                 ></v-text-field>
               </td>
               <td class="pr-10 ">
@@ -242,6 +250,7 @@
                     :true-value="true"
                     :disabled="!isEditing"
                     hide-details
+                    inset
                 ></v-switch>
                 <v-switch
                     v-model="item.save_absence_transfer_next_year"
@@ -251,18 +260,19 @@
                     :true-value="true"
                     :disabled="!isEditing"
                     hide-details
+                    inset
                 ></v-switch>
               </td>
             </tr>
             </tbody>
           </v-simple-table>
           <v-toolbar
-              class="mt-5 mb-5"
+              class="mt-5 mb-5 rounded-lg"
               flat
-              color="indigo"
+              color="back"
               dark
           >
-            <v-toolbar-title>
+            <v-toolbar-title class="secondary--text">
               مبانی محاسباتی حقوق و دستمزد کارگاه {{ item.name }}
             </v-toolbar-title>
           </v-toolbar>
@@ -302,6 +312,7 @@
                 </td>
                 <td>
                   <v-autocomplete
+                      class="rounded-lg"
                       :items="PAY_TYPES"
                       v-model="item.aele_mandi_pay_type"
                       item-text="name"
@@ -328,6 +339,7 @@
 
                 <td>
                   <v-autocomplete
+                      class="rounded-lg"
                       :items="PAY_TYPES"
                       v-model="item.ezafe_kari_pay_type"
                       item-text="name"
@@ -343,12 +355,13 @@
                 <td>تعطیل کاری</td>
                 <td>
                   <v-text-field append-icon="fa-percent"
-                                class="currency-input"
+                                class="currency-input rounded-lg"
                                 v-model="tatil" :disabled="true"></v-text-field>
                 </td>
 
                 <td>
                   <v-autocomplete
+                      class="rounded-lg"
                       :items="PAY_TYPES"
                       v-model="item.tatil_kari_pay_type"
                       item-text="name"
@@ -365,7 +378,7 @@
                 <td>کسر کار</td>
                 <td>
                   <v-text-field append-icon="fa-percent"
-                                class="currency-input"
+                                class="currency-input rounded-lg"
                                 v-model="kasr" :disabled="true"></v-text-field>
                 </td>
 
@@ -487,7 +500,15 @@
 
         </template>
         <v-btn
-            class="light-blue white--text mt-6 mb-6  mr-2 float-left"
+            v-if="item.is_verified"
+            class="info rounded-lg white--text mt-12 mb-6  mr-2 float-left" depressed
+            @click="$router.push('/panel/workshop/' + item.id + '/')"
+        >بازگشت به کارگاه
+
+        </v-btn>
+        <v-btn
+            v-if="!item.is_verified"
+            class="info rounded-lg white--text mt-6 mb-6  mr-2 float-left" depressed
             @click="$router.push('/panel/workshop/' + item.id + '/')"
         >بازگشت به کارگاه
 

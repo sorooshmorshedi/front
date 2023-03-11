@@ -1,13 +1,13 @@
 <template>
   <v-row>
     <v-col cols="12" md="6">
-      <v-card>
+      <v-card class="rounded-lg">
         <v-card-title>نمودار درختی حساب ها</v-card-title>
         <v-card-text>
-          <tree-component :data="root" @node-click="setAccount" @node-context-menu="contextMenu"></tree-component>
-          <context-menu ref="menu" class="context-menu">
+          <tree-component class="rounded-lg" :data="root" @node-click="setAccount" @node-context-menu="contextMenu"></tree-component>
+          <context-menu  ref="menu" class="context-menu rounded-lg">
             <template v-if="account">
-              <v-card>
+              <v-card class="rounded-lg">
                 <v-list dense>
                   <v-list-item @click="createChildAccount(account)" v-if="account.level != 3">
                     <v-list-item-icon>

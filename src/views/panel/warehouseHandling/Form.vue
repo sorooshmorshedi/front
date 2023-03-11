@@ -16,30 +16,33 @@
   >
     <template #header-btns>
       <template v-if="item.is_defined">
-        <span>
+        <span class="mr-2">
           <v-btn
+              depressed
             :to="{
               name: 'AdjustmentForm',
               params: { id: item.inputAdjustment, type: 'ia' },
             }"
-            class="blue white--text mr-1 mt-1 mt-md-0"
+            class="primary white--text mr-1 mt-1 mt-md-0"
             >مشاهده رسید</v-btn
           >
 
           <v-btn
+              depressed
             :to="{
               name: 'AdjustmentForm',
               params: { id: item.outputAdjustment, type: 'oa' },
             }"
-            class="blue white--text mr-1 mt-1 mt-md-0"
+            class="primary white--text mr-1 mt-1 mt-md-0"
             >مشاهده حواله</v-btn
           >
         </span>
       </template>
 
       <template v-if="$refs.mForm && id">
-        <span>
+        <span class="mr-2">
           <v-btn
+              depressed
             :block="isXs"
             small
             class="export-btn mr-1 mt-1 mt-md-0"
@@ -49,6 +52,7 @@
             >چاپ بدون مانده</v-btn
           >
           <v-btn
+              depressed
             small
             class="export-btn mr-1 mt-1 mt-md-0"
             :href="$refs.mForm.pdfUrl + '&hide_remains=true'"
@@ -56,6 +60,7 @@
             >PDF بدون مانده</v-btn
           >
           <v-btn
+              depressed
             small
             class="export-btn mr-1 mt-1 mt-md-0"
             @click="downloadUrl($refs.mForm.excelUrl + '&hide_remains=true')"
@@ -68,7 +73,7 @@
     <template>
       <v-row>
         <v-col cols="12" md="2">
-          <v-text-field disabled label="شماره" v-model="item.code" />
+          <v-text-field class="rounded-lg" disabled label="شماره" v-model="item.code" />
         </v-col>
         <v-col cols="12" md="2">
           <date v-model="item.start_date" label=" * تاریخ آغاز" :default="true" :disabled="!isEditing" />
@@ -83,10 +88,11 @@
           <mtime label="* ساعت ثبت انبار گردانی" v-model="item.submit_time" :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="2">
-          <v-text-field label="* انبار گردان" v-model="item.handler" :disabled="!isEditing" />
+          <v-text-field class="rounded-lg" label="* انبار گردان" v-model="item.handler" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
           <v-autocomplete
+              class="rounded-lg"
             :return-object="false"
             label="* انبار"
             :items="warehouses"
@@ -97,13 +103,13 @@
           />
         </v-col>
         <v-col cols="12" md="3">
-          <v-select :items="waresStatuses" v-model="filters.status" label="وضعیت کالا" :disabled="id != undefined" />
+          <v-select class="rounded-lg" :items="waresStatuses" v-model="filters.status" label="وضعیت کالا" :disabled="id != undefined" />
         </v-col>
         <v-col cols="12" md="3">
-          <v-textarea label="شرح" v-model="item.explanation" :disabled="!isEditing" />
+          <v-textarea class="rounded-lg" label="شرح" v-model="item.explanation" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="3">
-          <v-text-field v-if="item.created_by" label="کاربر" disabled v-model="item.created_by.name" />
+          <v-text-field class="rounded-lg" v-if="item.created_by" label="کاربر" disabled v-model="item.created_by.name" />
         </v-col>
 
         <v-col cols="12">
@@ -135,6 +141,7 @@
                 </td>
                 <td>
                   <row-textarea
+                      class="rounded-lg"
                     v-model="row.explanation"
                     :disabled="!isEditing"
                     :i="i"
@@ -149,7 +156,7 @@
     </template>
 
     <template #footer-outside-btns>
-      <v-btn v-if="id" @click="definite" :disabled="item.is_defined" class="blue white--text mr-1">ثبت نهایی</v-btn>
+      <v-btn v-if="id" depressed @click="definite" :disabled="item.is_defined" class="accent rounded-lg white--text mr-1">ثبت نهایی</v-btn>
     </template>
   </m-form>
 </template>

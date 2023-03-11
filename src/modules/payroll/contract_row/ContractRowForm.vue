@@ -21,10 +21,10 @@
             ref="contractRowForm"
         >
           <template>
-            <v-banner v-if="!item.is_verified && !item.use_in_insurance_list" class="mt-3 mb-5 red--text">
+            <v-banner v-if="!item.is_verified && !item.use_in_insurance_list" class="rounded-lg mt-3 mb-5 error--text">
               <v-avatar
                   slot="icon"
-                  color="red"
+                  color="error"
                   size="25"
               >
                 <v-icon
@@ -53,6 +53,7 @@
             <v-row>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.required,]"
                     label="کارگاه"
                     :items="workshops"
@@ -64,11 +65,11 @@
                 />
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersTo3Only" ref="contract_row" label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
+                <v-text-field class="rounded-lg" :rules="[rules.required,]" v-on:keypress="NumbersTo3Only" ref="contract_row" label="* ردیف پیمان " v-model="item.contract_row" background-color="white"
                               :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره قرارداد " v-model="item.contract_number" background-color="white"
+                <v-text-field class="rounded-lg" :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شماره قرارداد " v-model="item.contract_number" background-color="white"
                               :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
@@ -81,19 +82,19 @@
                 <date  v-model="item.initial_to_date" label="* تاریخ پایان قرارداد" :default="false" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
+                <v-text-field class="rounded-lg" :rules="[rules.required,]" v-on:keypress="NumbersOnly" label="* شناسه ملی واگذار کننده " v-model="item.assignor_national_code"
                               background-color="white" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* نام واگذار کننده " v-model="item.assignor_name" background-color="white"
+                <v-text-field class="rounded-lg" :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* نام واگذار کننده " v-model="item.assignor_name" background-color="white"
                               :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field :rules="[rules.required]" v-on:keypress="NumbersToTenOnly"  ref="code" label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
+                <v-text-field class="rounded-lg" :rules="[rules.required]" v-on:keypress="NumbersToTenOnly"  ref="code" label="* کد کارگاه واگذار کننده " v-model="item.assignor_workshop_code"
                               background-color="white" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
-                <v-text-field label=" شعبه تامین اجتماعی" v-model="item.branch" background-color="white" :disabled="!isEditing || item.is_verified"/>
+                <v-text-field class="rounded-lg" label=" شعبه تامین اجتماعی" v-model="item.branch" background-color="white" :disabled="!isEditing || item.is_verified"/>
               </v-col>
               <v-col cols="12" md="4">
                 <money
@@ -107,6 +108,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.bool_required,]"
                     label="* وضعیت"
                     :items="STATUS_TYPE"
@@ -119,7 +121,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" md="12">
-                <v-text-field  label=" موضوع " v-model="item.topic" background-color="white" :disabled="!isEditing || item.is_verified"/>
+                <v-text-field class="rounded-lg"  label=" موضوع " v-model="item.topic" background-color="white" :disabled="!isEditing || item.is_verified"/>
               </v-col>
             </v-row>
             <v-row>
@@ -131,10 +133,10 @@
                 <date v-show="item.id" v-model="item.get_now_date" label="* تاریخ پایان فعلی قرارداد" :default="false" :disabled="true"/>
               </v-col>
             </v-row>
-            <v-banner v-if="item.have_ads" class="mt-5 red--text">
+            <v-banner v-if="item.have_ads" class="rounded-lg mt-6 error--text">
               <v-avatar
                   slot="icon"
-                  color="red"
+                  color="error"
                   size="25"
               >
                 <v-icon
@@ -145,10 +147,10 @@
               </v-avatar>
               برای ویرایش اطلاعات ردیف پیمان ابتدا تمام تعدیل های این ردیف پیمان را حذف کنید
             </v-banner>
-            <v-banner v-if="item.use_in_insurance_list" class="mt-3 mb-5 red--text">
+            <v-banner v-if="item.use_in_insurance_list" class="rounded-lg mt-3 mb-5 error--text">
               <v-avatar
                   slot="icon"
-                  color="red"
+                  color="error"
                   size="25"
               >
                 <v-icon
@@ -162,11 +164,11 @@
             </v-banner>
           </template>
           <v-btn
-              class="light-blue white--text mt-6  mr-2 float-left"
+              class="accent rounded-lg white--text mt-6  mr-2 float-left" depressed
               @click="verifyContract(item.id)"
               v-if="item.id && !item.is_verified && !item.use_in_insurance_list && !isEditing" >ثبت نهایی</v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 float-left "
+              class="error rounded-lg white--text mt-12 mr-2 float-left " depressed
               @click="UnVerifyContract(item)"
               v-if="item.id && item.is_verified && !item.use_in_insurance_list && !item.have_ads" > خروج از وضعیت نهایی</v-btn>
           <v-dialog
@@ -176,40 +178,43 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                  class="accent darken-3 white--text mt-12 mr-2 float-left "
+                  class="secondary rounded-lg  white--text mt-12 mr-2 float-left " depressed
                   v-bind="attrs"
                   v-on="on"
               >ثبت تعدیل</v-btn>
             </template>
             <template v-slot:default="dialog">
-              <v-card>
+              <v-card class="rounded-lg">
                 <v-toolbar
-                    color="accent darken-3"
+                    class="rounded-lg"
+                    color="secondary"
                     dark
-                >ثبت تعدیل برای ردیف پیمان {{item.contract_row}}</v-toolbar>
+                >ثبت تعدیل برای ردیف پیمان {{item.contract_row}}
+                  <v-spacer></v-spacer>
+                  <v-btn small fab color="error" class="mt-1 mr-1 white--text" depressed @click="dialog.value = false"><v-icon>fa-times</v-icon></v-btn>
+
+                </v-toolbar>
                 <v-card-text>
 
                   <adjustment-form :contract_row="item.id" ></adjustment-form>
 
                 </v-card-text>
-                <v-card-actions class="justify-end">
-                  <v-btn fab color="red" class="mt-1 mr-1 white--text" @click="dialog.value = false"><v-icon>fa-times</v-icon></v-btn>
-                </v-card-actions>
               </v-card>
             </template>
           </v-dialog>
           <v-btn
-              class="primary darken-1 white--text mt-12 mr-2 float-left "
+              class="info rounded-lg white--text mt-12 mr-2 float-left "
               v-if="item.id && item.is_verified && item.have_ads"
+              depressed
               @click="goAdjustment(item)"
           >مشاهده تغییرات ردیف پیمان</v-btn>
           <v-btn
-              class="red darken-1 white--text mt-12 mr-2 float-left "
+              class="error rounded-lg white--text mt-12 mr-2 float-left " depressed
               v-if="item.id && item.is_verified && item.have_ads && item.status"
               @click="UnActiveContract(item)"
           >غیر فعال کردن</v-btn>
           <v-btn
-              class="green darken-1 white--text mt-12 mr-2 float-left "
+              class="success rounded-lg white--text mt-12 mr-2 float-left " depressed
               v-if="item.id && item.is_verified && item.have_ads && !item.status"
               @click="ActiveContract(item)"
           > فعال کردن</v-btn>
@@ -218,23 +223,24 @@
         <v-row justify="center">
           <v-dialog
               v-model="error_dialog"
+              class="rounded-lg"
               persistent
               @click:outside="error_dialog=false"
               max-width="400"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg pa-2">
+              <v-card-title class="error--text text-h5">
                 لطفا موارد زیر را تکمیل یا اصلاح کنید!
               </v-card-title>
               <v-card-text>
                 <v-row v-for="item in error_message" class="mt-5 mr-10">
-                  {{item}}
+                  {{ item }}
                 </v-row>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="error_dialog = false"
                 >

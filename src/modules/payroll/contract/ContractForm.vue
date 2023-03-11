@@ -20,12 +20,12 @@
             @delete="deleteItem"
             @clearForm="clearForm()"
             ref="ContractForm"
-
         >
           <template>
             <v-row>
               <v-col cols="12" md="12">
                 <v-autocomplete
+                    class="rounded-lg"
                     label="  کارگاه"
                     :items="workshops"
                     v-if="!item.id"
@@ -38,6 +38,7 @@
                     @change="getPersonnel(workshop)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     label="  کارگاه"
                     :items="workshops"
                     v-model="item.workshop_id"
@@ -54,6 +55,7 @@
             <v-row>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="!item.id"
                     label=" پرسنل"
                     :items="workshopPersonnels"
@@ -64,6 +66,7 @@
                     @change="setChange"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="item.id"
                     label=" پرسنل"
                     :items="workshopPersonnels"
@@ -76,6 +79,7 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-autocomplete
+                    class="rounded-lg"
                     label=" نام پدر"
                     :items="workshopPersonnels"
                     v-model="item.workshop_personnel"
@@ -87,6 +91,7 @@
               </v-col>
               <v-col cols="12" md="3">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="personnel_nationality[item.workshop_personnel] == 2"
                     label=" کد فراگیر تابعیت"
                     :items="workshopPersonnels"
@@ -96,6 +101,7 @@
                     :disabled="true"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="personnel_nationality[item.workshop_personnel] != 2"
                     label=" کد ملی"
                     :items="workshopPersonnels"
@@ -110,6 +116,7 @@
             <v-row>
               <v-col cols="12" md="6">
                 <v-text-field v-on:keypress="NumbersOnly" label="* شماره قرارداد  "
+                              class="rounded-lg"
                               v-model="item.code" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
@@ -130,6 +137,8 @@
             <v-row class="mt-10">
               <v-col cols="12" md="4">
                 <v-switch
+                    inset
+                    color="success"
                     class="text-right "
                     v-model="item.insurance"
                     label='اضافه شدن به لیست بیمه'
@@ -149,11 +158,13 @@
               <v-col cols="12" md="3" v-if="item.insurance">
                 <v-text-field v-on:keypress="NumbersOnly"
                               v-if="!is_insurance[item.workshop_personnel]"
+                              class="rounded-lg"
                               label=" * شماره بیمه" v-model="item.insurance_number"
                               background-color="white"
                               :disabled="!isEditing"/>
                 <v-text-field v-on:keypress="NumbersOnly"
                               v-if="is_insurance[item.workshop_personnel]"
+                              class="rounded-lg"
                               label=" شماره بیمه"
                               v-model="item.insurance_number = personnel_insurance_code[item.workshop_personnel]"
                               background-color="white"
@@ -165,6 +176,8 @@
             <v-row class="mt-10">
               <v-col cols="12" md="4">
                 <v-switch
+                    inset
+                    color="success"
                     class="text-right "
                     v-model="item.tax"
                     label='اضافه شدن به لیست مالیات '
@@ -182,55 +195,59 @@
             </v-row>
           </template>
           <v-btn
-              class="light-blue white--text mt-6  mr-2 float-left"
+              class="accent rounded-lg white--text mt-6  mr-2 float-left" depressed
               @click="verifyContract(item)"
               v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
           </v-btn>
           <v-btn
-              class="indigo white--text mt-12 mr-2 ml-2 float-left "
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
+              @click="UnVerifyContract(item)"
+              v-if="item.id && item.is_verified && item.unverifiable"> خروج از وضعیت نهایی
+          </v-btn>
+          <v-btn
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
+              @click="unverify_dialog = true"
+              v-if="item.id && item.is_verified && !item.unverifiable"> خروج از وضعیت نهایی
+          </v-btn>
+
+          <v-btn
+              class="secondary rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
               :disabled="!item.insurance_editable"
               @click="insurance_dialog=true"
               v-if="item.id && item.is_verified"> اضافه کردن به لیست بیمه
           </v-btn>
           <v-btn
-              class="yellow darken-3 white--text mt-12 mr-2 ml-2 float-left "
+              class="secondary white--text mt-12 mr-2 ml-2 float-left rounded-lg" depressed
               :disabled="!item.tax_editable"
               @click="tax_dialog=true"
               v-if="item.id && item.is_verified"> اضافه کردن به لیست مالیات
           </v-btn>
           <v-btn
-              class="primary white--text mt-12 mr-2 ml-2 float-left "
+              class="secondary rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
               :disabled="!item.is_quit_job_editable"
               @click="quit_dialog = true"
               v-if="item.id && item.is_verified"> ثبت ترک کار
           </v-btn>
 
-          <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
-              @click="UnVerifyContract(item)"
-              v-if="item.id && item.is_verified && item.unverifiable"> خروج از وضعیت نهایی
-          </v-btn>
-          <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
-              @click="unverify_dialog = true"
-              v-if="item.id && item.is_verified && !item.unverifiable"> خروج از وضعیت نهایی
-          </v-btn>
         </m-form>
         <v-row justify="center">
           <v-dialog
+              class="rounded-lg"
               v-model="tax_dialog"
               persistent
               @click:outside="tax_dialog=false"
               max-width="600"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg">
+              <v-card-title class="secondary--text text-h5">
                 اضافه کردن به لیست مالیات
               </v-card-title>
               <v-card-text>
                 <v-row class="mt-10">
                   <v-col cols="12" md="6">
                     <v-switch
+                        inset
+                        color="success"
                         class="text-right "
                         v-model="tax_status"
                         label='اضافه شدن به لیست مالیات '
@@ -250,15 +267,15 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="red darken-1"
-                    text
+                    color="error"
+                    class="rounded-lg" depressed
                     @click="tax_dialog = false"
                 >
                   بستن
                 </v-btn>
                 <v-btn
-                    color="green darken-1"
-                    text
+                    color="success"
+                    class="rounded-lg" depressed
                     @click="EditTax"
                 >
                   ثبت
@@ -275,13 +292,15 @@
               max-width="600"
           >
             <v-card>
-              <v-card-title class="red--text text-h5">
+              <v-card-title class="secondary--text text-h5">
                 اضافه کردن به لیست بیمه
               </v-card-title>
               <v-card-text>
                 <v-row class="mt-10">
                   <v-col cols="12" md="4">
                     <v-switch
+                        inset
+                        color="success"
                         class="text-right "
                         v-model="insurance_status"
                         label='اضافه شدن به لیست بیمه'
@@ -300,12 +319,14 @@
                   <v-col cols="12" md="3" v-if="insurance_status">
 
                     <v-text-field v-on:keypress="NumbersOnly"
+                                  class="rounded-lg"
                                   v-if="is_insurance[item.workshop_personnel]"
                                   label=" * شماره بیمه" v-model="insurance_number = personnel_insurance_code[item.workshop_personnel]"
                                   background-color="white"
                                   disabled="true"
                     />
                     <v-text-field v-on:keypress="NumbersOnly"
+                                  class="rounded-lg"
                                   v-if="!is_insurance[item.workshop_personnel]"
                                   label=" * شماره بیمه" v-model="insurance_number"
                                   background-color="white"
@@ -317,15 +338,15 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="red darken-1"
-                    text
+                    color="error"
+                    class="rounded-lg" depressed
                     @click="insurance_dialog = false"
                 >
                   بستن
                 </v-btn>
                 <v-btn
-                    color="green darken-1"
-                    text
+                    color="success"
+                    class="rounded-lg" depressed
                     @click="EditInsurance"
                 >
                   ثبت
@@ -337,12 +358,13 @@
         <v-row justify="center">
           <v-dialog
               v-model="error_dialog"
+              class="rounded-lg"
               persistent
               @click:outside="error_dialog=false"
               max-width="400"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg pa-2">
+              <v-card-title class="error--text text-h5">
                 لطفا موارد زیر را تکمیل یا اصلاح کنید!
               </v-card-title>
               <v-card-text>
@@ -353,7 +375,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="error_dialog = false"
                 >
@@ -392,13 +414,14 @@
         </v-row>
         <v-row justify="center">
           <v-dialog
+              class="rounded-lg"
               v-model="quit_dialog"
               persistent
               @click:outside="quit_dialog=false"
               max-width="300"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg">
+              <v-card-title class="secondary--text text-h5">
                 ثبت ترک کار
               </v-card-title>
               <v-card-text>
@@ -407,15 +430,15 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="red darken-1"
-                    text
+                    color="error"
+                    class="rounded-lg" depressed
                     @click="quit_dialog = false"
                 >
                   بستن
                 </v-btn>
                 <v-btn
-                    color="green darken-1"
-                    text
+                    color="success"
+                    class="rounded-lg" depressed
                     @click="quitJob(item)"
                 >
                   ثبت ترک کار

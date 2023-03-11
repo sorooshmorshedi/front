@@ -22,31 +22,28 @@
             ref="WorkshopPersonnelForm"
 
         >
-          <v-toolbar v-if="item.id" class="white--text" color="indigo">
+          <v-toolbar v-if="item.is_verified" class="rounded-lg" color="back" flat>
             <v-toolbar-title>
-              {{ personnelName }}
+              {{ item.personnel_name }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="red" class="white--text" left @click="settlement('html')" v-if="item.quit_job">
+            <v-btn color="primary" class="rounded-lg" depressed left @click="settlement('html')" v-if="item.quit_job">
               فرم تسویه
             </v-btn>
-            <v-btn left color="indigo lighten-4" @click="balance('html')" class="ml-2 mr-2 indigo--text text--darken-3">
+            <v-btn left color="secondary" @click="balance('html')" class="rounded-lg ml-2 mr-2 white--text" depressed>
               گردش پرداخت
             </v-btn>
 
           </v-toolbar>
           <v-col cols="12" md="12" v-if="item.quit_job">
             <v-banner
-                class="red white--text"
-                elevation="6"
+                flat
+                class="error--text rounded-lg"
                 outlined
-                rounded
-                single-line
-                sticky
             >
               <v-icon
                   class="mr-6 ml-10"
-                  color="white"
+                  color="error"
                   large
               >info
               </v-icon>
@@ -58,6 +55,7 @@
             <v-row class="mt-3">
               <v-col cols="12" md="12">
                 <v-autocomplete
+                    class="rounded-lg"
                     ref="workshopSelect"
                     label="کارگاه"
                     :items="workshops"
@@ -73,6 +71,7 @@
             <v-row class="mt-3" v-if="!item.id && workshop  && !searchByCode && !item.personnel">
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.required,]"
                     label="نام  و نام خانوادگی"
                     :items="personnels"
@@ -86,41 +85,44 @@
               </v-col>
 
               <v-col v-if="!item.personnel" cols="12" md="3">
-                <v-text-field v-on:keypress="NumbersOnly" label="* کد ملی / فراگیر" v-model="national_code"
+                <v-text-field class="rounded-lg" v-on:keypress="NumbersOnly" label="* کد ملی / فراگیر"
+                              v-model="national_code"
                               background-color="white" @keydown="personnel_code = null"/>
               </v-col>
 
               <v-col cols="12" md="3" v-if="!item.personnel">
-                <v-text-field v-on:keypress="NumbersOnly" label="* کد پرسنلی " v-model="personnel_code"
+                <v-text-field class="rounded-lg" v-on:keypress="NumbersOnly" label="* کد پرسنلی "
+                              v-model="personnel_code"
                               background-color="white" @keydown="national_code = null"/>
               </v-col>
 
               <v-col cols="12" md="2" v-if="!item.personnel">
-                <v-btn fab color="green" class=" white--text" @click="searchUser">
+                <v-btn depressed fab color="success" class=" white--text" @click="searchUser">
                   <v-icon>fa-search</v-icon>
                 </v-btn>
-                <v-btn fab color="red" class="mt-1 mr-1 white--text" @click="setNull">
+                <v-btn depressed fab color="error" class="mt-1 mr-1 white--text" @click="setNull">
                   <v-icon>fa-times</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
             <v-row v-if="!item.id && item.workshop && searchByCode">
               <v-col cols="12" md="4">
-                <v-text-field label="نام  و نام خانوادگی" v-model="personnelName"
+                <v-text-field class="rounded-lg" label="نام  و نام خانوادگی" v-model="personnelName"
                               :disabled="true" background-color="white"/>
-                <v-text-field v-show="false" v-model="item.personnel = personnel"
-                              :disabled="true" background-color="white"/>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field label="کد ملی / فراگیر" v-model="national_code"
+                <v-text-field class="rounded-lg" v-show="false" v-model="item.personnel = personnel"
                               :disabled="true" background-color="white"/>
               </v-col>
               <v-col cols="12" md="3">
-                <v-text-field label="کد پرسنلی" v-model="personnel_code"
+                <v-text-field class="rounded-lg" label="کد ملی / فراگیر" v-model="national_code"
                               :disabled="true" background-color="white"/>
               </v-col>
-              <v-col cols="12" md="1" >
-                <v-btn fab color="red" class=" mr-5 white--text" @click="searchByCode = null ; item.personnel = null ; national_code = null ; personnel_code = null">
+              <v-col cols="12" md="3">
+                <v-text-field class="rounded-lg" label="کد پرسنلی" v-model="personnel_code"
+                              :disabled="true" background-color="white"/>
+              </v-col>
+              <v-col cols="12" md="1">
+                <v-btn fab color="error" depressed class=" mr-5 white--text"
+                       @click="searchByCode = null ; item.personnel = null ; national_code = null ; personnel_code = null">
                   <v-icon>fa-times</v-icon>
                 </v-btn>
               </v-col>
@@ -129,6 +131,7 @@
             <v-row v-if="!item.id && item.workshop && !searchByCode && item.personnel">
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.required,]"
                     label="نام  و نام خانوادگی"
                     :items="personnels"
@@ -140,15 +143,16 @@
                 />
               </v-col>
               <v-col cols="12" md="3">
-                <v-text-field label="کد ملی / فراگیر" v-model="national_code"
+                <v-text-field class="rounded-lg" label="کد ملی / فراگیر" v-model="national_code"
                               :disabled="true" background-color="white"/>
               </v-col>
               <v-col cols="12" md="3">
-                <v-text-field label="کد پرسنلی" v-model="personnel_code"
+                <v-text-field class="rounded-lg" label="کد پرسنلی" v-model="personnel_code"
                               :disabled="true" background-color="white"/>
               </v-col>
               <v-col cols="12" md="1">
-                <v-btn fab color="red" class=" mr-5 white--text" @click="national_code = null ; personnel_code = null ; item.personnel = null">
+                <v-btn fab color="error" depressed class=" mr-5 white--text"
+                       @click="national_code = null ; personnel_code = null ; item.personnel = null">
                   <v-icon>fa-times</v-icon>
                 </v-btn>
               </v-col>
@@ -158,6 +162,7 @@
             <v-row class="" v-if="item.personnel">
               <v-col cols="12" md="12">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="item.id"
                     label="نام  و نام خانوادگی"
                     :items="personnels"
@@ -179,12 +184,14 @@
 
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly" label="* محل خدمت  "
+                <v-text-field class="rounded-lg" :rules="[rules.required,]" v-on:keypress="NoneNumbersOnly"
+                              label="* محل خدمت  "
                               v-model="item.job_location" background-color="white"
                               :disabled="!isEditing || item.quit_job"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.required,]"
                     label="* وضعیت کارمند"
                     :items="EMPLOYEE_TYPES"
@@ -196,6 +203,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.required,]"
                     label="* وضعیت محل کار"
                     :items="JOB_LOCATION_STATUSES"
@@ -208,28 +216,30 @@
 
 
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly"
+                <v-text-field class="rounded-lg" :rules="[rules.required,]" v-on:keypress="NumbersOnly"
                               label="* سابقه بیمه قبلی خارج این کارگاه (ماه) "
                               v-model="item.previous_insurance_history_out_workshop" background-color="white"
                               :disabled="!isEditing || item.quit_job || !is_insurance[item.personnel]"/>
               </v-col>
               <v-col cols="12" md="6">
-                <v-text-field :rules="[rules.required,]" v-on:keypress="NumbersOnly"
+                <v-text-field class="rounded-lg" :rules="[rules.required,]" v-on:keypress="NumbersOnly"
                               label="* سابقه بیمه قبلی در این کارگاه (ماه)"
                               v-model="item.previous_insurance_history_in_workshop" background-color="white"
                               :disabled="!isEditing || item.quit_job || !is_insurance[item.personnel]"/>
               </v-col>
               <v-col cols="12" md="6" v-if="item.id">
-                <v-text-field label="* سابقه بیمه جاری در این کارگاه (ماه) "
+                <v-text-field class="rounded-lg" label="* سابقه بیمه جاری در این کارگاه (ماه) "
                               v-model="item.get_current_insurance"
                               background-color="white" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="6" v-if="item.id">
-                <v-text-field label="* مجموع سوابق بیمه ای  (ماه) " v-model="item.total_insurance_month"
+                <v-text-field class="rounded-lg" label="* مجموع سوابق بیمه ای  (ماه) "
+                              v-model="item.total_insurance_month"
                               background-color="white" :disabled="true"/>
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
+                    class="rounded-lg"
                     ref="title"
                     :rules="[rules.required,]"
                     v-on:keypress="NoneNumbersOnly"
@@ -240,6 +250,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.bool_required,]"
                     label="* رسته شغلی "
                     :items="JOB_POSITIONS"
@@ -254,6 +265,7 @@
 
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.required,]"
                     label="* نوع استخدام "
                     :items="EMPLOYMENTS_TYPES"
@@ -266,6 +278,7 @@
 
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     :rules="[rules.required,]"
                     label="* نوع قرارداد"
                     :items="CONTRACT_TYPES"
@@ -279,7 +292,7 @@
               <v-col cols="12" md="6">
                 <v-text-field v-model="item.save_leave_limit"
                               :disabled="!isEditing"
-                              class="currency-input"
+                              class="currency-input rounded-lg"
                               label="حد نصاب مرخصی سالانه"
 
                 ></v-text-field>
@@ -291,10 +304,10 @@
             </v-row>
             <v-row class="mt-5" v-if="item.personnel">
               <v-col cols="12" md="12">
-                <v-banner class="mt-3  red--text" v-if="item.un_editable">
+                <v-banner class="mt-3 rounded-lg error--text" v-if="item.un_editable">
                   <v-avatar
                       slot="icon"
-                      color="red"
+                      color="error"
                       size="40"
                   >
                     <v-icon
@@ -306,10 +319,10 @@
                   با توجه به اینکه برای این پرسنل حق سنوات علی الحساب شناسایی شده دو فیلد زیر غیر قابل ویرایش می باشد
                 </v-banner>
 
-                <v-banner class="mt-3  red--text" v-if="!item.un_editable">
+                <v-banner class="mt-3  error--text rounded-lg" v-if="!item.un_editable">
                   <v-avatar
                       slot="icon"
-                      color="red"
+                      color="error"
                       size="25"
                   >
                     <v-icon
@@ -326,13 +339,14 @@
                       :true-value="true"
                       :false-value="false"
                       inset
-                      color="indigo"
+                      color="success"
                       @click="myAlert(item)"
                   ></v-switch>
                 </v-banner>
               </v-col>
               <v-col cols="12" md="6">
                 <v-text-field
+                    class="rounded-lg"
                     v-on:keypress="NumbersOnly"
                     label=" روز های کارکرد قبل از تعریف "
                     ref="day"
@@ -352,17 +366,17 @@
             </v-row>
           </template>
           <v-btn
-              class="light-blue white--text mt-6  mr-2 float-left"
+              class="accent rounded-lg white--text mt-6  mr-2 float-left" depressed
               @click="verifyPersonnel(item.id)"
               v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-12  mr-2 float-left "
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
               @click="verifyUnPersonnel(item.id)"
               v-if="item.id && item.is_verified && !item.unverifiable"> خروج از وضعیت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
               @click="unverify_dialog = true"
               v-if="item.id && item.is_verified && item.unverifiable"> خروج از وضعیت نهایی
           </v-btn>
@@ -374,10 +388,12 @@
               persistent
               @click:outside="error_dialog=false"
               max-width="400"
+              class="rounded-lg"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg">
+              <v-card-title class="error--text text-h5">
                 لطفا موارد زیر را تکمیل یا اصلاح کنید!
+
               </v-card-title>
               <v-card-text>
                 <v-row v-for="item in error_message" class="mt-5 mr-10">
@@ -387,9 +403,37 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="error_dialog = false"
+                >
+                  بستن
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog
+              v-model="sanavat_dialog"
+              persistent
+              @click:outside="sanavat_dialog=false"
+              max-width="400"
+              class="rounded-lg"
+
+          >
+            <v-card class="rounded-lg"
+            >
+              <v-card-title class="error--text text-h5">
+                توجه!
+              </v-card-title>
+              <v-card-text>
+                اگر از روش قطعی استفاده می کنید و حق سنوات را تسویه نموده اید، نیازی به تکمل فیلد های زیر نیست
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="success"
+                    text
+                    @click="sanavat_dialog = false"
                 >
                   بستن
                 </v-btn>
@@ -399,13 +443,14 @@
         </v-row>
         <v-row justify="center">
           <v-dialog
+              class="rounded-lg"
               v-model="unverify_dialog"
               persistent
               @click:outside="unverify_dialog=false"
-              max-width="300"
+              max-width="500"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg">
+              <v-card-title class="error--text text-h5">
                 خطا!
               </v-card-title>
               <v-card-text>
@@ -414,7 +459,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="unverify_dialog = false"
                 >
@@ -538,6 +583,7 @@ export default {
       personnel_code_dis: true,
       printUrl: 'payroll/workshop/personnel/all',
       isWorkshopConfirmed: false,
+      sanavat_dialog: false,
       baseUrl: "payroll/workshop/personnel",
       permissionBasename: "workshop_personnel",
       appendSlash: true,
@@ -603,7 +649,7 @@ export default {
         console.log(this.workshops)
       }
     })
-    if(this.$route.params.id){
+    if (this.$route.params.id) {
       this.personnel = []
       this.request({
         url: this.endpoint(`payroll/personnel/`),
@@ -622,7 +668,8 @@ export default {
           }
           console.log(this.is_insurance)
         }
-      })} else {
+      })
+    } else {
       this.request({
         url: this.endpoint(`payroll/workshop/default/`),
         method: "get",
@@ -691,7 +738,7 @@ export default {
     },
     myAlert(item) {
       if (item.sanavat_btn) {
-        window.alert('اگر از روش قطعی استفاده می کنید و حق سنوات را تسویه نموده اید، نیازی به تکمل فیلد های زیر نیست')
+        this.sanavat_dialog = true
       } else {
         this.$refs.WorkshopPersonnelForm.$props.items['sanavat_previuos_days'] = undefined
         this.$refs.WorkshopPersonnelForm.$props.items['sanavat_previous_amount'] = undefined
@@ -699,7 +746,7 @@ export default {
       }
 
     },
-    get_name_from_id(work_title){
+    get_name_from_id(work_title) {
       this.request({
         url: this.endpoint(`payroll/workTitle/` + work_title + '/'),
         method: "get",
@@ -708,14 +755,14 @@ export default {
         }
       })
     },
-    setChange(work_title){
+    setChange(work_title) {
       console.log(work_title)
       this.$refs.WorkshopPersonnelForm.$props.items['job_position'] = work_title
       this.$refs.title._props.value = work_title
       console.log(this.$refs.WorkshopPersonnelForm.$props.items['job_position'])
 
     },
-    show(item){
+    show(item) {
       console.log(item)
     },
 
@@ -753,7 +800,7 @@ export default {
 
     },
     balance(type) {
-      window.location.href =  "http://188.121.108.201:40/payroll/balance/html?id=" + this.$route.params.id + '&token=' +
+      window.location.href = "http://188.121.108.201:40/payroll/balance/html?id=" + this.$route.params.id + '&token=' +
           this.token
     },
     settlement(type) {

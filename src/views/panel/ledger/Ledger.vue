@@ -7,74 +7,75 @@
           <v-row>
             <v-col cols="12" md="4">
               <v-select
-                v-model="ledger.level"
-                label="سطح حساب"
-                :items="accountLevels"
-                item-text="text"
-                item-value="value"
-                :return-object="false"
+                  class="rounded-lg"
+                  v-model="ledger.level"
+                  label="سطح حساب"
+                  :items="accountLevels"
+                  item-text="text"
+                  item-value="value"
+                  :return-object="false"
               />
             </v-col>
             <v-col cols="12" md="8">
               <account-select
-                label="حساب"
-                v-if="ledger.level != undefined"
-                :items-type="ledger.level"
-                v-model="ledger.account"
-                :floatAccount="ledger.floatAccount"
-                @update:floatAccount="(v) => (ledger.floatAccount = v)"
-                :costCenter="ledger.costCenter"
-                @update:costCenter="(v) => (ledger.costCenter = v)"
-                :showLedgerBtn="false"
+                  label="حساب"
+                  v-if="ledger.level != undefined"
+                  :items-type="ledger.level"
+                  v-model="ledger.account"
+                  :floatAccount="ledger.floatAccount"
+                  @update:floatAccount="(v) => (ledger.floatAccount = v)"
+                  :costCenter="ledger.costCenter"
+                  @update:costCenter="(v) => (ledger.costCenter = v)"
+                  :showLedgerBtn="false"
               />
             </v-col>
             <template v-if="ledger.account">
               <v-col cols="12" md="2">
                 <date
-                  label="از تاریخ"
-                  v-model="filters.sanad__date__gte"
-                  clearable
+                    label="از تاریخ"
+                    v-model="filters.sanad__date__gte"
+                    clearable
                 />
               </v-col>
               <v-col cols="12" md="2">
                 <date
-                  label="تا تاریخ"
-                  v-model="filters.sanad__date__lte"
-                  clearable
+                    label="تا تاریخ"
+                    v-model="filters.sanad__date__lte"
+                    clearable
                 />
               </v-col>
               <v-col cols="12" md="2">
                 <money
-                  label="از شماره"
-                  v-model="filters.sanad__code__gte"
-                  clearable
+                    label="از شماره"
+                    v-model="filters.sanad__code__gte"
+                    clearable
                 />
               </v-col>
               <v-col cols="12" md="2">
                 <money
-                  label="تا شماره"
-                  v-model="filters.sanad__code__lte"
-                  clearable
+                    label="تا شماره"
+                    v-model="filters.sanad__code__lte"
+                    clearable
                 />
               </v-col>
               <v-col cols="12" md="4">
                 <v-radio-group v-model="filters.order_sanads_by" row>
                   <template #label>مرتب سازی بر اساس:</template>
                   <span>
-                    <v-radio label="تاریخ سند" value="date" />
-                    <v-radio label="شماره سند" value="code" />
+                    <v-radio label="تاریخ سند" value="date"/>
+                    <v-radio label="شماره سند" value="code"/>
                   </span>
                 </v-radio-group>
               </v-col>
               <v-col cols="12">
                 <sanad-item-list-report
-                  :filters.sync="filters"
-                  :showAccountInTable="showAccountInTable"
-                  :sortable="false"
-                  :filterable="false"
-                  :showRemain="true"
-                  :showPreviousRemain="true"
-                  :showLink="true"
+                    :filters.sync="filters"
+                    :showAccountInTable="showAccountInTable"
+                    :sortable="false"
+                    :filterable="false"
+                    :showRemain="true"
+                    :showPreviousRemain="true"
+                    :showLink="true"
                 />
               </v-col>
             </template>
@@ -89,10 +90,11 @@
 import SanadItemListReport from "@/components/mcomponents/report/SanadItemListReport";
 import queryBinding from "@/components/m-query-binding";
 import AccountMixin from "@/mixin/accountMixin";
+
 export default {
   name: "Ledger",
   mixins: [queryBinding, AccountMixin],
-  components: { SanadItemListReport },
+  components: {SanadItemListReport},
   props: {
     ledgerAccountIds: {
       default: () => [],
@@ -114,14 +116,14 @@ export default {
       },
       filters: {},
       accountLevels: [
-        { value: "level0", text: "گروه" },
-        { value: "level1", text: "کل" },
-        { value: "level2", text: "معین" },
-        { value: "level3", text: "تفضیلی" },
-        { value: "floatAccountGroups", text: "گروه شناور" },
-        { value: "costCenterGroups", text: "گروه مرکز هزینه و درآمد" },
-        { value: "floatAccounts", text: "شناور" },
-        { value: "costCenters", text: "مرکز هزینه و درآمد" },
+        {value: "level0", text: "گروه"},
+        {value: "level1", text: "کل"},
+        {value: "level2", text: "معین"},
+        {value: "level3", text: "تفضیلی"},
+        {value: "floatAccountGroups", text: "گروه شناور"},
+        {value: "costCenterGroups", text: "گروه مرکز هزینه و درآمد"},
+        {value: "floatAccounts", text: "شناور"},
+        {value: "costCenters", text: "مرکز هزینه و درآمد"},
       ],
     };
   },
@@ -179,13 +181,13 @@ export default {
     "ledger.account"() {
       if (this.ledger.account) {
         this.filters.account_title =
-          this.ledger.account.title || this.ledger.account.name;
+            this.ledger.account.title || this.ledger.account.name;
       }
 
       if (this.ledger.level.includes("level")) {
         this.filters.account__code__startswith = this.ledger.account
-          ? this.ledger.account.code
-          : null;
+            ? this.ledger.account.code
+            : null;
       } else {
         this.filters.account__code__startswith = null;
         let filterKeys = {
@@ -200,28 +202,28 @@ export default {
         });
 
         this.filters[filterKeys[this.ledger.level]] = this.ledger.account
-          ? this.ledger.account.id
-          : null;
+            ? this.ledger.account.id
+            : null;
       }
     },
     "ledger.floatAccount"() {
       this.filters["floatAccount"] = this.ledger.floatAccount
-        ? this.ledger.floatAccount.id
-        : null;
+          ? this.ledger.floatAccount.id
+          : null;
 
       if (this.ledger.floatAccount) {
         this.filters.float_account_title =
-          this.ledger.floatAccount.title || this.ledger.floatAccount.name;
+            this.ledger.floatAccount.title || this.ledger.floatAccount.name;
       }
     },
     "ledger.costCenter"() {
       this.filters["costCenter"] = this.ledger.costCenter
-        ? this.ledger.costCenter.id
-        : null;
+          ? this.ledger.costCenter.id
+          : null;
 
       if (this.ledger.costCenter) {
         this.filters.cost_center_title =
-          this.ledger.costCenter.title || this.ledger.costCenter.name;
+            this.ledger.costCenter.title || this.ledger.costCenter.name;
       }
     },
   },

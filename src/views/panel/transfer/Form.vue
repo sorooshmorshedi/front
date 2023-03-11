@@ -22,7 +22,7 @@
         <v-col cols="12" md="8">
           <v-row>
             <v-col cols="12" md="2">
-              <v-text-field label="شماره انتقال" disabled v-model="item.code" />
+              <v-text-field class="rounded-lg" label="شماره انتقال" disabled v-model="item.code" />
             </v-col>
             <v-col cols="12" md="2">
               <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
@@ -32,18 +32,18 @@
             </v-col>
 
             <v-col cols="12" md="3">
-              <v-text-field v-if="item.created_by" label="کاربر" disabled v-model="item.created_by.name" />
+              <v-text-field class="rounded-lg" v-if="item.created_by" label="کاربر" disabled v-model="item.created_by.name" />
             </v-col>
 
             <v-col cols="12" md="3">
-              <v-switch v-if="item.id" label="قطعی شده" v-model="item.is_defined" disabled />
+              <v-switch inset color="success" v-if="item.id" label="قطعی شده" v-model="item.is_defined" disabled />
             </v-col>
           </v-row>
         </v-col>
         <v-col cols="12" md="4">
           <v-row>
             <v-col cols="12">
-              <v-textarea label="توضیحات" class="form-control" v-model="item.explanation" :disabled="!isEditing" />
+              <v-textarea label="توضیحات" class="form-control rounded-lg" v-model="item.explanation" :disabled="!isEditing" />
             </v-col>
           </v-row>
         </v-col>
@@ -71,7 +71,7 @@
                   <ware-select v-model="rows[i].ware" :disabled="!isEditing" :show-main-unit="false" />
                 </td>
                 <td>
-                  <v-autocomplete
+                  <v-autocomplete class="rounded-lg"
                     v-if="rows[i].ware"
                     :items="getWareUnits(row.ware)"
                     v-model="rows[i].unit"
@@ -86,7 +86,8 @@
 
                 <td class="tr-warehouse">
                   <v-autocomplete
-                    :return-object="true"
+                      class="rounded-lg"
+                      :return-object="true"
                     v-if="rows[i].ware"
                     :items="warehouses"
                     v-model="rows[i].output_warehouse"
@@ -101,7 +102,8 @@
                 </td>
                 <td class="tr-warehouse">
                   <v-autocomplete
-                    :return-object="true"
+                      class="rounded-lg"
+                      :return-object="true"
                     v-if="rows[i].ware"
                     :items="warehouses"
                     v-model="rows[i].input_warehouse"
@@ -113,7 +115,8 @@
                 </td>
                 <td>
                   <row-textarea
-                    v-model="rows[i].explanation"
+                      class="rounded-lg"
+                      v-model="rows[i].explanation"
                     :disabled="!isEditing"
                     :i="i"
                     @updateRowsExplanation="updateRowsExplanation"

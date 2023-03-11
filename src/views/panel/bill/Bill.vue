@@ -17,7 +17,7 @@
               />
             </v-col>
             <v-col cols="12" md="4">
-              <v-switch label="احتساب مانده از قبل" v-model="filters.consider_previous_remain"></v-switch>
+              <v-switch inset color="success" label="احتساب مانده از قبل" v-model="filters.consider_previous_remain"></v-switch>
             </v-col>
             <v-col cols="12" v-if="filters.account">
               <sanad-item-list-report

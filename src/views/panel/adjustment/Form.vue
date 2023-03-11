@@ -1,51 +1,51 @@
 <template>
   <m-form
-    :title="title"
-    :showList="false"
-    :listRoute="{name:'AdjustmentsList', params:{type: type}}"
-    exportBaseUrl="reports/lists/adjustments"
-    :exportParams="{id: id}"
-    :isEditing.sync="isEditing"
-    :canDelete="canDelete"
-    :canSubmit="canSubmit"
-    @clearForm="clearForm(true)"
-    @goToForm="getItemByPosition"
-    @submit="validate"
-    @delete="deleteItem"
-    @define="defineItem"
+      :title="title"
+      :showList="false"
+      :listRoute="{name:'AdjustmentsList', params:{type: type}}"
+      exportBaseUrl="reports/lists/adjustments"
+      :exportParams="{id: id}"
+      :isEditing.sync="isEditing"
+      :canDelete="canDelete"
+      :canSubmit="canSubmit"
+      @clearForm="clearForm(true)"
+      @goToForm="getItemByPosition"
+      @submit="validate"
+      @delete="deleteItem"
+      @define="defineItem"
   >
     <template #header-btns>
-      <open-sanad-btn v-if="item.sanad" :sanad="item.sanad" />
+      <open-sanad-btn v-if="item.sanad" :sanad="item.sanad"/>
     </template>
     <template>
       <v-row>
         <v-col cols="8">
           <v-row>
             <v-col cols="12" md="2">
-              <v-text-field label="شماره" disabled v-model="item.code" />
+              <v-text-field class="rounded-lg" label="شماره" disabled v-model="item.code"/>
             </v-col>
             <v-col cols="12" md="2">
-              <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing" />
+              <date label=" * تاریخ" v-model="item.date" :default="true" :disabled="!isEditing"/>
             </v-col>
             <v-col cols="12" md="2">
               <mtime
-                label=" * ساعت"
-                required
-                v-model="item.time"
-                :default="true"
-                :disabled="!isEditing"
+                  label=" * ساعت"
+                  required
+                  v-model="item.time"
+                  :default="true"
+                  :disabled="!isEditing"
               />
             </v-col>
             <v-col cols="12" md="3">
               <v-text-field
-                v-if="item.created_by"
-                label="کاربر"
-                disabled
-                v-model="item.created_by.name"
+                  v-if="item.created_by"
+                  label="کاربر"
+                  disabled
+                  v-model="item.created_by.name"
               />
             </v-col>
             <v-col cols="12" md="3">
-              <v-switch v-if="item.id" label="قطعی شده" v-model="item.is_defined" disabled />
+              <v-switch v-if="item.id" label="قطعی شده" v-model="item.is_defined" disabled/>
             </v-col>
           </v-row>
         </v-col>
@@ -53,10 +53,10 @@
           <v-row>
             <v-col cols="12">
               <v-textarea
-                label="توضیحات"
-                class="form-control"
-                v-model="item.explanation"
-                :disabled="!isEditing"
+                  label="توضیحات"
+                  class="form-control rounded-lg"
+                  v-model="item.explanation"
+                  :disabled="!isEditing"
               />
             </v-col>
           </v-row>
@@ -79,60 +79,61 @@
             </template>
             <template #tbody>
               <tr v-for="(row,i) in rows" :key="i">
-                <td class="tr-counter">{{ i+1 }}</td>
+                <td class="tr-counter">{{ i + 1 }}</td>
                 <td class="tr-ware">
                   <ware-select
-                    v-model="rows[i].ware"
-                    :disabled="!isEditing"
-                    :show-main-unit="false"
+                      v-model="rows[i].ware"
+                      :disabled="!isEditing"
+                      :show-main-unit="false"
                   />
                 </td>
                 <td style="max-width:100px">
                   <v-autocomplete
-                    v-if="rows[i].ware"
-                    :items="getWareUnits(row.ware)"
-                    v-model="rows[i].unit"
-                    :title="rows[i].unit?rows[i].unit.title:''"
-                    item-text="name"
-                    item-value="id"
-                    :disabled="!isEditing"
-                    :return-object="true"
-                    :suffix="getUnitSuffix(row.ware, row.unit)"
+                      v-if="rows[i].ware"
+                      :items="getWareUnits(row.ware)"
+                      v-model="rows[i].unit"
+                      :title="rows[i].unit?rows[i].unit.title:''"
+                      item-text="name"
+                      item-value="id"
+                      :disabled="!isEditing"
+                      :return-object="true"
+                      :suffix="getUnitSuffix(row.ware, row.unit)"
                   ></v-autocomplete>
                 </td>
 
                 <td class="tr-warehouse">
                   <v-autocomplete
-                    :return-object="true"
-                    v-if="rows[i].ware"
-                    :items="warehouses"
-                    v-model="rows[i].warehouse"
-                    item-text="name"
-                    item-value="id"
-                    :disabled="!isEditing"
+                      :return-object="true"
+                      v-if="rows[i].ware"
+                      :items="warehouses"
+                      v-model="rows[i].warehouse"
+                      item-text="name"
+                      item-value="id"
+                      :disabled="!isEditing"
                   />
                   <span v-else>-</span>
                 </td>
                 <td>
-                  <money v-model="rows[i].unit_count" :disabled="!isEditing" />
+                  <money v-model="rows[i].unit_count" :disabled="!isEditing"/>
                 </td>
                 <td>
                   <row-textarea
-                    v-model="rows[i].explanation"
-                    :disabled="!isEditing"
-                    :i="i"
-                    @updateRowsExplanation="updateRowsExplanation"
+                      class="rounded-lg"
+                      v-model="rows[i].explanation"
+                      :disabled="!isEditing"
+                      :i="i"
+                      @updateRowsExplanation="updateRowsExplanation"
                   />
                 </td>
                 <td class="d-print-none">
                   <v-btn
-                    v-if="i != rows.length-1"
-                    @click="deleteRow(i)"
-                    class="red--text"
-                    icon
-                    :disabled="!isEditing"
+                      v-if="i != rows.length-1"
+                      @click="deleteRow(i)"
+                      class="red--text"
+                      icon
+                      :disabled="!isEditing"
                   >
-                    <v-icon>delete</v-icon>
+                    <v-img class="" max-width="20" src="/img/icons/delete.svg" > </v-img>
                   </v-btn>
                 </td>
               </tr>
@@ -143,7 +144,7 @@
                 <td colspan="1"></td>
                 <td>
                   <v-btn @click="deleteRow(-1)" icon class="red--text" :disabled="!isEditing">
-                    <v-icon>delete_sweep</v-icon>
+                    <v-img class="" max-width="20" src="/img/icons/delete.svg" > </v-img>
                   </v-btn>
                 </td>
               </tr>
@@ -162,11 +163,11 @@ import money from "@/components/mcomponents/cleave/Money";
 import date from "@/components/mcomponents/cleave/Date";
 import mtime from "@/components/mcomponents/cleave/Time";
 import _ from "lodash";
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 
 export default {
   name: "Form",
-  components: { money, date, mtime },
+  components: {money, date, mtime},
   mixins: [formsMixin, wareApiMixin, MFormMixin],
   props: {
     id: {},

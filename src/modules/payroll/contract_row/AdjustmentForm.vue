@@ -59,6 +59,7 @@
         </v-col>
         <v-col cols="12" md="12">
           <v-textarea
+              class="rounded-lg"
               outlined
               label="توضیحات"
               v-model="item.explanation"
@@ -68,11 +69,44 @@
       </v-row>
       <v-btn
           v-if="item.id != null && deleteVerify"
-          class="red darken-1 white--text  mr-2 float-left "
-          @click="verifyDelete(item.contract_row)"
+          class="error rounded-lg white--text  mr-2 float-left " depressed
+          @click="error_dialog = true"
       >حذف تعدیل</v-btn>
 
     </m-form>
+    <v-row justify="center">
+      <v-dialog
+          v-model="error_dialog"
+          class="rounded-lg"
+          persistent
+          @click:outside="error_dialog=false"
+          max-width="400"
+      >
+        <v-card class="rounded-lg pa-2">
+          <v-card-title class="error--text text-h5">
+            توجه!
+          </v-card-title>
+          <v-card-text>
+            آیا از حذف تعدیل اطمینان دارید؟
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                v-if="item.id != null && deleteVerify"
+                class="error rounded-lg white--text  mr-2 float-left " depressed
+                @click="error_dialog = false"
+            >خیر</v-btn>
+
+            <v-btn
+                v-if="item.id != null && deleteVerify"
+                class="success rounded-lg white--text  mr-2 float-left " depressed
+                @click="verifyDelete(item.contract_row)"
+            >بله</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
 
   </div>
 </template>
@@ -126,6 +160,7 @@ export default {
       permissionBasename: "adjustment",
       appendSlash: true,
       hasList: false,
+      error_dialog: false,
       hasIdProp: true,
       contractRow: null,
       contractRows: [],
@@ -203,7 +238,6 @@ export default {
       })
     },
     verifyDelete(id){
-      window.alert('آیا از حذف این تعدیل اطمینان دارید؟')
       this.$refs.adjustment.emitDelete()
       this.$router.push('/panel/ContractRowAdjustment?contract_row=' + id)
     },

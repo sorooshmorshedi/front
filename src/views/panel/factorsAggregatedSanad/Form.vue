@@ -20,13 +20,14 @@
     <template>
       <v-row>
         <v-col cols="12" md="2">
-          <v-text-field disabled label="شماره" v-model="item.code" background-color="white" />
+          <v-text-field class="rounded-lg" disabled label="شماره" v-model="item.code" background-color="white" />
         </v-col>
         <v-col cols="12" md="2">
           <date v-model="item.date" label=" * تاریخ " :default="true" :disabled="!isEditing" />
         </v-col>
         <v-col cols="12" md="2">
           <v-text-field
+              class="rounded-lg"
             v-if="item.created_by"
             label="کاربر"
             disabled
@@ -35,7 +36,7 @@
         </v-col>
 
         <v-col cols="12" md="6">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
+          <v-textarea class="rounded-lg" label="توضیحات" v-model="item.explanation" :disabled="!isEditing"></v-textarea>
         </v-col>
 
         <v-col cols="12" v-if="id">

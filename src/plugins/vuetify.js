@@ -43,10 +43,13 @@ export default new Vuetify({
         secondary: '#002357',
         accent: '#43CED7',
         error: '#F1416C',
+        danger: '#A61A14',
         info: '#019EF6',
         success: '#50CD89',
         warning: '#FFC700',
-        back: '#F7F9FE'
+        back: '#F7F9FE',
+        success_important: '#04844B',
+        black_theme: '#080707'
       },
     },
   },

@@ -8,88 +8,97 @@
           <v-row>
             <v-col cols="12" md="3">
               <v-select
-                label="نوع تراز"
-                v-model="filters.cols_count"
-                :items="balanceTypes"
-                :return-object="false"
+                  class="rounded-lg"
+                  label="نوع تراز"
+                  v-model="filters.cols_count"
+                  :items="balanceTypes"
+                  :return-object="false"
               />
 
               <v-select
-                class="mt-3"
-                :items="accountStatuses"
-                v-model="filters.balance_status"
-                label="وضعیت حساب"
+                  class="mt-3 rounded-lg"
+                  :items="accountStatuses"
+                  v-model="filters.balance_status"
+                  label="وضعیت حساب"
               />
 
               <v-switch
-                class="mt-3"
-                label="نمایش مغایرت ماهیت حساب ها"
-                v-model="filters.show_differences"
+                  inset
+                  color="success"
+                  class="mt-3"
+                  label="نمایش مغایرت ماهیت حساب ها"
+                  v-model="filters.show_differences"
               />
             </v-col>
 
             <template v-if="showAccountFilters">
               <v-col cols="12" md="3">
                 <v-select
-                  label="سطح حساب"
-                  v-model="filters.level"
-                  item-text="text"
-                  item-value="value"
-                  :items="accountLevels"
-                  :return-object="false"
+                    class="rounded-lg"
+                    label="سطح حساب"
+                    v-model="filters.level"
+                    item-text="text"
+                    item-value="value"
+                    :items="accountLevels"
+                    :return-object="false"
                 />
 
                 <v-select
-                  class="mt-3"
-                  label="حساب های خاص"
-                  v-model="filters.account_type"
-                  :items="specialAccounts"
-                  item-text="text"
-                  item-value="value"
-                  :return-object="false"
+                    class="mt-3 rounded-lg"
+                    label="حساب های خاص"
+                    v-model="filters.account_type"
+                    :items="specialAccounts"
+                    item-text="text"
+                    item-value="value"
+                    :return-object="false"
                 />
 
                 <v-switch
-                  label="نمایش حساب های تفضیلی شناور"
-                  v-model="filters.show_float_accounts"
-                  class="mt-3 text-right"
+                    inset
+                    color="success"
+                    label="نمایش حساب های تفضیلی شناور"
+                    v-model="filters.show_float_accounts"
+                    class="mt-3 text-right"
                 />
 
                 <v-switch
-                  label="نمایش مرکز هزینه و درآمد"
-                  v-model="filters.show_cost_centers"
-                  class="mt-3"
+                    inset
+                    color="success"
+                    label="نمایش مرکز هزینه و درآمد"
+                    v-model="filters.show_cost_centers"
+                    class="mt-3"
                 />
               </v-col>
 
               <v-col cols="12" md="2">
                 <v-text-field
-                  label="از کد حساب"
-                  type="number"
-                  v-model="filters.account__code__gte"
+                    class="rounded-lg"
+                    label="از کد حساب"
+                    type="number"
+                    v-model="filters.account__code__gte"
                 />
                 <v-text-field
-                  label="تا کد حساب"
-                  type="number"
-                  v-model="filters.account__code__lte"
-                  class="mt-3"
+                    class="rounded-lg mt-3"
+                    label="تا کد حساب"
+                    type="number"
+                    v-model="filters.account__code__lte"
                 />
               </v-col>
             </template>
 
             <v-col cols="12" md="2">
-              <date label="از تاریخ" v-model="filters.from_date" :defualt="false" />
+              <date label="از تاریخ" v-model="filters.from_date" :defualt="false"/>
               <div class="mt-3">
-                <date label="تا تاریخ" v-model="filters.to_date" :defualt="false" />
+                <date label="تا تاریخ" v-model="filters.to_date" :defualt="false"/>
               </div>
             </v-col>
             <v-col cols="12" md="2">
-              <v-text-field label="از شماره سند" type="number" v-model="filters.from_code" />
+              <v-text-field class="rounded-lg" label="از شماره سند" type="number" v-model="filters.from_code"/>
               <v-text-field
-                label="تا شماره سند"
-                type="number"
-                v-model="filters.to_code"
-                class="mt-3"
+                  class="rounded-lg mt-3"
+                  label="تا شماره سند"
+                  type="number"
+                  v-model="filters.to_code"
               />
             </v-col>
             <v-col cols="12" md="2"></v-col>
@@ -100,65 +109,70 @@
 
         <v-col cols="12">
           <m-datatable
-            ref="datatable"
-            :headers="headers"
-            :items="items"
-            :hidden-cols="hiddenCols"
-            :export-url="url"
-            :filters.sync="filters"
-            show-expand
-            :expanded.sync="items"
-            :show-select="false"
-            :additionalAppliedFilters="additionalAppliedFilters"
-            @update:options="setShowSum"
+              ref="datatable"
+              :headers="headers"
+              :items="items"
+              :hidden-cols="hiddenCols"
+              :export-url="url"
+              :filters.sync="filters"
+              show-expand
+              :expanded.sync="items"
+              :show-select="false"
+              :additionalAppliedFilters="additionalAppliedFilters"
+              @update:options="setShowSum"
           >
             <template #item.data-table-expand></template>
 
             <template
-              v-if="filters.show_float_accounts || filters.show_cost_centers"
-              v-slot:expanded-item="{ headers, item }"
+                v-if="filters.show_float_accounts || filters.show_cost_centers"
+                v-slot:expanded-item="{ headers, item }"
             >
               <template v-if="hasSubAccount(item)">
                 <td colspan="4"></td>
                 <td class>
                   <div
-                    class="py-1"
-                    v-for="(subAccount, i ) in getSubAccounts(item)"
-                  >{{ subAccount.name }}</div>
+                      class="py-1"
+                      v-for="(subAccount, i ) in getSubAccounts(item)"
+                  >{{ subAccount.name }}
+                  </div>
                 </td>
                 <td class="text-center">
                   <div
-                    class="py-1"
-                    v-for="(subAccount, i ) in getSubAccounts(item)"
-                  >{{ subAccount.bed_sum | toMoney }}</div>
+                      class="py-1"
+                      v-for="(subAccount, i ) in getSubAccounts(item)"
+                  >{{ subAccount.bed_sum | toMoney }}
+                  </div>
                 </td>
                 <td class="text-center">
                   <div
-                    class="py-1"
-                    v-for="(subAccount, i ) in getSubAccounts(item)"
-                  >{{ subAccount.bes_sum | toMoney }}</div>
+                      class="py-1"
+                      v-for="(subAccount, i ) in getSubAccounts(item)"
+                  >{{ subAccount.bes_sum | toMoney }}
+                  </div>
                 </td>
                 <template v-if="hiddenCols.length == 0">
                   <td class="text-center">
                     <div
-                      class="py-1"
-                      v-for="(subAccount, i ) in getSubAccounts(item)"
-                    >{{ subAccount.bed_remain | toMoney }}</div>
+                        class="py-1"
+                        v-for="(subAccount, i ) in getSubAccounts(item)"
+                    >{{ subAccount.bed_remain | toMoney }}
+                    </div>
                   </td>
                   <td class="text-center">
                     <div
-                      class="py-1"
-                      v-for="(subAccount, i ) in getSubAccounts(item)"
-                    >{{ subAccount.bes_remain | toMoney }}</div>
+                        class="py-1"
+                        v-for="(subAccount, i ) in getSubAccounts(item)"
+                    >{{ subAccount.bes_remain | toMoney }}
+                    </div>
                   </td>
                 </template>
                 <td>
                   <div
-                    v-if="getSubAccountLedgerQuery"
-                    class="py-1"
-                    v-for="(subAccount, i ) in getSubAccounts(item)"
+                      v-if="getSubAccountLedgerQuery"
+                      class="py-1"
+                      v-for="(subAccount, i ) in getSubAccounts(item)"
                   >
-                    <open-ledger-btn :query="getSubAccountLedgerQuery(item, subAccount)" />
+                    <open-ledger-btn :query="getSubAccountLedgerQuery(item, subAccount)"/>
                   </div>
                 </td>
               </template>
@@ -187,7 +201,7 @@
             </template>
 
             <template #item.ledger="{ item }" v-if="getAccountLedgerQuery">
-              <open-ledger-btn :query="getAccountLedgerQuery(item)" />
+              <open-ledger-btn :query="getAccountLedgerQuery(item)"/>
             </template>
           </m-datatable>
         </v-col>
@@ -201,11 +215,12 @@ import datatableBaseCols from "./_datatableBaseCols";
 import AccountApiMixin from "@/mixin/accountMixin";
 import _ from "lodash";
 import OpenLedgerBtn from "@/components/btns/OpenLedgerBtn.vue";
-import { AcroFormTextField } from "jspdf";
+import {AcroFormTextField} from "jspdf";
+
 export default {
   name: "Balance",
   mixins: [AccountApiMixin],
-  components: { OpenLedgerBtn },
+  components: {OpenLedgerBtn},
   props: {
     title: {
       required: true,
@@ -259,39 +274,39 @@ export default {
         },
       ],
       accountLevels: [
-        { value: null, text: "همه" },
-        { value: 0, text: "گروه" },
-        { value: 1, text: "کل" },
-        { value: 2, text: "معین" },
-        { value: 3, text: "تفضیلی" },
+        {value: null, text: "همه"},
+        {value: 0, text: "گروه"},
+        {value: 1, text: "کل"},
+        {value: 2, text: "معین"},
+        {value: 3, text: "تفضیلی"},
       ],
       specialAccounts: [
-        { value: null, text: "همه" },
-        { value: "bank", text: "بانک" },
-        { value: "buyer", text: "خریدار" },
-        { value: "seller", text: "فروشنده" },
+        {value: null, text: "همه"},
+        {value: "bank", text: "بانک"},
+        {value: "buyer", text: "خریدار"},
+        {value: "seller", text: "فروشنده"},
       ],
       accountStatuses: [
-        { value: null, text: "همه" },
-        { value: "with_remain", text: "حساب های دارای مانده" },
-        { value: "bed_remain", text: "مانده بدهکار" },
-        { value: "bes_remain", text: "مانده بستانکار" },
-        { value: "without_remain", text: "بدون مانده" },
-        { value: "with_transaction", text: "حساب های دارای گردش" },
-        { value: "without_transaction", text: "حساب های بدون گردش" },
+        {value: null, text: "همه"},
+        {value: "with_remain", text: "حساب های دارای مانده"},
+        {value: "bed_remain", text: "مانده بدهکار"},
+        {value: "bes_remain", text: "مانده بستانکار"},
+        {value: "without_remain", text: "بدون مانده"},
+        {value: "with_transaction", text: "حساب های دارای گردش"},
+        {value: "without_transaction", text: "حساب های بدون گردش"},
       ],
     };
   },
   computed: {
     sum() {
       let bed = 0,
-        bes = 0,
-        bedRemain = 0,
-        besRemain = 0,
-        openingBed = 0,
-        openingBes = 0,
-        previousBed = 0,
-        previousBes = 0;
+          bes = 0,
+          bedRemain = 0,
+          besRemain = 0,
+          openingBed = 0,
+          openingBes = 0,
+          previousBed = 0,
+          previousBes = 0;
       for (const account of this.items) {
         if (this.filters.level == null && account.level != undefined) {
           if (account.level == 0) {
@@ -464,10 +479,10 @@ export default {
   },
   methods: {
     setShowSum(options) {
-      let { page, itemsPerPage } = options;
+      let {page, itemsPerPage} = options;
       if (
-        itemsPerPage == -1 ||
-        page == Math.ceil(this.items.length / itemsPerPage)
+          itemsPerPage == -1 ||
+          page == Math.ceil(this.items.length / itemsPerPage)
       ) {
         this.showSum = true;
       } else {
@@ -476,8 +491,8 @@ export default {
     },
     hasSubAccount(item) {
       return (
-        (item.floatAccounts_data && item.floatAccounts_data.length) ||
-        (item.costCenters_data && item.costCenters_data.length)
+          (item.floatAccounts_data && item.floatAccounts_data.length) ||
+          (item.costCenters_data && item.costCenters_data.length)
       );
     },
     getSubAccounts(item) {

@@ -1,65 +1,106 @@
 <template>
   <div class="rtl">
     <m-form
-      title="سال مالی"
-      :items="items"
-      :cols="cols"
-      :canSubmit="canSubmit"
-      :canDelete="canDelete"
-      :is-editing.sync="isEditing"
-      :showListBtn="false"
-      :show-navigation-btns="false"
-      @click:row="setItem"
-      @clearForm="clearForm"
-      @submit="submit"
-      @delete="deleteItem"
+        title="سال مالی"
+        :items="items"
+        :cols="cols"
+        :canSubmit="canSubmit"
+        :canDelete="canDelete"
+        :is-editing.sync="isEditing"
+        :showListBtn="false"
+        :show-navigation-btns="false"
+        @click:row="setItem"
+        @clearForm="clearForm"
+        @submit="submit"
+        @delete="deleteItem"
     >
       <template #header-btns></template>
       <template #default>
         <v-row>
           <v-col cols="12" md="6">
-            <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
+            <v-text-field class="rounded-lg" label=" * نام" v-model="item.name" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="6">
             <v-select
-              label="* سیستم انبار"
-              v-model="item.warehouse_system"
-              :items="warehouseSystems"
-              :disabled="item.id != undefined && item.warehouse_system != ''"
-              :return-object="false"
+                class="rounded-lg"
+                label="* سیستم انبار"
+                v-model="item.warehouse_system"
+                :items="warehouseSystems"
+                :disabled="item.id != undefined && item.warehouse_system != ''"
+                :return-object="false"
             />
           </v-col>
           <v-col cols="12" md="6">
-            <date label=" * شروع" v-model="item.start" :default="true" :disabled="!isEditing" />
+            <date label=" * شروع" v-model="item.start" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="6">
-            <date label=" * پایان" v-model="item.end" :default="true" :disabled="!isEditing" />
+            <date label=" * پایان" v-model="item.end" :default="true" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12">
-            <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
+            <v-textarea class="rounded-lg" label="توضیحات" v-model="item.explanation" :disabled="!isEditing"/>
           </v-col>
         </v-row>
       </template>
 
       <template #item.activate="{ item }">
-        <v-btn
-          v-if="!financialYear || financialYear.id != item.id"
-          @click="activeFinancialYear(item)"
-          color="blue"
-          icon
-          large
+        <v-tooltip v-if="!financialYear || financialYear.id != item.id" top color="secondary">
+          <template v-slot:activator="{ on, attrs }">
+
+            <v-btn
+                @click="changeFinancialYear(item)"
+                color="secondary"
+                icon
+                large
+                v-bind="attrs"
+                v-on="on"
+            >
+              <v-icon>fa-power-off</v-icon>
+            </v-btn>
+          </template>
+          فعال سازی
+        </v-tooltip>
+
+        <v-tooltip v-else top color="success">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                color="success"
+                icon
+                large
+                v-bind="attrs"
+                v-on="on"
+
+            >
+              <v-icon>fa-check</v-icon>
+            </v-btn>
+          </template>
+          سال مالی فعال
+        </v-tooltip>
+        <v-dialog
+            v-model="changeFinancialYearDialog"
+            activator="parent"
+            transition="dialog-top-transition"
+            width="auto"
         >
-          <v-icon>fa-toggle-off</v-icon>
-        </v-btn>
-        <v-btn v-else icon color="blue" large>
-          <v-icon>fa-toggle-on</v-icon>
-        </v-btn>
+          <v-card class="pa-5 rounded-lg">
+            <v-card-title :style="{'color': '#F1416C'}">
+              آیا اطمینان دارید؟
+            </v-card-title>
+            <v-card-text>
+              با تغییر سال مالی سایر تب های سامانه بسته می شوند، میخواهید ادامه دهید؟
+            </v-card-text>
+            <v-card-actions class="justify-end">
+              <v-btn depressed color="error" @click="notChangeFinancialYear">خیر</v-btn>
+              <v-btn depressed title="تغییر سال مالی" color="success" @click="activeFinancialYear">بله</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
       </template>
     </m-form>
   </div>
 </template>
 <script>
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 import GetUserApi from "@/views/panel/user/getUserApi.js";
 import CompanyMixin from "@/views/panel/company/mixin";
 
@@ -81,6 +122,8 @@ export default {
       baseUrl: "companies/financialYears",
       permissionBasename: "financialYear",
       items: [],
+      next_year: null,
+      changeFinancialYearDialog: false,
       warehouseSystems: warehouseSystems,
       cols: [
         {
@@ -130,26 +173,30 @@ export default {
       this.item.company = this.company.id;
       return this.item;
     },
-    activeFinancialYear(item) {
-      if (
-        confirm(
-          "با تغییر سال مالی سایر تب های سامانه بسته می شوند، میخواهید ادامه دهید؟"
-        )
-      ) {
-        this.request({
-          url: this.endpoint("users/setActiveFinancialYear"),
-          method: "post",
-          data: {
-            financial_year: item.id,
-          },
-          success: (data) => {
-            this.tabEmit("change:activeFinancialYear");
-            this.successNotify();
-            window.location.reload();
-          },
-        });
-      }
+    activeFinancialYear() {
+      this.request({
+        url: this.endpoint("users/setActiveFinancialYear"),
+        method: "post",
+        data: {
+          financial_year: this.next_year.id,
+        },
+        success: (data) => {
+          this.tabEmit("change:activeFinancialYear");
+          this.successNotify();
+          window.location.reload();
+        },
+      });
     },
+    changeFinancialYear(item) {
+      console.log(item)
+      this.next_year = item
+      this.changeFinancialYearDialog = true
+    },
+    notChangeFinancialYear() {
+      this.next_year = null
+      this.changeFinancialYearDialog = false
+    },
+
   },
 };
 </script>

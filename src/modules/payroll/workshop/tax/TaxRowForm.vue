@@ -26,6 +26,7 @@
             <v-row>
               <v-col cols="12" md="4">
                 <v-text-field
+                    class="rounded-lg"
                     label="نام"
                     v-model="item.name"
                     :disabled="!isEditing"

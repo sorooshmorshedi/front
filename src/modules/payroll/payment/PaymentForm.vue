@@ -1,38 +1,46 @@
 <template>
-  <v-card class=" "
-          elevation="3"
+  <v-card class="rounded-lg "
           outlined
-          tile>
-    <v-toolbar color="indigo darken-2">
-      <v-toolbar-title class="white--text">محاسبه حقوق</v-toolbar-title>
+          flat>
+    <v-toolbar color="back" class="rounded-lg" flat>
+      <v-toolbar-title class="secondary--text">محاسبه حقوق</v-toolbar-title>
       <v-spacer></v-spacer>
-
-      <v-btn
-          small
-          v-if="payment_start"
-          outlined
-          @click="reloadWindow"
-          class="white--text mt-1 ml-1 mt-md-0"
-          icon
-          title="جدید"
-      >
-        <v-icon>fa-eraser</v-icon>
-      </v-btn>
-      <v-btn
-          small
-          class="light-blue white--text ml-2 mt-1 mt-md-0"
-          icon
-          @click="goToList"
-          outlined
-          title="لیست"
-      >
-        <v-icon>fa-th-list</v-icon>
-      </v-btn>
+      <v-tooltip top color="accent" v-if="payment_start">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              @click="reloadWindow"
+              href="#/"
+              class="accent ml-1 mt-1 mt-md-0 pa-4"
+              icon
+              v-bind="attrs"
+              v-on="on"
+          >
+            <v-img max-height="25" max-width="25" src="/img/icons/new_form.svg"></v-img>
+          </v-btn>
+        </template>
+        ایجاد فرم جدید
+      </v-tooltip>
+      <v-tooltip top color="secondary">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              v-bind="attrs"
+              v-on="on"
+              small
+              class="secondary white--text mr-1 ml-3 mt-1 mt-md-0 pa-4"
+              @click="goToList"
+              icon
+          >
+            <v-img max-height="25" max-width="25" src="/img/icons/list_icon.svg"></v-img>
+          </v-btn>
+        </template>
+        لیست
+      </v-tooltip>
 
     </v-toolbar>
     <v-row class="mt-4 mr-3 ml-3">
       <v-col class="mt-5" cols="12" md="4">
         <v-autocomplete
+            class="rounded-lg"
             v-if="!this.workshop"
             label="کارگاه"
             :items="workshops"
@@ -43,6 +51,7 @@
             item-value="id"
         />
         <v-text-field
+            class="rounded-lg"
             label="کارگاه"
             v-if="this.workshop"
             disabled="true"
@@ -50,6 +59,7 @@
             v-model="search_workshop"
         ></v-text-field>
         <v-text-field
+            class="rounded-lg"
             label="کارگاه"
             v-if="this.workshop"
             disabled="true"
@@ -58,6 +68,7 @@
       </v-col>
       <v-col class="mt-5" cols="12" md="4">
         <v-autocomplete
+            class="rounded-lg"
             label="سال"
             v-model="year"
             :disabled="payment_start || !search_workshop"
@@ -66,6 +77,7 @@
       </v-col>
       <v-col class="mt-5" cols="12" md="4">
         <v-autocomplete
+            class="rounded-lg"
             v-if="payment_type"
             label="ماه"
             :items="MONTHS"
@@ -76,6 +88,7 @@
             item-value="id"
         />
         <v-autocomplete
+            class="rounded-lg"
             v-if="!payment_type"
             label="ماه"
             :items="MONTHS"
@@ -93,22 +106,23 @@
           left
           large
           v-if="search_workshop && search_month"
-          class=" green white--text mb-5 ml-4 pl-4 pr-4 "
+          class="success white--text mb-5 ml-4 pl-4 pr-4 rounded-lg" depressed
       >ادامه
       </v-btn>
 
     </v-card-actions>
     <v-row v-if="payment_start && !list_generated">
       <v-col cols="12" md="6">
-        <v-card class="ma-5">
-          <v-toolbar color="indigo">
-            <v-toolbar-title class="white--text">
+        <v-card class="ma-5 rounded-lg">
+          <v-toolbar color="back" flat class="rounded-lg">
+            <v-toolbar-title class="secondary--text">
               حقوق و دستمزد
             </v-toolbar-title>
           </v-toolbar>
           <v-col class="mt-5 pr-10 pl-10" cols="12" md="12" v-if="payment_type">
 
             <v-autocomplete
+                class="rounded-lg"
                 label="نوع لیست"
                 :items="PAYMENT_TYPES"
                 v-model="payment_type"
@@ -122,6 +136,7 @@
           <v-row v-if="!payment_type" class="mt-5 pr-10 pl-10">
             <v-col cols="12" md="6">
               <v-autocomplete
+                  class="rounded-lg"
                   label="نوع لیست"
                   :items="PAYMENT_TYPES"
                   v-model="payment_type"
@@ -133,6 +148,7 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-autocomplete
+                  class="rounded-lg"
                   @change="getListsOfMonth(lists_of_month)"
                   label="ماه"
                   :items="MONTHS"
@@ -148,6 +164,7 @@
             <v-col cols="12" md="12" v-if="!payment_type"
             >
               <v-autocomplete
+                  class="rounded-lg"
                   label=" کپی بر اساس"
                   :items="workshop_list_of_pay"
                   v-model="copy_id"
@@ -161,6 +178,7 @@
 
             <v-col cols="12" md="12">
               <v-text-field
+                  class="rounded-lg"
                   label="نام لیست"
                   :disabled="list_generated"
                   v-model="list_name"
@@ -170,6 +188,7 @@
           <v-row class="mt-2 pr-10 pl-10">
             <v-col cols="12" md="12">
               <v-autocomplete
+                  class="rounded-lg"
                   label="محاسبه بیمه و مالیات"
                   :items="CALCULATE_TYPES"
                   :disabled="list_generated"
@@ -184,7 +203,8 @@
                 @click="getList"
                 v-if="payment_type && !payListCreated"
                 left
-                class=" green white--text mb-5 ml-8 pl-4 pr-4 "
+                depressed
+                class=" success  white--text mb-5 ml-8 pl-4 pr-4 rounded-lg"
             >ثبت
             </v-btn>
             <v-btn
@@ -192,14 +212,16 @@
                 v-if="payment_type && payListCreated"
                 left
                 large
-                class=" blue white--text mb-5 ml-8 pl-4 pr-4 "
+                depressed
+                class=" accent white--text mb-5 ml-8 pl-4 pr-4 rounded-lg"
             > انجام محاسبات
             </v-btn>
             <v-btn
                 @click="createListOfPayByPervious"
                 v-if="!payment_type"
                 left
-                class=" green white--text mb-5 ml-8 pl-4 pr-4 "
+                depressed
+                class=" success rounded-lg white--text mb-5 ml-8 pl-4 pr-4 "
             >ثبت
             </v-btn>
 
@@ -209,12 +231,13 @@
         <v-row justify="center">
           <v-dialog
               v-model="error_dialog"
+              class="rounded-lg"
               persistent
               @click:outside="error_dialog=false"
               max-width="400"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg pa-2">
+              <v-card-title class="error--text text-h5">
                 لطفا موارد زیر را تکمیل یا اصلاح کنید!
               </v-card-title>
               <v-card-text>
@@ -225,7 +248,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="error_dialog = false"
                 >
@@ -238,13 +261,13 @@
 
       </v-col>
       <v-col cols="12" md="6">
-        <v-card class="ma-5">
-          <v-toolbar color="indigo">
-            <v-toolbar-title class="white--text">
+        <v-card class="ma-5 rounded-lg">
+          <v-toolbar color="back" class="rounded-lg" flat>
+            <v-toolbar-title class="secondary--text">
               لیست های این کارگاه برای {{ search_month }} / {{ year }}
             </v-toolbar-title>
           </v-toolbar>
-          <m-datatable class="ma-3" :show-export-btns="false" :headers="headers"
+          <m-datatable class="ma-3" :show-export-btns="false" :headers="headers" :show-applied-filters="false"
                        :apiUrl="url" exportUrl="payroll" :filters.sync="export_filter"
                        ref="exportTable">
           </m-datatable>
@@ -255,55 +278,55 @@
     </v-row>
 
     <v-row>
-      <v-simple-table v-if="list_generated && !calculateDone" class="ma-6 " dense>
+      <v-simple-table v-if="list_generated && !calculateDone" class="ma-6 rounded-lg" dense>
         <template v-slot:default>
-          <thead class="style: blue lighten-4">
+          <thead class="back">
           <tr>
-            <th class="text-center">
+            <th class="text-center secondary--text">
               لحاظ کردن در لیست حقوق
             </th>
-            <th class="text-center">
+            <th class="text-center secondary--text">
               نام و نام خانوادگی
             </th>
-            <th class="text-center">
+            <th class="text-center secondary--text">
               ردیف پیمان
             </th>
-            <th class="text-center">
+            <th class="text-center secondary--text">
               اضافه کاری
             </th>
 
-            <th class="text-center">
+            <th class="text-center secondary--text">
               تعطیل کاری
             </th>
-            <th class="text-center">
+            <th class="text-center secondary--text">
               کسر کار
             </th>
-            <th class="text-center">
+            <th class="text-center secondary--text">
               شب کاری
             </th>
 
-            <th class="text-center">
+            <th class="text-center secondary--text">
               نوبت کاری صبح و عصر
             </th>
-            <th class="text-center">
+            <th class="text-center secondary--text">
               نوبت کاری صبح و شب
             </th>
 
-            <th class="text-center">
+            <th class="text-center secondary--text">
               نوبت کاری عصر و شب
             </th>
 
-            <th class="text-center">
+            <th class="text-center secondary--text">
               نوبت کاری صبح و عصر و شب
             </th>
-            <th class="text-center">
+            <th class="text-center secondary--text">
               مزایای غیر مستمر غیرنقدی
             </th>
-            <th class="text-center">
+            <th class="text-center secondary--text">
               سایر اضافات
             </th>
 
-            <th class="text-center">
+            <th class="text-center secondary--text">
               سایرکسورات
             </th>
 
@@ -313,27 +336,26 @@
           <tr v-for="person in payList" :key="person.id" class="ma-2 pa-2">
             <td class="text-center pb-5 pt-5">
               <v-switch
+                  inset
                   v-if="!items[person.id]['notice']"
-                  color="green"
+                  color="success"
                   background-color="rey lighten-4"
                   :false-value="false"
                   :true-value="true"
                   v-model="items[person.id]['is_in']"
               ></v-switch>
-              <v-tooltip top color="red">
+              <v-tooltip top color="error">
                 <template v-slot:activator="{ on, attrs }">
                   <v-avatar
                       v-bind="attrs"
                       v-on="on"
-
                       v-if="items[person.id]['notice']"
-                      color="red"
+                      color="error"
                       size="40"
                   >
                     <v-icon dark>
                       fa-exclamation
                     </v-icon>
-
                   </v-avatar>
                 </template>
                 <span>با توجه به این که پرسنل مشمول پایه سنوات شده، برای محاسبه حقوق برای این پرسنل، حکم جدید صادر کنید</span>
@@ -344,6 +366,7 @@
             <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
             <td>
               <v-autocomplete
+                  class="rounded-lg"
                   :items="contractRows"
                   v-model="items[person.id]['contract_row']"
                   item-text="name"
@@ -377,7 +400,7 @@
             </td>
             <td>
               <v-text-field v-model="items[person.id]['sob_asr'] "
-                            class="currency-input"
+                            class="currency-input rounded-lg"
                             label="روز"
                             :disabled="!items[person.id].is_in"
               >
@@ -385,7 +408,7 @@
             </td>
             <td>
               <v-text-field v-model="items[person.id]['sob_shab'] "
-                            class="currency-input"
+                            class="currency-input rounded-lg"
                             label="روز"
 
                             :disabled="!items[person.id].is_in"
@@ -394,7 +417,7 @@
             </td>
             <td>
               <v-text-field v-model="items[person.id]['asr_shab'] "
-                            class="currency-input"
+                            class="currency-input rounded-lg"
                             label="روز"
 
                             :disabled="!items[person.id].is_in"
@@ -403,7 +426,7 @@
             </td>
             <td>
               <v-text-field v-model="items[person.id]['sob_asr_shab'] "
-                            class="currency-input"
+                            class="currency-input rounded-lg"
                             label="روز"
 
                             :disabled="!items[person.id].is_in"
@@ -442,14 +465,16 @@
     <v-card-actions v-if="payment_start && list_generated" class="mt-4 d-flex justify-center justify-md-end mt-2">
       <div class="text-center">
         <v-dialog
+            class="rounded-lg"
             v-model="dialog"
             width="1500"
             persistent
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-                color="blue"
-                class="white--text ml-5 pl-10 pr-10"
+                color="secondary"
+                depressed
+                class="white--text ml-5 pl-10 pr-10 rounded-lg"
                 dark
                 v-bind="attrs"
                 v-on="on"
@@ -458,169 +483,169 @@
             </v-btn>
           </template>
 
-          <v-card>
-            <v-card-title class="text-h5 indigo white--text">
+          <v-card class="rounded-lg">
+            <v-card-title class="text-h5 secondary white--text rounded-lg">
               مرخصی و ماموریت تجمیعی
             </v-card-title>
             <v-simple-table class="border_all b ma-4 " dense>
               <template v-slot:default>
-                <thead class="style: blue lighten-4">
+                <thead class="back">
                 <tr>
-                  <th>
+                  <th class="text-center secondary--text" >
                     مشخصات
 
                   </th>
-                  <th class="text-center" colspan="3">
+                  <th class="text-center secondary--text" colspan="3">
                     ماموریت (روز)
                   </th>
-                  <th class="text-center" colspan="3">
+                  <th class="text-center secondary--text" colspan="3">
                     مرخصی استحقاقی (روز)
                   </th>
-                  <th class="text-center" colspan="3">
+                  <th class="text-center secondary--text" colspan="3">
                     مرخصی استعلاجی (روز)
                   </th>
-                  <th class="text-center" colspan="3">
+                  <th class="text-center secondary--text" colspan="3">
                     مرخصی بدون حقوق (روز)
                   </th>
-                  <th class="text-center" colspan="3">
+                  <th class="text-center secondary--text" colspan="3">
                     غیبت (روز)
                   </th>
-                  <th class="text-center" colspan="1">
+                  <th class="text-center secondary--text" colspan="1">
                     مرخصی ماده 73 (روز)
                   </th>
                 </tr>
                 </thead>
-                <thead class="style: blue lighten-4">
+                <thead class="back">
                 <tr>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     نام و نام خانوادگی
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     ماموریت ثبت شده
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     ماموریت تجمیعی
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     جمع
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     مرخصی استحقاقی ثبت شده
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     مرخصی استحقاقی تجمیعی
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     جمع
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     مرخصی استعلاجی ثبت شده
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     مرخصی استعلاجی تجمیعی
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     جمع
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     مرخصی بدون حقوق ثبت شده
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     مرخصی بدون حقوق تجمیعی
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     جمع
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     غیبت ثبت شده
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     غیبت تجمیعی
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     جمع
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                   </th>
 
 
                 </tr>
                 </thead>
-                <tbody class="grey lighten-4 ma-2">
+                <tbody class=" ma-2">
                 <tr v-for="person in payList" :key="person.id" class="ma-2 pa-2">
-                  <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
-                  <td class="text-center">
+                  <td class="text-center pb-5 pt-5"  secondary--text>{{ person.personnel_name }}</td>
+                  <td class="text-center  secondary--text ">
                     {{items[person.id]['mission']}}
                   </td>
                   <td>
                     <v-text-field
-                        class="currency-input"
+                        class="currency-input rounded-lg"
                         v-model="items[person.id]['cumulative_mission'] "
                         :disabled="!items[person.id].is_in"
                         @change="get_total()"
                     ></v-text-field>
                   </td>
-                  <td class="text-center">
+                  <td class="text-center  secondary--text">
                     {{ total[person.id].mission }}
                   </td>
-                  <td class="text-center">
+                  <td class="text-center  secondary--text">
                     {{items[person.id]['entitlement']}}
                   </td>
                   <td>
                     <v-text-field
-                        class="currency-input"
+                        class="currency-input  rounded-lg"
                         v-model="items[person.id]['cumulative_entitlement'] "
                         :disabled="!items[person.id].is_in"
                         @change="get_total()"
 
                     ></v-text-field>
                   </td>
-                  <td>
+                  <td class="text-center  secondary--text">
                     {{total[person.id].entitlement}}
                   </td>
-                  <td class="text-center">
+                  <td class="text-center  secondary--text">
                     {{items[person.id]['illness']}}
                   </td>
                   <td>
                     <v-text-field
-                        class="currency-input"
+                        class="currency-input  rounded-lg"
                         v-model="items[person.id]['cumulative_illness'] "
                         :disabled="!items[person.id].is_in"
                         @change="get_total()"
                     ></v-text-field>
                   </td>
-                  <td>
+                  <td class="text-center  secondary--text">
                     {{total[person.id].illness}}
                   </td>
-                  <td class="text-center">
+                  <td class="text-center  secondary--text">
                     {{items[person.id]['without_salary']}}
                   </td>
                   <td>
                     <v-text-field
-                        class="currency-input"
+                        class="currency-input rounded-lg"
                         v-model="items[person.id]['cumulative_without_salary'] "
                         :disabled="!items[person.id].is_in"
                         @change="get_total()"
                     ></v-text-field>
                   </td>
-                  <td>
+                  <td class="text-center  secondary--text">
                     {{total[person.id].without_salary}}
                   </td>
-                  <td class="text-center">
+                  <td class="text-center  secondary--text">
                     {{items[person.id]['absence']}}
                   </td>
                   <td>
                     <v-text-field
-                        class="currency-input"
+                        class="currency-input rounded-lg"
                         v-model="items[person.id]['cumulative_absence'] "
                         :disabled="!items[person.id].is_in"
                         @change="get_total()"
                     ></v-text-field>
                   </td>
-                  <td>
+                  <td class="text-center  secondary--text">
                     {{total[person.id].absence}}
                   </td>
-                  <td class="text-center">
+                  <td class="text-center  secondary--text">
                     {{ items[person.id]['73'] }}
                   </td>
                 </tr>
@@ -628,14 +653,12 @@
                 </tbody>
               </template>
             </v-simple-table>
-
-
-            <v-divider></v-divider>
-
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                  color="green"
+                  color="success"
+                  class="rounded-lg"
+                  depressed
                   dark
                   @click="dialog = false ; cumulativeDone = true"
               >
@@ -649,14 +672,16 @@
       </div>
       <div class="text-center">
         <v-dialog
+            class="rounded-lg"
             v-model="dialog1"
             width="1500"
             persistent
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-                color="blue"
-                class="white--text ml-5 pl-10 pr-10"
+                color="secondary"
+                class="white--text ml-5 pl-10 pr-10 rounded-lg"
+                depressed
                 dark
                 v-bind="attrs"
                 v-on="on"
@@ -665,37 +690,37 @@
             </v-btn>
           </template>
 
-          <v-card>
-            <v-card-title class="text-h5 indigo white--text">
+          <v-card class="rounded-lg">
+            <v-card-title class="text-h5 secondary white--text rounded-lg">
               سایر معافیت های مالیاتی
             </v-card-title>
             <v-simple-table class="ma-4 " dense>
               <template v-slot:default>
-                <thead class="style: blue lighten-4">
+                <thead class="back">
                 <tr>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     نام و نام خانوادگی
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     هزینه های درمانی ماده 137 ق.م.م
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     سایر حق بیمه پرداختی ماده 137 ق.م.م
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     معافیت مربوط به مناطق آزاد تجاری
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     معافیت قانون اجتناب از اخذ مالیات مضاعف
                   </th>
-                  <th class="text-center">
+                  <th class="text-center secondary--text">
                     سایر معافیت های مالیات
                   </th>
 
                 </tr>
                 </thead>
-                <tbody class="grey lighten-4 ma-2">
+                <tbody class=" ma-2">
                 <tr v-for="person in payList" :key="person.id" class="ma-2 pa-2">
-                  <td class="text-center pb-5 pt-5">{{ person.personnel_name }}</td>
+                  <td class="text-center pb-5 pt-5  secondary--text">{{ person.personnel_name }}</td>
 
                   <td>
                     <money
@@ -737,14 +762,12 @@
                 </tbody>
               </template>
             </v-simple-table>
-
-
-            <v-divider></v-divider>
-
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                  color="green"
+                  color="success"
+                  depressed
+                  class="rounded-lg"
                   dark
                   @click="dialog1 = false ; sayerDone=true"
               >
@@ -761,10 +784,10 @@
     <v-card-actions class="mt-5">
       <v-row v-if="list_generated && !calculateDone">
         <v-col cols="12" md="4" class="text-center">
-          <v-banner v-if="cumulativeDone" class="mt-3 mb-5 green--text">
+          <v-banner v-if="cumulativeDone" class="mt-3 mb-5 success--text rounded-lg">
             <v-avatar
                 slot="icon"
-                color="green"
+                color="success"
                 size="25"
             >
               <v-icon
@@ -775,10 +798,10 @@
             </v-avatar>
             ماموریت و مرخصی تجمیعی تایید شد
           </v-banner>
-          <v-banner v-if="!cumulativeDone" class="mt-3 mb-5 red--text">
+          <v-banner v-if="!cumulativeDone" class="mt-3 mb-5 error--text rounded-lg">
             <v-avatar
                 slot="icon"
-                color="red"
+                color="error"
                 size="25"
             >
               <v-icon
@@ -791,10 +814,10 @@
           </v-banner>
         </v-col>
         <v-col cols="12" md="4">
-          <v-banner v-if="sayerDone" class="mt-3 mb-5 green--text">
+          <v-banner v-if="sayerDone" class="mt-3 mb-5 success--text rounded-lg">
             <v-avatar
                 slot="icon"
-                color="green"
+                color="success"
                 size="25"
             >
               <v-icon
@@ -805,10 +828,10 @@
             </v-avatar>
             سایر معافیت های مالیاتی تایید شد
           </v-banner>
-          <v-banner v-if="!sayerDone" class="mt-3 mb-5 red--text">
+          <v-banner v-if="!sayerDone" class="mt-3 mb-5 error--text rounded-lg">
             <v-avatar
                 slot="icon"
-                color="red"
+                color="error"
                 size="25"
             >
               <v-icon
@@ -823,22 +846,24 @@
         </v-col>
         <v-col cols="12" md="4" class="text-center">
           <v-btn large v-if="list_generated && !calculateDone && sayerDone && cumulativeDone"
-                 @click="accept_dialog = true" color="green"
+                 @click="accept_dialog = true" color="success"
                  block
-                 class="white--text float-left ma-3 mt-6">ثبت و محاسبه حقوق و دستمزد
+                 depressed
+                 class="white--text float-left ma-3 mt-4 rounded-lg pt-8 pb-8">ثبت و محاسبه حقوق و دستمزد
           </v-btn>
         </v-col>
       </v-row>
     </v-card-actions>
     <v-row justify="center">
       <v-dialog
+          class="rounded-lg"
           v-model="accept_dialog"
           persistent
           @click:outside="accept_dialog=false"
           max-width="450"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="error--text text-h5">
             توجه!
           </v-card-title>
           <v-card-text>
@@ -848,15 +873,15 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
-                text
+                color="error rounded-lg"
+                depressed
                 @click="accept_dialog = false"
             >
               بستن
             </v-btn>
             <v-btn
-                color="green"
-                text
+                color="success rounded-lg"
+                depressed
                 @click="calculatePayment"
             >
               محاسبه حقوق و دستمزد
@@ -868,12 +893,13 @@
     <v-row justify="center">
       <v-dialog
           v-model="error_dialog"
+          class="rounded-lg"
           persistent
           @click:outside="error_dialog=false"
           max-width="400"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg pa-2">
+          <v-card-title class="error--text text-h5">
             لطفا موارد زیر را تکمیل یا اصلاح کنید!
           </v-card-title>
           <v-card-text>
@@ -884,7 +910,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="green darken-1"
+                color="success"
                 text
                 @click="error_dialog = false"
             >

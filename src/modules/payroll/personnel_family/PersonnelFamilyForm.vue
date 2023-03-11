@@ -24,6 +24,7 @@
         <v-row class="mt-1">
           <v-col cols="12" md="4">
             <v-autocomplete
+                class="rounded-lg"
                 v-if="!this.personnel"
                 label="پرسنل"
                 :items="personnels"
@@ -35,6 +36,7 @@
                 :rules="[rules.required,]"
             />
             <v-text-field
+                class="rounded-lg"
                 label="پرسنل"
                 v-if="this.personnel"
                 disabled="true"
@@ -42,6 +44,7 @@
                 v-model="item.personnel = this.personnel"
             ></v-text-field>
             <v-text-field
+                class="rounded-lg"
                 label="پرسنل"
                 v-if="this.personnel"
                 disabled="true"
@@ -51,6 +54,7 @@
           </v-col>
           <v-col cols="12" md="4" v-if="item.personnel">
             <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
+                          class="rounded-lg"
                           label="نام پدر پرسنل" v-model="father_naming[item.personnel]"
                           background-color="white" :disabled="true"/>
 
@@ -58,12 +62,14 @@
           <v-col cols="12" md="4" v-if="item.personnel">
 
             <v-text-field
+                class="rounded-lg"
                 label="کد ملی پرسنل  "
                 v-model="nat[item.personnel]"
                 background-color="white"
                 v-if="personnel_nationality[item.personnel] != 2"
                 :disabled="true"/>
             <v-text-field
+                class="rounded-lg"
                 label="کد فراگیر تابعیت پرسنل "
                 v-if="personnel_nationality[item.personnel] == 2"
                 v-model="nat[item.personnel]"
@@ -75,6 +81,7 @@
         <v-row class="mt-15" v-if="item.personnel">
           <v-col cols="12" md="4">
             <v-autocomplete
+                class="rounded-lg"
                 v-if="marital[item.personnel] == 's'"
                 label="* نسبت"
                 :items="SINGLE_RELATIVE_TYPE"
@@ -87,6 +94,7 @@
             />
 
             <v-autocomplete
+                class="rounded-lg"
                 v-if="marital[item.personnel] !== 's' && marital[item.personnel] !== 'c'"
                 label="* نسبت"
                 :items="RELATIVE_TYPE"
@@ -99,6 +107,7 @@
                 :rules="[rules.required,]"
             />
             <v-autocomplete
+                class="rounded-lg"
                 v-if="marital[item.personnel] == 'c'"
                 label="* نسبت"
                 :items="C_RELATIVE_TYPE"
@@ -113,20 +122,20 @@
           </v-col>
 
           <v-col cols="12" md="4">
-            <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
+            <v-text-field class="rounded-lg" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
                           label="* نام  " v-model="item.name"
                           background-color="white" :disabled="!isEditing"/>
 
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
+            <v-text-field class="rounded-lg" v-on:keypress="NoneNumbersOnly" :rules="[rules.required,]"
                           label="* نام خانوادگی "
                           v-model="item.last_name" background-color="white" :disabled="!isEditing"/>
 
           </v-col>
 
           <v-col cols="12" md="4">
-            <v-text-field v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد ملی "
+            <v-text-field class="rounded-lg" v-on:keypress="NumbersOnly" :rules="[rules.required,]" label="* کد ملی "
                           v-model="item.national_code" background-color="white" :disabled="!isEditing"/>
           </v-col>
 
@@ -134,29 +143,30 @@
             <date v-model="item.date_of_birth" label="* تاریخ  تولد " :default="false" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 's'">
-            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'f'" v-show="false" label="* جنسیت "
+            <v-text-field class="rounded-lg" v-if="item.relative == 's' && gender[item.personnel] == 'f'" v-show="false" label="* جنسیت "
                           v-model="item.gender = 'm'" background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'm'" v-show="false" label="* جنسیت "
+            <v-text-field class="rounded-lg" v-if="item.relative == 's' && gender[item.personnel] == 'm'" v-show="false" label="* جنسیت "
                           v-model="item.gender = 'f'" background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'f'" label="* جنسیت " v-model="men"
+            <v-text-field class="rounded-lg" v-if="item.relative == 's' && gender[item.personnel] == 'f'" label="* جنسیت " v-model="men"
                           background-color="white" :disabled="true"/>
-            <v-text-field v-if="item.relative == 's' && gender[item.personnel] == 'm'" label="* جنسیت " v-model="women"
+            <v-text-field class="rounded-lg" v-if="item.relative == 's' && gender[item.personnel] == 'm'" label="* جنسیت " v-model="women"
                           background-color="white" :disabled="true"/>
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 'm'">
-            <v-text-field v-if="item.relative == 'm'" v-show="false" label="* جنسیت " v-model="item.gender = 'f'"
+            <v-text-field class="rounded-lg" v-if="item.relative == 'm'" v-show="false" label="* جنسیت " v-model="item.gender = 'f'"
                           background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 'm'" label="* جنسیت " v-model="women" background-color="white"
+            <v-text-field class="rounded-lg" v-if="item.relative == 'm'" label="* جنسیت " v-model="women" background-color="white"
                           :disabled="true"/>
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 'f'">
-            <v-text-field v-if="item.relative == 'f'" v-show="false" label="* جنسیت " v-model="item.gender = 'm'"
+            <v-text-field class="rounded-lg" v-if="item.relative == 'f'" v-show="false" label="* جنسیت " v-model="item.gender = 'm'"
                           background-color="white" :disabled="!isEditing"/>
-            <v-text-field v-if="item.relative == 'f'" label="* جنسیت " v-model="men" background-color="white"
+            <v-text-field class="rounded-lg" v-if="item.relative == 'f'" label="* جنسیت " v-model="men" background-color="white"
                           :disabled="true"/>
           </v-col>
           <v-col cols="12" md="4" v-if="item.relative == 'c' || !item.relative">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label=" * جنسیت فرزند"
                 :items="CHILD_TYPES"
@@ -168,9 +178,9 @@
             />
           </v-col>
 
-
           <v-col cols="12" md="4">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label="* وضعیت تاهل"
                 v-if="item.relative!=='s'"
@@ -182,6 +192,7 @@
 
             />
             <v-text-field
+                class="rounded-lg"
                 label="* وضعیت تاهل"
                 v-if="item.relative=='s'"
                 disabled="true"
@@ -189,6 +200,7 @@
                 v-model="item.marital_status = 'm'"
             ></v-text-field>
             <v-text-field
+                class="rounded-lg"
                 label="* وضعیت تاهل"
                 v-if="item.relative=='s'"
                 disabled="true"
@@ -199,6 +211,7 @@
 
           <v-col cols="12" md="4">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label="* وضعیت تحصیل"
                 :items="STUDY_TYPE"
@@ -209,11 +222,12 @@
             />
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field v-show="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white"
+            <v-text-field class="rounded-lg" v-show="item.gender == 'f'" label="* خدمت سربازی" v-model="female" background-color="white"
                           :disabled="true"/>
-            <v-text-field v-show="false" v-if="item.gender == 'f'" label="* خدمت سربازی"
+            <v-text-field class="rounded-lg" v-show="false" v-if="item.gender == 'f'" label="* خدمت سربازی"
                           v-model="item.military_service = 'x'" background-color="white" :disabled="true"/>
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 v-if="item.gender == 'm' || !item.gender"
                 label="* خدمت سربازی"
@@ -227,6 +241,7 @@
 
           <v-col cols="12" md="4">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.required,]"
                 label="* وضعیت جسمی"
                 :items="PHYSICAL_TYPE"
@@ -238,6 +253,7 @@
           </v-col>
           <v-col cols="12" md="4">
             <v-autocomplete
+                class="rounded-lg"
                 :rules="[rules.bool_required,]"
                 label="* وضعیت  "
                 :items="PERSONNEL_STATUS"
@@ -251,12 +267,12 @@
         </v-row>
       </template>
       <v-btn
-          class="light-blue white--text mt-6  mr-2 float-left"
+          class="accent rounded-lg white--text mt-6  mr-2 float-left" depressed
           @click="verifyPersonnel(item.id)"
           v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
       </v-btn>
       <v-btn
-          class="red white--text   mr-2 float-left "
+          class="error rounded-lg white--text   mr-2 float-left " depressed
           @click="verifyUnPersonnel(item.id)"
           v-if="item.id && item.is_verified"> خروج از وضعیت نهایی
       </v-btn>
@@ -264,12 +280,13 @@
     <v-row justify="center">
       <v-dialog
           v-model="error_dialog"
+          class="rounded-lg"
           persistent
           @click:outside="error_dialog=false"
           max-width="400"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg pa-2">
+          <v-card-title class="error--text text-h5">
             لطفا موارد زیر را تکمیل یا اصلاح کنید!
           </v-card-title>
           <v-card-text>
@@ -280,7 +297,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="green darken-1"
+                color="success"
                 text
                 @click="error_dialog = false"
             >
@@ -292,7 +309,7 @@
     </v-row>
 
     <template v-if="item.personnel">
-      <v-card class="mt-8">
+      <v-card class="mt-8 rounded-lg">
         <v-card-title> خانواده {{ personnel_name }}</v-card-title>
         <v-card-text>
           <m-datatable :headers="headers" :apiUrl="printUrl" :filters.sync="filters"

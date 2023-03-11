@@ -17,10 +17,10 @@
     <template #default>
       <v-row>
         <v-col cols="12">
-          <v-text-field label="عنوان" v-model="item.name" disabled />
+          <v-text-field class="rounded-lg" label="عنوان" v-model="item.name" disabled />
         </v-col>
         <v-col cols="12">
-          <v-textarea label="متن" v-model="item.value" :disabled="!isEditing" />
+          <v-textarea class="rounded-lg" label="متن" v-model="item.value" :disabled="!isEditing" />
         </v-col>
       </v-row>
     </template>

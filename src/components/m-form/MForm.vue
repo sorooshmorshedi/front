@@ -1,179 +1,252 @@
 <template>
   <v-row :class="{ 'is-editing': isEditing }">
     <v-col cols="12" :md="formWidth">
-      <v-card>
+      <v-card class="rounded-lg">
         <v-card-title v-if="showHeader">
-          <span>{{ title }}</span>
+          <span class="black_theme--text">{{ title }}</span>
           <v-spacer></v-spacer>
-          <div class="d-flex flex-wrap justify-center mt-2">
-            <v-btn
-              small
-              v-if="showClearBtn"
-              @click.prevent="emit('clearForm')"
-              href="#/"
-              outlined
-              class="teal--text mt-1 mt-md-0"
-              icon
-              title="جدید"
-            >
-              <v-icon>fa-eraser</v-icon>
-            </v-btn>
-            <v-btn
-              small
-              v-if="showListBtn"
-              class="light-blue white--text mr-1 mt-1 mt-md-0"
-              :to="listRoute"
-              icon
-              outlined
-              title="لیست"
-            >
-              <v-icon>fa-th-list</v-icon>
-            </v-btn>
+          <div class="d-flex flex-wrap justify-center mt-2 ">
+            <v-tooltip top color="accent">
+              <template v-slot:activator="{ on, attrs }">
+
+                <v-btn
+                    v-if="showClearBtn"
+                    @click.prevent="emit('clearForm')"
+                    href="#/"
+                    class="accent mt-1 mt-md-0 pa-4"
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                  <v-img max-height="25" max-width="25" src="/img/icons/new_form.svg"></v-img>
+                </v-btn>
+              </template>
+              ایجاد فرم جدید
+            </v-tooltip>
+
+            <v-tooltip top color="secondary">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    small
+                    v-if="showListBtn"
+                    class="secondary white--text mr-1 mt-1 mt-md-0 pa-4"
+                    :to="listRoute"
+                    icon
+                >
+                  <v-img max-height="25" max-width="25" src="/img/icons/list_icon.svg"></v-img>
+                </v-btn>
+              </template>
+              لیست
+            </v-tooltip>
+
             <slot name="header-btns"></slot>
             <template v-if="hasExport">
               <span>
-                <v-btn
-                  small
-                  class="export-btn mr-1 mt-1 mt-md-0"
-                  :href="printUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="چاپ"
-                  icon
-                >
-                  <v-icon>fa-print</v-icon>
-                </v-btn>
-                <v-btn
-                  small
-                  class="export-btn mr-1 mt-1 mt-md-0"
-                  :href="pdfUrl"
-                  rel="noopener noreferrer"
-                  title="PDF"
-                  icon
-                >
-                  <v-icon>fa-file-pdf</v-icon>
-                </v-btn>
-                <v-btn
-                  small
-                  class="export-btn mr-1 mt-1 mt-md-0"
-                  @click="downloadUrl(excelUrl)"
-                  title="اکسل"
-                  icon
-                >
-                  <v-icon>fa-file-excel</v-icon>
-                </v-btn>
+                <v-tooltip top color="#019EF6">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        small
+                        v-bind="attrs"
+                        v-on="on"
+                        class="export-btn mr-4 mt-1 mt-md-0 pa-4"
+                        :href="printUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        icon
+                    >
+                      <v-img max-height="30" max-width="30" src="/img/icons/print_icon.svg"></v-img>
+                    </v-btn>
+                  </template>
+                  چاپ
+                </v-tooltip>
+                <v-tooltip top color="#019EF6">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        small
+                        class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 "
+                        :href="pdfUrl"
+                        rel="noopener noreferrer"
+                        icon
+                    >
+                      <v-img src="/img/icons/pdf.svg"></v-img>
+                    </v-btn>
+                  </template>
+                  خروجی PDF
+                </v-tooltip>
+                <v-tooltip top color="#019EF6">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn depressed
+                           icon
+                           v-bind="attrs"
+                           v-on="on"
+                           @click="downloadUrl(excelUrl)"
+                           class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 pa-1">
+                      <v-img src="/img/icons/xls.svg"></v-img>
+                    </v-btn>
+                  </template>
+                  خروجی اکسل
+                </v-tooltip>
               </span>
             </template>
           </div>
         </v-card-title>
 
-        <v-card-text class="form-fields">
+        <v-card-text class="form-fields rounded-lg">
           <slot name="default"></slot>
         </v-card-text>
 
         <v-card-actions v-if="showActions">
           <v-row no-gutters class="d-flex flex-column-reverse flex-md-row mb-1">
             <v-col
-              cols="12"
-              md="6"
-              class="d-flex justify-center justify-md-start mt-2 mt-md-0"
+                cols="12"
+                md="6"
+                class="d-flex justify-center justify-md-start mt-2 mt-md-0"
             >
               <template v-if="showNavigationBtns">
-                <v-btn
-                  @click="goToForm('first')"
-                  :disabled="!hasFirst"
-                  title="اولین"
-                  icon
-                >
-                  <v-icon>fa-fast-forward</v-icon>
-                </v-btn>
-                <v-btn
-                  @click="goToForm('prev')"
-                  :disabled="!hasPrev"
-                  icon
-                  title="قبلی"
-                  class="pr-1"
-                >
-                  <v-icon>fa-step-forward</v-icon>
-                </v-btn>
-                <v-btn
-                  @click="goToForm('next')"
-                  :disabled="!hasNext"
-                  icon
-                  title="بعدی"
-                  class="pr-1"
-                >
-                  <v-icon>fa-step-backward</v-icon>
-                </v-btn>
-                <v-btn
-                  @click="goToForm('last')"
-                  :disabled="!hasLast"
-                  icon
-                  title="آخرین"
-                  class="pr-1"
-                >
-                  <v-icon>fa-fast-backward</v-icon>
-                </v-btn>
+                <v-tooltip bottom color="#C2CEDB">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        class="mr-3"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="goToForm('first')"
+                        :disabled="!hasFirst"
+                        icon
+                    >
+                      <v-img max-height="20" max-width="20" src="/img/icons/bold_double_right.svg"></v-img>
+                    </v-btn>
+                  </template>
+                  اولین
+                </v-tooltip>
+                <v-tooltip bottom color="#C2CEDB">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="goToForm('prev')"
+                        :disabled="!hasPrev"
+                        icon
+                        class="pr-1"
+                    >
+                      <v-img max-height="20" max-width="20" src="/img/icons/bold_right.svg"></v-img>
+                    </v-btn>
+                  </template>
+                  قبلی
+                </v-tooltip>
+                <v-tooltip bottom color="#C2CEDB">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="goToForm('next')"
+                        :disabled="!hasNext"
+                        icon
+                        class="pr-1"
+                    >
+                      <v-img max-height="20" max-width="20" src="/img/icons/bold_left.svg"></v-img>
+                    </v-btn>
+                  </template>
+                  بعدی
+                </v-tooltip>
+                <v-tooltip bottom color="#C2CEDB">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        @click="goToForm('last')"
+                        :disabled="!hasLast"
+                        icon
+                        v-bind="attrs"
+                        v-on="on"
+                        class="pr-1"
+                    >
+                      <v-img max-height="20" max-width="20" src="/img/icons/bold_double_left.svg"></v-img>
+                    </v-btn>
+                  </template>
+                  آخرین
+                </v-tooltip>
               </template>
             </v-col>
             <v-col
-              cols="12"
-              md="6"
-              class="d-flex justify-center justify-md-end"
+                cols="12"
+                md="6"
+                class="d-flex justify-center justify-md-end"
             >
               <div
-                v-if="hasFinancialYear"
-                class="d-flex flex-wrap justify-center"
+                  v-if="hasFinancialYear"
+                  class="d-flex flex-wrap justify-center"
               >
                 <template v-if="isEditing">
                   <v-btn
-                    @click="emitDelete"
-                    v-if="canDelete"
-                    color="red"
-                    outlined
-                    class="mt-1 mt-md-0 ml-1"
-                    >حذف</v-btn
+                      depressed
+                      @click="delete_dialog = true"
+                      v-if="canDelete"
+                      color="error"
+                      class="mt-1 mt-md-0 ml-1 rounded-lg"
+                  >
+                    <v-img class="ml-1" max-width="20" src="/img/icons/delete.svg">
+
+                    </v-img>
+                    حذف
+                  </v-btn>
+                  <v-btn
+                      @click="submit(false)"
+                      v-if="canSubmit"
+                      depressed
+                      color="success"
+                      class="w-100px ml-1 green white--text mt-1 mt-md-0 rounded-lg"
+                  >ثبت
+                  </v-btn
                   >
                   <v-btn
-                    @click="submit(false)"
-                    v-if="canSubmit"
-                    class="w-100px ml-1 green white--text mt-1 mt-md-0"
-                    >ثبت</v-btn
-                  >
-                  <v-btn
-                    v-if="showSubmitAndClearBtn && canSubmit"
-                    @click="submit(true)"
-                    class="ml-1 mt-1 mt-md-0 green white--text"
-                    >ثبت و صدور جدید</v-btn
+                      v-if="showSubmitAndClearBtn && canSubmit"
+                      @click="submit(true)"
+                      color="success"
+                      depressed
+                      class="ml-1 mt-1 mt-md-0 green white--text rounded-lg"
+                  >ثبت و صدور جدید
+                  </v-btn
                   >
                   <slot name="footer-btns"></slot>
                 </template>
                 <v-btn
-                  v-else-if="canEdit"
-                  @click="edit()"
-                  class="submit amber w-100px mt-1 mt-md-0"
-                  >ویرایش</v-btn
+                    v-else-if="canEdit"
+                    @click="edit()"
+                    depressed
+                    class="submit warning w-100px mt-1 mt-md-0 rounded-lg"
+                >ویرایش
+                </v-btn
                 >
 
                 <v-btn
-                  v-if="isDefinable"
-                  @click="parentCall('defineItem', [false])"
-                  :disabled="!canDefine"
-                  class="blue white--text mr-1"
-                  >قطعی کردن</v-btn
+                    v-if="isDefinable"
+                    @click="parentCall('defineItem', [false])"
+                    :disabled="!canDefine"
+                    depressed
+                    class="secondary white--text mr-1 rounded-lg"
+                >قطعی کردن
+                </v-btn
                 >
-
-                <v-btn
-                  v-if="hasLock"
-                  @click="parentCall('toggleItemLock')"
-                  class="white--text mr-1"
-                  :class="isLocked ? 'red' : 'green'"
-                  icon
-                  :title="isLocked ? 'باز کردن قفل' : 'قفل کردن'"
-                >
-                  <v-icon v-if="isLocked">fa-lock</v-icon>
-                  <v-icon v-else>fa-unlock</v-icon>
-                </v-btn>
+                <v-tooltip v-if="hasLock" bottom :color="isLocked ? 'error' : 'success_important'">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        @click="parentCall('toggleItemLock')"
+                        class="white--text mr-5"
+                        v-bind="attrs"
+                        v-on="on"
+                        :class="isLocked ? 'error' : 'success_important'"
+                        icon
+                        :title="isLocked ? 'باز کردن قفل' : 'قفل کردن'"
+                    >
+                      <v-img v-if="isLocked" class="" max-width="20" src="/img/icons/unlock_1.svg"></v-img>
+                      <v-img v-else class="" max-width="20" src="/img/icons/lock_1.svg"></v-img>
+                    </v-btn>
+                  </template>
+                  <span v-if="isLocked"> باز کردن قفل </span>
+                  <span v-else> قفل کردن </span>
+                </v-tooltip>
 
                 <span class="mt-1 mt-md-0">
                   <slot name="footer-outside-btns"></slot>
@@ -189,29 +262,49 @@
       <v-card>
         <v-card-text>
           <m-datatable
-            :headers="cols"
-            :api-url="apiUrl"
-            :items="items"
-            @click:row="rowClick"
-            v-on="listeners"
-            v-bind="$attrs"
-            :filters.sync="filters"
-            ref="datatable"
+              :headers="cols"
+              :api-url="apiUrl"
+              :items="items"
+              @click:row="rowClick"
+              v-on="listeners"
+              v-bind="$attrs"
+              :filters.sync="filters"
+              ref="datatable"
           >
             <!-- Pass user templates to m-data-table -->
             <template v-for="(index, name) in $slots" v-slot:[name]>
-              <slot :name="name" />
+              <slot class="rounded-lg" :name="name"/>
             </template>
             <template
-              v-for="(index, name) in $scopedSlots"
-              v-slot:[name]="data"
+                v-for="(index, name) in $scopedSlots"
+                v-slot:[name]="data"
             >
-              <slot :name="name" v-bind="data"></slot>
+              <slot class="rounded-lg" :name="name" v-bind="data"></slot>
             </template>
           </m-datatable>
         </v-card-text>
       </v-card>
     </v-col>
+    <v-dialog
+        v-model="delete_dialog"
+        activator="parent"
+        transition="dialog-top-transition"
+        width="auto"
+    >
+      <v-card class="pa-5 rounded-lg">
+        <v-card-title :style="{'color': '#F1416C'}">
+          آیا اطمینان دارید؟
+        </v-card-title>
+        <v-card-text>
+          با توجه به اینکه امکان بازگردانی اطلاعات پس از حذف نمی باشد، آیا از حذف اطمینان دارید؟
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn depressed color="error" @click="delete_dialog = false">خیر</v-btn>
+          <v-btn depressed color="success" @click="deleteForm">حذف شود</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-row>
 </template>
 
@@ -220,7 +313,7 @@ import MDatatable from "@/components/m-datatable";
 
 export default {
   name: "MForm",
-  components: { MDatatable },
+  components: {MDatatable},
   props: {
     showHeader: {
       default: true,
@@ -239,7 +332,8 @@ export default {
     },
     exportBaseUrl: {},
     exportParams: {
-      default: () => {},
+      default: () => {
+      },
     },
 
     showList: {
@@ -278,7 +372,7 @@ export default {
       default: true,
     },
     canDelete: {
-      default: true,
+      default: false,
     },
     canEdit: {
       default: true,
@@ -299,6 +393,7 @@ export default {
   data() {
     return {
       filters: {},
+      delete_dialog: false,
     };
   },
   computed: {
@@ -328,7 +423,7 @@ export default {
     },
     hasExport() {
       return (
-        this.exportBaseUrl != undefined && this.exportParams.id != undefined
+          this.exportBaseUrl != undefined && this.exportParams.id != undefined
       );
     },
     printUrl() {
@@ -376,6 +471,10 @@ export default {
     emit(event) {
       this.$emit(event);
     },
+    deleteForm() {
+      this.delete_dialog = false;
+      this.emitDelete()
+    },
     addParams(url) {
       if (this.listRoute && this.listRoute.params) {
         Object.keys(this.listRoute.params).forEach((k) => {
@@ -420,10 +519,12 @@ export default {
   .v-input {
     font-size: 11px !important;
   }
+
   input {
     font-size: 11px !important;
     padding: 2px 0px !important;
   }
+
   label {
     font-size: 13px !important;
   }
@@ -439,7 +540,7 @@ export default {
     }
 
     th {
-      background-color: #eeeeee !important;
+      background-color: #FFFFFF !important;
     }
 
     td {
@@ -461,23 +562,23 @@ export default {
     }
 
     .v-text-field--filled.v-input--dense.v-text-field--single-line
-      > .v-input__control
-      > .v-input__slot,
+    > .v-input__control
+    > .v-input__slot,
     .v-text-field--filled.v-input--dense.v-text-field--outlined
-      > .v-input__control
-      > .v-input__slot,
+    > .v-input__control
+    > .v-input__slot,
     .v-text-field--full-width.v-input--dense.v-text-field--single-line
-      > .v-input__control
-      > .v-input__slot,
+    > .v-input__control
+    > .v-input__slot,
     .v-text-field--full-width.v-input--dense.v-text-field--outlined
-      > .v-input__control
-      > .v-input__slot,
+    > .v-input__control
+    > .v-input__slot,
     .v-text-field--outlined.v-input--dense.v-text-field--single-line
-      > .v-input__control
-      > .v-input__slot,
+    > .v-input__control
+    > .v-input__slot,
     .v-text-field--outlined.v-input--dense.v-text-field--outlined
-      > .v-input__control
-      > .v-input__slot {
+    > .v-input__control
+    > .v-input__slot {
       min-height: 32px !important;
     }
 
@@ -487,13 +588,13 @@ export default {
     }
 
     .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
-      .v-input__prepend-outer,
+    .v-input__prepend-outer,
     .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
-      .v-input__prepend-inner,
+    .v-input__prepend-inner,
     .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
-      .v-input__append-inner,
+    .v-input__append-inner,
     .v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined
-      .v-input__append-outer {
+    .v-input__append-outer {
       margin-top: 3px !important;
     }
   }

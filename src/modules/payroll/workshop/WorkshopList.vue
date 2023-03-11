@@ -29,47 +29,66 @@ export default {
         {
           text: "کد کارگاه",
           value: "workshop_code",
+          sortable: false,
         },
         {
           text: "نام کارگاه",
           value: "name",
+          sortable: false,
+
         },
         {
           text: "نام کارفرما",
           value: "employer_name",
+          sortable: false,
+
         },
         {
           text: "آدرس کارگاه",
           value: "address",
+          sortable: false,
+
         },
         {
           text: "کد پستی",
           value: "postal_code",
+          sortable: false,
+
         },
         {
           text: "کد شعبه",
           value: "branch_code",
+          sortable: false,
+
         },
 
         {
           text: "نام شعبه",
           value: "branch_name",
+          sortable: false,
+
         },
         {
           text: "فعال",
           value: "is_active",
-          type: 'boolean'
+          type: 'boolean',
+          sortable: false,
+
         },
         {
           text: "پیشفرض",
           value: "is_default",
-          type: 'boolean'
+          type: 'boolean',
+          sortable: false,
+
         },
 
         {
           text: "نهایی",
           value: "is_verified",
-          type: 'boolean'
+          type: 'boolean',
+          sortable: false,
+
         },
       ];
 

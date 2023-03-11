@@ -1,128 +1,141 @@
 <template>
   <m-form
-    :title="title"
-    :items="items"
-    :showList="showList"
-    :cols="cols"
-    :canSubmit="canSubmit"
-    :canDelete="canDelete"
-    :is-editing.sync="isEditing"
-    :showListBtn="false"
-    :show-navigation-btns="false"
-    @click:row="setItem"
-    @clearForm="clearForm"
-    @submit="submit"
-    @delete="deleteItem"
+      :title="title"
+      :items="items"
+      :showList="showList"
+      :cols="cols"
+      :canSubmit="canSubmit"
+      :canDelete="canDelete"
+      :is-editing.sync="isEditing"
+      :showListBtn="false"
+      :show-navigation-btns="false"
+      @click:row="setItem"
+      @clearForm="clearForm"
+      @submit="submit"
+      @delete="deleteItem"
   >
     <template #header-btns>
       <template v-for="i in 3">
         <v-btn
-          :key="i"
-          v-if="i-1 != level"
-          class="blue white--text mr-1 mt-1 mt-md-0"
-          :to="`/panel/wares/${i-1}`"
-        >تعریف {{ getWareTitle(i-1) }}</v-btn>
+            :key="i"
+            v-if="i-1 != level"
+            depressed
+            class="secondary white--text mr-1 mt-1 mt-md-0 rounded-lg"
+            :to="`/panel/wares/${i-1}`"
+        >تعریف {{ getWareTitle(i - 1) }}
+        </v-btn>
         <v-btn
-          :key="i"
-          v-else
-          class="blue white--text mr-1 mt-1 mt-md-0"
-          @click="clearForm"
-        >تعریف {{ getWareTitle(i-1) }}</v-btn>
+            :key="i"
+            v-else
+            depressed
+            class="secondary white--text mr-1 mt-1 mt-md-0 rounded-lg"
+            @click="clearForm"
+        >تعریف {{ getWareTitle(i - 1) }}
+        </v-btn>
       </template>
       <v-btn
-        class="blue white--text mr-1 mt-1 mt-md-0"
-        :to="{name:'Wares', params: {level:3}}"
-      >تعریف کالا</v-btn>
+          depressed
+          class="secondary white--text mr-1 mt-1 mt-md-0 rounded-lg"
+          :to="{name:'Wares', params: {level:3}}"
+      >تعریف کالا
+      </v-btn>
     </template>
 
     <template #default>
       <v-row>
         <v-col cols="12" md="6" v-if="level != 0">
           <v-autocomplete
-            :return-object="true"
-            :label="' * ' + getWareTitle(level - 1)"
-            :items="parentItems"
-            v-model="item.parent"
-            item-text="name"
-            :disabled="item.id != undefined || !isEditing"
-            item-value="id"
+              class="rounded-lg"
+              :return-object="true"
+              :label="' * ' + getWareTitle(level - 1)"
+              :items="parentItems"
+              v-model="item.parent"
+              item-text="name"
+              :disabled="item.id != undefined || !isEditing"
+              item-value="id"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" :md="level == 0?12:6">
-          <v-text-field label="کد" v-model="item.code" disabled />
+          <v-text-field class="rounded-lg" label="کد" v-model="item.code" disabled/>
         </v-col>
         <v-col cols="12" :md="isWare?4:12">
-          <v-text-field label=" * نام" v-model="item.name" :disabled="!isEditing" />
+          <v-text-field class="rounded-lg" label=" * نام" v-model="item.name" :disabled="!isEditing"/>
         </v-col>
         <template v-if="isWare">
           <v-col cols="12" md="4">
             <v-switch
-              :disabled="item.id != undefined || !isEditing"
-              label="کالای خدماتی"
-              v-model="item.is_service"
-              hint="کالای خدماتی انبار گردانی ندارد"
+                inset
+                color="success"
+                :disabled="item.id != undefined || !isEditing"
+                label="کالای خدماتی"
+                v-model="item.is_service"
+                hint="کالای خدماتی انبار گردانی ندارد"
             ></v-switch>
           </v-col>
           <v-col cols="12" md="4">
             <v-switch
-              v-if="isAdvari"
-              :disabled="!isEditing"
-              label="موجودی کالای منفی"
-              v-model="item.check_inventory"
-              :false-value="true"
-              :true-value="false"
+                inset
+                color="success"
+                v-if="isAdvari"
+                :disabled="!isEditing"
+                label="موجودی کالای منفی"
+                v-model="item.check_inventory"
+                :false-value="true"
+                :true-value="false"
             ></v-switch>
           </v-col>
           <v-col cols="12" md="6">
-            <v-btn @click="pricesDialog = true" block color="cyan white--text">واحد و قیمت فروش</v-btn>
+            <v-btn @click="pricesDialog = true" block class="mt-1 rounded-lg" depressed color="accent white--text">واحد و قیمت فروش</v-btn>
           </v-col>
 
           <v-col cols="12" md="6">
             <v-select
-              label=" * نوع قیمت گذاری"
-              :items="pricingTypes"
-              v-model="item.pricingType"
-              item-text="name"
-              item-value="id"
-              :disabled="!isEditing"
-              :return-object="true"
+                class="rounded-lg"
+                label=" * نوع قیمت گذاری"
+                :items="pricingTypes"
+                v-model="item.pricingType"
+                item-text="name"
+                item-value="id"
+                :disabled="!isEditing"
+                :return-object="true"
             ></v-select>
           </v-col>
           <v-col cols="12" md="3">
             <v-autocomplete
-              :return-object="false"
-              label=" * انبار پیشفرض"
-              :items="warehouses"
-              v-model="item.warehouse"
-              :disabled="!isEditing"
-              item-text="name"
-              item-value="id"
+                class="rounded-lg"
+                :return-object="false"
+                label=" * انبار پیشفرض"
+                :items="warehouses"
+                v-model="item.warehouse"
+                :disabled="!isEditing"
+                item-text="name"
+                item-value="id"
             ></v-autocomplete>
           </v-col>
           <v-col cols="12" md="3">
-            <v-text-field label="بارکد" v-model="item.barcode" :disabled="!isEditing" />
+            <v-text-field class="rounded-lg" label="بارکد" v-model="item.barcode" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <money label="حداقل فروش" v-model="item.minSale" :disabled="!isEditing" />
+            <money label="حداقل فروش" v-model="item.minSale" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <money label="حداکثر فروش" v-model="item.maxSale" :disabled="!isEditing" />
+            <money label="حداکثر فروش" v-model="item.maxSale" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <money label="حداقل موجودی" v-model="item.minInventory" :disabled="!isEditing" />
+            <money label="حداقل موجودی" v-model="item.minInventory" :disabled="!isEditing"/>
           </v-col>
           <v-col cols="12" md="3">
-            <money label="حداکثر موجودی" v-model="item.maxInventory" :disabled="!isEditing" />
+            <money label="حداکثر موجودی" v-model="item.maxInventory" :disabled="!isEditing"/>
           </v-col>
         </template>
         <v-col cols="12">
-          <v-textarea label="توضیحات" v-model="item.explanation" :disabled="!isEditing" />
+          <v-textarea class="rounded-lg" label="توضیحات" v-model="item.explanation" :disabled="!isEditing"/>
         </v-col>
       </v-row>
 
-      <v-dialog v-model="pricesDialog" scrollable max-width="1200px" transition="dialog-transition">
-        <v-card>
-          <v-card-title>
+      <v-dialog class="rounded-lg pa-2" v-model="pricesDialog" scrollable max-width="1200px" transition="dialog-transition">
+        <v-card class="rounded-lg">
+          <v-card-title class="secondary--text">
             واحد و قیمت فروش
             <span class="pr-1">{{ item.name }}</span>
           </v-card-title>
@@ -140,33 +153,34 @@
               </template>
               <template #tbody>
                 <tr v-for="(row,i) in rows" :key="i">
-                  <td class="tr-counter">{{ i+1 }}</td>
+                  <td class="tr-counter">{{ i + 1 }}</td>
                   <td style="min-width: 100px">
                     <v-autocomplete
-                      :return-object="false"
-                      :items="units"
-                      v-model="row.unit"
-                      item-text="name"
-                      item-value="id"
-                      :disabled="!isEditing"
+                        class="rounded-lg"
+                        :return-object="false"
+                        :items="units"
+                        v-model="row.unit"
+                        item-text="name"
+                        item-value="id"
+                        :disabled="!isEditing"
                     ></v-autocomplete>
                   </td>
                   <td>
                     <span v-if="i == 0">(واحد اصلی)</span>
-                    <money v-else v-model="row.conversion_factor" :disabled="!isEditing" />
+                    <money v-else v-model="row.conversion_factor" :disabled="!isEditing"/>
                   </td>
                   <td v-for="salePriceType in salePriceTypes" style="width: 150px">
-                    <money :disabled="!isEditing" v-model="row.prices[salePriceType.id]" />
+                    <money :disabled="!isEditing" v-model="row.prices[salePriceType.id]"/>
                   </td>
                   <td class="d-print-none">
                     <v-btn
-                      v-if="i != rows.length-1"
-                      @click="deleteRow(i)"
-                      class="red--text"
-                      icon
-                      :disabled="!isEditing"
+                        v-if="i != rows.length-1"
+                        @click="deleteRow(i)"
+                        class="error--text"
+                        icon
+                        :disabled="!isEditing"
                     >
-                      <v-icon>delete</v-icon>
+                      <v-img class="" max-width="20" src="/img/icons/delete.svg" > </v-img>
                     </v-btn>
                   </td>
                 </tr>
@@ -175,7 +189,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="pricesDialog = false" color="blue white--text w-100px">تایید</v-btn>
+            <v-btn depressed @click="pricesDialog = false" class="rounded-lg" color="success white--text w-100px">تایید</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -184,7 +198,7 @@
 </template>
 <script>
 import WareApiMixin from "@/mixin/wareApi";
-import { MFormMixin } from "@/components/m-form";
+import {MFormMixin} from "@/components/m-form";
 
 export default {
   name: "Wares",

@@ -1,59 +1,119 @@
 <template>
-  <v-card>
+  <v-card :style="'border: 1px solid white;'">
     <v-card-title v-show="!isPrinting" v-if="showExportBtns">
       <v-row no-gutters>
         <v-col
-          cols="12"
-          class="mt-1 text-left d-flex flex-column flex-md-row justify-end"
-          v-if="showExportBtns"
+            cols="12"
+            class="mt-1 text-left d-flex flex-column flex-md-row justify-end"
+            v-if="showExportBtns"
         >
-          <v-btn v-if="serverProcessing" icon @click="getDataFromApi">
-            <v-icon>fa-sync-alt</v-icon>
-          </v-btn>
+          <v-tooltip top color="#019EF6">
+            <template v-slot:activator="{ on, attrs }">
+              <v-hover v-slot="{ hover }">
+                <v-btn v-bind="attrs"
+                       :style="{ 'color': hover ? '#019EF6' : '#697480' }"
+                       v-on="on"
+                       v-if="serverProcessing"
+                       icon
+                       @click="getDataFromApi">
+                  <v-icon>fa-retweet</v-icon>
+                </v-btn>
+              </v-hover>
+
+            </template>
+            دریافت دوباره اطلاعات
+          </v-tooltip>
+
           <v-spacer></v-spacer>
-          <v-btn @click="exportTo('html')" class="export-btn block">چاپ</v-btn>
-          <v-btn @click="exportTo('pdf')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی PDF</v-btn>
-          <v-btn @click="exportTo('xlsx')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی اکسل</v-btn>
+          <v-tooltip top color="#019EF6">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                  depressed @click="exportTo('html')"
+                  class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 pa-4">
+                <v-img max-height="30" max-width="30" src="/img/icons/print_icon.svg"></v-img>
+              </v-btn>
+            </template>
+            چاپ
+          </v-tooltip>
+          <v-tooltip top color="#019EF6">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn depressed
+                     icon
+                     v-bind="attrs"
+                     v-on="on"
+                     @click="exportTo('pdf')"
+                     class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 ">
+                <v-img src="/img/icons/pdf.svg"></v-img>
+              </v-btn>
+            </template>
+            خروجی PDF
+          </v-tooltip>
+          <v-tooltip top color="#019EF6">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn depressed
+                     icon
+                     v-bind="attrs"
+                     v-on="on"
+                     @click="exportTo('xlsx')"
+                     class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 pa-1">
+                <v-img src="/img/icons/xls.svg"></v-img>
+              </v-btn>
+            </template>
+            خروجی اکسل
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-card-title>
     <div v-if="showAppliedFilters">
-      <v-card-subtitle>فیلتر های اعمال شده</v-card-subtitle>
+      <v-card-subtitle class="info--text" v-if="appliedFilters.length > 0">فیلتر های اعمال شده</v-card-subtitle>
       <div class="mx-4 mb-4">
-        <span v-for="(filter, i) in appliedFilters" :key="i" class="ml-6">
+        <v-chip
+            v-for="(filter, i) in appliedFilters" :key="i" class="secondary--text ml-6 pr-2 pl-2 pt-4 pb-4"
+            color="#EBEEF5"
+            label
+        >
+          <v-img @click="clearSpecificFilters(filter['text'])" src="/img/icons/close-circle.svg" class="ml-2"></v-img>
+          <span>
           {{ filter['text'] }}
           <span v-if="filter['typeText']">({{ filter['typeText'] }})</span>
           :
           {{ filter['value'] }}
         </span>
+        </v-chip>
       </div>
     </div>
     <v-data-table
-      :id="'datatable-' + _uid"
-      ref="datatable"
-      :show-select="!isPrinting && showSelect"
-      :headers="headersWithFilter"
-      :items="tableItems"
-      :options.sync="options"
-      :server-items-length="totalItems"
-      :loading="loading"
-      @input="v => selectedItems = v"
-      :search="search"
-      :disable-pagination="isPrinting"
-      :disable-sort="isPrinting"
-      :hide-default-footer="isPrinting"
-      :footer-props="{ showFirstLastPage: true }"
-      v-on="$listeners"
-      v-bind="$attrs"
-      :mobile-breakpoint="0"
+        :id="'datatable-' + _uid"
+        ref="datatable"
+        :style="'border: 1px solid #EEEAF5;'"
+        class="rounded-lg"
+        :show-select="!isPrinting && showSelect"
+        :headers="headersWithFilter"
+        :headerProps="headerprops"
+        :items="tableItems"
+        :options.sync="options"
+        :server-items-length="totalItems"
+        :loading="loading"
+        @input="v => selectedItems = v"
+        :search="search"
+        :disable-pagination="isPrinting"
+        :disable-sort="isPrinting"
+        :hide-default-footer="isPrinting"
+        :footer-props="{ showFirstLastPage: true }"
+        v-on="$listeners"
+        v-bind="$attrs"
+        :mobile-breakpoint="0"
     >
       <!-- Add row number field -->
       <template #item.rowNumber="{ item }">{{ getRowNumber(item) }}</template>
 
       <!-- Add detail icon -->
       <template #item.detail="{ item }">
-        <v-btn @click="$emit('detail', item)" color="light-blue white--text" icon>
-          <v-icon>fa-external-link-alt</v-icon>
+        <v-btn @click="$emit('detail', item)" color="info white--text rounded-lg" icon>
+          <v-icon>fa-info</v-icon>
         </v-btn>
       </template>
 
@@ -61,80 +121,95 @@
       <template v-for="header in headersWithFilter" v-slot:[getHeaderSlot(header.value)]="{header}">
         <template v-if="header.filterable != false && !isPrinting">
           <v-menu
-            top
-            left
-            offset-y
-            :close-on-content-click="false"
-            :key="header.value"
-            v-model="filterMenus[header.value]"
+              top
+              left
+              offset-y
+              :close-on-content-click="false"
+              :key="header.value"
+              v-model="filterMenus[header.value]"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                icon
-                x-small
-                v-bind="attrs"
-                v-on="on"
-                @click.stop
-                :color="filters[header.value]?'indigo':''"
+                  icon
+                  x-small
+                  :title="'فیلتر ' + header.text"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click.stop
+                  :color="filters[header.value]?'indigo':''"
               >
-                <v-icon x-small>fa fa-filter</v-icon>
+                <v-img max-width="20" max-height="20" src="/img/icons/filter.svg"></v-img>
               </v-btn>
             </template>
-            <v-card dense max-width="360">
-              <v-card-title>
+            <v-card dense max-width="360" class="pa-1">
+              <v-card-title class="secondary--text">
                 فیلتر
                 {{ header.text }}
+                <v-spacer></v-spacer>
+                <v-btn
+                    icon
+                    @click="filterMenus[header.value] = false"
+                    class="left mr-10"
+                >
+                  <v-img src="/img/icons/close-circle.svg"></v-img>
+                </v-btn>
+
               </v-card-title>
               <v-card-text class="pt-0">
                 <v-row v-if="isBoolean(header)">
                   <v-col cols="12">
                     <v-autocomplete
-                      :label="header.text"
-                      :items="getBooleanFilterItems(header)"
-                      clearable
-                      :value="filters[`${header.value}`]"
-                      @input="emitFilter(`${header.value}`, $event)"
+                        color="secondary"
+                        :label="header.text"
+                        :items="getBooleanFilterItems(header)"
+                        clearable
+                        :value="filters[`${header.value}`]"
+                        @input="emitFilter(`${header.value}`, $event)"
                     />
                   </v-col>
                 </v-row>
                 <v-row v-else-if="!header.items">
                   <v-col cols="12">
                     <component
-                      :is="getFilterField(header)"
-                      :label="`جستجو${serverProcessing?'ی دقیق':''}`"
-                      :value="filters[`${header.value}`]"
-                      @input="emitFilter(`${header.value}`, $event)"
-                      clearable
+                        color="secondary"
+                        :is="getFilterField(header)"
+                        :label="`جستجو${serverProcessing?'ی دقیق':''}`"
+                        :value="filters[`${header.value}`]"
+                        @input="emitFilter(`${header.value}`, $event)"
+                        clearable
                     />
                   </v-col>
 
                   <template v-if="serverProcessing">
                     <v-col cols="12">
                       <component
-                        :is="getFilterField(header)"
-                        label="جستجو"
-                        :value="filters[`${header.value}__icontains`]"
-                        @input="emitFilter(`${header.value}__icontains`, $event)"
-                        clearable
+                          color="secondary"
+                          :is="getFilterField(header)"
+                          label="جستجو"
+                          :value="filters[`${header.value}__icontains`]"
+                          @input="emitFilter(`${header.value}__icontains`, $event)"
+                          clearable
                       />
                     </v-col>
                     <template v-if="hasRangeFilter(header)">
                       <v-col cols="12" md="6">
                         <component
-                          :is="getFilterField(header)"
-                          label="از"
-                          :value="filters[`${header.value}__gte`]"
-                          @input="emitFilter(`${header.value}__gte`, $event)"
-                          clearable
+                            color="secondary"
+                            :is="getFilterField(header)"
+                            label="از"
+                            :value="filters[`${header.value}__gte`]"
+                            @input="emitFilter(`${header.value}__gte`, $event)"
+                            clearable
                         />
                       </v-col>
                       <v-col cols="12" md="6">
                         <component
-                          :is="getFilterField(header)"
-                          label="تا"
-                          :value="filters[`${header.value}__lte`]"
-                          @input="emitFilter(`${header.value}__lte`, $event)"
-                          clearable
+                            color="secondary"
+                            :is="getFilterField(header)"
+                            label="تا"
+                            :value="filters[`${header.value}__lte`]"
+                            @input="emitFilter(`${header.value}__lte`, $event)"
+                            clearable
                         />
                       </v-col>
                     </template>
@@ -143,23 +218,21 @@
                 <v-row v-else>
                   <v-col cols="12">
                     <v-autocomplete
-                      :label="header.text"
-                      :items="header.items"
-                      clearable
-                      :value="filters[`${header.value}`]"
-                      @input="emitFilter(`${header.value}`, $event)"
+                        color="secondary"
+                        :label="header.text"
+                        :items="header.items"
+                        clearable
+                        :value="filters[`${header.value}`]"
+                        @input="emitFilter(`${header.value}`, $event)"
                     />
                   </v-col>
                 </v-row>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn @click="clearFilters(header)" color="red" outlined>حذف فیلتر ها</v-btn>
-                <v-btn
-                  @click="filterMenus[header.value] = false"
-                  class="left"
-                  color="blue white--text"
-                >بستن</v-btn>
+                <v-btn @click="clearFilters(header)" color="error" outlined depressed>حذف فیلتر ها
+                  <v-icon class=" mr-2">fa-times-circle</v-icon>
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-menu>
@@ -169,9 +242,18 @@
 
       <template #header.rowNumber v-if="showClearFiltersBtn">
         <span v-if="isPrinting">#</span>
-        <v-btn v-else @click="clearAllFilters" icon title="خالی کردن فیلتر ها">
-          <v-icon class>$clearFiltersIcon</v-icon>
-        </v-btn>
+        <v-tooltip v-else top color="#019EF6">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn depressed
+                   icon
+                   v-bind="attrs"
+                   v-on="on"
+                   @click="clearAllFilters">
+              <v-img max-width="20" max-height="20" src="/img/icons/filterRemove.svg"></v-img>
+            </v-btn>
+          </template>
+          خالی کردن فیلتر ها
+        </v-tooltip>
       </template>
 
       <!-- Mask Data -->
@@ -179,8 +261,8 @@
         <!-- numeric -->
         <template v-if="isNumber(header)">
           <span
-            dir="ltr"
-            :class="getNumericClasses(item, header.value)"
+              dir="ltr"
+              :class="getNumericClasses(item, header.value)"
           >{{ getItemValue(item, header.value) | toMoney }}</span>
         </template>
 
@@ -200,7 +282,7 @@
 
         <!-- other-->
         <template v-else>
-          <truncate :value="getItemValue(item, header.value)" />
+          <truncate :value="getItemValue(item, header.value)"/>
         </template>
       </template>
 
@@ -208,7 +290,7 @@
         <template v-for="sum, i in [apiResponse.page_sum, apiResponse.sum]">
           <tr v-if="sum">
             <td v-for="header in headers" class="text-center">
-              <template v-if="header.value == 'rowNumber'">{{ i == 0?"جمع این صفحه":"جمع"}}</template>
+              <template v-if="header.value == 'rowNumber'">{{ i == 0 ? "جمع این صفحه" : "جمع" }}</template>
               <template v-else>{{ sum[header.value] | toMoney }}</template>
             </td>
           </tr>
@@ -217,7 +299,7 @@
 
       <!-- Pass user templates to vuetify data table -->
       <template v-for="(index, name) in $slots" v-slot:[name]>
-        <slot :name="name" />
+        <slot :name="name"/>
       </template>
       <template v-for="(index, name) in $scopedSlots" v-slot:[name]="data">
         <slot :name="name" v-bind="data"></slot>
@@ -227,10 +309,10 @@
 </template>
 <script>
 import XLSX from "xlsx";
-import { jsPDF } from "jspdf";
+import {jsPDF} from "jspdf";
 import _ from "lodash";
 import Truncate from "./Truncate";
-import { VTextField } from "vuetify/lib";
+import {VTextField} from "vuetify/lib";
 
 export default {
   props: {
@@ -289,7 +371,7 @@ export default {
   data() {
     return {
       list_view: false,
-      mydata:'',
+      mydata: '',
       filterMenus: {},
       search: "",
       totalItems: -1,
@@ -298,7 +380,9 @@ export default {
       loading: false,
       options: {},
       apiResponse: null,
-
+      headerprops: {
+        "sort-icon": "fa-sort-up"
+      },
       numericValues: ["bed", "bes", "value", "fee", "price", "count"],
       booleanValues: ["is_auto_created"],
 
@@ -391,47 +475,47 @@ export default {
 
       for (let header of this.headers) {
         Object.keys(this.filters)
-          .filter((key) =>
-            key
-              .replaceAll(".", "__")
-              .startsWith(header.value.replaceAll(".", "__"))
-          )
-          .forEach((key) => {
-            let value = this.filters[key];
+            .filter((key) =>
+                key
+                    .replaceAll(".", "__")
+                    .startsWith(header.value.replaceAll(".", "__"))
+            )
+            .forEach((key) => {
+              let value = this.filters[key];
 
-            if ([null, undefined, ""].includes(value)) return;
+              if ([null, undefined, ""].includes(value)) return;
 
-            let filterTypesTexts = {
-              "": null,
-              icontains: "شامل",
-              gte: "از",
-              lte: "تا",
-            };
+              let filterTypesTexts = {
+                "": null,
+                icontains: "شامل",
+                gte: "از",
+                lte: "تا",
+              };
 
-            let keyParts = key.split("__");
-            let filterType = keyParts[keyParts.length - 1];
-            let filterTypeText = filterTypesTexts[filterType];
+              let keyParts = key.split("__");
+              let filterType = keyParts[keyParts.length - 1];
+              let filterTypeText = filterTypesTexts[filterType];
 
-            if (this.isNumber(header)) value = this.toMoney(value);
+              if (this.isNumber(header)) value = this.toMoney(value);
 
-            if (this.isSelect(header)) {
-              value = header.items.find((o) => o.value == value).text;
-            }
-            if (this.isDate(header))
-              value = String(value).split("-").reverse().join("-");
+              if (this.isSelect(header)) {
+                value = header.items.find((o) => o.value == value).text;
+              }
+              if (this.isDate(header))
+                value = String(value).split("-").reverse().join("-");
 
-            if (this.isBoolean(header)) {
-              value = this.getBooleanFilterItems(header).find(
-                (o) => o.value == value
-              ).text;
-            }
+              if (this.isBoolean(header)) {
+                value = this.getBooleanFilterItems(header).find(
+                    (o) => o.value == value
+                ).text;
+              }
 
-            appliedFilters.push({
-              text: header.text,
-              typeText: filterTypeText,
-              value: value,
+              appliedFilters.push({
+                text: header.text,
+                typeText: filterTypeText,
+                value: value,
+              });
             });
-          });
       }
 
       return appliedFilters;
@@ -483,7 +567,7 @@ export default {
     },
     getSelectItemValue(header, item) {
       let value = header.items.filter(
-        (o) => o.value == this.getItemValue(item, header.value)
+          (o) => o.value == this.getItemValue(item, header.value)
       );
       if (value.length) return value[0].text;
       return "";
@@ -493,7 +577,7 @@ export default {
       if (datatable) {
         let prev_page = (this.options.page - 1) * this.options.itemsPerPage;
         return (
-          datatable.$children[0].computedItems.indexOf(item) + 1 + prev_page
+            datatable.$children[0].computedItems.indexOf(item) + 1 + prev_page
         );
       } else {
         return "";
@@ -501,11 +585,11 @@ export default {
     },
     hasRangeFilter(header) {
       return (
-        header.showRangeFilter || this.isNumber(header) || this.isDate(header)
+          header.showRangeFilter || this.isNumber(header) || this.isDate(header)
       );
     },
     emitFilter(key, value) {
-      let newFilters = { ...this.filters };
+      let newFilters = {...this.filters};
       newFilters[key] = value;
       this.$emit("update:filters", newFilters);
     },
@@ -524,14 +608,27 @@ export default {
       });
     },
     clearFilters(header) {
-      let newFilters = { ...this.filters };
+      let newFilters = {...this.filters};
       for (const filterType of this.filterTypes) {
         newFilters[filterType.getKey(header.value)] = "";
       }
       this.$emit("update:filters", newFilters);
     },
+    clearSpecificFilters(text) {
+      let this_header = null
+      for (let header of this.headers) {
+        if (header.text == text) {
+          this_header = header
+        }
+      }
+      let newFilters = {...this.filters};
+      for (const filterType of this.filterTypes) {
+        newFilters[filterType.getKey(this_header.value)] = "";
+      }
+      this.$emit("update:filters", newFilters);
+    },
     clearAllFilters() {
-      let newFilters = { ...this.filters };
+      let newFilters = {...this.filters};
       Object.keys(newFilters).forEach((key) => {
         newFilters[key] = "";
       });
@@ -573,13 +670,13 @@ export default {
     getHeaderSlot(value) {
       return `header.${value}`;
     },
-    getOrdering(){
-      const { sortBy, sortDesc } = this.options;
+    getOrdering() {
+      const {sortBy, sortDesc} = this.options;
       let ordering;
       if (sortBy && sortBy.length === 1 && sortDesc.length === 1) {
         ordering = `${sortDesc[0] ? "-" : ""}${sortBy[0].replaceAll(
-          ".",
-          "__"
+            ".",
+            "__"
         )}`;
       }
 
@@ -588,7 +685,7 @@ export default {
     },
     getDataFromApi() {
       this.loading = true;
-      const { page, itemsPerPage } = this.options;
+      const {page, itemsPerPage} = this.options;
 
 
       let limit = itemsPerPage;
@@ -640,7 +737,7 @@ export default {
         url = exportUrl.replace("?", `/${outputFormat}?`);
       } else {
         url = `${exportUrl}${
-          exportUrl.endsWith("/") ? "" : "/"
+            exportUrl.endsWith("/") ? "" : "/"
         }${outputFormat}?`;
       }
       url = this.endpoint(url);
@@ -656,18 +753,18 @@ export default {
           } else {
             let filters = {
               ...this.filters,
-              view_list : this.list_view,
+              view_list: this.list_view,
               search: this.search,
               ordering: this.getOrdering()
             };
-            
+
             Object.keys(filters).forEach((k) => {
               if (filters[k] != undefined) {
                 url += k.replaceAll(".", "__") + "=" + filters[k] + "&";
               }
             });
             url += `headers=${JSON.stringify(
-              this.headers.filter((o) => o.hideInExport != true)
+                this.headers.filter((o) => o.hideInExport != true)
             )}&`;
             url += `applied_filters=${JSON.stringify(this.appliedFilters)}&`;
           }
@@ -719,21 +816,28 @@ export default {
 table {
   page-break-inside: auto;
 }
+
 tr {
   page-break-inside: avoid;
   page-break-after: auto;
 }
+
 thead {
   display: table-header-group;
+  background-color: #F7F9FE;
 }
+
 tfoot {
   display: table-footer-group;
 }
+
 @page {
   size: auto;
   margin: 0mm;
 }
+
 .nowrap {
   white-space: nowrap;
 }
+
 </style>

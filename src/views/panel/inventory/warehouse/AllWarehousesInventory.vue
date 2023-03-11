@@ -6,23 +6,24 @@
       <v-row>
         <v-col cols="12" md="4">
           <v-autocomplete
-            :return-object="false"
-            label="انبار"
-            :items="warehouses"
-            v-model="filters.warehouse"
-            item-text="title"
-            item-value="id"
+              class="rounded-lg"
+              :return-object="false"
+              label="انبار"
+              :items="warehouses"
+              v-model="filters.warehouse"
+              item-text="title"
+              item-value="id"
           />
         </v-col>
         <v-col cols="12" md="4">
-          <v-select :items="wareLevels" v-model="filters.level" label="سطح کالا" />
+          <v-select class="rounded-lg" :items="wareLevels" v-model="filters.level" label="سطح کالا"/>
         </v-col>
         <v-col cols="12" md="4">
-          <v-select :items="waresStatuses" v-model="filters.status" label="وضعیت کالا"></v-select>
+          <v-select class="rounded-lg" :items="waresStatuses" v-model="filters.status" label="وضعیت کالا"></v-select>
         </v-col>
 
         <v-col cols="12">
-          <m-datatable :api-url="url" :headers="headers" :filters.sync="filters" />
+          <m-datatable :api-url="url" :headers="headers" :filters.sync="filters"/>
         </v-col>
       </v-row>
     </v-card-text>
@@ -32,6 +33,7 @@
 <script>
 import wareApiMixin from "@/mixin/wareApi";
 import _ from "lodash";
+
 export default {
   mixins: [wareApiMixin],
   props: ["warehouseId"],

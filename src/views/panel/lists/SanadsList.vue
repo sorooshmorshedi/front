@@ -6,30 +6,33 @@
       <v-btn
           :block="isXs"
           small
+          depressed
           @click="reorderSanads('date')"
-          class="teal white--text mr-md-1"
+          class="rounded-lg accent white--text mr-md-1"
       >مرتب کردن کد اسناد بر اساس تاریخ
       </v-btn
       >
       <v-btn
           :block="isXs"
           small
+          depressed
           @click="reorderSanads('local_id')"
-          class="teal white--text mr-md-1 mt-1 mt-md-0"
+          class="rounded-lg accent white--text mr-md-1 mt-1 mt-md-0"
       >مرتب کردن کد اسناد بر اساس عطف
       </v-btn>
       <v-btn
           :block="isXs"
           small
+          depressed
           @click="reorderSanads(null)"
-          class="teal white--text mr-md-1 mt-1 mt-md-0"
+          class="rounded-lg accent white--text mr-md-1 mt-1 mt-md-0"
       >بازگردانی کد اسناد به حالت اولیه
       </v-btn>
       <div @mouseenter="list_export">
-        <v-btn @click="$refs.datatable.exportTo('html')" class="export-btn mr-3 block">چاپ لیست اسناد</v-btn>
-        <v-btn @click="$refs.datatable.exportTo('pdf')" class="export-btn mt-2 mt-sm-0 mr-md-1">خروجی PDF لیست اسناد
+        <v-btn depressed @click="$refs.datatable.exportTo('html')" class="rounded-lg export-btn mr-3 block">چاپ لیست اسناد</v-btn>
+        <v-btn depressed @click="$refs.datatable.exportTo('pdf')" class="rounded-lg export-btn mt-2 mt-sm-0 mr-md-1">خروجی PDF لیست اسناد
         </v-btn>
-        <v-btn @click="$refs.datatable.exportTo('xlsx')" class="export-btn mt-2 ml-4 mt-sm-0 mr-md-1">خروجی اکسل لیست
+        <v-btn depressed @click="$refs.datatable.exportTo('xlsx')" class="rounded-lg export-btn mt-2 ml-4 mt-sm-0 mr-md-1">خروجی اکسل لیست
           اسناد
         </v-btn>
       </div>

@@ -18,10 +18,10 @@
           ref="workshopSettingForm"
       >
         <template>
-          <v-banner v-if="item.is_verified" class="mt-3 mb-5 red--text">
+          <v-banner v-if="item.is_verified" class="mt-3 mb-5 error-text rounded-lg">
             <v-avatar
                 slot="icon"
-                color="red"
+                color="error"
                 size="25"
             >
               <v-icon
@@ -35,9 +35,9 @@
 
           <v-toolbar
               v-if="is_pop"
-              class="mb-5"
+              class="mb-5 rounded-lg"
               flat
-              color="red"
+              color="error"
               dark
           >
             <v-toolbar-title>

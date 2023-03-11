@@ -8,7 +8,7 @@
       v-on:keypress="NumbersOnly"
       v-model="formattedAmount"
       append-icon="fa-percent"
-      class="currency-input"
+      class="currency-input rounded-lg"
       :smaller-font="formattedAmount.length > 14"
       style="min-width: 80px;"
       v-bind="$attrs"

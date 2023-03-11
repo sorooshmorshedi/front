@@ -19,8 +19,8 @@
         ref="HRLetterFrom"
     >
       <template>
-        <v-card class="ma-2 ">
-          <v-toolbar color="indigo">
+        <v-card class="ma-2 rounded-lg ">
+          <v-toolbar color="secondary" class="rounded-lg" flat>
             <v-toolbar-title class="white--text">
               مشخصات
             </v-toolbar-title>
@@ -36,6 +36,7 @@
               ></v-text-field>
 
               <v-text-field
+                  class="rounded-lg"
                   :rules="[rules.required,]"
                   v-if="item.is_template == 't'"
                   label="* نام قالب"
@@ -46,7 +47,7 @@
           </v-row>
 
 
-          <v-toolbar color="indigo">
+          <v-toolbar color="secondary" class="rounded-lg" flat>
             <v-toolbar-title class="white--text">
               عناوین حکمی
             </v-toolbar-title>
@@ -68,6 +69,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.hoghooghe_roozane_nature"
@@ -101,6 +103,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.hoghooghe_roozane_base"
                   label="مزد پایه"
                   color="success"
@@ -129,6 +132,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.paye_sanavat_nature"
@@ -162,6 +166,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.paye_sanavat_base"
                   label="مزد پایه"
                   color="success"
@@ -187,6 +192,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_maskan_nature"
@@ -219,6 +225,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_maskan_base"
                   label="مزد پایه"
                   color="success"
@@ -246,6 +253,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.bon_kharo_bar_nature"
@@ -279,6 +287,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.bon_kharo_bar_base"
                   label="مزد پایه"
                   color="success"
@@ -305,6 +314,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_jazb_nature"
@@ -337,6 +347,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_jazb_base"
                   label="مزد پایه"
                   color="success"
@@ -365,6 +376,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_sarparasti_nature"
@@ -398,6 +410,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_sarparasti_base"
                   label="مزد پایه"
                   color="success"
@@ -425,6 +438,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_modiriyat_nature"
@@ -458,6 +472,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_modiriyat_base"
                   label="مزد پایه"
                   color="success"
@@ -487,6 +502,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_shoghl_nature"
@@ -520,6 +536,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_shoghl_base"
                   label="مزد پایه"
                   color="success"
@@ -547,6 +564,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_tahsilat_nature"
@@ -580,6 +598,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_tahsilat_base"
                   label="مزد پایه"
                   color="success"
@@ -608,6 +627,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_sakhti_kar_nature"
@@ -642,6 +662,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_sakhti_kar_base"
                   label="مزد پایه"
                   color="success"
@@ -669,6 +690,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_ankal_nature"
@@ -702,6 +724,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_ankal_base"
                   label="مزد پایه"
                   color="success"
@@ -729,6 +752,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_badi_abohava_nature"
@@ -762,6 +786,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_badi_abohava_base"
                   label="مزد پایه"
                   color="success"
@@ -789,6 +814,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.mahroomiat_tashilat_zendegi_nature"
@@ -822,6 +848,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.mahroomiat_tashilat_zendegi_base"
                   label="مزد پایه"
                   color="success"
@@ -849,6 +876,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_mahal_khedmat_nature"
@@ -882,6 +910,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_mahal_khedmat_base"
                   label="مزد پایه"
                   color="success"
@@ -909,6 +938,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.fogholade_sharayet_mohit_kar_nature"
@@ -942,6 +972,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.fogholade_sharayet_mohit_kar_base"
                   label="مزد پایه"
                   color="success"
@@ -969,6 +1000,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.ayabo_zahab_nature"
@@ -1002,6 +1034,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.ayabo_zahab_base"
                   label="مزد پایه"
                   color="success"
@@ -1029,6 +1062,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.yarane_ghaza_nature"
@@ -1062,6 +1096,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.yarane_ghaza_base"
                   label="مزد پایه"
                   color="success"
@@ -1089,6 +1124,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_shir_nature"
@@ -1122,6 +1158,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_shir_base"
                   label="مزد پایه"
                   color="success"
@@ -1150,6 +1187,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_taahol_nature"
@@ -1182,6 +1220,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.haghe_taahol_base"
                   label="مزد پایه"
                   color="success"
@@ -1208,6 +1247,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.komakhazine_mahdekoodak_nature"
@@ -1241,6 +1281,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.komakhazine_mahdekoodak_base"
                   label="مزد پایه"
                   color="success"
@@ -1268,6 +1309,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.komakhazine_varzesh_nature"
@@ -1301,6 +1343,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.komakhazine_varzesh_base"
                   label="مزد پایه"
                   color="success"
@@ -1327,6 +1370,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.komakhazine_mobile_nature"
@@ -1360,6 +1404,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.komakhazine_mobile_base"
                   label="مزد پایه"
                   color="success"
@@ -1387,6 +1432,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.mazaya_mostamar_gheyre_naghdi_nature = 'p'"
@@ -1420,6 +1466,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-switch
+                  inset
                   v-model="item.mazaya_mostamar_gheyre_naghdi_base"
                   label="مزد پایه"
                   color="success"
@@ -1431,7 +1478,7 @@
             </v-col>
           </v-row>
 
-          <v-toolbar color="indigo" class="mt-10">
+          <v-toolbar color="secondary" class="mt-10 rounded-lg" flat>
 
             <v-toolbar-title class="white--text">
               عناوین غیر حکمی
@@ -1445,6 +1492,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_owlad_nature = 'u'"
@@ -1488,6 +1536,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.ezafe_kari_nature = 'u'"
@@ -1529,6 +1578,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.shab_kari_nature = 'u'"
@@ -1569,6 +1619,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.tatil_kari_nature = 'u'"
@@ -1609,6 +1660,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.nobat_kari_nature = 'u'"
@@ -1649,6 +1701,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-autocomplete
+                  class="rounded-lg"
                   label="* ماهیت عناوین شغلی"
                   :items="NATURE_TYPES"
                   v-model="item.haghe_maamooriat_nature = 'u'"
@@ -1689,6 +1742,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-text-field
+                  class="rounded-lg"
                   :disabled="true"
                   v-model="sanavat_msg"
               />
@@ -1725,6 +1779,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-text-field
+                  class="rounded-lg"
                   :disabled="true"
                   v-model="sanavat_msg"
               />
@@ -1757,7 +1812,7 @@
           </v-row>
 
 
-          <v-toolbar v-if="item.id" color="indigo" class="mt-10">
+          <v-toolbar v-if="item.id" color="secondary" class="mt-10 rounded-lg" flat>
 
             <v-toolbar-title class="white--text">
               مزد مبنا حکم {{item.name}}
@@ -1800,36 +1855,14 @@
             </v-col>
 
           </v-row>
-          <v-row class="ma-5">
-            <v-col cols="12" md="12" v-if="item.id && !item.is_calculated">
-              <v-banner
-                  class="red white--text"
-                  elevation="6"
-                  outlined
-                  rounded
-                  single-line
-                  sticky
-              >
-                <v-icon
-                    class="mr-6 ml-10"
-                    color="white"
-                    large
-                >info
-                </v-icon>
-                به دلیل اینکه با این حکم کارگزینی محاسبات حقوق و دستمزد ثبت شده است قادر به ویرایش نمی باشید
-                در صورت تمایل به تغییر برای قرارداد خود حکم جدید ثبت کنید
-              </v-banner>
-            </v-col>
-
-          </v-row>
         </v-card>
       </template>
       <v-btn
-          class="light-blue white--text mt-6  mr-2 float-left"
+          class="accent white--text mt-6  mr-2 float-left rounded-lg" depressed
           @click="verifyHRL(item)"
           v-if="item.id && item.is_calculated && !item.is_verified && !isEditing" >ثبت نهایی</v-btn>
       <v-btn
-          class="red white--text mt-12 mr-2 ml-2 float-left "
+          class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
           @click="UnVerifyHRL(item)"
           v-if="item.id && item.is_verified" > خروج از وضعیت نهایی</v-btn>
 
@@ -1837,23 +1870,24 @@
     <v-row justify="center">
       <v-dialog
           v-model="error_dialog"
+          class="rounded-lg"
           persistent
           @click:outside="error_dialog=false"
           max-width="400"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg pa-2">
+          <v-card-title class="error--text text-h5">
             لطفا موارد زیر را تکمیل یا اصلاح کنید!
           </v-card-title>
           <v-card-text>
             <v-row v-for="item in error_message" class="mt-5 mr-10">
-              {{item}}
+              {{ item }}
             </v-row>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="green darken-1"
+                color="success"
                 text
                 @click="error_dialog = false"
             >

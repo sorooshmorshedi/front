@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-text-field label="جستجو" class="my-2" id="tree-search" v-model="searchValue" />
+    <v-text-field label="جستجو" class="my-2 rounded-lg" id="tree-search" v-model="searchValue" />
     <TreeUl v-bind="childBind" class="rtl p-0 m-0" />
   </div>
 </template>

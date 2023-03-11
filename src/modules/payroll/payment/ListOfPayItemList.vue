@@ -1,76 +1,93 @@
 <template>
-  <v-card>
-
+  <v-card class="rounded-lg">
     <v-toolbar
-        class="mt-10 mr-5 ml-5"
-        color="indigo"
-        dark
+        class=" mr-3 ml-3 mt-3 rounded-lg"
+        color="back"
+        flat
     >
-      <v-toolbar-title>حقوق و دستمزد {{list_of_pay.name}}</v-toolbar-title>
+      <v-toolbar-title class="secondary--text">حقوق و دستمزد {{list_of_pay.name}}</v-toolbar-title>
 
       <v-divider
           class="mx-4"
           vertical
       ></v-divider>
 
-      <span class="subheading mr-4 ml-4">کارگاه :  {{ list_of_pay.workshop_display }}</span>
+      <span class="secondary--text subheading mr-4 ml-4">کارگاه :  {{ list_of_pay.workshop_display }}</span>
       <v-divider class="mr-2 ml-2" vertical></v-divider>
-      <span class="subheading mr-4 ">سال : {{ list_of_pay.year }}</span>
+      <span class="secondary--text subheading mr-4 ">سال : {{ list_of_pay.year }}</span>
 
       <v-divider class="mr-4" vertical></v-divider>
-      <span class="subheading mr-2 ml-2 "> ماه : {{ list_of_pay.month_name }}</span>
+      <span class="subheading mr-2 ml-2 secondary--text "> ماه : {{ list_of_pay.month_name }}</span>
       <v-divider class="mr-2 ml-2" vertical></v-divider>
       <v-spacer></v-spacer>
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="چاپ"
-          icon
-          @click="printThis('html')"
-      >
-        <v-icon>fa-print</v-icon>
-      </v-btn>
-      <v-btn
-          class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-          rounded
-          title="PDF"
-          @click="printThis('pdf')"
-          icon
-
-      >
-        <v-icon>fa-file-pdf</v-icon>
-      </v-btn>
-      <v-btn
-          small
-          class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-          @click="printThis('xlsx')"
-          title="اکسل"
-          icon
-      >
-        <v-icon>fa-file-excel</v-icon>
-      </v-btn>
-
-      <v-btn
-          small
-          class="light-blue white--text ml-2 mr-3 mt-1 mt-md-0"
-          icon
-          @click="goToList"
-          outlined
-          title="لیست"
-      >
-        <v-icon>fa-th-list</v-icon>
-      </v-btn>
+      <v-tooltip top color="#019EF6">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              icon
+              v-bind="attrs"
+              v-on="on"
+              depressed @click="printThis('html')"
+              class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 pa-4">
+            <v-img max-height="30" max-width="30" src="/img/icons/print_icon.svg"></v-img>
+          </v-btn>
+        </template>
+        چاپ
+      </v-tooltip>
+      <v-tooltip top color="#019EF6">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn depressed
+                 icon
+                 v-bind="attrs"
+                 v-on="on"
+                 @click="printThis('pdf')"
+                 class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 ">
+            <v-img src="/img/icons/pdf.svg"></v-img>
+          </v-btn>
+        </template>
+        خروجی PDF
+      </v-tooltip>
+      <v-tooltip top color="#019EF6">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn depressed
+                 icon
+                 v-bind="attrs"
+                 v-on="on"
+                 @click="printThis('xlsx')"
+                 class="secondary--text export-btn mt-2 mt-sm-0 mr-md-2 pa-1">
+            <v-img src="/img/icons/xls.svg"></v-img>
+          </v-btn>
+        </template>
+        خروجی اکسل
+      </v-tooltip>
+      <v-tooltip top color="secondary">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              v-bind="attrs"
+              v-on="on"
+              small
+              class="secondary white--text mr-1 mt-1 mt-md-0 pa-4"
+              @click="goToList"
+              icon
+          >
+            <v-img max-height="25" max-width="25" src="/img/icons/list_icon.svg"></v-img>
+          </v-btn>
+        </template>
+        لیست
+      </v-tooltip>
     </v-toolbar>
-    <v-toolbar color="indigo darken-3" class="white--text   ml-5 mt-1 mr-5 rounded">
+    <v-toolbar v-if="list_of_pay.ultimate" color="secondary" class="white--text rounded-b-lg ml-5 mr-5" flat>
       <v-spacer></v-spacer>
-      <v-btn v-if="list_of_pay.ultimate" @click="goReport()" color="primary darken-1" class=" white--text ml-4"
-             large>گزارش بیمه و مالیات
+      <v-btn @click="goReport()" color="back" class="secondary--text ml-4 rounded-lg" depressed>
+        <v-img max-height="25" max-width="20" class="ml-1" src="/img/icons/report.svg"></v-img>
+        گزارش بیمه و مالیات
       </v-btn>
-      <v-btn v-if="list_of_pay.ultimate && !list_of_pay.bank_pay_date" @click="goPay()" color="green darken-1" class=" white--text"
-             large> پرداخت حقوق
+      <v-btn v-if="!list_of_pay.bank_pay_date" @click="goPay()" color="primary" class="rounded-lg white--text" depressed>
+        <v-img max-height="25" max-width="20" src="/img/icons/payment.svg" class="ml-2"></v-img>
+        پرداخت حقوق
       </v-btn>
-      <v-btn v-if="list_of_pay.ultimate && list_of_pay.bank_pay_date" @click="goPay()" color="blue darken-2" class=" white--text"
-             large>مشاهده حقوق پرداختی
+      <v-btn v-if="list_of_pay.bank_pay_date" @click="goPay()" color="accent" class=" white--text rounded-lg" depressed>
+        <v-img max-height="25" max-width="20" src="/img/icons/pay_see.svg" class="ml-2"></v-img>
+        مشاهده حقوق پرداختی
       </v-btn>
 
     </v-toolbar>
@@ -78,11 +95,12 @@
       <v-dialog
           v-model="accept_dialog"
           persistent
+          class="rounded-lg"
           @click:outside="accept_dialog=false"
           max-width="400"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="error--text text-h5">
             توجه!
           </v-card-title>
           <v-card-text>
@@ -91,15 +109,17 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
-                text
+                color="error"
+                class="rounded-lg"
+                depressed
                 @click="accept_dialog = false"
             >
               بستن
             </v-btn>
             <v-btn
-                color="light-blue"
-                text
+                color="accent"
+                class="rounded-lg"
+                depressed
                 @click="UltimateList"
             >
               ثبت نهایی
@@ -110,13 +130,14 @@
     </v-row>
     <v-row justify="center">
       <v-dialog
+          class="rounded-lg"
           v-model="un_accept_dialog"
           persistent
           @click:outside="un_accept_dialog=false"
           max-width="500"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="error--text text-h5">
             توجه!
           </v-card-title>
           <v-card-text>
@@ -131,8 +152,9 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
-                text
+                color="error"
+                depressed
+                class="rounded-lg"
                 @click="un_accept_dialog = false"
             >
               بستن
@@ -143,13 +165,14 @@
     </v-row>
     <v-row justify="center">
       <v-dialog
+          class="rounded-lg"
           v-model="workshop_dialog"
           persistent
           @click:outside="workshop_dialog=false"
           max-width="300"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="error--text text-h5">
             توجه!
           </v-card-title>
           <v-card-text>
@@ -158,8 +181,9 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
-                text
+                color="error"
+                depressed
+                class="rounded-lg"
                 @click="workshop_dialog = false"
             >
               بستن
@@ -170,13 +194,14 @@
     </v-row>
     <v-row justify="center">
       <v-dialog
+          class="rounded-lg"
           v-model="delete_dialog"
           persistent
           @click:outside="delete_dialog=false"
-          max-width="400"
+          max-width="550"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="error--text text-h5">
             آیا از حذف این لیست اطمینان دارید؟
           </v-card-title>
           <v-card-text >
@@ -185,15 +210,17 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
-                text
+                color="success"
+                depressed
+                class="rounded-lg"
                 @click="delete_dialog = false"
             >
               بستن
             </v-btn>
             <v-btn
-                color="light-blue"
-                text
+                color="error"
+                depressed
+                class="rounded-lg"
                 @click="DeleteList"
             >
               حذف
@@ -204,12 +231,13 @@
     </v-row>
     <v-row justify="center">
       <v-dialog
+          class="rounded-lg"
           v-model="un_ultimate_dialog"
           @click:outside="un_ultimate_dialog=false"
           max-width="450"
       >
-        <v-card>
-          <v-card-title class="red--text text-h5">
+        <v-card class="rounded-lg">
+          <v-card-title class="error--text text-h5">
             توجه
           </v-card-title>
           <v-card-text v-if="list_of_pay.use_in_calculate" >
@@ -221,15 +249,17 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="red darken-1"
-                text
+                color="success"
+                depressed
+                class="rounded-lg"
                 @click="un_ultimate_dialog = false"
             >
               بستن
             </v-btn>
             <v-btn
-                color="light-blue"
-                text
+                color="error"
+                depressed
+                class="rounded-lg"
                 @click="UnUltimateList"
             >
               خروج از وضعیت نهایی
@@ -238,7 +268,6 @@
         </v-card>
       </v-dialog>
     </v-row>
-
     <v-card-actions class="justify-end mt-4">
     </v-card-actions>
     <v-card-text>
@@ -248,122 +277,38 @@
         <template #item.detail="{ item }">
           <detail-link :to="to(item)"/>
         </template>
+        <template  v-slot:body.append="{ headers }">
+          <tr class="text-center back">
+            <td colspan="9" class="success--text">جمع</td>
+            <td> {{list_of_pay.get_total.normal_worktime}}</td>
+            <td> {{list_of_pay.get_total.real_worktime}}</td>
+            <td> {{list_of_pay.get_total.hoghoogh_mahane}}</td>
+            <td> {{list_of_pay.get_total.sanavat_mahane}}</td>
+            <td> {{list_of_pay.get_total.ezafe_kari_total}}</td>
+            <td> {{list_of_pay.get_total.tatil_kari_total}}</td>
+            <td> {{list_of_pay.get_total.shab_kari_total}}</td>
+            <td> {{list_of_pay.get_total.mission_total}}</td>
+            <td> {{list_of_pay.get_total.aele_mandi}}</td>
+            <td> {{list_of_pay.get_total.haghe_maskan}}</td>
+            <td> {{list_of_pay.get_total.haghe_jazb}}</td>
+            <td> {{list_of_pay.get_total.kharo_bar}}</td>
+            <td> {{list_of_pay.get_total.sayer_hr}}</td>
+            <td> {{list_of_pay.get_total.haghe_sanavat_total}}</td>
+            <td> {{list_of_pay.get_total.padash_total}}</td>
+            <td> {{list_of_pay.get_total.sayer_ezafat}}</td>
+            <td> {{list_of_pay.get_total.total_payment}}</td>
+            <td> {{list_of_pay.get_total.haghe_bime_bime_shavande}}</td>
+            <td> {{list_of_pay.get_total.total_tax}}</td>
+            <td> {{list_of_pay.get_total.dept_amount}}</td>
+            <td> {{list_of_pay.get_total.loan_amount}}</td>
+            <td> {{list_of_pay.get_total.check_and_get_optional_deduction_episode}}</td>
+            <td> {{list_of_pay.get_total.kasre_kar_total}}</td>
+            <td> {{list_of_pay.get_total.sayer_kosoorat}}</td>
+            <td> {{list_of_pay.get_total.payable}}</td>
+          </tr>
+        </template>
+
       </m-datatable>
-      <v-simple-table class="ma-3 border_all " dense>
-        <thead class="indigo darken-2 white--text">
-        <tr>
-          <th class="white--text pa-1">
-
-          </th>
-          <th class="white--text pa-1">
-            کارکرد عادی
-          </th>
-          <th class="white--text pa-1">
-            کارکرد واقعی
-          </th>
-          <th class="white--text pa-1">
-            حقوق پایه ماهانه
-          </th>
-          <th class="white--text pa-1">
-            پایه سنوات ماهانه
-          </th>
-          <th class="white--text pa-1">
-            اضافه کاری
-          </th>
-          <th class="white--text pa-1">
-            تعطیل کاری
-          </th>
-          <th class="white--text pa-1">
-            شب کاری
-          </th>
-          <th class="white--text pa-1">
-            ماموریت
-          </th>
-          <th class="white--text pa-1">
-            حق اولاد
-          </th>
-          <th class="white--text pa-1">
-            حق مسکن
-          </th>
-          <th class="white--text pa-1">
-            حق جذب
-          </th>
-          <th class="white--text pa-1">
-            بن خاروبار
-          </th>
-          <th class="white--text pa-1">
-            جمع سایر مزایای حکمی
-          </th>
-          <th class="white--text pa-1">
-            حق سنوات
-          </th>
-          <th class="white--text pa-1">
-            عیدی و پاداش
-          </th>
-          <th class="white--text pa-1">
-            سایر اضافات
-          </th>
-          <th class="white--text pa-1">
-            حقوق مزایای کل ماهانه
-          </th>
-          <th class="white--text pa-1">
-            حق بیمه سهم بیمه شده
-          </th>
-          <th class="white--text pa-1">
-            مالیات حقوق
-          </th>
-          <th class="white--text pa-1">
-            بدهی مساعده
-          </th>
-          <th class="white--text pa-1">
-            بدهی وام
-          </th>
-          <th class="white--text pa-1">
-            بدهی غیره
-          </th>
-          <th class="white--text pa-1">
-            کسر کار
-          </th>
-          <th class="white--text pa-1">
-            سایر کسورات
-          </th>
-          <th class="white--text pa-1">
-            حقوق و دستمزد پرداختنی
-          </th>
-        </tr>
-
-        </thead>
-        <tbody>
-        <tr>
-          <td  class="text-center"> جمع</td>
-          <td> {{list_of_pay.get_total.normal_worktime}}</td>
-          <td> {{list_of_pay.get_total.real_worktime}}</td>
-          <td> {{list_of_pay.get_total.hoghoogh_mahane}}</td>
-          <td> {{list_of_pay.get_total.sanavat_mahane}}</td>
-          <td> {{list_of_pay.get_total.ezafe_kari_total}}</td>
-          <td> {{list_of_pay.get_total.tatil_kari_total}}</td>
-          <td> {{list_of_pay.get_total.shab_kari_total}}</td>
-          <td> {{list_of_pay.get_total.mission_total}}</td>
-          <td> {{list_of_pay.get_total.aele_mandi}}</td>
-          <td> {{list_of_pay.get_total.haghe_maskan}}</td>
-          <td> {{list_of_pay.get_total.haghe_jazb}}</td>
-          <td> {{list_of_pay.get_total.kharo_bar}}</td>
-          <td> {{list_of_pay.get_total.sayer_hr}}</td>
-          <td> {{list_of_pay.get_total.haghe_sanavat_total}}</td>
-          <td> {{list_of_pay.get_total.padash_total}}</td>
-          <td> {{list_of_pay.get_total.sayer_ezafat}}</td>
-          <td> {{list_of_pay.get_total.total_payment}}</td>
-          <td> {{list_of_pay.get_total.haghe_bime_bime_shavande}}</td>
-          <td> {{list_of_pay.get_total.total_tax}}</td>
-          <td> {{list_of_pay.get_total.dept_amount}}</td>
-          <td> {{list_of_pay.get_total.loan_amount}}</td>
-          <td> {{list_of_pay.get_total.check_and_get_optional_deduction_episode}}</td>
-          <td> {{list_of_pay.get_total.kasre_kar_total}}</td>
-          <td> {{list_of_pay.get_total.sayer_kosoorat}}</td>
-          <td> {{list_of_pay.get_total.payable}}</td>
-        </tr>
-        </tbody>
-      </v-simple-table>
 
       <m-datatable v-show="false" :headers="headers" :apiUrl="url" :exportUrl="export_url" :filters.sync="export_filter"
                    ref="exportTable">
@@ -377,10 +322,10 @@
         <v-col cols="12" md="9">
           <v-row>
             <v-col cols="12" md="12">
-              <v-banner v-if="!list_of_pay.use_in_calculate" class="ml-2 mr-2 mb-2 orange--text text--darken-3">
+              <v-banner v-if="!list_of_pay.use_in_calculate" class="ml-2 mr-2 mb-2 primary--text rounded-lg">
                 <v-avatar
                     slot="icon"
-                    color="orange"
+                    color="primary"
                     size="40"
                 >
                   <v-icon
@@ -391,10 +336,10 @@
                 </v-avatar>
                 این لیست در محاسبات بیمه و مالیات محاسبه نمی شود
               </v-banner>
-              <v-banner v-if="list_of_pay.use_in_calculate" class="ml-2 mr-2 mb-2 green--text text--darken-3">
+              <v-banner v-if="list_of_pay.use_in_calculate" class="ml-2 mr-2 mb-2 success--text rounded-lg">
                 <v-avatar
                     slot="icon"
-                    color="green"
+                    color="success"
                     size="40"
                 >
                   <v-icon
@@ -415,47 +360,53 @@
             class="d-flex justify-center justify-md-end"
         >
           <v-btn
-              class="orange white--text mt-2  mr-2 ml-5 float-left"
+              class="warning rounded-lg white--text mt-2  mr-2 ml-2 float-left"
+              depressed
               large
               @click="$router.push('/panel/payList/edit?pay_id=' + $route.params.id)"
               v-if="!list_of_pay.ultimate"
           >ویرایش
           </v-btn>
           <v-btn
-              class="red white--text mt-2  mr-2 ml-5 float-left"
+              class="error rounded-lg white--text mt-2  mr-2 ml-2 float-left"
+              depressed
               large
               @click="delete_dialog = true"
               v-if="!list_of_pay.ultimate"
           >حذف لیست
           </v-btn>
           <v-btn
-              class="light-blue white--text mt-2  mr-2 ml-5 float-left"
+              class="light-blue white--text mt-2  mr-2 ml-2 float-left"
               large
               @click="un_accept_dialog = true"
               v-if="!list_of_pay.ultimate && !list_of_pay.get_is_editable"
           >ثبت نهایی
           </v-btn>
           <v-btn
-              class="light-blue white--text mt-2  mr-2 ml-5 float-left"
+              class="accent white--text mt-2  mr-2 ml-2 float-left rounded-lg"
+              depressed
               large
               @click="accept_dialog = true"
               v-if="!list_of_pay.ultimate && list_of_pay.get_is_editable"
           >ثبت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-2 mr-2 ml-5 float-left "
+              class="error white--text mt-2 mr-2 ml-2 float-left rounded-lg"
+              depressed
               @click="un_ultimate_dialog = true"
               large
               v-if="list_of_pay.ultimate && list_of_pay.get_is_editable && list_of_pay.is_workshop_verified"> خروج از وضعیت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-2 mr-2 ml-5 float-left "
+              class="error white--text mt-2 mr-2 ml-2 float-left rounded-lg "
+              depressed
               @click="workshop_dialog = true"
               large
               v-if="list_of_pay.ultimate && list_of_pay.get_is_editable && !list_of_pay.is_workshop_verified"> خروج از وضعیت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-2 mr-2 ml-5 float-left "
+              class="error white--text mt-2 mr-2 ml-2 float-left rounded-lg"
+              depressed
               @click="un_accept_dialog = true"
               large
               v-if="list_of_pay.ultimate && !list_of_pay.get_is_editable"> خروج از وضعیت نهایی

@@ -23,12 +23,12 @@
         >
 
           <template>
-            <v-row v-if="item.un_editable">
+            <v-row v-if="item.un_editable" >
               <v-col cols="12" md="12">
-                <v-banner class="mt-3 mb-5 red--text">
+                <v-banner class="rounded-lg mt-3 mb-5 error--text">
                   <v-avatar
                       slot="icon"
-                      color="red"
+                      color="error"
                       size="40"
                   >
                     <v-icon
@@ -44,6 +44,7 @@
             <v-row>
               <v-col cols="12" md="12" v-if="!item.id">
                 <v-autocomplete
+                    class="rounded-lg"
                     label="  کارگاه"
                     :items="workshops"
                     v-model="workshop"
@@ -56,6 +57,7 @@
               </v-col>
               <v-col cols="12" md="12" v-if="item.id && !isEditing">
                 <v-text-field
+                    class="rounded-lg"
                     label="  کارگاه"
                     v-model="item.workshop"
                     :disabled="true"
@@ -63,6 +65,7 @@
               </v-col>
               <v-col cols="12" md="12" v-if="item.id && isEditing">
                 <v-autocomplete
+                    class="rounded-lg"
                     label="  کارگاه"
                     :items="workshops"
                     v-model="item.workshop_id"
@@ -77,6 +80,7 @@
             <v-row v-if="item.workshop_personnel && item.leave_type == 'e'">
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="!item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -87,6 +91,7 @@
                     :disabled="!isEditing || !workshop"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="item.id"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -97,6 +102,7 @@
                     :disabled="!isEditing"
                 />
                 <v-text-field
+                    class="rounded-lg"
                     label="پرسنل در کارگاه"
                     v-if="this.workshopPersonnel"
                     disabled="true"
@@ -106,6 +112,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c' && marital[item.workshop_personnel] != 's'"
                     label="نوع"
                     :items="ABSENCE_TYPES"
@@ -116,6 +123,7 @@
                     @change="setValues(item)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] == 'f' &&  marital[item.workshop_personnel] == 's'"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
@@ -126,6 +134,7 @@
                     @change="setValues(item)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] == 'c'"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
@@ -136,6 +145,7 @@
                     @change="setValues(item)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] != 'f'"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
@@ -148,6 +158,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="item.leave_type == 'e'"
                     label="نوع مرخصی استحقاقی"
                     :items="ENTITLEMENT_LEAVE_TYPES"
@@ -163,6 +174,7 @@
             <v-row v-if="item.workshop_personnel && item.leave_type == 'm'">
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -173,6 +185,7 @@
                     :disabled="!isEditing || !workshop"
                 />
                 <v-text-field
+                    class="rounded-lg"
                     label="پرسنل در کارگاه"
                     v-if="this.workshopPersonnel"
                     disabled="true"
@@ -182,6 +195,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c' && marital[item.workshop_personnel] != 's'"
                     label="نوع"
                     :items="ABSENCE_TYPES"
@@ -192,6 +206,7 @@
                     @change="setValues(item)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] == 'f' &&  marital[item.workshop_personnel] == 's'"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
@@ -202,6 +217,7 @@
                     @change="setValues(item)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] == 'c'"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
@@ -212,6 +228,7 @@
                     @change="setValues(item)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] !== 'f'"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
@@ -224,6 +241,7 @@
               </v-col>
               <v-col cols="12" md="4">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="marital[item.workshop_personnel] != 's' && marital[item.workshop_personnel] != 'c' &&
                      gender[item.workshop_personnel] == 'f' &&
                      item.leave_type == 'm'"
@@ -235,6 +253,7 @@
                     :disabled="!isEditing"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="marital[item.workshop_personnel] != 's' && marital[item.workshop_personnel] != 'c'&&
                      gender[item.workshop_personnel] != 'f' && item.leave_type == 'm'"
                     label="دلیل مرخصی ماده 73"
@@ -245,6 +264,7 @@
                     :disabled="!isEditing"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="marital[item.workshop_personnel] == 's' && item.leave_type == 'm'"
                     label="دلیل مرخصی ماده 73"
                     :items="SINGLE_MATTER_73_LEAVE_TYPES"
@@ -254,6 +274,7 @@
                     :disabled="!isEditing"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="marital[item.workshop_personnel] == 'c' && item.leave_type == 'm'"
                     label="دلیل مرخصی ماده 73"
                     :items="C_MATTER_73_LEAVE_TYPES"
@@ -264,10 +285,10 @@
                 />
               </v-col>
               <v-col cols="12" md="12">
-                <v-banner class="mt-3 mb-5 orange--text text--darken-3">
+                <v-banner class="mt-3 rounded-lg mb-5 primary--text">
                   <v-avatar
                       slot="icon"
-                      color="orange"
+                      color="primary"
                       size="25"
                   >
                     <v-icon
@@ -287,6 +308,7 @@
             <v-row v-if="item.leave_type != 'e' && item.leave_type != 'm'">
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="!this.workshopPersonnel"
                     label=" پرسنل در کارگاه"
                     :items="workshopPersonnels"
@@ -297,6 +319,7 @@
                     :disabled="!isEditing || !workshop"
                 />
                 <v-text-field
+                    class="rounded-lg"
                     label="پرسنل در کارگاه"
                     v-if="this.workshopPersonnel"
                     disabled="true"
@@ -306,6 +329,7 @@
               </v-col>
               <v-col cols="12" md="6">
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] != 'c' && marital[item.workshop_personnel] != 's'"
                     label="نوع"
                     :items="ABSENCE_TYPES"
@@ -316,6 +340,7 @@
                     @change="setValues(item)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] == 'f' &&  marital[item.workshop_personnel] == 's'"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
@@ -326,6 +351,7 @@
                     @change="setValues(item)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] == 'f' && marital[item.workshop_personnel] == 'c'"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
@@ -336,6 +362,7 @@
                     @change="setValues(item)"
                 />
                 <v-autocomplete
+                    class="rounded-lg"
                     v-if="gender[item.workshop_personnel] != 'f'"
                     label="نوع"
                     :items="MALE_ABSENCE_TYPES"
@@ -373,7 +400,7 @@
               <v-col cols="12" md="12" v-if="item.leave_type == 'i'"
               >
 
-                <v-text-field label="* علت حادثه" v-model="item.cause_of_incident" background-color="white"
+                <v-text-field class="rounded-lg" label="* علت حادثه" v-model="item.cause_of_incident" background-color="white"
                               :disabled="!isEditing"/>
 
               </v-col>
@@ -409,26 +436,26 @@
             </v-row>
             <v-row v-if="item.workshop_personnel">
               <v-col cols="12" md="12">
-                <v-text-field label="توضیحات" v-model="item.explanation" background-color="white"
+                <v-text-field class="rounded-lg" label="توضیحات" v-model="item.explanation" background-color="white"
                               :disabled="!isEditing"/>
               </v-col>
               <v-col cols="12" md="4" v-if="item.id">
-                <v-text-field label="مدت مرخصی به روز" v-model="item.time_period" background-color="white"
+                <v-text-field class="rounded-lg" label="مدت مرخصی به روز" v-model="item.time_period" background-color="white"
                               :disabled="true"/>
               </v-col>
               <v-col cols="12" md="4" v-if="item.id && item.entitlement_leave_type == 'h'">
-                <v-text-field label="مدت مرخصی به ساعت" v-model="item.by_hour" background-color="white"
+                <v-text-field class="rounded-lg" label="مدت مرخصی به ساعت" v-model="item.by_hour" background-color="white"
                               :disabled="true"/>
               </v-col>
             </v-row>
           </template>
           <v-btn
-              class="light-blue white--text mt-6  mr-2 float-left"
+              class="accent rounded-lg white--text mt-6  mr-2 float-left" depressed
               @click="verifyAbsence(item)"
               v-if="item.id && !item.is_verified && !isEditing">ثبت نهایی
           </v-btn>
           <v-btn
-              class="red white--text mt-12 mr-2 ml-2 float-left "
+              class="error rounded-lg white--text mt-12 mr-2 ml-2 float-left " depressed
               @click="UnVerifyAbsence(item)"
               v-if="item.id && item.is_verified && !item.un_editable"> خروج از وضعیت نهایی
           </v-btn>
@@ -437,12 +464,13 @@
         <v-row justify="center">
           <v-dialog
               v-model="error_dialog"
+              class="rounded-lg"
               persistent
               @click:outside="error_dialog=false"
               max-width="400"
           >
-            <v-card>
-              <v-card-title class="red--text text-h5">
+            <v-card class="rounded-lg pa-2">
+              <v-card-title class="error--text text-h5">
                 لطفا موارد زیر را تکمیل یا اصلاح کنید!
               </v-card-title>
               <v-card-text>
@@ -453,7 +481,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="green darken-1"
+                    color="success"
                     text
                     @click="error_dialog = false"
                 >

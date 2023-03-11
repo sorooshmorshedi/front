@@ -10,11 +10,13 @@
       clearable
       style="min-width: 140px"
       v-bind="$attrs"
+      class="rounded-lg"
       @click:clear="isDirty = true"
       :id="id"
     >
       <template #append>
         <v-icon
+          :disabled="disabled"
           class="mt-1"
           @click="$refs.datepicker.visible = true"
           @contextmenu.prevent="setToday"

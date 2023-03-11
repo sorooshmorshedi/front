@@ -5,16 +5,17 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="4">
-          <v-select :items="wareLevels" v-model="filters.level" label="سطح کالا" />
+          <v-select class="rounded-lg" :items="wareLevels" v-model="filters.level" label="سطح کالا" />
         </v-col>
         <v-col cols="12" md="4">
-          <v-select :items="waresStatuses" v-model="filters.status" label="وضعیت کالا"></v-select>
+          <v-select class="rounded-lg"  :items="waresStatuses" v-model="filters.status" label="وضعیت کالا"></v-select>
         </v-col>
         <v-col cols="12" md="4" class="d-flex justify-center justify-md-end">
           <v-btn
             v-if="isAdvari"
+            depressed
             @click="sortInventory"
-            color="blue white--text"
+            color="secondary rounded-lg white--text"
           >مرتب سازی کاردکس کالا</v-btn>
         </v-col>
         <v-col cols="12" class="all-wares-inventory">
@@ -28,14 +29,15 @@
     </v-card-text>
 
     <v-dialog
+        class="rounded-lg"
       v-model="errorDialog"
       scrollable
       max-width="1200px"
       transition="dialog-transition"
       :fullscreen="isPrinting"
     >
-      <v-card>
-        <v-card-title>اتمام عملیات مرتب سازی کاردکس کالا به دلیل منفی شدن کالا های زیر امکان پذیر نیست</v-card-title>
+      <v-card class="rounded-lg pa-2">
+        <v-card-title class="error--text">اتمام عملیات مرتب سازی کاردکس کالا به دلیل منفی شدن کالا های زیر امکان پذیر نیست</v-card-title>
 
         <v-card-text>
           <m-datatable

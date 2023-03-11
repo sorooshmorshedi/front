@@ -5,36 +5,39 @@
     <v-card-text>
       <v-row>
         <v-col cols="12" md="6">
-          <ware-select label="کالا" v-model="inventory.ware" @input="setWarehouse" />
+          <ware-select label="کالا" v-model="inventory.ware" @input="setWarehouse"/>
         </v-col>
 
         <v-col cols="12" md="6">
           <v-autocomplete
-            :return-object="false"
-            label="انبار"
-            :items="warehouses"
-            v-model="filters.warehouse"
-            item-text="title"
-            item-value="id"
+              class="rounded-lg"
+              :return-object="false"
+              label="انبار"
+              :items="warehouses"
+              v-model="filters.warehouse"
+              item-text="title"
+              item-value="id"
           />
         </v-col>
 
         <v-col cols="12" class="detailed-ware-inventory">
           <m-datatable
-            v-if="inventory.ware"
-            :api-url="url"
-            :headers="headers"
-            :filters.sync="filters"
+              v-if="inventory.ware"
+              :api-url="url"
+              :headers="headers"
+              :filters.sync="filters"
           >
             <template #item.code="{ item }">
               <v-btn
-                v-if="item.factor.code"
-                text
-                color="blue"
-                icon
-                rounded
-                :to="getDetailLink(item)"
-              >{{ item.origin.code }}</v-btn>
+                  v-if="item.factor.code"
+                  text
+                  depressed
+                  color="info"
+                  icon
+                  rounded
+                  :to="getDetailLink(item)"
+              >{{ item.origin.code }}
+              </v-btn>
             </template>
           </m-datatable>
         </v-col>
@@ -48,8 +51,9 @@ import _ from "lodash";
 import queryBinding from "@/components/m-query-binding";
 import wareApiMixin from "@/mixin/wareApi";
 import Template from "@/views/Template.vue";
+
 export default {
-  components: { Template },
+  components: {Template},
   mixins: [queryBinding, wareApiMixin],
   data() {
     return {

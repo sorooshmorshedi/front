@@ -17,6 +17,7 @@
       <v-row>
         <v-col cols="12">
           <v-autocomplete
+              class="rounded-lg"
             label="* کاربر"
             v-model="item.user"
             :items="users"

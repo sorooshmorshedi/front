@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="rounded-lg">
     <v-card-title>کاردکس انبار</v-card-title>
 
     <v-card-text>
@@ -9,6 +9,7 @@
         </v-col>
         <v-col cols="12" md="4">
           <v-autocomplete
+              class="rounded-lg"
             :return-object="false"
             label="انبار"
             :items="warehouses"
