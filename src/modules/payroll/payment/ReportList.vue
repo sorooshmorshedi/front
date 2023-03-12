@@ -345,56 +345,71 @@
           <td class=" text-center pt-3"> {{ row.contract_row }}</td>
           <td class="pt-2 text-center">
             <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="فایل بیمه"
+                small
+                target="_blank"
+                class="secondary  mr-1 mt-1 mt-md-0"
                 :href="endpoint(`payroll/diskette/contractRowInsurance/` + $route.params.id + '/' + row.id + '/' + '?token=' + token)"
                 icon
             >
-              <v-icon>fa-file-download</v-icon>
+              <v-img max-height="20" max-width="20" src="/img/icons/file_download.svg"></v-img>
             </v-btn>
           </td>
           <td class="pt-2 text-center">
             <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="فایل بیمه"
+                small
+                target="_blank"
+                class="secondary  mr-1 mt-1 mt-md-0"
                 :href="endpoint(`payroll/diskette/insurance/contractRowPerson/`  + $route.params.id + '/' + row.id + '/' + '?token=' + token)"
                 icon
             >
-              <v-icon>fa-file-download</v-icon>
+              <v-img max-height="20" max-width="20" src="/img/icons/file_download.svg"></v-img>
             </v-btn>
+
           </td>
           <td class="pt-2 text-center">
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="چاپ"
-                icon
-                @click="printRowCardex('html', row.id)"
-            >
-              <v-icon>fa-print</v-icon>
-            </v-btn>
-            <v-btn
-                class="export-btn grey--text  text--darken-3 mr-1 mt-1 mt-md-0"
-                rounded
-                title="PDF"
-                @click="printRowCardex('pdf', row.id)"
-                icon
-
-            >
-              <v-icon>fa-file-pdf</v-icon>
-            </v-btn>
-            <v-btn
-                small
-                class=" grey--text  text--darken-3 export-btn mr-1 mt-1 mt-md-0"
-                @click="printRowCardex('xlsx', row.id)"
-                title="اکسل"
-                icon
-            >
-              <v-icon>fa-file-excel</v-icon>
-            </v-btn>
-
+            <v-tooltip bottom color="#019EF6">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    small
+                    v-bind="attrs"
+                    v-on="on"
+                    class="export-btn mr-md-2 mt-2  pa-4"
+                    @click="printRowCardex('html', row.id)"
+                    icon
+                >
+                  <v-img max-height="30" max-width="30" src="/img/icons/print_icon.svg"></v-img>
+                </v-btn>
+              </template>
+              چاپ گزارش ماهانه بیمه
+            </v-tooltip>
+            <v-tooltip bottom color="#019EF6">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    small
+                    class="secondary--text export-btn mt-2  mr-md-2 "
+                    @click="printRowCardex('pdf', row.id)"
+                    icon
+                >
+                  <v-img src="/img/icons/pdf.svg"></v-img>
+                </v-btn>
+              </template>
+              خروجی PDF گزارش ماهانه بیمه
+            </v-tooltip>
+            <v-tooltip bottom color="#019EF6">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn depressed
+                       icon
+                       v-bind="attrs"
+                       v-on="on"
+                       @click="printRowCardex('xlsx', row.id)"
+                       class="secondary--text export-btn mt-2  mr-md-2 pa-1">
+                  <v-img src="/img/icons/xls.svg"></v-img>
+                </v-btn>
+              </template>
+              خروجی اکسل گزارش ماهانه بیمه
+            </v-tooltip>
           </td>
 
         </tr>

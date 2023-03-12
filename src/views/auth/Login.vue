@@ -51,7 +51,7 @@
 
         <v-card-actions class="pb-3 flex-row flex-md-row">
 
-          <v-btn @click="login" depressed block color="#FF8700" class="white--text mt-5" large>ورود</v-btn>
+          <v-btn @click="login" depressed block color="#FF8700" class="white--text mt-5 rounded-lg" large>ورود</v-btn>
         </v-card-actions>
       </v-card>
       <v-row class="mt-16 d-flex justify-center">

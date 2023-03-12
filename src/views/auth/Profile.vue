@@ -106,18 +106,19 @@
                 <v-spacer></v-spacer>
                 <v-btn
                     depressed
+                    class="rounded-lg"
                     @click="openChangePhoneDialog"
                     color="back secondary--text"
                 >تغییر شماره موبایل
                 </v-btn>
                 <template v-if="!isEditing">
-                  <v-btn depressed @click="isEditing = true" class="primary white--text w-100px"
+                  <v-btn depressed @click="isEditing = true" class="warning rounded-lg white--text w-100px"
                   >ویرایش
                   </v-btn
                   >
                 </template>
                 <template v-else>
-                  <v-btn depressed @click="updateProfile" color="success white--text w-100px"
+                  <v-btn depressed @click="updateProfile" color="success white--text w-100px" class="rounded-lg"
                   >ثبت
                   </v-btn
                   >
@@ -134,34 +135,37 @@
                       <v-text-field
                           class="text-field-ltr rounded-lg"
                           label=" * کلمه عبور فعلی"
-                          type="password"
+                          :type="pass_type"
                           v-model="oldPassword"
                           :rules="rules.required"
+                          :append-icon="pass_icon"
                           :hide-details="false"
+                          @click:append="changeType"
+
                       />
                     </v-col>
                     <v-col cols="12" md="4">
                       <v-text-field
                           class="text-field-ltr rounded-lg"
                           label=" * کلمه عبور جدید"
-                          :type="pass_type"
+                          :type="pass1_type"
                           v-model="newPassword"
                           :rules="passwordRules"
-                          :append-icon="pass_icon"
+                          :append-icon="pass1_icon"
                           :hide-details="false"
-                          @click:append="changeType"
+                          @click:append="changeType1"
                       />
                     </v-col>
                     <v-col cols="12" md="4">
                       <v-text-field
                           class="text-field-ltr rounded-lg"
-                          :type="pass_type"
+                          :type="pass2_type"
                           label=" * تکرار کلمه عبور جدید"
                           v-model="newPasswordRepeat"
                           :rules="rules.required"
                           :hide-details="false"
-                          :append-icon="pass_icon"
-                          @click:append="changeType"
+                          :append-icon="pass2_icon"
+                          @click:append="changeType2"
                       />
                     </v-col>
                   </v-row>
@@ -169,7 +173,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn @click="changePassword" color="success white--text w-100px"
+                <v-btn @click="changePassword" color="success white--text w-100px" depressed class="rounded-lg"
                 >ثبت
                 </v-btn
                 >
@@ -188,13 +192,13 @@
                   <template #item.action="{ item }">
                     <template v-if="item.status == 'p'">
                       <v-btn
-                          depressed
+                          depressed class="rounded-lg"
                           @click="confirmInvitation(item)"
                           color="success white--text"
                       >تایید دعوت</v-btn
                       >
                       <v-btn
-                          depressed
+                          depressed class="rounded-lg"
                           @click="changeInvitationStatus(item, 'r')"
                           color="error white--text mr-1"
                       >رد دعوت</v-btn
@@ -239,6 +243,7 @@
                       </li>
                     </ul>
                     <v-btn
+                        class="rounded-lg"
                         color="red white--text"
                         v-if="user.has_two_factor_authentication"
                         @click="removeSecretKeyDialog = true"
@@ -308,17 +313,16 @@
                   @click="removeSecretKeyDialog = false"
                   block
                   depressed
-                  class="mt-3 mt-md-1 mr-md-6"
+                  class="mt-3 mt-md-1 mr-md-6 rounded-lg"
                   color="error white--text"
-              >بستن</v-btn
-              >
+              >بستن</v-btn>
             </v-col>
             <v-col cols="12" md="3" class="ml-1">
               <v-btn
                   @click="removeSecretKey"
                   block
                   depressed
-                  class="mt-3 mt-md-1 mr-md-2"
+                  class="mt-3 mt-md-1 mr-md-2 rounded-lg"
                   color="success white--text"
               >غیر فعال سازی</v-btn
               >
@@ -334,7 +338,7 @@
         max-width="400px"
         transition="dialog-transition"
     >
-      <v-card class="rounded-lg pa-3">
+      <v-card class="rounded-lg pa-2">
         <v-card-title class="mt-0 secondary--text">تایید دعوت</v-card-title>
         <v-card-subtitle class="mt-0" >
           لطفا کد تاییدی که از شرکت
@@ -353,6 +357,7 @@
           <v-btn
               @click="changeInvitationStatus(invitation, 'a', confirmationCode)"
               block
+              depressed class="rounded-lg"
               color="success white--text "
           >تایید</v-btn
           >
@@ -380,7 +385,7 @@
                     block
                     depressed
                     color="success white--text"
-                    class="mt-2"
+                    class="mt-2 rounded-lg"
                     :disabled="codeSent"
                     @click="sendCode"
                 >
@@ -399,7 +404,7 @@
           </v-form>
         </v-card-text>
         <v-card-actions v-if="codeSent" class="justify-end">
-          <v-btn @click="sendCode" :disabled="!canResend" outlined >
+          <v-btn @click="sendCode" :disabled="!canResend" outlined depressed class="rounded-lg">
             <span v-if="canResend">
               ارسال دوباره کد
             </span>
@@ -407,7 +412,7 @@
               {{ timer }}
             </span>
           </v-btn>
-          <v-btn @click="changePhone" color="success white--text w-100px"
+          <v-btn @click="changePhone" color="success white--text w-100px" class="rounded-lg" depressed
           >تایید</v-btn
           >
         </v-card-actions>
@@ -440,8 +445,13 @@ export default {
       newPasswordRepeat: null,
 
       invitations: [],
+      pass1_type: "password",
+      pass2_type: "password",
+      pass1_icon: "fa-eye",
+      pass2_icon: "fa-eye",
       pass_type: "password",
       pass_icon: "fa-eye",
+
       invitation: null,
       confirmInvitationDialog: false,
       confirmationCode: null,
@@ -632,6 +642,24 @@ export default {
           this.invitations = data;
         },
       });
+    },
+    changeType1() {
+      if (!this.pass1_type) {
+        this.pass1_type = "password"
+        this.pass1_icon = "fa-eye"
+      } else {
+        this.pass1_type = ""
+        this.pass1_icon = "fa-eye-slash "
+      }
+    },
+    changeType2() {
+      if (!this.pass2_type) {
+        this.pass2_type = "password"
+        this.pass2_icon = "fa-eye"
+      } else {
+        this.pass2_type = ""
+        this.pass2_icon = "fa-eye-slash "
+      }
     },
     changeType() {
       if (!this.pass_type) {

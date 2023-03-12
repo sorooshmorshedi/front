@@ -20,7 +20,7 @@
               <v-btn :to="{name: 'Login'}" :style="{'color' : '#100C0C' }" color="white" block large depressed class="rounded-lg mr-2"> ورود </v-btn>
             </v-col>
             <v-col cols="12" md="6">
-              <v-btn color="#002357"   block large depressed class="rounded-lg white--text"> ثبت نام </v-btn>
+              <v-btn color="#002357"  block large depressed class="rounded-lg white--text rounded-lg"> ثبت نام </v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -84,7 +84,7 @@
 
         <v-card-actions class="pb-3 flex-row flex-md-row">
 
-          <v-btn @click="register" depressed block color="#FF8700" class="white--text mt-5" large>ثبت نام</v-btn>
+          <v-btn @click="register" depressed block color="#FF8700" class="white--text mt-5 rounded-lg" large>ثبت نام</v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -103,14 +103,16 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-btn @click="phoneVerificationDialog = false" text color="primary">تغییر شماره موبایل</v-btn>
+          <v-btn @click="phoneVerificationDialog = false" depressed class="rounded-lg" text color="primary">تغییر شماره موبایل</v-btn>
           <v-spacer></v-spacer>
           <v-btn
               @click="sendVerificationCode({phone: item.phone, recaptchaResponse})"
               outlined
+              depressed
+              class="rounded-lg"
               color="#002357"
           >ارسال دوباره</v-btn>
-          <v-btn @click="createUser" depressed  color="#FF8700" class="white--text ">تایید</v-btn>
+          <v-btn @click="createUser" depressed  color="#FF8700" class="white--text rounded-lg">تایید</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
